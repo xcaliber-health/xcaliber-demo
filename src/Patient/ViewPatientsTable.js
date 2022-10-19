@@ -67,8 +67,10 @@ const ViewPatientsTable = (props) => {
       <TableBody>
         {newData.patients.map((patient) => (
           <TableRow
+            onClick = {() => {navigate("/p360/"+patient.code)}}
             key={patient.id}
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            style = {{cursor : "pointer"}}
           >
 
             <TableCell align="center">{patient.code}</TableCell>

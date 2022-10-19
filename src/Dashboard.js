@@ -174,6 +174,7 @@ function DashboardContent() {
               <Route path="terminology" element={<Terminology />} />
               <Route path="interop" element={<div> interop </div>} />
               <Route path="p360" element={<ViewPatients/>} />
+              <Route path="p360/:id" element={<Chart/>} />
               <Route path="analytics" element={<div> analytics </div>} />
             </Routes>
           </Container>
