@@ -25,6 +25,7 @@ const ViewPatientsTable = (props) => {
   })
 
   const func = async () => {
+    setAwait(true);
     const d = await getPatientsAtPage(props.page, searchRequest.queryString);
     console.log('data', d)
     // const newData =await parserFunc(d.data.entry)
