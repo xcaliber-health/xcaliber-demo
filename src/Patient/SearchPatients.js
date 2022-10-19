@@ -30,7 +30,7 @@ const SearchPatients = () => {
   
 
   const onSearchRequestChange = useCallback((newSearchRequest) => {
-    console.log(newSearchRequest.queryString);
+    setPage(1);
     setSearchRequest(newSearchRequest)
   }, [])
 
