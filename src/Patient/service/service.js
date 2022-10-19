@@ -329,7 +329,7 @@ export const getAllPatients = () => {
 export const getPatientCount = async (name) => {
   try {
     name = !name ? '' : name;
-    const response = await axios.get(`${endpointUrl}/Patient?_count=1&_offset=1&name=${name}`,config)
+    const response = await axios.get(`${endpointUrl}/Patient?_count=1&_offset=0&name=${name}`,config)
 
     const patients = response.data.data.total;
     return patients;
@@ -355,7 +355,7 @@ export const getPatient = (id) => {
 
 export const getPatientsAtPage = (page, name) => {
   name = !name ? '' : name;
-  const offset = ((page*10)-10) + 1;
+  const offset = (page*10)-10;
   return axios
     .get(`${endpointUrl}/Patient?_count=10&_offset=${offset}&name=${name}`, config)
     .then(async (response) => {

@@ -40,10 +40,9 @@ const ViewPatientsTable = (props) => {
 
   useEffect(() => {
     func()
-  }, [props.page])
+  }, [props.page, searchRequest])
 
   if (awaitd) {
-    console.log(status)
     return <Loading />
   }
 
