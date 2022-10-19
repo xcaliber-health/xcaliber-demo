@@ -11,7 +11,6 @@
   "dependencies": {
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
-    "@hospitalrun/components": "^3.4.0",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "latest",
     "axios": "^1.1.3",

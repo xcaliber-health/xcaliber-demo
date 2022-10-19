@@ -1,4 +1,4 @@
-import { TextInput } from '@hospitalrun/components'
+import { TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 
 
@@ -22,12 +22,13 @@ const PatientSearchInput = (props) => {
   }
 
   return (
-    <TextInput
-      size="lg"
-      type="text"
-      onChange={onSearchBoxChange}
-      value={searchText}
-      placeholder={'search'}
+    <TextField id="outlined-basic" 
+    label="search"
+    variant="outlined" 
+    onChange={onSearchBoxChange}
+    value={searchText}
+    placeholder={'search'}
+
     />
   )
 }

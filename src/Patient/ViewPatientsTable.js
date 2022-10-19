@@ -1,4 +1,3 @@
-import { Table } from '@hospitalrun/components'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getPatientsAtPage } from './service/service'
@@ -7,7 +6,13 @@ import { formatDate } from '../core-utils/formatDate'
 // import usePatients from '../hooks/usePatients'
 // import PatientSearchRequest from '../models/PatientSearchRequest'
 // import NoPatientsExist from './NoPatientsExist'
-
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 const ViewPatientsTable = (props) => {
   const { searchRequest } = props
@@ -48,27 +53,41 @@ const ViewPatientsTable = (props) => {
   return (
 
 
-      <Table
-        data={props.filtered ? props.patientData : newData.patients}
-        getID={(row) => row.id}
-        columns={[
-          { label: 'id', key: 'code' },
-          { label: 'givenName', key: 'givenName' },
-          { label: 'familyName', key: 'familyName' },
-          { label: 'sex', key: 'sex' },
-          {
-            label: 'dateOfBirth',
-            key: 'dateOfBirth',
-            formatter: (row) => formatDate(row.dateOfBirth),
-          },
-        ]}
-        actionsHeaderText={''}
-        actions={[
-          { label: 'View', action: (row) => navigate(`/patients/${row.id}`) },
-        ]}
-      />
+    <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <TableHead>
+        <TableRow>
+          <TableCell align="center">id</TableCell>
+          <TableCell align="center">given name</TableCell>
+          <TableCell align="center">family name</TableCell>
+          <TableCell align="center">sex&nbsp;(g)</TableCell>
+          <TableCell align="center">date of birth</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {newData.patients.map((patient) => (
+          <TableRow
+            key={patient.id}
+            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+          >
+
+            <TableCell align="center">{patient.code}</TableCell>
+            <TableCell align="center">{patient.givenName}</TableCell>
+            <TableCell align="center">{patient.familyName}</TableCell>
+            <TableCell align="center">{patient.sex}</TableCell>
+            <TableCell align="center" component="th" scope="row">
+              { formatDate(patient.dateOfBirth)}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+     
   )
 }
 
+
 export default ViewPatientsTable
+
 
