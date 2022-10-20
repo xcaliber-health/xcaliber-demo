@@ -26,7 +26,14 @@ import { useNavigate } from "react-router-dom";
 import Terminology from "./Terminology";
 import ViewPatients from "./Patient/ViewPatients";
 import Analytics from "./Analytics";
+import { Avatar } from "@mui/material";
 
+const useStyles = makeStyles({
+  selectList:
+  {
+    backgroundColor:"grey"
+  }
+})
 function Copyright(props) {
   return (
     <Typography
@@ -94,13 +101,16 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent() {
+  const classes=useStyles();
   const [open, setOpen] = React.useState(true);
+  const [id,setId]=React.useState('terminology');
   const navigate = useNavigate();
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
   const onMenuClick = (path) => {
+    setId(path);
     navigate(`/${path}`);
   };
 
@@ -126,18 +136,13 @@ function DashboardContent() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Demo
-            </Typography>
+            <Grid justifyContent="space-between" direction="flex" container>
+            <Box component="img" sx={{height: 40,width: 50}} src="https://www.orthofix.com/wp-content/uploads/2019/01/XCaliber_logo.png"/>
+          <Avatar ></Avatar>
+          </Grid>
           </Toolbar>
         </AppBar>
-        <Drawer variant="permanent" open={open}>
+        <Drawer variant="permanent" open={open} >
           <Toolbar
             sx={{
               display: "flex",
@@ -146,13 +151,15 @@ function DashboardContent() {
               px: [1],
             }}
           >
-            <IconButton onClick={toggleDrawer}>
+            <IconButton onClick={toggleDrawer}  >
+            <Typography style={{marginRight:"30px" ,variant:"h6",display:"inline-block"}}>Capabilities</Typography>
+            {/* Capabilities */}
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
           <Divider />
-          <List component="nav">
-            {mainListItems(onMenuClick)}
+          <List component="nav" >
+            {mainListItems(onMenuClick,classes.selectList,id)}
             {/* <Divider sx={{ my: 1 }} />
             {secondaryListItems} */}
           </List>
@@ -170,8 +177,8 @@ function DashboardContent() {
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Routes>
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }} >
+            <Routes >
               <Route path="terminology" element={<Terminology />} />
               <Route path="interop" element={<div> interop </div>} />
               <Route path="p360" element={<ViewPatients />} />
