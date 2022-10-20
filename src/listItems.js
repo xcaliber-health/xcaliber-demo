@@ -10,9 +10,11 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 
-export const mainListItems = (onClick) => (
+
+
+export const mainListItems = (onClick,class,id) => {
   <React.Fragment>
-  <ListItemButton onClick={() => {onClick("terminology")}}>
+  <ListItemButton onClick={() => {onClick("terminology")}} >
     <ListItemIcon>
       <DashboardIcon />
     </ListItemIcon>
@@ -37,7 +39,7 @@ export const mainListItems = (onClick) => (
     <ListItemText primary="Analytics" />
   </ListItemButton>
 </React.Fragment>
-);
+};
 
 export const secondaryListItems = (
   <React.Fragment>

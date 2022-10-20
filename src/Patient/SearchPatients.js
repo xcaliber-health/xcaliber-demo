@@ -359,8 +359,8 @@ const SearchPatients = () => {
           /> */}
           <Grid>
             <Grid md={12}>
-              <Grid>
-                <Grid md={8} style={{ paddingLeft: "0px" }}>
+              <Grid display="flex">
+                <Grid md={8} style={{ paddingLeft: "0px" }} >
                   <PatientSearchInput
                     data-testid={"searcinput"}
                     onChange={onSearchRequestChange}
@@ -376,6 +376,7 @@ const SearchPatients = () => {
                   <Button
                     startIcon={<PersonAddIcon></PersonAddIcon>}
                     onClick={handleDrawerOpen}
+                    sx={{marginLeft:"20px"}}
                   >
                     Create Patient
                   </Button>
