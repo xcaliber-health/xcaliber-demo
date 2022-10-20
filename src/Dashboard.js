@@ -24,7 +24,8 @@ import Orders from "./Orders";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Terminology from "./Terminology";
-import ViewPatients from "./Patient/ViewPatients"
+import ViewPatients from "./Patient/ViewPatients";
+import Analytics from "./Analytics";
 
 function Copyright(props) {
   return (
@@ -173,9 +174,9 @@ function DashboardContent() {
             <Routes>
               <Route path="terminology" element={<Terminology />} />
               <Route path="interop" element={<div> interop </div>} />
-              <Route path="p360" element={<ViewPatients/>} />
-              <Route path="p360/:id" element={<Chart/>} />
-              <Route path="analytics" element={<div> analytics </div>} />
+              <Route path="p360" element={<ViewPatients />} />
+              <Route path="p360/:id" element={<Chart />} />
+              <Route path="analytics" element={<Analytics />} />
             </Routes>
           </Container>
         </Box>
