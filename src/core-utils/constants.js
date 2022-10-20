@@ -4,3 +4,8 @@ export const APP_MESSAGES = {
 };
 export const TERMINOLOGY_API_ENDPOINT =
   "https://browser.ihtsdotools.org/snowstorm/snomed-ct/browser/MAIN/SNOMEDCT-US/2022-09-01/descriptions?&limit=${LIMIT_VALUE}&term=${SEARCH_TERM_VALUE}&active=true&conceptActive=true&lang=english&groupByConcept=true";
+
+export const LENS_API_ENDPOINT = `https://lens-blitz.xcaliberapis.com`;
+export const BUTTON_LABELS = {
+  RUN: "Run",
+};
