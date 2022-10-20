@@ -159,7 +159,7 @@ function DashboardContent() {
           </Toolbar>
           <Divider />
           <List component="nav" >
-            {mainListItems(onMenuClick,classes.selectList,id)}
+            {mainListItems(onMenuClick)}
             {/* <Divider sx={{ my: 1 }} />
             {secondaryListItems} */}
           </List>
