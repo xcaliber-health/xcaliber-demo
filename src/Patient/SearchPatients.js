@@ -10,6 +10,10 @@ import ViewPatientsTable from "./ViewPatientsTable";
 // import { data } from './../util/constants'
 import Pagination from "./Pagination";
 import MenuItem from "@mui/material/MenuItem";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Drawer } from "@mui/material";
 // import PatientRepository from '../../shared/db/PatientRepository'
 // import Patient from '../../shared/model/Patient'
@@ -92,7 +96,17 @@ const SearchPatients = () => {
     let lastname = document.getElementById("lastname").value;
     let birthDate = document.getElementById("birthday").value;
 
-    console.log(firstname+" "+middlename+" "+lastname+" "+birthDate+" "+gender);
+    console.log(
+      firstname +
+        " " +
+        middlename +
+        " " +
+        lastname +
+        " " +
+        birthDate +
+        " " +
+        gender
+    );
 
     let patient = {
       addresses: [],
@@ -103,12 +117,12 @@ const SearchPatients = () => {
       isApproximateDateOfBirth: false,
       phoneNumbers: [],
       sex: gender,
-      suffix: ""
-    }
+      suffix: "",
+    };
 
     let id = await addPatient(patient);
 
-    window.alert("Successfully created patient with Id " +id.id);
+    window.alert("Successfully created patient with Id " + id.id);
     handleDrawerClose();
 
     const processor = async () => {
@@ -202,65 +216,127 @@ const SearchPatients = () => {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "space-around",
-              padding: "10px",
+              padding: "10px"
             },
           }}
         >
-          <Button onClick={handleDrawerClose} variant="contained">
-            Cancel
-          </Button>
-          <Box
-            sx={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "space-evenly",
-            }}
-          >
-            <TextField placeholder="Given Name" required id="firstname"></TextField>
-            <TextField placeholder="Middle Name" id="middlename"></TextField>
-            <TextField placeholder="Family Name" required id="lastname"></TextField>
-          </Box>
-
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              alignItems: "center",
-              width: "100%",
-            }}
-          >
+          <Typography variant="h3">New Patient</Typography>
+          <Accordion sx={{ padding: "20px" }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Basic Information</Typography>
+            </AccordionSummary>
             <Box
               sx={{
                 display: "flex",
-                flexDirection: "column",
-                marginBottom: "15px",
+                width: "100%",
+                justifyContent: "space-evenly",
+                flexWrap: "wrap"
               }}
             >
-              <label for="birthday">D.O.B</label>
-              <input type="date" id="birthday" name="birthday"></input>
-            </Box>
-
-            <Box>
               <TextField
-                helperText="Gender"
-                select
-                value={gender}
-                onChange={handleSelectChange}
-                id="gender"
+                placeholder="Given Name"
+                required
+                id="firstname"
+                sx={{marginTop: "10px"}}
+              ></TextField>
+              <TextField placeholder="Middle Name" id="middlename" sx={{marginTop: "10px"}}></TextField>
+              <TextField
+                placeholder="Family Name"
+                required
+                id="lastname"
+                sx={{marginTop: "10px"}}
+              ></TextField>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginBottom: "15px",
+                  marginTop: "10px"
+                }}
               >
-                {genders.map((option) => {
-                  return (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  );
-                })}
-              </TextField>
+                <label for="birthday">D.O.B</label>
+                <input type="date" id="birthday" name="birthday"></input>
+              </Box>
+
+              <Box sx={{marginTop: "10px"}}>
+                <TextField
+                  helperText="Gender"
+                  select
+                  value={gender}
+                  onChange={handleSelectChange}
+                  id="gender"
+                >
+                  {genders.map((option) => {
+                    return (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    );
+                  })}
+                </TextField>
+              </Box>
             </Box>
+          </Accordion>
+          <Accordion sx={{ width: "100%", padding: "20px" }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Contact Information</Typography>
+            </AccordionSummary>
+
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                Phone Number
+              </AccordionSummary>
+              <TextField
+                placeholder="Phone Number"
+                sx={{ width: "100%" }}
+              ></TextField>
+            </Accordion>
+
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                Email
+              </AccordionSummary>
+              <TextField placeholder="Email" sx={{ width: "100%" }}></TextField>
+            </Accordion>
+
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                Address
+              </AccordionSummary>
+              <TextField
+                placeholder="Address"
+                sx={{ Width: "100%" }}
+              ></TextField>
+            </Accordion>
+          </Accordion>
+          <Box sx={{display: "flex", width: "100%", justifyContent: "flex-end"}}>
+            <Button variant="contained" onClick={handleSubmit} sx={{marginRight: "10px"}}>
+              Create Patient
+            </Button>
+            <Button onClick={handleDrawerClose} variant="contained">
+              Cancel
+            </Button>
           </Box>
-          <Button variant="contained" onClick={ handleSubmit }>
-            Create Patient
-          </Button>
         </Drawer>
         <Container>
           {/* <FilterMenu
