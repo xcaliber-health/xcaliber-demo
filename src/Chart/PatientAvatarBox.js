@@ -41,7 +41,7 @@ const PatientDetailsCard = ({ patientDetails, upcomingAppointments }) => {
           pb: theme.spacing(1),
           pt: theme.spacing(1),
           pl: "none",
-          width: theme.spacing(50),
+          width: "100%",
         }}
       />
       <Grid

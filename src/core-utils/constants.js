@@ -11,4 +11,9 @@ export const BUTTON_LABELS = {
   RUN: "Run",
   EDIT_PROFILE: "Edit Profile",
   UPCOMING_APPOINTMENTS: "Upcoming Appointments",
+  VITALS: "Vitals",
+  ALLERGIES: "Allergies",
+  PROBLEMS: "Problems",
+  IMMUNIZATIONS: "Immunizations",
+  MEDICATIONS: "Medications",
 };
