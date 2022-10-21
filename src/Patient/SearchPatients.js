@@ -377,6 +377,8 @@ const SearchPatients = () => {
                     startIcon={<PersonAddIcon></PersonAddIcon>}
                     onClick={handleDrawerOpen}
                     sx={{marginLeft:"20px"}}
+                    primary
+                    variant = "contained"
                   >
                     Create Patient
                   </Button>

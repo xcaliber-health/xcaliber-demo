@@ -11,6 +11,8 @@ const config = {
   headers: {
     Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
     'x-source-id': `${process.env.REACT_APP_XSOURCEID}`,
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
   },
 }
 

@@ -18,7 +18,7 @@ export const mainListItems = (onClick) => (
     <ListItemIcon>
       <DashboardIcon />
     </ListItemIcon>
-    <ListItemText primary="Terminology APIs" />
+    <ListItemText primary="Terminology-Hub" />
   </ListItemButton>
   <ListItemButton onClick={() => {onClick("interop")}}>
     <ListItemIcon>

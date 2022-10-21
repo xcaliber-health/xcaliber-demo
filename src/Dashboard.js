@@ -27,6 +27,7 @@ import Terminology from "./Terminology";
 import ViewPatients from "./Patient/ViewPatients";
 import Analytics from "./Analytics";
 import { Avatar } from "@mui/material";
+import logo from './static/xcaliber_logo.png'
 
 function Copyright(props) {
   return (
@@ -130,13 +131,9 @@ function DashboardContent() {
               <MenuIcon />
             </IconButton>
             <Grid justifyContent="space-between" direction="flex" container>
-              <Box
-                component="img"
-                sx={{ height: 40, width: 50 }}
-                src="https://www.orthofix.com/wp-content/uploads/2019/01/XCaliber_logo.png"
-              />
-              <Avatar></Avatar>
-            </Grid>
+            <Box component="img" sx={{height: 40}} src={logo}/>
+          <Avatar ></Avatar>
+          </Grid>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -148,17 +145,9 @@ function DashboardContent() {
               px: [1],
             }}
           >
-            <IconButton onClick={toggleDrawer}>
-              <Typography
-                style={{
-                  marginRight: "30px",
-                  variant: "h6",
-                  display: "inline-block",
-                }}
-              >
-                Capabilities
-              </Typography>
-              {/* Capabilities */}
+            <IconButton onClick={toggleDrawer}  >
+            <Typography variant="h5" style={{marginRight:"30px" ,display:"inline-block"}}>Capabilities</Typography>
+            {/* Capabilities */}
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
