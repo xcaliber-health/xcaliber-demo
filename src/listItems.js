@@ -12,7 +12,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 
 
 
-export const mainListItems = (onClick,class,id) => {
+export const mainListItems = (onClick) => (
   <React.Fragment>
   <ListItemButton onClick={() => {onClick("terminology")}} >
     <ListItemIcon>
@@ -39,7 +39,7 @@ export const mainListItems = (onClick,class,id) => {
     <ListItemText primary="Analytics" />
   </ListItemButton>
 </React.Fragment>
-};
+);
 
 export const secondaryListItems = (
   <React.Fragment>

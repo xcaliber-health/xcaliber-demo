@@ -28,12 +28,7 @@ import ViewPatients from "./Patient/ViewPatients";
 import Analytics from "./Analytics";
 import { Avatar } from "@mui/material";
 
-const useStyles = makeStyles({
-  selectList:
-  {
-    backgroundColor:"grey"
-  }
-})
+
 function Copyright(props) {
   return (
     <Typography
@@ -101,7 +96,6 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent() {
-  const classes=useStyles();
   const [open, setOpen] = React.useState(true);
   const [id,setId]=React.useState('terminology');
   const navigate = useNavigate();
