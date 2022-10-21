@@ -29,7 +29,16 @@ import Analytics from "./Analytics";
 import { Avatar } from "@mui/material";
 import logo from "./static/xcaliber_logo.png";
 import Watermark from "./Watermark";
-
+import { makeStyles } from "@material-ui/styles";
+const useStyles = makeStyles({
+  root:
+  {
+  "& .Mui-selected":
+  {
+    backgroundColor:"grey",
+  },
+}
+})
 function Copyright(props) {
   return (
     <Typography
@@ -97,15 +106,16 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent() {
+  const classes=useStyles();
   const [open, setOpen] = React.useState(true);
-  const [id, setId] = React.useState("terminology");
+  const [id, setId] = React.useState(0);
   const navigate = useNavigate();
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
-  const onMenuClick = (path) => {
-    setId(path);
+  const onMenuClick = (path,id) => {
+    setId(id);
     navigate(`/${path}`);
   };
 
@@ -159,7 +169,7 @@ function DashboardContent() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems(onMenuClick)}
+            {mainListItems(onMenuClick,id,classes.root)}
             {/* <Divider sx={{ my: 1 }} />
             {secondaryListItems} */}
           </List>
