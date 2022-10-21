@@ -100,21 +100,21 @@ const CreateAppointment = ({
           pt={2}
         >
           <FormControlLabel
-            value="T18:30:00Z"
+            value="T11:00:00Z"
             control={<Radio />}
-            label="6:30 PM"
+            label="11:00 AM"
             disabled={value ? false : true}
           />
           <FormControlLabel
-            value="T18:45:00Z"
+            value="T14:00:00Z"
             control={<Radio />}
-            label="6:45 PM"
+            label="02:00 PM"
             disabled={value ? false : true}
           />
           <FormControlLabel
-            value="T19:00:00Z"
+            value="T16:00:00Z"
             control={<Radio />}
-            label="7:00 PM"
+            label="04:00 PM"
             disabled={value ? false : true}
           />
         </RadioGroup>
