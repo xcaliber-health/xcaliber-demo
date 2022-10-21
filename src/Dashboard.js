@@ -27,7 +27,16 @@ import Terminology from "./Terminology";
 import ViewPatients from "./Patient/ViewPatients";
 import Analytics from "./Analytics";
 import { Avatar } from "@mui/material";
-
+import { makeStyles } from "@material-ui/styles";
+const useStyles = makeStyles({
+  root:
+  {
+  "& .Mui-selected":
+  {
+    backgroundColor:"grey",
+  },
+}
+})
 
 function Copyright(props) {
   return (
@@ -96,15 +105,16 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent() {
+  const classes=useStyles();
   const [open, setOpen] = React.useState(true);
-  const [id,setId]=React.useState('terminology');
+  const [id, setId] = React.useState(0);
   const navigate = useNavigate();
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
-  const onMenuClick = (path) => {
-    setId(path);
+  const onMenuClick = (path,id) => {
+    setId(id);
     navigate(`/${path}`);
   };
 
@@ -131,7 +141,7 @@ function DashboardContent() {
               <MenuIcon />
             </IconButton>
             <Grid justifyContent="space-between" direction="flex" container>
-            <Box component="img" sx={{height: 40,width: 50}} src="https://www.orthofix.com/wp-content/uploads/2019/01/XCaliber_logo.png"/>
+            <Box component="img" sx={{height: 40,width: 130}} src="https://docs.xcaliberapis.com/static/xcaliber_logo-64b841b5fcfa9eee6ff27337dbcc9217.png"/>
           <Avatar ></Avatar>
           </Grid>
           </Toolbar>
@@ -153,7 +163,7 @@ function DashboardContent() {
           </Toolbar>
           <Divider />
           <List component="nav" >
-            {mainListItems(onMenuClick)}
+            {mainListItems(onMenuClick,id,classes.root)}
             {/* <Divider sx={{ my: 1 }} />
             {secondaryListItems} */}
           </List>
