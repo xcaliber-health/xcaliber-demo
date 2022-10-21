@@ -27,7 +27,8 @@ import Terminology from "./Terminology";
 import ViewPatients from "./Patient/ViewPatients";
 import Analytics from "./Analytics";
 import { Avatar } from "@mui/material";
-import logo from './static/xcaliber_logo.png'
+import logo from "./static/xcaliber_logo.png";
+import Watermark from "./Watermark";
 
 function Copyright(props) {
   return (
@@ -131,9 +132,9 @@ function DashboardContent() {
               <MenuIcon />
             </IconButton>
             <Grid justifyContent="space-between" direction="flex" container>
-            <Box component="img" sx={{height: 40}} src={logo}/>
-          <Avatar ></Avatar>
-          </Grid>
+              <Box component="img" sx={{ height: 40 }} src={logo} />
+              <Avatar></Avatar>
+            </Grid>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -145,9 +146,14 @@ function DashboardContent() {
               px: [1],
             }}
           >
-            <IconButton onClick={toggleDrawer}  >
-            <Typography variant="h5" style={{marginRight:"30px" ,display:"inline-block"}}>Capabilities</Typography>
-            {/* Capabilities */}
+            <IconButton onClick={toggleDrawer}>
+              <Typography
+                variant="h5"
+                style={{ marginRight: "30px", display: "inline-block" }}
+              >
+                Capabilities
+              </Typography>
+              {/* Capabilities */}
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
@@ -179,6 +185,7 @@ function DashboardContent() {
               <Route path="p360/:id" element={<Chart />} />
               <Route path="analytics" element={<Analytics />} />
             </Routes>
+            <Watermark />
           </Container>
         </Box>
       </Box>
