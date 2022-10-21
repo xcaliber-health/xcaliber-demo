@@ -19,4 +19,21 @@ export const AppointmentService = {
       console.log(error);
     }
   },
+  createAppointment: async (appointmentPayload) => {
+    try {
+      const result = await axios.post(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment`,
+        appointmentPayload,
+        {
+          headers: {
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+          },
+        }
+      );
+      return result.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };

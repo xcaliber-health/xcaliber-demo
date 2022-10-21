@@ -28,7 +28,6 @@ import ViewPatients from "./Patient/ViewPatients";
 import Analytics from "./Analytics";
 import { Avatar } from "@mui/material";
 
-
 function Copyright(props) {
   return (
     <Typography
@@ -52,7 +51,7 @@ const drawerWidth = 240;
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
+  zIndex: theme.zIndex.drawer - 1,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -97,7 +96,7 @@ const mdTheme = createTheme();
 
 function DashboardContent() {
   const [open, setOpen] = React.useState(true);
-  const [id,setId]=React.useState('terminology');
+  const [id, setId] = React.useState("terminology");
   const navigate = useNavigate();
   const toggleDrawer = () => {
     setOpen(!open);
@@ -131,12 +130,16 @@ function DashboardContent() {
               <MenuIcon />
             </IconButton>
             <Grid justifyContent="space-between" direction="flex" container>
-            <Box component="img" sx={{height: 40,width: 50}} src="https://www.orthofix.com/wp-content/uploads/2019/01/XCaliber_logo.png"/>
-          <Avatar ></Avatar>
-          </Grid>
+              <Box
+                component="img"
+                sx={{ height: 40, width: 50 }}
+                src="https://www.orthofix.com/wp-content/uploads/2019/01/XCaliber_logo.png"
+              />
+              <Avatar></Avatar>
+            </Grid>
           </Toolbar>
         </AppBar>
-        <Drawer variant="permanent" open={open} >
+        <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
               display: "flex",
@@ -145,14 +148,22 @@ function DashboardContent() {
               px: [1],
             }}
           >
-            <IconButton onClick={toggleDrawer}  >
-            <Typography style={{marginRight:"30px" ,variant:"h6",display:"inline-block"}}>Capabilities</Typography>
-            {/* Capabilities */}
+            <IconButton onClick={toggleDrawer}>
+              <Typography
+                style={{
+                  marginRight: "30px",
+                  variant: "h6",
+                  display: "inline-block",
+                }}
+              >
+                Capabilities
+              </Typography>
+              {/* Capabilities */}
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
           <Divider />
-          <List component="nav" >
+          <List component="nav">
             {mainListItems(onMenuClick)}
             {/* <Divider sx={{ my: 1 }} />
             {secondaryListItems} */}
@@ -171,8 +182,8 @@ function DashboardContent() {
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }} >
-            <Routes >
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <Routes>
               <Route path="terminology" element={<Terminology />} />
               <Route path="interop" element={<div> interop </div>} />
               <Route path="p360" element={<ViewPatients />} />

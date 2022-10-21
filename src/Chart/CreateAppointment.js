@@ -1,0 +1,135 @@
+import {
+  Button,
+  Grid,
+  RadioGroup,
+  TextField,
+  Typography,
+  Radio,
+  FormControlLabel,
+} from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import React, { useEffect } from "react";
+
+const CreateAppointment = ({
+  patientDetails,
+  appointmentFormDetails,
+  onScheduleClick,
+  onCancelClick,
+  onReasonChange,
+  onDateChange,
+  onTimeChange,
+  updatePatientId,
+}) => {
+  const [value, setValue] = React.useState(null);
+  useEffect(() => {
+    updatePatientId(patientDetails?.id);
+  }, []);
+  useEffect(() => {
+    if (value) {
+      const dateObject = new Date(value);
+      onDateChange(
+        `${dateObject.getFullYear()}-${
+          dateObject.getMonth() + 1
+        }-${dateObject.getDate()}T00:00:00Z`
+      );
+    }
+  }, [value]);
+  return (
+    <Grid container direction="column" justifyContent="space-between">
+      <Grid item container pt={2}>
+        <Grid item>
+          <Typography>Schedule Appointment</Typography>
+        </Grid>
+        <Grid container item>
+          <Button
+            onClick={() => {
+              onScheduleClick(appointmentFormDetails, patientDetails?.id);
+            }}
+          >
+            Schedule
+          </Button>
+          <Button onClick={onCancelClick}>Cancel</Button>
+        </Grid>
+      </Grid>
+      <Grid item pt={2}>
+        <TextField
+          sx={{ width: "100%" }}
+          value={`${patientDetails?.name?.[0]?.given?.[0]}  ${patientDetails?.name?.[0]?.family} `}
+          disabled
+          required={true}
+        />
+      </Grid>
+      <Grid item pt={2}>
+        <Typography pb={1}> Reason for visit</Typography>
+        <TextField
+          sx={{ width: "100%" }}
+          label={"reason"}
+          onChange={(e) => {
+            onReasonChange(e.target.value);
+          }}
+        />
+      </Grid>
+      <Grid item pt={2}>
+        <Typography pb={1}>Select team member (Physician Assistant)</Typography>
+        <TextField
+          sx={{ width: "100%" }}
+          value={"Xcaliber user"}
+          required
+          disabled
+        />
+      </Grid>
+      <Grid item pt={2}>
+        <Typography pb={1}> Location Type</Typography>
+        <TextField
+          sx={{ width: "100%" }}
+          value={"Virtual/Telehealth"}
+          required
+          disabled
+        />
+      </Grid>
+      <Grid item pt={2}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Appointment date"
+            value={value}
+            onChange={(newValue) => {
+              setValue(newValue);
+            }}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
+      </Grid>
+      <Grid>
+        <RadioGroup
+          onChange={(e) => {
+            onTimeChange(e.target.value);
+          }}
+          pt={2}
+        >
+          <FormControlLabel
+            value="T18:30:00Z"
+            control={<Radio />}
+            label="6:30 PM"
+            disabled={value ? false : true}
+          />
+          <FormControlLabel
+            value="T18:45:00Z"
+            control={<Radio />}
+            label="6:45 PM"
+            disabled={value ? false : true}
+          />
+          <FormControlLabel
+            value="T19:00:00Z"
+            control={<Radio />}
+            label="7:00 PM"
+            disabled={value ? false : true}
+          />
+        </RadioGroup>
+      </Grid>
+    </Grid>
+  );
+};
+
+export default CreateAppointment;
