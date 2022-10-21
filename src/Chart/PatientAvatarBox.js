@@ -6,7 +6,12 @@ import { BUTTON_LABELS } from "../core-utils/constants";
 import { useEffect } from "react";
 import { Helper } from "../core-utils/helper";
 
-const PatientDetailsCard = ({ patientDetails, upcomingAppointments }) => {
+const PatientDetailsCard = ({
+  patientDetails,
+  upcomingAppointments,
+  drawerState,
+  handleDrawerState,
+}) => {
   const theme = useTheme();
   const commonGridElements = { pt: theme.spacing(1.5), pb: theme.spacing(1.5) };
 
@@ -56,7 +61,13 @@ const PatientDetailsCard = ({ patientDetails, upcomingAppointments }) => {
         >
           <EventAvailableIcon />
           {BUTTON_LABELS.UPCOMING_APPOINTMENTS}
-          <IconButton sx={{ p: 0 }} display="flex">
+          <IconButton
+            sx={{ p: 0 }}
+            display="flex"
+            onClick={() => {
+              handleDrawerState(!drawerState);
+            }}
+          >
             <AddCircleOutlineRoundedIcon />
           </IconButton>
         </Box>
