@@ -37,30 +37,21 @@ const CreateAppointment = ({
     }
   }, [value]);
   return (
-    <Grid container direction="column" justifyContent="space-between">
+    <Grid container direction="column">
       <Grid item container pt={2}>
         <Grid item>
-          <Typography>Schedule Appointment</Typography>
+          <Typography variant="h4">Schedule Appointment</Typography>
         </Grid>
-        <Grid container item>
-          <Button
-            onClick={() => {
-              onScheduleClick(appointmentFormDetails, patientDetails?.id);
-            }}
-          >
-            Schedule
-          </Button>
-          <Button onClick={onCancelClick}>Cancel</Button>
-        </Grid>
+
       </Grid>
-      <Grid item pt={2}>
+      {/* <Grid item pt={2}>
         <TextField
           sx={{ width: "100%" }}
           value={`${patientDetails?.name?.[0]?.given?.[0]}  ${patientDetails?.name?.[0]?.family} `}
           disabled
           required={true}
         />
-      </Grid>
+      </Grid> */}
       <Grid item pt={2}>
         <Typography pb={1}> Reason for visit</Typography>
         <TextField
@@ -71,7 +62,7 @@ const CreateAppointment = ({
           }}
         />
       </Grid>
-      <Grid item pt={2}>
+      {/* <Grid item pt={2}>
         <Typography pb={1}>Select team member (Physician Assistant)</Typography>
         <TextField
           sx={{ width: "100%" }}
@@ -79,8 +70,8 @@ const CreateAppointment = ({
           required
           disabled
         />
-      </Grid>
-      <Grid item pt={2}>
+      </Grid> */}
+      {/* <Grid item pt={2}>
         <Typography pb={1}> Location Type</Typography>
         <TextField
           sx={{ width: "100%" }}
@@ -88,7 +79,7 @@ const CreateAppointment = ({
           required
           disabled
         />
-      </Grid>
+      </Grid> */}
       <Grid item pt={2}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
@@ -128,6 +119,16 @@ const CreateAppointment = ({
           />
         </RadioGroup>
       </Grid>
+      <Grid container item style={{display: "flex", flexDirection : "row-reverse"}} >
+          <Button
+            onClick={() => {
+              onScheduleClick(appointmentFormDetails, patientDetails?.id);
+            }}
+          >
+            Schedule
+          </Button>
+          <Button onClick={onCancelClick}>Cancel</Button>
+        </Grid>
     </Grid>
   );
 };

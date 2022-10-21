@@ -157,13 +157,14 @@ function DashboardContent() {
             }}
           >
             <IconButton onClick={toggleDrawer}>
-              <Typography
+              {open &&
+              (<Typography
                 variant="h5"
-                style={{ marginRight: "30px", display: "inline-block" }}
-              >
+                style={{ display: "inline-block" }}
+              > 
                 Capabilities
-              </Typography>
-              {/* Capabilities */}
+              </Typography>)
+              }
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
@@ -187,7 +188,7 @@ function DashboardContent() {
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
             <Routes>
               <Route path="terminology" element={<Terminology />} />
               <Route path="interop" element={<div> interop </div>} />

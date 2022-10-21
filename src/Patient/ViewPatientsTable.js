@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@mui/system";
 import { getPatientsAtPage } from "./service/service";
 import Loading from "./Loading";
 import { formatDate } from "../core-utils/formatDate";
@@ -17,6 +18,7 @@ import Paper from "@mui/material/Paper";
 const ViewPatientsTable = (props) => {
   const { searchRequest } = props;
   const navigate = useNavigate();
+  const theme = useTheme();
   //   const { data, status } = usePatients(searchRequest)
   const [awaitd, setAwait] = useState(true);
   const [newData, setNewData] = useState({
@@ -43,7 +45,7 @@ const ViewPatientsTable = (props) => {
   }, [props.page, searchRequest]);
 
   if (awaitd) {
-    return <Loading />;
+    return <div style ={{height : "200px", width : "100%", display : "flex", justifyContent: "center", alignItems : "center" }}><Loading /></div>
   }
 
   if (newData.totalCount === 0) {
@@ -51,7 +53,7 @@ const ViewPatientsTable = (props) => {
   }
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} style = {{marginTop : theme.spacing(3)}}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
