@@ -26,9 +26,9 @@ const PatientSearchInput = (props) => {
     label="search"
     variant="outlined" 
     onChange={onSearchBoxChange}
-    sx={{width:"90ch"}}
+    sx={{width:"100%"}}
     value={searchText}
-    placeholder={'search'}
+    placeholder={'search by name'}
 
     />
   )

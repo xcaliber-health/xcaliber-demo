@@ -167,7 +167,7 @@ const Chart = () => {
             width: "40%",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-around",
+            justifyContent: "flex-start",
             padding: "10px",
             height: "100%",
             overflowY: "scroll",
