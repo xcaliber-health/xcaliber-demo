@@ -73,7 +73,7 @@ const PatientDetailsCard = ({
           disabled={true}
         />
       </Drawer>
-      <Grid item>
+      <Grid item sx={{padding:theme.spacing(1)}}>
         <Grid>{`${patientDetails?.name?.[0]?.given?.[0]}  ${patientDetails?.name?.[0]?.family} `}</Grid>
         <Grid>
           {`Patient | ${calculateAge(
