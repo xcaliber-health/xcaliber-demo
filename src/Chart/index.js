@@ -237,7 +237,7 @@ const Chart = () => {
           Timeline
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <NotesTab />
+          <NotesTab patientDetails={patientDetails} />
         </TabPanel>
         <TabPanel value={value} index={2}>
           Details
