@@ -20,6 +20,7 @@ import PamiV from "./PamiV";
 
 import CreateAppointment from "./CreateAppointment";
 import Loading from "../Patient/Loading";
+import DetailsTab from "./TabComponents/DetailsTab";
 
 const Chart = () => {
   const { id } = useParams();
@@ -211,7 +212,7 @@ const Chart = () => {
         }}
         lg={3}
       >
-        <Paper style = {{height : "100%"}}>
+        <Paper style={{ height: "100%" }}>
           {!loading && (
             <PatientDetailsCard
               patientId={id}
@@ -221,7 +222,7 @@ const Chart = () => {
               handleDrawerState={setIsDrawerOpen}
             />
           )}
-          {loading && <Loading/>}
+          {loading && <Loading />}
         </Paper>
       </Grid>
 
@@ -232,7 +233,7 @@ const Chart = () => {
         }}
         lg={5}
       >
-        <Paper style = {{height : "100%"}}>
+        <Paper style={{ height: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
               value={value}
@@ -240,9 +241,10 @@ const Chart = () => {
               aria-label="basic tabs example"
               centered
             >
-              <Tab label="Timeline"  style = {{width : "25%"}}/>
-              <Tab label="Notes" style = {{width : "25%"}} />
-              <Tab label="Details" style = {{width : "25%"}}/>
+              <Tab label="Timeline" style={{ width: "25%" }} />
+              <Tab label="Notes" style={{ width: "25%" }} />
+              <Tab label="Details" style={{ width: "25%" }} />
+              <Tab label="Profile" style={{ width: "25%" }} />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
@@ -254,6 +256,9 @@ const Chart = () => {
           <TabPanel value={value} index={2}>
             <ComingSoon />
           </TabPanel>
+          <TabPanel value={value} index={3}>
+            <DetailsTab patientDetails={patientDetails} />
+          </TabPanel>
         </Paper>
       </Grid>
 
@@ -264,7 +269,7 @@ const Chart = () => {
         }}
         lg={3}
       >
-        <Paper style = {{height : "100%"}}>
+        <Paper style={{ height: "100%" }}>
           <PamiV />
         </Paper>
       </Grid>
