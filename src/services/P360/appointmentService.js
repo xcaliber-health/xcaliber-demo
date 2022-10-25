@@ -31,6 +31,7 @@ export const AppointmentService = {
           },
         }
       );
+
       return result.data;
     } catch (error) {
       console.log(error);
