@@ -13,7 +13,8 @@ import PatientDetailsCard from "./PatientAvatarBox";
 import { useParams, useNavigate } from "react-router-dom";
 import { PatientService } from "../services/P360/patientService";
 import { AppointmentService } from "../services/P360/appointmentService";
-
+import NotesTab from "./TabComponents/NotesTab";
+import ComingSoon from "../Watermark/ComingSoon"
 import PamiV from "./PamiV";
 
 import CreateAppointment from "./CreateAppointment";
@@ -161,13 +162,16 @@ const Chart = () => {
       <Drawer
         anchor={"right"}
         open={isDrawerOpen}
+        onClose={() => {
+          setIsDrawerOpen(false);
+        }}
         variant="temporary"
         PaperProps={{
           sx: {
             width: "40%",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-around",
+            justifyContent: "flex-start",
             padding: "10px",
             height: "100%",
             overflowY: "scroll",
@@ -231,13 +235,13 @@ const Chart = () => {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          Timeline
+          <ComingSoon/>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Notes
+          <NotesTab patientDetails={patientDetails} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Details
+        <ComingSoon/>
         </TabPanel>
       </Grid>
 

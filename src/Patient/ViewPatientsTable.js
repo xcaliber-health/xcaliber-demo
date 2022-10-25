@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@mui/system";
 import { getPatientsAtPage } from "./service/service";
 import Loading from "./Loading";
 import { formatDate } from "../core-utils/formatDate";
@@ -13,9 +14,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { Typography } from "@mui/material";
 const ViewPatientsTable = (props) => {
   const { searchRequest } = props;
   const navigate = useNavigate();
+  const theme = useTheme();
   //   const { data, status } = usePatients(searchRequest)
   const [awaitd, setAwait] = useState(true);
   const [newData, setNewData] = useState({
@@ -42,7 +45,7 @@ const ViewPatientsTable = (props) => {
   }, [props.page, searchRequest]);
 
   if (awaitd) {
-    return <Loading />;
+    return <div style ={{height : "200px", width : "100%", display : "flex", justifyContent: "center", alignItems : "center" }}><Loading /></div>
   }
 
   if (newData.totalCount === 0) {
@@ -50,13 +53,13 @@ const ViewPatientsTable = (props) => {
   }
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} style = {{marginTop : theme.spacing(3)}}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="center">name</TableCell>
-            <TableCell align="center">gender</TableCell>
-            <TableCell align="center">date of birth</TableCell>
+            <TableCell align="center"><Typography>name</Typography></TableCell>
+            <TableCell align="center"><Typography>gender</Typography></TableCell>
+            <TableCell align="center"><Typography>date of birth</Typography></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -69,10 +72,10 @@ const ViewPatientsTable = (props) => {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               style={{ cursor: "pointer" }}
             >
-              <TableCell align="center">{patient.familyName} {patient.givenName}</TableCell>
-              <TableCell align="center">{patient.sex}</TableCell>
+              <TableCell align="center"><Typography>{patient.familyName} {patient.givenName}</Typography></TableCell>
+              <TableCell align="center"><Typography>{patient.sex}</Typography></TableCell>
               <TableCell align="center" component="th" scope="row">
-                {formatDate(patient.dateOfBirth)}
+              <Typography>{formatDate(patient.dateOfBirth)}</Typography>
               </TableCell>
             </TableRow>
           ))}

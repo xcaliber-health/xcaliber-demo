@@ -299,7 +299,7 @@ const SearchPatients = () => {
           /> */}
           <Grid>
             <Grid md={12}>
-              <Grid display="flex">
+              <Grid display="flex" justifyContent="flex-end">
                 <Grid md={8} style={{ paddingLeft: "0px" }} >
                   <PatientSearchInput
                     data-testid={"searcinput"}
