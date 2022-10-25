@@ -34,7 +34,7 @@ const PatientDetailsCard = ({
 
   return (
     <Grid container minWidth={theme.spacing(25)} sx={{ pt: theme.spacing(1) }}>
-      <Grid sx={{ padding: theme.spacing(1) }} item>
+      <Grid sx={{ padding: theme.spacing(1), pl : theme.spacing(3) }} item>
         <Avatar sx={{ height: 50, width: 50, marginRight: theme.spacing(1) }} />
       </Grid>
       <Drawer

@@ -15,7 +15,13 @@ export default function PamiV() {
         alignSelf="flex-start"
         display="flex"
         justifyContent="space-between"
-        margin={theme.spacing(3)}
+        // marginLeft={theme.spacing(3)}
+        // marginRight={theme.spacing(3)}
+        marginBottom={theme.spacing(3)}
+        marginLeft={theme.spacing(3)}
+        marginRight={theme.spacing(3)}
+        paddingTop = {theme.spacing(3)}
+
       >
         <div style = {{display : "flex", alignItems: "center"}}>
         <DeviceThermostat />

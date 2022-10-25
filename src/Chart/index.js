@@ -6,6 +6,7 @@ import {
   Typography,
   IconButton,
   Drawer,
+  Paper,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/system";
@@ -14,10 +15,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { PatientService } from "../services/P360/patientService";
 import { AppointmentService } from "../services/P360/appointmentService";
 import NotesTab from "./TabComponents/NotesTab";
-import ComingSoon from "../Watermark/ComingSoon"
+import ComingSoon from "../Watermark/ComingSoon";
 import PamiV from "./PamiV";
 
 import CreateAppointment from "./CreateAppointment";
+import Loading from "../Patient/Loading";
 
 const Chart = () => {
   const { id } = useParams();
@@ -196,64 +198,67 @@ const Chart = () => {
       </Drawer>
       <Grid
         sx={{
-          backgroundColor: "#FAF9F6",
           width: theme.spacing(50),
           height: theme.spacing(60),
         }}
         lg={3}
       >
-        {!loading && (
-          <PatientDetailsCard
-            patientId={id}
-            patientDetails={patientDetails}
-            upcomingAppointments={upcomingAppointments}
-            drawerState={isDrawerOpen}
-            handleDrawerState={setIsDrawerOpen}
-          />
-        )}
-        {loading && "Loading"}
+        <Paper style = {{height : "100%"}}>
+          {!loading && (
+            <PatientDetailsCard
+              patientId={id}
+              patientDetails={patientDetails}
+              upcomingAppointments={upcomingAppointments}
+              drawerState={isDrawerOpen}
+              handleDrawerState={setIsDrawerOpen}
+            />
+          )}
+          {loading && <Loading/>}
+        </Paper>
       </Grid>
 
       <Grid
         sx={{
-          backgroundColor: "#FAF9F6",
           // width: theme.spacing(50),
           height: theme.spacing(60),
         }}
         lg={5}
       >
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-            centered
-          >
-            <Tab label="Timeline" />
-            <Tab label="Notes" />
-            <Tab label="Details" />
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0}>
-          <ComingSoon/>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <NotesTab patientDetails={patientDetails} />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-        <ComingSoon/>
-        </TabPanel>
+        <Paper style = {{height : "100%"}}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="basic tabs example"
+              centered
+            >
+              <Tab label="Timeline"  style = {{width : "25%"}}/>
+              <Tab label="Notes" style = {{width : "25%"}} />
+              <Tab label="Details" style = {{width : "25%"}}/>
+            </Tabs>
+          </Box>
+          <TabPanel value={value} index={0}>
+            <ComingSoon />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <NotesTab patientDetails={patientDetails} />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <ComingSoon />
+          </TabPanel>
+        </Paper>
       </Grid>
 
       <Grid
         sx={{
-          backgroundColor: "#FAF9F6",
           // width: theme.spacing(50),
           height: theme.spacing(60),
         }}
         lg={3}
       >
-        <PamiV />
+        <Paper style = {{height : "100%"}}>
+          <PamiV />
+        </Paper>
       </Grid>
     </Grid>
   );

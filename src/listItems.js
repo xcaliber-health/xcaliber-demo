@@ -15,26 +15,26 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 export const mainListItems = (onClick,id,classColor) => (
   <React.Fragment>
   <ListItemButton onClick={() => {onClick("terminology",1)}} selected={id===1?classColor:""} >
-    <ListItemIcon>
-      <DashboardIcon />
+    <ListItemIcon color='red'>
+      <DashboardIcon style={{color:'#185DA0'}}/>
     </ListItemIcon>
     <ListItemText primary="Terminology-Hub" />
   </ListItemButton>
   <ListItemButton onClick={() => {onClick("interop",2)}}  selected={id===2?classColor:""}>
     <ListItemIcon>
-      <ShoppingCartIcon />
+      <ShoppingCartIcon style={{color:'#185DA0'}}/>
     </ListItemIcon>
     <ListItemText primary="Interop APIs" />
   </ListItemButton>
   <ListItemButton onClick={() => {onClick("p360",3)}}  selected={id===3?classColor:""}>
     <ListItemIcon>
-      <PeopleIcon />
+      <PeopleIcon style={{color:'#185DA0'}}/>
     </ListItemIcon>
     <ListItemText primary="P360" />
   </ListItemButton>
   <ListItemButton onClick={() => {onClick("analytics",4)}}  selected={id===4?classColor:""}>
     <ListItemIcon>
-      <BarChartIcon />
+      <BarChartIcon style={{color:'#185DA0'}}/>
     </ListItemIcon>
     <ListItemText primary="Analytics" />
   </ListItemButton>

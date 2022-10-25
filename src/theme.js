@@ -5,7 +5,7 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#556cd6',
+      main: '#185DA0',
     },
     secondary: {
       main: '#19857b',
@@ -13,6 +13,9 @@ const theme = createTheme({
     error: {
       main: red.A400,
     },
+    text : {
+      
+    }
   },
   typography:{
     fontFamily : "Montesteratt"

@@ -2,7 +2,7 @@ import { usePagination } from './service/service'
 import React, { useMemo } from 'react'
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography,IconButton } from '@mui/material'
 const Pagination = (props) => {
   const DOTS = '...'
 
@@ -42,15 +42,15 @@ const Pagination = (props) => {
       }}
     >
       {/* Left navigation arrow */}
+      <IconButton color="primary">
       <KeyboardArrowLeftIcon
         onClick={onPrevious}
         sx={{
-          '&:hover': {
-            background: '#f00',
-          },
+
           display: `${currentPage==1 ? 'none' : 'flex'}`
         }}
       ></KeyboardArrowLeftIcon>
+      </IconButton>
       {paginationRange.map((pageNumber) => {
         // If the pageItem is a DOT, render the DOTS unicode character
         if (pageNumber === DOTS) {
@@ -62,9 +62,7 @@ const Pagination = (props) => {
           <Box
             onClick={() => onPageChange(pageNumber)}
             sx={{
-              '&:hover': {
-                background: '#f00',
-              },
+
               backgroundColor: `${pageNumber == currentPage ? 'darkgrey' : 'inherit'}`,
               borderRadius: '50%',
               height: '25px',
@@ -74,21 +72,28 @@ const Pagination = (props) => {
               justifyContent: 'center',
             }}
           >
+                  <IconButton color="primary">
+            <Typography variant='caption'>
             {pageNumber}
+
+            </Typography>
+            </IconButton>
+
           </Box>
         )
       })}
       {/*  Right Navigation arrow */}
+      <IconButton color="primary">
 
       <KeyboardArrowRightIcon
         onClick={onNext}
         sx={{
-          '&:hover': {
-            background: '#f00',
-          },
+
           display: `${currentPage==lastPage ? 'none' : 'flex'}`
         }}
       ></KeyboardArrowRightIcon>
+            </IconButton>
+
     </Box>
   )
 }
