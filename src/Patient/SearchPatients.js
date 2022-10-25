@@ -21,6 +21,7 @@ import { addPatient, getAllPatients, getPatientCount } from "./service/service";
 import { FormControl } from "@mui/material";
 import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 export const LabelsContext = React.createContext({
   filterLabels: [],
   setFilterLabels: () => { },
@@ -54,7 +55,7 @@ const SearchPatients = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [toggleDrawer, setToggleDrawer] = useState(false);
   const [gender, setGender] = useState("");
-
+  const navigate = useNavigate();
   const handleGenderChange = (event) => {
     setGender(event.target.value);
   };
@@ -127,8 +128,7 @@ const SearchPatients = () => {
     };
 
     let id = await addPatient(patient);
-
-    window.alert("Successfully created patient with Id " + id.id);
+    navigate(`/p360/` + id.id);
     handleDrawerClose();
 
     const processor = async () => {
