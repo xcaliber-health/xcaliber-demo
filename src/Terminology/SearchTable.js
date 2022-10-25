@@ -6,30 +6,79 @@ import {
   TableRow,
   Table,
   Grid,
+  Drawer,
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/system";
+import { useState } from "react";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import AppBar from "@mui/material/AppBar";
+import TabPanel from "./modal";
+
+function SimpleDialog(props) {
+  const { onClose, open } = props;
+  const handleClose = () => {
+    onClose(false);
+  };
+  const [value, setValue] = useState(0);
+  const handleChange = (event, value) => {
+    setValue(value);
+  };
+  return (
+    <Drawer onClose={handleClose} open={open} anchor="right">
+      {value === 0 && (<Typography style={{ paddingTop: "50px", paddingBlock: "30px", paddingLeft: "30px" }} variant="h5">Summary</Typography>
+      )}
+      {value === 1 && (<Typography style={{ paddingTop: "50px", paddingBlock: "30px", paddingLeft: "30px" }} variant="h5">Representation</Typography>
+      )}
+      {/* <DialogTitle id="simple-dialog-title">Terminology</DialogTitle> */}
+      <AppBar position="static" color="default">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <Tab label="Summary" />
+          <Tab label="Representation" />
+        </Tabs>
+      </AppBar>
+      <TabPanel value={value} index={0}>Coming soon1...</TabPanel>
+      <TabPanel value={value} index={1}>Coming soon2...</TabPanel>
+
+    </Drawer>
+  );
+}
+
+
 
 export default function SearchTable({ tableRowData }) {
   const theme = useTheme();
+  const [open, setOpen] = useState(false);
+  const onSearchResultsClick = () => {
+    setOpen(true);
+  }
+  const handleClose = () => {
+    setOpen(false);
+  }
   return (
     tableRowData[0] && (
-      <Paper style = {{marginTop : theme.spacing(4), overflow: "scroll"}}>
-         {tableRowData[0].map((rowData, index) => {
-            return (
-              <ListItemButton
-              onClick={() => {
-                onClick("terminology");
-              }}
-              style = {{flexDirection : "column",alignItems: "flex-start"}}
+      <Paper style={{ marginTop: theme.spacing(4), overflow: "scroll" }}>
+        {tableRowData[0].map((rowData, index) => {
+          return (
+            <ListItemButton
+              onClick={() => { onSearchResultsClick() }}
+              style={{ flexDirection: "column", alignItems: "flex-start" }}
               divider
-              key = {rowData.id}
+              key={rowData.id}
             >
               <ListItemText primary={rowData?.term} />
               <ListItemText secondary={rowData?.concept?.fsn?.term} />
             </ListItemButton>
-            );
-          })}
-        
+          );
+        })}
+
         {/* <Table
       sx={{ maxWidth: 250, mt: theme.spacing(2) }}
       aria-label="simple table"
@@ -47,7 +96,9 @@ export default function SearchTable({ tableRowData }) {
           })}
       </TableBody>
     </Table> */}
+        <SimpleDialog open={open} onClose={handleClose} />
       </Paper>
     )
   );
 }
+
