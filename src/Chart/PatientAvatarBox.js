@@ -20,17 +20,16 @@ const PatientDetailsCard = ({
       <Grid sx={{ padding: theme.spacing(1) }} item>
         <Avatar sx={{ height: 50, width: 50, marginRight: theme.spacing(1) }} />
       </Grid>
-      <Grid item>
+      <Grid item sx={{ padding: theme.spacing(1) }}>
         <Grid>{`${patientDetails?.name?.[0]?.given?.[0]}  ${patientDetails?.name?.[0]?.family} `}</Grid>
         <Grid>
-          {`Patient | ${20} | ${
-            patientDetails?.extension?.find((extension) => {
-              return (
-                extension?.url ===
-                "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
-              );
-            })?.valueCode
-          }`}
+          {`Patient | ${20} | ${patientDetails?.extension?.find((extension) => {
+            return (
+              extension?.url ===
+              "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
+            );
+          })?.valueCode
+            }`}
         </Grid>
 
         {/* TODO : Edit profile button 

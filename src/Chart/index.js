@@ -223,6 +223,7 @@ const Chart = () => {
             value={value}
             onChange={handleChange}
             aria-label="basic tabs example"
+            centered
           >
             <Tab label="Timeline" />
             <Tab label="Notes" />
