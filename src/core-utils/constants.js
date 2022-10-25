@@ -5,6 +5,7 @@ export const APP_MESSAGES = {
 export const TERMINOLOGY_API_ENDPOINT =
   "https://browser.ihtsdotools.org/snowstorm/snomed-ct/browser/MAIN/SNOMEDCT-US/2022-09-01/descriptions?&limit=${LIMIT_VALUE}&term=${SEARCH_TERM_VALUE}&active=true&conceptActive=true&lang=english&groupByConcept=true";
 
+export const TERMINOLOGY_TAG_API_ENDPOINT = "https://browser.ihtsdotools.org/snowstorm/snomed-ct/browser/MAIN/SNOMEDCT-US/2022-09-01/descriptions?&limit=${LIMIT_VALUE}&term=${SEARCH_TERM_VALUE}&semanticTags=${TAGS}&active=true&conceptActive=true&lang=english&groupByConcept=true"
 export const LENS_API_ENDPOINT = `https://lens-blitz.xcaliberapis.com`;
 export const XCHANGE_SERVICE_ENDPOINT = `https://xchange-blitz.xcaliberapis.com`;
 export const BUTTON_LABELS = {
@@ -17,3 +18,33 @@ export const BUTTON_LABELS = {
   IMMUNIZATIONS: "Immunizations",
   MEDICATIONS: "Medications",
 };
+export const tags = [
+  'administration method',
+  'assessment scale',
+  'attribute',
+  'body structure',
+  'cell',
+  'clinical drug',
+  'disorder',
+  'disposition',
+  'event',
+  'finding',
+  'medicinal product',
+  'medicinal product form',
+  'morphologic abnormality',
+  'navigational concept',
+  'observable entity',
+  'organism',
+  'physical object',
+  'procedure',
+  'product',
+  'qualifier value',
+  'regime/therapy',
+  'release characteristic',
+  'role',
+  'situation',
+  'specimen',
+  'substance'
+]
+
+
