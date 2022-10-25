@@ -136,9 +136,17 @@ const Chart = () => {
     ) {
       alert("Please provide a valid reason ");
     } else {
-      await AppointmentService.createAppointment(appointmentPayload);
+      const response = await AppointmentService.createAppointment(
+        appointmentPayload
+      );
+      const createdAppointment = await AppointmentService.getAppointmentById(
+        response
+      );
+      setUpcomingAppointments([
+        ...upcomingAppointments,
+        { resource: { ...createdAppointment } },
+      ]);
       setIsDrawerOpen(false);
-      navigate(`/p360/${id}`);
     }
   };
   useEffect(() => {
@@ -199,7 +207,7 @@ const Chart = () => {
       <Grid
         sx={{
           width: theme.spacing(50),
-          height: theme.spacing(60),
+          height: "100%",
         }}
         lg={3}
       >

@@ -4,7 +4,6 @@ import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
 export const NoteService = {
   getVisitNotes: async (patientId) => {
     try {
-      console.log("here id  : ", patientId);
       const response = await axios.get(
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&type=visit-notes&_count=3`,
         {
@@ -23,7 +22,6 @@ export const NoteService = {
   },
   createNote: async (notePayload) => {
     try {
-      console.log(notePayload);
       const response = await axios.post(
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?type=visit-notes`,
         notePayload,
@@ -36,7 +34,25 @@ export const NoteService = {
           },
         }
       );
-      return response.data;
+      return response.data?.data?.id;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getVisitNoteById: async (noteId) => {
+    try {
+      const result = await axios.get(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference/${noteId}?type=visit-notes`,
+        {
+          headers: {
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          },
+        }
+      );
+      return result?.data?.data;
     } catch (error) {
       console.log(error);
     }

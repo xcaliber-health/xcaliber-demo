@@ -15,6 +15,7 @@ import { BUTTON_LABELS } from "../core-utils/constants";
 import { useState } from "react";
 import CreateAppointment from "./CreateAppointment";
 import { Helper } from "../core-utils/helper";
+import DoctorImage from "../../src/assets/unsplash_VeF3uWcH4L4.svg";
 
 const PatientDetailsCard = ({
   patientDetails,
@@ -33,9 +34,16 @@ const PatientDetailsCard = ({
   };
 
   return (
-    <Grid container minWidth={theme.spacing(25)} sx={{ pt: theme.spacing(1) }}>
-      <Grid sx={{ padding: theme.spacing(1), pl : theme.spacing(3) }} item>
-        <Avatar sx={{ height: 50, width: 50, marginRight: theme.spacing(1) }} />
+    <Grid
+      container
+      minWidth={theme.spacing(25)}
+      sx={{ height: "100%", pt: theme.spacing(1) }}
+    >
+      <Grid sx={{ padding: theme.spacing(1) }} item>
+        <Avatar
+          src={DoctorImage}
+          sx={{ height: 50, width: 50, marginRight: theme.spacing(1) }}
+        />
       </Grid>
       <Drawer
         anchor={"right"}
@@ -73,7 +81,7 @@ const PatientDetailsCard = ({
           disabled={true}
         />
       </Drawer>
-      <Grid item sx={{padding:theme.spacing(1)}}>
+      <Grid item sx={{ padding: theme.spacing(1) }}>
         <Grid>{`${patientDetails?.name?.[0]?.given?.[0]}  ${patientDetails?.name?.[0]?.family} `}</Grid>
         <Grid>
           {`Patient | ${calculateAge(
@@ -109,7 +117,7 @@ const PatientDetailsCard = ({
         sx={{ p: theme.spacing(3), width: theme.spacing(42) }}
         alignItems="center"
       >
-        <Grid container>
+        <Grid container spacing={1}>
           <EventAvailableIcon />
           <Typography
             sx={{
@@ -127,7 +135,7 @@ const PatientDetailsCard = ({
               handleDrawerState(!drawerState);
             }}
           >
-            <AddCircleOutlineRoundedIcon />
+            <AddCircleOutlineRoundedIcon sx={{ color: "black", mr: -12 }} />
           </IconButton>
         </Grid>
         <Grid

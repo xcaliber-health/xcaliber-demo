@@ -45,6 +45,23 @@ const CreateNotes = ({
         <Grid item pt={2}>
           <Typography variant="h4">{`Create Notes`}</Typography>
         </Grid>
+        <Grid sx={{ width: "100%" }} item pt={2}>
+          <InputLabel id="notesinput-label-select-label">Template</InputLabel>
+          <Select
+            sx={{ width: "190%" }}
+            id="template-note-select"
+            value={templateValue}
+            label="Age"
+            onChange={(e) => {
+              setTemplateValue(e.target.value);
+              onTemplateChange(e.target.value);
+            }}
+          >
+            <MenuItem value={`Simple`}>Simple</MenuItem>
+            <MenuItem value={`SOAP`}>SOAP</MenuItem>
+            <MenuItem value={`Pre-Op`}>Pre-Op</MenuItem>
+          </Select>
+        </Grid>
         <Grid item pt={2}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
@@ -88,6 +105,7 @@ const CreateNotes = ({
           container
           item
           style={{ display: "flex", flexDirection: "row-reverse" }}
+          justifyContent={"space-around"}
         >
           <Button
             onClick={() => {
@@ -95,28 +113,17 @@ const CreateNotes = ({
               onCreateClick(noteFormDetails);
             }}
             disabled={disabled}
+            variant="contained"
           >
             Create
           </Button>
-          <Button onClick={onCancelClick} disabled={disabled}>
+          <Button
+            onClick={onCancelClick}
+            disabled={disabled}
+            variant="contained"
+          >
             Cancel
           </Button>
-        </Grid>
-        <Grid item pt={2}>
-          <InputLabel id="notesinput-label-select-label">Template</InputLabel>
-          <Select
-            id="template-note-select"
-            value={templateValue}
-            label="Age"
-            onChange={(e) => {
-              setTemplateValue(e.target.value);
-              onTemplateChange(e.target.value);
-            }}
-          >
-            <MenuItem value={`Simple`}>Simple</MenuItem>
-            <MenuItem value={`SOAP`}>SOAP</MenuItem>
-            <MenuItem value={`Pre-Op`}>Pre-Op</MenuItem>
-          </Select>
         </Grid>
       </Grid>
     </Grid>

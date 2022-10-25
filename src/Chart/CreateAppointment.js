@@ -39,11 +39,11 @@ const CreateAppointment = ({
   }, [value]);
 
   return (
-    <Grid container direction="column">
+    <Grid container direction="column" pt={2}>
       <Grid item container pt={2}>
         <Grid item>
           <Typography variant="h4">
-            {disabled ? `Appointment Details ` : `Schedule Appointment`}{" "}
+            {disabled ? `Appointment Details ` : `Schedule Appointment`}
           </Typography>
         </Grid>
       </Grid>
@@ -148,17 +148,23 @@ const CreateAppointment = ({
       <Grid
         container
         item
-        style={{ display: "flex", flexDirection: "row-reverse" }}
+        style={{
+          display: "flex",
+          flexDirection: "row-reverse",
+          width: "60%",
+        }}
+        justifyContent={"space-evenly"}
       >
         <Button
           onClick={() => {
             onScheduleClick(appointmentFormDetails, patientDetails?.id);
           }}
           disabled={disabled}
+          variant="contained"
         >
           Schedule
         </Button>
-        <Button onClick={onCancelClick} disabled={disabled}>
+        <Button onClick={onCancelClick} disabled={disabled} variant="contained">
           Cancel
         </Button>
       </Grid>
