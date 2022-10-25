@@ -124,7 +124,7 @@ function DashboardContent() {
         position="absolute"
         open={open}
         style={{
-          background: "linear-gradient(to left,#1D5D9E, #2D93AC,#3DC6B8)",
+          background: "linear-gradient(to right,#1D5D9E, #2D93AC,#3DC6B8)",
         }}
       >
         <Toolbar
@@ -200,10 +200,11 @@ function DashboardContent() {
           maxWidth="xl"
           sx={{ mt: 4, mb: 4 }}
           style={{ background: "#F2F2F2" }}
+          height = "100%"
         >
           <Routes>
             <Route path="terminology" element={<Terminology />} />
-            <Route path="interop" element={<div> interop </div>} />
+            <Route path="interop" element={<iframe src="https://docs.xcaliberapis.com/apireference/xchangeapis" style = {{width : "100%", height: "1500px"}}> </iframe>} />
             <Route path="p360" element={<ViewPatients />} />
             <Route path="p360/:id" element={<Chart />} />
             <Route path="analytics" element={<Analytics />} />
