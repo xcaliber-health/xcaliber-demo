@@ -17,7 +17,7 @@ import AppBar from "@mui/material/AppBar";
 import TabPanel from "./modal";
 
 function SimpleDialog(props) {
-  const { onClose, open } = props;
+  const { onClose, open, data } = props;
   const handleClose = () => {
     onClose(false);
   };
@@ -27,11 +27,16 @@ function SimpleDialog(props) {
   };
   return (
     <Drawer onClose={handleClose} open={open} anchor="right">
-      {value === 0 && (<Typography style={{ paddingTop: "50px", paddingBlock: "30px", paddingLeft: "30px" }} variant="h5">Summary</Typography>
-      )}
-      {value === 1 && (<Typography style={{ paddingTop: "50px", paddingBlock: "30px", paddingLeft: "30px" }} variant="h5">Representation</Typography>
-      )}
-      {/* <DialogTitle id="simple-dialog-title">Terminology</DialogTitle> */}
+      <Typography
+        style={{
+          paddingTop: "50px",
+          paddingBlock: "30px",
+          paddingLeft: "30px",
+        }}
+        variant="h5"
+      >
+        {data?.term}
+      </Typography>
       <AppBar position="static" color="default">
         <Tabs
           value={value}
@@ -44,31 +49,38 @@ function SimpleDialog(props) {
           <Tab label="Representation" />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0}>Coming soon1...</TabPanel>
-      <TabPanel value={value} index={1}>Coming soon2...</TabPanel>
-
+      <TabPanel value={value} index={0}>
+        {" "}
+        <ComingSoon />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        {" "}
+        <ComingSoon />
+      </TabPanel>
     </Drawer>
   );
 }
 
-
-
 export default function SearchTable({ tableRowData }) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const onSearchResultsClick = () => {
+  const [selected, setSelected] = useState();
+  const onSearchResultsClick = (rowData) => {
     setOpen(true);
-  }
+    setSelected(rowData);
+  };
   const handleClose = () => {
     setOpen(false);
-  }
+  };
   return (
     tableRowData[0] && (
       <Paper style={{ marginTop: theme.spacing(4), overflow: "scroll" }}>
         {tableRowData[0].map((rowData, index) => {
           return (
             <ListItemButton
-              onClick={() => { onSearchResultsClick() }}
+              onClick={() => {
+                onSearchResultsClick(rowData);
+              }}
               style={{ flexDirection: "column", alignItems: "flex-start" }}
               divider
               key={rowData.id}
@@ -96,9 +108,8 @@ export default function SearchTable({ tableRowData }) {
           })}
       </TableBody>
     </Table> */}
-        <SimpleDialog open={open} onClose={handleClose} />
+        <SimpleDialog open={open} onClose={handleClose} data={selected} />
       </Paper>
     )
   );
 }
-

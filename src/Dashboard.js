@@ -120,7 +120,6 @@ function DashboardContent() {
   };
 
   return (
-    <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
@@ -200,7 +199,6 @@ function DashboardContent() {
           </Container>
         </Box>
       </Box>
-    </ThemeProvider>
   );
 }
 
