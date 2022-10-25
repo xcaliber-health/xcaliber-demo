@@ -19,6 +19,7 @@ import ComingSoon from "../Watermark/ComingSoon";
 import PamiV from "./PamiV";
 
 import CreateAppointment from "./CreateAppointment";
+import Loading from "../Patient/Loading";
 
 const Chart = () => {
   const { id } = useParams();
@@ -212,7 +213,7 @@ const Chart = () => {
               handleDrawerState={setIsDrawerOpen}
             />
           )}
-          {loading && "Loading"}
+          {loading && <Loading/>}
         </Paper>
       </Grid>
 
