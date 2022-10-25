@@ -142,7 +142,7 @@ const NotesTab = ({ patientDetails }) => {
         onClick={() => {
           setIsDrawerOpen(true);
         }}
-        sx={{ width: "50%", display: "flex", alignSelf: "center" }}
+        sx={{ width: "50%", display: "flex", alignSelf: "flex-end" }}
         variant="contained"
       >
         Create Note
