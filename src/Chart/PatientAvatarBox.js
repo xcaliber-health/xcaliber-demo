@@ -6,6 +6,7 @@ import {
   Box,
   IconButton,
   Drawer,
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/system";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
@@ -108,13 +109,17 @@ const PatientDetailsCard = ({
         sx={{ p: theme.spacing(3), width: theme.spacing(42) }}
         alignItems="center"
       >
-        <Box
-          alignSelf="flex-start"
-          display="flex"
-          justifyContent="space-between"
-        >
+        <Grid container>
           <EventAvailableIcon />
-          {BUTTON_LABELS.UPCOMING_APPOINTMENTS}
+          <Typography
+            sx={{
+              fontSize: theme.spacing(1.8),
+              ml: theme.spacing(0.5),
+              mr: theme.spacing(0.5),
+            }}
+          >
+            {BUTTON_LABELS.UPCOMING_APPOINTMENTS}
+          </Typography>
           <IconButton
             sx={{ p: 0 }}
             display="flex"
@@ -124,7 +129,7 @@ const PatientDetailsCard = ({
           >
             <AddCircleOutlineRoundedIcon />
           </IconButton>
-        </Box>
+        </Grid>
         <Grid
           flexDirection="column"
           container
@@ -148,12 +153,21 @@ const PatientDetailsCard = ({
                   }}
                 >
                   <span>
-                    {appointment?.resource?.appointmentType?.coding?.[0]?.code}
+                    {appointment?.resource?.appointmentType?.coding?.[0]?.code}{" "}
+                    ,{" "}
+                  </span>{" "}
+                  <span style={{ color: "black" }}>
+                    {appointmentDateDetailObject?.DAY}
+                  </span>{" "}
+                  <span style={{ color: "black" }}>
+                    {appointmentDateDetailObject?.MONTH}
+                  </span>{" "}
+                  <span style={{ color: "black" }}>
+                    {appointmentDateDetailObject?.DATE}
+                  </span>{" "}
+                  <span style={{ color: "black" }}>
+                    {appointmentDateDetailObject?.YEAR}
                   </span>
-                  <span> {appointmentDateDetailObject?.DAY} </span>
-                  <span> {appointmentDateDetailObject?.MONTH} </span>
-                  <span> {appointmentDateDetailObject?.DATE} </span>
-                  <span> {appointmentDateDetailObject?.YEAR} </span>
                 </Grid>
               );
             })}

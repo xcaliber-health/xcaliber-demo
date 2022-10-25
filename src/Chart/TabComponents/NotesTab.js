@@ -10,6 +10,7 @@ import { useTheme } from "@mui/system";
 import { useEffect, useState } from "react";
 import { NoteService } from "../../services/P360/noteService";
 import CreateNotes from "../CreateNotes";
+import { Helper } from "../../core-utils/helper";
 
 const NotesTab = ({ patientDetails }) => {
   const theme = useTheme();
@@ -134,11 +135,13 @@ const NotesTab = ({ patientDetails }) => {
   }, []);
 
   return (
-    <Grid container spacing={2} direction={"column"}>
+    <Grid container spacing={1} direction={"column"}>
       <Button
         onClick={() => {
           setIsDrawerOpen(true);
         }}
+        sx={{ width: "50%", display: "flex", alignSelf: "center" }}
+        variant="contained"
       >
         Create Note
       </Button>
@@ -173,7 +176,7 @@ const NotesTab = ({ patientDetails }) => {
           updatePatientId={updatePatientId}
         />
       </Drawer>
-      <Paper style={{ marginTop: theme.spacing(4), overflow: "scroll" }}>
+      <Paper style={{ marginTop: theme.spacing(2) }}>
         {notes &&
           notes?.map((note) => {
             return (
@@ -184,7 +187,36 @@ const NotesTab = ({ patientDetails }) => {
               >
                 <ListItemText primary={note?.resource?.description} />
                 <ListItemText secondary={note?.resource?.docStatus} />
-                <ListItemText secondary={note?.resource?.date} />
+                <ListItemText>
+                  <span style={{ color: "black" }}>
+                    {
+                      Helper.extractFieldsFromDate(
+                        note?.resource?.date?.slice(0, 10)
+                      )?.DAY
+                    }
+                  </span>{" "}
+                  <span style={{ color: "black" }}>
+                    {
+                      Helper.extractFieldsFromDate(
+                        note?.resource?.date?.slice(0, 10)
+                      )?.MONTH
+                    }
+                  </span>{" "}
+                  <span style={{ color: "black" }}>
+                    {
+                      Helper.extractFieldsFromDate(
+                        note?.resource?.date?.slice(0, 10)
+                      )?.DATE
+                    }
+                  </span>{" "}
+                  <span style={{ color: "black" }}>
+                    {
+                      Helper.extractFieldsFromDate(
+                        note?.resource?.date?.slice(0, 10)
+                      )?.YEAR
+                    }
+                  </span>
+                </ListItemText>
               </ListItemButton>
             );
           })}

@@ -4,6 +4,7 @@ import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
 export const NoteService = {
   getVisitNotes: async (patientId) => {
     try {
+      console.log("here id  : ", patientId);
       const response = await axios.get(
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&type=visit-notes&_count=3`,
         {
