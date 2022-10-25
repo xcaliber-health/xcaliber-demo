@@ -14,6 +14,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { Typography } from "@mui/material";
 const ViewPatientsTable = (props) => {
   const { searchRequest } = props;
   const navigate = useNavigate();
@@ -56,9 +57,9 @@ const ViewPatientsTable = (props) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="center">name</TableCell>
-            <TableCell align="center">gender</TableCell>
-            <TableCell align="center">date of birth</TableCell>
+            <TableCell align="center"><Typography>name</Typography></TableCell>
+            <TableCell align="center"><Typography>gender</Typography></TableCell>
+            <TableCell align="center"><Typography>date of birth</Typography></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -71,10 +72,10 @@ const ViewPatientsTable = (props) => {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               style={{ cursor: "pointer" }}
             >
-              <TableCell align="center">{patient.familyName} {patient.givenName}</TableCell>
-              <TableCell align="center">{patient.sex}</TableCell>
+              <TableCell align="center"><Typography>{patient.familyName} {patient.givenName}</Typography></TableCell>
+              <TableCell align="center"><Typography>{patient.sex}</Typography></TableCell>
               <TableCell align="center" component="th" scope="row">
-                {formatDate(patient.dateOfBirth)}
+              <Typography>{formatDate(patient.dateOfBirth)}</Typography>
               </TableCell>
             </TableRow>
           ))}

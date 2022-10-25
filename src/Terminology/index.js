@@ -1,4 +1,4 @@
-import { Grid, Table, TextField } from "@mui/material";
+import { Grid, Table, TextField,Typography } from "@mui/material";
 import { useTheme } from "@mui/system";
 import { useEffect, useState } from "react";
 import { APP_MESSAGES } from "../core-utils/constants";
@@ -14,7 +14,7 @@ export default function Terminology() {
 
   return (
     <Grid direction={"column"} container width={"100%"} height={`100%`}>
-      <Grid item>{TYPING_HEADING}</Grid>
+      <Grid item><Typography>{TYPING_HEADING}</Typography></Grid>
       <Grid item>
         <TextField
           onChange={async (e) => {

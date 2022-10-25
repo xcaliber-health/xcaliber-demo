@@ -14,7 +14,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { PatientService } from "../services/P360/patientService";
 import { AppointmentService } from "../services/P360/appointmentService";
 import NotesTab from "./TabComponents/NotesTab";
-
+import ComingSoon from "../Watermark/ComingSoon"
 import PamiV from "./PamiV";
 
 import CreateAppointment from "./CreateAppointment";
@@ -234,13 +234,13 @@ const Chart = () => {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          Timeline
+          <ComingSoon/>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <NotesTab patientDetails={patientDetails} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Details
+        <ComingSoon/>
         </TabPanel>
       </Grid>
 
