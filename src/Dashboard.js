@@ -169,7 +169,7 @@ function DashboardContent() {
           <IconButton onClick={toggleDrawer}>
             {open && (
               <Typography variant="h5" style={{ display: "inline-block" }}>
-                Capabilities
+                
               </Typography>
             )}
             <ChevronLeftIcon />
