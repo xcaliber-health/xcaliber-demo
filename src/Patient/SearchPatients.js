@@ -251,12 +251,12 @@ const SearchPatients = () => {
               onChange={handleGenderChange}
             >
               {genders.map((option) => {
-                    return (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    );
-                  })}
+                return (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                );
+              })}
             </Select>
           </FormControl>
           <Typography>Contact Information</Typography>
