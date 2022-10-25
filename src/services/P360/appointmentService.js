@@ -32,7 +32,23 @@ export const AppointmentService = {
         }
       );
 
-      return result.data;
+      return result.data?.data?.id;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getAppointmentById: async (appointmentId) => {
+    try {
+      const result = await axios.get(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment/${appointmentId}`,
+        {
+          headers: {
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+          },
+        }
+      );
+      return result?.data?.data;
     } catch (error) {
       console.log(error);
     }

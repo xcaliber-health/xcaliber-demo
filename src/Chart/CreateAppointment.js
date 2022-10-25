@@ -43,7 +43,7 @@ const CreateAppointment = ({
       <Grid item container pt={2}>
         <Grid item>
           <Typography variant="h4">
-            {disabled ? `Appointment Details ` : `Schedule Appointment`}{" "}
+            {disabled ? `Appointment Details ` : `Schedule Appointment`}
           </Typography>
         </Grid>
       </Grid>

@@ -76,7 +76,9 @@ const NotesTab = ({ patientDetails }) => {
   // patientDetails,
   // noteFormDetails,
   const onCreateClick = async (notesPayload) => {
-    await NoteService.createNote(notesPayload);
+    const noteResponse = await NoteService.createNote(notesPayload);
+    const createdNote = await NoteService.getVisitNoteById(noteResponse);
+    setNotes([...notes, { resource: { ...createdNote } }]);
     setIsDrawerOpen(false);
   };
 
