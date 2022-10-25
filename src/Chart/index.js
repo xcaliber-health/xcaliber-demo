@@ -13,6 +13,7 @@ import PatientDetailsCard from "./PatientAvatarBox";
 import { useParams, useNavigate } from "react-router-dom";
 import { PatientService } from "../services/P360/patientService";
 import { AppointmentService } from "../services/P360/appointmentService";
+import NotesTab from "./TabComponents/NotesTab";
 
 import PamiV from "./PamiV";
 
@@ -161,6 +162,9 @@ const Chart = () => {
       <Drawer
         anchor={"right"}
         open={isDrawerOpen}
+        onClose={() => {
+          setIsDrawerOpen(false);
+        }}
         variant="temporary"
         PaperProps={{
           sx: {
@@ -233,7 +237,7 @@ const Chart = () => {
           Timeline
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Notes
+          <NotesTab />
         </TabPanel>
         <TabPanel value={value} index={2}>
           Details

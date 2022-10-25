@@ -1,9 +1,18 @@
-import { Grid, Avatar, Button, Divider, Box, IconButton } from "@mui/material";
+import {
+  Grid,
+  Avatar,
+  Button,
+  Divider,
+  Box,
+  IconButton,
+  Drawer,
+} from "@mui/material";
 import { useTheme } from "@mui/system";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import { BUTTON_LABELS } from "../core-utils/constants";
-import { useEffect } from "react";
+import { useState } from "react";
+import CreateAppointment from "./CreateAppointment";
 import { Helper } from "../core-utils/helper";
 
 const PatientDetailsCard = ({
@@ -14,16 +23,61 @@ const PatientDetailsCard = ({
 }) => {
   const theme = useTheme();
   const commonGridElements = { pt: theme.spacing(1.5), pb: theme.spacing(1.5) };
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [appIndex, setAppIndex] = useState(null);
+
+  const calculateAge = (birthYear) => {
+    let currentYear = new Date().getFullYear();
+    return `${currentYear - birthYear}`;
+  };
 
   return (
     <Grid container minWidth={theme.spacing(25)} sx={{ pt: theme.spacing(1) }}>
       <Grid sx={{ padding: theme.spacing(1) }} item>
         <Avatar sx={{ height: 50, width: 50, marginRight: theme.spacing(1) }} />
       </Grid>
+      <Drawer
+        anchor={"right"}
+        open={isDrawerOpen}
+        variant="temporary"
+        onClose={() => {
+          setIsDrawerOpen(false);
+        }}
+        PaperProps={{
+          sx: {
+            width: "40%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            padding: "10px",
+            height: "100%",
+            overflowY: "scroll",
+            position: "absolute",
+            zIndex: 1500,
+          },
+        }}
+      >
+        <CreateAppointment
+          patientDetails={null}
+          appointmentFormDetails={upcomingAppointments?.[appIndex]}
+          setAppointmentPayload={() => {}}
+          onScheduleClick={() => {}}
+          onReasonChange={() => {}}
+          onCancelClick={() => {
+            setIsDrawerOpen(!isDrawerOpen);
+          }}
+          onDateChange={() => {}}
+          onTimeChange={() => {}}
+          updatePatientId={() => {}}
+          disabled={true}
+        />
+      </Drawer>
       <Grid item>
         <Grid>{`${patientDetails?.name?.[0]?.given?.[0]}  ${patientDetails?.name?.[0]?.family} `}</Grid>
         <Grid>
-          {`Patient | ${20} | ${
+          {`Patient | ${calculateAge(
+            parseInt(patientDetails?.birthDate?.slice(0, 4))
+          )} | ${
             patientDetails?.extension?.find((extension) => {
               return (
                 extension?.url ===
@@ -80,12 +134,22 @@ const PatientDetailsCard = ({
           sx={{ ...commonGridElements }}
         >
           {upcomingAppointments &&
-            upcomingAppointments?.map((appointment) => {
+            upcomingAppointments?.map((appointment, index) => {
               const appointmentDateDetailObject = Helper.extractFieldsFromDate(
                 appointment?.resource?.start?.slice(0, 10)
               );
               return (
-                <Grid sx={{ ...commonGridElements }} item>
+                <Grid
+                  sx={{ ...commonGridElements, cursor: "pointer" }}
+                  item
+                  onClick={() => {
+                    setIsDrawerOpen(true);
+                    setAppIndex(index);
+                  }}
+                >
+                  <span>
+                    {appointment?.resource?.appointmentType?.coding?.[0]?.code}
+                  </span>
                   <span> {appointmentDateDetailObject?.DAY} </span>
                   <span> {appointmentDateDetailObject?.MONTH} </span>
                   <span> {appointmentDateDetailObject?.DATE} </span>
