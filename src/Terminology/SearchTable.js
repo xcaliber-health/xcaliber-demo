@@ -15,7 +15,7 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import AppBar from "@mui/material/AppBar";
 import TabPanel from "./modal";
-
+import ComingSoon from "../Watermark/ComingSoon"
 function SimpleDialog(props) {
   const { onClose, open, data } = props;
   const handleClose = () => {

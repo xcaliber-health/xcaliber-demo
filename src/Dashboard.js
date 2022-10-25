@@ -31,14 +31,12 @@ import logo from "./static/xcaliber_logo.png";
 import Watermark from "./Watermark";
 import { makeStyles } from "@material-ui/styles";
 const useStyles = makeStyles({
-  root:
-  {
-  "& .Mui-selected":
-  {
-    backgroundColor:"grey",
+  root: {
+    "& .Mui-selected": {
+      backgroundColor: "grey",
+    },
   },
-}
-})
+});
 function Copyright(props) {
   return (
     <Typography
@@ -106,7 +104,7 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent() {
-  const classes=useStyles();
+  const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [id, setId] = React.useState(0);
   const navigate = useNavigate();
@@ -114,91 +112,106 @@ function DashboardContent() {
     setOpen(!open);
   };
 
-  const onMenuClick = (path,id) => {
+  const onMenuClick = (path, id) => {
     setId(id);
     navigate(`/${path}`);
   };
 
   return (
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: "24px", // keep right padding when drawer closed
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Grid justifyContent="space-between" direction="flex" container>
-              <Box component="img" sx={{ height: 40 }} src={logo} />
-              <Avatar></Avatar>
-            </Grid>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              {open &&
-              (<Typography
-                variant="h5"
-                style={{ display: "inline-block" }}
-              > 
-                Capabilities
-              </Typography>)
-              }
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            {mainListItems(onMenuClick,id,classes.root)}
-            {/* <Divider sx={{ my: 1 }} />
-            {secondaryListItems} */}
-          </List>
-        </Drawer>
-        <Box
-          component="main"
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <AppBar
+        position="absolute"
+        open={open}
+        style={{
+          background: "linear-gradient(to left,#1D5D9E, #2D93AC,#3DC6B8)",
+        }}
+      >
+        <Toolbar
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
+            pr: "24px", // keep right padding when drawer closed
           }}
         >
-          <Toolbar />
-          <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
-            <Routes>
-              <Route path="terminology" element={<Terminology />} />
-              <Route path="interop" element={<div> interop </div>} />
-              <Route path="p360" element={<ViewPatients />} />
-              <Route path="p360/:id" element={<Chart />} />
-              <Route path="analytics" element={<Analytics />} />
-            </Routes>
-            <Watermark />
-          </Container>
-        </Box>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={toggleDrawer}
+            sx={{
+              marginRight: "36px",
+              ...(open && { display: "none" }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Grid justifyContent="space-between" direction="flex" container>
+            <Box component="img" sx={{ height: 40 }} src={logo} />
+            <Avatar></Avatar>
+          </Grid>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        variant="permanent"
+        open={open}
+        style={{ background: "#D6FFFD" }}
+        PaperProps={{ style: { background: "#D6FFFD" } }}
+        SlideProps = {{style:{color:'#185DA0'}}}
+      >
+        <Toolbar
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            px: [1],
+          }}
+          style={{ background: "#D6FFFD" }}
+        >
+          <IconButton onClick={toggleDrawer}>
+            {open && (
+              <Typography variant="h5" style={{ display: "inline-block" }}>
+                Capabilities
+              </Typography>
+            )}
+            <ChevronLeftIcon />
+          </IconButton>
+        </Toolbar>
+        <Divider />
+        <List component="nav">
+          {mainListItems(onMenuClick, id, classes.root)}
+          {/* <Divider sx={{ my: 1 }} />
+            {secondaryListItems} */}
+        </List>
+      </Drawer>
+      <Box
+        component="main"
+        sx={{
+          backgroundColor: (theme) =>
+            theme.palette.mode === "light"
+              ? theme.palette.grey[100]
+              : theme.palette.grey[900],
+          flexGrow: 1,
+          height: "100vh",
+          overflow: "auto",
+        }}
+        style={{ background: "#F2F2F2" }}
+      >
+        <Toolbar />
+        <Container
+          maxWidth="xl"
+          sx={{ mt: 4, mb: 4 }}
+          style={{ background: "#F2F2F2" }}
+        >
+          <Routes>
+            <Route path="terminology" element={<Terminology />} />
+            <Route path="interop" element={<div> interop </div>} />
+            <Route path="p360" element={<ViewPatients />} />
+            <Route path="p360/:id" element={<Chart />} />
+            <Route path="analytics" element={<Analytics />} />
+          </Routes>
+          <Watermark />
+        </Container>
       </Box>
+    </Box>
   );
 }
 

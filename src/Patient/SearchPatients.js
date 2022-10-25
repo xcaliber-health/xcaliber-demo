@@ -1,5 +1,6 @@
 import { Container, Grid, Typography } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
+import { useTheme } from "@mui/system";
 // import { Button } from '@hospitalrun/components'
 // import PatientSearchRequest from '../models/PatientSearchRequest'
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -56,6 +57,7 @@ const SearchPatients = () => {
   const [toggleDrawer, setToggleDrawer] = useState(false);
   const [gender, setGender] = useState("");
   const navigate = useNavigate();
+  const theme = useTheme()
   const handleGenderChange = (event) => {
     setGender(event.target.value);
   };
@@ -359,7 +361,7 @@ const SearchPatients = () => {
               page={page}
             />
           </Grid>
-          <Grid>
+          <Grid paddingTop={theme.spacing(3)}>
             <Pagination
               currentPage={page}
               onPageChange={onPageChange}
