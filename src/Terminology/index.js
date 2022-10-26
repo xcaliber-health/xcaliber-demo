@@ -32,6 +32,7 @@ export default function Terminology() {
             if (e.target.value?.length === 0) {
               setTableData([]);
               setTagName([]);
+              setValue('');
             } else if (e.target.value?.length >= 3) {
               setValue(e.target.value);
               setLoading(true);
