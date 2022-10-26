@@ -7,7 +7,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
-import { tags as names } from '../core-utils/constants'
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -19,14 +18,9 @@ const MenuProps = {
     },
 };
 
-export default function MultipleSelectChip() {
+export default function MultipleSelectChip(props) {
     const theme = useTheme();
-    const [tagName, setTagName] = React.useState([]);
-    // const {names,handleChange } = props;
-    const handleChange = (event) => {
-        const { target: { value }, } = event;
-        setTagName(value);
-    };
+    const { options, handleChange, tagName } = props;
 
     return (
         <div>
@@ -48,12 +42,12 @@ export default function MultipleSelectChip() {
 
                     MenuProps={MenuProps}
                 >
-                    {names.map((name) => (
+                    {options.map((option) => (
                         <MenuItem
-                            key={name}
-                            value={name}
+                            key={option}
+                            value={option}
                         >
-                            {name}
+                            {option}
                         </MenuItem>
                     ))}
                 </Select>

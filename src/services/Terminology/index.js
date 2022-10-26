@@ -15,7 +15,7 @@ export const TerminologyService = {
 };
 
 export const TerminologyTagService = {
-  getSnomedResultsByTerm: async (term, limit = 60, Tags) => {
+  getSnomedResultsByTermAndTag: async (term, Tags, limit = 60) => {
     try {
       let url = TERMINOLOGY_TAG_API_ENDPOINT?.replace("${SEARCH_TERM_VALUE}", term);
       url = url.replace("${LIMIT_VALUE}", limit);
