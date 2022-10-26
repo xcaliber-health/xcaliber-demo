@@ -1,13 +1,4 @@
-import {
-  Grid,
-  Box,
-  Tabs,
-  Tab,
-  Typography,
-  IconButton,
-  Drawer,
-  Paper,
-} from "@mui/material";
+import { Grid, Box, Tabs, Tab, Typography, Drawer, Paper } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/system";
 import PatientDetailsCard from "./PatientAvatarBox";
@@ -21,6 +12,11 @@ import PamiV from "./PamiV";
 import CreateAppointment from "./CreateAppointment";
 import Loading from "../Patient/Loading";
 import DetailsTab from "./TabComponents/DetailsTab";
+import { VitalService } from "../services/P360/vitalService";
+import { ProblemService } from "../services/P360/problemService";
+import { AllergyService } from "../services/P360/allergyService";
+import { MedicationService } from "../services/P360/medicationService";
+import { ImmunizationService } from "../services/P360/immunizationService";
 
 const Chart = () => {
   const { id } = useParams();
@@ -28,6 +24,11 @@ const Chart = () => {
   const navigate = useNavigate();
   const [patientDetails, setPatientDetails] = useState({});
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
+  const [patientVitals, setPatientVitals] = useState([]);
+  const [patientProblems, setPatientProblems] = useState([]);
+  const [patientAllergies, setPatientAllergies] = useState([]);
+  const [patientImmunizations, setPatientImmunizations] = useState([]);
+  const [patientMedications, setPatientMedications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [appointmentPayload, setAppointmentPayload] = useState({
@@ -73,6 +74,32 @@ const Chart = () => {
     );
     setUpcomingAppointments(response);
   };
+
+  const getProblems = async () => {
+    const response = await ProblemService.getProblems(id);
+    setPatientProblems(response);
+  };
+
+  const getAllergies = async () => {
+    const response = await AllergyService.getAllergies(id);
+    setPatientAllergies(response);
+  };
+
+  const getMedications = async () => {
+    const response = await MedicationService.getMedications(id);
+    setPatientMedications(response);
+  };
+
+  const getImmunizations = async () => {
+    const response = await ImmunizationService.getImmunization(id);
+    setPatientImmunizations(response);
+  };
+
+  const getVitals = async () => {
+    const response = await VitalService.getVitals(id);
+    setPatientVitals(response);
+  };
+
   const onReasonChange = (reason) => {
     setAppointmentPayload({
       data: {
@@ -152,7 +179,15 @@ const Chart = () => {
   };
   useEffect(() => {
     setLoading(true);
-    Promise.all([getPatientDetails(), getUpcomingAppointments()])
+    Promise.all([
+      getPatientDetails(),
+      getUpcomingAppointments(),
+      getProblems(),
+      getAllergies(),
+      getMedications(),
+      getImmunizations(),
+      getVitals(),
+    ])
       .then()
       .catch()
       .finally(() => {
@@ -265,12 +300,18 @@ const Chart = () => {
       <Grid
         sx={{
           // width: theme.spacing(50),
-          height: theme.spacing(60),
+          height: `100%`,
         }}
         lg={3}
       >
         <Paper style={{ height: "100%" }}>
-          <PamiV />
+          <PamiV
+            vitalsList={patientVitals}
+            allergyList={patientAllergies}
+            problemsList={patientProblems}
+            medicationList={patientMedications}
+            immunizationList={patientImmunizations}
+          />
         </Paper>
       </Grid>
     </Grid>
