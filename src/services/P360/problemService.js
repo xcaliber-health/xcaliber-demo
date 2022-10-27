@@ -18,4 +18,38 @@ export const ProblemService = {
       console.log(error);
     }
   },
+  createProblem: async (problemPayload) => {
+    try {
+      const result = await axios.post(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Condition`,
+        problemPayload,
+        {
+          headers: {
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+          },
+        }
+      );
+      return result?.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getProblemById: async (id) => {
+    try {
+      const result = await axios.get(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Condition/${id}`,
+        {
+          headers: {
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+          },
+        }
+      );
+
+      return result?.data?.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };

@@ -61,6 +61,14 @@ const Chart = () => {
     },
   });
 
+  useEffect(() => {
+    console.log(patientProblems);
+  });
+
+  const updateProblemsState = (createdProblemData) => {
+    setPatientProblems([...patientProblems, createdProblemData]);
+  };
+
   const getPatientDetails = async () => {
     const response = await PatientService.getPatientById(id);
     setPatientDetails(response);
@@ -311,6 +319,8 @@ const Chart = () => {
             problemsList={patientProblems}
             medicationList={patientMedications}
             immunizationList={patientImmunizations}
+            patientId={id}
+            updateProblem={updateProblemsState}
           />
         </Paper>
       </Grid>

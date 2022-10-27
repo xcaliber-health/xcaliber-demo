@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import React, { useEffect, useState } from "react";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import {
   Dangerous,
@@ -8,31 +7,75 @@ import {
   Medication,
   Vaccines,
 } from "@mui/icons-material/";
-import { Grid, Box, Tabs, Tab, Typography, IconButton } from "@mui/material";
+import {
+  Grid,
+  Box,
+  Tabs,
+  Tab,
+  Typography,
+  IconButton,
+  Drawer,
+} from "@mui/material";
 import { BUTTON_LABELS } from "../core-utils/constants";
 import { useTheme } from "@mui/system";
 import { Helper } from "../core-utils/helper";
+import { PatientProblems } from "./DrawerComponents/problems";
 
 export default function PamiV({
+  patientId,
   problemsList,
   allergyList,
   medicationList,
   immunizationList,
   vitalsList,
+  updateProblem,
 }) {
   const theme = useTheme();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [currentDrawerIndex, setCurrentDrawerIndex] = useState(0);
   const commonGridElements = {
     pt: theme.spacing(0.5),
     pb: 0,
     fontSize: "14px",
   };
+  const onCancelClick = () => {
+    setIsDrawerOpen(false);
+  };
 
-  useEffect(() => {
-    console.log(allergyList);
-  });
-
+  const onScheduleClick = () => {
+    setIsDrawerOpen(false);
+  };
   return (
     <React.Fragment>
+      <Drawer
+        anchor={"right"}
+        open={isDrawerOpen}
+        onClose={() => {
+          setIsDrawerOpen(false);
+        }}
+        variant="temporary"
+        PaperProps={{
+          sx: {
+            width: "40%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            padding: "10px",
+            height: "100%",
+            overflowY: "scroll",
+            position: "absolute",
+            zIndex: 1500,
+          },
+        }}
+      >
+        {currentDrawerIndex === 1 && (
+          <PatientProblems
+            onCancelClick={onCancelClick}
+            patientId={patientId}
+            updateProblems={updateProblem}
+          />
+        )}
+      </Drawer>
       <Box
         alignSelf="flex-start"
         display="flex"
@@ -88,9 +131,16 @@ export default function PamiV({
       >
         <div style={{ display: "flex", alignItems: "center" }}>
           <ReportProblem />
-          {BUTTON_LABELS.PROBLEMS}
+          <Typography>{BUTTON_LABELS.PROBLEMS}</Typography>
         </div>
-        <IconButton sx={{ p: 0 }} display="flex">
+        <IconButton
+          sx={{ p: 0 }}
+          display="flex"
+          onClick={() => {
+            setIsDrawerOpen(true);
+            setCurrentDrawerIndex(1);
+          }}
+        >
           <AddCircleOutlineRoundedIcon />
         </IconButton>
       </Box>
