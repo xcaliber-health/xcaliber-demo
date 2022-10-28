@@ -5,11 +5,11 @@ export const ProblemService = {
   getProblems: async (patientId) => {
     try {
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Condition?_count=3&patient=${patientId}&category=problem-list-item`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Condition?_count=3&patient=${patientId}&category=problem-list-item&?departmentId=1`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
-            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
       );
@@ -26,7 +26,7 @@ export const ProblemService = {
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
-            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
       );
@@ -42,7 +42,7 @@ export const ProblemService = {
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
-            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
       );

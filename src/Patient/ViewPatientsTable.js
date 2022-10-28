@@ -29,15 +29,13 @@ const ViewPatientsTable = (props) => {
   const func = async () => {
     setAwait(true);
     const d = await getPatientsAtPage(props.page, searchRequest.queryString);
-    console.log("data", d);
     // const newData =await parserFunc(d.data.entry)
     // console.log('parsedFuncdata', newData)
     // console.log('parsedFunc', newData)
     let mock = { patients: d, totalCount: d.length };
-    console.log("mock: ", mock);
+
     setNewData(mock);
     setAwait(false);
-    console.log("data2: ", newData);
   };
 
   useEffect(() => {
@@ -45,7 +43,19 @@ const ViewPatientsTable = (props) => {
   }, [props.page, searchRequest]);
 
   if (awaitd) {
-    return <div style ={{height : "200px", width : "100%", display : "flex", justifyContent: "center", alignItems : "center" }}><Loading /></div>
+    return (
+      <div
+        style={{
+          height: "200px",
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Loading />
+      </div>
+    );
   }
 
   if (newData.totalCount === 0) {
@@ -53,13 +63,19 @@ const ViewPatientsTable = (props) => {
   }
 
   return (
-    <TableContainer component={Paper} style = {{marginTop : theme.spacing(3)}}>
+    <TableContainer component={Paper} style={{ marginTop: theme.spacing(3) }}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="center"><Typography>name</Typography></TableCell>
-            <TableCell align="center"><Typography>gender</Typography></TableCell>
-            <TableCell align="center"><Typography>date of birth</Typography></TableCell>
+            <TableCell align="center">
+              <Typography>name</Typography>
+            </TableCell>
+            <TableCell align="center">
+              <Typography>gender</Typography>
+            </TableCell>
+            <TableCell align="center">
+              <Typography>date of birth</Typography>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -72,10 +88,16 @@ const ViewPatientsTable = (props) => {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               style={{ cursor: "pointer" }}
             >
-              <TableCell align="center"><Typography>{patient.familyName} {patient.givenName}</Typography></TableCell>
-              <TableCell align="center"><Typography>{patient.sex}</Typography></TableCell>
+              <TableCell align="center">
+                <Typography>
+                  {patient.familyName} {patient.givenName}
+                </Typography>
+              </TableCell>
+              <TableCell align="center">
+                <Typography>{patient.sex}</Typography>
+              </TableCell>
               <TableCell align="center" component="th" scope="row">
-              <Typography>{formatDate(patient.dateOfBirth)}</Typography>
+                <Typography>{formatDate(patient.dateOfBirth)}</Typography>
               </TableCell>
             </TableRow>
           ))}

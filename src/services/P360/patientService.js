@@ -1,5 +1,6 @@
 import axios from "axios";
 import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
+import store from "../../Redux/store";
 
 export const PatientService = {
   getPatientById: async (id) => {
@@ -9,7 +10,7 @@ export const PatientService = {
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
-            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+            "x-source-id": localStorage.getItem(`XCALIBER_TOKEN`),
           },
         }
       );

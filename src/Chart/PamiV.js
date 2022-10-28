@@ -161,8 +161,7 @@ export default function PamiV({
               p={4}
             >
               <span style={{ color: `#84818a` }}>
-                {problem?.resource?.code?.coding?.[0]?.system} {"-"}
-                {problem?.resource?.code?.coding?.[0]?.code} ,
+                {problem?.resource?.text?.div}
               </span>{" "}
               <span style={{ color: "black" }}>{dateObject?.DAY}</span>{" "}
               <span style={{ color: "black" }}>{dateObject?.MONTH}</span>{" "}
