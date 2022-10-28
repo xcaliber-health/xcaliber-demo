@@ -1,5 +1,5 @@
 import * as React from "react";
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import { styled, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
@@ -9,27 +9,33 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
+import SettingsSharpIcon from "@mui/icons-material/SettingsSharp";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainListItems, secondaryListItems } from "./listItems";
+import { mainListItems } from "./listItems";
 import Chart from "./Chart";
-import Deposits from "./Deposits";
-import Orders from "./Orders";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { Routes, Route } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Terminology from "./Terminology";
 import ViewPatients from "./Patient/ViewPatients";
 import Analytics from "./Analytics";
-import { Avatar } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Dialog,
+  Radio,
+  FormControlLabel,
+  RadioGroup,
+} from "@mui/material";
 import logo from "./static/xcaliber_logo.png";
 import Watermark from "./Watermark";
 import { makeStyles } from "@material-ui/styles";
+import { useTheme } from "@mui/system";
+
 const useStyles = makeStyles({
   root: {
     "& .Mui-selected": {
@@ -104,8 +110,13 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent() {
+  const theme = useTheme();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [sourceState, setSourceState] = React.useState("");
+  const [isModalOpen, setIsModalOpen] = React.useState();
+  const dispatch = useDispatch();
+  // const [source, setSource] = React.useState(null);
   const [id, setId] = React.useState(0);
   const navigate = useNavigate();
   const toggleDrawer = () => {
@@ -116,6 +127,35 @@ function DashboardContent() {
     setId(id);
     navigate(`/${path}`);
   };
+
+  const setLocalStorageContext = () => {
+    if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION") {
+      localStorage.setItem("XCALIBER_SOURCE", `ELATION`);
+      localStorage.setItem(
+        "XCALIBER_TOKEN",
+        `${process.env.REACT_APP_XSOURCEID}`
+      );
+      setSourceState("ELATION");
+    } else if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") {
+      localStorage.setItem("XCALIBER_SOURCE", `ATHENA`);
+      localStorage.setItem(
+        "XCALIBER_TOKEN",
+        `${process.env.REACT_APP_ATHENA_XSOURCEID}`
+      );
+      setSourceState("ATHENA");
+    } else {
+      localStorage.setItem("XCALIBER_SOURCE", `ELATION`);
+      localStorage.setItem(
+        "XCALIBER_TOKEN",
+        `${process.env.REACT_APP_XSOURCEID}`
+      );
+      setSourceState("ELATION");
+    }
+  };
+
+  React.useEffect(() => {
+    setLocalStorageContext();
+  }, []);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -146,6 +186,74 @@ function DashboardContent() {
           </IconButton>
           <Grid justifyContent="space-between" direction="flex" container>
             <Box component="img" sx={{ height: 40 }} src={logo} />
+            <Dialog direction="column" open={isModalOpen}>
+              <Grid
+                container
+                sx={{ width: theme.spacing(60), height: theme.spacing(30) }}
+                direction={"column"}
+                padding={4}
+              >
+                <RadioGroup
+                  onChange={(e) => {
+                    setSourceState(e.target.value);
+                  }}
+                  pt={2}
+                >
+                  <FormControlLabel
+                    value="ELATION"
+                    control={<Radio />}
+                    label="Elation"
+                  />
+                  <FormControlLabel
+                    value="ATHENA"
+                    control={<Radio />}
+                    label="Athena"
+                  />
+                </RadioGroup>
+                <Grid
+                  paddingTop={6}
+                  container
+                  item
+                  justifyContent={"space-evenly"}
+                >
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={() => {
+                      localStorage.setItem("XCALIBER_SOURCE", sourceState);
+                      localStorage.setItem(
+                        "XCALIBER_TOKEN",
+                        sourceState === "ELATION"
+                          ? `${process.env.REACT_APP_XSOURCEID}`
+                          : `${process.env.REACT_APP_ATHENA_XSOURCEID}`
+                      );
+                      // dispatch({ type: sourceState });
+                      setIsModalOpen(false);
+                      window.location.reload();
+                    }}
+                  >
+                    Submit
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={() => {
+                      setIsModalOpen(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Grid>
+              </Grid>
+            </Dialog>
+            <IconButton
+              sx={{ color: "black", marginRight: -95 }}
+              onClick={() => {
+                setIsModalOpen(true);
+              }}
+            >
+              <SettingsSharpIcon />
+            </IconButton>
             <Avatar></Avatar>
           </Grid>
         </Toolbar>
@@ -155,7 +263,7 @@ function DashboardContent() {
         open={open}
         style={{ background: "#D6FFFD" }}
         PaperProps={{ style: { background: "#D6FFFD" } }}
-        SlideProps = {{style:{color:'#185DA0'}}}
+        SlideProps={{ style: { color: "#185DA0" } }}
       >
         <Toolbar
           sx={{
@@ -168,9 +276,10 @@ function DashboardContent() {
         >
           <IconButton onClick={toggleDrawer}>
             {open && (
-              <Typography variant="h5" style={{ display: "inline-block" }}>
-                
-              </Typography>
+              <Typography
+                variant="h5"
+                style={{ display: "inline-block" }}
+              ></Typography>
             )}
             <ChevronLeftIcon />
           </IconButton>
@@ -179,7 +288,7 @@ function DashboardContent() {
         <List component="nav">
           {mainListItems(onMenuClick, id, classes.root)}
           {/* <Divider sx={{ my: 1 }} />
-            {secondaryListItems} */}
+              {secondaryListItems} */}
         </List>
       </Drawer>
       <Box
@@ -200,11 +309,21 @@ function DashboardContent() {
           maxWidth="xl"
           sx={{ mt: 4, mb: 4 }}
           style={{ background: "#F2F2F2" }}
-          height = "100%"
+          height="100%"
         >
           <Routes>
             <Route path="terminology" element={<Terminology />} />
-            <Route path="interop" element={<iframe src="https://docs.xcaliberapis.com/apireference/xchangeapis" style = {{width : "100%", height: "1500px"}}> </iframe>} />
+            <Route
+              path="interop"
+              element={
+                <iframe
+                  src="https://docs.xcaliberapis.com/apireference/xchangeapis"
+                  style={{ width: "100%", height: "1500px" }}
+                >
+                  {" "}
+                </iframe>
+              }
+            />
             <Route path="p360" element={<ViewPatients />} />
             <Route path="p360/:id" element={<Chart />} />
             <Route path="analytics" element={<Analytics />} />

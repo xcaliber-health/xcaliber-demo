@@ -25,7 +25,7 @@ import { Select } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 export const LabelsContext = React.createContext({
   filterLabels: [],
-  setFilterLabels: () => { },
+  setFilterLabels: () => {},
 });
 
 const genders = [
@@ -57,7 +57,7 @@ const SearchPatients = () => {
   const [toggleDrawer, setToggleDrawer] = useState(false);
   const [gender, setGender] = useState("");
   const navigate = useNavigate();
-  const theme = useTheme()
+  const theme = useTheme();
   const handleGenderChange = (event) => {
     setGender(event.target.value);
   };
@@ -105,18 +105,6 @@ const SearchPatients = () => {
     let lastname = document.getElementById("lastname").value;
     let birthDate = document.getElementById("birthday").value;
 
-    console.log(
-      firstname +
-      " " +
-      middlename +
-      " " +
-      lastname +
-      " " +
-      birthDate +
-      " " +
-      gender
-    );
-
     let patient = {
       addresses: [],
       dateOfBirth: birthDate,
@@ -156,8 +144,6 @@ const SearchPatients = () => {
   }
 
   const filterAllPatientData = async (param) => {
-    console.log(param);
-    console.log("paramValues: ", param, param.length);
     if (param?.length > 0) {
       // let tempData = await PatientRepository.findAll()
       let tempData = await getAllPatients();
@@ -168,7 +154,6 @@ const SearchPatients = () => {
           }
           if (data === data2.sex) {
             allFilterData.push(data2);
-            console.log("newdata: ", allFilterData);
           } else {
             let age = getAge(data2.dateOfBirth);
             if (
@@ -204,9 +189,8 @@ const SearchPatients = () => {
           }
         });
       });
-      console.log("allFilterData: ", allFilterData);
+
       setFilteredPatientData(allFilterData);
-      console.log("filteredPatientData", filteredPatientData);
     }
   };
 
@@ -224,18 +208,24 @@ const SearchPatients = () => {
               flexDirection: "column",
               alignItems: "left",
               justifyContent: "space-around",
-              padding: "10px"
+              padding: "10px",
             },
           }}
         >
           <Typography variant="h3">New Patient</Typography>
-          <Typography >Basic Information</Typography>
+          <Typography>Basic Information</Typography>
           <TextField
             placeholder="Given Name"
             required
             id="firstname"
           ></TextField>
-          <TextField placeholder="Middle Name" id="middlename" sx={{ marginTop: "5px" }}>middlename</TextField>
+          <TextField
+            placeholder="Middle Name"
+            id="middlename"
+            sx={{ marginTop: "5px" }}
+          >
+            middlename
+          </TextField>
           <TextField
             placeholder="Family Name"
             required
@@ -267,12 +257,15 @@ const SearchPatients = () => {
             sx={{ width: "100%" }}
           ></TextField>
           <TextField placeholder="Email" sx={{ width: "100%" }}></TextField>
-          <TextField
-            placeholder="Address"
-            sx={{ Width: "100%" }}
-          ></TextField>
-          <Box sx={{ display: "flex", width: "100%", justifyContent: "flex-end" }}>
-            <Button variant="contained" onClick={handleSubmit} sx={{ marginRight: "10px" }}>
+          <TextField placeholder="Address" sx={{ Width: "100%" }}></TextField>
+          <Box
+            sx={{ display: "flex", width: "100%", justifyContent: "flex-end" }}
+          >
+            <Button
+              variant="contained"
+              onClick={handleSubmit}
+              sx={{ marginRight: "10px" }}
+            >
               Create Patient
             </Button>
             <Button onClick={handleDrawerClose} variant="contained">
@@ -302,7 +295,7 @@ const SearchPatients = () => {
           <Grid>
             <Grid md={12}>
               <Grid display="flex" justifyContent="flex-end">
-                <Grid md={8} style={{ paddingLeft: "0px" }} >
+                <Grid md={8} style={{ paddingLeft: "0px" }}>
                   <PatientSearchInput
                     data-testid={"searcinput"}
                     onChange={onSearchRequestChange}
