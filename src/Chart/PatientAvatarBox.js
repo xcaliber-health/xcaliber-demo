@@ -16,6 +16,13 @@ import { useState } from "react";
 import CreateAppointment from "./CreateAppointment";
 import { Helper } from "../core-utils/helper";
 import DoctorImage from "../../src/assets/unsplash_VeF3uWcH4L4.svg";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Paper from "@mui/material/Paper";
+
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import DetailsTab from "./TabComponents/DetailsTab";
 
 const PatientDetailsCard = ({
   patientDetails,
@@ -36,15 +43,50 @@ const PatientDetailsCard = ({
   return (
     <Grid
       container
-      minWidth={theme.spacing(25)}
-      sx={{ height: "100%", pt: theme.spacing(1) }}
+      maxWidth={theme.spacing(50)}
+      sx={{ height: "100%" }}
     >
-      <Grid sx={{ padding: theme.spacing(1) }} item>
-        <Avatar
-          src={DoctorImage}
-          sx={{ height: 50, width: 50, marginRight: theme.spacing(1) }}
-        />
-      </Grid>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Grid sx={{ padding: theme.spacing(1) }} item>
+            <Avatar
+              src={DoctorImage}
+              sx={{ height: 50, width: 50, marginRight: theme.spacing(1) }}
+            />
+          </Grid>
+
+          <Grid item sx={{ padding: theme.spacing(1) }}>
+            <Grid>{`${patientDetails?.name?.[0]?.given?.[0]}  ${patientDetails?.name?.[0]?.family} `}</Grid>
+            <Grid>
+              {`Patient | ${calculateAge(
+                parseInt(patientDetails?.birthDate?.slice(0, 4))
+              )} | ${
+                patientDetails?.extension?.find((extension) => {
+                  return (
+                    extension?.url ===
+                    "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
+                  );
+                })?.valueCode
+              }`}
+            </Grid>
+
+            {/* TODO : Edit profile button 
+         <Grid>
+          <Button size="small" variant="contained">
+            {BUTTON_LABELS.EDIT_PROFILE}
+          </Button>
+        </Grid> 
+        */}
+          </Grid>
+        </AccordionSummary>
+        <AccordionDetails>
+        <DetailsTab patientDetails={patientDetails} ></DetailsTab>
+        </AccordionDetails>
+      </Accordion>
       <Drawer
         anchor={"right"}
         open={isDrawerOpen}
@@ -81,105 +123,81 @@ const PatientDetailsCard = ({
           disabled={true}
         />
       </Drawer>
-      <Grid item sx={{ padding: theme.spacing(1) }}>
-        <Grid>{`${patientDetails?.name?.[0]?.given?.[0]}  ${patientDetails?.name?.[0]?.family} `}</Grid>
-        <Grid>
-          {`Patient | ${calculateAge(
-            parseInt(patientDetails?.birthDate?.slice(0, 4))
-          )} | ${
-            patientDetails?.extension?.find((extension) => {
-              return (
-                extension?.url ===
-                "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
-              );
-            })?.valueCode
-          }`}
-        </Grid>
 
-        {/* TODO : Edit profile button 
-         <Grid>
-          <Button size="small" variant="contained">
-            {BUTTON_LABELS.EDIT_PROFILE}
-          </Button>
-        </Grid> 
-        */}
-      </Grid>
-      <Divider
-        sx={{
-          pb: theme.spacing(1),
-          pt: theme.spacing(1),
-          pl: "none",
-          width: "100%",
-        }}
-      />
       <Grid
         item
-        sx={{ p: theme.spacing(3), width: theme.spacing(42) }}
+        sx={{ width: theme.spacing(50) }}
         alignItems="center"
       >
-        <Grid container spacing={1}>
-          <EventAvailableIcon />
-          <Typography
-            sx={{
-              fontSize: theme.spacing(1.8),
-              ml: theme.spacing(0.5),
-              mr: theme.spacing(0.5),
-            }}
-          >
-            {BUTTON_LABELS.UPCOMING_APPOINTMENTS}
-          </Typography>
-          <IconButton
-            sx={{ p: 0 }}
+        <Paper style={{ height: "100%", marginTop : theme.spacing(3) }}>
+          <Grid container sx = {{padding: theme.spacing(2)}}>
+            <EventAvailableIcon />
+            <Typography
+              sx={{
+                fontSize: theme.spacing(1.8),
+                ml: theme.spacing(0.5),
+                mr: theme.spacing(0.5),
+              }}
+            >
+              {BUTTON_LABELS.UPCOMING_APPOINTMENTS}
+            </Typography>
+            <IconButton
+              sx={{ p: 0 }}
+              display="flex"
+              onClick={() => {
+                handleDrawerState(!drawerState);
+              }}
+            >
+              <AddCircleOutlineRoundedIcon sx={{ color: "black", mr: -12 }} />
+            </IconButton>
+          </Grid>
+          <Grid
+            flexDirection="column"
+            container
+            fontSize={theme.spacing(1.8)}
+            color="#84818a"
             display="flex"
-            onClick={() => {
-              handleDrawerState(!drawerState);
-            }}
+            sx={{ ...commonGridElements,paddingLeft: theme.spacing(2) }}
           >
-            <AddCircleOutlineRoundedIcon sx={{ color: "black", mr: -12 }} />
-          </IconButton>
-        </Grid>
-        <Grid
-          flexDirection="column"
-          container
-          fontSize={theme.spacing(1.8)}
-          color="#84818a"
-          display="flex"
-          sx={{ ...commonGridElements }}
-        >
-          {upcomingAppointments &&
-            upcomingAppointments?.map((appointment, index) => {
-              const appointmentDateDetailObject = Helper.extractFieldsFromDate(
-                appointment?.resource?.start?.slice(0, 10)
-              );
-              return (
-                <Grid
-                  sx={{ ...commonGridElements, cursor: "pointer" }}
-                  item
-                  onClick={() => {
-                    setIsDrawerOpen(true);
-                    setAppIndex(index);
-                  }}
-                >
-                  <span>
-                    {appointment?.resource?.appointmentType?.coding?.[0]?.code}{" "}
-                    ,{" "}
-                  </span>{" "}
-                  <span style={{ color: "black" }}>
-                    {appointmentDateDetailObject?.DAY}
-                  </span>{" "}
-                  <span style={{ color: "black" }}>
-                    {appointmentDateDetailObject?.MONTH}
-                  </span>{" "}
-                  <span style={{ color: "black" }}>
-                    {appointmentDateDetailObject?.DATE}
-                  </span>{" "}
-                  <span style={{ color: "black" }}>
-                    {appointmentDateDetailObject?.YEAR}
-                  </span>
-                </Grid>
-              );
-            })}
-        </Grid>
+            {upcomingAppointments &&
+              upcomingAppointments?.map((appointment, index) => {
+                const appointmentDateDetailObject =
+                  Helper.extractFieldsFromDate(
+                    appointment?.resource?.start?.slice(0, 10)
+                  );
+                return (
+                  <Grid
+                    sx={{ ...commonGridElements, cursor: "pointer" }}
+                    item
+                    onClick={() => {
+                      setIsDrawerOpen(true);
+                      setAppIndex(index);
+                    }}
+                  >
+                    <span>
+                      {
+                        appointment?.resource?.appointmentType?.coding?.[0]
+                          ?.code
+                      }{" "}
+                      ,{" "}
+                    </span>{" "}
+                    <span style={{ color: "black" }}>
+                      {appointmentDateDetailObject?.DAY}
+                    </span>{" "}
+                    <span style={{ color: "black" }}>
+                      {appointmentDateDetailObject?.MONTH}
+                    </span>{" "}
+                    <span style={{ color: "black" }}>
+                      {appointmentDateDetailObject?.DATE}
+                    </span>{" "}
+                    <span style={{ color: "black" }}>
+                      {appointmentDateDetailObject?.YEAR}
+                    </span>
+                  </Grid>
+                );
+              })}
+          </Grid>
+        </Paper>
       </Grid>
     </Grid>
   );

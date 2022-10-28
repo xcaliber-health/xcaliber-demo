@@ -1,4 +1,5 @@
 import { Typography, Box } from "@mui/material";
+import logo from "../static/xcaliber_logo.png";
 
 const Watermark = () => {
   return (
@@ -11,7 +12,11 @@ const Watermark = () => {
         opacity: 0.35,
       }}
     >
-      <Typography sx={{ fontSize: "40px" }}>XCALIBER-DEMO</Typography>
+      <Typography sx={{ fontSize: "20px" }}>
+        Powered by
+      </Typography>
+      <Box component="img" sx={{ height: 40 }} src={logo} />
+
       <Typography sx={{ fontSize: "20px" }}>
         Do not add any real data here
       </Typography>

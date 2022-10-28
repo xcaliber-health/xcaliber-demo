@@ -24,7 +24,6 @@ import { PatientProblems } from "./DrawerComponents/problems";
 import { BUTTON_LABELS } from "../core-utils/constants";
 import CreateAppointment from "./CreateAppointment";
 import Loading from "../Patient/Loading";
-import DetailsTab from "./TabComponents/DetailsTab";
 import { VitalService } from "../services/P360/vitalService";
 import { ProblemService } from "../services/P360/problemService";
 import { AllergyService } from "../services/P360/allergyService";
@@ -266,9 +265,9 @@ const Chart = () => {
           width: theme.spacing(50),
           height: "100%",
         }}
-        lg={3}
+        lg={4}
       >
-        <Paper style={{ height: "100%" ,marginBottom:"20px"}}>
+        {/* <Paper style={{ height: "100%" ,marginBottom:"20px"}}> */}
           {!loading && (
             <PatientDetailsCard
               patientId={id}
@@ -279,9 +278,9 @@ const Chart = () => {
             />
           )}
           {loading && <Loading />}
-        </Paper>
+        {/* </Paper> */}
         <Paper>
-          <DetailsTab patientDetails={patientDetails} ></DetailsTab>
+         
         </Paper>
       </Grid>
 
@@ -303,8 +302,8 @@ const Chart = () => {
               scrollButtons="auto"
               aria-label="scrollable auto tabs example"
             >
-              <Tab label="Vitals" style={{ width: "25%" }} />
               <Tab label="Notes" style={{ width: "25%" }} />
+              <Tab label="Vitals" style={{ width: "25%" }} />
               <Tab label="Problems" style={{ width: "25%" }} />
               <Tab label="Allergies" style={{ width: "25%" }} />
               <Tab label="Immunizations" style={{ width: "25%" }} />
@@ -312,7 +311,7 @@ const Chart = () => {
               {/* <Tab label="Profile" style={{ width: "25%" }} /> */}
             </Tabs>
           </Box>
-          <TabPanel value={value} index={0}>
+          <TabPanel value={value} index={1}>
             <Box
               alignSelf="flex-start"
               display="flex"
@@ -335,7 +334,7 @@ const Chart = () => {
             </Box>
             <PamiV vitalsList={patientVitals} patientId={id} />
           </TabPanel>
-          <TabPanel value={value} index={1}>
+          <TabPanel value={value} index={0}>
             <NotesTab patientDetails={patientDetails} />
           </TabPanel>
           <TabPanel value={value} index={2}>

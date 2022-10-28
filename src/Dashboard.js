@@ -31,7 +31,6 @@ import {
   FormControlLabel,
   RadioGroup,
 } from "@mui/material";
-import logo from "./static/xcaliber_logo.png";
 import Watermark from "./Watermark";
 import { makeStyles } from "@material-ui/styles";
 import { useTheme } from "@mui/system";
@@ -185,7 +184,7 @@ function DashboardContent() {
             <MenuIcon />
           </IconButton>
           <Grid justifyContent="space-between" direction="flex" container>
-            <Box component="img" sx={{ height: 40 }} src={logo} />
+          <Typography variant="h5">XCALIBER-DEMO</Typography>
             <Dialog direction="column" open={isModalOpen}>
               <Grid
                 container
@@ -246,15 +245,17 @@ function DashboardContent() {
                 </Grid>
               </Grid>
             </Dialog>
+            <Box display="flex">
             <IconButton
-              sx={{ color: "black", marginRight: -95 }}
+              sx={{ color: "black", marginRight: '8px' }}
               onClick={() => {
                 setIsModalOpen(true);
               }}
             >
-              <SettingsSharpIcon />
+              <SettingsSharpIcon color="action" />
             </IconButton>
             <Avatar></Avatar>
+            </Box>
           </Grid>
         </Toolbar>
       </AppBar>

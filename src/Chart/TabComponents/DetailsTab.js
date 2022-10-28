@@ -26,9 +26,12 @@ const DetailsTab = ({ patientDetails }) => {
           <Grid item p={1}>
             <Typography>Gender</Typography>
             <Typography sx={{ ...commonValueStyles }}>
-              {patientDetails?.extension?.find((ext) => {
-                return ext?.url?.endsWith("gender-marker");
-              })?.valueString ?? `-`}
+              { patientDetails?.extension?.find((extension) => {
+                  return (
+                    extension?.url ===
+                    "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
+                  );
+                })?.valueCode}
             </Typography>
           </Grid>
           <Grid item p={1}>
