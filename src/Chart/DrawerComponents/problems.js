@@ -189,7 +189,7 @@ export const PatientProblems = ({
           disabled={disabled}
           variant="contained"
         >
-          Schedule
+          Create
         </Button>
         <Button onClick={onCancelClick} disabled={disabled} variant="contained">
           Cancel

@@ -43,6 +43,7 @@ const Chart = () => {
   const [patientMedications, setPatientMedications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isProblemsDrawerOpen, setIsProblemsDrawerOpen] = useState(false);
   const [appointmentPayload, setAppointmentPayload] = useState({
     data: {
       resourceType: "Appointment",
@@ -260,6 +261,33 @@ const Chart = () => {
           updatePatientId={updatePatientId}
         />
       </Drawer>
+      <Drawer
+        anchor={"right"}
+        open={isProblemsDrawerOpen}
+        onClose={() => {
+          setIsProblemsDrawerOpen(false);
+        }}
+        variant="temporary"
+        PaperProps={{
+          sx: {
+            width: "40%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            padding: "10px",
+            height: "100%",
+            overflowY: "scroll",
+            position: "absolute",
+            zIndex: 1500,
+          },
+        }}
+      >
+        <PatientProblems
+            disabled = {false}
+            onCancelClick = {() => {setIsProblemsDrawerOpen(false)}}
+          patientId={id}
+        />
+      </Drawer>
       <Grid
         sx={{
           width: theme.spacing(50),
@@ -352,7 +380,7 @@ const Chart = () => {
           sx={{ p: 0 }}
           display="flex"
           onClick={() => {
-            setIsDrawerOpen(true);
+            setIsProblemsDrawerOpen(true);
             setCurrentDrawerIndex(1);
           }}
         >
