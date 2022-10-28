@@ -76,26 +76,7 @@ export default function PamiV({
           />
         )}
       </Drawer>
-      <Box
-        alignSelf="flex-start"
-        display="flex"
-        justifyContent="space-between"
-        // marginLeft={theme.spacing(3)}
-        // marginRight={theme.spacing(3)}
-        marginBottom={theme.spacing(3)}
-        marginLeft={theme.spacing(3)}
-        marginRight={theme.spacing(3)}
-        paddingTop={theme.spacing(3)}
-      >
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <DeviceThermostat />
-          {BUTTON_LABELS.VITALS}
-        </div>
 
-        <IconButton sx={{ p: 0 }} display="flex">
-          <AddCircleOutlineRoundedIcon />
-        </IconButton>
-      </Box>
       {vitalsList &&
         vitalsList?.map((vital) => {
           let dateObject = Helper.extractFieldsFromDate(
@@ -123,27 +104,6 @@ export default function PamiV({
             </Grid>
           );
         })}
-      <Box
-        alignSelf="flex-start"
-        display="flex"
-        justifyContent="space-between"
-        margin={theme.spacing(3)}
-      >
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <ReportProblem />
-          <Typography>{BUTTON_LABELS.PROBLEMS}</Typography>
-        </div>
-        <IconButton
-          sx={{ p: 0 }}
-          display="flex"
-          onClick={() => {
-            setIsDrawerOpen(true);
-            setCurrentDrawerIndex(1);
-          }}
-        >
-          <AddCircleOutlineRoundedIcon />
-        </IconButton>
-      </Box>
 
       {problemsList &&
         problemsList?.map((problem) => {
@@ -171,21 +131,6 @@ export default function PamiV({
           );
         })}
 
-      <Box
-        alignSelf="flex-start"
-        display="flex"
-        justifyContent="space-between"
-        margin={theme.spacing(3)}
-      >
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Dangerous />
-          {BUTTON_LABELS.ALLERGIES}
-        </div>
-
-        <IconButton sx={{ p: 0 }} display="flex">
-          <AddCircleOutlineRoundedIcon />
-        </IconButton>
-      </Box>
       {allergyList &&
         allergyList?.map((allergy) => {
           let dateObject = Helper.extractFieldsFromDate(
@@ -211,21 +156,6 @@ export default function PamiV({
             </Grid>
           );
         })}
-      <Box
-        alignSelf="flex-start"
-        display="flex"
-        justifyContent="space-between"
-        margin={theme.spacing(3)}
-      >
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Vaccines />
-          {BUTTON_LABELS.IMMUNIZATIONS}
-        </div>
-
-        <IconButton sx={{ p: 0 }} display="flex">
-          <AddCircleOutlineRoundedIcon />
-        </IconButton>
-      </Box>
       {immunizationList &&
         immunizationList?.map((immunization) => {
           let dateObject = Helper.extractFieldsFromDate(
@@ -252,21 +182,6 @@ export default function PamiV({
             </Grid>
           );
         })}
-      <Box
-        alignSelf="flex-start"
-        display="flex"
-        justifyContent="space-between"
-        margin={theme.spacing(3)}
-      >
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Medication />
-          {BUTTON_LABELS.MEDICATIONS}
-        </div>
-
-        <IconButton sx={{ p: 0 }} display="flex">
-          <AddCircleOutlineRoundedIcon />
-        </IconButton>
-      </Box>
       {medicationList &&
         medicationList?.map((medication) => {
           let dateObject = Helper.extractFieldsFromDate(
