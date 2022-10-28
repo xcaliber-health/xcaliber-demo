@@ -5,7 +5,7 @@ export const NoteService = {
   getVisitNotes: async (patientId) => {
     try {
       const response = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&type=visit-notes&_count=3`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&type=visit-notes&_count=3&departmentId=1`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
