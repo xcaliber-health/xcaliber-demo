@@ -8,7 +8,16 @@ import { AppointmentService } from "../services/P360/appointmentService";
 import NotesTab from "./TabComponents/NotesTab";
 import ComingSoon from "../Watermark/ComingSoon";
 import PamiV from "./PamiV";
-
+import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
+import {
+  Dangerous,
+  ReportProblem,
+  DeviceThermostat,
+  Medication,
+  Vaccines,
+} from "@mui/icons-material/";
+import { BUTTON_LABELS } from "../core-utils/constants";
+import { IconButton } from "@mui/material";
 import CreateAppointment from "./CreateAppointment";
 import Loading from "../Patient/Loading";
 import DetailsTab from "./TabComponents/DetailsTab";
@@ -247,7 +256,7 @@ const Chart = () => {
         }}
         lg={3}
       >
-        <Paper style={{ height: "100%" }}>
+        <Paper style={{ height: "100%", marginBottom: "20px" }}>
           {!loading && (
             <PatientDetailsCard
               patientId={id}
@@ -259,6 +268,9 @@ const Chart = () => {
           )}
           {loading && <Loading />}
         </Paper>
+        <Paper>
+          <DetailsTab patientDetails={patientDetails} ></DetailsTab>
+        </Paper>
       </Grid>
 
       <Grid
@@ -266,52 +278,124 @@ const Chart = () => {
           // width: theme.spacing(50),
           height: theme.spacing(60),
         }}
-        lg={5}
+        lg={9}
       >
         <Paper style={{ height: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
               value={value}
               onChange={handleChange}
-              aria-label="basic tabs example"
+              // width="60%"
               centered
+              variant="scrollable"
+              scrollButtons="auto"
+              aria-label="scrollable auto tabs example"
             >
-              <Tab label="Timeline" style={{ width: "25%" }} />
+              <Tab label="Vitals" style={{ width: "25%" }} />
               <Tab label="Notes" style={{ width: "25%" }} />
-              <Tab label="Details" style={{ width: "25%" }} />
-              <Tab label="Profile" style={{ width: "25%" }} />
+              <Tab label="Problems" style={{ width: "25%" }} />
+              <Tab label="Allergies" style={{ width: "25%" }} />
+              <Tab label="Immunizations" style={{ width: "25%" }} />
+              <Tab label="Medications" style={{ width: "25%" }} />
+              {/* <Tab label="Profile" style={{ width: "25%" }} /> */}
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <ComingSoon />
+            <Box
+              alignSelf="flex-start"
+              display="flex"
+              justifyContent="space-between"
+              // marginLeft={theme.spacing(3)}
+              // marginRight={theme.spacing(3)}
+              marginBottom={theme.spacing(3)}
+              marginLeft={theme.spacing(3)}
+              marginRight={theme.spacing(3)}
+              paddingTop={theme.spacing(3)}
+            >
+              <div style={{ display: "flex", alignItems: "center", }}>
+                <DeviceThermostat />
+                {BUTTON_LABELS.VITALS}
+              </div>
+
+              <IconButton sx={{ p: 0 }} display="flex">
+                <AddCircleOutlineRoundedIcon />
+              </IconButton>
+            </Box>
+            <PamiV vitalsList={patientVitals} />
           </TabPanel>
           <TabPanel value={value} index={1}>
             <NotesTab patientDetails={patientDetails} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <ComingSoon />
+            <Box
+              alignSelf="flex-start"
+              display="flex"
+              justifyContent="space-between"
+              margin={theme.spacing(3)}
+            >
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <ReportProblem />
+                {BUTTON_LABELS.PROBLEMS}
+              </div>
+              <IconButton sx={{ p: 0 }} display="flex">
+                <AddCircleOutlineRoundedIcon />
+              </IconButton>
+            </Box>
+            <PamiV problemsList={patientProblems} />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <DetailsTab patientDetails={patientDetails} />
-          </TabPanel>
-        </Paper>
-      </Grid>
+            <Box
+              alignSelf="flex-start"
+              display="flex"
+              justifyContent="space-between"
+              margin={theme.spacing(3)}
+            >
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Dangerous />
+                {BUTTON_LABELS.ALLERGIES}
+              </div>
 
-      <Grid
-        sx={{
-          // width: theme.spacing(50),
-          height: `100%`,
-        }}
-        lg={3}
-      >
-        <Paper style={{ height: "100%" }}>
-          <PamiV
-            vitalsList={patientVitals}
-            allergyList={patientAllergies}
-            problemsList={patientProblems}
-            medicationList={patientMedications}
-            immunizationList={patientImmunizations}
-          />
+              <IconButton sx={{ p: 0 }} display="flex">
+                <AddCircleOutlineRoundedIcon />
+              </IconButton>
+            </Box>
+            <PamiV allergyList={patientAllergies} />
+          </TabPanel>
+          <TabPanel value={value} index={4}>
+            <Box
+              alignSelf="flex-start"
+              display="flex"
+              justifyContent="space-between"
+              margin={theme.spacing(3)}
+            >
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Vaccines />
+                {BUTTON_LABELS.IMMUNIZATIONS}
+              </div>
+
+              <IconButton sx={{ p: 0 }} display="flex">
+                <AddCircleOutlineRoundedIcon />
+              </IconButton>
+            </Box>
+            <PamiV immunizationList={patientImmunizations} />
+          </TabPanel>
+          <TabPanel value={value} index={5}>
+            <PamiV medicationList={patientMedications} />
+            <Box
+              alignSelf="flex-start"
+              display="flex"
+              justifyContent="space-between"
+              margin={theme.spacing(3)}
+            >
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Medication />
+                {BUTTON_LABELS.MEDICATIONS}
+              </div>
+              <IconButton sx={{ p: 0 }} display="flex">
+                <AddCircleOutlineRoundedIcon />
+              </IconButton>
+            </Box>
+          </TabPanel>
         </Paper>
       </Grid>
     </Grid>
@@ -330,7 +414,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 2 }}>
           <Typography>{children}</Typography>
         </Box>
       )}
