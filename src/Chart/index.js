@@ -290,7 +290,7 @@ const Chart = () => {
           // width: theme.spacing(50),
           height: theme.spacing(60),
         }}
-        lg={9}
+        lg={8}
       >
         <Paper style={{ height: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
