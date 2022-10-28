@@ -282,6 +282,7 @@ export const parserFunc = (data) => {
     tempObj.id = item.resource.id;
     tempObj.sex = item.resource.gender;
     tempObj.type = "mockType";
+    tempObj.extension = item.resource.extension
     dataHolder.push(tempObj);
   });
   return dataHolder;

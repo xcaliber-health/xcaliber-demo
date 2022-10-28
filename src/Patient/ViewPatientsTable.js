@@ -61,7 +61,7 @@ const ViewPatientsTable = (props) => {
   if (newData.totalCount === 0) {
     return <div />;
   }
-
+  console.log(newData)
   return (
     <TableContainer component={Paper} style={{ marginTop: theme.spacing(3) }}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -94,7 +94,12 @@ const ViewPatientsTable = (props) => {
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography>{patient.sex}</Typography>
+                <Typography>{ patient?.extension?.find((extension) => {
+                  return (
+                    extension?.url ===
+                    "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
+                  );
+                })?.valueCode}</Typography>
               </TableCell>
               <TableCell align="center" component="th" scope="row">
                 <Typography>{formatDate(patient.dateOfBirth)}</Typography>
