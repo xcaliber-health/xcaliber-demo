@@ -176,6 +176,7 @@ const NotesTab = ({ patientDetails }) => {
           onCreateClick={onCreateClick}
           onTemplateChange={onTemplateChange}
           updatePatientId={updatePatientId}
+          patientDetails={patientDetails}
         />
       </Drawer>
       <Paper style={{ marginTop: theme.spacing(2) }}>
