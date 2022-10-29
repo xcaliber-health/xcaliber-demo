@@ -9,36 +9,216 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Autocomplete,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { NoteService } from "../services/P360/noteService";
 
 const CreateNotes = ({
   patientDetails,
   noteFormDetails,
   onCreateClick,
   onCancelClick,
-  onTemplateChange,
-  onDateChange,
-  onTimeChange,
   updatePatientId,
   disabled,
 }) => {
-  const [value, setValue] = useState(null);
-  const [templateValue, setTemplateValue] = useState("Simple");
-  useEffect(() => {
-    if (value) {
-      const dateObject = new Date(value);
-      onDateChange(
-        `${dateObject.getFullYear()}-${
-          dateObject.getMonth() + 1
-        }-${dateObject.getDate()}T00:00:00Z`
-      );
-    }
-  }, [value]);
+  const [notePayLoad, setNotePayLoad] = useState();
 
+  const [problemPayLoad, setProblemPayLoad] = useState("");
+  const peSequence = {
+    General: 0,
+    Eyes: 1,
+    HENT: 2,
+    Neck: 3,
+    Resp: 4,
+    CVS: 5,
+    Breast: 6,
+    Abdom: 7,
+    GU: 8,
+    MSS: 9,
+    NS: 10,
+    Skin: 11,
+    Lymph: 12,
+    Psych: 13,
+    Rectal: 14,
+  };
+  const [general, setGeneral] = useState("");
+  const [eyes, setEyes] = useState("");
+  const [hent, setHENT] = useState("");
+  const [neck, setNeck] = useState("");
+  const [resp, setResp] = useState("");
+  const [cvs, setCVS] = useState("");
+  const [breast, setBreast] = useState("");
+  const [abdom, setAbdom] = useState("");
+  const [gu, setGU] = useState("");
+  const [mss, setMSS] = useState("");
+  const [ns, setNS] = useState("");
+  const [skin, setSkin] = useState("");
+  const [lymph, setLymph] = useState("");
+  const [psych, setPsych] = useState("");
+  const [rectal, setRectal] = useState("");
+
+  const getPhysicalExamAttachment = (title, data) => {
+    return {
+      attachment: {
+        contentType: "text/plain",
+        hash: "md5 hash of base64 section content",
+        data,
+        title,
+        extension: [
+          {
+            url: "http://xcaliber-fhir/structureDefinition/pe-sequence",
+            valueInteger: peSequence[title],
+          },
+        ],
+      },
+      format: {
+        system: "urn:oid:1.3.6.1.4.1.19376.1.2.3",
+        code: "urn:ihe:pcc:handp:2008",
+        display: "PE",
+      },
+    };
+  };
+  const onSaveNote = async () => {
+    const date = new Date().toISOString();
+    var content = [];
+    if (problemPayLoad !== "") {
+      content.push({
+        attachment: {
+          contentType: "text/plain",
+          data: problemPayLoad,
+          title: "Problem",
+          hash: "md5 hash of base64 section content",
+        },
+      });
+    }
+    if (general !== "") {
+      content.push(getPhysicalExamAttachment("General", general));
+    }
+    if (eyes !== "") {
+      content.push(getPhysicalExamAttachment("Eyes", eyes));
+    }
+    if (hent !== "") {
+      content.push(getPhysicalExamAttachment("HENT", hent));
+    }
+    if (neck !== "") {
+      content.push(getPhysicalExamAttachment("Neck", neck));
+    }
+    if (resp !== "") {
+      content.push(getPhysicalExamAttachment("Resp", resp));
+    }
+    if (cvs !== "") {
+      content.push(getPhysicalExamAttachment("CVS", cvs));
+    }
+    if (breast !== "") {
+      content.push(getPhysicalExamAttachment("Breast", breast));
+    }
+    if (abdom !== "") {
+      content.push(getPhysicalExamAttachment("Abdom", abdom));
+    }
+    if (gu !== "") {
+      content.push(getPhysicalExamAttachment("GU", gu));
+    }
+    if (mss !== "") {
+      content.push(getPhysicalExamAttachment("MSS", mss));
+    }
+    if (ns !== "") {
+      content.push(getPhysicalExamAttachment("NS", ns));
+    }
+    if (skin !== "") {
+      content.push(getPhysicalExamAttachment("Skin", skin));
+    }
+    if (lymph !== "") {
+      content.push(getPhysicalExamAttachment("Lymph", lymph));
+    }
+    if (psych !== "") {
+      content.push(getPhysicalExamAttachment("Psych", psych));
+    }
+    if (rectal !== "") {
+      content.push(getPhysicalExamAttachment("Rectal", rectal));
+    }
+
+    const notePayLoad = {
+      data: {
+        resourceType: "DocumentReference",
+        status: "current",
+        docStatus: "preliminary",
+        type: {
+          coding: [
+            {
+              system: "https://sandbox.elationemr.com/api/2.0/visit_note_types",
+              code: "Elation",
+              display: "SOAP",
+            },
+          ],
+        },
+        category: [
+          {
+            coding: [
+              {
+                system:
+                  "https://sandbox.elationemr.com/api/2.0/visit_note_types",
+                code: "Elation",
+                display: "SOAP",
+              },
+            ],
+          },
+        ],
+        date,
+        description: "Office Visit Note",
+        subject: {
+          reference: `Patient/${patientDetails?.id}`,
+        },
+        author: [
+          {
+            reference: "Practitioner/140857915539458",
+            identifier: {
+              id: "user_id",
+              value: 2758,
+            },
+          },
+        ],
+        securityLabel: [
+          {
+            coding: [
+              {
+                system:
+                  "http://terminology.hl7.org/CodeSystem/v3-Confidentiality",
+                code: "U",
+                display: "unrestricted",
+              },
+            ],
+          },
+        ],
+        extension: [
+          {
+            url: "http://xcaliber-fhir/structureDefinition/practice",
+            valueString: 140857911017476,
+          },
+        ],
+        content,
+        context: {
+          encounter: [
+            {
+              reference: `Encounter/${date}`,
+            },
+          ],
+          period: {
+            start: date,
+          },
+        },
+        contained: [],
+      },
+    };
+    const note = await NoteService.createNote(notePayLoad);
+  };
   return (
     <Grid container>
       <Grid item pt={2}>
@@ -46,76 +226,261 @@ const CreateNotes = ({
           <Typography variant="h4">{`Create Notes`}</Typography>
         </Grid>
         <Grid sx={{ width: "100%" }} item pt={2}>
-          <InputLabel id="notesinput-label-select-label">Template</InputLabel>
-          <Select
-            sx={{ width: "190%" }}
-            id="template-note-select"
-            value={templateValue}
-            label="Age"
-            onChange={(e) => {
-              setTemplateValue(e.target.value);
-              onTemplateChange(e.target.value);
-            }}
-          >
-            <MenuItem value={`Simple`}>Simple</MenuItem>
-            <MenuItem value={`SOAP`}>SOAP</MenuItem>
-            <MenuItem value={`Pre-Op`}>Pre-Op</MenuItem>
-          </Select>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="panel1a-header"
+            >
+              <Typography>Problems</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography pb={1}> Problem</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setProblemPayLoad(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
         </Grid>
-        <Grid item pt={2}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="Document date"
-              value={value}
-              onChange={(newValue) => {
-                setValue(newValue);
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
+        <Grid sx={{ width: "100%" }} item pt={2}>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="panel2a-header"
+            >
+              <Typography>Vitals</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
+                eget.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
         </Grid>
-        <Grid item pt={2}>
-          <RadioGroup
-            onChange={(e) => {
-              onTimeChange(e.target.value);
-            }}
-            pt={2}
-          >
-            <FormControlLabel
-              value="T11:00:00Z"
-              control={<Radio />}
-              label="11:00 AM"
-              disabled={value ? false : true}
-            />
-            <FormControlLabel
-              value="T14:00:00Z"
-              control={<Radio />}
-              label="02:00 PM"
-              disabled={value ? false : true}
-            />
-            <FormControlLabel
-              value="T16:00:00Z"
-              control={<Radio />}
-              label="04:00 PM"
-              disabled={value ? false : true}
-            />
-          </RadioGroup>
+        <Grid sx={{ width: "100%" }} item pt={2}>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="panel3a-header"
+            >
+              <Typography>Physical Exam</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography pb={1}>General</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setGeneral(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Eyes</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setEyes(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>HENT</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setHENT(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Resp</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setResp(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Neck</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setNeck(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>CVS</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setCVS(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Breast</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setBreast(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Abdom</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setAbdom(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>GU</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setGU(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>MSS</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setMSS(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>NS</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setNS(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Skin</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setSkin(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Lymph</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setLymph(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Psych</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setPsych(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Rectal</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRectal(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
         </Grid>
         <Grid
           container
           item
-          style={{ display: "flex", flexDirection: "row-reverse" }}
-          justifyContent={"space-around"}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            width: "60%",
+            paddingTop: 12,
+          }}
+          justifyContent={"space-between"}
         >
           <Button
             onClick={() => {
-              updatePatientId(patientDetails?.id);
-              onCreateClick(noteFormDetails);
+              onSaveNote();
             }}
             disabled={disabled}
             variant="contained"
           >
-            Create
+            Save
           </Button>
           <Button
             onClick={onCancelClick}
