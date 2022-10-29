@@ -9,7 +9,7 @@ import NotesTab from "./TabComponents/NotesTab";
 import ComingSoon from "../Watermark/ComingSoon";
 import PamiV from "./PamiV";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
-
+import CreateVitals from './DrawerComponents/CreateVitals'
 import {
   Dangerous,
   ReportProblem,
@@ -44,6 +44,7 @@ const Chart = () => {
   const [loading, setLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isProblemsDrawerOpen, setIsProblemsDrawerOpen] = useState(false);
+  const [isVitalsDrawerOpen, setVitalsDrawer] = useState(false)
   const [appointmentPayload, setAppointmentPayload] = useState({
     data: {
       resourceType: "Appointment",
@@ -288,6 +289,33 @@ const Chart = () => {
           patientId={id}
         />
       </Drawer>
+      <Drawer
+        anchor={"right"}
+        open={isVitalsDrawerOpen}
+        onClose={() => {
+          setVitalsDrawer(false);
+        }}
+        variant="temporary"
+        PaperProps={{
+          sx: {
+            width: "40%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            padding: "10px",
+            height: "100%",
+            overflowY: "scroll",
+            position: "absolute",
+            zIndex: 1500,
+          },
+        }}
+      >
+        <CreateVitals
+            disabled = {false}
+            onCancelClick = {() => {setVitalsDrawer(false)}}
+          patientId={id}
+        />
+      </Drawer>
       <Grid
         sx={{
           width: theme.spacing(50),
@@ -356,7 +384,10 @@ const Chart = () => {
                 {BUTTON_LABELS.VITALS}
               </div>
 
-              <IconButton sx={{ p: 0 }} display="flex">
+              <IconButton sx={{ p: 0 }} display="flex"           onClick={() => {
+            setVitalsDrawer(true);
+            setCurrentDrawerIndex(1);
+          }}>
                 <AddCircleOutlineRoundedIcon />
               </IconButton>
             </Box>
