@@ -7,7 +7,7 @@ export const TerminologyService = {
       let url = TERMINOLOGY_API_ENDPOINT?.replace("${SEARCH_TERM_VALUE}", term);
       url = url.replace("${LIMIT_VALUE}", limit);
       const response = await axios.get(url);
-      return response.data?.items;
+      return response;
     } catch (error) {
       //Handle Exception
     }
@@ -19,7 +19,7 @@ export const TerminologyTagService = {
     try {
       let url = TERMINOLOGY_TAG_API_ENDPOINT?.replace("${SEARCH_TERM_VALUE}", term);
       url = url.replace("${LIMIT_VALUE}", limit);
-      url = url.replace("${TAGS}", Tags)
+      url = url.replace("${TAGS}", Tags);
       const response = await axios.get(url);
       return response.data?.items;
     } catch (error) {
