@@ -65,6 +65,22 @@ const CreateNotes = ({
   const [psych, setPsych] = useState("");
   const [rectal, setRectal] = useState("");
 
+  const [rosgeneral, setRosGeneral] = useState("");
+  const [roseyes, setRosEyes] = useState("");
+  const [roshent, setRosHENT] = useState("");
+  const [rosneck, setRosNeck] = useState("");
+  const [rosresp, setRosResp] = useState("");
+  const [roscvs, setRosCVS] = useState("");
+  const [rosbreast, setRosBreast] = useState("");
+  const [rosabdom, setRosAbdom] = useState("");
+  const [rosgu, setRosGU] = useState("");
+  const [rosmss, setRosMSS] = useState("");
+  const [rosns, setRosNS] = useState("");
+  const [rosskin, setRosSkin] = useState("");
+  const [roslymph, setRosLymph] = useState("");
+  const [rospsych, setRosPsych] = useState("");
+  const [rosrectal, setRosRectal] = useState("");
+
   const getPhysicalExamAttachment = (title, data) => {
     return {
       attachment: {
@@ -83,6 +99,28 @@ const CreateNotes = ({
         system: "urn:oid:1.3.6.1.4.1.19376.1.2.3",
         code: "urn:ihe:pcc:handp:2008",
         display: "PE",
+      },
+    };
+  };
+
+  const getRosAttachment = (title, data) => {
+    return {
+      attachment: {
+        contentType: "text/plain",
+        hash: "md5 hash of base64 section content",
+        data,
+        title,
+        extension: [
+          {
+            url: "http://xcaliber-fhir/structureDefinition/ros-sequence",
+            valueInteger: peSequence[title],
+          },
+        ],
+      },
+      format: {
+        system: "urn:oid:1.3.6.1.4.1.19376.1.2.3",
+        code: "urn:ihe:pcc:handp:2008",
+        display: "ROS",
       },
     };
   };
@@ -145,6 +183,51 @@ const CreateNotes = ({
       content.push(getPhysicalExamAttachment("Rectal", rectal));
     }
 
+    if (rosgeneral !== "") {
+      content.push(getRosAttachment("General", rosgeneral));
+    }
+    if (roseyes !== "") {
+      content.push(getRosAttachment("Eyes", roseyes));
+    }
+    if (roshent !== "") {
+      content.push(getRosAttachment("HENT", roshent));
+    }
+    if (rosneck !== "") {
+      content.push(getRosAttachment("Neck", rosneck));
+    }
+    if (rosresp !== "") {
+      content.push(getRosAttachment("Resp", rosresp));
+    }
+    if (roscvs !== "") {
+      content.push(getRosAttachment("CVS", roscvs));
+    }
+    if (rosbreast !== "") {
+      content.push(getRosAttachment("Breast", rosbreast));
+    }
+    if (rosabdom !== "") {
+      content.push(getRosAttachment("Abdom", rosabdom));
+    }
+    if (rosgu !== "") {
+      content.push(getRosAttachment("GU", rosgu));
+    }
+    if (rosmss !== "") {
+      content.push(getRosAttachment("MSS", rosmss));
+    }
+    if (rosns !== "") {
+      content.push(getRosAttachment("NS", rosns));
+    }
+    if (rosskin !== "") {
+      content.push(getRosAttachment("Skin", rosskin));
+    }
+    if (roslymph !== "") {
+      content.push(getRosAttachment("Lymph", roslymph));
+    }
+    if (rospsych !== "") {
+      content.push(getRosAttachment("Psych", rospsych));
+    }
+    if (rosrectal !== "") {
+      content.push(getRosAttachment("Rectal", rosrectal));
+    }
     const notePayLoad = {
       data: {
         resourceType: "DocumentReference",
@@ -218,6 +301,7 @@ const CreateNotes = ({
       },
     };
     const note = await NoteService.createNote(notePayLoad);
+    console.log(note);
   };
   return (
     <Grid container>
@@ -454,6 +538,200 @@ const CreateNotes = ({
                       onChange={(e) => {
                         if (e.target?.value && e.target?.value !== null)
                           setRectal(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+        <Grid sx={{ width: "100%" }} item pt={2}>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="panel4a-header"
+            >
+              <Typography>ROS</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography pb={1}>General</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosGeneral(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Eyes</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosEyes(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>HENT</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosHENT(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Resp</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosResp(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Neck</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosNeck(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>CVS</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosCVS(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Breast</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosBreast(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Abdom</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosAbdom(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>GU</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosGU(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>MSS</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosMSS(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>NS</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosNS(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Skin</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosSkin(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Lymph</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosLymph(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Psych</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosPsych(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item pt={2}>
+                  <Typography pb={1}>Rectal</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setRosRectal(e.target?.value);
                       }}
                     />
                   )}
