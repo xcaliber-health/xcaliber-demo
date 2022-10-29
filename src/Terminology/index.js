@@ -1,6 +1,7 @@
 import { Grid, Table, TextField, Typography } from "@mui/material";
 import * as React from 'react';
 import { useTheme } from "@mui/system";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { APP_MESSAGES, tags } from "../core-utils/constants";
 import { TerminologyService, TerminologyTagService } from "../services/Terminology";
@@ -13,6 +14,8 @@ export default function Terminology() {
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState('');
   const theme = useTheme();
+  let data = [];
+  const [tagsNa, setTagsNa] = useState([]);
   const handleMultiChange = async (e) => {
     setTagName(e.target.value);
     setLoading(true);
@@ -39,7 +42,13 @@ export default function Terminology() {
               const result = await TerminologyService.getSnomedResultsByTerm(
                 e.target.value
               );
-              setTableData([result]);
+              const tagResult = result.data.buckets.semanticTags;
+              let entries = Object.entries(tagResult)
+              data = entries.map(([key, val] = entry) => {
+                return `${key}`;
+              });
+              setTagsNa(data);
+              setTableData([result.data?.items]);
               setLoading(false);
             }
           }}
@@ -50,7 +59,7 @@ export default function Terminology() {
             height: theme.spacing(8),
           }}
         />
-        <MultipleSelectChip options={tags} tagName={tagName} handleChange={handleMultiChange} />
+        <MultipleSelectChip options={tagsNa} tagName={tagName} handleChange={handleMultiChange} />
 
       </Grid>
       {loading && <Grid sx={{ p: "10px" }}>{`Searching`}</Grid>}

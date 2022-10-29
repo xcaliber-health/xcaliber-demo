@@ -18,33 +18,3 @@ export const BUTTON_LABELS = {
   IMMUNIZATIONS: "Immunizations",
   MEDICATIONS: "Medications",
 };
-export const tags = [
-  'administration method',
-  'assessment scale',
-  'attribute',
-  'body structure',
-  'cell',
-  'clinical drug',
-  'disorder',
-  'disposition',
-  'event',
-  'finding',
-  'medicinal product',
-  'medicinal product form',
-  'morphologic abnormality',
-  'navigational concept',
-  'observable entity',
-  'organism',
-  'physical object',
-  'procedure',
-  'product',
-  'qualifier value',
-  'regime/therapy',
-  'release characteristic',
-  'role',
-  'situation',
-  'specimen',
-  'substance'
-]
-
-
