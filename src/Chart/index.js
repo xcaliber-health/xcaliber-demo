@@ -128,10 +128,6 @@ const Chart = () => {
     },
   });
 
-  useEffect(() => {
-    console.log(patientProblems);
-  });
-
   const updateProblemsState = (createdProblemData) => {
     setPatientProblems([...patientProblems, createdProblemData]);
   };
@@ -334,7 +330,6 @@ const Chart = () => {
       const createdAllergy = await AllergyService.createAllergies(
         allergyPayload
       );
-      console.log(createdAllergy);
       const createdAllergyData = await AllergyService.getAllergyById(
         createdAllergy?.id
       );
@@ -538,13 +533,7 @@ const Chart = () => {
         <Paper></Paper>
       </Grid>
 
-      <Grid
-        sx={{
-          // width: theme.spacing(50),
-          height: theme.spacing(60),
-        }}
-        lg={8}
-      >
+      <Grid sx={{}} lg={8}>
         <Paper style={{ height: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
@@ -637,7 +626,7 @@ const Chart = () => {
                           </TableCell>
                           <TableCell align="center">
                             <Typography>
-                              {dateObject?.DAY} {dateObject?.MONTH}
+                              {dateObject?.DAY} {dateObject?.MONTH}{" "}
                               {dateObject?.DATE}
                             </Typography>
                           </TableCell>
@@ -715,7 +704,7 @@ const Chart = () => {
                           </TableCell>
                           <TableCell align="center">
                             <Typography>
-                              {dateObject?.DAY} {dateObject?.MONTH}
+                              {dateObject?.DAY} {dateObject?.MONTH}{" "}
                               {dateObject?.DATE}
                             </Typography>
                           </TableCell>
@@ -790,7 +779,7 @@ const Chart = () => {
                           </TableCell>
                           <TableCell align="center">
                             <Typography>
-                              {dateObject?.DAY} {dateObject?.MONTH}
+                              {dateObject?.DAY} {dateObject?.MONTH}{" "}
                               {dateObject?.DATE}
                             </Typography>
                           </TableCell>

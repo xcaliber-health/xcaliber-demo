@@ -121,7 +121,6 @@ const CreateAppointment = ({
       <Grid>
         <RadioGroup
           onChange={(e) => {
-            console.log(e.target.value);
             onTimeChange(e.target.value);
           }}
           pt={2}
