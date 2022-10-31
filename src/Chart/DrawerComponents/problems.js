@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Grid,
+  Box,
   Typography,
   TextField,
   Autocomplete,
@@ -154,7 +155,7 @@ export const PatientProblems = ({
         )} */}
       </Grid>
       <Grid item pt={2}>
-        <Typography pb={1}> Reason for visit</Typography>
+        <Typography pb={1}>Synopsis</Typography>
         {!disabled && (
           <TextField
             sx={{ width: "100%" }}
@@ -175,30 +176,22 @@ export const PatientProblems = ({
           />
         )}
       </Grid>
-      <Grid
-        container
-        item
-        style={{
-          display: "flex",
-          flexDirection: "row-reverse",
-          width: "60%",
-          paddingTop: 12,
-        }}
-        justifyContent={"space-between"}
-      >
+     
+      <Box sx={{ display: "flex", width: "100%", padding: '8px 0px 8px 0px', justifyContent: "flex-end" }}>
         <Button
           onClick={() => {
             createProblem(problemPayload);
           }}
           disabled={disabled}
           variant="contained"
+          sx={{ marginRight: "10px" }}
         >
           Create
         </Button>
-        <Button onClick={onCancelClick} disabled={disabled} variant="contained">
+        <Button onClick={onCancelClick} variant="contained">
           Cancel
         </Button>
-      </Grid>
+      </Box>
     </Grid>
   );
 };

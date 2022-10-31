@@ -7,6 +7,7 @@ import {
   IconButton,
   Drawer,
   Typography,
+  Tooltip,
   Chip,
 } from "@mui/material";
 import { useTheme } from "@mui/system";
@@ -24,7 +25,7 @@ import Paper from "@mui/material/Paper";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DetailsTab from "./TabComponents/DetailsTab";
-
+import NorthEastIcon from '@mui/icons-material/NorthEast';
 const PatientDetailsCard = ({
   patientDetails,
   upcomingAppointments,
@@ -49,14 +50,14 @@ const PatientDetailsCard = ({
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Grid sx={{ padding: theme.spacing(1) }} item>
+          <Grid sx={{ padding: theme.spacing(1) }} item lg={3}>
             <Avatar
               src={DoctorImage}
               sx={{ height: 50, width: 50, marginRight: theme.spacing(1) }}
             />
           </Grid>
 
-          <Grid item sx={{ padding: theme.spacing(1) }}>
+          <Grid item sx={{ padding: theme.spacing(1) }} lg = {7}>
             {patientDetails?.extension?.find((ext) => {
               return ext?.url?.endsWith("deleted-date");
             }) && (
@@ -85,6 +86,15 @@ const PatientDetailsCard = ({
           </Button>
         </Grid> 
         */}
+          </Grid>
+          <Grid sx={{ padding: theme.spacing(1) }} item lg={1}>
+          <Tooltip title="View in EHR" >
+
+            <IconButton onClick = {() => {window.open(`https://sandbox.elationemr.com/patient/${patientDetails?.id}/req-action/`)}}>
+            <NorthEastIcon />
+
+            </IconButton>
+            </Tooltip>
           </Grid>
         </AccordionSummary>
         <AccordionDetails>
