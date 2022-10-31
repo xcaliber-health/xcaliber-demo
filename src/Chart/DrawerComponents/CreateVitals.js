@@ -73,47 +73,44 @@ export default function Vitals({
       ]
     }
     const entries = [];
-    if (sys && dia) {
-      entries.push({
-        resource: {
-          ...resource,
-          code: {
-            coding: [
-              {
-                code: "85354-9",
-                display: "Blood Pressure"
-              }
+    if(sys || dia){
+      const component=[];
+      if(sys){
+        component.push({
+          "code": {
+            "coding": [
+                {
+                    "code": "8480-6"
+                }
             ]
           },
-          component: [
-            {
-              code: {
-                coding: [
-                  {
-                    code: "8480-6"
-                  }
-                ]
-              },
-              valueQuantity: {
-                value: "120"
-              }
-            },
-            {
-              code: {
-                coding: [
-                  {
-                    code: "8462-4"
-                  }
-                ]
-              },
-              valueQuantity: {
-                value: dia
-              }
-            }
-
-          ],
+          "valueQuantity": {
+            "value":sys
+          }
+        })
+      }
+      if(dia){
+        component.push({
+          "code": {
+            "coding": [
+                {
+                  "code": "8462-4"
+                }
+            ]
+        },
+        "valueQuantity": {
+            "value": dia
         }
-      })
+        })
+      }
+      entries.push({resource: {...resource,
+        code: {
+          "coding": [{ 
+            "code": "85354-9",
+            "display": "Blood Pressure"}]
+        },
+        component
+      }})
     }
     if (height) {
       heightValue = 1;
