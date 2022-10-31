@@ -9,7 +9,7 @@ import NotesTab from "./TabComponents/NotesTab";
 import ComingSoon from "../Watermark/ComingSoon";
 import PamiV from "./PamiV";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
-import CreateVitals from './DrawerComponents/CreateVitals'
+import CreateVitals from "./DrawerComponents/CreateVitals";
 import {
   Dangerous,
   ReportProblem,
@@ -17,15 +17,13 @@ import {
   Medication,
   Vaccines,
 } from "@mui/icons-material/";
-import {
-  IconButton
-} from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { IconButton } from "@mui/material";
 import { PatientProblems } from "./DrawerComponents/problems";
 import { BUTTON_LABELS } from "../core-utils/constants";
 import CreateAppointment from "./CreateAppointment";
@@ -54,16 +52,16 @@ const Chart = () => {
   const [loading, setLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isProblemsDrawerOpen, setIsProblemsDrawerOpen] = useState(false);
-  const [isVitalsDrawerOpen, setVitalsDrawer] = useState(false)
+  const [isVitalsDrawerOpen, setVitalsDrawer] = useState(false);
   const [isAllergyDrawerOpen, setIsAllergyDrawerOpen] = useState(false);
   const [severity, setSeverity] = React.useState(null);
   const handleSeverityChange = (e) => {
-    setSeverity(e.target.value)
-  }
+    setSeverity(e.target.value);
+  };
   const [status, setStatus] = React.useState(null);
   const handleStatusChange = (e) => {
-    setStatus(e.target.value)
-  }
+    setStatus(e.target.value);
+  };
   const [valueDate, setValueDate] = React.useState(null);
   const handleDateChange = (newValue) => {
     setValueDate(newValue);
@@ -103,35 +101,31 @@ const Chart = () => {
       clinicalStatus: {
         coding: [
           {
-            "code": "active",
-            "display": "Active"
-          }
-        ]
+            code: "active",
+            display: "Active",
+          },
+        ],
       },
       identifier: [
         {
           id: "medispanid",
-          value: "44364"
+          value: "44364",
         },
         {
           id: "medispandnid",
-          value: "12647"
-        }
+          value: "12647",
+        },
       ],
       patient: {
-        "reference": `Patient/${id}`
+        reference: `Patient/${id}`,
       },
       onsetDateTime: "2010-07-02",
       recordedDate: "2022-06-28T11:43:22Z",
       text: {
-        div: "deletedDate: null"
+        div: "deletedDate: null",
       },
-      reaction: []
+      reaction: [],
     },
-  });
-
-  useEffect(() => {
-    console.log(patientProblems);
   });
 
   const updateProblemsState = (createdProblemData) => {
@@ -202,7 +196,12 @@ const Chart = () => {
     });
   };
   const onTimeChange = (time) => {
-    let finalDateValue = appointmentPayload?.data?.start?.slice(0, 10);
+    let finalDateValue;
+    if (appointmentPayload?.data?.start?.slice(0, 10)?.endsWith("T")) {
+      finalDateValue = appointmentPayload?.data?.start?.slice(0, 9);
+    } else {
+      finalDateValue = appointmentPayload?.data?.start?.slice(0, 10);
+    }
     setAppointmentPayload({
       data: {
         ...appointmentPayload?.data,
@@ -261,15 +260,15 @@ const Chart = () => {
         code: {
           coding: [
             {
-              display: reason
-            }
-          ]
+              display: reason,
+            },
+          ],
         },
       },
     });
   };
-  const reaction2 = []
-  const reaction = {}
+  const reaction2 = [];
+  const reaction = {};
   const onReactionChange = (reaction1) => {
     if (reaction1) {
       reaction["reaction"] = reaction1;
@@ -277,7 +276,7 @@ const Chart = () => {
     setAllergyPayload({
       data: {
         ...allergyPayload?.data,
-        reaction: reaction
+        reaction: reaction,
       },
     });
   };
@@ -288,7 +287,7 @@ const Chart = () => {
     setAllergyPayload({
       data: {
         ...allergyPayload?.data,
-        reaction: reaction
+        reaction: reaction,
       },
     });
     setSeverity(severity);
@@ -301,9 +300,9 @@ const Chart = () => {
           coding: [
             {
               code: status,
-              display: status
-            }
-          ]
+              display: status,
+            },
+          ],
         },
       },
     });
@@ -327,13 +326,20 @@ const Chart = () => {
       allergyPayload?.data?.start?.trim() === ""
     ) {
       alert("Please provide allergy");
-    }
-    else {
-      await AllergyService.createAllergies(allergyPayload);
+    } else {
+      const createdAllergy = await AllergyService.createAllergies(
+        allergyPayload
+      );
+      const createdAllergyData = await AllergyService.getAllergyById(
+        createdAllergy?.id
+      );
+      setPatientAllergies([
+        ...patientAllergies,
+        { resource: { ...createdAllergyData } },
+      ]);
       setIsAllergyDrawerOpen(false);
     }
-  }
-
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -421,8 +427,11 @@ const Chart = () => {
       >
         <PatientProblems
           disabled={false}
-          onCancelClick={() => { setIsProblemsDrawerOpen(false) }}
+          onCancelClick={() => {
+            setIsProblemsDrawerOpen(false);
+          }}
           patientId={id}
+          updateProblems={updateProblemsState}
         />
       </Drawer>
       <Drawer
@@ -448,10 +457,15 @@ const Chart = () => {
       >
         <CreateVitals
           disabled={false}
-          onCancelClick={() => { setVitalsDrawer(false) }}
+          onCancelClick={() => {
+            setVitalsDrawer(false);
+          }}
           patientId={id}
           handleClose={() => setVitalsDrawer(false)}
-          onVitalsClick={() => { getVitals(); setVitalsDrawer(false) }}
+          onVitalsClick={() => {
+            getVitals();
+            setVitalsDrawer(false);
+          }}
           patientDetails={patientDetails}
         />
       </Drawer>
@@ -459,7 +473,7 @@ const Chart = () => {
         anchor={"right"}
         open={isAllergyDrawerOpen}
         onClose={() => {
-          setIsAllergyDrawerOpen(false)
+          setIsAllergyDrawerOpen(false);
         }}
         variant="temporary"
         PaperProps={{
@@ -488,8 +502,12 @@ const Chart = () => {
           severity={severity}
           handleDateChange={handleDateChange}
           handleSeverityChange={handleSeverityChange}
-          handleAllergyClick={() => { handleAllergyClick(allergyPayload) }}
-          onCancelClick={() => { setIsAllergyDrawerOpen(false) }}
+          handleAllergyClick={() => {
+            handleAllergyClick(allergyPayload);
+          }}
+          onCancelClick={() => {
+            setIsAllergyDrawerOpen(false);
+          }}
           patientId={id}
         />
       </Drawer>
@@ -512,18 +530,10 @@ const Chart = () => {
         )}
         {loading && <Loading />}
         {/* </Paper> */}
-        <Paper>
-
-        </Paper>
+        <Paper></Paper>
       </Grid>
 
-      <Grid
-        sx={{
-          // width: theme.spacing(50),
-          height: theme.spacing(60),
-        }}
-        lg={8}
-      >
+      <Grid sx={{}} lg={8}>
         <Paper style={{ height: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
@@ -556,21 +566,28 @@ const Chart = () => {
               marginRight={theme.spacing(3)}
               paddingTop={theme.spacing(3)}
             >
-              <div style={{ display: "flex", alignItems: "center", }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <DeviceThermostat />
                 {BUTTON_LABELS.VITALS}
               </div>
 
-              <IconButton sx={{ p: 0 }} display="flex" onClick={() => {
-                setVitalsDrawer(true);
-                setCurrentDrawerIndex(1);
-              }}>
+              <IconButton
+                sx={{ p: 0 }}
+                display="flex"
+                onClick={() => {
+                  setVitalsDrawer(true);
+                  setCurrentDrawerIndex(1);
+                }}
+              >
                 <AddCircleOutlineRoundedIcon />
               </IconButton>
             </Box>
             {/* <PamiV vitalsList={patientVitals} patientId={id} /> */}
 
-            <TableContainer component={Paper} style={{ marginTop: theme.spacing(3) }}>
+            <TableContainer
+              component={Paper}
+              style={{ marginTop: theme.spacing(3) }}
+            >
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
@@ -593,12 +610,16 @@ const Chart = () => {
                     patientVitals?.map((vital) => {
                       let dateObject = Helper.extractFieldsFromDate(
                         vital?.resource?.extension?.find((ext) => {
-                          return ext?.url?.endsWith("observation-document-date");
+                          return ext?.url?.endsWith(
+                            "observation-document-date"
+                          );
                         })?.valueString
                       );
                       return (
                         <TableRow
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
                           style={{ cursor: "pointer" }}
                         >
                           <TableCell align="center">
@@ -614,7 +635,10 @@ const Chart = () => {
                             </Grid>
                           </TableCell>
                           <TableCell align="center">
-                            <Typography>{dateObject?.DAY} {dateObject?.MONTH}{dateObject?.DATE}</Typography>
+                            <Typography>
+                              {dateObject?.DAY} {dateObject?.MONTH}{" "}
+                              {dateObject?.DATE}
+                            </Typography>
                           </TableCell>
                           <TableCell align="center" component="th" scope="row">
                             <Typography>{dateObject?.YEAR}</Typography>
@@ -625,7 +649,6 @@ const Chart = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-
           </TabPanel>
           <TabPanel value={value} index={0}>
             <NotesTab patientDetails={patientDetails} />
@@ -653,7 +676,10 @@ const Chart = () => {
               </IconButton>
             </Box>
             {/* <PamiV problemsList={patientProblems} updateProblem={updateProblemsState} patientId={id} /> */}
-            <TableContainer component={Paper} style={{ marginTop: theme.spacing(3) }}>
+            <TableContainer
+              component={Paper}
+              style={{ marginTop: theme.spacing(3) }}
+            >
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
@@ -676,7 +702,9 @@ const Chart = () => {
                       );
                       return (
                         <TableRow
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
                           style={{ cursor: "pointer" }}
                         >
                           <TableCell align="center">
@@ -685,7 +713,10 @@ const Chart = () => {
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
-                            <Typography>{dateObject?.DAY} {dateObject?.MONTH}{dateObject?.DATE}</Typography>
+                            <Typography>
+                              {dateObject?.DAY} {dateObject?.MONTH}{" "}
+                              {dateObject?.DATE}
+                            </Typography>
                           </TableCell>
                           <TableCell align="center" component="th" scope="row">
                             <Typography>{dateObject?.YEAR}</Typography>
@@ -709,12 +740,22 @@ const Chart = () => {
                 {BUTTON_LABELS.ALLERGIES}
               </div>
 
-              <IconButton sx={{ p: 0 }} display="flex" onClick={() => { setIsAllergyDrawerOpen(true) }}>
+              <IconButton
+                sx={{ p: 0 }}
+                display="flex"
+                onClick={() => {
+                  setIsAllergyDrawerOpen(true);
+                }}
+              >
                 <AddCircleOutlineRoundedIcon />
               </IconButton>
             </Box>
             {/* <PamiV allergyList={patientAllergies} patientId={id} /> */}
-            <TableContainer component={Paper} style={{ marginTop: theme.spacing(3) }}>
+
+            <TableContainer
+              component={Paper}
+              style={{ marginTop: theme.spacing(3) }}
+            >
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
@@ -737,7 +778,9 @@ const Chart = () => {
                       );
                       return (
                         <TableRow
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
                           style={{ cursor: "pointer" }}
                         >
                           <TableCell align="center">
@@ -746,7 +789,10 @@ const Chart = () => {
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
-                            <Typography>{dateObject?.DAY} {dateObject?.MONTH}{dateObject?.DATE}</Typography>
+                            <Typography>
+                              {dateObject?.DAY} {dateObject?.MONTH}{" "}
+                              {dateObject?.DATE}
+                            </Typography>
                           </TableCell>
                           <TableCell align="center" component="th" scope="row">
                             <Typography>{dateObject?.YEAR}</Typography>

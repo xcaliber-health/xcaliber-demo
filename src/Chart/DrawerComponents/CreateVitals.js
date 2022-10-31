@@ -125,7 +125,9 @@ export default function Vitals({
         resource: {
           ...resource,
           code: {
-            "coding": [{ "display": "Height" }]
+            "coding": [{ 
+              "code":"8302-2",
+              "display": "Height"}]
           },
           valueQuantity: {
             "unit": "inches",
@@ -139,7 +141,8 @@ export default function Vitals({
         resource: {
           ...resource,
           code: {
-            "coding": [{
+            "coding": [{ 
+              "code": "29463-7",
               "display": "Weight"
             }]
           },
@@ -166,7 +169,10 @@ export default function Vitals({
         resource: {
           ...resource,
           code: {
-            "coding": [{ "display": "Oxygen Saturation" }]
+
+            "coding": [{ 
+              "code": "59408-5",
+              "display": "Oxygen Saturation"}]
           },
           valueQuantity: {
             "unit": "%",
@@ -180,7 +186,10 @@ export default function Vitals({
         resource: {
           ...resource,
           code: {
-            "coding": [{ "display": "Pulse" }]
+
+            "coding": [{
+              "code": "8867-4",
+              "display": "Pulse"}]
           },
           valueQuantity: {
             "unit": "bpm",
@@ -194,7 +203,9 @@ export default function Vitals({
         resource: {
           ...resource,
           code: {
-            "coding": [{ "display": "Body Temparature" }]
+            "coding": [{
+            "code": "8310-5",
+            "display": "Body Temparature"}]
           },
           valueQuantity: {
             "unit": "fahrenheit",
@@ -208,7 +219,9 @@ export default function Vitals({
         resource: {
           ...resource,
           code: {
-            "coding": [{ "display": "Respiration Rate" }]
+            "coding": [{
+              "code": "9279-1",
+              "display": "Respiration Rate"}]
           },
           valueQuantity: {
             "unit": "bpm",

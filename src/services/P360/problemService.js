@@ -13,7 +13,7 @@ export const ProblemService = {
           },
         }
       );
-      return result?.data?.data?.entry?.slice(0, 2);
+      return result?.data?.data?.entry?.slice(0, 10);
     } catch (error) {
       console.log(error);
     }
