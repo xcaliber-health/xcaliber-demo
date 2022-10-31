@@ -21,7 +21,13 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { NoteService } from "../services/P360/noteService";
 
-const DisplayNotes = ({ note, disabled, onCancelClick }) => {
+const DisplayNotes = ({
+  note,
+  disabled,
+  onCancelClick,
+  reloadNotes,
+  patientDetails,
+}) => {
   const [problems, setProblems] = useState([]);
   const [physicalExam, setPhysicalExam] = useState([]);
   const [ros, setROS] = useState([]);
@@ -509,6 +515,7 @@ const DisplayNotes = ({ note, disabled, onCancelClick }) => {
                 onClick={() => {
                   onSaveNote();
                   onCancelClick();
+                  reloadNotes(patientDetails?.id);
                 }}
                 variant="contained"
               >
