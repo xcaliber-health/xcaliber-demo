@@ -20,6 +20,12 @@ import {
 import {
   IconButton
 } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import { PatientProblems } from "./DrawerComponents/problems";
 import { BUTTON_LABELS } from "../core-utils/constants";
 import CreateAppointment from "./CreateAppointment";
@@ -32,6 +38,7 @@ import { ImmunizationService } from "../services/P360/immunizationService";
 import Allergy from "./DrawerComponents/createAllergies";
 import { secondsInWeek } from "date-fns";
 import { rangeRight } from "lodash";
+import { Helper } from "../core-utils/helper";
 
 const Chart = () => {
   const { id } = useParams();
@@ -312,9 +319,19 @@ const Chart = () => {
     setValueDate(date);
   };
 
-  const handleAllergyClick = async () => {
-    await AllergyService.createAllergies(allergyPayload);
-    setIsAllergyDrawerOpen(false);
+  const handleAllergyClick = async (allergyPayload) => {
+    const keyArray = Object.keys(allergyPayload?.data);
+    if (
+      !keyArray?.includes("code") ||
+      allergyPayload?.data?.start === null ||
+      allergyPayload?.data?.start?.trim() === ""
+    ) {
+      alert("Please provide allergy");
+    }
+    else {
+      await AllergyService.createAllergies(allergyPayload);
+      setIsAllergyDrawerOpen(false);
+    }
   }
 
 
@@ -471,7 +488,7 @@ const Chart = () => {
           severity={severity}
           handleDateChange={handleDateChange}
           handleSeverityChange={handleSeverityChange}
-          handleAllergyClick={handleAllergyClick}
+          handleAllergyClick={() => { handleAllergyClick(allergyPayload) }}
           onCancelClick={() => { setIsAllergyDrawerOpen(false) }}
           patientId={id}
         />
@@ -551,7 +568,54 @@ const Chart = () => {
                 <AddCircleOutlineRoundedIcon />
               </IconButton>
             </Box>
-            <PamiV vitalsList={patientVitals} patientId={id} />
+            {/* <PamiV vitalsList={patientVitals} patientId={id} /> */}
+
+            <TableContainer component={Paper} style={{ marginTop: theme.spacing(3) }}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">
+                      <Typography>Vitals</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography>Date</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography>Year</Typography>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {patientVitals &&
+                    patientVitals?.map((vital) => {
+                      let dateObject = Helper.extractFieldsFromDate(
+                        vital?.resource?.extension?.find((ext) => {
+                          return ext?.url?.endsWith("observation-document-date");
+                        })?.valueString
+                      );
+                      return (
+                        <TableRow
+                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <TableCell align="center">
+                            <Typography>
+                              {vital?.resource?.code?.coding?.[0]?.display}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Typography>{dateObject?.DAY} {dateObject?.MONTH}{dateObject?.DATE}</Typography>
+                          </TableCell>
+                          <TableCell align="center" component="th" scope="row">
+                            <Typography>{dateObject?.YEAR}</Typography>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+
           </TabPanel>
           <TabPanel value={value} index={0}>
             <NotesTab patientDetails={patientDetails} />
@@ -578,7 +642,50 @@ const Chart = () => {
                 <AddCircleOutlineRoundedIcon />
               </IconButton>
             </Box>
-            <PamiV problemsList={patientProblems} updateProblem={updateProblemsState} patientId={id} />
+            {/* <PamiV problemsList={patientProblems} updateProblem={updateProblemsState} patientId={id} /> */}
+            <TableContainer component={Paper} style={{ marginTop: theme.spacing(3) }}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">
+                      <Typography>Problems</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography>Date</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography>Year</Typography>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {patientProblems &&
+                    patientProblems?.map((problem) => {
+                      let dateObject = Helper.extractFieldsFromDate(
+                        problem?.resource?.recordedDate
+                      );
+                      return (
+                        <TableRow
+                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <TableCell align="center">
+                            <Typography>
+                            {problem?.resource?.text?.div}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Typography>{dateObject?.DAY} {dateObject?.MONTH}{dateObject?.DATE}</Typography>
+                          </TableCell>
+                          <TableCell align="center" component="th" scope="row">
+                            <Typography>{dateObject?.YEAR}</Typography>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={3}>
             <Box
@@ -596,7 +703,50 @@ const Chart = () => {
                 <AddCircleOutlineRoundedIcon />
               </IconButton>
             </Box>
-            <PamiV allergyList={patientAllergies} patientId={id} />
+            {/* <PamiV allergyList={patientAllergies} patientId={id} /> */}
+             <TableContainer component={Paper} style={{ marginTop: theme.spacing(3) }}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">
+                      <Typography>Allergies</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography>Date</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography>Year</Typography>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {patientAllergies &&
+                    patientAllergies?.map((allergy) => {
+                      let dateObject = Helper.extractFieldsFromDate(
+                        allergy?.resource?.recordedDate
+                      );
+                      return (
+                        <TableRow
+                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <TableCell align="center">
+                            <Typography>
+                            {allergy?.resource?.code?.coding?.[0]?.display}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Typography>{dateObject?.DAY} {dateObject?.MONTH}{dateObject?.DATE}</Typography>
+                          </TableCell>
+                          <TableCell align="center" component="th" scope="row">
+                            <Typography>{dateObject?.YEAR}</Typography>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={4}>
             <Box
