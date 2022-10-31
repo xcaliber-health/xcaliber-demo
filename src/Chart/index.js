@@ -1,4 +1,13 @@
-import { Grid, Box, Tabs, Tab, Typography, Drawer, Paper } from "@mui/material";
+import {
+  Grid,
+  Box,
+  Tabs,
+  Tab,
+  Typography,
+  Drawer,
+  Paper,
+  Button,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/system";
 import PatientDetailsCard from "./PatientAvatarBox";
@@ -571,16 +580,16 @@ const Chart = () => {
                 {BUTTON_LABELS.VITALS}
               </div>
 
-              <IconButton
-                sx={{ p: 0 }}
-                display="flex"
+              <Button
+                sx={{ display: "flex", alignSelf: "flex-end" }}
+                variant="contained"
                 onClick={() => {
                   setVitalsDrawer(true);
                   setCurrentDrawerIndex(1);
                 }}
               >
-                <AddCircleOutlineRoundedIcon />
-              </IconButton>
+                Create Vitals
+              </Button>
             </Box>
             {/* <PamiV vitalsList={patientVitals} patientId={id} /> */}
 
@@ -654,16 +663,16 @@ const Chart = () => {
                 <ReportProblem />
                 <Typography>{BUTTON_LABELS.PROBLEMS}</Typography>
               </div>
-              <IconButton
-                sx={{ p: 0 }}
-                display="flex"
+              <Button
+                sx={{ display: "flex", alignSelf: "flex-end" }}
+                variant="contained"
                 onClick={() => {
                   setIsProblemsDrawerOpen(true);
                   setCurrentDrawerIndex(1);
                 }}
               >
-                <AddCircleOutlineRoundedIcon />
-              </IconButton>
+                Create Problems
+              </Button>
             </Box>
             {/* <PamiV problemsList={patientProblems} updateProblem={updateProblemsState} patientId={id} /> */}
             <TableContainer
@@ -730,15 +739,15 @@ const Chart = () => {
                 {BUTTON_LABELS.ALLERGIES}
               </div>
 
-              <IconButton
-                sx={{ p: 0 }}
-                display="flex"
+              <Button
+                sx={{ display: "flex", alignSelf: "flex-end" }}
+                variant="contained"
                 onClick={() => {
                   setIsAllergyDrawerOpen(true);
                 }}
               >
-                <AddCircleOutlineRoundedIcon />
-              </IconButton>
+                Create Allergies
+              </Button>
             </Box>
             {/* <PamiV allergyList={patientAllergies} patientId={id} /> */}
             <TableContainer
@@ -805,9 +814,12 @@ const Chart = () => {
                 {BUTTON_LABELS.IMMUNIZATIONS}
               </div>
 
-              <IconButton sx={{ p: 0 }} display="flex">
-                <AddCircleOutlineRoundedIcon />
-              </IconButton>
+              <Button
+                sx={{ display: "flex", alignSelf: "flex-end" }}
+                variant="contained"
+              >
+                Create Immunization
+              </Button>
             </Box>
             <PamiV immunizationList={patientImmunizations} patientId={id} />
           </TabPanel>
@@ -823,9 +835,9 @@ const Chart = () => {
                 <Medication />
                 {BUTTON_LABELS.MEDICATIONS}
               </div>
-              <IconButton sx={{ p: 0 }} display="flex">
-                <AddCircleOutlineRoundedIcon />
-              </IconButton>
+              <Button variant="contained" display="flex">
+                Create Medications
+              </Button>
             </Box>
           </TabPanel>
         </Paper>

@@ -7,6 +7,7 @@ import {
   IconButton,
   Drawer,
   Typography,
+  Chip,
 } from "@mui/material";
 import { useTheme } from "@mui/system";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
@@ -60,7 +61,7 @@ const PatientDetailsCard = ({
               return ext?.url?.endsWith("deleted-date");
             }) && (
               <Grid color={"black"}>
-                <Typography>DELETED</Typography>
+                <Chip label="DELETED" />
               </Grid>
             )}
             <Grid>{`${patientDetails?.name?.[0]?.given?.[0]}  ${patientDetails?.name?.[0]?.family} `}</Grid>
