@@ -73,44 +73,54 @@ export default function Vitals({
       ]
     }
     const entries = [];
-    if(sys || dia){
-      const component=[];
-      if(sys){
-        component.push({
-          "code": {
-            "coding": [
-                {
-                    "code": "8480-6"
-                }
+    if (sys && dia) {
+      entries.push({
+        resource: {
+          ...resource,
+          code: {
+            coding: [
+              {
+                code: "85354-9",
+                display: "Blood Pressure"
+              }
             ]
           },
-          "valueQuantity": {
-            "value":sys
-          }
-        })
-      }
-      if(dia){
-        component.push({
-          "code": {
-            "coding": [
-                {
-                  "code": "8462-4"
-                }
-            ]
-        },
-        "valueQuantity": {
-            "value": dia
+          component: [
+            {
+              code: {
+                coding: [
+                  {
+                    code: "8480-6"
+                  }
+                ]
+              },
+              valueQuantity: {
+                value: sys
+              }
+            },
+            {
+              code: {
+                coding: [
+                  {
+                    code: "8462-4"
+                  }
+                ]
+              },
+              valueQuantity: {
+                value: dia
+              }
+            }
+
+          ],
         }
-        })
-      }
-      entries.push({resource: {...resource,
-        code: {
-          "coding": [{ 
-            "code": "85354-9",
-            "display": "Blood Pressure"}]
-        },
-        component
-      }})
+      })
+    }
+    if (sys && !dia) {
+      alert("Please provide both systolic and diastolic blood presure");
+    }
+
+    if (!sys && dia) {
+      alert("Please provide both systolic and diastolic blood pressure");
     }
     if (height) {
       heightValue = 1;
