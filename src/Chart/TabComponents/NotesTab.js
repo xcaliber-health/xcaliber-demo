@@ -5,6 +5,7 @@ import {
   Drawer,
   ListItemButton,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/system";
 import { useEffect, useState } from "react";
@@ -19,6 +20,13 @@ const NotesTab = ({ patientDetails }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isNoteDisplayDrawerOpen, setIsNoteDisplayDrawerOpen] = useState(false);
   const [note, setNote] = useState({});
+  const [flag, setFlag] = useState(false);
+  useEffect(() => {
+    if (!localStorage.getItem(`notes_${patientDetails?.id}`)) {
+      localStorage.setItem(`notes_${patientDetails?.id}`, JSON.stringify([]));
+    }
+    setFlag(true);
+  }, []);
   const [notesPayload, setNotesPayload] = useState({
     data: {
       resourceType: "DocumentReference",
@@ -205,55 +213,124 @@ const NotesTab = ({ patientDetails }) => {
       >
         <DisplayNotes note={note} />
       </Drawer>
-      <Paper style={{ marginTop: theme.spacing(2) }}>
-        {notes &&
-          notes?.map((note) => {
-            return (
-              <ListItemButton
-                style={{ flexDirection: "column", alignItems: "flex-start" }}
-                divider
-                key={note.id}
-                onClick={() => {
-                  setIsNoteDisplayDrawerOpen(true);
-                  setNote(note);
-                }}
-              >
-                <ListItemText primary={note?.resource?.description} />
-                <ListItemText secondary={note?.resource?.docStatus} />
-                <ListItemText>
-                  <span style={{ color: "black" }}>
-                    {
-                      Helper.extractFieldsFromDate(
-                        note?.resource?.date?.slice(0, 10)
-                      )?.DAY
-                    }
-                  </span>{" "}
-                  <span style={{ color: "black" }}>
-                    {
-                      Helper.extractFieldsFromDate(
-                        note?.resource?.date?.slice(0, 10)
-                      )?.MONTH
-                    }
-                  </span>{" "}
-                  <span style={{ color: "black" }}>
-                    {
-                      Helper.extractFieldsFromDate(
-                        note?.resource?.date?.slice(0, 10)
-                      )?.DATE
-                    }
-                  </span>{" "}
-                  <span style={{ color: "black" }}>
-                    {
-                      Helper.extractFieldsFromDate(
-                        note?.resource?.date?.slice(0, 10)
-                      )?.YEAR
-                    }
-                  </span>
-                </ListItemText>
-              </ListItemButton>
-            );
-          })}
-      </Paper>
+      {flag && (
+        <Grid container direction="column">
+          <Paper style={{ marginTop: theme.spacing(2) }}>
+            <Typography pt={1} sx={{ paddingLeft: "15px", fontWeight: "bold" }}>
+              Unsigned Notes
+            </Typography>
+
+            {localStorage.getItem(`notes_${patientDetails?.id}`) &&
+              JSON.parse(
+                localStorage.getItem(`notes_${patientDetails?.id}`)
+              )?.map((note) => {
+                return (
+                  <ListItemButton
+                    style={{
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                    }}
+                    divider
+                    key={note.id}
+                    onClick={() => {
+                      setIsNoteDisplayDrawerOpen(true);
+                      setNote(note);
+                    }}
+                  >
+                    <ListItemText primary={note?.resource?.description} />
+                    <ListItemText secondary={note?.resource?.docStatus} />
+                    <ListItemText>
+                      <span style={{ color: "black" }}>
+                        {
+                          Helper.extractFieldsFromDate(
+                            note?.resource?.date?.slice(0, 10)
+                          )?.DAY
+                        }
+                      </span>{" "}
+                      <span style={{ color: "black" }}>
+                        {
+                          Helper.extractFieldsFromDate(
+                            note?.resource?.date?.slice(0, 10)
+                          )?.MONTH
+                        }
+                      </span>{" "}
+                      <span style={{ color: "black" }}>
+                        {
+                          Helper.extractFieldsFromDate(
+                            note?.resource?.date?.slice(0, 10)
+                          )?.DATE
+                        }
+                      </span>{" "}
+                      <span style={{ color: "black" }}>
+                        {
+                          Helper.extractFieldsFromDate(
+                            note?.resource?.date?.slice(0, 10)
+                          )?.YEAR
+                        }
+                      </span>
+                    </ListItemText>
+                  </ListItemButton>
+                );
+              })}
+          </Paper>
+          <Paper style={{ marginTop: theme.spacing(2) }}>
+            <Typography pt={1} sx={{ paddingLeft: "15px", fontWeight: "bold" }}>
+              Signed Notes
+            </Typography>
+
+            {notes &&
+              notes?.map((note) => {
+                return (
+                  <ListItemButton
+                    style={{
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                    }}
+                    divider
+                    key={note.id}
+                    onClick={() => {
+                      setIsNoteDisplayDrawerOpen(true);
+                      setNote(note);
+                    }}
+                  >
+                    <ListItemText primary={note?.resource?.description} />
+                    <ListItemText secondary={note?.resource?.docStatus} />
+                    <ListItemText>
+                      <span style={{ color: "black" }}>
+                        {
+                          Helper.extractFieldsFromDate(
+                            note?.resource?.date?.slice(0, 10)
+                          )?.DAY
+                        }
+                      </span>{" "}
+                      <span style={{ color: "black" }}>
+                        {
+                          Helper.extractFieldsFromDate(
+                            note?.resource?.date?.slice(0, 10)
+                          )?.MONTH
+                        }
+                      </span>{" "}
+                      <span style={{ color: "black" }}>
+                        {
+                          Helper.extractFieldsFromDate(
+                            note?.resource?.date?.slice(0, 10)
+                          )?.DATE
+                        }
+                      </span>{" "}
+                      <span style={{ color: "black" }}>
+                        {
+                          Helper.extractFieldsFromDate(
+                            note?.resource?.date?.slice(0, 10)
+                          )?.YEAR
+                        }
+                      </span>
+                    </ListItemText>
+                  </ListItemButton>
+                );
+              })}
+          </Paper>
+        </Grid>
+      )}
     </Grid>
   );
 };

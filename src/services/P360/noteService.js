@@ -20,8 +20,8 @@ export const NoteService = {
       for (let i = 0; i < response.data?.data?.entry?.length; i++) {
         const resource = response.data?.data?.entry?.[i];
         if (
-          resource?.resource?.category?.[0]?.coding?.[0]?.display?.toLowerCase() ===
-          "soap"
+          resource?.resource?.category?.[0]?.coding?.[0]?.display ===
+          "Complete H&P (2 col A/P)"
         ) {
           notes.push(resource);
           count++;

@@ -29,8 +29,6 @@ const CreateNotes = ({
   updatePatientId,
   disabled,
 }) => {
-  const [notePayLoad, setNotePayLoad] = useState();
-
   const [problemPayLoad, setProblemPayLoad] = useState("");
   const [allergyList, setAllergy] = useState("");
   const [pastHistory, setpastHistory] = useState("");
@@ -134,7 +132,7 @@ const CreateNotes = ({
       },
     };
   };
-  const onSaveNote = async () => {
+  const createNotePayLoad = async () => {
     const date = new Date().toISOString();
     var content = [];
     if (problemPayLoad !== "") {
@@ -147,95 +145,95 @@ const CreateNotes = ({
         },
       });
     }
-    if(allergyList !== "") {
+    if (allergyList !== "") {
       content.push({
         attachment: {
           contentType: "text/plain",
           data: allergyList,
           title: "Allergies",
           hash: "md5 hash of base64 section content",
-        }
-      })
+        },
+      });
     }
-    if(pastHistory !== "") {
+    if (pastHistory !== "") {
       content.push({
         attachment: {
           contentType: "text/plain",
           data: pastHistory,
           title: "Past",
           hash: "md5 hash of base64 section content",
-        }
-      })
+        },
+      });
     }
-    if(surgicalHistory !== "") {
+    if (surgicalHistory !== "") {
       content.push({
         attachment: {
           contentType: "text/plain",
           data: surgicalHistory,
           title: "Surgical",
           hash: "md5 hash of base64 section content",
-        }
-      })
+        },
+      });
     }
-    if(familyHistory !== "") {
+    if (familyHistory !== "") {
       content.push({
         attachment: {
           contentType: "text/plain",
           data: familyHistory,
           title: "Family",
           hash: "md5 hash of base64 section content",
-        }
-      })
+        },
+      });
     }
-    if(socialHistory !== "") {
+    if (socialHistory !== "") {
       content.push({
         attachment: {
           contentType: "text/plain",
           data: socialHistory,
           title: "Social",
           hash: "md5 hash of base64 section content",
-        }
-      })
+        },
+      });
     }
-    if(habbits !== "") {
+    if (habbits !== "") {
       content.push({
         attachment: {
           contentType: "text/plain",
           data: habbits,
           title: "Habits",
           hash: "md5 hash of base64 section content",
-        }
-      })
+        },
+      });
     }
-    if(medications !== "") {
+    if (medications !== "") {
       content.push({
         attachment: {
           contentType: "text/plain",
           data: medications,
           title: "Med",
           hash: "md5 hash of base64 section content",
-        }
-      })
+        },
+      });
     }
-    if(assesmentPlan !== "") {
+    if (assesmentPlan !== "") {
       content.push({
         attachment: {
           contentType: "text/plain",
           data: assesmentPlan,
           title: "Assessplan",
           hash: "md5 hash of base64 section content",
-        }
-      })
+        },
+      });
     }
-    if(followup !== "") {
+    if (followup !== "") {
       content.push({
         attachment: {
           contentType: "text/plain",
           data: followup,
           title: "Followup",
           hash: "md5 hash of base64 section content",
-        }
-      })
+        },
+      });
     }
     if (general !== "") {
       content.push(getPhysicalExamAttachment("General", general));
@@ -329,79 +327,91 @@ const CreateNotes = ({
       content.push(getRosAttachment("Rectal", rosrectal));
     }
     const notePayLoad = {
-      data: {
-        resourceType: "DocumentReference",
-        status: "current",
-        docStatus: "preliminary",
-        type: {
+      resourceType: "DocumentReference",
+      status: "current",
+      docStatus: "preliminary",
+      type: {
+        coding: [
+          {
+            system: "https://sandbox.elationemr.com/api/2.0/visit_note_types",
+            code: "Elation",
+            display: "Complete H&P (2 col A/P)",
+          },
+        ],
+      },
+      category: [
+        {
           coding: [
             {
               system: "https://sandbox.elationemr.com/api/2.0/visit_note_types",
               code: "Elation",
-              display: "SOAP",
+              display: "Complete H&P (2 col A/P)",
             },
           ],
         },
-        category: [
-          {
-            coding: [
-              {
-                system:
-                  "https://sandbox.elationemr.com/api/2.0/visit_note_types",
-                code: "Elation",
-                display: "SOAP",
-              },
-            ],
-          },
-        ],
-        date,
-        description: "Office Visit Note",
-        subject: {
-          reference: `Patient/${patientDetails?.id}`,
-        },
-        author: [
-          {
-            reference: "Practitioner/140857915539458",
-            identifier: {
-              id: "user_id",
-              value: 2758,
-            },
-          },
-        ],
-        securityLabel: [
-          {
-            coding: [
-              {
-                system:
-                  "http://terminology.hl7.org/CodeSystem/v3-Confidentiality",
-                code: "U",
-                display: "unrestricted",
-              },
-            ],
-          },
-        ],
-        extension: [
-          {
-            url: "http://xcaliber-fhir/structureDefinition/practice",
-            valueString: 140857911017476,
-          },
-        ],
-        content,
-        context: {
-          encounter: [
-            {
-              reference: `Encounter/${date}`,
-            },
-          ],
-          period: {
-            start: date,
-          },
-        },
-        contained: [],
+      ],
+      date,
+      description: "Office Visit Note",
+      subject: {
+        reference: `Patient/${patientDetails?.id}`,
       },
+      author: [
+        {
+          reference: "Practitioner/140857915539458",
+          identifier: {
+            id: "user_id",
+            value: 2758,
+          },
+        },
+      ],
+      securityLabel: [
+        {
+          coding: [
+            {
+              system:
+                "http://terminology.hl7.org/CodeSystem/v3-Confidentiality",
+              code: "U",
+              display: "unrestricted",
+            },
+          ],
+        },
+      ],
+      extension: [
+        {
+          url: "http://xcaliber-fhir/structureDefinition/practice",
+          valueString: 140857911017476,
+        },
+      ],
+      content,
+      context: {
+        encounter: [
+          {
+            reference: `Encounter/${date}`,
+          },
+        ],
+        period: {
+          start: date,
+        },
+      },
+      contained: [],
     };
-    const note = await NoteService.createNote(notePayLoad);
+    return notePayLoad;
+  };
+  const onSaveNote = async () => {
+    const notePayLoad = await createNotePayLoad();
+
+    const note = await NoteService.createNote({ data: { ...notePayLoad } });
     console.log(note);
+  };
+  const onSaveNoteAsDraft = async () => {
+    const notePayLoad = await createNotePayLoad();
+    localStorage.setItem(
+      `notes_${patientDetails?.id}`,
+      JSON.stringify([
+        ...JSON.parse(localStorage.getItem(`notes_${patientDetails?.id}`)),
+        { resource: { ...notePayLoad } },
+      ])
+    );
   };
   return (
     <Grid container>
@@ -845,7 +855,6 @@ const CreateNotes = ({
                     />
                   )}
                 </Grid>
-
               </Grid>
             </AccordionDetails>
           </Accordion>
@@ -867,12 +876,11 @@ const CreateNotes = ({
                       sx={{ width: "100%" }}
                       onChange={(e) => {
                         if (e.target?.value && e.target?.value !== null)
-                        setpastHistory(e.target?.value);
+                          setpastHistory(e.target?.value);
                       }}
                     />
                   )}
                 </Grid>
-
               </Grid>
             </AccordionDetails>
           </Accordion>
@@ -894,12 +902,11 @@ const CreateNotes = ({
                       sx={{ width: "100%" }}
                       onChange={(e) => {
                         if (e.target?.value && e.target?.value !== null)
-                        setsurgicalHistory(e.target?.value);
+                          setsurgicalHistory(e.target?.value);
                       }}
                     />
                   )}
                 </Grid>
-
               </Grid>
             </AccordionDetails>
           </Accordion>
@@ -921,12 +928,11 @@ const CreateNotes = ({
                       sx={{ width: "100%" }}
                       onChange={(e) => {
                         if (e.target?.value && e.target?.value !== null)
-                        setfamilyHistory(e.target?.value);
+                          setfamilyHistory(e.target?.value);
                       }}
                     />
                   )}
                 </Grid>
-
               </Grid>
             </AccordionDetails>
           </Accordion>
@@ -948,12 +954,11 @@ const CreateNotes = ({
                       sx={{ width: "100%" }}
                       onChange={(e) => {
                         if (e.target?.value && e.target?.value !== null)
-                        setsocialHistory(e.target?.value);
+                          setsocialHistory(e.target?.value);
                       }}
                     />
                   )}
                 </Grid>
-
               </Grid>
             </AccordionDetails>
           </Accordion>
@@ -975,12 +980,11 @@ const CreateNotes = ({
                       sx={{ width: "100%" }}
                       onChange={(e) => {
                         if (e.target?.value && e.target?.value !== null)
-                        sethabbits(e.target?.value);
+                          sethabbits(e.target?.value);
                       }}
                     />
                   )}
                 </Grid>
-
               </Grid>
             </AccordionDetails>
           </Accordion>
@@ -1002,12 +1006,11 @@ const CreateNotes = ({
                       sx={{ width: "100%" }}
                       onChange={(e) => {
                         if (e.target?.value && e.target?.value !== null)
-                        setmedications(e.target?.value);
+                          setmedications(e.target?.value);
                       }}
                     />
                   )}
                 </Grid>
-
               </Grid>
             </AccordionDetails>
           </Accordion>
@@ -1029,12 +1032,11 @@ const CreateNotes = ({
                       sx={{ width: "100%" }}
                       onChange={(e) => {
                         if (e.target?.value && e.target?.value !== null)
-                        setassesmentPlan(e.target?.value);
+                          setassesmentPlan(e.target?.value);
                       }}
                     />
                   )}
                 </Grid>
-
               </Grid>
             </AccordionDetails>
           </Accordion>
@@ -1056,12 +1058,11 @@ const CreateNotes = ({
                       sx={{ width: "100%" }}
                       onChange={(e) => {
                         if (e.target?.value && e.target?.value !== null)
-                        setfollowup(e.target?.value);
+                          setfollowup(e.target?.value);
                       }}
                     />
                   )}
                 </Grid>
-
               </Grid>
             </AccordionDetails>
           </Accordion>
@@ -1084,7 +1085,16 @@ const CreateNotes = ({
             disabled={disabled}
             variant="contained"
           >
-            Save
+            Sign
+          </Button>
+          <Button
+            onClick={() => {
+              onSaveNoteAsDraft();
+            }}
+            disabled={disabled}
+            variant="contained"
+          >
+            Save As Draft
           </Button>
           <Button
             onClick={onCancelClick}
