@@ -34,15 +34,28 @@ const DisplayNotes = ({ note }) => {
     let problemsArray = [];
     let physicalExamArray = [];
     let rosArray = [];
+    let allergyArray = [];
     for (let i = 0; i < note?.resource?.content?.length; i++) {
       const noteContent = note?.resource?.content?.[i];
 
       const { attachment } = noteContent;
       if (!noteContent?.format) {
-        problemsArray.push({
-          data: attachment?.data,
-          title: attachment?.title,
-        });
+        if (attachement?.title === "Problem") {
+          problemsArray.push({
+            data: attachment?.data,
+            title: attachment?.title,
+          });
+        } else if (attachement?.title === "Allergies") {
+          allergyArray.push({
+            data: attachment?.data,
+            title: attachment?.title,
+          });
+        } else if (attachement?.title === "Past") {
+          allergyArray.push({
+            data: attachment?.data,
+            title: attachment?.title,
+          });
+        }
       } else if (noteContent?.format?.display?.toLowerCase() === "pe") {
         physicalExamArray.push({
           data: attachment?.data,
@@ -78,13 +91,14 @@ const DisplayNotes = ({ note }) => {
               <AccordionDetails>
                 <Grid container direction="column">
                   {problems &&
-                    problems?.map((problem) => {
+                    problems?.map((item) => {
                       return (
-                        problems?.data !== "" && (
+                        item?.data !== "" && (
                           <Grid item>
-                            <Typography>Problem</Typography>
+                            <Typography> {item?.title}</Typography>
+
                             <Typography pb={1} sx={{ ...commonValueStyles }}>
-                              {problem?.data}
+                              {item?.data}
                             </Typography>
                           </Grid>
                         )
