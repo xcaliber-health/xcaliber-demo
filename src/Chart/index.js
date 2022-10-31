@@ -639,8 +639,7 @@ const Chart = () => {
                           <TableCell >
                             <Grid display="flex">
                               <Typography>{vital?.resource?.code?.coding?.[0]?.display === "body mass index" ? (vital?.resource?.valueString) : (vital?.resource?.code?.coding?.[0]?.display === "Blood Pressure") ? (vital?.resource?.component[0]?.valueQuantity.value) : (vital?.resource?.valueQuantity.value)}</Typography>
-                              <Typography>/</Typography>
-                              <Typography>{vital?.resource?.code?.coding?.[0]?.display === "Blood Pressure" ? (vital?.resource?.component[1]?.valueQuantity.value) : ""}</Typography>
+                              {vital?.resource?.code?.coding?.[0]?.display === "Blood Pressure" && <><Typography>/</Typography><Typography>{vital?.resource?.code?.coding?.[0]?.display === "Blood Pressure" ? (vital?.resource?.component[1]?.valueQuantity.value) : ""}</Typography></>}
                             </Grid>
                           </TableCell>
                           <TableCell align="center">
