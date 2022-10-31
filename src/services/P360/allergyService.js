@@ -1,4 +1,5 @@
 import axios from "axios";
+import { result } from "lodash";
 import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
 
 export const AllergyService = {
@@ -18,4 +19,24 @@ export const AllergyService = {
       console.log(error);
     }
   },
+  createAllergies: async (allergyPayload) => {
+    try {
+      const result = await axios.post(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/AllergyIntolerance`,allergyPayload,
+        {
+          headers: {
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+          },
+        }
+      );
+      console.log(result);
+      return result?.data?.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
 };

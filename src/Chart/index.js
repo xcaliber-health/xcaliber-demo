@@ -29,6 +29,9 @@ import { ProblemService } from "../services/P360/problemService";
 import { AllergyService } from "../services/P360/allergyService";
 import { MedicationService } from "../services/P360/medicationService";
 import { ImmunizationService } from "../services/P360/immunizationService";
+import Allergy from "./DrawerComponents/createAllergies";
+import { secondsInWeek } from "date-fns";
+import { rangeRight } from "lodash";
 
 const Chart = () => {
   const { id } = useParams();
@@ -45,6 +48,19 @@ const Chart = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isProblemsDrawerOpen, setIsProblemsDrawerOpen] = useState(false);
   const [isVitalsDrawerOpen, setVitalsDrawer] = useState(false)
+  const [isAllergyDrawerOpen, setIsAllergyDrawerOpen] = useState(false);
+  const [severity, setSeverity] = React.useState(null);
+  const handleSeverityChange = (e) => {
+    setSeverity(e.target.value)
+  }
+  const [status, setStatus] = React.useState(null);
+  const handleStatusChange = (e) => {
+    setStatus(e.target.value)
+  }
+  const [valueDate, setValueDate] = React.useState(null);
+  const handleDateChange = (newValue) => {
+    setValueDate(newValue);
+  };
   const [appointmentPayload, setAppointmentPayload] = useState({
     data: {
       resourceType: "Appointment",
@@ -72,6 +88,38 @@ const Chart = () => {
           },
         },
       ],
+    },
+  });
+  const [allergyPayload, setAllergyPayload] = useState({
+    data: {
+      resourceType: "AllergyIntolerance",
+      clinicalStatus: {
+        coding: [
+          {
+            "code": "active",
+            "display": "Active"
+          }
+        ]
+      },
+      identifier: [
+        {
+          id: "medispanid",
+          value: "44364"
+        },
+        {
+          id: "medispandnid",
+          value: "12647"
+        }
+      ],
+      patient: {
+        "reference": `Patient/${id}`
+      },
+      onsetDateTime: "2010-07-02",
+      recordedDate: "2022-06-28T11:43:22Z",
+      text: {
+        div: "deletedDate: null"
+      },
+      reaction: []
     },
   });
 
@@ -199,6 +247,77 @@ const Chart = () => {
       setIsDrawerOpen(false);
     }
   };
+  const onAllergyChange = (reason) => {
+    setAllergyPayload({
+      data: {
+        ...allergyPayload?.data,
+        code: {
+          coding: [
+            {
+              display: reason
+            }
+          ]
+        },
+      },
+    });
+  };
+  const reaction2 = []
+  const reaction = {}
+  const onReactionChange = (reaction1) => {
+    if (reaction1) {
+      reaction["reaction"] = reaction1;
+    }
+    setAllergyPayload({
+      data: {
+        ...allergyPayload?.data,
+        reaction: reaction
+      },
+    });
+  };
+  const onSeverityChange = (severity) => {
+    if (severity) {
+      reaction["description"] = severity;
+    }
+    setAllergyPayload({
+      data: {
+        ...allergyPayload?.data,
+        reaction: reaction
+      },
+    });
+    setSeverity(severity);
+  };
+  const onStatusChange = (status) => {
+    setAllergyPayload({
+      data: {
+        ...allergyPayload?.data,
+        clinicalStatus: {
+          coding: [
+            {
+              code: status,
+              display: status
+            }
+          ]
+        },
+      },
+    });
+    setStatus(status);
+  };
+  const onAllergyDateChange = (date) => {
+    setAllergyPayload({
+      data: {
+        ...allergyPayload?.data,
+        onsetDateTime: date,
+      },
+    });
+    setValueDate(date);
+  };
+
+  const handleAllergyClick = async () => {
+    await AllergyService.createAllergies(allergyPayload);
+    setIsAllergyDrawerOpen(false);
+  }
+
+
   useEffect(() => {
     setLoading(true);
     Promise.all([
@@ -284,8 +403,8 @@ const Chart = () => {
         }}
       >
         <PatientProblems
-            disabled = {false}
-            onCancelClick = {() => {setIsProblemsDrawerOpen(false)}}
+          disabled={false}
+          onCancelClick={() => { setIsProblemsDrawerOpen(false) }}
           patientId={id}
         />
       </Drawer>
@@ -311,8 +430,46 @@ const Chart = () => {
         }}
       >
         <CreateVitals
-            disabled = {false}
-            onCancelClick = {() => {setVitalsDrawer(false)}}
+          disabled={false}
+          onCancelClick={() => { setVitalsDrawer(false) }}
+          patientId={id}
+        />
+      </Drawer>
+      <Drawer
+        anchor={"right"}
+        open={isAllergyDrawerOpen}
+        onClose={() => {
+          setIsAllergyDrawerOpen(false)
+        }}
+        variant="temporary"
+        PaperProps={{
+          sx: {
+            width: "40%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            padding: "10px",
+            height: "100%",
+            overflowY: "scroll",
+            position: "absolute",
+            zIndex: 1500,
+          },
+        }}
+      >
+        <Allergy
+          disabled={false}
+          onAllergyChange={onAllergyChange}
+          onDateChange={onAllergyDateChange}
+          onReactionChange={onReactionChange}
+          onSeverityChange={onSeverityChange}
+          onStatusChange={onStatusChange}
+          status={status}
+          handleStatusChange={handleStatusChange}
+          severity={severity}
+          handleDateChange={handleDateChange}
+          handleSeverityChange={handleSeverityChange}
+          handleAllergyClick={handleAllergyClick}
+          onCancelClick={() => { setIsAllergyDrawerOpen(false) }}
           patientId={id}
         />
       </Drawer>
@@ -324,19 +481,19 @@ const Chart = () => {
         lg={4}
       >
         {/* <Paper style={{ height: "100%" ,marginBottom:"20px"}}> */}
-          {!loading && (
-            <PatientDetailsCard
-              patientId={id}
-              patientDetails={patientDetails}
-              upcomingAppointments={upcomingAppointments}
-              drawerState={isDrawerOpen}
-              handleDrawerState={setIsDrawerOpen}
-            />
-          )}
-          {loading && <Loading />}
+        {!loading && (
+          <PatientDetailsCard
+            patientId={id}
+            patientDetails={patientDetails}
+            upcomingAppointments={upcomingAppointments}
+            drawerState={isDrawerOpen}
+            handleDrawerState={setIsDrawerOpen}
+          />
+        )}
+        {loading && <Loading />}
         {/* </Paper> */}
         <Paper>
-         
+
         </Paper>
       </Grid>
 
@@ -349,7 +506,7 @@ const Chart = () => {
       >
         <Paper style={{ height: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
+            <Tabs
               value={value}
               onChange={handleChange}
               // width="60%"
@@ -384,10 +541,10 @@ const Chart = () => {
                 {BUTTON_LABELS.VITALS}
               </div>
 
-              <IconButton sx={{ p: 0 }} display="flex"           onClick={() => {
-            setVitalsDrawer(true);
-            setCurrentDrawerIndex(1);
-          }}>
+              <IconButton sx={{ p: 0 }} display="flex" onClick={() => {
+                setVitalsDrawer(true);
+                setCurrentDrawerIndex(1);
+              }}>
                 <AddCircleOutlineRoundedIcon />
               </IconButton>
             </Box>
@@ -397,28 +554,28 @@ const Chart = () => {
             <NotesTab patientDetails={patientDetails} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-          <Box
-        alignSelf="flex-start"
-        display="flex"
-        justifyContent="space-between"
-        margin={theme.spacing(3)}
-      >
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <ReportProblem />
-          <Typography>{BUTTON_LABELS.PROBLEMS}</Typography>
-        </div>
-        <IconButton
-          sx={{ p: 0 }}
-          display="flex"
-          onClick={() => {
-            setIsProblemsDrawerOpen(true);
-            setCurrentDrawerIndex(1);
-          }}
-        >
-          <AddCircleOutlineRoundedIcon />
-        </IconButton>
-      </Box>
-            <PamiV problemsList={patientProblems} updateProblem={updateProblemsState}  patientId={id}/>
+            <Box
+              alignSelf="flex-start"
+              display="flex"
+              justifyContent="space-between"
+              margin={theme.spacing(3)}
+            >
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <ReportProblem />
+                <Typography>{BUTTON_LABELS.PROBLEMS}</Typography>
+              </div>
+              <IconButton
+                sx={{ p: 0 }}
+                display="flex"
+                onClick={() => {
+                  setIsProblemsDrawerOpen(true);
+                  setCurrentDrawerIndex(1);
+                }}
+              >
+                <AddCircleOutlineRoundedIcon />
+              </IconButton>
+            </Box>
+            <PamiV problemsList={patientProblems} updateProblem={updateProblemsState} patientId={id} />
           </TabPanel>
           <TabPanel value={value} index={3}>
             <Box
@@ -432,11 +589,11 @@ const Chart = () => {
                 {BUTTON_LABELS.ALLERGIES}
               </div>
 
-              <IconButton sx={{ p: 0 }} display="flex">
+              <IconButton sx={{ p: 0 }} display="flex" onClick={() => { setIsAllergyDrawerOpen(true) }}>
                 <AddCircleOutlineRoundedIcon />
               </IconButton>
             </Box>
-            <PamiV allergyList={patientAllergies}  patientId={id}/>
+            <PamiV allergyList={patientAllergies} patientId={id} />
           </TabPanel>
           <TabPanel value={value} index={4}>
             <Box
@@ -454,7 +611,7 @@ const Chart = () => {
                 <AddCircleOutlineRoundedIcon />
               </IconButton>
             </Box>
-            <PamiV immunizationList={patientImmunizations}  patientId={id}/>
+            <PamiV immunizationList={patientImmunizations} patientId={id} />
           </TabPanel>
           <TabPanel value={value} index={5}>
             <PamiV medicationList={patientMedications} patientId={id} />
