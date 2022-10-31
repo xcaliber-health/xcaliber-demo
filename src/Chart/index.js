@@ -450,8 +450,8 @@ const Chart = () => {
           disabled={false}
           onCancelClick={() => { setVitalsDrawer(false) }}
           patientId={id}
-          handleClose={()=>setVitalsDrawer(false)}
-          onVitalsClick={()=>{getVitals(); setVitalsDrawer(false)}}
+          handleClose={() => setVitalsDrawer(false)}
+          onVitalsClick={() => { getVitals(); setVitalsDrawer(false) }}
           patientDetails={patientDetails}
         />
       </Drawer>
@@ -577,6 +577,9 @@ const Chart = () => {
                     <TableCell align="center">
                       <Typography>Vitals</Typography>
                     </TableCell>
+                    <TableCell>
+                      <Typography>Value</Typography>
+                    </TableCell>
                     <TableCell align="center">
                       <Typography>Date</Typography>
                     </TableCell>
@@ -602,6 +605,13 @@ const Chart = () => {
                             <Typography>
                               {vital?.resource?.code?.coding?.[0]?.display}
                             </Typography>
+                          </TableCell>
+                          <TableCell >
+                            <Grid display="flex">
+                              <Typography>{vital?.resource?.code?.coding?.[0]?.display === "body mass index" ? (vital?.resource?.valueString) : (vital?.resource?.code?.coding?.[0]?.display === "Blood Pressure") ? (vital?.resource?.component[0]?.valueQuantity.value) : (vital?.resource?.valueQuantity.value)}</Typography>
+                              <Typography>/</Typography>
+                              <Typography>{vital?.resource?.code?.coding?.[0]?.display === "Blood Pressure" ? (vital?.resource?.component[1]?.valueQuantity.value) : ""}</Typography>
+                            </Grid>
                           </TableCell>
                           <TableCell align="center">
                             <Typography>{dateObject?.DAY} {dateObject?.MONTH}{dateObject?.DATE}</Typography>
@@ -671,7 +681,7 @@ const Chart = () => {
                         >
                           <TableCell align="center">
                             <Typography>
-                            {problem?.resource?.text?.div}
+                              {problem?.resource?.text?.div}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
@@ -704,7 +714,7 @@ const Chart = () => {
               </IconButton>
             </Box>
             {/* <PamiV allergyList={patientAllergies} patientId={id} /> */}
-             <TableContainer component={Paper} style={{ marginTop: theme.spacing(3) }}>
+            <TableContainer component={Paper} style={{ marginTop: theme.spacing(3) }}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
@@ -732,7 +742,7 @@ const Chart = () => {
                         >
                           <TableCell align="center">
                             <Typography>
-                            {allergy?.resource?.code?.coding?.[0]?.display}
+                              {allergy?.resource?.code?.coding?.[0]?.display}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
