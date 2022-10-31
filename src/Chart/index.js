@@ -563,22 +563,16 @@ const Chart = () => {
               {/* <Tab label="Profile" style={{ width: "25%" }} /> */}
             </Tabs>
           </Box>
-          <TabPanel value={value} index={1}>
+          <TabPanel value={value} index={1} >
             <Box
               alignSelf="flex-start"
+              flexDirection={"row-reverse"}
               display="flex"
-              justifyContent="space-between"
               // marginLeft={theme.spacing(3)}
               // marginRight={theme.spacing(3)}
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
-              marginRight={theme.spacing(3)}
-              paddingTop={theme.spacing(3)}
             >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <DeviceThermostat />
-                {BUTTON_LABELS.VITALS}
-              </div>
 
               <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
@@ -662,16 +656,16 @@ const Chart = () => {
             <NotesTab patientDetails={patientDetails} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <Box
+          <Box
               alignSelf="flex-start"
+              flexDirection={"row-reverse"}
               display="flex"
-              justifyContent="space-between"
-              margin={theme.spacing(3)}
+              // marginLeft={theme.spacing(3)}
+              // marginRight={theme.spacing(3)}
+              marginBottom={theme.spacing(3)}
+              marginLeft={theme.spacing(3)}
             >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <ReportProblem />
-                <Typography>{BUTTON_LABELS.PROBLEMS}</Typography>
-              </div>
+              
               <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
@@ -737,16 +731,15 @@ const Chart = () => {
             </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <Box
+          <Box
               alignSelf="flex-start"
+              flexDirection={"row-reverse"}
               display="flex"
-              justifyContent="space-between"
-              margin={theme.spacing(3)}
+              // marginLeft={theme.spacing(3)}
+              // marginRight={theme.spacing(3)}
+              marginBottom={theme.spacing(3)}
+              marginLeft={theme.spacing(3)}
             >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Dangerous />
-                {BUTTON_LABELS.ALLERGIES}
-              </div>
 
               <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
@@ -813,42 +806,145 @@ const Chart = () => {
             </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={4}>
-            <Box
+          <Box
               alignSelf="flex-start"
+              flexDirection={"row-reverse"}
               display="flex"
-              justifyContent="space-between"
-              margin={theme.spacing(3)}
+              // marginLeft={theme.spacing(3)}
+              // marginRight={theme.spacing(3)}
+              marginBottom={theme.spacing(3)}
+              marginLeft={theme.spacing(3)}
             >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Vaccines />
-                {BUTTON_LABELS.IMMUNIZATIONS}
-              </div>
 
-              <Button
+              {/* <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
               >
                 Create Immunization
-              </Button>
+              </Button> */}
             </Box>
-            <PamiV immunizationList={patientImmunizations} patientId={id} />
+            {/* <PamiV immunizationList={patientImmunizations} patientId={id} /> */}
+            <TableContainer
+              component={Paper}
+              style={{ marginTop: theme.spacing(3) }}
+            >
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">
+                      <Typography>Immunizations</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography>Date</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography>Year</Typography>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {patientImmunizations &&
+                    patientImmunizations?.map((immunization) => {
+                      let dateObject = Helper.extractFieldsFromDate(
+                        immunization?.resource?.occurrenceDateTime
+                      );
+                      return (
+                        <TableRow
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <TableCell align="center">
+                            <Typography>
+                            {immunization?.resource?.vaccineCode?.coding?.[0]?.display}{" "}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Typography>
+                              {dateObject?.DAY} {dateObject?.MONTH}{" "}
+                              {dateObject?.DATE}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="center" component="th" scope="row">
+                            <Typography>{dateObject?.YEAR}</Typography>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={5}>
-            <PamiV medicationList={patientMedications} patientId={id} />
-            <Box
+          <Box
               alignSelf="flex-start"
+              flexDirection={"row-reverse"}
               display="flex"
-              justifyContent="space-between"
-              margin={theme.spacing(3)}
+              // marginLeft={theme.spacing(3)}
+              // marginRight={theme.spacing(3)}
+              marginBottom={theme.spacing(3)}
+              marginLeft={theme.spacing(3)}
             >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Medication />
-                {BUTTON_LABELS.MEDICATIONS}
-              </div>
-              <Button variant="contained" display="flex">
+             
+              {/* <Button variant="contained" display="flex">
                 Create Medications
-              </Button>
+              </Button> */}
             </Box>
+            <TableContainer
+              component={Paper}
+              style={{ marginTop: theme.spacing(3) }}
+            >
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">
+                      <Typography>Medication</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography>Date</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography>Year</Typography>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {patientMedications &&
+                    patientMedications?.map((medication) => {
+                      let dateObject = Helper.extractFieldsFromDate(
+                        medication?.resource?.effectiveDateTime
+                        );
+                      return (
+                        <TableRow
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <TableCell align="center">
+                            <Typography>
+                            {
+                  medication?.resource?.medicationCodeableConcept?.coding?.[0]
+                    ?.display
+                }{" "}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Typography>
+                              {dateObject?.DAY} {dateObject?.MONTH}{" "}
+                              {dateObject?.DATE}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="center" component="th" scope="row">
+                            <Typography>{dateObject?.YEAR}</Typography>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </TabPanel>
         </Paper>
       </Grid>
