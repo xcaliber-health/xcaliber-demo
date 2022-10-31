@@ -191,6 +191,7 @@ const NotesTab = ({ patientDetails }) => {
           onTemplateChange={onTemplateChange}
           updatePatientId={updatePatientId}
           patientDetails={patientDetails}
+          reloadNotes={getNotes}
         />
       </Drawer>
       <Drawer
@@ -218,6 +219,8 @@ const NotesTab = ({ patientDetails }) => {
           note={note}
           disabled={disabled}
           onCancelClick={ondisplayNoteCancelClick}
+          reloadNotes={getNotes}
+          patientDetails={patientDetails}
         />
       </Drawer>
       {flag && (
