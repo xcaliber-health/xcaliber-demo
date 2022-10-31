@@ -11,11 +11,14 @@ import { useEffect, useState } from "react";
 import { NoteService } from "../../services/P360/noteService";
 import CreateNotes from "../CreateNotes";
 import { Helper } from "../../core-utils/helper";
+import DisplayNotes from "../displayNotes";
 
 const NotesTab = ({ patientDetails }) => {
   const theme = useTheme();
   const [notes, setNotes] = useState([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isNoteDisplayDrawerOpen, setIsNoteDisplayDrawerOpen] = useState(false);
+  const [note, setNote] = useState({});
   const [notesPayload, setNotesPayload] = useState({
     data: {
       resourceType: "DocumentReference",
@@ -179,6 +182,29 @@ const NotesTab = ({ patientDetails }) => {
           patientDetails={patientDetails}
         />
       </Drawer>
+      <Drawer
+        anchor={"right"}
+        open={isNoteDisplayDrawerOpen}
+        variant="temporary"
+        onClose={() => {
+          setIsNoteDisplayDrawerOpen(false);
+        }}
+        PaperProps={{
+          sx: {
+            width: "40%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            padding: "10px",
+            height: "100%",
+            overflowY: "scroll",
+            position: "absolute",
+            zIndex: 1500,
+          },
+        }}
+      >
+        <DisplayNotes note={note} />
+      </Drawer>
       <Paper style={{ marginTop: theme.spacing(2) }}>
         {notes &&
           notes?.map((note) => {
@@ -187,6 +213,10 @@ const NotesTab = ({ patientDetails }) => {
                 style={{ flexDirection: "column", alignItems: "flex-start" }}
                 divider
                 key={note.id}
+                onClick={() => {
+                  setIsNoteDisplayDrawerOpen(true);
+                  setNote(note);
+                }}
               >
                 <ListItemText primary={note?.resource?.description} />
                 <ListItemText secondary={note?.resource?.docStatus} />
