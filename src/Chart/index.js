@@ -433,6 +433,9 @@ const Chart = () => {
           disabled={false}
           onCancelClick={() => { setVitalsDrawer(false) }}
           patientId={id}
+          handleClose={()=>setVitalsDrawer(false)}
+          onVitalsClick={()=>{getVitals(); setVitalsDrawer(false)}}
+          patientDetails={patientDetails}
         />
       </Drawer>
       <Drawer
