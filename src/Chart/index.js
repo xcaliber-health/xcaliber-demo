@@ -490,7 +490,7 @@ const Chart = () => {
             width: "40%",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
+            // justifyContent: "space-between",
             padding: "10px",
             height: "100%",
             overflowY: "scroll",
