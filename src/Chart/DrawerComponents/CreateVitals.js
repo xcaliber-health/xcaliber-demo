@@ -72,33 +72,53 @@ import { VitalService } from "../../services/P360/vitalService";
         ]
       }
       const entries=[];
-      if(sys){
-        entries.push({resource: {...resource,
-          code: {
-            "coding": [{ 
-              "code":"8480-6",
-              "display": "Blood Pressure"}]
+
+      if(sys || dia){
+        const component=[];
+        if(sys){
+          component.push({
+            "code": {
+              "coding": [
+                  {
+                      "code": "8480-6"
+                  }
+              ]
+            },
+            "valueQuantity": {
+              "value":sys
+            }
+          })
+        }
+        if(dia){
+          component.push({
+            "code": {
+              "coding": [
+                  {
+                    "code": "8462-4"
+                  }
+              ]
           },
-          valueQuantity: {
-              "value": sys
-          }}})
-      }
-      if(dia){
-        entries.push({resource: {...resource,
-          code: {
-            "coding": [{ 
-              "code":"8462-4",
-              "display": "Blood Pressure"}]
-          },
-          valueQuantity: {
+          "valueQuantity": {
               "value": dia
-          }}})
+          }
+          })
+        }
+        entries.push({resource: {...resource,
+          code: {
+            "coding": [{ 
+              "code": "85354-9",
+              "display": "Blood Pressure"}]
+          },
+          component
+        }})
       }
     
       if(height){
         entries.push({resource: {...resource,
           code: {
-            "coding": [{ "display": "Height"}]
+            "coding": [{ 
+              "code":"8302-2",
+              "display": "Height"}]
           },
           valueQuantity: {
               "unit": "feet",
@@ -108,7 +128,9 @@ import { VitalService } from "../../services/P360/vitalService";
       if(inch){
         entries.push({resource: {...resource,
           code: {
-            "coding": [{ "display": "Height"}]
+            "coding": [{ 
+              "code":"8302-2",
+              "display": "Height"}]
           },
           valueQuantity: {
               "unit": "inches",
@@ -119,6 +141,7 @@ import { VitalService } from "../../services/P360/vitalService";
         entries.push({resource: {...resource,
           code: {
             "coding": [{ 
+              "code": "29463-7",
               "display": "Weight"
             }]
           },
@@ -137,7 +160,9 @@ import { VitalService } from "../../services/P360/vitalService";
       if(oxy){
         entries.push({resource: {...resource,
           code: {
-            "coding": [{ "display": "Oxygen Saturation"}]
+            "coding": [{ 
+              "code": "59408-5",
+              "display": "Oxygen Saturation"}]
           },
           valueQuantity: {
               "unit": "%",
@@ -147,7 +172,9 @@ import { VitalService } from "../../services/P360/vitalService";
       if(pluse){
         entries.push({resource: {...resource,
           code: {
-            "coding": [{ "display": "Pulse"}]
+            "coding": [{
+              "code": "8867-4",
+              "display": "Pulse"}]
           },
           valueQuantity: {
               "unit": "bpm",
@@ -157,7 +184,9 @@ import { VitalService } from "../../services/P360/vitalService";
       if(bodyTemp){
         entries.push({resource: {...resource,
           code: {
-            "coding": [{ "display": "Body Temparature"}]
+            "coding": [{
+            "code": "8310-5",
+            "display": "Body Temparature"}]
           },
           valueQuantity: {
               "unit": "fahrenheit",
@@ -167,7 +196,9 @@ import { VitalService } from "../../services/P360/vitalService";
       if(rr){
         entries.push({resource: {...resource,
           code: {
-            "coding": [{ "display": "Respiration Rate"}]
+            "coding": [{
+              "code": "9279-1",
+              "display": "Respiration Rate"}]
           },
           valueQuantity: {
               "unit": "bpm",
