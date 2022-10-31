@@ -95,7 +95,7 @@ export default function Vitals({
                 ]
               },
               valueQuantity: {
-                value: "120"
+                value: sys
               }
             },
             {
@@ -114,6 +114,13 @@ export default function Vitals({
           ],
         }
       })
+    }
+    if (sys && !dia) {
+      alert("Please provide both systolic and diastolic blood presure");
+    }
+
+    if (!sys && dia) {
+      alert("Please provide both systolic and diastolic blood pressure");
     }
     if (height) {
       heightValue = 1;
