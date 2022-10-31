@@ -305,7 +305,7 @@ const CreateNotes = ({
   };
   return (
     <Grid container>
-      <Grid item pt={2}>
+      <Grid item pt={2} sx={{ width: "100%" }}>
         <Grid item pt={2}>
           <Typography variant="h4">{`Create Notes`}</Typography>
         </Grid>
@@ -332,23 +332,6 @@ const CreateNotes = ({
                   )}
                 </Grid>
               </Grid>
-            </AccordionDetails>
-          </Accordion>
-        </Grid>
-        <Grid sx={{ width: "100%" }} item pt={2}>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              id="panel2a-header"
-            >
-              <Typography>Vitals</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget.
-              </Typography>
             </AccordionDetails>
           </Accordion>
         </Grid>
