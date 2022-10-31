@@ -1081,8 +1081,8 @@ const CreateNotes = ({
           <Button
             onClick={() => {
               onSaveNote();
+              onCancelClick();
             }}
-            disabled={disabled}
             variant="contained"
           >
             Sign
@@ -1090,6 +1090,7 @@ const CreateNotes = ({
           <Button
             onClick={() => {
               onSaveNoteAsDraft();
+              onCancelClick();
             }}
             disabled={disabled}
             variant="contained"
