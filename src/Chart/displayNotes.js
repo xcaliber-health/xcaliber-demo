@@ -21,7 +21,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { NoteService } from "../services/P360/noteService";
 
-const DisplayNotes = ({ note }) => {
+const DisplayNotes = ({ note, disabled, onCancelClick }) => {
   const [problems, setProblems] = useState([]);
   const [physicalExam, setPhysicalExam] = useState([]);
   const [ros, setROS] = useState([]);
@@ -136,6 +136,12 @@ const DisplayNotes = ({ note }) => {
 
     setFlag(true);
   }, []);
+  const onSaveNote = async () => {
+    const noteId = await NoteService.createNote({
+      data: { ...note.resource },
+    });
+    console.log(noteId);
+  };
   if (flag) {
     return (
       <Grid container>
@@ -487,6 +493,40 @@ const DisplayNotes = ({ note }) => {
               </AccordionDetails>
             </Accordion>
           </Grid>
+          {!disabled && (
+            <Grid
+              container
+              item
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                width: "60%",
+                paddingTop: 12,
+              }}
+              justifyContent={"space-between"}
+            >
+              <Button
+                onClick={() => {
+                  onSaveNote();
+                  onCancelClick();
+                }}
+                variant="contained"
+              >
+                Sign
+              </Button>
+              <Button
+                onClick={() => {
+                  onCancelClick();
+                }}
+                variant="contained"
+              >
+                Save As Draft
+              </Button>
+              <Button onClick={onCancelClick} variant="contained">
+                Cancel
+              </Button>
+            </Grid>
+          )}
         </Grid>
       </Grid>
     );
