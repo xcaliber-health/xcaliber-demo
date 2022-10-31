@@ -23,11 +23,9 @@ import { NoteService } from "../services/P360/noteService";
 
 const CreateNotes = ({
   patientDetails,
-  noteFormDetails,
-  onCreateClick,
   onCancelClick,
-  updatePatientId,
   disabled,
+  reloadNotes,
 }) => {
   const [problemPayLoad, setProblemPayLoad] = useState("");
   const [allergyList, setAllergy] = useState("");
@@ -1082,6 +1080,7 @@ const CreateNotes = ({
             onClick={() => {
               onSaveNote();
               onCancelClick();
+              reloadNotes(patientDetails?.id);
             }}
             variant="contained"
           >
