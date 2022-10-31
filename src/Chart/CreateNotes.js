@@ -32,6 +32,16 @@ const CreateNotes = ({
   const [notePayLoad, setNotePayLoad] = useState();
 
   const [problemPayLoad, setProblemPayLoad] = useState("");
+  const [allergyList, setAllergy] = useState("");
+  const [pastHistory, setpastHistory] = useState("");
+  const [surgicalHistory, setsurgicalHistory] = useState("");
+  const [familyHistory, setfamilyHistory] = useState("");
+  const [socialHistory, setsocialHistory] = useState("");
+  const [habbits, sethabbits] = useState("");
+  const [medications, setmedications] = useState("");
+  const [assesmentPlan, setassesmentPlan] = useState("");
+  const [followup, setfollowup] = useState("");
+
   const peSequence = {
     General: 0,
     Eyes: 1,
@@ -136,6 +146,96 @@ const CreateNotes = ({
           hash: "md5 hash of base64 section content",
         },
       });
+    }
+    if(allergyList !== "") {
+      content.push({
+        attachment: {
+          contentType: "text/plain",
+          data: allergyList,
+          title: "Allergies",
+          hash: "md5 hash of base64 section content",
+        }
+      })
+    }
+    if(pastHistory !== "") {
+      content.push({
+        attachment: {
+          contentType: "text/plain",
+          data: pastHistory,
+          title: "Past",
+          hash: "md5 hash of base64 section content",
+        }
+      })
+    }
+    if(surgicalHistory !== "") {
+      content.push({
+        attachment: {
+          contentType: "text/plain",
+          data: surgicalHistory,
+          title: "Surgical",
+          hash: "md5 hash of base64 section content",
+        }
+      })
+    }
+    if(familyHistory !== "") {
+      content.push({
+        attachment: {
+          contentType: "text/plain",
+          data: familyHistory,
+          title: "Family",
+          hash: "md5 hash of base64 section content",
+        }
+      })
+    }
+    if(socialHistory !== "") {
+      content.push({
+        attachment: {
+          contentType: "text/plain",
+          data: socialHistory,
+          title: "Social",
+          hash: "md5 hash of base64 section content",
+        }
+      })
+    }
+    if(habbits !== "") {
+      content.push({
+        attachment: {
+          contentType: "text/plain",
+          data: habbits,
+          title: "Habits",
+          hash: "md5 hash of base64 section content",
+        }
+      })
+    }
+    if(medications !== "") {
+      content.push({
+        attachment: {
+          contentType: "text/plain",
+          data: medications,
+          title: "Med",
+          hash: "md5 hash of base64 section content",
+        }
+      })
+    }
+    if(assesmentPlan !== "") {
+      content.push({
+        attachment: {
+          contentType: "text/plain",
+          data: assesmentPlan,
+          title: "Assessplan",
+          hash: "md5 hash of base64 section content",
+        }
+      })
+    }
+    if(followup !== "") {
+      content.push({
+        attachment: {
+          contentType: "text/plain",
+          data: followup,
+          title: "Followup",
+          hash: "md5 hash of base64 section content",
+        }
+      })
     }
     if (general !== "") {
       content.push(getPhysicalExamAttachment("General", general));
@@ -736,6 +836,249 @@ const CreateNotes = ({
                     />
                   )}
                 </Grid>
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+        <Grid sx={{ width: "100%" }} item pt={2}>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="panel4a-header"
+            >
+              <Typography>Allergies</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography pb={1}>Allergies</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                          setAllergy(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+        <Grid sx={{ width: "100%" }} item pt={2}>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="panel4a-header"
+            >
+              <Typography>Past History</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography pb={1}>Past History</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                        setpastHistory(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+        <Grid sx={{ width: "100%" }} item pt={2}>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="panel4a-header"
+            >
+              <Typography>Surgical History</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography pb={1}>Surgical History</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                        setsurgicalHistory(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+        <Grid sx={{ width: "100%" }} item pt={2}>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="panel4a-header"
+            >
+              <Typography>Family History</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography pb={1}>Family History</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                        setfamilyHistory(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+        <Grid sx={{ width: "100%" }} item pt={2}>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="panel4a-header"
+            >
+              <Typography>Social History</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography pb={1}>Social History</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                        setsocialHistory(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+        <Grid sx={{ width: "100%" }} item pt={2}>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="panel4a-header"
+            >
+              <Typography>Habbits</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography pb={1}>Habbits</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                        sethabbits(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+        <Grid sx={{ width: "100%" }} item pt={2}>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="panel4a-header"
+            >
+              <Typography>Medications</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography pb={1}>Medications</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                        setmedications(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+        <Grid sx={{ width: "100%" }} item pt={2}>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="panel4a-header"
+            >
+              <Typography>Assesment Plan</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography pb={1}>Assesment Plan</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                        setassesmentPlan(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+        <Grid sx={{ width: "100%" }} item pt={2}>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id="panel4a-header"
+            >
+              <Typography>Follow up</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container direction="column">
+                <Grid item>
+                  <Typography pb={1}>Follow up</Typography>
+                  {!disabled && (
+                    <TextField
+                      sx={{ width: "100%" }}
+                      onChange={(e) => {
+                        if (e.target?.value && e.target?.value !== null)
+                        setfollowup(e.target?.value);
+                      }}
+                    />
+                  )}
+                </Grid>
+
               </Grid>
             </AccordionDetails>
           </Accordion>
