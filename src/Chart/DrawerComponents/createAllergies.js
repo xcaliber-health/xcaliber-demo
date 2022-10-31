@@ -32,9 +32,9 @@ export default function Allergy({
     onSeverityChange,
     onStatusChange,
     onReactionChange,
-    onReactionCodeChange,
     onDateChange,
     severity,
+    allergyPayload,
     status
 }) {
     const classes = useStyles();
@@ -130,7 +130,7 @@ export default function Allergy({
                 </LocalizationProvider>
             </Grid>
             <Box sx={{ display: "flex", width: "100%", padding: '8px 0px 8px 0px', justifyContent: "flex-end" }}>
-                <Button variant="contained" onClick={handleAllergyClick} sx={{ marginRight: "10px" }}>
+                <Button variant="contained" onClick={() => { handleAllergyClick(allergyPayload) }} sx={{ marginRight: "10px" }}>
                     Create Allergy
                 </Button>
                 <Button onClick={onCancelClick} variant="contained">
