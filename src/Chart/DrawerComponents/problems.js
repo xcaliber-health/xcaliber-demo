@@ -19,7 +19,7 @@ export const PatientProblems = ({
       resourceType: "Condition",
       text: {
         status: "generated",
-        div: "Treacher Collins syndrome",
+        div: "",
       },
       clinicalStatus: {
         coding: [
@@ -109,6 +109,10 @@ export const PatientProblems = ({
                 setProblemPayload({
                   data: {
                     ...problemPayload?.data,
+                    text: {
+                      status: "generated",
+                      div: v?.display,
+                    },
                     code: {
                       coding: [
                         {
