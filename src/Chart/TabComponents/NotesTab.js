@@ -21,6 +21,7 @@ const NotesTab = ({ patientDetails }) => {
   const [isNoteDisplayDrawerOpen, setIsNoteDisplayDrawerOpen] = useState(false);
   const [note, setNote] = useState({});
   const [flag, setFlag] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   useEffect(() => {
     if (!localStorage.getItem(`notes_${patientDetails?.id}`)) {
       localStorage.setItem(`notes_${patientDetails?.id}`, JSON.stringify([]));
@@ -95,6 +96,9 @@ const NotesTab = ({ patientDetails }) => {
 
   const onCancelClick = () => {
     setIsDrawerOpen(false);
+  };
+  const ondisplayNoteCancelClick = () => {
+    setIsNoteDisplayDrawerOpen(false);
   };
   const onDateChange = (date) => {
     setNotesPayload({
@@ -211,7 +215,11 @@ const NotesTab = ({ patientDetails }) => {
           },
         }}
       >
-        <DisplayNotes note={note} />
+        <DisplayNotes
+          note={note}
+          disabled={disabled}
+          onCancelClick={ondisplayNoteCancelClick}
+        />
       </Drawer>
       {flag && (
         <Grid container direction="column">
@@ -234,6 +242,7 @@ const NotesTab = ({ patientDetails }) => {
                     key={note.id}
                     onClick={() => {
                       setIsNoteDisplayDrawerOpen(true);
+                      setDisabled(false);
                       setNote(note);
                     }}
                   >
@@ -290,6 +299,7 @@ const NotesTab = ({ patientDetails }) => {
                     key={note.id}
                     onClick={() => {
                       setIsNoteDisplayDrawerOpen(true);
+                      setDisabled(true);
                       setNote(note);
                     }}
                   >
