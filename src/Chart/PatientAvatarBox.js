@@ -41,11 +41,7 @@ const PatientDetailsCard = ({
   };
 
   return (
-    <Grid
-      container
-      maxWidth={theme.spacing(50)}
-      sx={{ height: "100%" }}
-    >
+    <Grid container maxWidth={theme.spacing(50)} sx={{ height: "100%" }}>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -60,6 +56,13 @@ const PatientDetailsCard = ({
           </Grid>
 
           <Grid item sx={{ padding: theme.spacing(1) }}>
+            {patientDetails?.extension?.find((ext) => {
+              return ext?.url?.endsWith("deleted-date");
+            }) && (
+              <Grid color={"black"}>
+                <Typography>DELETED</Typography>
+              </Grid>
+            )}
             <Grid>{`${patientDetails?.name?.[0]?.given?.[0]}  ${patientDetails?.name?.[0]?.family} `}</Grid>
             <Grid>
               {`Patient | ${calculateAge(
@@ -84,7 +87,7 @@ const PatientDetailsCard = ({
           </Grid>
         </AccordionSummary>
         <AccordionDetails>
-        <DetailsTab patientDetails={patientDetails} ></DetailsTab>
+          <DetailsTab patientDetails={patientDetails}></DetailsTab>
         </AccordionDetails>
       </Accordion>
       <Drawer
@@ -124,13 +127,9 @@ const PatientDetailsCard = ({
         />
       </Drawer>
 
-      <Grid
-        item
-        sx={{ width: theme.spacing(50) }}
-        alignItems="center"
-      >
-        <Paper style={{ height: "100%", marginTop : theme.spacing(3) }}>
-          <Grid container sx = {{padding: theme.spacing(2)}}>
+      <Grid item sx={{ width: theme.spacing(50) }} alignItems="center">
+        <Paper style={{ height: "100%", marginTop: theme.spacing(3) }}>
+          <Grid container sx={{ padding: theme.spacing(2) }}>
             <EventAvailableIcon />
             <Typography
               sx={{
@@ -157,7 +156,7 @@ const PatientDetailsCard = ({
             fontSize={theme.spacing(1.8)}
             color="#84818a"
             display="flex"
-            sx={{ ...commonGridElements,paddingLeft: theme.spacing(2) }}
+            sx={{ ...commonGridElements, paddingLeft: theme.spacing(2) }}
           >
             {upcomingAppointments &&
               upcomingAppointments?.map((appointment, index) => {

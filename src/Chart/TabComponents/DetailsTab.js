@@ -1,9 +1,6 @@
 import { Paper, Grid, Typography } from "@mui/material";
 import { useEffect } from "react";
 const DetailsTab = ({ patientDetails }) => {
-  useEffect(() => {
-    console.log(patientDetails);
-  });
   const commonValueStyles = {
     color: " #84818a",
   };
@@ -26,12 +23,14 @@ const DetailsTab = ({ patientDetails }) => {
           <Grid item p={1}>
             <Typography>Gender</Typography>
             <Typography sx={{ ...commonValueStyles }}>
-              { patientDetails?.extension?.find((extension) => {
+              {
+                patientDetails?.extension?.find((extension) => {
                   return (
                     extension?.url ===
                     "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
                   );
-                })?.valueCode}
+                })?.valueCode
+              }
             </Typography>
           </Grid>
           <Grid item p={1}>
