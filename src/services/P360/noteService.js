@@ -5,7 +5,7 @@ export const NoteService = {
   getVisitNotes: async (patientId) => {
     try {
       const response = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&type=visit-notes&_count=3&departmentId=1`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&type=visit-notes&departmentId=1`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -15,7 +15,22 @@ export const NoteService = {
           },
         }
       );
-      return response.data?.data?.entry;
+      let count = 0;
+      const notes = [];
+      for (let i = 0; i < response.data?.data?.entry?.length; i++) {
+        const resource = response.data?.data?.entry?.[i];
+        if (
+          resource?.resource?.category?.[0]?.coding?.[0]?.display?.toLowerCase() ===
+          "soap"
+        ) {
+          notes.push(resource);
+          count++;
+        }
+        if (count === 3) {
+          break;
+        }
+      }
+      return notes;
     } catch (error) {
       console.log(error);
     }
