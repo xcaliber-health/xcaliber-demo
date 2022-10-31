@@ -17,12 +17,12 @@ import { MenuItem } from "@mui/material";
 import { SevereColdOutlined } from "@mui/icons-material";
 const useStyles = makeStyles(() => (
     {
-        typography:
-        {
-            paddingTop: "20px",
-            paddingRight: "5px",
-            paddingLeft: "5px"
-        }
+        // typography:
+        // {
+        //     paddingTop: "20px",
+        //     paddingRight: "5px",
+        //     paddingLeft: "5px"
+        // }
     }))
 
 export default function Allergy({
@@ -51,11 +51,11 @@ export default function Allergy({
     return (
         <React.Fragment>
             <Grid>
-                <Typography variant="h5" sx={{ marginTop: "10px" }}>Add Patient Allergy</Typography>
+                <Typography variant="h5" sx={{ marginBottom: "20px" }}>Add Patient Allergy</Typography>
             </Grid>
             <Divider></Divider>
             <Grid display="flex">
-                <Typography sx={{ marginTop: "10px", marginBottom: "10px", marginRight: "110px" }}>Allergy:</Typography>
+                <Typography sx={{ marginTop: "13px", marginRight: "25px", marginBottom: "30px" }}>Allergy:</Typography>
                 <TextField sx={{ width: "100%" }}
                     label={"Allergy"}
                     required
@@ -64,7 +64,7 @@ export default function Allergy({
                     }} />
             </Grid>
             <Grid display="flex">
-                <Typography sx={{ marginTop: "10px", marginBottom: "10px", marginRight: "100px" }}>Reaction:</Typography>
+                <Typography sx={{ marginTop: "13px", marginRight: "17px" }}>Reaction:</Typography>
                 <TextField sx={{ width: "100%" }}
                     label={"Reaction..."}
                     onChange={(e) => {
@@ -79,7 +79,7 @@ export default function Allergy({
                         onReactionCodeChange(e.target.value);
                     }} />
             </Grid> */}
-            <Grid>
+            <Grid sx={{ paddingTop: "20px" }}>
                 <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">Severity:</InputLabel>
                     <Select
@@ -98,7 +98,7 @@ export default function Allergy({
                     </Select>
                 </FormControl>
             </Grid>
-            <Grid>
+            <Grid sx={{ paddingTop: "20px", paddingBottom: "20px" }}>
                 <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">Status:</InputLabel>
                     <Select
@@ -115,7 +115,7 @@ export default function Allergy({
             </Grid>
 
             <Grid display="flex">
-                <Typography sx={{ marginTop: "20px", marginRight: "20px" }}>Onset Date:</Typography>
+                <Typography sx={{ paddingTop: "20px" }}>Onset Date:</Typography>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DesktopDatePicker
                         label="Date"
