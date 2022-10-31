@@ -28,6 +28,9 @@ const NotesTab = ({ patientDetails }) => {
     }
     setFlag(true);
   }, []);
+  useEffect(() => {
+    Promise.all([getNotes(patientDetails?.id)]);
+  }, [patientDetails]);
   const [notesPayload, setNotesPayload] = useState({
     data: {
       resourceType: "DocumentReference",
@@ -146,10 +149,6 @@ const NotesTab = ({ patientDetails }) => {
       },
     });
   };
-
-  useEffect(() => {
-    Promise.all([getNotes(patientDetails?.id)]);
-  }, []);
 
   return (
     <Grid container spacing={1} direction={"column"}>
