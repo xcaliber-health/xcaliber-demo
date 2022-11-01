@@ -173,7 +173,7 @@ const PatientDetailsCard = ({
               upcomingAppointments?.map((appointment, index) => {
                 const appointmentDateDetailObject =
                   Helper.extractFieldsFromDate(
-                    appointment?.resource?.start?.slice(0, 10)
+                    appointment?.resource?.start
                   );
                 return (
                   <Grid
