@@ -291,7 +291,8 @@ const Chart = () => {
   };
   const onSeverityChange = (severity) => {
     if (severity) {
-      reaction["description"] = severity;
+      // reaction["description"] = severity;
+      reaction["severity"] = severity;
     }
     setAllergyPayload({
       data: {
@@ -563,7 +564,7 @@ const Chart = () => {
               {/* <Tab label="Profile" style={{ width: "25%" }} /> */}
             </Tabs>
           </Box>
-          <TabPanel value={value} index={1} >
+          <TabPanel value={value} index={1}>
             <Box
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
@@ -573,7 +574,6 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
-
               <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
@@ -630,10 +630,31 @@ const Chart = () => {
                               {vital?.resource?.code?.coding?.[0]?.display}
                             </Typography>
                           </TableCell>
-                          <TableCell >
+                          <TableCell>
                             <Grid display="flex">
-                              <Typography>{vital?.resource?.code?.coding?.[0]?.display === "body mass index" ? (vital?.resource?.valueString) : (vital?.resource?.code?.coding?.[0]?.display === "Blood Pressure") ? (vital?.resource?.component[0]?.valueQuantity.value) : (vital?.resource?.valueQuantity.value)}</Typography>
-                              {vital?.resource?.code?.coding?.[0]?.display === "Blood Pressure" && <><Typography>/</Typography><Typography>{vital?.resource?.code?.coding?.[0]?.display === "Blood Pressure" ? (vital?.resource?.component[1]?.valueQuantity.value) : ""}</Typography></>}
+                              <Typography>
+                                {vital?.resource?.code?.coding?.[0]?.display ===
+                                "body mass index"
+                                  ? vital?.resource?.valueString
+                                  : vital?.resource?.code?.coding?.[0]
+                                      ?.display === "Blood Pressure"
+                                  ? vital?.resource?.component[0]?.valueQuantity
+                                      .value
+                                  : vital?.resource?.valueQuantity.value}
+                              </Typography>
+                              {vital?.resource?.code?.coding?.[0]?.display ===
+                                "Blood Pressure" && (
+                                <>
+                                  <Typography>/</Typography>
+                                  <Typography>
+                                    {vital?.resource?.code?.coding?.[0]
+                                      ?.display === "Blood Pressure"
+                                      ? vital?.resource?.component[1]
+                                          ?.valueQuantity.value
+                                      : ""}
+                                  </Typography>
+                                </>
+                              )}
                             </Grid>
                           </TableCell>
                           <TableCell align="center">
@@ -656,16 +677,13 @@ const Chart = () => {
             <NotesTab patientDetails={patientDetails} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-          <Box
+            <Box
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
               display="flex"
-              // marginLeft={theme.spacing(3)}
-              // marginRight={theme.spacing(3)}
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
-              
               <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
@@ -689,6 +707,9 @@ const Chart = () => {
                       <Typography>Problems</Typography>
                     </TableCell>
                     <TableCell align="center">
+                      <Typography>Synopsis</Typography>
+                    </TableCell>
+                    <TableCell align="center">
                       <Typography>Date</Typography>
                     </TableCell>
                     <TableCell align="center">
@@ -699,6 +720,7 @@ const Chart = () => {
                 <TableBody>
                   {patientProblems &&
                     patientProblems?.map((problem) => {
+                      console.log(problem);
                       let dateObject = Helper.extractFieldsFromDate(
                         problem?.resource?.recordedDate
                       );
@@ -712,6 +734,11 @@ const Chart = () => {
                           <TableCell align="center">
                             <Typography>
                               {problem?.resource?.text?.div}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Typography>
+                              {problem?.resource?.note?.[0]?.text}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
@@ -731,7 +758,7 @@ const Chart = () => {
             </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={3}>
-          <Box
+            <Box
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
               display="flex"
@@ -740,7 +767,6 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
-
               <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
@@ -762,6 +788,9 @@ const Chart = () => {
                   <TableRow>
                     <TableCell align="center">
                       <Typography>Allergies</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography>Status</Typography>
                     </TableCell>
                     <TableCell align="center">
                       <Typography>Date</Typography>
@@ -790,6 +819,10 @@ const Chart = () => {
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
+                            {allergy?.resource?.clinicalStatus?.coding?.[0]
+                              ?.display ?? null}
+                          </TableCell>
+                          <TableCell align="center">
                             <Typography>
                               {dateObject?.DAY} {dateObject?.MONTH}{" "}
                               {dateObject?.DATE}
@@ -806,7 +839,7 @@ const Chart = () => {
             </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={4}>
-          <Box
+            <Box
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
               display="flex"
@@ -815,7 +848,6 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
-
               {/* <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
@@ -857,7 +889,10 @@ const Chart = () => {
                         >
                           <TableCell align="center">
                             <Typography>
-                            {immunization?.resource?.vaccineCode?.coding?.[0]?.display}{" "}
+                              {
+                                immunization?.resource?.vaccineCode?.coding?.[0]
+                                  ?.display
+                              }{" "}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
@@ -877,7 +912,7 @@ const Chart = () => {
             </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={5}>
-          <Box
+            <Box
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
               display="flex"
@@ -886,7 +921,6 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
-             
               {/* <Button variant="contained" display="flex">
                 Create Medications
               </Button> */}
@@ -914,7 +948,7 @@ const Chart = () => {
                     patientMedications?.map((medication) => {
                       let dateObject = Helper.extractFieldsFromDate(
                         medication?.resource?.effectiveDateTime
-                        );
+                      );
                       return (
                         <TableRow
                           sx={{
@@ -924,10 +958,10 @@ const Chart = () => {
                         >
                           <TableCell align="center">
                             <Typography>
-                            {
-                  medication?.resource?.medicationCodeableConcept?.coding?.[0]
-                    ?.display
-                }{" "}
+                              {
+                                medication?.resource?.medicationCodeableConcept
+                                  ?.coding?.[0]?.display
+                              }{" "}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
