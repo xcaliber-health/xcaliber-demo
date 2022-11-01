@@ -21,7 +21,7 @@ import DoctorImage from "../../src/assets/unsplash_VeF3uWcH4L4.svg";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Paper from "@mui/material/Paper";
-
+import Elation from "../../src/static/E-Favicon-150x150.png"
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DetailsTab from "./TabComponents/DetailsTab";
@@ -91,7 +91,7 @@ const PatientDetailsCard = ({
           <Tooltip title="View in EHR" >
 
             <IconButton onClick = {() => {window.open(`https://sandbox.elationemr.com/patient/${patientDetails?.id}/req-action/`)}}>
-            <NorthEastIcon />
+            <img src={Elation} style = {{height : "24px", width : "24px"}}/>
 
             </IconButton>
             </Tooltip>

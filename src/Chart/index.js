@@ -594,16 +594,16 @@ const Chart = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Vitals</Typography>
                     </TableCell>
                     <TableCell>
                       <Typography>Value</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Date</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Year</Typography>
                     </TableCell>
                   </TableRow>
@@ -625,7 +625,7 @@ const Chart = () => {
                           }}
                           style={{ cursor: "pointer" }}
                         >
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {vital?.resource?.code?.coding?.[0]?.display}
                             </Typography>
@@ -657,13 +657,13 @@ const Chart = () => {
                               )}
                             </Grid>
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {dateObject?.DAY} {dateObject?.MONTH}{" "}
                               {dateObject?.DATE}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center" component="th" scope="row">
+                          <TableCell align="left" component="th" scope="row">
                             <Typography>{dateObject?.YEAR}</Typography>
                           </TableCell>
                         </TableRow>
@@ -703,16 +703,16 @@ const Chart = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Problems</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Synopsis</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Date</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Year</Typography>
                     </TableCell>
                   </TableRow>
@@ -731,12 +731,12 @@ const Chart = () => {
                           }}
                           style={{ cursor: "pointer" }}
                         >
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {problem?.resource?.text?.div}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {problem?.resource?.note?.[0]?.text}
                             </Typography>
@@ -747,7 +747,7 @@ const Chart = () => {
                               {dateObject?.DATE}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center" component="th" scope="row">
+                          <TableCell align="left" component="th" scope="row">
                             <Typography>{dateObject?.YEAR}</Typography>
                           </TableCell>
                         </TableRow>
@@ -786,16 +786,16 @@ const Chart = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Allergies</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Status</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Date</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Year</Typography>
                     </TableCell>
                   </TableRow>
@@ -813,22 +813,22 @@ const Chart = () => {
                           }}
                           style={{ cursor: "pointer" }}
                         >
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {allergy?.resource?.code?.coding?.[0]?.display}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="left">
                             {allergy?.resource?.clinicalStatus?.coding?.[0]
                               ?.display ?? null}
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {dateObject?.DAY} {dateObject?.MONTH}{" "}
                               {dateObject?.DATE}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center" component="th" scope="row">
+                          <TableCell align="left" component="th" scope="row">
                             <Typography>{dateObject?.YEAR}</Typography>
                           </TableCell>
                         </TableRow>
@@ -863,13 +863,13 @@ const Chart = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Immunizations</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Date</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Year</Typography>
                     </TableCell>
                   </TableRow>
@@ -887,7 +887,7 @@ const Chart = () => {
                           }}
                           style={{ cursor: "pointer" }}
                         >
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {
                                 immunization?.resource?.vaccineCode?.coding?.[0]
@@ -895,13 +895,13 @@ const Chart = () => {
                               }{" "}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {dateObject?.DAY} {dateObject?.MONTH}{" "}
                               {dateObject?.DATE}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center" component="th" scope="row">
+                          <TableCell align="left" component="th" scope="row">
                             <Typography>{dateObject?.YEAR}</Typography>
                           </TableCell>
                         </TableRow>
@@ -932,13 +932,13 @@ const Chart = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Medication</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Date</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Year</Typography>
                     </TableCell>
                   </TableRow>
@@ -956,7 +956,7 @@ const Chart = () => {
                           }}
                           style={{ cursor: "pointer" }}
                         >
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {
                                 medication?.resource?.medicationCodeableConcept
@@ -964,13 +964,13 @@ const Chart = () => {
                               }{" "}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {dateObject?.DAY} {dateObject?.MONTH}{" "}
                               {dateObject?.DATE}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center" component="th" scope="row">
+                          <TableCell align="left" component="th" scope="row">
                             <Typography>{dateObject?.YEAR}</Typography>
                           </TableCell>
                         </TableRow>
