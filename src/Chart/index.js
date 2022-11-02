@@ -46,6 +46,7 @@ import Allergy from "./DrawerComponents/createAllergies";
 import { secondsInWeek } from "date-fns";
 import { rangeRight } from "lodash";
 import { Helper } from "../core-utils/helper";
+import { ReferenceDataService } from "../services/P360/referenceDataService";
 
 const Chart = () => {
   const { id } = useParams();
@@ -178,6 +179,16 @@ const Chart = () => {
   const getVitals = async () => {
     const response = await VitalService.getVitals(id);
     setPatientVitals(response);
+  };
+  const [allergyOptions, setAllergyOptions] = useState([]);
+  const updateOptions = async (searchTerm) => {
+    const result = await ReferenceDataService.getAllergyData(searchTerm);
+    setAllergyOptions(result);
+  };
+  const initialiseAllergyOptions = async () => {
+    const result = await ReferenceDataService.getAllergyData();
+    console.log(result);
+    setAllergyOptions(result);
   };
 
   const onReasonChange = (reason) => {
@@ -326,6 +337,10 @@ const Chart = () => {
     });
     setValueDate(date);
   };
+  // useEffect(() => {
+  //   Promise.all([initialiseAllergyOptions()]);
+  // }, []);
+
 
   const handleAllergyClick = async (allergyPayload) => {
     const keyArray = Object.keys(allergyPayload?.data);
@@ -360,6 +375,7 @@ const Chart = () => {
       getMedications(),
       getImmunizations(),
       getVitals(),
+      initialiseAllergyOptions()
     ])
       .then()
       .catch()
@@ -517,7 +533,10 @@ const Chart = () => {
           onCancelClick={() => {
             setIsAllergyDrawerOpen(false);
           }}
+          initializeAllergyOptions={() => { initialiseAllergyOptions }}
           patientId={id}
+          allergyOptions={allergyOptions}
+          updateOptions={updateOptions}
         />
       </Drawer>
       <Grid
@@ -656,7 +675,7 @@ const Chart = () => {
             <NotesTab patientDetails={patientDetails} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-          <Box
+            <Box
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
               display="flex"
@@ -665,7 +684,7 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
-              
+
               <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
@@ -731,7 +750,7 @@ const Chart = () => {
             </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={3}>
-          <Box
+            <Box
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
               display="flex"
@@ -806,7 +825,7 @@ const Chart = () => {
             </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={4}>
-          <Box
+            <Box
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
               display="flex"
@@ -857,7 +876,7 @@ const Chart = () => {
                         >
                           <TableCell align="center">
                             <Typography>
-                            {immunization?.resource?.vaccineCode?.coding?.[0]?.display}{" "}
+                              {immunization?.resource?.vaccineCode?.coding?.[0]?.display}{" "}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
@@ -877,7 +896,7 @@ const Chart = () => {
             </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={5}>
-          <Box
+            <Box
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
               display="flex"
@@ -886,7 +905,7 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
-             
+
               {/* <Button variant="contained" display="flex">
                 Create Medications
               </Button> */}
@@ -914,7 +933,7 @@ const Chart = () => {
                     patientMedications?.map((medication) => {
                       let dateObject = Helper.extractFieldsFromDate(
                         medication?.resource?.effectiveDateTime
-                        );
+                      );
                       return (
                         <TableRow
                           sx={{
@@ -924,10 +943,10 @@ const Chart = () => {
                         >
                           <TableCell align="center">
                             <Typography>
-                            {
-                  medication?.resource?.medicationCodeableConcept?.coding?.[0]
-                    ?.display
-                }{" "}
+                              {
+                                medication?.resource?.medicationCodeableConcept?.coding?.[0]
+                                  ?.display
+                              }{" "}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
