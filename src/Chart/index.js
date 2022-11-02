@@ -46,6 +46,7 @@ import Allergy from "./DrawerComponents/createAllergies";
 import { secondsInWeek } from "date-fns";
 import { rangeRight } from "lodash";
 import { Helper } from "../core-utils/helper";
+import { ReferenceDataService } from "../services/P360/referenceDataService";
 
 const Chart = () => {
   const { id } = useParams();
@@ -178,6 +179,16 @@ const Chart = () => {
   const getVitals = async () => {
     const response = await VitalService.getVitals(id);
     setPatientVitals(response);
+  };
+  const [allergyOptions, setAllergyOptions] = useState([]);
+  const updateOptions = async (searchTerm) => {
+    const result = await ReferenceDataService.getAllergyData(searchTerm);
+    setAllergyOptions(result);
+  };
+  const initialiseAllergyOptions = async () => {
+    const result = await ReferenceDataService.getAllergyData();
+    console.log(result);
+    setAllergyOptions(result);
   };
 
   const onReasonChange = (reason) => {
@@ -327,6 +338,10 @@ const Chart = () => {
     });
     setValueDate(date);
   };
+  // useEffect(() => {
+  //   Promise.all([initialiseAllergyOptions()]);
+  // }, []);
+
 
   const handleAllergyClick = async (allergyPayload) => {
     const keyArray = Object.keys(allergyPayload?.data);
@@ -361,6 +376,7 @@ const Chart = () => {
       getMedications(),
       getImmunizations(),
       getVitals(),
+      initialiseAllergyOptions()
     ])
       .then()
       .catch()
@@ -518,7 +534,10 @@ const Chart = () => {
           onCancelClick={() => {
             setIsAllergyDrawerOpen(false);
           }}
+          initializeAllergyOptions={() => { initialiseAllergyOptions }}
           patientId={id}
+          allergyOptions={allergyOptions}
+          updateOptions={updateOptions}
         />
       </Drawer>
       <Grid
@@ -959,6 +978,7 @@ const Chart = () => {
                           <TableCell align="left">
                             <Typography>
                               {
+
                                 medication?.resource?.medicationCodeableConcept
                                   ?.coding?.[0]?.display
                               }{" "}

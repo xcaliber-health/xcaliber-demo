@@ -15,6 +15,8 @@ import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import { SevereColdOutlined } from "@mui/icons-material";
+import { Autocomplete } from "@mui/material";
+import { ReferenceDataService } from "../../services/P360/referenceDataService";
 const useStyles = makeStyles(() => (
     {
         // typography:
@@ -35,7 +37,11 @@ export default function Allergy({
     onDateChange,
     severity,
     allergyPayload,
-    status
+    status,
+    allergyOptions,
+    updateOptions,
+    initializeAllergyOptions
+
 }) {
     const classes = useStyles();
     const [value, setValue] = React.useState(null);
@@ -48,6 +54,9 @@ export default function Allergy({
             );
         }
     }, [value]);
+    // useEffect(() => {
+    //     Promise.all([initializeAllergyOptions()]);
+    //   }, []);
     return (
         <React.Fragment>
             <Grid>
@@ -55,13 +64,39 @@ export default function Allergy({
             </Grid>
             <Divider></Divider>
             <Grid display="flex">
-                <Typography sx={{ marginTop: "13px", marginRight: "25px", marginBottom: "30px" }}>Allergy:</Typography>
-                <TextField sx={{ width: "100%" }}
+                <Typography sx={{ marginTop: "13px", marginRight: "31px", marginBottom: "30px" }}>Allergy:</Typography>
+                <Autocomplete
+                    sx={{ width: "100%" }}
+                    id="combo-box-demo"
+                    options={allergyOptions}
+                    getOptionLabel={(option) => {
+                        return `${option?.Concept_Code_2} (${option?.Concept_Name_2})`;
+                    }}
+                    onChange={(e, v) => {
+                        if (v && v !== "" && v !== null) {
+                            onAllergyChange(v?.Concept_Name_2);
+                        }
+                    }}
+                    renderInput={(params) => (
+                        <TextField sx={{ width: "100%" }}
+                            {...params}
+                            label="Allergy"
+                            onChange={(ev) => {
+                                if (ev.target.value !== "" || ev.target.value !== null) {
+                                    updateOptions(ev.target.value);
+                                }
+                                // onAllergyChange(ev.target.value);
+
+                            }}
+                        />
+                    )}
+                />
+                {/* <TextField sx={{ width: "100%" }}
                     label={"Allergy"}
                     required
                     onChange={(e) => {
                         onAllergyChange(e.target.value);
-                    }} />
+                    }} /> */}
             </Grid>
             <Grid display="flex">
                 <Typography sx={{ marginTop: "13px", marginRight: "17px" }}>Reaction:</Typography>
