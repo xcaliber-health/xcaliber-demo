@@ -311,28 +311,28 @@ const NotesTab = ({ patientDetails }) => {
                       <span style={{ color: "black" }}>
                         {
                           Helper.extractFieldsFromDate(
-                            note?.resource?.date?.slice(0, 10)
+                            note?.resource?.date
                           )?.DAY
                         }
                       </span>{" "}
                       <span style={{ color: "black" }}>
                         {
                           Helper.extractFieldsFromDate(
-                            note?.resource?.date?.slice(0, 10)
+                            note?.resource?.date
                           )?.MONTH
                         }
                       </span>{" "}
                       <span style={{ color: "black" }}>
                         {
                           Helper.extractFieldsFromDate(
-                            note?.resource?.date?.slice(0, 10)
+                            note?.resource?.date
                           )?.DATE
                         }
                       </span>{" "}
                       <span style={{ color: "black" }}>
                         {
                           Helper.extractFieldsFromDate(
-                            note?.resource?.date?.slice(0, 10)
+                            note?.resource?.date
                           )?.YEAR
                         }
                       </span>
