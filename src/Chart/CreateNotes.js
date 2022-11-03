@@ -403,13 +403,22 @@ const CreateNotes = ({
   };
   const onSaveNoteAsDraft = async () => {
     const notePayLoad = await createNotePayLoad();
-    localStorage.setItem(
-      `notes_${patientDetails?.id}`,
-      JSON.stringify([
-        ...JSON.parse(localStorage.getItem(`notes_${patientDetails?.id}`)),
-        { resource: { ...notePayLoad } },
-      ])
+    let draftedNotes = JSON.parse(
+      localStorage.getItem(`notes_${patientDetails?.id}`)
     );
+    if (draftedNotes && draftedNotes !== null)
+      localStorage.setItem(
+        `notes_${patientDetails?.id}`,
+        JSON.stringify([
+          ...JSON.parse(localStorage.getItem(`notes_${patientDetails?.id}`)),
+          { resource: { ...notePayLoad } },
+        ])
+      );
+    else
+      localStorage.setItem(
+        `notes_${patientDetails?.id}`,
+        JSON.stringify([{ resource: { ...notePayLoad } }])
+      );
   };
   return (
     <Grid container>
