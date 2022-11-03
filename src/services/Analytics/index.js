@@ -5,7 +5,7 @@ export const AnalyticService = {
   discoverLens: async (payload) => {
     try {
       let url = `${LENS_API_ENDPOINT}/api/v1/datalenses/5197fc6c-b44a-4d94-87f0-9e09aa27bfc3/discover`;
-      const response = await axios.post(url, JSON.parse(payload), {
+      const response = await axios.post(url, payload, {
         headers: {
           Authorization: `${process.env.REACT_APP_AUTHORIZATION}`
         },

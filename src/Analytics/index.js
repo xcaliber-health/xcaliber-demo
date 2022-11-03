@@ -52,7 +52,7 @@ export default function Terminology() {
             onClick={async () => {
               setLoading(true);
               console.log(lensData);
-              result = await AnalyticService.discoverLens({query : lensData});
+              result = await AnalyticService.discoverLens({"query" : lensData});
               setData(result);
               setFlag(1);
             }}
