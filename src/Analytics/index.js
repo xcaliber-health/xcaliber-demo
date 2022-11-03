@@ -6,44 +6,47 @@ import { AnalyticService } from "../services/Analytics";
 import LensTable from "./LensTable";
 
 export default function Terminology() {
-  let result=[]
+  let result = []
   const theme = useTheme();
   const [lensData, setLensData] = useState([]);
-  const [flag,setFlag]=useState(0);
-  const [data,setData]=useState([
-    {Allergies:[]},
-    {FamilyHistory:[]},
-    {Immunizations:[]},
-    {Insurance:[]},
-    {Medications:[]},
-    {Patient:{}},
-    {Patient_ID:''},
-    {Problems:[]},
-    {Procedures:[]},
-    {Vitals:[]}
-])
+  const [flag, setFlag] = useState(0);
+  const [data, setData] = useState([
+    { Allergies: [] },
+    { FamilyHistory: [] },
+    { Immunizations: [] },
+    { Insurance: [] },
+    { Medications: [] },
+    { Patient: {} },
+    { Patient_ID: '' },
+    { Problems: [] },
+    { Procedures: [] },
+    { Vitals: [] }
+  ])
   // const [tableData,setTableData]=useState([
-    
+
   // ]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (data && data!== null) {
-     setLoading(false);
+    if (data && data !== null) {
+      setLoading(false);
     }
   }, [data]);
   return (
-    <Grid width={"80%"} height={`100%`} container direction="column">
+    <Grid container direction="column">
       <Grid
         container
         item
-        // justifyContent="space-around"
+        display="block"
+        justifyContent="space-between"
         sx={{ marginBottom: theme.spacing(2) }}
       >
         <Grid item>
-          <TextField label="query" size="small" sx={{marginRight:"20px"}}value={lensData}
-          onChange={(e)=>{setLensData(e.target.value)}}/>
+          <TextField label="query" sx={{ marginRight: "20px", width: "1000px", marginBottom: "20px" }} minRows={10}
+            multiline
+            value={lensData}
+            onChange={(e) => { setLensData(e.target.value) }} />
         </Grid>
-       
+
         <Grid item>
           <Button
             onClick={async () => {
@@ -52,9 +55,9 @@ export default function Terminology() {
               result = await AnalyticService.discoverLens(lensData);
               setData(result);
               setFlag(1);
-              
             }}
             variant="contained"
+            sx={{ marginLeft: "938px" }}
           >
             {BUTTON_LABELS.RUN}
           </Button>
@@ -63,7 +66,7 @@ export default function Terminology() {
 
       <Grid item>
         {
-        !loading && <LensTable tableRowData={data} flag={flag} />}
+          !loading && <LensTable tableRowData={data} flag={flag} />}
         {loading && "Searching"}
       </Grid>
     </Grid>
