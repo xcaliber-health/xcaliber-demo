@@ -6,34 +6,53 @@ import { AnalyticService } from "../services/Analytics";
 import LensTable from "./LensTable";
 
 export default function Terminology() {
+  let result=[]
   const theme = useTheme();
   const [lensData, setLensData] = useState([]);
+  const [flag,setFlag]=useState(0);
+  const [data,setData]=useState([
+    {Allergies:[]},
+    {FamilyHistory:[]},
+    {Immunizations:[]},
+    {Insurance:[]},
+    {Medications:[]},
+    {Patient:{}},
+    {Patient_ID:''},
+    {Problems:[]},
+    {Procedures:[]},
+    {Vitals:[]}
+])
+  // const [tableData,setTableData]=useState([
+    
+  // ]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (lensData && lensData !== null) {
-      if (loading) setLoading(false);
+    if (data && data!== null) {
+     setLoading(false);
     }
-  }, [lensData]);
+  }, [data]);
   return (
     <Grid width={"80%"} height={`100%`} container direction="column">
       <Grid
         container
         item
-        justifyContent="space-around"
+        // justifyContent="space-around"
         sx={{ marginBottom: theme.spacing(2) }}
       >
         <Grid item>
-          <TextField label="select" size="small" />
+          <TextField label="query" size="small" sx={{marginRight:"20px"}}value={lensData}
+          onChange={(e)=>{setLensData(e.target.value)}}/>
         </Grid>
-        <Grid item>
-          <TextField label="where" size="small" />
-        </Grid>
+       
         <Grid item>
           <Button
             onClick={async () => {
               setLoading(true);
-              const result = await AnalyticService.discoverLens();
-              setLensData(result);
+              console.log(lensData);
+              result = await AnalyticService.discoverLens(lensData);
+              setData(result);
+              setFlag(1);
+              
             }}
             variant="contained"
           >
@@ -43,7 +62,8 @@ export default function Terminology() {
       </Grid>
 
       <Grid item>
-        {!loading && <LensTable tableRowData={lensData} />}
+        {
+        !loading && <LensTable tableRowData={data} flag={flag} />}
         {loading && "Searching"}
       </Grid>
     </Grid>
