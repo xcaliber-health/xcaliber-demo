@@ -11,7 +11,7 @@ export const AnalyticService = {
         },
       });
       console.log(response);
-      return response.data?.results?.slice(0, 2);
+      return response.data?.results;
     } catch (error) {
       //Handle Exception
       console.log(error);
