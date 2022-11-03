@@ -34,9 +34,6 @@ const NotesTab = ({ patientDetails }) => {
   useEffect(() => {
     Promise.all([getNotes(patientDetails?.id)]);
   }, [patientDetails]);
-  useEffect(() => {
-    console.log("note changed ===========", note);
-  }, [note]);
   const [notesPayload, setNotesPayload] = useState({
     data: {
       resourceType: "DocumentReference",
