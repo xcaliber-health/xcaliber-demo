@@ -462,7 +462,25 @@ const DraftNotes = ({
     onCancelClick();
     reloadNotes(patientDetails?.id);
   };
-
+  const onSaveNoteAsDraft = async () => {
+    const notePayLoad = await createNotePayLoad();
+    let draftedNotes = JSON.parse(
+      localStorage.getItem(`notes_${patientDetails?.id}`)
+    );
+    if (draftedNotes && draftedNotes !== null)
+      localStorage.setItem(
+        `notes_${patientDetails?.id}`,
+        JSON.stringify([
+          ...JSON.parse(localStorage.getItem(`notes_${patientDetails?.id}`)),
+          { resource: { ...notePayLoad } },
+        ])
+      );
+    else
+      localStorage.setItem(
+        `notes_${patientDetails?.id}`,
+        JSON.stringify([{ resource: { ...notePayLoad } }])
+      );
+  };
   if (flag) {
     return (
       <Grid container>
@@ -1123,13 +1141,23 @@ const DraftNotes = ({
             style={{
               display: "flex",
               flexDirection: "row",
-              width: "40%",
+              width: "60%",
               paddingTop: 12,
             }}
             justifyContent={"space-between"}
           >
             <Button onClick={onSignClick} variant="contained">
               Sign
+            </Button>
+
+            <Button
+              onClick={() => {
+                onSaveNoteAsDraft();
+                onCancelClick();
+              }}
+              variant="contained"
+            >
+              Save as Draft
             </Button>
 
             <Button
