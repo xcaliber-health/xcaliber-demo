@@ -65,6 +65,7 @@ const Chart = () => {
   const [isVitalsDrawerOpen, setVitalsDrawer] = useState(false);
   const [isAllergyDrawerOpen, setIsAllergyDrawerOpen] = useState(false);
   const [severity, setSeverity] = React.useState(null);
+  const [currentTimezoneDate, setCurrentTimezoneDate] = useState(null);
   const handleSeverityChange = (e) => {
     setSeverity(e.target.value);
   };
@@ -187,7 +188,6 @@ const Chart = () => {
   };
   const initialiseAllergyOptions = async () => {
     const result = await ReferenceDataService.getAllergyData();
-    console.log(result);
     setAllergyOptions(result);
   };
 
@@ -207,25 +207,52 @@ const Chart = () => {
       },
     });
   };
-  const onDateChange = (startDate) => {
+  const onDateChange = (dateObject) => {
+    if (dateObject.getTimezoneOffset() < 0)
+      dateObject.setMinutes(
+        dateObject.getMinutes() - -dateObject.getTimezoneOffset()
+      );
+    else
+      dateObject.setMinutes(
+        dateObject.getMinutes() - dateObject.getTimezoneOffset()
+      );
+    let dateInUtc = `${dateObject.getFullYear()}-${
+      dateObject.getMonth() + 1
+    }-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}:${dateObject.getSeconds()}Z`;
+
     setAppointmentPayload({
       data: {
         ...appointmentPayload?.data,
-        start: startDate,
+        start: dateInUtc,
       },
     });
   };
   const onTimeChange = (time) => {
     let finalDateValue;
-    if (appointmentPayload?.data?.start?.slice(0, 10)?.endsWith("T")) {
-      finalDateValue = appointmentPayload?.data?.start?.slice(0, 9);
+    if (currentTimezoneDate?.slice(0, 10)?.endsWith("T")) {
+      finalDateValue = currentTimezoneDate?.slice(0, 9);
     } else {
-      finalDateValue = appointmentPayload?.data?.start?.slice(0, 10);
+      finalDateValue = currentTimezoneDate?.slice(0, 10);
     }
+    const hourMinuteSecondData = time?.slice(1, -1)?.split(":");
+    finalDateValue = new Date(finalDateValue);
+    finalDateValue.setHours(hourMinuteSecondData[0]);
+    finalDateValue.setMinutes(hourMinuteSecondData[1]);
+    finalDateValue.setSeconds(hourMinuteSecondData[2]);
+    if (finalDateValue.getTimezoneOffset() < 0)
+      finalDateValue.setMinutes(
+        finalDateValue.getMinutes() - -finalDateValue.getTimezoneOffset()
+      );
+    else
+      finalDateValue.setMinutes(
+        finalDateValue.getMinutes() - finalDateValue.getTimezoneOffset()
+      );
     setAppointmentPayload({
       data: {
         ...appointmentPayload?.data,
-        start: `${finalDateValue}${time}`,
+        start: `${finalDateValue.getFullYear()}-${
+          finalDateValue.getMonth() + 1
+        }-${finalDateValue.getDate()}T${finalDateValue.getHours()}:${finalDateValue.getMinutes()}:${finalDateValue.getSeconds()}Z`,
       },
     });
   };
@@ -338,10 +365,6 @@ const Chart = () => {
     });
     setValueDate(date);
   };
-  // useEffect(() => {
-  //   Promise.all([initialiseAllergyOptions()]);
-  // }, []);
-
 
   const handleAllergyClick = async (allergyPayload) => {
     const keyArray = Object.keys(allergyPayload?.data);
@@ -376,7 +399,7 @@ const Chart = () => {
       getMedications(),
       getImmunizations(),
       getVitals(),
-      initialiseAllergyOptions()
+      initialiseAllergyOptions(),
     ])
       .then()
       .catch()
@@ -384,9 +407,11 @@ const Chart = () => {
         setLoading(false);
       });
   }, []);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+  const updateTimezoneDate = (dateTobeUpdated) => {
+    setCurrentTimezoneDate(dateTobeUpdated);
   };
   return (
     <Grid
@@ -428,6 +453,7 @@ const Chart = () => {
           onDateChange={onDateChange}
           onTimeChange={onTimeChange}
           updatePatientId={updatePatientId}
+          updateCurrentTimezoneDate={updateTimezoneDate}
         />
       </Drawer>
       <Drawer
@@ -534,7 +560,9 @@ const Chart = () => {
           onCancelClick={() => {
             setIsAllergyDrawerOpen(false);
           }}
-          initializeAllergyOptions={() => { initialiseAllergyOptions }}
+          initializeAllergyOptions={() => {
+            initialiseAllergyOptions;
+          }}
           patientId={id}
           allergyOptions={allergyOptions}
           updateOptions={updateOptions}
@@ -739,7 +767,6 @@ const Chart = () => {
                 <TableBody>
                   {patientProblems &&
                     patientProblems?.map((problem) => {
-                      console.log(problem);
                       let dateObject = Helper.extractFieldsFromDate(
                         problem?.resource?.recordedDate
                       );
@@ -978,7 +1005,6 @@ const Chart = () => {
                           <TableCell align="left">
                             <Typography>
                               {
-
                                 medication?.resource?.medicationCodeableConcept
                                   ?.coding?.[0]?.display
                               }{" "}
