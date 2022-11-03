@@ -26,9 +26,9 @@ export const NoteService = {
           notes.push(resource);
           count++;
         }
-        if (count === 3) {
-          break;
-        }
+        // if (count === 3) {
+        //   break;
+        // }
       }
       return notes;
     } catch (error) {
