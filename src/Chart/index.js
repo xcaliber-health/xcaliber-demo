@@ -407,6 +407,7 @@ const Chart = () => {
         setLoading(false);
       });
   }, []);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -768,7 +769,7 @@ const Chart = () => {
                   {patientProblems &&
                     patientProblems?.map((problem) => {
                       let dateObject = Helper.extractFieldsFromDate(
-                        problem?.resource?.recordedDate
+                        problem?.resource?.onsetDateTime
                       );
                       return (
                         <TableRow
@@ -779,12 +780,17 @@ const Chart = () => {
                         >
                           <TableCell align="left">
                             <Typography>
-                              {problem?.resource?.text?.div}
+                              {problem?.resource?.text?.div &&
+                                problem?.resource?.text?.div}
+                              {problem?.resource?.code?.coding?.[0]?.display}
                             </Typography>
                           </TableCell>
                           <TableCell align="left">
                             <Typography>
-                              {problem?.resource?.note?.[0]?.text}
+                              {problem?.resource?.note?.[0]?.text &&
+                              problem?.resource?.note?.[0]?.text?.trim() !== ""
+                                ? problem?.resource?.note?.[0]?.text
+                                : "null"}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
@@ -866,16 +872,20 @@ const Chart = () => {
                           </TableCell>
                           <TableCell align="left">
                             {allergy?.resource?.clinicalStatus?.coding?.[0]
-                              ?.display ?? null}
+                              ?.display ?? "null"}
                           </TableCell>
                           <TableCell align="left">
                             <Typography>
-                              {dateObject?.DAY} {dateObject?.MONTH}{" "}
+                              {dateObject?.DAY ?? "null"} {dateObject?.MONTH}{" "}
                               {dateObject?.DATE}
                             </Typography>
                           </TableCell>
                           <TableCell align="left" component="th" scope="row">
-                            <Typography>{dateObject?.YEAR}</Typography>
+                            <Typography>
+                              {dateObject?.YEAR && dateObject?.YEAR !== NaN
+                                ? dateObject?.YEAR
+                                : "null"}
+                            </Typography>
                           </TableCell>
                         </TableRow>
                       );
@@ -1017,7 +1027,11 @@ const Chart = () => {
                             </Typography>
                           </TableCell>
                           <TableCell align="left" component="th" scope="row">
-                            <Typography>{dateObject?.YEAR}</Typography>
+                            <Typography>
+                              {dateObject?.YEAR && dateObject?.YEAR
+                                ? dateObject?.YEAR !== NaN
+                                : "null"}
+                            </Typography>
                           </TableCell>
                         </TableRow>
                       );

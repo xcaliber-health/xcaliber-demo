@@ -34,6 +34,7 @@ const NotesTab = ({ patientDetails }) => {
   useEffect(() => {
     Promise.all([getNotes(patientDetails?.id)]);
   }, [patientDetails]);
+
   const [notesPayload, setNotesPayload] = useState({
     data: {
       resourceType: "DocumentReference",
@@ -87,6 +88,7 @@ const NotesTab = ({ patientDetails }) => {
   });
 
   const getNotes = async (patientId) => {
+    console.log("patient id ", patientId);
     const result = await NoteService.getVisitNotes(patientId);
     setNotes(result);
   };
