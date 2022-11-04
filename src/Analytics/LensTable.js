@@ -1,13 +1,5 @@
 import {
-  TableBody,
-  TableCell,
-  TableRow,
-  Table,
-  Grid,
-  TableHead,
-  TableContainer,
   Typography,
-  Divider,
 } from "@mui/material";
 import { useTheme } from "@mui/system";
 import { AgGridReact } from "ag-grid-react";
@@ -16,15 +8,15 @@ import 'ag-grid-community/dist/styles/ag-theme-alpine.css'
 import 'ag-grid-enterprise';
 import { useEffect } from "react";
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { render } from 'react-dom';
-
 export default function LensTable({ tableRowData, flag }) {
   const gridRef = useRef();
   const theme = useTheme();
-  const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
-  const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
-  const [rowData, setRowData] = useState();
-  const allergyData = [];
+  const [allergyData, setAllergyData] = useState([]);
+  const [ImmunizationData, setImmunizationData] = useState([]);
+  const [familyHistoryData, setFamilyHistoryData] = useState([]);
+  const [problemData, setProblemData] = useState([]);
+  const [vitalsData, setVitalsData] = useState([]);
+  const [procedureData, setProcedureData] = useState([]);
   const [columnDefs, setColumnDefs] = useState([
     { field: 'Patient_ID', cellRenderer: 'agGroupCellRenderer' },
     { field: 'Patient.Race' },
@@ -34,6 +26,41 @@ export default function LensTable({ tableRowData, flag }) {
     { field: 'Patient.State' },
     { field: 'Patient.Phone' }
   ]);
+  let allergyArray = [];
+  let immunizationArray = [];
+  let familyHistoryArray = [];
+  let problemArray = [];
+  let procedureArray = [];
+  let vitalsArray = [];
+
+  useEffect(() => {
+    tableRowData.forEach((row) => {
+      if (row.Allergies && row.Allergies !== null) {
+        allergyArray.push(row);
+      }
+      if (row.Immunizations && row.Immunizations !== null) {
+        immunizationArray.push(row);
+      }
+      if (row.FamilyHistory) {
+        familyHistoryArray.push(row);
+      }
+      if (row.Problems) {
+        problemArray.push(row);
+      }
+      if (row.Procedures) {
+        procedureArray.push(row);
+      }
+      if (row.Vitals) {
+        vitalsArray.push(row)
+      }
+    })
+    setAllergyData(allergyArray);
+    setImmunizationData(immunizationArray);
+    setVitalsData(vitalsArray);
+    setProblemData(problemArray);
+    setProcedureData(procedureArray);
+    setFamilyHistoryData(familyHistoryArray);
+  }, []);
   const defaultColDef = useMemo(() => {
     return {
       flex: 1,
@@ -44,229 +71,152 @@ export default function LensTable({ tableRowData, flag }) {
       gridRef.current.api.getDisplayedRowAtIndex(1).setExpanded(true);
     }, 0);
   }, []);
+  const dataCall = (data) => {
+    const columnDefs = [];
+    var Columns = Object.keys(data);
+    Columns.forEach((column) => {
+      columnDefs.push({ field: column })
 
-  const onGridReady = useCallback((params) => {
-    setRowData(tableRowData);
-  }, []);
-  const detailCellRendererParams = useMemo(() => {
+    })
     return {
-      detailGridOptions: {
-        suppressRowClickSelection: true,
-        enableRangeSelection: true,
-        pagination: true,
-        paginationAutoPageSize: true,
-        columnDefs: [
-          { field: 'FH_ID' },
-          { field: 'FamilyHistory_ICD9' },
-          { field: 'FamilyHistory_Relation' },
-          { field: 'FamilyHistory_SNOMED' },
-        ],
-        defaultColDef: {
-          sortable: true,
-          flex: 1,
-        },
+      suppressRowClickSelection: true,
+      enableRangeSelection: true,
+      pagination: true,
+      paginationAutoPageSize: true,
+      columnDefs: columnDefs,
+      defaultColDef: {
+        sortable: true,
+        flex: 1,
       },
+    }
+
+  }
+  const allergyCall = (data) => {
+    return {
+      detailGridOptions: dataCall(data),
+      getDetailRowData: (params) => {
+        params.successCallback(params.data.Allergies);
+      },
+    };
+  }
+  const historyCall = (data) => {
+    return {
+      detailGridOptions: dataCall(data),
       getDetailRowData: (params) => {
         params.successCallback(params.data.FamilyHistory);
       },
     };
-  }, []);
-  const detailCellRendererParamsProblems = useMemo(() => {
+  }
+  const immunizationCall = (data) => {
     return {
-      detailGridOptions: {
-        suppressRowClickSelection: true,
-        enableRangeSelection: true,
-        pagination: true,
-        paginationAutoPageSize: true,
-        columnDefs: [
-          { field: 'Condition_Description' },
-          // { field: 'Condition_ICD9_Code' },
-          // { field: 'Condition_ICD10_Code' },
-          { field: 'Condition_ID' },
-          // { field: 'Condition_SNOMED_Code' },
-          { field: 'Condition_Status' }
-        ],
-        defaultColDef: {
-          sortable: true,
-          flex: 1,
-        },
-      },
-      getDetailRowData: (params) => {
-        params.successCallback(params.data.Problems);
-      },
-    };
-  }, []);
-  const detailCellRendererParamsAllergies = useMemo(() => {
-    return {
-      detailGridOptions: {
-        suppressRowClickSelection: true,
-        enableRangeSelection: true,
-        pagination: true,
-        paginationAutoPageSize: true,
-        columnDefs: [
-          { field: 'Allergy_ID' },
-          { field: 'Allergy_Reaction' },
-          { field: 'Allergy_Severity' },
-          { field: 'Allergy_Start_Date' },
-          { field: 'Allergy_Status' },
-          { field: 'Allergy_Substance' }
-        ],
-        defaultColDef: {
-          sortable: true,
-          flex: 1,
-        },
-      },
-      getDetailRowData: (params) => {
-        params.successCallback(params.data.Allergies);
-        allergyData.push(params.data.Allergies);
-        console.log(allergyData);
-      },
-    };
-  }, []);
-  const detailCellRendererParamsImmunization = useMemo(() => {
-    return {
-      detailGridOptions: {
-        suppressRowClickSelection: true,
-        enableRangeSelection: true,
-        pagination: true,
-        paginationAutoPageSize: true,
-        columnDefs: [
-          { field: 'Immunization_ID' },
-          { field: 'Immunization_Date' },
-          // { field: 'Immunization_Dose_Quantity' },
-          // { field: 'Immunization_Dose_Units' },
-          { field: 'Immunization_Name' },
-          { field: 'Immunization_CodeSystem' }
-        ],
-        defaultColDef: {
-          sortable: true,
-          flex: 1,
-        },
-      },
+      detailGridOptions: dataCall(data),
       getDetailRowData: (params) => {
         params.successCallback(params.data.Immunizations);
       },
     };
-  }, []);
-  const detailCellRendererParamsProcedures = useMemo(() => {
+  }
+  const procedureCall = (data) => {
     return {
-      detailGridOptions: {
-        suppressRowClickSelection: true,
-        enableRangeSelection: true,
-        pagination: true,
-        paginationAutoPageSize: true,
-        columnDefs: [
-          { field: 'Procedure_ID' },
-          { field: 'Procedure_Code_Description' },
-          { field: 'Procedure_Performed_Date' },
-          { field: 'Procedure_Type' }
-        ],
-        defaultColDef: {
-          sortable: true,
-          flex: 1,
-        },
-      },
+      detailGridOptions: dataCall(data),
       getDetailRowData: (params) => {
         params.successCallback(params.data.Procedures);
       },
     };
-  }, []);
-  const detailCellRendererParamsVitals = useMemo(() => {
+  }
+
+  const vitalsCall = (data) => {
     return {
-      detailGridOptions: {
-        suppressRowClickSelection: true,
-        enableRangeSelection: true,
-        pagination: true,
-        paginationAutoPageSize: true,
-        columnDefs: [
-          { field: 'Vital_Name' },
-          { field: 'Vital_Code' },
-          { field: 'Vital_Sign_Date' },
-          { field: 'Vital_Value' }
-        ],
-        defaultColDef: {
-          sortable: true,
-          flex: 1,
-        },
-      },
+      detailGridOptions: dataCall(data),
       getDetailRowData: (params) => {
         params.successCallback(params.data.Vitals);
       },
     };
-  }, []);
-  return (
-    <div >
-
-      {flag == 1 &&
-        <div className="ag-theme-alpine" style={{ height: 300 }} >
-          {/* {tableRowData.FamilyHistory!==null&&<div className="ag-theme-alpine" style={{ height: 300 }}> */}
-          <Typography>FamilyHistory</Typography>
-          <AgGridReact
-            columnDefs={columnDefs}
-            ref={gridRef}
-            rowData={rowData}
-            detailCellRendererParams={detailCellRendererParams}
-            onGridReady={onGridReady}
-            onFirstDataRendered={onFirstDataRendered}
-            masterDetail={true}
-            defaultColDef={defaultColDef} />
-          {/* </div>} */}
-          {/* {tableRowData.Problems!==null&&<div className="ag-theme-alpine" style={{ height: 300 }}> */}
-          <Typography>Problems</Typography>
-          <AgGridReact
-            columnDefs={columnDefs}
-            ref={gridRef}
-            rowData={rowData}
-            detailCellRendererParams={detailCellRendererParamsProblems}
-            onGridReady={onGridReady}
-            onFirstDataRendered={onFirstDataRendered}
-            masterDetail={true}
-            defaultColDef={defaultColDef} />
-          {/* </div>} */}
-          {/* {allergyData !== null &&
-            <div className="ag-theme-alpine" style={{ height: 300 }}> */}
-          <Typography>Allergies</Typography>
-          <AgGridReact
-            columnDefs={columnDefs}
-            ref={gridRef}
-            rowData={rowData}
-            detailCellRendererParams={detailCellRendererParamsAllergies}
-            onGridReady={onGridReady}
-            onFirstDataRendered={onFirstDataRendered}
-            masterDetail={true}
-            defaultColDef={defaultColDef} />
-          {/* </div>} */}
-          <Typography>Immunizations</Typography>
-          <AgGridReact
-            columnDefs={columnDefs}
-            ref={gridRef}
-            rowData={rowData}
-            detailCellRendererParams={detailCellRendererParamsImmunization}
-            onGridReady={onGridReady}
-            onFirstDataRendered={onFirstDataRendered}
-            masterDetail={true}
-            defaultColDef={defaultColDef} />
-          <Typography>Procedures</Typography>
-          <AgGridReact
-            columnDefs={columnDefs}
-            ref={gridRef}
-            rowData={rowData}
-            detailCellRendererParams={detailCellRendererParamsProcedures}
-            onGridReady={onGridReady}
-            onFirstDataRendered={onFirstDataRendered}
-            masterDetail={true}
-            defaultColDef={defaultColDef} />
-          <Typography>Vitals</Typography>
-          <AgGridReact
-            columnDefs={columnDefs}
-            ref={gridRef}
-            rowData={rowData}
-            detailCellRendererParams={detailCellRendererParamsVitals}
-            onGridReady={onGridReady}
-            onFirstDataRendered={onFirstDataRendered}
-            masterDetail={true}
-            defaultColDef={defaultColDef} />
-        </div>}
-    </div>
-  );
+  }
+  const problemCall = (data) => {
+    return {
+      detailGridOptions: dataCall(data),
+      getDetailRowData: (params) => {
+        params.successCallback(params.data.Problems);
+      },
+    };
+  }
+  if (flag === 1)
+    return (
+      <div >
+        <div>
+          {(allergyData.length !== 0) &&
+            <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
+              <Typography>Allergies</Typography>
+              <AgGridReact
+                columnDefs={columnDefs}
+                ref={gridRef}
+                rowData={allergyData}
+                detailCellRendererParams={allergyCall(allergyData[0]?.Allergies[0])}
+                onFirstDataRendered={onFirstDataRendered}
+                masterDetail={true}
+                defaultColDef={defaultColDef} />
+            </div>}
+          {(familyHistoryData.length !== 0) &&
+            <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
+              <Typography>Family_History</Typography>
+              <AgGridReact
+                columnDefs={columnDefs}
+                ref={gridRef}
+                rowData={familyHistoryData}
+                detailCellRendererParams={historyCall(familyHistoryData[0]?.FamilyHistory[0])}
+                onFirstDataRendered={onFirstDataRendered}
+                masterDetail={true}
+                defaultColDef={defaultColDef} />
+            </div>}
+          {(ImmunizationData.length !== 0) &&
+            <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
+              <Typography>Immunizations</Typography>
+              <AgGridReact
+                columnDefs={columnDefs}
+                ref={gridRef}
+                rowData={ImmunizationData}
+                detailCellRendererParams={immunizationCall(ImmunizationData[0]?.Immunizations[0])}
+                onFirstDataRendered={onFirstDataRendered}
+                masterDetail={true}
+                defaultColDef={defaultColDef} />
+            </div>}
+          {(procedureData.length !== 0) &&
+            <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
+              <Typography>Procedures</Typography>
+              <AgGridReact
+                columnDefs={columnDefs}
+                ref={gridRef}
+                rowData={procedureData}
+                detailCellRendererParams={procedureCall(procedureData[0]?.Procedures[0])}
+                onFirstDataRendered={onFirstDataRendered}
+                masterDetail={true}
+                defaultColDef={defaultColDef} />
+            </div>}
+          {(vitalsData.length !== 0) &&
+            <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
+              <Typography>Vitals</Typography>
+              <AgGridReact
+                columnDefs={columnDefs}
+                ref={gridRef}
+                rowData={vitalsData}
+                detailCellRendererParams={vitalsCall(vitalsData[0]?.Vitals[0])}
+                onFirstDataRendered={onFirstDataRendered}
+                masterDetail={true}
+                defaultColDef={defaultColDef} />
+            </div>}
+          {(problemData.length !== 0) &&
+            <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
+              <Typography>Problems</Typography>
+              <AgGridReact
+                columnDefs={columnDefs}
+                ref={gridRef}
+                rowData={problemData}
+                detailCellRendererParams={problemCall(problemData[0]?.Problems[0])}
+                onFirstDataRendered={onFirstDataRendered}
+                masterDetail={true}
+                defaultColDef={defaultColDef} />
+            </div>}
+        </div>
+      </div>
+    );
 }
