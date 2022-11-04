@@ -295,7 +295,7 @@ const SearchPatients = () => {
           <Grid>
             <Grid md={12}>
               <Grid display="flex" justifyContent="flex-end">
-                <Grid md={8} style={{ paddingLeft: "0px" }}>
+                <Grid md={8} sx={{ paddingLeft: "0px", width: "100%" }}>
                   <PatientSearchInput
                     data-testid={"searcinput"}
                     onChange={onSearchRequestChange}

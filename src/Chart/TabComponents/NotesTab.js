@@ -13,12 +13,15 @@ import { NoteService } from "../../services/P360/noteService";
 import CreateNotes from "../CreateNotes";
 import { Helper } from "../../core-utils/helper";
 import DisplayNotes from "../displayNotes";
+import DraftNotes from "../draftNotes";
 
 const NotesTab = ({ patientDetails }) => {
   const theme = useTheme();
   const [notes, setNotes] = useState([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isNoteDisplayDrawerOpen, setIsNoteDisplayDrawerOpen] = useState(false);
+  const [isUnsignedNoteDisplayDrawerOpen, setIsUnsignedNoteDisplayDrawerOpen] =
+    useState(false);
   const [note, setNote] = useState({});
   const [flag, setFlag] = useState(false);
   const [disabled, setDisabled] = useState(true);
@@ -31,6 +34,7 @@ const NotesTab = ({ patientDetails }) => {
   useEffect(() => {
     Promise.all([getNotes(patientDetails?.id)]);
   }, [patientDetails]);
+
   const [notesPayload, setNotesPayload] = useState({
     data: {
       resourceType: "DocumentReference",
@@ -84,6 +88,7 @@ const NotesTab = ({ patientDetails }) => {
   });
 
   const getNotes = async (patientId) => {
+    console.log("patient id ", patientId);
     const result = await NoteService.getVisitNotes(patientId);
     setNotes(result);
   };
@@ -223,6 +228,36 @@ const NotesTab = ({ patientDetails }) => {
           patientDetails={patientDetails}
         />
       </Drawer>
+      <Drawer
+        anchor={"right"}
+        open={isUnsignedNoteDisplayDrawerOpen}
+        variant="temporary"
+        onClose={() => {
+          setIsUnsignedNoteDisplayDrawerOpen(false);
+        }}
+        PaperProps={{
+          sx: {
+            width: "40%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            padding: "10px",
+            height: "100%",
+            overflowY: "scroll",
+            position: "absolute",
+            zIndex: 1500,
+          },
+        }}
+      >
+        <DraftNotes
+          patientDetails={patientDetails}
+          note={note}
+          onCancelClick={() => {
+            setIsUnsignedNoteDisplayDrawerOpen(false);
+          }}
+          reloadNotes={getNotes}
+        />
+      </Drawer>
       {flag && (
         <Grid container direction="column">
           <Paper style={{ marginTop: theme.spacing(2) }}>
@@ -243,7 +278,7 @@ const NotesTab = ({ patientDetails }) => {
                     divider
                     key={note.id}
                     onClick={() => {
-                      setIsNoteDisplayDrawerOpen(true);
+                      setIsUnsignedNoteDisplayDrawerOpen(true);
                       setDisabled(false);
                       setNote(note);
                     }}
@@ -310,30 +345,26 @@ const NotesTab = ({ patientDetails }) => {
                     <ListItemText>
                       <span style={{ color: "black" }}>
                         {
-                          Helper.extractFieldsFromDate(
-                            note?.resource?.date?.slice(0, 10)
-                          )?.DAY
+                          Helper.extractFieldsFromDate(note?.resource?.date)
+                            ?.DAY
                         }
                       </span>{" "}
                       <span style={{ color: "black" }}>
                         {
-                          Helper.extractFieldsFromDate(
-                            note?.resource?.date?.slice(0, 10)
-                          )?.MONTH
+                          Helper.extractFieldsFromDate(note?.resource?.date)
+                            ?.MONTH
                         }
                       </span>{" "}
                       <span style={{ color: "black" }}>
                         {
-                          Helper.extractFieldsFromDate(
-                            note?.resource?.date?.slice(0, 10)
-                          )?.DATE
+                          Helper.extractFieldsFromDate(note?.resource?.date)
+                            ?.DATE
                         }
                       </span>{" "}
                       <span style={{ color: "black" }}>
                         {
-                          Helper.extractFieldsFromDate(
-                            note?.resource?.date?.slice(0, 10)
-                          )?.YEAR
+                          Helper.extractFieldsFromDate(note?.resource?.date)
+                            ?.YEAR
                         }
                       </span>
                     </ListItemText>

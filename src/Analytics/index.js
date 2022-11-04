@@ -52,6 +52,7 @@ export default function Terminology() {
             onClick={async () => {
               setLoading(true);
               result = await AnalyticService.discoverLens(lensData);
+
               setData(result);
               setFlag(1);
             }}

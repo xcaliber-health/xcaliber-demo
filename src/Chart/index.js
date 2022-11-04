@@ -65,6 +65,7 @@ const Chart = () => {
   const [isVitalsDrawerOpen, setVitalsDrawer] = useState(false);
   const [isAllergyDrawerOpen, setIsAllergyDrawerOpen] = useState(false);
   const [severity, setSeverity] = React.useState(null);
+  const [currentTimezoneDate, setCurrentTimezoneDate] = useState(null);
   const handleSeverityChange = (e) => {
     setSeverity(e.target.value);
   };
@@ -187,7 +188,6 @@ const Chart = () => {
   };
   const initialiseAllergyOptions = async () => {
     const result = await ReferenceDataService.getAllergyData();
-    console.log(result);
     setAllergyOptions(result);
   };
 
@@ -207,25 +207,52 @@ const Chart = () => {
       },
     });
   };
-  const onDateChange = (startDate) => {
+  const onDateChange = (dateObject) => {
+    if (dateObject.getTimezoneOffset() < 0)
+      dateObject.setMinutes(
+        dateObject.getMinutes() - -dateObject.getTimezoneOffset()
+      );
+    else
+      dateObject.setMinutes(
+        dateObject.getMinutes() - dateObject.getTimezoneOffset()
+      );
+    let dateInUtc = `${dateObject.getFullYear()}-${
+      dateObject.getMonth() + 1
+    }-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}:${dateObject.getSeconds()}Z`;
+
     setAppointmentPayload({
       data: {
         ...appointmentPayload?.data,
-        start: startDate,
+        start: dateInUtc,
       },
     });
   };
   const onTimeChange = (time) => {
     let finalDateValue;
-    if (appointmentPayload?.data?.start?.slice(0, 10)?.endsWith("T")) {
-      finalDateValue = appointmentPayload?.data?.start?.slice(0, 9);
+    if (currentTimezoneDate?.slice(0, 10)?.endsWith("T")) {
+      finalDateValue = currentTimezoneDate?.slice(0, 9);
     } else {
-      finalDateValue = appointmentPayload?.data?.start?.slice(0, 10);
+      finalDateValue = currentTimezoneDate?.slice(0, 10);
     }
+    const hourMinuteSecondData = time?.slice(1, -1)?.split(":");
+    finalDateValue = new Date(finalDateValue);
+    finalDateValue.setHours(hourMinuteSecondData[0]);
+    finalDateValue.setMinutes(hourMinuteSecondData[1]);
+    finalDateValue.setSeconds(hourMinuteSecondData[2]);
+    if (finalDateValue.getTimezoneOffset() < 0)
+      finalDateValue.setMinutes(
+        finalDateValue.getMinutes() - -finalDateValue.getTimezoneOffset()
+      );
+    else
+      finalDateValue.setMinutes(
+        finalDateValue.getMinutes() - finalDateValue.getTimezoneOffset()
+      );
     setAppointmentPayload({
       data: {
         ...appointmentPayload?.data,
-        start: `${finalDateValue}${time}`,
+        start: `${finalDateValue.getFullYear()}-${
+          finalDateValue.getMonth() + 1
+        }-${finalDateValue.getDate()}T${finalDateValue.getHours()}:${finalDateValue.getMinutes()}:${finalDateValue.getSeconds()}Z`,
       },
     });
   };
@@ -302,7 +329,8 @@ const Chart = () => {
   };
   const onSeverityChange = (severity) => {
     if (severity) {
-      reaction["description"] = severity;
+      // reaction["description"] = severity;
+      reaction["severity"] = severity;
     }
     setAllergyPayload({
       data: {
@@ -337,10 +365,6 @@ const Chart = () => {
     });
     setValueDate(date);
   };
-  // useEffect(() => {
-  //   Promise.all([initialiseAllergyOptions()]);
-  // }, []);
-
 
   const handleAllergyClick = async (allergyPayload) => {
     const keyArray = Object.keys(allergyPayload?.data);
@@ -375,7 +399,7 @@ const Chart = () => {
       getMedications(),
       getImmunizations(),
       getVitals(),
-      initialiseAllergyOptions()
+      initialiseAllergyOptions(),
     ])
       .then()
       .catch()
@@ -386,6 +410,9 @@ const Chart = () => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+  const updateTimezoneDate = (dateTobeUpdated) => {
+    setCurrentTimezoneDate(dateTobeUpdated);
   };
   return (
     <Grid
@@ -427,6 +454,7 @@ const Chart = () => {
           onDateChange={onDateChange}
           onTimeChange={onTimeChange}
           updatePatientId={updatePatientId}
+          updateCurrentTimezoneDate={updateTimezoneDate}
         />
       </Drawer>
       <Drawer
@@ -533,7 +561,9 @@ const Chart = () => {
           onCancelClick={() => {
             setIsAllergyDrawerOpen(false);
           }}
-          initializeAllergyOptions={() => { initialiseAllergyOptions }}
+          initializeAllergyOptions={() => {
+            initialiseAllergyOptions;
+          }}
           patientId={id}
           allergyOptions={allergyOptions}
           updateOptions={updateOptions}
@@ -582,7 +612,7 @@ const Chart = () => {
               {/* <Tab label="Profile" style={{ width: "25%" }} /> */}
             </Tabs>
           </Box>
-          <TabPanel value={value} index={1} >
+          <TabPanel value={value} index={1}>
             <Box
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
@@ -592,7 +622,6 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
-
               <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
@@ -613,16 +642,16 @@ const Chart = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Vitals</Typography>
                     </TableCell>
                     <TableCell>
                       <Typography>Value</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Date</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Year</Typography>
                     </TableCell>
                   </TableRow>
@@ -644,24 +673,45 @@ const Chart = () => {
                           }}
                           style={{ cursor: "pointer" }}
                         >
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {vital?.resource?.code?.coding?.[0]?.display}
                             </Typography>
                           </TableCell>
-                          <TableCell >
+                          <TableCell>
                             <Grid display="flex">
-                              <Typography>{vital?.resource?.code?.coding?.[0]?.display === "body mass index" ? (vital?.resource?.valueString) : (vital?.resource?.code?.coding?.[0]?.display === "Blood Pressure") ? (vital?.resource?.component[0]?.valueQuantity.value) : (vital?.resource?.valueQuantity.value)}</Typography>
-                              {vital?.resource?.code?.coding?.[0]?.display === "Blood Pressure" && <><Typography>/</Typography><Typography>{vital?.resource?.code?.coding?.[0]?.display === "Blood Pressure" ? (vital?.resource?.component[1]?.valueQuantity.value) : ""}</Typography></>}
+                              <Typography>
+                                {vital?.resource?.code?.coding?.[0]?.display ===
+                                "body mass index"
+                                  ? vital?.resource?.valueString
+                                  : vital?.resource?.code?.coding?.[0]
+                                      ?.display === "Blood Pressure"
+                                  ? vital?.resource?.component[0]?.valueQuantity
+                                      .value
+                                  : vital?.resource?.valueQuantity.value}
+                              </Typography>
+                              {vital?.resource?.code?.coding?.[0]?.display ===
+                                "Blood Pressure" && (
+                                <>
+                                  <Typography>/</Typography>
+                                  <Typography>
+                                    {vital?.resource?.code?.coding?.[0]
+                                      ?.display === "Blood Pressure"
+                                      ? vital?.resource?.component[1]
+                                          ?.valueQuantity.value
+                                      : ""}
+                                  </Typography>
+                                </>
+                              )}
                             </Grid>
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {dateObject?.DAY} {dateObject?.MONTH}{" "}
                               {dateObject?.DATE}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center" component="th" scope="row">
+                          <TableCell align="left" component="th" scope="row">
                             <Typography>{dateObject?.YEAR}</Typography>
                           </TableCell>
                         </TableRow>
@@ -679,12 +729,9 @@ const Chart = () => {
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
               display="flex"
-              // marginLeft={theme.spacing(3)}
-              // marginRight={theme.spacing(3)}
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
-
               <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
@@ -704,13 +751,16 @@ const Chart = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Problems</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
+                      <Typography>Synopsis</Typography>
+                    </TableCell>
+                    <TableCell align="left">
                       <Typography>Date</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Year</Typography>
                     </TableCell>
                   </TableRow>
@@ -719,7 +769,7 @@ const Chart = () => {
                   {patientProblems &&
                     patientProblems?.map((problem) => {
                       let dateObject = Helper.extractFieldsFromDate(
-                        problem?.resource?.recordedDate
+                        problem?.resource?.onsetDateTime
                       );
                       return (
                         <TableRow
@@ -728,9 +778,19 @@ const Chart = () => {
                           }}
                           style={{ cursor: "pointer" }}
                         >
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
-                              {problem?.resource?.text?.div}
+                              {problem?.resource?.text?.div &&
+                                problem?.resource?.text?.div}
+                              {problem?.resource?.code?.coding?.[0]?.display}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography>
+                              {problem?.resource?.note?.[0]?.text &&
+                              problem?.resource?.note?.[0]?.text?.trim() !== ""
+                                ? problem?.resource?.note?.[0]?.text
+                                : "null"}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
@@ -739,7 +799,7 @@ const Chart = () => {
                               {dateObject?.DATE}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center" component="th" scope="row">
+                          <TableCell align="left" component="th" scope="row">
                             <Typography>{dateObject?.YEAR}</Typography>
                           </TableCell>
                         </TableRow>
@@ -759,7 +819,6 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
-
               <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
@@ -779,13 +838,16 @@ const Chart = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Allergies</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
+                      <Typography>Status</Typography>
+                    </TableCell>
+                    <TableCell align="left">
                       <Typography>Date</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Year</Typography>
                     </TableCell>
                   </TableRow>
@@ -803,19 +865,27 @@ const Chart = () => {
                           }}
                           style={{ cursor: "pointer" }}
                         >
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {allergy?.resource?.code?.coding?.[0]?.display}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="left">
+                            {allergy?.resource?.clinicalStatus?.coding?.[0]
+                              ?.display ?? "null"}
+                          </TableCell>
+                          <TableCell align="left">
                             <Typography>
-                              {dateObject?.DAY} {dateObject?.MONTH}{" "}
+                              {dateObject?.DAY ?? "null"} {dateObject?.MONTH}{" "}
                               {dateObject?.DATE}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center" component="th" scope="row">
-                            <Typography>{dateObject?.YEAR}</Typography>
+                          <TableCell align="left" component="th" scope="row">
+                            <Typography>
+                              {dateObject?.YEAR && dateObject?.YEAR !== NaN
+                                ? dateObject?.YEAR
+                                : "null"}
+                            </Typography>
                           </TableCell>
                         </TableRow>
                       );
@@ -834,7 +904,6 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
-
               {/* <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
@@ -850,13 +919,13 @@ const Chart = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Immunizations</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Date</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Year</Typography>
                     </TableCell>
                   </TableRow>
@@ -874,18 +943,21 @@ const Chart = () => {
                           }}
                           style={{ cursor: "pointer" }}
                         >
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
-                              {immunization?.resource?.vaccineCode?.coding?.[0]?.display}{" "}
+                              {
+                                immunization?.resource?.vaccineCode?.coding?.[0]
+                                  ?.display
+                              }{" "}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {dateObject?.DAY} {dateObject?.MONTH}{" "}
                               {dateObject?.DATE}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center" component="th" scope="row">
+                          <TableCell align="left" component="th" scope="row">
                             <Typography>{dateObject?.YEAR}</Typography>
                           </TableCell>
                         </TableRow>
@@ -905,7 +977,6 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
-
               {/* <Button variant="contained" display="flex">
                 Create Medications
               </Button> */}
@@ -917,13 +988,13 @@ const Chart = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Medication</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Date</Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Typography>Year</Typography>
                     </TableCell>
                   </TableRow>
@@ -941,22 +1012,26 @@ const Chart = () => {
                           }}
                           style={{ cursor: "pointer" }}
                         >
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {
-                                medication?.resource?.medicationCodeableConcept?.coding?.[0]
-                                  ?.display
+                                medication?.resource?.medicationCodeableConcept
+                                  ?.coding?.[0]?.display
                               }{" "}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="left">
                             <Typography>
                               {dateObject?.DAY} {dateObject?.MONTH}{" "}
                               {dateObject?.DATE}
                             </Typography>
                           </TableCell>
-                          <TableCell align="center" component="th" scope="row">
-                            <Typography>{dateObject?.YEAR}</Typography>
+                          <TableCell align="left" component="th" scope="row">
+                            <Typography>
+                              {dateObject?.YEAR && dateObject?.YEAR
+                                ? dateObject?.YEAR !== NaN
+                                : "null"}
+                            </Typography>
                           </TableCell>
                         </TableRow>
                       );

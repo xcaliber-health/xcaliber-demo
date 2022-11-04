@@ -67,13 +67,13 @@ const ViewPatientsTable = (props) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="center">
+            <TableCell align="left">
               <Typography>name</Typography>
             </TableCell>
-            <TableCell align="center">
+            <TableCell align="left">
               <Typography>gender</Typography>
             </TableCell>
-            <TableCell align="center">
+            <TableCell align="left">
               <Typography>date of birth</Typography>
             </TableCell>
           </TableRow>
@@ -88,12 +88,12 @@ const ViewPatientsTable = (props) => {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               style={{ cursor: "pointer" }}
             >
-              <TableCell align="center">
-                <Typography>
+              <TableCell align="left">
+                <Typography color = "primary">
                   {patient.familyName} {patient.givenName}
                 </Typography>
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="left">
                 <Typography>{ patient?.extension?.find((extension) => {
                   return (
                     extension?.url ===
@@ -101,7 +101,7 @@ const ViewPatientsTable = (props) => {
                   );
                 })?.valueCode}</Typography>
               </TableCell>
-              <TableCell align="center" component="th" scope="row">
+              <TableCell align="left" component="th" scope="row">
                 <Typography>{formatDate(patient.dateOfBirth)}</Typography>
               </TableCell>
             </TableRow>

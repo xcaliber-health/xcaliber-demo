@@ -184,7 +184,10 @@ function DashboardContent() {
             <MenuIcon />
           </IconButton>
           <Grid justifyContent="space-between" direction="flex" container>
+          <Box display = "flex" alignItems={"center"}> 
           <Typography variant="h5">XCALIBER-DEMO</Typography>
+          <Typography variant = "body2" sx={{paddingLeft : "24px"}}> Do not add any real PII/PHI data here.</Typography>
+          </Box>
             <Dialog direction="column" open={isModalOpen}>
               <Grid
                 container
@@ -192,25 +195,31 @@ function DashboardContent() {
                 direction={"column"}
                 padding={4}
               >
-                <RadioGroup
-                  onChange={(e) => {
-                    setSourceState(e.target.value);
-                  }}
-                  pt={2}
-                >
-                  <FormControlLabel
-                    value="ELATION"
-                    control={<Radio />}
-                    label="Elation"
-                  />
-                  <FormControlLabel
-                    value="ATHENA"
-                    control={<Radio />}
-                    label="Athena"
-                  />
-                </RadioGroup>
+                <Grid item>
+                  <Typography>Switch data source</Typography>
+                </Grid>
+                <Grid item>
+                  <RadioGroup
+                    onChange={(e) => {
+                      setSourceState(e.target.value);
+                    }}
+                    pt={2}
+                  >
+                    <FormControlLabel
+                      value="ELATION"
+                      control={<Radio />}
+                      label="Elation"
+                    />
+                    <FormControlLabel
+                      value="ATHENA"
+                      control={<Radio />}
+                      label="Athena"
+                    />
+                  </RadioGroup>
+                </Grid>
                 <Grid
-                  paddingTop={6}
+                  paddingLeft={0}
+                  marginLeft={0}
                   container
                   item
                   justifyContent={"space-evenly"}
@@ -246,15 +255,15 @@ function DashboardContent() {
               </Grid>
             </Dialog>
             <Box display="flex">
-            <IconButton
-              sx={{ color: "black", marginRight: '8px' }}
-              onClick={() => {
-                setIsModalOpen(true);
-              }}
-            >
-              <SettingsSharpIcon color="action" />
-            </IconButton>
-            <Avatar></Avatar>
+              <IconButton
+                sx={{ color: "black", marginRight: "8px" }}
+                onClick={() => {
+                  setIsModalOpen(true);
+                }}
+              >
+                <SettingsSharpIcon color="action" />
+              </IconButton>
+              <Avatar></Avatar>
             </Box>
           </Grid>
         </Toolbar>
@@ -289,7 +298,7 @@ function DashboardContent() {
         <List component="nav">
           {mainListItems(onMenuClick, id, classes.root)}
           {/* <Divider sx={{ my: 1 }} />
-              {secondaryListItems} */}
+                {secondaryListItems} */}
         </List>
       </Drawer>
       <Box
