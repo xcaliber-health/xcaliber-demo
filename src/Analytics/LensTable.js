@@ -9,7 +9,6 @@ import 'ag-grid-enterprise';
 import { useEffect } from "react";
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 export default function LensTable({ tableRowData, flag }) {
-  console.log(tableRowData);
   const gridRef = useRef();
   const theme = useTheme();
   const [allergyData, setAllergyData] = useState([]);
@@ -18,6 +17,8 @@ export default function LensTable({ tableRowData, flag }) {
   const [problemData, setProblemData] = useState([]);
   const [vitalsData, setVitalsData] = useState([]);
   const [procedureData, setProcedureData] = useState([]);
+  const [patientData, setPatientData] = useState([]);
+  const [k, setK] = useState(0);
   const [columnDefs, setColumnDefs] = useState([
     { field: 'Patient_ID', cellRenderer: 'agGroupCellRenderer' },
     { field: 'Patient.Race' },
@@ -33,26 +34,36 @@ export default function LensTable({ tableRowData, flag }) {
   let problemArray = [];
   let procedureArray = [];
   let vitalsArray = [];
-
+  let patientArray = [];
   useEffect(() => {
     tableRowData.forEach((row) => {
       if (row.Allergies && row.Allergies !== null) {
         allergyArray.push(row);
+        setK(1);
       }
       if (row.Immunizations && row.Immunizations !== null) {
         immunizationArray.push(row);
+        setK(1);
       }
       if (row.FamilyHistory && row.FamilyHistory !== null) {
         familyHistoryArray.push(row);
+        setK(1);
+
       }
       if (row.Problems && row.Problems !== null) {
         problemArray.push(row);
+        setK(1);
+
       }
       if (row.Procedures && row.Procedures !== null) {
         procedureArray.push(row);
+        setK(1);
+
       }
       if (row.Vitals && row.Vitals !== null) {
         vitalsArray.push(row)
+        setK(1);
+
       }
     })
     setAllergyData(allergyArray);
@@ -62,9 +73,18 @@ export default function LensTable({ tableRowData, flag }) {
     setProcedureData(procedureArray);
     setFamilyHistoryData(familyHistoryArray);
   }, []);
-  const defaultColDef = useMemo(() => {
+  useEffect(() => {
+    tableRowData.forEach((row) => {
+      if (k !== 1 && row.Patient) {
+        patientArray.push(row);
+      }
+    })
+    setPatientData(patientArray);
+  }, []);
+  const defaultColDef = (() => {
     return {
       flex: 1,
+      alwaysShowHorizontalScroll: true
     };
   }, []);
   const onFirstDataRendered = useCallback((params) => {
@@ -76,7 +96,8 @@ export default function LensTable({ tableRowData, flag }) {
     const columnDefs = [];
     var Columns = Object.keys(data);
     Columns.forEach((column) => {
-      columnDefs.push({ field: column })
+      if (column.value !== null)
+        columnDefs.push({ field: column })
 
     })
     return {
@@ -86,7 +107,6 @@ export default function LensTable({ tableRowData, flag }) {
       paginationAutoPageSize: true,
       columnDefs: columnDefs,
       defaultColDef: {
-        sortable: true,
         flex: 1,
       },
     }
@@ -99,6 +119,43 @@ export default function LensTable({ tableRowData, flag }) {
         params.successCallback(params.data.Allergies);
       },
     };
+  }
+  const ColumCall = (data) => {
+    const columnDefs = [];
+    var basicCol = Object.keys(data[0]);
+    basicCol.forEach((column) => {
+      if (column === 'Patient_ID') {
+        columnDefs.push({ field: column, cellRenderer: 'agGroupCellRenderer' })
+      }
+    })
+    if (data.Patient !== {}) {
+      var Columns = Object.keys(data[0].Patient);
+      Columns.forEach((column) => {
+        if (column !== 'Patient_ID') {
+          columnDefs.push({ field: `Patient.${column}`, headerName: column })
+        }
+      })
+    }
+    return columnDefs;
+  }
+  const patientColumnCall = (data) => {
+    const columnDefs = [];
+    var basicCol = Object.keys(data[0]);
+    basicCol.forEach((column) => {
+      if (column === 'Patient_ID') {
+        columnDefs.push({ field: column })
+      }
+    })
+    if (data.Patient !== {}) {
+      var Columns = Object.keys(data[0].Patient);
+      Columns.forEach((column) => {
+        if (column !== 'Patient_ID') {
+          columnDefs.push({ field: `Patient.${column}`, headerName: column })
+        }
+      })
+    }
+    return columnDefs;
+
   }
   const historyCall = (data) => {
     return {
@@ -145,77 +202,95 @@ export default function LensTable({ tableRowData, flag }) {
     return (
       <div >
         <div>
-          {((allergyData.length !== 0)&& Object.keys(allergyData[0]?.Allergies[0]).length!==0 )&&
+          {((allergyData.length !== 0) && Object.keys(allergyData[0]?.Allergies[0]).length !== 0) &&
             <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
               <Typography>Allergies</Typography>
               <AgGridReact
-                columnDefs={columnDefs}
+                columnDefs={ColumCall(allergyData)}
                 ref={gridRef}
+                alwaysShowHorizontalScroll={true}
                 rowData={allergyData}
                 detailCellRendererParams={allergyCall(allergyData[0]?.Allergies[0])}
                 onFirstDataRendered={onFirstDataRendered}
                 masterDetail={true}
-                defaultColDef={defaultColDef} />
+                // flex={1}
+                defaultColDef={defaultColDef}
+              />
             </div>}
-          {((familyHistoryData.length !== 0)&& Object.keys(familyHistoryData[0]?.FamilyHistory[0]).length!==0 ) &&
+          {((familyHistoryData.length !== 0) && Object.keys(familyHistoryData[0]?.FamilyHistory[0]).length !== 0) &&
             <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
               <Typography>Family_History</Typography>
               <AgGridReact
-                columnDefs={columnDefs}
+                columnDefs={ColumCall(familyHistoryData)}
                 ref={gridRef}
                 rowData={familyHistoryData}
+                alwaysShowHorizontalScroll={true}
                 detailCellRendererParams={historyCall(familyHistoryData[0]?.FamilyHistory[0])}
                 onFirstDataRendered={onFirstDataRendered}
                 masterDetail={true}
                 defaultColDef={defaultColDef} />
             </div>}
-          {((ImmunizationData.length !== 0)&& Object.keys(ImmunizationData[0]?.Immunizations[0]).length!==0 ) &&
+          {((ImmunizationData.length !== 0) && Object.keys(ImmunizationData[0]?.Immunizations[0]).length !== 0) &&
             <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
               <Typography>Immunizations</Typography>
               <AgGridReact
-                columnDefs={columnDefs}
+                columnDefs={ColumCall(ImmunizationData)}
                 ref={gridRef}
+                alwaysShowHorizontalScroll={true}
                 rowData={ImmunizationData}
                 detailCellRendererParams={immunizationCall(ImmunizationData[0]?.Immunizations[0])}
                 onFirstDataRendered={onFirstDataRendered}
                 masterDetail={true}
                 defaultColDef={defaultColDef} />
             </div>}
-          {((procedureData.length !== 0)&& Object.keys(procedureData[0]?.Procedures[0]).length!==0 ) &&
+          {((procedureData.length !== 0) && Object.keys(procedureData[0]?.Procedures[0]).length !== 0) &&
             <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
               <Typography>Procedures</Typography>
               <AgGridReact
-                columnDefs={columnDefs}
+                columnDefs={ColumCall(procedureData)}
                 ref={gridRef}
+                alwaysShowHorizontalScroll={true}
                 rowData={procedureData}
                 detailCellRendererParams={procedureCall(procedureData[0]?.Procedures[0])}
                 onFirstDataRendered={onFirstDataRendered}
                 masterDetail={true}
                 defaultColDef={defaultColDef} />
             </div>}
-          {((vitalsData.length !== 0)&& Object.keys(vitalsData[0]?.Vitals[0]).length!==0 )&&
+          {((vitalsData.length !== 0) && Object.keys(vitalsData[0]?.Vitals[0]).length !== 0) &&
             <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
               <Typography>Vitals</Typography>
               <AgGridReact
-                columnDefs={columnDefs}
+                columnDefs={ColumCall(vitalsData)}
                 ref={gridRef}
+                alwaysShowHorizontalScroll={true}
                 rowData={vitalsData}
                 detailCellRendererParams={vitalsCall(vitalsData[0]?.Vitals[0])}
                 onFirstDataRendered={onFirstDataRendered}
                 masterDetail={true}
                 defaultColDef={defaultColDef} />
             </div>}
-          {((problemData.length !== 0) && Object.keys(problemData[0]?.Problems[0]).length!==0 )&&
+          {((problemData.length !== 0) && Object.keys(problemData[0]?.Problems[0]).length !== 0) &&
             <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
               <Typography>Problems</Typography>
               <AgGridReact
-                columnDefs={columnDefs}
+                columnDefs={ColumCall(problemData)}
                 ref={gridRef}
+                alwaysShowHorizontalScroll={true}
                 rowData={problemData}
                 detailCellRendererParams={problemCall(problemData[0]?.Problems[0])}
                 onFirstDataRendered={onFirstDataRendered}
                 masterDetail={true}
                 defaultColDef={defaultColDef} />
+            </div>}
+          {(patientData.length !== 0) &&
+            <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
+              <Typography>Patient_Data</Typography>
+              <AgGridReact
+                columnDefs={patientColumnCall(patientData)}
+                ref={gridRef}
+                alwaysShowHorizontalScroll={true}
+                rowData={patientData}
+              />
             </div>}
         </div>
       </div>
