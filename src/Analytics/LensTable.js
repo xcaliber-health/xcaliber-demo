@@ -128,7 +128,7 @@ export default function LensTable({ tableRowData, flag }) {
         columnDefs.push({ field: column, cellRenderer: 'agGroupCellRenderer' })
       }
     })
-    if (data.Patient !== {}) {
+    if (data.Patient && data.Patient !== {}) {
       var Columns = Object.keys(data[0].Patient);
       Columns.forEach((column) => {
         if (column !== 'Patient_ID') {
