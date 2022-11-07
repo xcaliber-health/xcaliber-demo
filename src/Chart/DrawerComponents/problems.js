@@ -16,12 +16,27 @@ export const PatientProblems = ({
   updateProblems,
 }) => {
   const [problemPayload, setProblemPayload] = useState({
+    context: {
+      departmentId: "150",
+    },
     data: {
       resourceType: "Condition",
       text: {
         status: "generated",
         div: "",
       },
+      category: [
+        {
+          coding: [
+            {
+              system:
+                "http://terminology.hl7.org/CodeSystem/condition-category",
+              code: "problem-list-item",
+              display: "Problem List Item",
+            },
+          ],
+        },
+      ],
       clinicalStatus: {
         coding: [
           {
@@ -108,6 +123,9 @@ export const PatientProblems = ({
             onChange={(e, v) => {
               if (v && v !== "" && v !== null) {
                 setProblemPayload({
+                  context: {
+                    departmentId: "150",
+                  },
                   data: {
                     ...problemPayload?.data,
                     text: {
@@ -163,6 +181,9 @@ export const PatientProblems = ({
             onChange={(e) => {
               if (e.target.value && e.target.value !== null)
                 setProblemPayload({
+                  context: {
+                    departmentId: "150",
+                  },
                   data: {
                     ...problemPayload?.data,
                     note: [
@@ -176,8 +197,15 @@ export const PatientProblems = ({
           />
         )}
       </Grid>
-     
-      <Box sx={{ display: "flex", width: "100%", padding: '8px 0px 8px 0px', justifyContent: "flex-end" }}>
+
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          padding: "8px 0px 8px 0px",
+          justifyContent: "flex-end",
+        }}
+      >
         <Button
           onClick={() => {
             createProblem(problemPayload);
