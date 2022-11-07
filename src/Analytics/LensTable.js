@@ -18,16 +18,6 @@ export default function LensTable({ tableRowData, flag }) {
   const [vitalsData, setVitalsData] = useState([]);
   const [procedureData, setProcedureData] = useState([]);
   const [patientData, setPatientData] = useState([]);
-  const [k, setK] = useState(0);
-  const [columnDefs, setColumnDefs] = useState([
-    { field: 'Patient_ID', cellRenderer: 'agGroupCellRenderer' },
-    { field: 'Patient.Race' },
-    { field: 'Patient.LastName' },
-    { field: 'Patient.DOB' },
-    { field: 'Patient.City' },
-    { field: 'Patient.State' },
-    { field: 'Patient.Phone' }
-  ]);
   let allergyArray = [];
   let immunizationArray = [];
   let familyHistoryArray = [];
@@ -39,47 +29,46 @@ export default function LensTable({ tableRowData, flag }) {
     tableRowData.forEach((row) => {
       if (row.Allergies && row.Allergies !== null) {
         allergyArray.push(row);
-        setK(1);
+        patientArray.push(row);
       }
       if (row.Immunizations && row.Immunizations !== null) {
         immunizationArray.push(row);
-        setK(1);
+        patientArray.push(row);
       }
       if (row.FamilyHistory && row.FamilyHistory !== null) {
         familyHistoryArray.push(row);
-        setK(1);
+        patientArray.push(row);
 
       }
       if (row.Problems && row.Problems !== null) {
         problemArray.push(row);
-        setK(1);
+        patientArray.push(row);
 
       }
       if (row.Procedures && row.Procedures !== null) {
         procedureArray.push(row);
-        setK(1);
+        patientArray.push(row);
 
       }
       if (row.Vitals && row.Vitals !== null) {
         vitalsArray.push(row)
-        setK(1);
-
+        patientArray.push(row);
       }
     })
+    if (patientArray === []) {
+      tableRowData.forEach((row) => {
+        if (row.Patient) {
+          patientArray.push(row);
+        }
+      })
+      setPatientData(patientArray);
+    }
     setAllergyData(allergyArray);
     setImmunizationData(immunizationArray);
     setVitalsData(vitalsArray);
     setProblemData(problemArray);
     setProcedureData(procedureArray);
     setFamilyHistoryData(familyHistoryArray);
-  }, []);
-  useEffect(() => {
-    tableRowData.forEach((row) => {
-      if (k !== 1 && row.Patient) {
-        patientArray.push(row);
-      }
-    })
-    setPatientData(patientArray);
   }, []);
   const defaultColDef = (() => {
     return {
