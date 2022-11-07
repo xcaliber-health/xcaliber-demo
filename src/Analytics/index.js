@@ -41,7 +41,7 @@ export default function Terminology() {
         sx={{ marginBottom: theme.spacing(2) }}
       >
         <Grid item>
-          <TextField label="query" sx={{ marginRight: "20px", width: "1000px", marginBottom: "20px" }} minRows={10}
+          <TextField label="query" sx={{ marginRight: theme.spacing(5), width: theme.spacing(150), marginBottom: theme.spacing(5) }} minRows={10}
             multiline
             value={lensData}
             onChange={(e) => { setLensData(e.target.value) }} />
@@ -51,13 +51,13 @@ export default function Terminology() {
           <Button
             onClick={async () => {
               setLoading(true);
-              console.log(lensData);
-              result = await AnalyticService.discoverLens({"query" : lensData});
+              result = await AnalyticService.discoverLens(lensData);
+
               setData(result);
               setFlag(1);
             }}
             variant="contained"
-            sx={{ marginLeft: "938px" }}
+            sx={{ marginLeft: theme.spacing(143) }}
           >
             {BUTTON_LABELS.RUN}
           </Button>
