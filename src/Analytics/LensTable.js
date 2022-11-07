@@ -80,7 +80,7 @@ export default function LensTable({ tableRowData, flag }) {
       }
     })
     setPatientData(patientArray);
-  }, []);
+  }, [k]);
   const defaultColDef = (() => {
     return {
       flex: 1,
