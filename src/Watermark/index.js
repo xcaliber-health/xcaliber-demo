@@ -8,18 +8,15 @@ const Watermark = () => {
         position: "absolute",
         bottom: 0,
         right: 0,
+        'z-index': 1300,
         color: "#5c6f84",
         opacity: 0.35,
       }}
     >
-      <Typography sx={{ fontSize: "20px" }}>
+      <Typography variant= "body2" >
         Powered by
       </Typography>
       <Box component="img" sx={{ height: 40 }} src={logo} />
-
-      <Typography sx={{ fontSize: "20px" }}>
-        Do not add any real data here
-      </Typography>
     </Box>
   );
 };

@@ -21,11 +21,12 @@ import DoctorImage from "../../src/assets/unsplash_VeF3uWcH4L4.svg";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Paper from "@mui/material/Paper";
-
+import Elation from "../../src/static/E-Favicon-150x150.png";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DetailsTab from "./TabComponents/DetailsTab";
-import NorthEastIcon from '@mui/icons-material/NorthEast';
+import NorthEastIcon from "@mui/icons-material/NorthEast";
+import { useEffect } from "react";
 const PatientDetailsCard = ({
   patientDetails,
   upcomingAppointments,
@@ -57,7 +58,7 @@ const PatientDetailsCard = ({
             />
           </Grid>
 
-          <Grid item sx={{ padding: theme.spacing(1) }} lg = {7}>
+          <Grid item sx={{ padding: theme.spacing(1) }} lg={7}>
             {patientDetails?.extension?.find((ext) => {
               return ext?.url?.endsWith("deleted-date");
             }) && (
@@ -72,8 +73,8 @@ const PatientDetailsCard = ({
               )} | ${
                 patientDetails?.extension?.find((extension) => {
                   return (
-                    extension?.url ===
-                    "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
+                    extension?.url?.endsWith("legal-sex") ||
+                    extension?.url?.endsWith("us-core-birthsex")
                   );
                 })?.valueCode
               }`}
@@ -88,12 +89,16 @@ const PatientDetailsCard = ({
         */}
           </Grid>
           <Grid sx={{ padding: theme.spacing(1) }} item lg={1}>
-          <Tooltip title="View in EHR" >
-
-            <IconButton onClick = {() => {window.open(`https://sandbox.elationemr.com/patient/${patientDetails?.id}/req-action/`)}}>
-            <NorthEastIcon />
-
-            </IconButton>
+            <Tooltip title="View in EHR">
+              <IconButton
+                onClick={() => {
+                  window.open(
+                    `https://sandbox.elationemr.com/patient/${patientDetails?.id}/req-action/`
+                  );
+                }}
+              >
+                <img src={Elation} style={{ height: "24px", width: "24px" }} />
+              </IconButton>
             </Tooltip>
           </Grid>
         </AccordionSummary>
@@ -172,9 +177,7 @@ const PatientDetailsCard = ({
             {upcomingAppointments &&
               upcomingAppointments?.map((appointment, index) => {
                 const appointmentDateDetailObject =
-                  Helper.extractFieldsFromDate(
-                    appointment?.resource?.start?.slice(0, 10)
-                  );
+                  Helper.extractFieldsFromDate(appointment?.resource?.start);
                 return (
                   <Grid
                     sx={{ ...commonGridElements, cursor: "pointer" }}

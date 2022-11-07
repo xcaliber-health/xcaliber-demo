@@ -22,6 +22,7 @@ const CreateAppointment = ({
   onTimeChange,
   updatePatientId,
   disabled,
+  updateCurrentTimezoneDate,
 }) => {
   const [value, setValue] = React.useState(null);
   useEffect(() => {
@@ -30,11 +31,12 @@ const CreateAppointment = ({
   useEffect(() => {
     if (value) {
       const dateObject = new Date(value);
-      onDateChange(
+      updateCurrentTimezoneDate(
         `${dateObject.getFullYear()}-${
           dateObject.getMonth() + 1
-        }-${dateObject.getDate()}T00:00:00Z`
+        }-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}:${dateObject.getSeconds()}Z`
       );
+      onDateChange(dateObject);
     }
   }, [value]);
 
