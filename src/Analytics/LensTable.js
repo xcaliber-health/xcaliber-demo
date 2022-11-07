@@ -9,6 +9,7 @@ import 'ag-grid-enterprise';
 import { useEffect } from "react";
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 export default function LensTable({ tableRowData, flag }) {
+  console.log(tableRowData);
   const gridRef = useRef();
   const theme = useTheme();
   const [allergyData, setAllergyData] = useState([]);
@@ -41,16 +42,16 @@ export default function LensTable({ tableRowData, flag }) {
       if (row.Immunizations && row.Immunizations !== null) {
         immunizationArray.push(row);
       }
-      if (row.FamilyHistory) {
+      if (row.FamilyHistory && row.FamilyHistory !== null) {
         familyHistoryArray.push(row);
       }
-      if (row.Problems) {
+      if (row.Problems && row.Problems !== null) {
         problemArray.push(row);
       }
-      if (row.Procedures) {
+      if (row.Procedures && row.Procedures !== null) {
         procedureArray.push(row);
       }
-      if (row.Vitals) {
+      if (row.Vitals && row.Vitals !== null) {
         vitalsArray.push(row)
       }
     })
@@ -144,7 +145,7 @@ export default function LensTable({ tableRowData, flag }) {
     return (
       <div >
         <div>
-          {(allergyData.length !== 0) &&
+          {((allergyData.length !== 0)&& Object.keys(allergyData[0]?.Allergies[0]).length!==0 )&&
             <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
               <Typography>Allergies</Typography>
               <AgGridReact
@@ -156,7 +157,7 @@ export default function LensTable({ tableRowData, flag }) {
                 masterDetail={true}
                 defaultColDef={defaultColDef} />
             </div>}
-          {(familyHistoryData.length !== 0) &&
+          {((familyHistoryData.length !== 0)&& Object.keys(familyHistoryData[0]?.FamilyHistory[0]).length!==0 ) &&
             <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
               <Typography>Family_History</Typography>
               <AgGridReact
@@ -168,7 +169,7 @@ export default function LensTable({ tableRowData, flag }) {
                 masterDetail={true}
                 defaultColDef={defaultColDef} />
             </div>}
-          {(ImmunizationData.length !== 0) &&
+          {((ImmunizationData.length !== 0)&& Object.keys(ImmunizationData[0]?.Immunizations[0]).length!==0 ) &&
             <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
               <Typography>Immunizations</Typography>
               <AgGridReact
@@ -180,7 +181,7 @@ export default function LensTable({ tableRowData, flag }) {
                 masterDetail={true}
                 defaultColDef={defaultColDef} />
             </div>}
-          {(procedureData.length !== 0) &&
+          {((procedureData.length !== 0)&& Object.keys(procedureData[0]?.Procedures[0]).length!==0 ) &&
             <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
               <Typography>Procedures</Typography>
               <AgGridReact
@@ -192,7 +193,7 @@ export default function LensTable({ tableRowData, flag }) {
                 masterDetail={true}
                 defaultColDef={defaultColDef} />
             </div>}
-          {(vitalsData.length !== 0) &&
+          {((vitalsData.length !== 0)&& Object.keys(vitalsData[0]?.Vitals[0]).length!==0 )&&
             <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
               <Typography>Vitals</Typography>
               <AgGridReact
@@ -204,7 +205,7 @@ export default function LensTable({ tableRowData, flag }) {
                 masterDetail={true}
                 defaultColDef={defaultColDef} />
             </div>}
-          {(problemData.length !== 0) &&
+          {((problemData.length !== 0) && Object.keys(problemData[0]?.Problems[0]).length!==0 )&&
             <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
               <Typography>Problems</Typography>
               <AgGridReact
