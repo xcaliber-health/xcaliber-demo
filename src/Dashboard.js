@@ -184,10 +184,13 @@ function DashboardContent() {
             <MenuIcon />
           </IconButton>
           <Grid justifyContent="space-between" direction="flex" container>
-          <Box display = "flex" alignItems={"center"}> 
-          <Typography variant="h5">XCALIBER-DEMO</Typography>
-          <Typography variant = "body2" sx={{paddingLeft : "24px"}}> Do not add any real PII/PHI data here.</Typography>
-          </Box>
+            <Box display="flex" alignItems={"center"}>
+              <Typography variant="h5">XCALIBER-DEMO</Typography>
+              <Typography variant="body2" sx={{ paddingLeft: "24px" }}>
+                {" "}
+                Do not add any real PII/PHI data here.
+              </Typography>
+            </Box>
             <Dialog direction="column" open={isModalOpen}>
               <Grid
                 container
@@ -237,6 +240,7 @@ function DashboardContent() {
                       );
                       // dispatch({ type: sourceState });
                       setIsModalOpen(false);
+                      navigate("/p360");
                       window.location.reload();
                     }}
                   >

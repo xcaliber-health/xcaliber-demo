@@ -93,7 +93,6 @@ const Chart = () => {
             display: "",
           },
         ],
-        text: "Collaborative 1",
       },
       status: "booked",
       extension:
@@ -241,10 +240,7 @@ const Chart = () => {
                 localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
                   ? reason
                   : "422",
-              display:
-                localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
-                  ? reason
-                  : "Collaborative 1",
+              display: reason,
             },
           ],
         },
