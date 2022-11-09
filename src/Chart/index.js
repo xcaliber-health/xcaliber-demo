@@ -351,7 +351,6 @@ const Chart = () => {
       const response = await AppointmentService.createAppointment(
         appointmentPayload
       );
-      console.log(response);
       const createdAppointment = await AppointmentService.getAppointmentById(
         response
       );
@@ -469,7 +468,9 @@ const Chart = () => {
         setLoading(false);
       });
   }, []);
-
+  useEffect(() => {
+    console.log(patientAllergies);
+  });
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -939,8 +940,15 @@ const Chart = () => {
                           </TableCell>
                           <TableCell align="left">
                             <Typography>
-                              {dateObject?.DAY ?? "null"} {dateObject?.MONTH}{" "}
-                              {dateObject?.DATE}
+                              {Object.values(dateObject).every((dateObj) => {
+                                return (
+                                  dateObj !== "Invalid Choice" &&
+                                  dateObj !== NaN
+                                );
+                              })
+                                ? `${dateObject?.DAY} ${dateObject?.MONTH}
+                                ${dateObject?.DATE}`
+                                : `null`}
                             </Typography>
                           </TableCell>
                           <TableCell align="left" component="th" scope="row">
@@ -1085,8 +1093,15 @@ const Chart = () => {
                           </TableCell>
                           <TableCell align="left">
                             <Typography>
-                              {dateObject?.DAY} {dateObject?.MONTH}{" "}
-                              {dateObject?.DATE}
+                              {Object.values(dateObject).every((dateobj) => {
+                                return (
+                                  dateobj !== "Invalid Choice" &&
+                                  dateobj !== NaN
+                                );
+                              })
+                                ? `${dateObject?.DAY} ${dateObject?.MONTH} $
+                              {dateObject?.DATE}`
+                                : "null"}
                             </Typography>
                           </TableCell>
                           <TableCell align="left" component="th" scope="row">
