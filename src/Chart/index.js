@@ -723,8 +723,9 @@ const Chart = () => {
                     patientVitals?.map((vital) => {
                       let dateObject = Helper.extractFieldsFromDate(
                         vital?.resource?.extension?.find((ext) => {
-                          return ext?.url?.endsWith(
-                            "observation-document-date"
+                          return (
+                            ext?.url?.endsWith("observation-document-date") ||
+                            ext?.url?.endsWith("created-date")
                           );
                         })?.valueString
                       );
@@ -743,22 +744,22 @@ const Chart = () => {
                           <TableCell>
                             <Grid display="flex">
                               <Typography>
-                                {vital?.resource?.code?.coding?.[0]?.display ===
+                                {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
                                 "body mass index"
                                   ? vital?.resource?.valueString
-                                  : vital?.resource?.code?.coding?.[0]
-                                      ?.display === "Blood Pressure"
+                                  : vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
+                                    "blood pressure"
                                   ? vital?.resource?.component[0]?.valueQuantity
                                       .value
                                   : vital?.resource?.valueQuantity.value}
                               </Typography>
-                              {vital?.resource?.code?.coding?.[0]?.display ===
-                                "Blood Pressure" && (
+                              {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
+                                "blood pressure" && (
                                 <>
                                   <Typography>/</Typography>
                                   <Typography>
-                                    {vital?.resource?.code?.coding?.[0]
-                                      ?.display === "Blood Pressure"
+                                    {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
+                                    "blood pressure"
                                       ? vital?.resource?.component[1]
                                           ?.valueQuantity.value
                                       : ""}
