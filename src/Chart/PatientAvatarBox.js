@@ -22,6 +22,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Paper from "@mui/material/Paper";
 import Elation from "../../src/static/E-Favicon-150x150.png";
+import Athena from "../../src/static/athena_logo.ico";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DetailsTab from "./TabComponents/DetailsTab";
@@ -71,12 +72,14 @@ const PatientDetailsCard = ({
               {`Patient | ${calculateAge(
                 parseInt(patientDetails?.birthDate?.slice(0, 4))
               )} | ${
-                patientDetails?.extension?.find((extension) => {
-                  return (
-                    extension?.url?.endsWith("legal-sex") ||
-                    extension?.url?.endsWith("us-core-birthsex")
-                  );
-                })?.valueCode
+                patientDetails?.gender
+                  ? patientDetails?.gender
+                  : patientDetails?.extension?.find((extension) => {
+                      return (
+                        extension?.url?.endsWith("legal-sex") ||
+                        extension?.url?.endsWith("us-core-birthsex")
+                      );
+                    })?.valueCode
               }`}
             </Grid>
 
@@ -93,11 +96,20 @@ const PatientDetailsCard = ({
               <IconButton
                 onClick={() => {
                   window.open(
-                    `https://sandbox.elationemr.com/patient/${patientDetails?.id}/req-action/`
+                    localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
+                      ? `https://sandbox.elationemr.com/patient/${patientDetails?.id}/req-action/`
+                      : `https://preview.athenahealth.com/195903/5/globalframeset.esp?MAIN=https%3A%2F%2Fpreview%2Eathenahealth%2Ecom%2F195903%2F5%2Fax%2Fdashboard`
                   );
                 }}
               >
-                <img src={Elation} style={{ height: "24px", width: "24px" }} />
+                <img
+                  src={
+                    localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION"
+                      ? Elation
+                      : Athena
+                  }
+                  style={{ height: "24px", width: "24px" }}
+                />
               </IconButton>
             </Tooltip>
           </Grid>
@@ -176,6 +188,7 @@ const PatientDetailsCard = ({
           >
             {upcomingAppointments &&
               upcomingAppointments?.map((appointment, index) => {
+                console.log(appointment);
                 const appointmentDateDetailObject =
                   Helper.extractFieldsFromDate(appointment?.resource?.start);
                 return (
@@ -190,7 +203,7 @@ const PatientDetailsCard = ({
                     <span>
                       {
                         appointment?.resource?.appointmentType?.coding?.[0]
-                          ?.code
+                          ?.display
                       }{" "}
                       ,{" "}
                     </span>{" "}

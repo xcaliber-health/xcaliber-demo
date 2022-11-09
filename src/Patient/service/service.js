@@ -247,7 +247,12 @@ export const deParsefunc = (item) => {
           },
         ],
         birthDate: finalDate,
-        gender: "Identifies as Male",
+        gender:
+          item?.sex === "man"
+            ? "Identifies as Male"
+            : item?.sex === "woman"
+            ? `Identifies as Female`
+            : `Gender non-conforming (neither exclusively male nor female)`,
         maritalStatus: {
           coding: [
             {

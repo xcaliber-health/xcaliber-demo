@@ -25,6 +25,9 @@ const ViewPatientsTable = (props) => {
     patients: [],
     totalCount: 0,
   });
+  useEffect(() => {
+    console.log(newData);
+  });
 
   const func = async () => {
     setAwait(true);
@@ -61,7 +64,7 @@ const ViewPatientsTable = (props) => {
   if (newData.totalCount === 0) {
     return <div />;
   }
-  console.log(newData)
+
   return (
     <TableContainer component={Paper} style={{ marginTop: theme.spacing(3) }}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -89,17 +92,23 @@ const ViewPatientsTable = (props) => {
               style={{ cursor: "pointer" }}
             >
               <TableCell align="left">
-                <Typography color = "primary">
+                <Typography color="primary">
                   {patient.familyName} {patient.givenName}
                 </Typography>
               </TableCell>
               <TableCell align="left">
-                <Typography>{ patient?.extension?.find((extension) => {
-                  return (
-                    extension?.url ===
-                    "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
-                  );
-                })?.valueCode}</Typography>
+                <Typography>
+                  {patient?.gender ??
+                    patient?.extension?.find((extension) => {
+                      return (
+                        extension?.url ===
+                        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
+                      );
+                    })?.valueCode ??
+                    patient?.extension?.find((extension) => {
+                      return extension?.url?.endsWith("legal-sex");
+                    })?.valueCode}
+                </Typography>
               </TableCell>
               <TableCell align="left" component="th" scope="row">
                 <Typography>{formatDate(patient.dateOfBirth)}</Typography>
