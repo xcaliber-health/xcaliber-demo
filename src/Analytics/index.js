@@ -9,6 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { Typography } from "@mui/material";
 import { DataObject } from "@mui/icons-material";
+import { MobileDatePicker } from "@mui/x-date-pickers";
 export default function Terminology() {
   let result = []
   const theme = useTheme();
@@ -91,6 +92,12 @@ export default function Terminology() {
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
+            <Button variant="contained" onClick={async () => {
+              if (start !== null || end !== null) {
+                setStart(null);
+                setEnd(null);
+              }
+            }} sx={{ marginLeft: theme.spacing(10), marginTop: theme.spacing(0),marginBottom:theme.spacing(2) }}>Clear</Button>
             <Button
               onClick={async () => {
                 setLoading(true);
@@ -104,7 +111,7 @@ export default function Terminology() {
                 setFlag(1);
               }}
               variant="contained"
-              sx={{ marginLeft: theme.spacing(45), marginTop: "5px" }}
+              sx={{ marginLeft: theme.spacing(25), marginTop: theme.spacing(0),marginBottom:theme.spacing(2)}}
             >
               {BUTTON_LABELS.RUN}
             </Button>
