@@ -1,21 +1,15 @@
-import {
-  Drawer,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Drawer, Grid, Typography } from "@mui/material";
 import { Button, TextField, Box } from "@mui/material";
 import { makeStyles } from "@material-ui/styles";
 import React, { useEffect, useState } from "react";
 import { VitalService } from "../../services/P360/vitalService";
-const useStyles = makeStyles(() => (
-  {
-    typography:
-    {
-      paddingTop: "20px",
-      paddingRight: "5px",
-      paddingLeft: "5px"
-    }
-  }))
+const useStyles = makeStyles(() => ({
+  typography: {
+    paddingTop: "20px",
+    paddingRight: "5px",
+    paddingLeft: "5px",
+  },
+}));
 
 export default function Vitals({
   patientDetails,
@@ -32,7 +26,7 @@ export default function Vitals({
   oncircumChange,
   onSysChange,
   onDiaChange,
-  onVitalsChange
+  onVitalsChange,
 }) {
   const classes = useStyles();
   let heightValue = 0;
@@ -44,34 +38,34 @@ export default function Vitals({
   const [bodyTemp, setBodyTemp] = useState();
   const [pluse, setPluse] = useState();
   const [rr, setRr] = useState();
-  const [bmi, setBmi] = useState('');
+  const [bmi, setBmi] = useState("");
   const [oxy, setOxy] = useState();
   const [headCir, setHeadCir] = useState();
-
 
   const onCreate = async () => {
     const resource = {
       resourceType: "Observation",
       subject: {
-        reference: `Patient/${patientDetails?.id}`
+        reference: `Patient/${patientDetails?.id}`,
       },
       performer: [
         {
-          reference: "Organization/140857911017476"
-        }
+          reference: "Organization/140857911017476",
+        },
       ],
       category: [
         {
-          "coding": [
+          coding: [
             {
-              "system": "http://terminology.hl7.org/CodeSystem/observation-category",
-              "code": "vital-signs",
-              "display": "Vital Signs"
-            }
-          ]
-        }
-      ]
-    }
+              system:
+                "http://terminology.hl7.org/CodeSystem/observation-category",
+              code: "vital-signs",
+              display: "Vital Signs",
+            },
+          ],
+        },
+      ],
+    };
     const entries = [];
     if (sys && dia) {
       entries.push({
@@ -80,40 +74,42 @@ export default function Vitals({
           code: {
             coding: [
               {
+                system: "http://loinc.org",
                 code: "85354-9",
-                display: "Blood Pressure"
-              }
-            ]
+                display: "Blood Pressure",
+              },
+            ],
           },
           component: [
             {
               code: {
                 coding: [
                   {
-                    code: "8480-6"
-                  }
-                ]
+                    system: "http://loinc.org",
+                    code: "8480-6",
+                  },
+                ],
               },
               valueQuantity: {
-                value: sys
-              }
+                value: sys,
+              },
             },
             {
               code: {
                 coding: [
                   {
-                    code: "8462-4"
-                  }
-                ]
+                    system: "http://loinc.org",
+                    code: "8462-4",
+                  },
+                ],
               },
               valueQuantity: {
-                value: dia
-              }
-            }
-
+                value: dia,
+              },
+            },
           ],
-        }
-      })
+        },
+      });
     }
     if (sys && !dia) {
       alert("Please provide both systolic and diastolic blood presure");
@@ -127,158 +123,194 @@ export default function Vitals({
       heightValue = 12 * height;
     }
     if (inch) {
-      const sum = parseInt(inch) + parseInt(heightValue)
+      const sum = parseInt(inch) + parseInt(heightValue);
       entries.push({
         resource: {
           ...resource,
           code: {
-            "coding": [{ 
-              "code":"8302-2",
-              "display": "Height"}]
+            coding: [
+              {
+                system: "http://loinc.org",
+                code: "8302-2",
+                display: "Height",
+              },
+            ],
           },
           valueQuantity: {
-            "unit": "inches",
-            "value": sum
-          }
-        }
-      })
+            unit: "inches",
+            value: sum,
+          },
+        },
+      });
     }
     if (weight) {
       entries.push({
         resource: {
           ...resource,
           code: {
-            "coding": [{ 
-              "code": "29463-7",
-              "display": "Weight"
-            }]
+            coding: [
+              {
+                system: "http://loinc.org",
+                code: "29463-7",
+                display: "Weight",
+              },
+            ],
           },
           valueQuantity: {
-            "unit": "lbs",
-            "value": weight
-          }
-        }
-      })
+            unit: "lbs",
+            value: weight,
+          },
+        },
+      });
     }
     if (bmi) {
       entries.push({
         resource: {
           ...resource,
           code: {
-            "coding": [{ "display": "body mass index" }]
+            coding: [
+              { system: "http://loinc.org", display: "body mass index" },
+            ],
           },
-          valueString: bmi
-        }
-      })
+          valueString: bmi,
+        },
+      });
     }
     if (oxy) {
       entries.push({
         resource: {
           ...resource,
           code: {
-
-            "coding": [{ 
-              "code": "59408-5",
-              "display": "Oxygen Saturation"}]
+            coding: [
+              {
+                system: "http://loinc.org",
+                code: "59408-5",
+                display: "Oxygen Saturation",
+              },
+            ],
           },
           valueQuantity: {
-            "unit": "%",
-            "value": oxy
-          }
-        }
-      })
+            unit: "%",
+            value: oxy,
+          },
+        },
+      });
     }
     if (pluse) {
       entries.push({
         resource: {
           ...resource,
           code: {
-
-            "coding": [{
-              "code": "8867-4",
-              "display": "Pulse"}]
+            coding: [
+              {
+                system: "http://loinc.org",
+                code: "8867-4",
+                display: "Pulse",
+              },
+            ],
           },
           valueQuantity: {
-            "unit": "bpm",
-            "value": pluse
-          }
-        }
-      })
+            unit: "bpm",
+            value: pluse,
+          },
+        },
+      });
     }
     if (bodyTemp) {
       entries.push({
         resource: {
           ...resource,
           code: {
-            "coding": [{
-            "code": "8310-5",
-            "display": "Body Temparature"}]
+            coding: [
+              {
+                system: "http://loinc.org",
+                code: "8310-5",
+                display: "Body Temparature",
+              },
+            ],
           },
           valueQuantity: {
-            "unit": "fahrenheit",
-            "value": bodyTemp
-          }
-        }
-      })
+            unit: "fahrenheit",
+            value: bodyTemp,
+          },
+        },
+      });
     }
     if (rr) {
       entries.push({
         resource: {
           ...resource,
           code: {
-            "coding": [{
-              "code": "9279-1",
-              "display": "Respiration Rate"}]
+            coding: [
+              {
+                system: "http://loinc.org",
+                code: "9279-1",
+                display: "Respiration Rate",
+              },
+            ],
           },
           valueQuantity: {
-            "unit": "bpm",
-            "value": rr
-          }
-        }
-      })
+            unit: "bpm",
+            value: rr,
+          },
+        },
+      });
     }
     if (headCir) {
       entries.push({
         resource: {
           ...resource,
           code: {
-            "coding": [{ "display": "Head Circumference" }]
+            coding: [
+              { system: "http://loinc.org", display: "Head Circumference" },
+            ],
           },
           valueQuantity: {
-            "unit": "cm",
-            "value": headCir
-          }
-        }
-      })
+            unit: "cm",
+            value: headCir,
+          },
+        },
+      });
     }
 
     const vitalsPayLoad = {
+      context: {
+        departmentId: "150",
+      },
       data: {
         resourceType: "Bundle",
-        entry: entries
-      }
-    }
+        entry: entries,
+      },
+    };
 
     await VitalService.createVitals(vitalsPayLoad);
     onVitalsClick();
-  }
+  };
 
   return (
     <React.Fragment>
       <Typography variant="h5">Create Vitals</Typography>
-      <Grid container display={"flex"} justifyContent="space-between" sx={{ padding: '8px 0px 8px 0px' }}>
+      <Grid
+        container
+        display={"flex"}
+        justifyContent="space-between"
+        sx={{ padding: "8px 0px 8px 0px" }}
+      >
         <Grid item>
           <Typography className={classes.typography}>Blood Pressure</Typography>
         </Grid>
-        <Grid item display={"flex"} sx={{ padding: '8px 0px 8px 0px', width: '50%' }}>
+        <Grid
+          item
+          display={"flex"}
+          sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+        >
           <TextField
             placeholder="Sys"
             required
             id="sys"
             onChange={(e) => {
               // onSysChange(e.target.value);
-              setSys(e.target.value)
-
+              setSys(e.target.value);
             }}
           ></TextField>
           <Typography className={classes.typography}>/</Typography>
@@ -293,20 +325,39 @@ export default function Vitals({
           ></TextField>
         </Grid>
       </Grid>
-      <Grid container display={"flex"} justifyContent="space-between" sx={{ padding: '8px 0px 8px 0px' }}>
+      <Grid
+        container
+        display={"flex"}
+        justifyContent="space-between"
+        sx={{ padding: "8px 0px 8px 0px" }}
+      >
         <Grid item>
-          <Typography sx={{ paddingTop: "20px", marginRight: "20px" }} className={classes.typography}>Height</Typography>
+          <Typography
+            sx={{ paddingTop: "20px", marginRight: "20px" }}
+            className={classes.typography}
+          >
+            Height
+          </Typography>
         </Grid>
-        <Grid item display={"flex"} sx={{ padding: '8px 0px 8px 0px', width: '50%' }}>
+        <Grid
+          item
+          display={"flex"}
+          sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+        >
           <TextField
             required
             id="feet"
             onChange={(e) => {
               // onHeightChange(e.target.value);
-              setHeight(e.target.value)
+              setHeight(e.target.value);
             }}
           ></TextField>
-          <Typography sx={{ paddingTop: "20px" }} className={classes.typography}>ft</Typography>
+          <Typography
+            sx={{ paddingTop: "20px" }}
+            className={classes.typography}
+          >
+            ft
+          </Typography>
           <TextField
             required
             id="inch"
@@ -315,14 +366,28 @@ export default function Vitals({
               setInches(e.target.value);
             }}
           ></TextField>
-          <Typography sx={{ paddingTop: "20px" }} className={classes.typography}>in</Typography>
+          <Typography
+            sx={{ paddingTop: "20px" }}
+            className={classes.typography}
+          >
+            in
+          </Typography>
         </Grid>
       </Grid>
-      <Grid container display={"flex"} justifyContent="space-between" sx={{ padding: '8px 0px 8px 0px' }}>
+      <Grid
+        container
+        display={"flex"}
+        justifyContent="space-between"
+        sx={{ padding: "8px 0px 8px 0px" }}
+      >
         <Grid item>
           <Typography className={classes.typography}>Weight</Typography>
         </Grid>
-        <Grid item display={"flex"} sx={{ padding: '8px 0px 8px 0px', width: '50%' }}>
+        <Grid
+          item
+          display={"flex"}
+          sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+        >
           <TextField
             required
             id="weight"
@@ -330,43 +395,81 @@ export default function Vitals({
             // onFocusOut={onWeightChange(weight)}
             // onFocusOut={onWeightChange(weight)}
             onChange={(e) => {
-              setWeight(e.target.value)
+              setWeight(e.target.value);
               // onWeightChange(e.target.value);
             }}
           ></TextField>
-          <Typography sx={{ paddingTop: "20px" }} className={classes.typography}>lbs</Typography>
+          <Typography
+            sx={{ paddingTop: "20px" }}
+            className={classes.typography}
+          >
+            lbs
+          </Typography>
         </Grid>
       </Grid>
-      <Grid container display={"flex"} justifyContent="space-between" sx={{ padding: '8px 0px 8px 0px' }}>
-        <Grid container display={"flex"} justifyContent="space-between" sx={{ padding: '8px 0px 8px 0px', width: "50%" }}>
+      <Grid
+        container
+        display={"flex"}
+        justifyContent="space-between"
+        sx={{ padding: "8px 0px 8px 0px" }}
+      >
+        <Grid
+          container
+          display={"flex"}
+          justifyContent="space-between"
+          sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+        >
           <Grid item sx={{ width: "50%" }}>
-            <Typography sx={{ paddingTop: "20px", marginRight: "55px" }} className={classes.typography}>BMI</Typography>
+            <Typography
+              sx={{ paddingTop: "20px", marginRight: "55px" }}
+              className={classes.typography}
+            >
+              BMI
+            </Typography>
           </Grid>
-          <Grid item display={"flex"} sx={{ padding: '8px 0px 8px 0px', width: '50%' }}>
+          <Grid
+            item
+            display={"flex"}
+            sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+          >
             <TextField
               required
               id="bmi"
               value={bmi}
               onChange={(e) => {
-                setBmi(e.target.value)
+                setBmi(e.target.value);
                 // onbmiChange(bmi);
                 // console.log(bmi);
               }}
             ></TextField>
           </Grid>
         </Grid>
-        <Grid container display={"flex"} justifyContent="space-between" sx={{ padding: '8px 0px 8px 0px', width: '50%' }}>
+        <Grid
+          container
+          display={"flex"}
+          justifyContent="space-between"
+          sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+        >
           <Grid item sx={{ width: "50%" }}>
-            <Typography sx={{ paddingTop: "20px", marginLeft: "10px" }} className={classes.typography}>Oxygen Saturation</Typography>
+            <Typography
+              sx={{ paddingTop: "20px", marginLeft: "10px" }}
+              className={classes.typography}
+            >
+              Oxygen Saturation
+            </Typography>
           </Grid>
-          <Grid item display={"flex"} sx={{ padding: '8px 0px 8px 0px', width: '50%' }}>
+          <Grid
+            item
+            display={"flex"}
+            sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+          >
             <TextField
               required
               placeholder="%"
               id="oxygen"
               onChange={(e) => {
                 // onOxygenChange(e.target.value);
-                setOxy(e.target.value)
+                setOxy(e.target.value);
               }}
             ></TextField>
             {/* <Typography sx={{ paddingTop: "20px" }} className={classes.typography}>%</Typography> */}
@@ -374,12 +477,31 @@ export default function Vitals({
         </Grid>
       </Grid>
 
-      <Grid container display={"flex"} justifyContent="space-between" sx={{ padding: '8px 0px 8px 0px' }}>
-        <Grid container display={"flex"} justifyContent="space-between" sx={{ padding: '8px 0px 8px 0px', width: "50%" }}>
+      <Grid
+        container
+        display={"flex"}
+        justifyContent="space-between"
+        sx={{ padding: "8px 0px 8px 0px" }}
+      >
+        <Grid
+          container
+          display={"flex"}
+          justifyContent="space-between"
+          sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+        >
           <Grid item sx={{ width: "50%" }}>
-            <Typography sx={{ paddingTop: "20px", marginRight: "25px" }} className={classes.typography}>Pulse Rate</Typography>
+            <Typography
+              sx={{ paddingTop: "20px", marginRight: "25px" }}
+              className={classes.typography}
+            >
+              Pulse Rate
+            </Typography>
           </Grid>
-          <Grid item display={"flex"} sx={{ padding: '8px 0px 8px 0px', width: '50%' }}>
+          <Grid
+            item
+            display={"flex"}
+            sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+          >
             <TextField
               required
               placeholder="bpm"
@@ -392,11 +514,25 @@ export default function Vitals({
             {/* <Typography sx={{ paddingTop: "20px" }} className={classes.typography}>bpm</Typography> */}
           </Grid>
         </Grid>
-        <Grid container display={"flex"} justifyContent="space-between" sx={{ padding: '8px 0px 8px 0px', width: "50%" }}>
+        <Grid
+          container
+          display={"flex"}
+          justifyContent="space-between"
+          sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+        >
           <Grid item sx={{ width: "50%" }}>
-            <Typography sx={{ paddingTop: "20px", marginLeft: "10px" }} className={classes.typography}>Body Temparature</Typography>
+            <Typography
+              sx={{ paddingTop: "20px", marginLeft: "10px" }}
+              className={classes.typography}
+            >
+              Body Temparature
+            </Typography>
           </Grid>
-          <Grid item display={"flex"} sx={{ padding: '8px 0px 8px 0px', width: '50%' }}>
+          <Grid
+            item
+            display={"flex"}
+            sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+          >
             <TextField
               required
               placeholder="fahrenheit"
@@ -411,12 +547,31 @@ export default function Vitals({
         </Grid>
       </Grid>
 
-      <Grid container display={"flex"} justifyContent="space-between" sx={{ padding: '8px 0px 8px 0px' }}>
-        <Grid container display={"flex"} justifyContent="space-between" sx={{ padding: '8px 0px 8px 0px', width: "50%" }}>
+      <Grid
+        container
+        display={"flex"}
+        justifyContent="space-between"
+        sx={{ padding: "8px 0px 8px 0px" }}
+      >
+        <Grid
+          container
+          display={"flex"}
+          justifyContent="space-between"
+          sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+        >
           <Grid item sx={{ width: "50%" }}>
-            <Typography sx={{ paddingTop: "20px" }} className={classes.typography}>Respiration Rate</Typography>
+            <Typography
+              sx={{ paddingTop: "20px" }}
+              className={classes.typography}
+            >
+              Respiration Rate
+            </Typography>
           </Grid>
-          <Grid item display={"flex"} sx={{ padding: '8px 0px 8px 0px', width: '50%' }}>
+          <Grid
+            item
+            display={"flex"}
+            sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+          >
             <TextField
               required
               placeholder="bpm"
@@ -429,11 +584,25 @@ export default function Vitals({
             {/* <Typography sx={{ paddingTop: "20px" }} className={classes.typography}>bpm</Typography> */}
           </Grid>
         </Grid>
-        <Grid container display={"flex"} justifyContent="space-between" sx={{ padding: '8px 0px 8px 0px', width: "50%" }}>
+        <Grid
+          container
+          display={"flex"}
+          justifyContent="space-between"
+          sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+        >
           <Grid item sx={{ width: "50%" }}>
-            <Typography sx={{ paddingTop: "20px", marginLeft: "10px" }} className={classes.typography}>Head Circumference</Typography>
+            <Typography
+              sx={{ paddingTop: "20px", marginLeft: "10px" }}
+              className={classes.typography}
+            >
+              Head Circumference
+            </Typography>
           </Grid>
-          <Grid item display={"flex"} sx={{ padding: '8px 0px 8px 0px', width: '50%' }}>
+          <Grid
+            item
+            display={"flex"}
+            sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+          >
             <TextField
               required
               placeholder="cm"
@@ -447,8 +616,21 @@ export default function Vitals({
           </Grid>
         </Grid>
       </Grid>
-      <Box sx={{ display: "flex", width: "100%", padding: '8px 0px 8px 0px', justifyContent: "flex-end" }}>
-        <Button variant="contained" onClick={() => { onCreate() }} sx={{ marginRight: "10px" }}>
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          padding: "8px 0px 8px 0px",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Button
+          variant="contained"
+          onClick={() => {
+            onCreate();
+          }}
+          sx={{ marginRight: "10px" }}
+        >
           Create Vitals
         </Button>
         <Button onClick={handleClose} variant="contained">

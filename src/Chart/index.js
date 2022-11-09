@@ -78,9 +78,11 @@ const Chart = () => {
     setValueDate(newValue);
   };
   const [appointmentPayload, setAppointmentPayload] = useState({
+    context: {
+      departmentId: "150",
+    },
     data: {
       resourceType: "Appointment",
-      id: 141000308031578,
       start: "",
       minutesDuration: 15,
       appointmentType: {
@@ -91,11 +93,37 @@ const Chart = () => {
             display: "",
           },
         ],
+        text: "Collaborative 1",
       },
+      status: "booked",
+      extension:
+        localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
+          ? [
+              {
+                url: "http://xcaliber-fhir/structureDefinition/copay",
+                valueString: {
+                  collectedforother: 0,
+                  collectedforappointment: 0,
+                  insurancecopay: 0,
+                },
+              },
+              {
+                url: "http://xcaliber-fhir/structureDefinition/copay",
+                valueString: 0,
+              },
+              {
+                url: "http://xcaliber-fhir/structureDefinition/department-id",
+                valueInteger: "150",
+              },
+            ]
+          : [],
       participant: [
         {
           actor: {
-            reference: "Practitioner/140857915539458",
+            reference:
+              localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION"
+                ? "Practitioner/140857915539458"
+                : "Practitioner/89",
           },
         },
         {
@@ -103,6 +131,13 @@ const Chart = () => {
             reference: "HealthcareService/140857911017476",
           },
         },
+        localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION"
+          ? {}
+          : {
+              actor: {
+                reference: "Location/1",
+              },
+            },
       ],
     },
   });
@@ -193,14 +228,23 @@ const Chart = () => {
 
   const onReasonChange = (reason) => {
     setAppointmentPayload({
+      context: {
+        departmentId: "150",
+      },
       data: {
         ...appointmentPayload?.data,
         appointmentType: {
           coding: [
             {
               system: "https://hl7.org/fhir/v2/ValueSet/appointment-type",
-              code: reason,
-              display: reason,
+              code:
+                localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
+                  ? reason
+                  : "422",
+              display:
+                localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
+                  ? reason
+                  : "Collaborative 1",
             },
           ],
         },
@@ -216,10 +260,18 @@ const Chart = () => {
       dateObject.setMinutes(
         dateObject.getMinutes() - dateObject.getTimezoneOffset()
       );
-    let dateInUtc = `${dateObject.getFullYear()}-${dateObject.getMonth() + 1
-      }-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}:${dateObject.getSeconds()}Z`;
+    let hourValue =
+      dateObject.getHours() <= 9
+        ? `0${dateObject.getHours()}`
+        : `${dateObject.getHours()}`;
+    let dateInUtc = `${dateObject.getFullYear()}-${
+      dateObject.getMonth() + 1
+    }-${dateObject.getDate()}T${hourValue}:${dateObject.getMinutes()}:0${dateObject.getSeconds()}Z`;
 
     setAppointmentPayload({
+      context: {
+        departmentId: "150",
+      },
       data: {
         ...appointmentPayload?.data,
         start: dateInUtc,
@@ -246,16 +298,27 @@ const Chart = () => {
       finalDateValue.setMinutes(
         finalDateValue.getMinutes() - finalDateValue.getTimezoneOffset()
       );
+    let hourValue =
+      dateObject.getHours() <= 9
+        ? `0${dateObject.getHours()}`
+        : `${dateObject.getHours()}`;
     setAppointmentPayload({
+      context: {
+        departmentId: "150",
+      },
       data: {
         ...appointmentPayload?.data,
-        start: `${finalDateValue.getFullYear()}-${finalDateValue.getMonth() + 1
-          }-${finalDateValue.getDate()}T${finalDateValue.getHours()}:${finalDateValue.getMinutes()}:${finalDateValue.getSeconds()}Z`,
+        start: `${finalDateValue.getFullYear()}-${
+          finalDateValue.getMonth() + 1
+        }-${finalDateValue.getDate()}T${hourValue}:${finalDateValue.getMinutes()}:${finalDateValue.getSeconds()}Z`,
       },
     });
   };
   const updatePatientId = (patientId) => {
     setAppointmentPayload({
+      context: {
+        departmentId: "150",
+      },
       data: {
         ...appointmentPayload?.data,
         participant: [
@@ -407,7 +470,6 @@ const Chart = () => {
   useEffect(() => {
     { initialiseAllergyOptions() }
   }, []);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -661,8 +723,9 @@ const Chart = () => {
                     patientVitals?.map((vital) => {
                       let dateObject = Helper.extractFieldsFromDate(
                         vital?.resource?.extension?.find((ext) => {
-                          return ext?.url?.endsWith(
-                            "observation-document-date"
+                          return (
+                            ext?.url?.endsWith("observation-document-date") ||
+                            ext?.url?.endsWith("created-date")
                           );
                         })?.valueString
                       );
@@ -681,23 +744,24 @@ const Chart = () => {
                           <TableCell>
                             <Grid display="flex">
                               <Typography>
-                                {vital?.resource?.code?.coding?.[0]?.display ===
-                                  "body mass index"
+                                {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
+                                "body mass index"
                                   ? vital?.resource?.valueString
-                                  : vital?.resource?.code?.coding?.[0]
-                                    ?.display === "Blood Pressure"
-                                    ? vital?.resource?.component[0]?.valueQuantity
+                                  : vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
+                                    "blood pressure"
+                                  ? vital?.resource?.component[0]?.valueQuantity
                                       .value
                                     : vital?.resource?.valueQuantity.value}
                               </Typography>
-                              {vital?.resource?.code?.coding?.[0]?.display ===
-                                "Blood Pressure" && (
-                                  <>
-                                    <Typography>/</Typography>
-                                    <Typography>
-                                      {vital?.resource?.code?.coding?.[0]
-                                        ?.display === "Blood Pressure"
-                                        ? vital?.resource?.component[1]
+
+                              {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
+                                "blood pressure" && (
+                                <>
+                                  <Typography>/</Typography>
+                                  <Typography>
+                                    {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
+                                    "blood pressure"
+                                      ? vital?.resource?.component[1]
                                           ?.valueQuantity.value
                                         : ""}
                                     </Typography>
@@ -876,8 +940,15 @@ const Chart = () => {
                           </TableCell>
                           <TableCell align="left">
                             <Typography>
-                              {dateObject?.DAY ?? "null"} {dateObject?.MONTH}{" "}
-                              {dateObject?.DATE}
+                              {Object.values(dateObject).every((dateObj) => {
+                                return (
+                                  dateObj !== "Invalid Choice" &&
+                                  dateObj !== NaN
+                                );
+                              })
+                                ? `${dateObject?.DAY} ${dateObject?.MONTH}
+                                ${dateObject?.DATE}`
+                                : `null`}
                             </Typography>
                           </TableCell>
                           <TableCell align="left" component="th" scope="row">
@@ -1022,8 +1093,15 @@ const Chart = () => {
                           </TableCell>
                           <TableCell align="left">
                             <Typography>
-                              {dateObject?.DAY} {dateObject?.MONTH}{" "}
-                              {dateObject?.DATE}
+                              {Object.values(dateObject).every((dateobj) => {
+                                return (
+                                  dateobj !== "Invalid Choice" &&
+                                  dateobj !== NaN
+                                );
+                              })
+                                ? `${dateObject?.DAY} ${dateObject?.MONTH} $
+                              {dateObject?.DATE}`
+                                : "null"}
                             </Typography>
                           </TableCell>
                           <TableCell align="left" component="th" scope="row">

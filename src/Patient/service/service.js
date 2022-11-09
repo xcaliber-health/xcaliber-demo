@@ -31,176 +31,449 @@ const dateParser = (item) => {
 
 export const deParsefunc = (item) => {
   let finalDate = dateParser(item.dateOfBirth);
+  let tempObj;
+  if (localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION")
+    tempObj = {
+      context: {
+        departmentId: "1",
+      },
+      data: {
+        resourceType: "Patient",
 
-  let tempObj = {
-    context: {
-      requestId: "5b316a07ceb2ee6422f53b837b65c4d0",
-      source: "ELATION",
-      quorum: true,
-      notify: true,
-    },
-    data: {
-      resourceType: "Patient",
-
-      name: [
-        {
-          use: "official",
-          family: item.familyName,
-          given: [item.givenName, item.suffix],
-          text: item.givenName + " " + item.suffix + " " + item.familyName,
-        },
-      ],
-      identifier: [
-        {
-          type: {
-            text: "ssn",
-            coding: [
+        name: [
+          {
+            use: "official",
+            family: item.familyName,
+            given: [item.givenName, item.suffix],
+            text: item.givenName + " " + item.suffix + " " + item.familyName,
+          },
+        ],
+        identifier: [
+          {
+            type: {
+              text: "ssn",
+              coding: [
+                {
+                  system: "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  code: "SS",
+                },
+              ],
+            },
+            system: "http://hl7.org/fhir/sid/us-ssn",
+            value: null,
+          },
+        ],
+        address: tableObjDeparser(item.addresses, "address"),
+        birthDate: finalDate,
+        gender: item.sex,
+        generalPractitioner: [
+          {
+            reference: "Practitioner/140857915539458",
+          },
+        ],
+        contact: [
+          {
+            name: {
+              use: "official",
+              family: "EmergencyLName",
+              given: ["EmergencyFName", ""],
+              text: "EmergencyFName EmergencyLName",
+            },
+            relationship: [
               {
-                system: "http://terminology.hl7.org/CodeSystem/v2-0203",
-                code: "SS",
+                text: "Child",
+                coding: [
+                  {
+                    code: "C",
+                    display: "Emergency Contact",
+                  },
+                ],
+              },
+            ],
+            telecom: [
+              {
+                system: "phone",
+                value: "9876567898",
+              },
+            ],
+            address: {
+              line: ["test emergency address", "#456"],
+              city: "test emergency city",
+              state: "AL",
+              postalCode: "98765",
+            },
+          },
+        ],
+        extension: [
+          {
+            url: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
+            valueCode: "Male",
+          },
+          {
+            url: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity",
+            valueString: "Hispanic or Latino",
+          },
+          {
+            url: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race",
+            valueString: "Black or African American",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/gender-marker",
+            valueString: "F",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/pronouns",
+            valueString: "she_her_hers",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/sexual-orientation",
+            valueString: "prefer_not_to_say",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/notes",
+            valueString: "Test notes",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/provider.html",
+            valueString: 140983539597314,
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/provider-npi.html",
+            valueString: "1730691296",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/master-patient",
+            valueString: 141002016555288,
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/created-date",
+            valueString: "2022-09-28T08:07:14Z",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/practice",
+            valueInteger: 140857911017476,
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/modified-date",
+            valueDateTime: "2022-09-28T08:07:14Z",
+          },
+        ],
+        telecom: phnEmlParser(item.phoneNumbers, item.emails),
+        meta: null,
+        contained: [
+          {
+            resourceType: "RelatedPerson",
+            id: 141002015965544,
+            name: [
+              {
+                use: "official",
+                family: "Test",
+                given: ["Other", ""],
+              },
+            ],
+            relationship: [
+              {
+                coding: [
+                  {
+                    code: "O",
+                  },
+                ],
+                text: "Other",
+              },
+            ],
+            address: [
+              {
+                line: ["101 Lane Street"],
+                city: "Madison",
+                state: "WI",
+                postalCode: "53711",
+              },
+            ],
+            telecom: [
+              {
+                value: "1231231233",
               },
             ],
           },
-          system: "http://hl7.org/fhir/sid/us-ssn",
-          value: null,
-        },
-      ],
-      address: tableObjDeparser(item.addresses, "address"),
-      birthDate: finalDate,
-      gender: item.sex,
-      generalPractitioner: [
-        {
-          reference: "Practitioner/140857915539458",
-        },
-      ],
-      contact: [
-        {
-          name: {
+        ],
+        communication: [
+          {
+            language: {
+              coding: [
+                {
+                  code: "eng",
+                  system: "http://hl7.org/fhir/ValueSet/all-languages",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    };
+  else {
+    tempObj = {
+      context: {
+        departmentId: "150",
+      },
+      data: {
+        resourceType: "Patient",
+        name: [
+          {
             use: "official",
-            family: "EmergencyLName",
-            given: ["EmergencyFName", ""],
-            text: "EmergencyFName EmergencyLName",
+            family: item.familyName,
+            given: [item.givenName, item.suffix],
+            text: item.givenName + " " + item.suffix + " " + item.familyName,
           },
-          relationship: [
-            {
-              text: "Child",
+        ],
+        address: [
+          {
+            line: ["Test", ""],
+            city: "TEST CITY",
+            state: "CA",
+            postalCode: "78987",
+            country: "USA",
+          },
+        ],
+        communication: [
+          {
+            language: {
               coding: [
                 {
-                  code: "C",
-                  display: "Emergency Contact",
+                  code: "eng",
+                  system: "http://hl7.org/fhir/ValueSet/all-languages",
                 },
               ],
             },
-          ],
-          telecom: [
-            {
-              system: "phone",
-              value: "9876567898",
-            },
-          ],
-          address: {
-            line: ["test emergency address", "#456"],
-            city: "test emergency city",
-            state: "AL",
-            postalCode: "98765",
           },
-        },
-      ],
-      extension: [
-        {
-          url: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
-          valueCode: "Male",
-        },
-        {
-          url: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity",
-          valueString: "Hispanic or Latino",
-        },
-        {
-          url: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race",
-          valueString: "Black or African American",
-        },
-        {
-          url: "http://xcaliber-fhir/structureDefinition/gender-marker",
-          valueString: "F",
-        },
-        {
-          url: "http://xcaliber-fhir/structureDefinition/pronouns",
-          valueString: "she_her_hers",
-        },
-        {
-          url: "http://xcaliber-fhir/structureDefinition/sexual-orientation",
-          valueString: "prefer_not_to_say",
-        },
-        {
-          url: "http://xcaliber-fhir/structureDefinition/notes",
-          valueString: "Test notes",
-        },
-        {
-          url: "http://xcaliber-fhir/structureDefinition/provider.html",
-          valueString: 140983539597314,
-        },
-        {
-          url: "http://xcaliber-fhir/structureDefinition/provider-npi.html",
-          valueString: "1730691296",
-        },
-        {
-          url: "http://xcaliber-fhir/structureDefinition/master-patient",
-          valueString: 141002016555288,
-        },
-        {
-          url: "http://xcaliber-fhir/structureDefinition/created-date",
-          valueString: "2022-09-28T08:07:14Z",
-        },
-        {
-          url: "http://xcaliber-fhir/structureDefinition/practice",
-          valueInteger: 140857911017476,
-        },
-        {
-          url: "http://xcaliber-fhir/structureDefinition/modified-date",
-          valueDateTime: "2022-09-28T08:07:14Z",
-        },
-      ],
-      telecom: phnEmlParser(item.phoneNumbers, item.emails),
-      meta: null,
-      contained: [
-        {
-          resourceType: "RelatedPerson",
-          id: 141002015965544,
-          name: [
+        ],
+        birthDate: finalDate,
+        gender: "Identifies as Male",
+        maritalStatus: {
+          coding: [
             {
-              use: "official",
-              family: "Test",
-              given: ["Other", ""],
+              system: "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+              code: "S",
             },
           ],
-          relationship: [
-            {
+        },
+        generalPractitioner: [
+          {
+            reference: "Practitioner/89",
+          },
+        ],
+        contact: [
+          {
+            telecom: [
+              {
+                system: "phone",
+                use: "home",
+              },
+              {
+                system: "phone",
+                use: "mobile",
+              },
+            ],
+          },
+        ],
+        extension: [
+          {
+            url: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity",
+            extension: [
+              {
+                url: "text",
+                valueString: "2165-9",
+              },
+            ],
+          },
+          {
+            url: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race",
+            extension: [
+              {
+                url: "text",
+                valueString: ["1987-7"],
+              },
+            ],
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/legal-sex",
+            valueCode: "M",
+          },
+          {
+            url: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
+            valueCode: "M",
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/consenttocall.html",
+            valueBoolean: true,
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/countrycode3166.html",
+            valueString: "US",
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/guarantoraddress1.html",
+            valueString: "Test",
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/guarantorcity.html",
+            valueString: "TEST CITY",
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/guarantorstate.html",
+            valueString: "CA",
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/guarantorzip.html",
+            valueString: "78987",
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/guarantorcountrycode3166.html",
+            valueString: "US",
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/guarantorlastname.html",
+            valueString: "App",
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/guarantorrelationshiptopatient.html",
+            valueString: "32",
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/guarantoraddresssameaspatient.html",
+            valueString: true,
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/language6392code.html",
+            valueString: "eng",
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/preferredpronouns.html",
+            valueString: "he/him",
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/primarydepartmentid.html",
+            valueString: "169",
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/sexualorientation.html",
+            valueString: "Choose not to disclose",
+          },
+          {
+            url: "https://docs.xcaliberapis.com/xchange/elation/extensions/status.html",
+            valueString: "active",
+          },
+        ],
+        identifier: [
+          {
+            type: {
               coding: [
                 {
-                  code: "O",
+                  system: "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  code: "SS",
                 },
               ],
-              text: "Other",
             },
-          ],
-          address: [
-            {
-              line: ["101 Lane Street"],
-              city: "Madison",
-              state: "WI",
-              postalCode: "53711",
-            },
-          ],
-          telecom: [
-            {
-              value: "1231231233",
-            },
-          ],
-        },
-      ],
-      communication: [],
-    },
-  };
+            system: "http://hl7.org/fhir/sid/us-ssn",
+            value: "",
+          },
+        ],
+        telecom: [
+          {
+            extension: [
+              {
+                url: "http://schemas.canvasmedical.com/fhir/extensions/has-consent",
+                valueBoolean: true,
+              },
+            ],
+            system: "phone",
+            value: "8765434567",
+            use: "home",
+          },
+          {
+            extension: [
+              {
+                url: "http://schemas.canvasmedical.com/fhir/extensions/has-consent",
+                valueBoolean: true,
+              },
+            ],
+            system: "phone",
+            value: "8765678767",
+            use: "work",
+          },
+          {
+            extension: [
+              {
+                url: "http://schemas.canvasmedical.com/fhir/extensions/has-consent",
+                valueBoolean: true,
+              },
+              {
+                url: "https://docs.xcaliberapis.com/xchange/elation/extensions/telecom/contactpreference_announcement_phone.html",
+                valueBoolean: true,
+              },
+              {
+                url: "https://docs.xcaliberapis.com/xchange/elation/extensions/telecom/contactpreference_announcement_sms.html",
+                valueBoolean: true,
+              },
+              {
+                url: "https://docs.xcaliberapis.com/xchange/elation/extensions/telecom/contactpreference_appointment_phone.html",
+                valueBoolean: true,
+              },
+              {
+                url: "https://docs.xcaliberapis.com/xchange/elation/extensions/telecom/contactpreference_appointment_sms.html",
+                valueBoolean: true,
+              },
+              {
+                url: "https://docs.xcaliberapis.com/xchange/elation/extensions/telecom/contactpreference_billing_phone.html",
+                valueBoolean: true,
+              },
+              {
+                url: "https://docs.xcaliberapis.com/xchange/elation/extensions/telecom/contactpreference_billing_sms.html",
+                valueBoolean: true,
+              },
+              {
+                url: "https://docs.xcaliberapis.com/xchange/elation/extensions/telecom/contactpreference_lab_phone.html",
+                valueBoolean: true,
+              },
+              {
+                url: "https://docs.xcaliberapis.com/xchange/elation/extensions/telecom/contactpreference_lab_sms.html",
+                valueBoolean: true,
+              },
+            ],
+            system: "phone",
+            value: "8765434567",
+            use: "mobile",
+          },
+          {
+            extension: [
+              {
+                url: "http://schemas.canvasmedical.com/fhir/extensions/has-consent",
+                valueBoolean: true,
+              },
+              {
+                url: "https://docs.xcaliberapis.com/xchange/elation/extensions/telecom/contactpreference_announcement_email.html",
+                valueBoolean: true,
+              },
+              {
+                url: "https://docs.xcaliberapis.com/xchange/elation/extensions/telecom/contactpreference_appointment_email.html",
+                valueBoolean: true,
+              },
+              {
+                url: "https://docs.xcaliberapis.com/xchange/elation/extensions/telecom/contactpreference_billing_email.html",
+                valueBoolean: true,
+              },
+              {
+                url: "https://docs.xcaliberapis.com/xchange/elation/extensions/telecom/contactpreference_lab_email.html",
+                valueBoolean: true,
+              },
+            ],
+            system: "email",
+            value: "test@gmail.com",
+          },
+        ],
+        meta: null,
+      },
+    };
+  }
   return tempObj;
 };
 
@@ -282,7 +555,7 @@ export const parserFunc = (data) => {
     tempObj.id = item.resource.id;
     tempObj.sex = item.resource.gender;
     tempObj.type = "mockType";
-    tempObj.extension = item.resource.extension
+    tempObj.extension = item.resource.extension;
     dataHolder.push(tempObj);
   });
   return dataHolder;
@@ -424,11 +697,12 @@ export const addPatient = (patient) => {
   const configHeaders = {
     headers: {
       Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
-      "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+      "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
     },
   };
+  console.log(d);
   return axios
     .post(`${endpointUrl}/Patient`, d, configHeaders)
     .then(async (response) => {
