@@ -216,9 +216,8 @@ const Chart = () => {
       dateObject.setMinutes(
         dateObject.getMinutes() - dateObject.getTimezoneOffset()
       );
-    let dateInUtc = `${dateObject.getFullYear()}-${
-      dateObject.getMonth() + 1
-    }-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}:${dateObject.getSeconds()}Z`;
+    let dateInUtc = `${dateObject.getFullYear()}-${dateObject.getMonth() + 1
+      }-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}:${dateObject.getSeconds()}Z`;
 
     setAppointmentPayload({
       data: {
@@ -250,9 +249,8 @@ const Chart = () => {
     setAppointmentPayload({
       data: {
         ...appointmentPayload?.data,
-        start: `${finalDateValue.getFullYear()}-${
-          finalDateValue.getMonth() + 1
-        }-${finalDateValue.getDate()}T${finalDateValue.getHours()}:${finalDateValue.getMinutes()}:${finalDateValue.getSeconds()}Z`,
+        start: `${finalDateValue.getFullYear()}-${finalDateValue.getMonth() + 1
+          }-${finalDateValue.getDate()}T${finalDateValue.getHours()}:${finalDateValue.getMinutes()}:${finalDateValue.getSeconds()}Z`,
       },
     });
   };
@@ -399,13 +397,15 @@ const Chart = () => {
       getMedications(),
       getImmunizations(),
       getVitals(),
-      initialiseAllergyOptions(),
     ])
       .then()
       .catch()
       .finally(() => {
         setLoading(false);
       });
+  }, []);
+  useEffect(() => {
+    { initialiseAllergyOptions() }
   }, []);
 
   const handleChange = (event, newValue) => {
@@ -682,27 +682,27 @@ const Chart = () => {
                             <Grid display="flex">
                               <Typography>
                                 {vital?.resource?.code?.coding?.[0]?.display ===
-                                "body mass index"
+                                  "body mass index"
                                   ? vital?.resource?.valueString
                                   : vital?.resource?.code?.coding?.[0]
-                                      ?.display === "Blood Pressure"
-                                  ? vital?.resource?.component[0]?.valueQuantity
+                                    ?.display === "Blood Pressure"
+                                    ? vital?.resource?.component[0]?.valueQuantity
                                       .value
-                                  : vital?.resource?.valueQuantity.value}
+                                    : vital?.resource?.valueQuantity.value}
                               </Typography>
                               {vital?.resource?.code?.coding?.[0]?.display ===
                                 "Blood Pressure" && (
-                                <>
-                                  <Typography>/</Typography>
-                                  <Typography>
-                                    {vital?.resource?.code?.coding?.[0]
-                                      ?.display === "Blood Pressure"
-                                      ? vital?.resource?.component[1]
+                                  <>
+                                    <Typography>/</Typography>
+                                    <Typography>
+                                      {vital?.resource?.code?.coding?.[0]
+                                        ?.display === "Blood Pressure"
+                                        ? vital?.resource?.component[1]
                                           ?.valueQuantity.value
-                                      : ""}
-                                  </Typography>
-                                </>
-                              )}
+                                        : ""}
+                                    </Typography>
+                                  </>
+                                )}
                             </Grid>
                           </TableCell>
                           <TableCell align="left">
@@ -788,7 +788,7 @@ const Chart = () => {
                           <TableCell align="left">
                             <Typography>
                               {problem?.resource?.note?.[0]?.text &&
-                              problem?.resource?.note?.[0]?.text?.trim() !== ""
+                                problem?.resource?.note?.[0]?.text?.trim() !== ""
                                 ? problem?.resource?.note?.[0]?.text
                                 : "null"}
                             </Typography>
