@@ -460,7 +460,6 @@ const Chart = () => {
       getMedications(),
       getImmunizations(),
       getVitals(),
-      initialiseAllergyOptions(),
     ])
       .then()
       .catch()
@@ -469,8 +468,8 @@ const Chart = () => {
       });
   }, []);
   useEffect(() => {
-    console.log(patientAllergies);
-  });
+    { initialiseAllergyOptions() }
+  }, []);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -752,8 +751,9 @@ const Chart = () => {
                                     "blood pressure"
                                   ? vital?.resource?.component[0]?.valueQuantity
                                       .value
-                                  : vital?.resource?.valueQuantity.value}
+                                    : vital?.resource?.valueQuantity.value}
                               </Typography>
+
                               {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
                                 "blood pressure" && (
                                 <>
@@ -763,10 +763,10 @@ const Chart = () => {
                                     "blood pressure"
                                       ? vital?.resource?.component[1]
                                           ?.valueQuantity.value
-                                      : ""}
-                                  </Typography>
-                                </>
-                              )}
+                                        : ""}
+                                    </Typography>
+                                  </>
+                                )}
                             </Grid>
                           </TableCell>
                           <TableCell align="left">
@@ -852,7 +852,7 @@ const Chart = () => {
                           <TableCell align="left">
                             <Typography>
                               {problem?.resource?.note?.[0]?.text &&
-                              problem?.resource?.note?.[0]?.text?.trim() !== ""
+                                problem?.resource?.note?.[0]?.text?.trim() !== ""
                                 ? problem?.resource?.note?.[0]?.text
                                 : "null"}
                             </Typography>
