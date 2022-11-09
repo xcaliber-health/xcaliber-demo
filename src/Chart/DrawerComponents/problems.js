@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { ReferenceDataService } from "../../services/P360/referenceDataService";
 import { ProblemService } from "../../services/P360/problemService";
+import Loading from "../../Patient/Loading";
 export const PatientProblems = ({
   patientId,
   disabled,
@@ -67,6 +68,7 @@ export const PatientProblems = ({
     },
   });
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [problemIcd10Options, setProblemIcd10Options] = useState([]);
   const updateOptions = async (searchTerm) => {
@@ -80,87 +82,117 @@ export const PatientProblems = ({
 
   const createProblem = async (problemPayload) => {
     const createdProblem = await ProblemService.createProblem(problemPayload);
-    const createdProblemData = await ProblemService.getProblemById(
-      createdProblem?.data?.id
-    );
-    updateProblems({ resource: { ...createdProblemData } });
-    onCancelClick();
+    if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION") {
+      const createdProblemData = await ProblemService.getProblemById(
+        createdProblem?.data?.id
+      );
+      updateProblems({ resource: { ...createdProblemData } });
+      onCancelClick();
+    } else if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") {
+      onCancelClick();
+      window.location.reload();
+    }
   };
 
   useEffect(() => {
-    Promise.all([initialiseProblemOptions()]);
+    setLoading(true);
+    Promise.all([initialiseProblemOptions()])
+      .then()
+      .catch()
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (
     <Grid container direction="column" pt={2}>
-      <Grid item container pt={2}>
-        <Grid item>
-          <Typography variant="h4">
-            {disabled ? `Problem Details ` : `Create problem`}
-          </Typography>
-        </Grid>
-      </Grid>
-      <Grid item pt={2}>
-        <Typography pb={1}> ICD10-Code</Typography>
-        {!disabled && (
-          <Autocomplete
-            open={open}
-            onOpen={() => {
-              setOpen(true);
-            }}
-            onClose={() => {
-              setOpen(false);
-            }}
-            disablePortal
-            id="combo-box-demo"
-            options={problemIcd10Options}
-            getOptionLabel={(option) => {
-              return `${option?.code} (${option?.display})`;
-            }}
-            isOptionEqualToValue={(option, value) => {
-              return false;
-            }}
-            onChange={(e, v) => {
-              if (v && v !== "" && v !== null) {
-                setProblemPayload({
-                  context: {
-                    departmentId: "150",
-                  },
-                  data: {
-                    ...problemPayload?.data,
-                    text: {
-                      status: "generated",
-                      div: v?.display,
-                    },
-                    code: {
-                      coding: [
-                        {
-                          system: "ICD10",
-                          code: v?.code,
+      {loading && <Loading />}
+      {!loading && (
+        <React.Fragment>
+          <Grid item container pt={2}>
+            <Grid item>
+              <Typography variant="h4">
+                {disabled ? `Problem Details ` : `Create problem`}
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid item pt={2}>
+            <Typography pb={1}> ICD10-Code</Typography>
+            {!disabled && (
+              <Autocomplete
+                open={open}
+                onOpen={() => {
+                  setOpen(true);
+                }}
+                onClose={() => {
+                  setOpen(false);
+                }}
+                disablePortal
+                id="combo-box-demo"
+                options={problemIcd10Options}
+                getOptionLabel={(option) => {
+                  if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION")
+                    return `${option?.code} (${option?.display})`;
+                  else if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA")
+                    return `${option?.SNOMED_CID} (${option?.SNOMED_FSN})`;
+                  else return option?.label;
+                }}
+                onChange={(e, v) => {
+                  if (v && v !== "" && v !== null) {
+                    setProblemPayload({
+                      context: {
+                        departmentId: "150",
+                      },
+                      data: {
+                        ...problemPayload?.data,
+                        text: {
+                          status: "generated",
+                          div:
+                            localStorage.getItem("XCALIBER_SOURCE") ===
+                            "ELATION"
+                              ? v?.display
+                              : v?.SNOMED_FSN,
                         },
-                      ],
-                    },
-                  },
-                });
-              }
-            }}
-            isOptionEqualToValue={(option, value) => {
-              return option?.code !== value?.display;
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="ICD10-code"
-                onChange={(ev) => {
-                  if (ev.target.value !== "" || ev.target.value !== null) {
-                    updateOptions(ev.target.value);
+                        code: {
+                          coding: [
+                            {
+                              system:
+                                localStorage.getItem(`XCALIBER_SOURCE`) ===
+                                "ELATION"
+                                  ? `ICD10`
+                                  : `http://snomed.info/sct`,
+                              code:
+                                localStorage.getItem("XCALIBER_SOURCE") ===
+                                "ELATION"
+                                  ? v?.code
+                                  : v?.SNOMED_CID,
+                            },
+                          ],
+                        },
+                      },
+                    });
                   }
                 }}
+                isOptionEqualToValue={(option, value) => {
+                  return (
+                    option?.code !== value?.display ||
+                    option?.SNOMED_CID !== option?.SNOMED_FSN
+                  );
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="ICD10-code"
+                    onChange={(ev) => {
+                      if (ev.target.value !== "" || ev.target.value !== null) {
+                        updateOptions(ev.target.value);
+                      }
+                    }}
+                  />
+                )}
               />
             )}
-          />
-        )}
-        {/* {disabled && (
+            {/* {disabled && (
           <TextField
             sx={{ width: "100%" }}
             label={"reason"}
@@ -171,55 +203,57 @@ export const PatientProblems = ({
             disabled={true}
           />
         )} */}
-      </Grid>
-      <Grid item pt={2}>
-        <Typography pb={1}>Synopsis</Typography>
-        {!disabled && (
-          <TextField
-            sx={{ width: "100%" }}
-            label={"reason"}
-            onChange={(e) => {
-              if (e.target.value && e.target.value !== null)
-                setProblemPayload({
-                  context: {
-                    departmentId: "150",
-                  },
-                  data: {
-                    ...problemPayload?.data,
-                    note: [
-                      {
-                        text: e.target?.value,
+          </Grid>
+          <Grid item pt={2}>
+            <Typography pb={1}>Synopsis</Typography>
+            {!disabled && (
+              <TextField
+                sx={{ width: "100%" }}
+                label={"reason"}
+                onChange={(e) => {
+                  if (e.target.value && e.target.value !== null)
+                    setProblemPayload({
+                      context: {
+                        departmentId: "150",
                       },
-                    ],
-                  },
-                });
-            }}
-          />
-        )}
-      </Grid>
+                      data: {
+                        ...problemPayload?.data,
+                        note: [
+                          {
+                            text: e.target?.value,
+                          },
+                        ],
+                      },
+                    });
+                }}
+              />
+            )}
+          </Grid>
 
-      <Box
-        sx={{
-          display: "flex",
-          width: "100%",
-          padding: "8px 0px 8px 0px",
-          justifyContent: "flex-end",
-        }}
-      >
-        <Button
-          onClick={() => {
-            createProblem(problemPayload);
-          }}
-          disabled={disabled}
-          variant="contained"
-          sx={{ marginRight: "10px" }}
-        >
-          Create
-        </Button>
-        <Button onClick={onCancelClick} variant="contained">
-          Cancel
-        </Button>
-      </Box>
+          <Box
+            sx={{
+              display: "flex",
+              width: "100%",
+              padding: "8px 0px 8px 0px",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Button
+              onClick={() => {
+                createProblem(problemPayload);
+              }}
+              disabled={disabled}
+              variant="contained"
+              sx={{ marginRight: "10px" }}
+            >
+              Create
+            </Button>
+            <Button onClick={onCancelClick} variant="contained">
+              Cancel
+            </Button>
+          </Box>
+        </React.Fragment>
+      )}
     </Grid>
   );
 };
