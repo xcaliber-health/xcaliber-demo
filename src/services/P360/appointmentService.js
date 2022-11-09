@@ -21,13 +21,14 @@ export const AppointmentService = {
   },
   createAppointment: async (appointmentPayload) => {
     try {
+      console.log(appointmentPayload);
       const result = await axios.post(
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment`,
         appointmentPayload,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
-            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
       );
@@ -44,7 +45,7 @@ export const AppointmentService = {
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
-            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
       );
