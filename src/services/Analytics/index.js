@@ -18,4 +18,20 @@ export const AnalyticService = {
       console.log(error);
     }
   },
+  timeSeries: async (payload, start, end) => {
+    try {
+      let payload1 = { "query": `${payload}`, "start": `${start}`, "end": `${end}` }
+      let url = `${LENS_API_ENDPOINT}/api/v1/datalenses/5197fc6c-b44a-4d94-87f0-9e09aa27bfc3/timeseries`;
+      const response = await axios.post(url, payload1, {
+        headers: {
+          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`
+        },
+      });
+      return response.data?.results;
+    } catch (error) {
+      //Handle Exception
+      window.alert("Enter correct query");
+      console.log(error);
+    }
+  },
 };

@@ -96,19 +96,20 @@ export default function LensTable({ tableRowData, flag }) {
     const columnDefs = [];
     var Columns = Object.keys(data);
     Columns.forEach((column) => {
-      if (column.value !== null)
-        columnDefs.push({ field: column })
-
+      if (column.value !== null || column.value !== "") {
+        columnDefs.push({ field: column, editable: true })
+      }
     })
     return {
       suppressRowClickSelection: true,
+      alwaysShowHorizontalScroll: true,
       enableRangeSelection: true,
       pagination: true,
       paginationAutoPageSize: true,
       columnDefs: columnDefs,
-      defaultColDef: {
-        flex: 1,
-      },
+      // defaultColDef: {
+      //   flex: 1,
+      // },
     }
 
   }
