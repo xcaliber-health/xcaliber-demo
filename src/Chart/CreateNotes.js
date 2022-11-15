@@ -10,6 +10,7 @@ import {
   Select,
   MenuItem,
   Autocomplete,
+  Chip,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -26,6 +27,7 @@ const CreateNotes = ({
   onCancelClick,
   disabled,
   reloadNotes,
+  bookedNote,
 }) => {
   const [problemPayLoad, setProblemPayLoad] = useState("");
   const [allergyList, setAllergy] = useState("");
@@ -86,6 +88,10 @@ const CreateNotes = ({
   const [roslymph, setRosLymph] = useState("");
   const [rospsych, setRosPsych] = useState("");
   const [rosrectal, setRosRectal] = useState("");
+
+  useEffect(() => {
+    console.log("booked note", bookedNote);
+  });
 
   const getPhysicalExamAttachment = (title, data) => {
     return {
@@ -397,9 +403,15 @@ const CreateNotes = ({
   };
   const onSaveNote = async () => {
     const notePayLoad = await createNotePayLoad();
-
-    const note = await NoteService.createNote({ data: { ...notePayLoad } });
-    console.log(note);
+    const note = await NoteService.createNote(
+      {
+        context: {
+          departmentId: "1",
+        },
+        data: { ...notePayLoad },
+      },
+      bookedNote?.[0]?.resource?.id
+    );
   };
   const onSaveNoteAsDraft = async () => {
     const notePayLoad = await createNotePayLoad();
@@ -425,6 +437,17 @@ const CreateNotes = ({
       <Grid item pt={2} sx={{ width: "100%" }}>
         <Grid item pt={2}>
           <Typography variant="h4">{`Create Notes`}</Typography>
+          {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" &&
+          bookedNote &&
+          bookedNote?.length !== 0 ? (
+            <Chip sx={{ pl: "4px" }} label={bookedNote?.[0]?.resource?.id} />
+          ) : (
+            localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" && (
+              <Typography sx={{ pl: "4px", pt: "4px" }} variant="h6">
+                Please create an appointment to be checked in
+              </Typography>
+            )
+          )}
         </Grid>
         <Grid sx={{ width: "100%" }} item pt={2}>
           <Accordion>

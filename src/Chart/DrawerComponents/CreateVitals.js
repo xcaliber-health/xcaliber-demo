@@ -275,7 +275,7 @@ export default function Vitals({
 
     const vitalsPayLoad = {
       context: {
-        departmentId: "150",
+        departmentId: "1",
       },
       data: {
         resourceType: "Bundle",

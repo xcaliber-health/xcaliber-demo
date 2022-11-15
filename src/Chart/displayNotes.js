@@ -142,401 +142,414 @@ const DisplayNotes = ({
 
     setFlag(true);
   }, []);
+  useEffect(() => {});
   const onSaveNote = async () => {
     const noteId = await NoteService.createNote({
+      context: {
+        departmentId: "1",
+      },
       data: { ...note.resource },
     });
-    console.log(noteId);
   };
   if (flag) {
-    return (
-      <Grid container>
-        <Grid item pt={2} sx={{ width: "100%" }}>
-          <Grid item pt={2}>
-            <Typography variant="h4">{`Notes`}</Typography>
-          </Grid>
-          <Grid sx={{ width: "100%" }} item pt={2}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                id="panel1a-header"
-              >
-                <Typography>Problems</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container direction="column">
-                  {problems &&
-                    problems?.map((item) => {
-                      return (
-                        item?.data !== "" && (
-                          <Grid item>
-                            <Typography> {item?.title}</Typography>
-
-                            <Typography pb={1} sx={{ ...commonValueStyles }}>
-                              {item?.data}
-                            </Typography>
-                          </Grid>
-                        )
-                      );
-                    })}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-          <Grid sx={{ width: "100%" }} item pt={2}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                id="panel3a-header"
-              >
-                <Typography>Physical Exam</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container direction="column">
-                  {physicalExam &&
-                    physicalExam?.map((peItem) => {
-                      return (
-                        peItem?.data !== "" && (
-                          <Grid item>
-                            <Typography> {peItem?.title}</Typography>
-
-                            <Typography pb={1} sx={{ ...commonValueStyles }}>
-                              {peItem?.data}
-                            </Typography>
-                          </Grid>
-                        )
-                      );
-                    })}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-          <Grid sx={{ width: "100%" }} item pt={2}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                id="panel4a-header"
-              >
-                <Typography>ROS</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container direction="column">
-                  {ros &&
-                    ros?.map((rosItem) => {
-                      return (
-                        rosItem?.data !== "" && (
-                          <Grid item>
-                            <Typography> {rosItem?.title}</Typography>
-
-                            <Typography pb={1} sx={{ ...commonValueStyles }}>
-                              {rosItem?.data}
-                            </Typography>
-                          </Grid>
-                        )
-                      );
-                    })}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-          <Grid sx={{ width: "100%" }} item pt={2}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                id="panel1a-header"
-              >
-                <Typography>Allergies</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container direction="column">
-                  {allergyArray &&
-                    allergyArray?.map((item) => {
-                      return (
-                        item?.data !== "" && (
-                          <Grid item>
-                            <Typography> {item?.title}</Typography>
-
-                            <Typography pb={1} sx={{ ...commonValueStyles }}>
-                              {item?.data}
-                            </Typography>
-                          </Grid>
-                        )
-                      );
-                    })}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-
-          <Grid sx={{ width: "100%" }} item pt={2}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                id="panel1a-header"
-              >
-                <Typography>Past History</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container direction="column">
-                  {pastArray &&
-                    pastArray?.map((item) => {
-                      return (
-                        item?.data !== "" && (
-                          <Grid item>
-                            <Typography> {item?.title}</Typography>
-
-                            <Typography pb={1} sx={{ ...commonValueStyles }}>
-                              {item?.data}
-                            </Typography>
-                          </Grid>
-                        )
-                      );
-                    })}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-
-          <Grid sx={{ width: "100%" }} item pt={2}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                id="panel1a-header"
-              >
-                <Typography>Surgical History</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container direction="column">
-                  {surgicalArray &&
-                    surgicalArray?.map((item) => {
-                      return (
-                        item?.data !== "" && (
-                          <Grid item>
-                            <Typography> {item?.title}</Typography>
-
-                            <Typography pb={1} sx={{ ...commonValueStyles }}>
-                              {item?.data}
-                            </Typography>
-                          </Grid>
-                        )
-                      );
-                    })}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-
-          <Grid sx={{ width: "100%" }} item pt={2}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                id="panel1a-header"
-              >
-                <Typography>Family History</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container direction="column">
-                  {familyArray &&
-                    familyArray?.map((item) => {
-                      return (
-                        item?.data !== "" && (
-                          <Grid item>
-                            <Typography> {item?.title}</Typography>
-
-                            <Typography pb={1} sx={{ ...commonValueStyles }}>
-                              {item?.data}
-                            </Typography>
-                          </Grid>
-                        )
-                      );
-                    })}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-
-          <Grid sx={{ width: "100%" }} item pt={2}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                id="panel1a-header"
-              >
-                <Typography>Social History</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container direction="column">
-                  {socialArray &&
-                    socialArray?.map((item) => {
-                      return (
-                        item?.data !== "" && (
-                          <Grid item>
-                            <Typography> {item?.title}</Typography>
-
-                            <Typography pb={1} sx={{ ...commonValueStyles }}>
-                              {item?.data}
-                            </Typography>
-                          </Grid>
-                        )
-                      );
-                    })}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-
-          <Grid sx={{ width: "100%" }} item pt={2}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                id="panel1a-header"
-              >
-                <Typography>Habits</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container direction="column">
-                  {habitsArray &&
-                    habitsArray?.map((item) => {
-                      return (
-                        item?.data !== "" && (
-                          <Grid item>
-                            <Typography> {item?.title}</Typography>
-
-                            <Typography pb={1} sx={{ ...commonValueStyles }}>
-                              {item?.data}
-                            </Typography>
-                          </Grid>
-                        )
-                      );
-                    })}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-
-          <Grid sx={{ width: "100%" }} item pt={2}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                id="panel1a-header"
-              >
-                <Typography>Medications</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container direction="column">
-                  {medArray &&
-                    medArray?.map((item) => {
-                      return (
-                        item?.data !== "" && (
-                          <Grid item>
-                            <Typography> {item?.title}</Typography>
-
-                            <Typography pb={1} sx={{ ...commonValueStyles }}>
-                              {item?.data}
-                            </Typography>
-                          </Grid>
-                        )
-                      );
-                    })}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-
-          <Grid sx={{ width: "100%" }} item pt={2}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                id="panel1a-header"
-              >
-                <Typography>Assessment Plan</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container direction="column">
-                  {assessplanArray &&
-                    assessplanArray?.map((item) => {
-                      return (
-                        item?.data !== "" && (
-                          <Grid item>
-                            <Typography> {item?.title}</Typography>
-
-                            <Typography pb={1} sx={{ ...commonValueStyles }}>
-                              {item?.data}
-                            </Typography>
-                          </Grid>
-                        )
-                      );
-                    })}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-
-          <Grid sx={{ width: "100%" }} item pt={2}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                id="panel1a-header"
-              >
-                <Typography>Follow up</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container direction="column">
-                  {followupArray &&
-                    followupArray?.map((item) => {
-                      return (
-                        item?.data !== "" && (
-                          <Grid item>
-                            <Typography> {item?.title}</Typography>
-
-                            <Typography pb={1} sx={{ ...commonValueStyles }}>
-                              {item?.data}
-                            </Typography>
-                          </Grid>
-                        )
-                      );
-                    })}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-          {!disabled && (
-            <Grid
-              container
-              item
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                width: "60%",
-                paddingTop: 12,
-              }}
-              justifyContent={"space-between"}
-            >
-              <Button
-                onClick={() => {
-                  onSaveNote();
-                  onCancelClick();
-                  reloadNotes(patientDetails?.id);
-                }}
-                variant="contained"
-              >
-                Sign
-              </Button>
-              <Button
-                onClick={() => {
-                  onCancelClick();
-                }}
-                variant="contained"
-              >
-                Save As Draft
-              </Button>
-              <Button onClick={onCancelClick} variant="contained">
-                Cancel
-              </Button>
+    if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION") {
+      return (
+        <Grid container>
+          <Grid item pt={2} sx={{ width: "100%" }}>
+            <Grid item pt={2}>
+              <Typography variant="h4">{`Notes`}</Typography>
             </Grid>
-          )}
+            <Grid sx={{ width: "100%" }} item pt={2}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  id="panel1a-header"
+                >
+                  <Typography>Problems</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container direction="column">
+                    {problems &&
+                      problems?.map((item) => {
+                        return (
+                          item?.data !== "" && (
+                            <Grid item>
+                              <Typography> {item?.title}</Typography>
+
+                              <Typography pb={1} sx={{ ...commonValueStyles }}>
+                                {item?.data}
+                              </Typography>
+                            </Grid>
+                          )
+                        );
+                      })}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+            <Grid sx={{ width: "100%" }} item pt={2}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  id="panel3a-header"
+                >
+                  <Typography>Physical Exam</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container direction="column">
+                    {physicalExam &&
+                      physicalExam?.map((peItem) => {
+                        return (
+                          peItem?.data !== "" && (
+                            <Grid item>
+                              <Typography> {peItem?.title}</Typography>
+
+                              <Typography pb={1} sx={{ ...commonValueStyles }}>
+                                {peItem?.data}
+                              </Typography>
+                            </Grid>
+                          )
+                        );
+                      })}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+            <Grid sx={{ width: "100%" }} item pt={2}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  id="panel4a-header"
+                >
+                  <Typography>ROS</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container direction="column">
+                    {ros &&
+                      ros?.map((rosItem) => {
+                        return (
+                          rosItem?.data !== "" && (
+                            <Grid item>
+                              <Typography> {rosItem?.title}</Typography>
+
+                              <Typography pb={1} sx={{ ...commonValueStyles }}>
+                                {rosItem?.data}
+                              </Typography>
+                            </Grid>
+                          )
+                        );
+                      })}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+            <Grid sx={{ width: "100%" }} item pt={2}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  id="panel1a-header"
+                >
+                  <Typography>Allergies</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container direction="column">
+                    {allergyArray &&
+                      allergyArray?.map((item) => {
+                        return (
+                          item?.data !== "" && (
+                            <Grid item>
+                              <Typography> {item?.title}</Typography>
+
+                              <Typography pb={1} sx={{ ...commonValueStyles }}>
+                                {item?.data}
+                              </Typography>
+                            </Grid>
+                          )
+                        );
+                      })}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+
+            <Grid sx={{ width: "100%" }} item pt={2}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  id="panel1a-header"
+                >
+                  <Typography>Past History</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container direction="column">
+                    {pastArray &&
+                      pastArray?.map((item) => {
+                        return (
+                          item?.data !== "" && (
+                            <Grid item>
+                              <Typography> {item?.title}</Typography>
+
+                              <Typography pb={1} sx={{ ...commonValueStyles }}>
+                                {item?.data}
+                              </Typography>
+                            </Grid>
+                          )
+                        );
+                      })}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+
+            <Grid sx={{ width: "100%" }} item pt={2}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  id="panel1a-header"
+                >
+                  <Typography>Surgical History</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container direction="column">
+                    {surgicalArray &&
+                      surgicalArray?.map((item) => {
+                        return (
+                          item?.data !== "" && (
+                            <Grid item>
+                              <Typography> {item?.title}</Typography>
+
+                              <Typography pb={1} sx={{ ...commonValueStyles }}>
+                                {item?.data}
+                              </Typography>
+                            </Grid>
+                          )
+                        );
+                      })}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+
+            <Grid sx={{ width: "100%" }} item pt={2}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  id="panel1a-header"
+                >
+                  <Typography>Family History</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container direction="column">
+                    {familyArray &&
+                      familyArray?.map((item) => {
+                        return (
+                          item?.data !== "" && (
+                            <Grid item>
+                              <Typography> {item?.title}</Typography>
+
+                              <Typography pb={1} sx={{ ...commonValueStyles }}>
+                                {item?.data}
+                              </Typography>
+                            </Grid>
+                          )
+                        );
+                      })}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+
+            <Grid sx={{ width: "100%" }} item pt={2}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  id="panel1a-header"
+                >
+                  <Typography>Social History</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container direction="column">
+                    {socialArray &&
+                      socialArray?.map((item) => {
+                        return (
+                          item?.data !== "" && (
+                            <Grid item>
+                              <Typography> {item?.title}</Typography>
+
+                              <Typography pb={1} sx={{ ...commonValueStyles }}>
+                                {item?.data}
+                              </Typography>
+                            </Grid>
+                          )
+                        );
+                      })}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+
+            <Grid sx={{ width: "100%" }} item pt={2}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  id="panel1a-header"
+                >
+                  <Typography>Habits</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container direction="column">
+                    {habitsArray &&
+                      habitsArray?.map((item) => {
+                        return (
+                          item?.data !== "" && (
+                            <Grid item>
+                              <Typography> {item?.title}</Typography>
+
+                              <Typography pb={1} sx={{ ...commonValueStyles }}>
+                                {item?.data}
+                              </Typography>
+                            </Grid>
+                          )
+                        );
+                      })}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+
+            <Grid sx={{ width: "100%" }} item pt={2}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  id="panel1a-header"
+                >
+                  <Typography>Medications</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container direction="column">
+                    {medArray &&
+                      medArray?.map((item) => {
+                        return (
+                          item?.data !== "" && (
+                            <Grid item>
+                              <Typography> {item?.title}</Typography>
+
+                              <Typography pb={1} sx={{ ...commonValueStyles }}>
+                                {item?.data}
+                              </Typography>
+                            </Grid>
+                          )
+                        );
+                      })}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+
+            <Grid sx={{ width: "100%" }} item pt={2}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  id="panel1a-header"
+                >
+                  <Typography>Assessment Plan</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container direction="column">
+                    {assessplanArray &&
+                      assessplanArray?.map((item) => {
+                        return (
+                          item?.data !== "" && (
+                            <Grid item>
+                              <Typography> {item?.title}</Typography>
+
+                              <Typography pb={1} sx={{ ...commonValueStyles }}>
+                                {item?.data}
+                              </Typography>
+                            </Grid>
+                          )
+                        );
+                      })}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+
+            <Grid sx={{ width: "100%" }} item pt={2}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  id="panel1a-header"
+                >
+                  <Typography>Follow up</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container direction="column">
+                    {followupArray &&
+                      followupArray?.map((item) => {
+                        return (
+                          item?.data !== "" && (
+                            <Grid item>
+                              <Typography> {item?.title}</Typography>
+
+                              <Typography pb={1} sx={{ ...commonValueStyles }}>
+                                {item?.data}
+                              </Typography>
+                            </Grid>
+                          )
+                        );
+                      })}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+            {!disabled && (
+              <Grid
+                container
+                item
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  width: "60%",
+                  paddingTop: 12,
+                }}
+                justifyContent={"space-between"}
+              >
+                <Button
+                  onClick={() => {
+                    onSaveNote();
+                    onCancelClick();
+                    reloadNotes(patientDetails?.id);
+                  }}
+                  variant="contained"
+                >
+                  Sign
+                </Button>
+                <Button
+                  onClick={() => {
+                    onCancelClick();
+                  }}
+                  variant="contained"
+                >
+                  Save As Draft
+                </Button>
+                <Button onClick={onCancelClick} variant="contained">
+                  Cancel
+                </Button>
+              </Grid>
+            )}
+          </Grid>
         </Grid>
-      </Grid>
-    );
+      );
+    } else if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") {
+      return (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: note?.resource?.content?.[0]?.attachment?.data,
+          }}
+        ></div>
+      );
+    } else return <>Invalid Source</>;
   }
 };
 export default DisplayNotes;

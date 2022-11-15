@@ -213,7 +213,7 @@ export const deParsefunc = (item) => {
   else {
     tempObj = {
       context: {
-        departmentId: "150",
+        departmentId: "1",
       },
       data: {
         resourceType: "Patient",

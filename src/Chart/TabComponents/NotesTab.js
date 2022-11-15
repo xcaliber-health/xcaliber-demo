@@ -14,8 +14,9 @@ import CreateNotes from "../CreateNotes";
 import { Helper } from "../../core-utils/helper";
 import DisplayNotes from "../displayNotes";
 import DraftNotes from "../draftNotes";
+import Loading from "../../Patient/Loading";
 
-const NotesTab = ({ patientDetails }) => {
+const NotesTab = ({ patientDetails, bookedNote }) => {
   const theme = useTheme();
   const [notes, setNotes] = useState([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -88,7 +89,6 @@ const NotesTab = ({ patientDetails }) => {
   });
 
   const getNotes = async (patientId) => {
-    console.log("patient id ", patientId);
     const result = await NoteService.getVisitNotes(patientId);
     setNotes(result);
   };
@@ -197,6 +197,7 @@ const NotesTab = ({ patientDetails }) => {
           updatePatientId={updatePatientId}
           patientDetails={patientDetails}
           reloadNotes={getNotes}
+          bookedNote={bookedNote}
         />
       </Drawer>
       <Drawer
@@ -326,6 +327,11 @@ const NotesTab = ({ patientDetails }) => {
 
             {notes &&
               notes?.map((note) => {
+                let noteDateValue =
+                  localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
+                    ? note?.resource?.date
+                    : note?.resource?.context?.period?.start;
+
                 return (
                   <ListItemButton
                     style={{
@@ -340,32 +346,25 @@ const NotesTab = ({ patientDetails }) => {
                       setNote(note);
                     }}
                   >
-                    <ListItemText primary={note?.resource?.description} />
+                    <ListItemText
+                      primary={
+                        note?.resource?.description ??
+                        note?.resource?.category?.[0]?.coding?.[0]?.display
+                      }
+                    />
                     <ListItemText secondary={note?.resource?.docStatus} />
                     <ListItemText>
                       <span style={{ color: "black" }}>
-                        {
-                          Helper.extractFieldsFromDate(note?.resource?.date)
-                            ?.DAY
-                        }
+                        {Helper.extractFieldsFromDate(noteDateValue)?.DAY}
                       </span>{" "}
                       <span style={{ color: "black" }}>
-                        {
-                          Helper.extractFieldsFromDate(note?.resource?.date)
-                            ?.MONTH
-                        }
+                        {Helper.extractFieldsFromDate(noteDateValue)?.MONTH}
                       </span>{" "}
                       <span style={{ color: "black" }}>
-                        {
-                          Helper.extractFieldsFromDate(note?.resource?.date)
-                            ?.DATE
-                        }
+                        {Helper.extractFieldsFromDate(noteDateValue)?.DATE}
                       </span>{" "}
                       <span style={{ color: "black" }}>
-                        {
-                          Helper.extractFieldsFromDate(note?.resource?.date)
-                            ?.YEAR
-                        }
+                        {Helper.extractFieldsFromDate(noteDateValue)?.YEAR}
                       </span>
                     </ListItemText>
                   </ListItemButton>

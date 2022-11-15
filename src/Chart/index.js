@@ -79,7 +79,7 @@ const Chart = () => {
   };
   const [appointmentPayload, setAppointmentPayload] = useState({
     context: {
-      departmentId: "150",
+      departmentId: "1",
     },
     data: {
       resourceType: "Appointment",
@@ -228,7 +228,7 @@ const Chart = () => {
   const onReasonChange = (reason) => {
     setAppointmentPayload({
       context: {
-        departmentId: "150",
+        departmentId: "1",
       },
       data: {
         ...appointmentPayload?.data,
@@ -266,7 +266,7 @@ const Chart = () => {
 
     setAppointmentPayload({
       context: {
-        departmentId: "150",
+        departmentId: "1",
       },
       data: {
         ...appointmentPayload?.data,
@@ -300,7 +300,7 @@ const Chart = () => {
         : `${dateObject.getHours()}`;
     setAppointmentPayload({
       context: {
-        departmentId: "150",
+        departmentId: "1",
       },
       data: {
         ...appointmentPayload?.data,
@@ -313,7 +313,7 @@ const Chart = () => {
   const updatePatientId = (patientId) => {
     setAppointmentPayload({
       context: {
-        departmentId: "150",
+        departmentId: "1",
       },
       data: {
         ...appointmentPayload?.data,
@@ -464,7 +464,9 @@ const Chart = () => {
       });
   }, []);
   useEffect(() => {
-    { initialiseAllergyOptions() }
+    {
+      initialiseAllergyOptions();
+    }
   }, []);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -747,7 +749,7 @@ const Chart = () => {
                                     "blood pressure"
                                   ? vital?.resource?.component[0]?.valueQuantity
                                       .value
-                                    : vital?.resource?.valueQuantity.value}
+                                  : vital?.resource?.valueQuantity.value}
                               </Typography>
 
                               {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
@@ -759,10 +761,10 @@ const Chart = () => {
                                     "blood pressure"
                                       ? vital?.resource?.component[1]
                                           ?.valueQuantity.value
-                                        : ""}
-                                    </Typography>
-                                  </>
-                                )}
+                                      : ""}
+                                  </Typography>
+                                </>
+                              )}
                             </Grid>
                           </TableCell>
                           <TableCell align="left">
@@ -782,7 +784,14 @@ const Chart = () => {
             </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={0}>
-            <NotesTab patientDetails={patientDetails} />
+            <NotesTab
+              patientDetails={patientDetails}
+              bookedNote={upcomingAppointments
+                ?.filter((app) => {
+                  return app?.resource?.status === "booked";
+                })
+                ?.slice(0, 1)}
+            />
           </TabPanel>
           <TabPanel value={value} index={2}>
             <Box
@@ -848,7 +857,7 @@ const Chart = () => {
                           <TableCell align="left">
                             <Typography>
                               {problem?.resource?.note?.[0]?.text &&
-                                problem?.resource?.note?.[0]?.text?.trim() !== ""
+                              problem?.resource?.note?.[0]?.text?.trim() !== ""
                                 ? problem?.resource?.note?.[0]?.text
                                 : "null"}
                             </Typography>
