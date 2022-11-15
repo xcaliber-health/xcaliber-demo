@@ -18,7 +18,7 @@ export const PatientProblems = ({
 }) => {
   const [problemPayload, setProblemPayload] = useState({
     context: {
-      departmentId: "150",
+      departmentId: "1",
     },
     data: {
       resourceType: "Condition",
@@ -141,7 +141,7 @@ export const PatientProblems = ({
                   if (v && v !== "" && v !== null) {
                     setProblemPayload({
                       context: {
-                        departmentId: "150",
+                        departmentId: "1",
                       },
                       data: {
                         ...problemPayload?.data,
@@ -214,7 +214,7 @@ export const PatientProblems = ({
                   if (e.target.value && e.target.value !== null)
                     setProblemPayload({
                       context: {
-                        departmentId: "150",
+                        departmentId: "1",
                       },
                       data: {
                         ...problemPayload?.data,
