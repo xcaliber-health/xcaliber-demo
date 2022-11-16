@@ -4,8 +4,14 @@ import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
 export const AppointmentService = {
   getUpcomingAppointments: async (patientId, currentDate) => {
     try {
+      let dateVal =
+        localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
+          ? `date=gt${currentDate}`
+          : localStorage.getItem("XCALIBER_SOURCE") === "ATHENA"
+          ? `start-date=${currentDate}`
+          : "";
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment?patient=${patientId}&date=gt${currentDate}&departmentId=1`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment?patient=${patientId}&${dateVal}&departmentId=150`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,

@@ -30,11 +30,16 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
     if (!localStorage.getItem(`notes_${patientDetails?.id}`)) {
       localStorage.setItem(`notes_${patientDetails?.id}`, JSON.stringify([]));
     }
-    setFlag(true);
   }, []);
   useEffect(() => {
     Promise.all([getNotes(patientDetails?.id)]);
   }, [patientDetails]);
+
+  useEffect(() => {
+    if (notes && notes !== null && notes?.length > 0) {
+      setFlag(true);
+    }
+  }, [notes]);
 
   const [notesPayload, setNotesPayload] = useState({
     data: {
@@ -91,6 +96,10 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
   const getNotes = async (patientId) => {
     const result = await NoteService.getVisitNotes(patientId);
     setNotes(result);
+  };
+
+  const updateNotes = (createdNote) => {
+    setNotes([createdNote, ...notes]);
   };
 
   // patientDetails,
@@ -196,7 +205,7 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
           onTemplateChange={onTemplateChange}
           updatePatientId={updatePatientId}
           patientDetails={patientDetails}
-          reloadNotes={getNotes}
+          reloadNotes={updateNotes}
           bookedNote={bookedNote}
         />
       </Drawer>
@@ -373,6 +382,7 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
           </Paper>
         </Grid>
       )}
+      {!flag && <Loading />}
     </Grid>
   );
 };

@@ -6,7 +6,7 @@ export const PatientService = {
   getPatientById: async (id) => {
     try {
       const response = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Patient/${id}?departmentId=1`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Patient/${id}?departmentId=150`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,

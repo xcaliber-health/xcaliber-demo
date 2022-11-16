@@ -34,7 +34,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { IconButton } from "@mui/material";
 import { PatientProblems } from "./DrawerComponents/problems";
-import { BUTTON_LABELS } from "../core-utils/constants";
+import { BUTTON_LABELS, DEPARTMENT_ID } from "../core-utils/constants";
 import CreateAppointment from "./CreateAppointment";
 import Loading from "../Patient/Loading";
 import { VitalService } from "../services/P360/vitalService";
@@ -79,7 +79,7 @@ const Chart = () => {
   };
   const [appointmentPayload, setAppointmentPayload] = useState({
     context: {
-      departmentId: "1",
+      departmentId: DEPARTMENT_ID,
     },
     data: {
       resourceType: "Appointment",
@@ -134,7 +134,7 @@ const Chart = () => {
           ? {}
           : {
               actor: {
-                reference: "Location/1",
+                reference: "Location/150",
               },
             },
       ],
@@ -228,7 +228,7 @@ const Chart = () => {
   const onReasonChange = (reason) => {
     setAppointmentPayload({
       context: {
-        departmentId: "1",
+        departmentId: DEPARTMENT_ID,
       },
       data: {
         ...appointmentPayload?.data,
@@ -266,7 +266,7 @@ const Chart = () => {
 
     setAppointmentPayload({
       context: {
-        departmentId: "1",
+        departmentId: DEPARTMENT_ID,
       },
       data: {
         ...appointmentPayload?.data,
@@ -300,7 +300,7 @@ const Chart = () => {
         : `${dateObject.getHours()}`;
     setAppointmentPayload({
       context: {
-        departmentId: "1",
+        departmentId: DEPARTMENT_ID,
       },
       data: {
         ...appointmentPayload?.data,
@@ -313,7 +313,7 @@ const Chart = () => {
   const updatePatientId = (patientId) => {
     setAppointmentPayload({
       context: {
-        departmentId: "1",
+        departmentId: DEPARTMENT_ID,
       },
       data: {
         ...appointmentPayload?.data,

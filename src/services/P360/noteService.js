@@ -1,11 +1,14 @@
 import axios from "axios";
-import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
+import {
+  DEPARTMENT_ID,
+  XCHANGE_SERVICE_ENDPOINT,
+} from "../../core-utils/constants";
 
 export const NoteService = {
   getVisitNotes: async (patientId) => {
     try {
       const response = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&type=visit-notes&departmentId=1`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&type=visit-notes&departmentId=150&start-date=2022-01-01`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -45,14 +48,13 @@ export const NoteService = {
   createNote: async (notePayload, appointmentId = "0") => {
     try {
       let encounterId = "0";
-      console.log(localStorage.getItem(`XCALBER_SOURCE`));
       if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
         await axios
           .patch(
             `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment/${appointmentId}`,
             {
               context: {
-                departmentId: "1",
+                departmentId: DEPARTMENT_ID,
               },
               data: {
                 status: "checked-in",
@@ -86,7 +88,6 @@ export const NoteService = {
             }
           )
           .then((res) => {
-            console.log(res.data?.data?.supportingInformation?.[0]?.reference);
             encounterId =
               res.data?.data?.supportingInformation?.[0]?.reference?.split(
                 "Encounter/"
@@ -127,6 +128,24 @@ export const NoteService = {
         }
       );
       return result?.data?.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getNoteByAppointmentId: async (patientId, appointmentId) => {
+    try {
+      const result = await axios.get(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference/?patient=${patientId}&departmentId=150&appointment=${appointmentId}`,
+        {
+          headers: {
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          },
+        }
+      );
+      return result?.data?.data?.entry;
     } catch (error) {
       console.log(error);
     }
