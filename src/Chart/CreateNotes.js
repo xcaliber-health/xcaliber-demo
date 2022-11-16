@@ -21,6 +21,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { NoteService } from "../services/P360/noteService";
+import { DEPARTMENT_ID } from "../core-utils/constants";
 
 const CreateNotes = ({
   patientDetails,
@@ -88,10 +89,6 @@ const CreateNotes = ({
   const [roslymph, setRosLymph] = useState("");
   const [rospsych, setRosPsych] = useState("");
   const [rosrectal, setRosRectal] = useState("");
-
-  useEffect(() => {
-    console.log("booked note", bookedNote);
-  });
 
   const getPhysicalExamAttachment = (title, data) => {
     return {
@@ -406,12 +403,20 @@ const CreateNotes = ({
     const note = await NoteService.createNote(
       {
         context: {
-          departmentId: "1",
+          departmentId: DEPARTMENT_ID,
         },
         data: { ...notePayLoad },
       },
       bookedNote?.[0]?.resource?.id
     );
+    if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
+      const createdNote = await NoteService.getNoteByAppointmentId(
+        patientDetails?.id,
+        bookedNote?.[0]?.resource?.id
+      );
+
+      reloadNotes(createdNote?.[0]);
+    }
   };
   const onSaveNoteAsDraft = async () => {
     const notePayLoad = await createNotePayLoad();
@@ -1112,7 +1117,6 @@ const CreateNotes = ({
             onClick={() => {
               onSaveNote();
               onCancelClick();
-              reloadNotes(patientDetails?.id);
             }}
             variant="contained"
           >

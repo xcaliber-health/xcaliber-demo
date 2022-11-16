@@ -7,6 +7,7 @@ import { range } from "lodash";
 import { useMemo } from "react";
 import store from "../../Redux/store";
 import { LocalTaxiSharp } from "@mui/icons-material";
+import { DEPARTMENT_ID } from "../../core-utils/constants";
 
 const endpointUrl = "https://xchange-blitz.xcaliberapis.com/api/v1";
 
@@ -35,7 +36,7 @@ export const deParsefunc = (item) => {
   if (localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION")
     tempObj = {
       context: {
-        departmentId: "1",
+        departmentId: DEPARTMENT_ID,
       },
       data: {
         resourceType: "Patient",
@@ -213,7 +214,7 @@ export const deParsefunc = (item) => {
   else {
     tempObj = {
       context: {
-        departmentId: "1",
+        departmentId: DEPARTMENT_ID,
       },
       data: {
         resourceType: "Patient",
@@ -675,7 +676,7 @@ export const getPatientsAtPage = (page, name) => {
   else if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") {
     return axios
       .get(
-        `${endpointUrl}/Patient?departmentId=1&_count=10&_offset=${offset}&given=Stuart&name=${name}`,
+        `${endpointUrl}/Patient?departmentId=150&_count=10&_offset=${offset}&given=George&name=${name}`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,

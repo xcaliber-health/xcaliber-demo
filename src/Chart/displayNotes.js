@@ -20,6 +20,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { NoteService } from "../services/P360/noteService";
+import { DEPARTMENT_ID } from "../core-utils/constants";
 
 const DisplayNotes = ({
   note,
@@ -146,7 +147,7 @@ const DisplayNotes = ({
   const onSaveNote = async () => {
     const noteId = await NoteService.createNote({
       context: {
-        departmentId: "1",
+        departmentId: DEPARTMENT_ID,
       },
       data: { ...note.resource },
     });

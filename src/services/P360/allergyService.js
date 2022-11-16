@@ -6,7 +6,7 @@ export const AllergyService = {
   getAllergies: async (patientId) => {
     try {
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/AllergyIntolerance?_count=5&patient=${patientId}&departmentId=1`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/AllergyIntolerance?_count=5&patient=${patientId}&departmentId=150`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
