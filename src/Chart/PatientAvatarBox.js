@@ -72,14 +72,9 @@ const PatientDetailsCard = ({
               {`Patient | ${calculateAge(
                 parseInt(patientDetails?.birthDate?.slice(0, 4))
               )} | ${
-                patientDetails?.gender
-                  ? patientDetails?.gender
-                  : patientDetails?.extension?.find((extension) => {
-                      return (
-                        extension?.url?.endsWith("legal-sex") ||
-                        extension?.url?.endsWith("us-core-birthsex")
-                      );
-                    })?.valueCode
+                patientDetails?.extension?.find((extension) => {
+                  return extension?.url?.endsWith("legal-sex") ?? `-`;
+                })?.valueCode ?? `-`
               }`}
             </Grid>
 
