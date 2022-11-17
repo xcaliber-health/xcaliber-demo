@@ -27,7 +27,6 @@ export const AppointmentService = {
   },
   createAppointment: async (appointmentPayload) => {
     try {
-      console.log(appointmentPayload);
       const result = await axios.post(
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment`,
         appointmentPayload,

@@ -3,6 +3,7 @@ import { Button, TextField, Box } from "@mui/material";
 import { makeStyles } from "@material-ui/styles";
 import React, { useEffect, useState } from "react";
 import { VitalService } from "../../services/P360/vitalService";
+import { DEPARTMENT_ID } from "../../core-utils/constants";
 const useStyles = makeStyles(() => ({
   typography: {
     paddingTop: "20px",
@@ -282,7 +283,6 @@ export default function Vitals({
         entry: entries,
       },
     };
-
     await VitalService.createVitals(vitalsPayLoad);
     onVitalsClick();
   };

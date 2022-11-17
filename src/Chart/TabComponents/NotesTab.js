@@ -18,7 +18,7 @@ import Loading from "../../Patient/Loading";
 
 const NotesTab = ({ patientDetails, bookedNote }) => {
   const theme = useTheme();
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isNoteDisplayDrawerOpen, setIsNoteDisplayDrawerOpen] = useState(false);
   const [isUnsignedNoteDisplayDrawerOpen, setIsUnsignedNoteDisplayDrawerOpen] =
@@ -36,7 +36,7 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
   }, [patientDetails]);
 
   useEffect(() => {
-    if (notes && notes !== null && notes?.length > 0) {
+    if (notes && notes !== null && notes?.length >= 0) {
       setFlag(true);
     }
   }, [notes]);

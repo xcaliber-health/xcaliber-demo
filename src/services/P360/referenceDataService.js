@@ -33,7 +33,6 @@ export const ReferenceDataService = {
           },
         }
       );
-      console.log(result?.data?.data?.result);
       return result?.data?.data?.result;
     } catch (error) {
       console.log(error);

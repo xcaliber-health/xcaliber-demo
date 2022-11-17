@@ -687,7 +687,6 @@ const Chart = () => {
                 variant="contained"
                 onClick={() => {
                   setVitalsDrawer(true);
-                  setCurrentDrawerIndex(1);
                 }}
               >
                 Create Vitals
@@ -806,7 +805,6 @@ const Chart = () => {
                 variant="contained"
                 onClick={() => {
                   setIsProblemsDrawerOpen(true);
-                  setCurrentDrawerIndex(1);
                 }}
               >
                 Create Problems
@@ -856,9 +854,21 @@ const Chart = () => {
                           </TableCell>
                           <TableCell align="left">
                             <Typography>
-                              {problem?.resource?.note?.[0]?.text &&
-                              problem?.resource?.note?.[0]?.text?.trim() !== ""
-                                ? problem?.resource?.note?.[0]?.text
+                              {localStorage.getItem("XCALIBER_SOURCE") ===
+                              "ELATION"
+                                ? problem?.resource?.note?.[0]?.text &&
+                                  problem?.resource?.note?.[0]?.text !== null
+                                  ? problem?.resource?.note?.[0]?.text
+                                  : "null"
+                                : localStorage.getItem(`XCALIBER_SOURCE`) ===
+                                  "ATHENA"
+                                ? problem?.resource?.contained?.[0]?.notes
+                                    ?.text &&
+                                  problem?.resource?.contained?.[0]?.notes
+                                    ?.text !== null
+                                  ? problem?.resource?.contained?.[0]?.notes
+                                      ?.text
+                                  : "null"
                                 : "null"}
                             </Typography>
                           </TableCell>
@@ -925,7 +935,7 @@ const Chart = () => {
                   {patientAllergies &&
                     patientAllergies?.map((allergy) => {
                       let dateObject = Helper.extractFieldsFromDate(
-                        allergy?.resource?.recordedDate
+                        allergy?.resource?.onsetDateTime
                       );
                       return (
                         <TableRow

@@ -25,9 +25,6 @@ const ViewPatientsTable = (props) => {
     patients: [],
     totalCount: 0,
   });
-  useEffect(() => {
-    console.log(newData);
-  });
 
   const func = async () => {
     setAwait(true);

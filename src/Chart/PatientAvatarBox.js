@@ -188,7 +188,6 @@ const PatientDetailsCard = ({
           >
             {upcomingAppointments &&
               upcomingAppointments?.map((appointment, index) => {
-                console.log(appointment);
                 const appointmentDateDetailObject =
                   Helper.extractFieldsFromDate(appointment?.resource?.start);
                 return (
