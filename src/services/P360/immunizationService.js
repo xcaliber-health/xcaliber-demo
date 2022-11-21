@@ -5,7 +5,9 @@ export const ImmunizationService = {
   getImmunization: async (patientId) => {
     try {
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Immunization?_count=5&patient=${patientId}&departmentId=150`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Immunization?_count=5&patient=${patientId}&departmentId=${localStorage.getItem(
+          `DEPARTMENT_ID`
+        )}`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,

@@ -6,7 +6,9 @@ export const AllergyService = {
   getAllergies: async (patientId) => {
     try {
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/AllergyIntolerance?patient=${patientId}&departmentId=150`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/AllergyIntolerance?patient=${patientId}&departmentId=${localStorage.getItem(
+          `DEPARTMENT_ID`
+        )}`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -27,13 +29,12 @@ export const AllergyService = {
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
-            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
           },
         }
       );
-      console.log(result);
       return result?.data?.data;
     } catch (error) {
       console.log(error);

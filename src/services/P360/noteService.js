@@ -1,14 +1,13 @@
 import axios from "axios";
-import {
-  DEPARTMENT_ID,
-  XCHANGE_SERVICE_ENDPOINT,
-} from "../../core-utils/constants";
+import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
 
 export const NoteService = {
   getVisitNotes: async (patientId) => {
     try {
       const response = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&type=visit-notes&departmentId=150&start-date=2022-01-01`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&type=visit-notes&departmentId=${localStorage.getItem(
+          `DEPARTMENT_ID`
+        )}&start-date=2022-01-01`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -54,7 +53,7 @@ export const NoteService = {
             `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment/${appointmentId}`,
             {
               context: {
-                departmentId: DEPARTMENT_ID,
+                departmentId: localStorage.getItem(`DEPARTMENT_ID`),
               },
               data: {
                 status: "checked-in",
@@ -135,7 +134,9 @@ export const NoteService = {
   getNoteByAppointmentId: async (patientId, appointmentId) => {
     try {
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference/?patient=${patientId}&departmentId=150&appointment=${appointmentId}`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference/?patient=${patientId}&departmentId=${localStorage.getItem(
+          `DEPARTMENT_ID`
+        )}&appointment=${appointmentId}`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,

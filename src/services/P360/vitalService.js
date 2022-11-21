@@ -5,7 +5,9 @@ export const VitalService = {
   getVitals: async (patientId) => {
     try {
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Observation?patient=${patientId}&category=vital-signs&departmentId=150`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Observation?patient=${patientId}&category=vital-signs&departmentId=${localStorage.getItem(
+          `DEPARTMENT_ID`
+        )}`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,

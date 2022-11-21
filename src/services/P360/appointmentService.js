@@ -11,7 +11,9 @@ export const AppointmentService = {
           ? `start-date=${currentDate}`
           : "";
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment?patient=${patientId}&${dateVal}&departmentId=150`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment?patient=${patientId}&${dateVal}&departmentId=${localStorage.getItem(
+          `DEPARTMENT_ID`
+        )}`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,

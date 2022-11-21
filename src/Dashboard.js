@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import Terminology from "./Terminology";
 import ViewPatients from "./Patient/ViewPatients";
 import Analytics from "./Analytics";
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import {
   Avatar,
   Button,
@@ -34,6 +35,7 @@ import {
 import Watermark from "./Watermark";
 import { makeStyles } from "@material-ui/styles";
 import { useTheme } from "@mui/system";
+import { DEPARTMENTS } from "./core-utils/constants";
 
 const useStyles = makeStyles({
   root: {
@@ -113,7 +115,9 @@ function DashboardContent() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [sourceState, setSourceState] = React.useState("");
+  const [departmentId, setDepartmentId] = React.useState(`150`);
   const [isModalOpen, setIsModalOpen] = React.useState();
+  const [isDepartmentModalOpen, setIsDepartmentModalOpen] = React.useState();
   const dispatch = useDispatch();
   // const [source, setSource] = React.useState(null);
   const [id, setId] = React.useState(0);
@@ -238,7 +242,6 @@ function DashboardContent() {
                           ? `${process.env.REACT_APP_XSOURCEID}`
                           : `${process.env.REACT_APP_ATHENA_XSOURCEID}`
                       );
-                      // dispatch({ type: sourceState });
                       setIsModalOpen(false);
                       navigate("/p360");
                       window.location.reload();
@@ -258,6 +261,73 @@ function DashboardContent() {
                 </Grid>
               </Grid>
             </Dialog>
+            <Box display="flex" sx={{ marginRight: theme.spacing(-56.5) }}>
+              <Dialog direction="column" open={isDepartmentModalOpen}>
+                <Grid
+                  container
+                  // sx={{ width: theme.spacing(60), height: theme.spacing(30) }}
+                  direction={"column"}
+                  padding={2}
+                >
+                  <Grid item>
+                    <Typography variant="h4">Change department</Typography>
+                  </Grid>
+                  <Grid item>
+                    <RadioGroup
+                      onChange={(e) => {
+                        setDepartmentId(e.target.value);
+                      }}
+                      pt={2}
+                    >
+                      {DEPARTMENTS.map((dept) => {
+                        return (
+                          <FormControlLabel
+                            value={dept?.departmentid}
+                            control={<Radio />}
+                            label={`${dept?.patientdepartmentname}  (${dept?.departmentid})`}
+                          />
+                        );
+                      })}
+                    </RadioGroup>
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  item
+                  justifyContent={"space-around"}
+                  paddingBottom={4}
+                >
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={() => {
+                      localStorage.setItem(`DEPARTMENT_ID`, departmentId);
+                      setIsDepartmentModalOpen(false);
+                      navigate("/p360");
+                      window.location.reload();
+                    }}
+                  >
+                    Submit
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={() => {
+                      setIsDepartmentModalOpen(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Grid>
+              </Dialog>
+              <IconButton
+                onClick={() => {
+                  setIsDepartmentModalOpen(true);
+                }}
+              >
+                <ChangeCircleIcon color="action" />
+              </IconButton>
+            </Box>
             <Box display="flex">
               <IconButton
                 sx={{ color: "black", marginRight: "8px" }}

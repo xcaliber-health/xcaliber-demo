@@ -10,7 +10,6 @@ import {
 import { ReferenceDataService } from "../../services/P360/referenceDataService";
 import { ProblemService } from "../../services/P360/problemService";
 import Loading from "../../Patient/Loading";
-import { DEPARTMENT_ID } from "../../core-utils/constants";
 export const PatientProblems = ({
   patientId,
   disabled,
@@ -19,7 +18,7 @@ export const PatientProblems = ({
 }) => {
   const [problemPayload, setProblemPayload] = useState({
     context: {
-      departmentId: DEPARTMENT_ID,
+      departmentId: localStorage.getItem(`DEPARTMENT_ID`),
     },
     data: {
       resourceType: "Condition",
@@ -143,7 +142,7 @@ export const PatientProblems = ({
                   if (v && v !== "" && v !== null) {
                     setProblemPayload({
                       context: {
-                        departmentId: DEPARTMENT_ID,
+                        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
                       },
                       data: {
                         ...problemPayload?.data,
@@ -201,7 +200,7 @@ export const PatientProblems = ({
                   if (e.target.value && e.target.value !== null)
                     setProblemPayload({
                       context: {
-                        departmentId: DEPARTMENT_ID,
+                        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
                       },
                       data: {
                         ...problemPayload?.data,

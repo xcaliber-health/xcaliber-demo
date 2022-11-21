@@ -29,7 +29,7 @@ export const ReferenceDataService = {
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
-            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
       );
