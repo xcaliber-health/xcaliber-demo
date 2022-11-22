@@ -1,27 +1,10 @@
-import {
-  Grid,
-  Typography,
-  TextField,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
-  Button,
-  InputLabel,
-  Select,
-  MenuItem,
-  Autocomplete,
-  Chip,
-} from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import React, { useEffect, useState } from "react";
+import { Grid, Typography, TextField, Button, Chip } from "@mui/material";
+import React, { useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { NoteService } from "../services/P360/noteService";
-import { DEPARTMENT_ID } from "../core-utils/constants";
 
 const CreateNotes = ({
   patientDetails,
@@ -403,7 +386,7 @@ const CreateNotes = ({
     const note = await NoteService.createNote(
       {
         context: {
-          departmentId: DEPARTMENT_ID,
+          departmentId: localStorage.getItem(`DEPARTMENT_ID`),
         },
         data: { ...notePayLoad },
       },

@@ -15,26 +15,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { PatientService } from "../services/P360/patientService";
 import { AppointmentService } from "../services/P360/appointmentService";
 import NotesTab from "./TabComponents/NotesTab";
-import ComingSoon from "../Watermark/ComingSoon";
-import PamiV from "./PamiV";
-import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import CreateVitals from "./DrawerComponents/CreateVitals";
-import {
-  Dangerous,
-  ReportProblem,
-  DeviceThermostat,
-  Medication,
-  Vaccines,
-} from "@mui/icons-material/";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { IconButton } from "@mui/material";
 import { PatientProblems } from "./DrawerComponents/problems";
-import { BUTTON_LABELS, DEPARTMENT_ID } from "../core-utils/constants";
 import CreateAppointment from "./CreateAppointment";
 import Loading from "../Patient/Loading";
 import { VitalService } from "../services/P360/vitalService";
@@ -43,8 +31,6 @@ import { AllergyService } from "../services/P360/allergyService";
 import { MedicationService } from "../services/P360/medicationService";
 import { ImmunizationService } from "../services/P360/immunizationService";
 import Allergy from "./DrawerComponents/createAllergies";
-import { secondsInWeek } from "date-fns";
-import { rangeRight } from "lodash";
 import { Helper } from "../core-utils/helper";
 import { ReferenceDataService } from "../services/P360/referenceDataService";
 
@@ -79,7 +65,7 @@ const Chart = () => {
   };
   const [appointmentPayload, setAppointmentPayload] = useState({
     context: {
-      departmentId: DEPARTMENT_ID,
+      departmentId: localStorage.getItem(`DEPARTMENT_ID`),
     },
     data: {
       resourceType: "Appointment",
@@ -112,7 +98,7 @@ const Chart = () => {
               },
               {
                 url: "http://xcaliber-fhir/structureDefinition/department-id",
-                valueInteger: "150",
+                valueInteger: localStorage.getItem(`DEPARTMENT_ID`),
               },
             ]
           : [],
@@ -122,7 +108,7 @@ const Chart = () => {
             reference:
               localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION"
                 ? "Practitioner/140857915539458"
-                : "Practitioner/89",
+                : "Practitioner/111",
           },
         },
         {
@@ -134,13 +120,16 @@ const Chart = () => {
           ? {}
           : {
               actor: {
-                reference: "Location/150",
+                reference: `Location/${localStorage.getItem(`DEPARTMENT_ID`)}`,
               },
             },
       ],
     },
   });
   const [allergyPayload, setAllergyPayload] = useState({
+    context: {
+      departmentId: localStorage.getItem(`DEPARTMENT_ID`),
+    },
     data: {
       resourceType: "AllergyIntolerance",
       clinicalStatus: {
@@ -221,14 +210,19 @@ const Chart = () => {
     setAllergyOptions(result);
   };
   const initialiseAllergyOptions = async () => {
-    const result = await ReferenceDataService.getAllergyData();
+    const result =
+      localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
+        ? await ReferenceDataService.getAllergyData()
+        : localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
+        ? await ReferenceDataService.getAllergyData(`ab`)
+        : null;
     setAllergyOptions(result);
   };
 
   const onReasonChange = (reason) => {
     setAppointmentPayload({
       context: {
-        departmentId: DEPARTMENT_ID,
+        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
       },
       data: {
         ...appointmentPayload?.data,
@@ -266,7 +260,7 @@ const Chart = () => {
 
     setAppointmentPayload({
       context: {
-        departmentId: DEPARTMENT_ID,
+        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
       },
       data: {
         ...appointmentPayload?.data,
@@ -300,7 +294,7 @@ const Chart = () => {
         : `${dateObject.getHours()}`;
     setAppointmentPayload({
       context: {
-        departmentId: DEPARTMENT_ID,
+        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
       },
       data: {
         ...appointmentPayload?.data,
@@ -313,7 +307,7 @@ const Chart = () => {
   const updatePatientId = (patientId) => {
     setAppointmentPayload({
       context: {
-        departmentId: DEPARTMENT_ID,
+        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
       },
       data: {
         ...appointmentPayload?.data,
@@ -357,30 +351,52 @@ const Chart = () => {
       setIsDrawerOpen(false);
     }
   };
-  const onAllergyChange = (reason) => {
+  const onAllergyChange = (reference) => {
     setAllergyPayload({
+      context: {
+        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
+      },
       data: {
         ...allergyPayload?.data,
         code: {
           coding: [
             {
-              display: reason,
+              system:
+                localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
+                  ? `elation`
+                  : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
+                  ? `athena`
+                  : `null`,
+              code:
+                localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
+                  ? reference?.allergyid
+                  : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
+                  ? reference?.Concept_Code_2
+                  : `null`,
+              display:
+                localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
+                  ? reference?.allergyname
+                  : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
+                  ? reference?.Concept_Name_2
+                  : `null`,
             },
           ],
         },
       },
     });
   };
-  const reaction2 = [];
   const reaction = {};
   const onReactionChange = (reaction1) => {
     if (reaction1) {
       reaction["reaction"] = reaction1;
     }
     setAllergyPayload({
+      context: {
+        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
+      },
       data: {
         ...allergyPayload?.data,
-        reaction: reaction,
+        reaction: [reaction],
       },
     });
   };
@@ -390,15 +406,21 @@ const Chart = () => {
       reaction["severity"] = severity;
     }
     setAllergyPayload({
+      context: {
+        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
+      },
       data: {
         ...allergyPayload?.data,
-        reaction: reaction,
+        reaction: [reaction],
       },
     });
     setSeverity(severity);
   };
   const onStatusChange = (status) => {
     setAllergyPayload({
+      context: {
+        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
+      },
       data: {
         ...allergyPayload?.data,
         clinicalStatus: {
@@ -415,6 +437,9 @@ const Chart = () => {
   };
   const onAllergyDateChange = (date) => {
     setAllergyPayload({
+      context: {
+        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
+      },
       data: {
         ...allergyPayload?.data,
         onsetDateTime: date,
@@ -432,17 +457,24 @@ const Chart = () => {
     ) {
       alert("Please provide allergy");
     } else {
-      const createdAllergy = await AllergyService.createAllergies(
-        allergyPayload
-      );
-      const createdAllergyData = await AllergyService.getAllergyById(
-        createdAllergy?.id
-      );
-      setPatientAllergies([
-        ...patientAllergies,
-        { resource: { ...createdAllergyData } },
-      ]);
-      setIsAllergyDrawerOpen(false);
+      if (localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`) {
+        const createdAllergy = await AllergyService.createAllergies(
+          allergyPayload
+        );
+        const createdAllergyData = await AllergyService.getAllergyById(
+          createdAllergy?.id
+        );
+        setPatientAllergies([
+          ...patientAllergies,
+          { resource: { ...createdAllergyData } },
+        ]);
+        setIsAllergyDrawerOpen(false);
+      } else if (localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`) {
+        const createdAllergy = await AllergyService.createAllergies(
+          allergyPayload
+        );
+        window.location.reload();
+      }
     }
   };
 
@@ -687,7 +719,6 @@ const Chart = () => {
                 variant="contained"
                 onClick={() => {
                   setVitalsDrawer(true);
-                  setCurrentDrawerIndex(1);
                 }}
               >
                 Create Vitals
@@ -806,7 +837,6 @@ const Chart = () => {
                 variant="contained"
                 onClick={() => {
                   setIsProblemsDrawerOpen(true);
-                  setCurrentDrawerIndex(1);
                 }}
               >
                 Create Problems
@@ -856,9 +886,21 @@ const Chart = () => {
                           </TableCell>
                           <TableCell align="left">
                             <Typography>
-                              {problem?.resource?.note?.[0]?.text &&
-                              problem?.resource?.note?.[0]?.text?.trim() !== ""
-                                ? problem?.resource?.note?.[0]?.text
+                              {localStorage.getItem("XCALIBER_SOURCE") ===
+                              "ELATION"
+                                ? problem?.resource?.note?.[0]?.text &&
+                                  problem?.resource?.note?.[0]?.text !== null
+                                  ? problem?.resource?.note?.[0]?.text
+                                  : "null"
+                                : localStorage.getItem(`XCALIBER_SOURCE`) ===
+                                  "ATHENA"
+                                ? problem?.resource?.contained?.[0]?.notes
+                                    ?.text &&
+                                  problem?.resource?.contained?.[0]?.notes
+                                    ?.text !== null
+                                  ? problem?.resource?.contained?.[0]?.notes
+                                      ?.text
+                                  : "null"
                                 : "null"}
                             </Typography>
                           </TableCell>
@@ -925,7 +967,7 @@ const Chart = () => {
                   {patientAllergies &&
                     patientAllergies?.map((allergy) => {
                       let dateObject = Helper.extractFieldsFromDate(
-                        allergy?.resource?.recordedDate
+                        allergy?.resource?.onsetDateTime
                       );
                       return (
                         <TableRow

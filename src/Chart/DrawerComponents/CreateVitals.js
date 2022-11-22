@@ -1,7 +1,7 @@
-import { Drawer, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { Button, TextField, Box } from "@mui/material";
 import { makeStyles } from "@material-ui/styles";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { VitalService } from "../../services/P360/vitalService";
 const useStyles = makeStyles(() => ({
   typography: {
@@ -11,23 +11,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function Vitals({
-  patientDetails,
-  vitalsDetails,
-  onVitalsClick,
-  onWeightChange,
-  onHeightChange,
-  onbmiChange,
-  onOxygenChange,
-  onPulseChange,
-  handleClose,
-  onRespirationChange,
-  onbodyTemperatureChange,
-  oncircumChange,
-  onSysChange,
-  onDiaChange,
-  onVitalsChange,
-}) {
+export default function Vitals({ patientDetails, onVitalsClick, handleClose }) {
   const classes = useStyles();
   let heightValue = 0;
   const [height, setHeight] = useState(0);
@@ -164,15 +148,32 @@ export default function Vitals({
       });
     }
     if (bmi) {
+      let bmiValue;
+      if (localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION") {
+        bmiValue = {
+          valueString: bmi,
+        };
+      } else if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
+        bmiValue = {
+          valueQuantity: {
+            unit: "kg/m2",
+            value: bmi,
+          },
+        };
+      }
       entries.push({
         resource: {
           ...resource,
           code: {
             coding: [
-              { system: "http://loinc.org", display: "body mass index" },
+              {
+                system: "http://loinc.org",
+                code: "39156-5",
+                display: "body mass index",
+              },
             ],
           },
-          valueString: bmi,
+          ...bmiValue,
         },
       });
     }
@@ -275,14 +276,14 @@ export default function Vitals({
 
     const vitalsPayLoad = {
       context: {
-        departmentId: DEPARTMENT_ID,
+        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
       },
       data: {
         resourceType: "Bundle",
         entry: entries,
       },
     };
-
+    console.log(vitalsPayLoad);
     await VitalService.createVitals(vitalsPayLoad);
     onVitalsClick();
   };
@@ -450,30 +451,32 @@ export default function Vitals({
           justifyContent="space-between"
           sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
         >
-          <Grid item sx={{ width: "50%" }}>
-            <Typography
-              sx={{ paddingTop: "20px", marginLeft: "10px" }}
-              className={classes.typography}
-            >
-              Oxygen Saturation
-            </Typography>
-          </Grid>
-          <Grid
-            item
-            display={"flex"}
-            sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
-          >
-            <TextField
-              required
-              placeholder="%"
-              id="oxygen"
-              onChange={(e) => {
-                // onOxygenChange(e.target.value);
-                setOxy(e.target.value);
-              }}
-            ></TextField>
-            {/* <Typography sx={{ paddingTop: "20px" }} className={classes.typography}>%</Typography> */}
-          </Grid>
+          {localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION" && (
+            <>
+              <Grid item sx={{ width: "50%" }}>
+                <Typography
+                  sx={{ paddingTop: "20px", marginLeft: "10px" }}
+                  className={classes.typography}
+                >
+                  Oxygen Saturation
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                display={"flex"}
+                sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+              >
+                <TextField
+                  required
+                  placeholder="%"
+                  id="oxygen"
+                  onChange={(e) => {
+                    setOxy(e.target.value);
+                  }}
+                ></TextField>
+              </Grid>
+            </>
+          )}
         </Grid>
       </Grid>
 
@@ -590,30 +593,34 @@ export default function Vitals({
           justifyContent="space-between"
           sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
         >
-          <Grid item sx={{ width: "50%" }}>
-            <Typography
-              sx={{ paddingTop: "20px", marginLeft: "10px" }}
-              className={classes.typography}
-            >
-              Head Circumference
-            </Typography>
-          </Grid>
-          <Grid
-            item
-            display={"flex"}
-            sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
-          >
-            <TextField
-              required
-              placeholder="cm"
-              id="circumference"
-              onChange={(e) => {
-                // oncircumChange(e.target.value)
-                setHeadCir(e.target.value);
-              }}
-            ></TextField>
-            {/* <Typography sx={{ paddingTop: "20px" }} className={classes.typography}>cm</Typography> */}
-          </Grid>
+          {localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION" && (
+            <>
+              <Grid item sx={{ width: "50%" }}>
+                <Typography
+                  sx={{ paddingTop: "20px", marginLeft: "10px" }}
+                  className={classes.typography}
+                >
+                  Head Circumference
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                display={"flex"}
+                sx={{ padding: "8px 0px 8px 0px", width: "50%" }}
+              >
+                <TextField
+                  required
+                  placeholder="cm"
+                  id="circumference"
+                  onChange={(e) => {
+                    // oncircumChange(e.target.value)
+                    setHeadCir(e.target.value);
+                  }}
+                ></TextField>
+                {/* <Typography sx={{ paddingTop: "20px" }} className={classes.typography}>cm</Typography> */}
+              </Grid>
+            </>
+          )}
         </Grid>
       </Grid>
       <Box

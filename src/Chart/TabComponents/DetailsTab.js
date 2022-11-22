@@ -23,14 +23,7 @@ const DetailsTab = ({ patientDetails }) => {
           <Grid item p={1}>
             <Typography>Gender</Typography>
             <Typography sx={{ ...commonValueStyles }}>
-              {
-                patientDetails?.extension?.find((extension) => {
-                  return (
-                    extension?.url ===
-                    "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
-                  );
-                })?.valueCode
-              }
+              {patientDetails?.gender ?? `-`}
             </Typography>
           </Grid>
           <Grid item p={1}>
@@ -74,17 +67,29 @@ const DetailsTab = ({ patientDetails }) => {
           <Grid item p={1}>
             <Typography> Race</Typography>
             <Typography sx={{ ...commonValueStyles }}>
-              {patientDetails?.extension?.find((ext) => {
-                return ext?.url?.endsWith("us-core-race");
-              })?.valueString ?? `-`}
+              {localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
+                ? patientDetails?.extension?.find((ext) => {
+                    return ext?.url?.endsWith("us-core-race");
+                  })?.valueString ?? `-`
+                : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
+                ? patientDetails?.extension?.find((ext) => {
+                    return ext?.url?.endsWith("us-core-race");
+                  })?.extension?.[0]?.valueString?.[0] ?? `-`
+                : `-`}
             </Typography>
           </Grid>
           <Grid item p={1}>
             <Typography> Ethnicity</Typography>
             <Typography sx={{ ...commonValueStyles }}>
-              {patientDetails?.extension?.find((ext) => {
-                return ext?.url?.endsWith("us-core-ethnicity");
-              })?.valueString ?? `-`}
+              {localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
+                ? patientDetails?.extension?.find((ext) => {
+                    return ext?.url?.endsWith("us-core-ethnicity");
+                  })?.valueString ?? `-`
+                : localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
+                ? patientDetails?.extension?.find((ext) => {
+                    return ext?.url?.endsWith("us-core-ethnicity");
+                  })?.extension?.[0]?.valueString ?? `-`
+                : `-`}
             </Typography>
           </Grid>
         </Grid>

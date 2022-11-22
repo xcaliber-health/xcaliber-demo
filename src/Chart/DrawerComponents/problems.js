@@ -10,7 +10,6 @@ import {
 import { ReferenceDataService } from "../../services/P360/referenceDataService";
 import { ProblemService } from "../../services/P360/problemService";
 import Loading from "../../Patient/Loading";
-import { DEPARTMENT_ID } from "../../core-utils/constants";
 export const PatientProblems = ({
   patientId,
   disabled,
@@ -19,7 +18,7 @@ export const PatientProblems = ({
 }) => {
   const [problemPayload, setProblemPayload] = useState({
     context: {
-      departmentId: DEPARTMENT_ID,
+      departmentId: localStorage.getItem(`DEPARTMENT_ID`),
     },
     data: {
       resourceType: "Condition",
@@ -118,7 +117,7 @@ export const PatientProblems = ({
             </Grid>
           </Grid>
           <Grid item pt={2}>
-            <Typography pb={1}> ICD10-Code</Typography>
+            <Typography pb={1}> Snomed-Code</Typography>
             {!disabled && (
               <Autocomplete
                 open={open}
@@ -132,9 +131,10 @@ export const PatientProblems = ({
                 id="combo-box-demo"
                 options={problemIcd10Options}
                 getOptionLabel={(option) => {
-                  if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION")
-                    return `${option?.code} (${option?.display})`;
-                  else if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA")
+                  if (
+                    localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" ||
+                    localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
+                  )
                     return `${option?.SNOMED_CID} (${option?.SNOMED_FSN})`;
                   else return option?.label;
                 }}
@@ -142,31 +142,19 @@ export const PatientProblems = ({
                   if (v && v !== "" && v !== null) {
                     setProblemPayload({
                       context: {
-                        departmentId: DEPARTMENT_ID,
+                        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
                       },
                       data: {
                         ...problemPayload?.data,
                         text: {
                           status: "generated",
-                          div:
-                            localStorage.getItem("XCALIBER_SOURCE") ===
-                            "ELATION"
-                              ? v?.display
-                              : v?.SNOMED_FSN,
+                          div: v?.SNOMED_FSN,
                         },
                         code: {
                           coding: [
                             {
-                              system:
-                                localStorage.getItem(`XCALIBER_SOURCE`) ===
-                                "ELATION"
-                                  ? `ICD10`
-                                  : `http://snomed.info/sct`,
-                              code:
-                                localStorage.getItem("XCALIBER_SOURCE") ===
-                                "ELATION"
-                                  ? v?.code
-                                  : v?.SNOMED_CID,
+                              system: `http://snomed.info/sct`,
+                              code: v?.SNOMED_CID,
                             },
                           ],
                         },
@@ -175,15 +163,12 @@ export const PatientProblems = ({
                   }
                 }}
                 isOptionEqualToValue={(option, value) => {
-                  return (
-                    option?.code !== value?.display ||
-                    option?.SNOMED_CID !== option?.SNOMED_FSN
-                  );
+                  return option?.SNOMED_CID !== option?.SNOMED_FSN;
                 }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="ICD10-code"
+                    label="Snomed-code"
                     onChange={(ev) => {
                       if (ev.target.value !== "" || ev.target.value !== null) {
                         updateOptions(ev.target.value);
@@ -215,7 +200,7 @@ export const PatientProblems = ({
                   if (e.target.value && e.target.value !== null)
                     setProblemPayload({
                       context: {
-                        departmentId: DEPARTMENT_ID,
+                        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
                       },
                       data: {
                         ...problemPayload?.data,

@@ -29,11 +29,10 @@ export const ReferenceDataService = {
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
-            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
       );
-      console.log(result?.data?.data?.result);
       return result?.data?.data?.result;
     } catch (error) {
       console.log(error);
