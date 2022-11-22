@@ -7,7 +7,7 @@ export const ProblemService = {
       const result = await axios.get(
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Condition?patient=${patientId}&category=problem-list-item&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}&_count=5`,
+        )}`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -15,7 +15,7 @@ export const ProblemService = {
           },
         }
       );
-      return result?.data?.data?.entry?.slice(0, 10);
+      return result?.data?.data?.entry;
     } catch (error) {
       console.log(error);
     }

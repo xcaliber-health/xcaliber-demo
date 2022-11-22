@@ -375,7 +375,7 @@ const Chart = () => {
                   : `null`,
               display:
                 localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
-                  ? reference?.allergyname
+                  ? reference?.allergenname
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
                   ? reference?.Concept_Name_2
                   : `null`,
@@ -385,35 +385,32 @@ const Chart = () => {
       },
     });
   };
-  const reaction = {};
   const onReactionChange = (reaction1) => {
-    if (reaction1) {
-      reaction["reaction"] = reaction1;
-    }
     setAllergyPayload({
       context: {
         departmentId: localStorage.getItem(`DEPARTMENT_ID`),
       },
       data: {
         ...allergyPayload?.data,
-        reaction: [reaction],
+        reaction: [
+          { ...allergyPayload?.data?.reaction?.[0], description: reaction1 },
+        ],
       },
     });
   };
   const onSeverityChange = (severity) => {
-    if (severity) {
-      // reaction["description"] = severity;
-      reaction["severity"] = severity;
-    }
     setAllergyPayload({
       context: {
         departmentId: localStorage.getItem(`DEPARTMENT_ID`),
       },
       data: {
         ...allergyPayload?.data,
-        reaction: [reaction],
+        reaction: [
+          { ...allergyPayload?.data?.reaction?.[0], severity: severity },
+        ],
       },
     });
+
     setSeverity(severity);
   };
   const onStatusChange = (status) => {

@@ -6,7 +6,7 @@ export const ReferenceDataService = {
     try {
       const result = await axios.get(
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?category=problems&resourceType=condition&searchString=${
-          searchString ?? ""
+          searchString ?? "abc"
         }`,
         {
           headers: {
@@ -24,7 +24,7 @@ export const ReferenceDataService = {
     try {
       const result = await axios.get(
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=allergy&searchString=${
-          searchString ?? ""
+          searchString ?? "abe"
         }`,
         {
           headers: {
