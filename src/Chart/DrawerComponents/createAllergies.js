@@ -36,6 +36,7 @@ export default function Allergy({
 }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
   useEffect(() => {
     if (value) {
       const dateObject = new Date(value);
@@ -56,7 +57,11 @@ export default function Allergy({
       <Divider></Divider>
       <Grid display="flex">
         <Typography
-          sx={{ marginTop: "13px", marginRight: "31px", marginBottom: "30px" }}
+          sx={{
+            marginTop: "13px",
+            marginRight: "31px",
+            marginBottom: "30px",
+          }}
         >
           Allergy:
         </Typography>
@@ -113,14 +118,6 @@ export default function Allergy({
           }}
         />
       </Grid>
-      {/* <Grid display="flex">
-                <Typography sx={{ marginTop: "10px", marginBottom: "10px", marginRight: "50px" }}>Reaction_Code:</Typography>
-                <TextField sx={{ width: "100%" }}
-                    label={"Reaction Snomed Code"}
-                    onChange={(e) => {
-                        onReactionCodeChange(e.target.value);
-                    }} />
-            </Grid> */}
       <Grid sx={{ paddingTop: "20px" }}>
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Severity:</InputLabel>
@@ -157,7 +154,6 @@ export default function Allergy({
           </Select>
         </FormControl>
       </Grid>
-
       <Grid display="flex">
         <Typography sx={{ paddingTop: "20px" }}>Onset Date:</Typography>
         <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -15,7 +15,7 @@ export const VitalService = {
           },
         }
       );
-      return result?.data?.data?.entry?.slice(0, 10);
+      return result?.data?.data?.entry;
     } catch (error) {
       console.log(error);
     }
