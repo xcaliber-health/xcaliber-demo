@@ -1,9 +1,9 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Dashboard from "./Dashboard";
 import { BrowserRouter } from "react-router-dom";
-
+import { SocketService } from "./socket";
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
@@ -18,6 +18,22 @@ function Copyright() {
 }
 
 export default function App() {
+  const socket = SocketService.getSocket();
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Socket Connected");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Socket Disconnected");
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("disconnect");
+    };
+  }, []);
+
   return (
     <BrowserRouter>
       <Dashboard />

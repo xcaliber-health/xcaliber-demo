@@ -33,6 +33,7 @@ import { ImmunizationService } from "../services/P360/immunizationService";
 import Allergy from "./DrawerComponents/createAllergies";
 import { Helper } from "../core-utils/helper";
 import { ReferenceDataService } from "../services/P360/referenceDataService";
+import { SocketService } from "../socket";
 
 const Chart = () => {
   const { id } = useParams();
@@ -492,6 +493,36 @@ const Chart = () => {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    const socket= SocketService.getSocket();
+    socket.on("notification", (data) => {
+      if(data?.source?.type === localStorage.getItem("XCALIBER_SOURCE")){
+      switch(data?.resource?.resourceType){
+        case "Condition":
+          getProblems();
+          break;
+        case "AllergyIntolerance":
+          getAllergies();
+          break;        
+        case "Immunization":
+          getImmunizations();
+          break;       
+        case "Observation":
+          getVitals();
+          break;    
+        case "Medication":
+          getMedications();
+          break;        
+      }
+    }
+    console.log("Recieved notification",data);
+    });
+    return () => {
+      socket.off("notification");
+    };
+  }, []);
+
   useEffect(() => {
     {
       initialiseAllergyOptions();
