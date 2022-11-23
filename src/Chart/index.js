@@ -254,9 +254,16 @@ const Chart = () => {
       dateObject.getHours() <= 9
         ? `0${dateObject.getHours()}`
         : `${dateObject.getHours()}`;
+
     let dateInUtc = `${dateObject.getFullYear()}-${
-      dateObject.getMonth() + 1
-    }-${dateObject.getDate()}T${hourValue}:${dateObject.getMinutes()}:0${dateObject.getSeconds()}Z`;
+      dateObject.getMonth() <= 8
+        ? `0${dateObject.getMonth() + 1}`
+        : dateObject.getMonth() + 1
+    }-${
+      dateObject.getDate() <= 9
+        ? `0${dateObject.getDate()}`
+        : `${dateObject.getDate()}`
+    }T${hourValue}:${dateObject.getMinutes()}:0${dateObject.getSeconds()}Z`;
 
     setAppointmentPayload({
       context: {
@@ -289,9 +296,9 @@ const Chart = () => {
         finalDateValue.getMinutes() - finalDateValue.getTimezoneOffset()
       );
     let hourValue =
-      dateObject.getHours() <= 9
-        ? `0${dateObject.getHours()}`
-        : `${dateObject.getHours()}`;
+      finalDateValue.getHours() <= 9
+        ? `0${finalDateValue.getHours()}`
+        : `${finalDateValue.getHours()}`;
     setAppointmentPayload({
       context: {
         departmentId: localStorage.getItem(`DEPARTMENT_ID`),
@@ -299,8 +306,14 @@ const Chart = () => {
       data: {
         ...appointmentPayload?.data,
         start: `${finalDateValue.getFullYear()}-${
-          finalDateValue.getMonth() + 1
-        }-${finalDateValue.getDate()}T${hourValue}:${finalDateValue.getMinutes()}:${finalDateValue.getSeconds()}Z`,
+          finalDateValue.getMonth() <= 8
+            ? `0${finalDateValue.getMonth() + 1}`
+            : finalDateValue.getMonth() + 1
+        }-${
+          finalDateValue.getDate() <= 9
+            ? `0${finalDateValue.getDate()}`
+            : `${finalDateValue.getDate()}`
+        }T${hourValue}:${finalDateValue.getMinutes()}:${finalDateValue.getSeconds()}0Z`,
       },
     });
   };
