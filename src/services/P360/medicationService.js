@@ -15,7 +15,26 @@ export const MedicationService = {
           },
         }
       );
-      return result?.data?.data?.entry?.slice(0, 2);
+      return result?.data?.data?.entry?.slice(0, 5);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  createMedicationInAthena: async (requestPayLoad) => {
+    try {
+      const result = await axios.post(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/MedicationStatement`,
+        requestPayLoad,
+        {
+          headers: {
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          },
+        }
+      );
+      return result?.data?.data;
     } catch (error) {
       console.log(error);
     }

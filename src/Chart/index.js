@@ -33,6 +33,7 @@ import { ImmunizationService } from "../services/P360/immunizationService";
 import Allergy from "./DrawerComponents/createAllergies";
 import { Helper } from "../core-utils/helper";
 import { ReferenceDataService } from "../services/P360/referenceDataService";
+import { CreateMedication } from "./DrawerComponents/createMedications";
 import { SocketService } from "../socket";
 
 const Chart = () => {
@@ -51,6 +52,7 @@ const Chart = () => {
   const [isProblemsDrawerOpen, setIsProblemsDrawerOpen] = useState(false);
   const [isVitalsDrawerOpen, setVitalsDrawer] = useState(false);
   const [isAllergyDrawerOpen, setIsAllergyDrawerOpen] = useState(false);
+  const [isMedicationDrawerOpen, setIsMedicationDrawerOpen] = useState(false);
   const [severity, setSeverity] = React.useState(null);
   const [currentTimezoneDate, setCurrentTimezoneDate] = useState(null);
   const handleSeverityChange = (e) => {
@@ -508,28 +510,28 @@ const Chart = () => {
   }, []);
 
   useEffect(() => {
-    const socket= SocketService.getSocket();
+    const socket = SocketService.getSocket();
     socket.on("notification", (data) => {
-      if(data?.source?.type === localStorage.getItem("XCALIBER_SOURCE")){
-      switch(data?.resource?.resourceType){
-        case "Condition":
-          getProblems();
-          break;
-        case "AllergyIntolerance":
-          getAllergies();
-          break;        
-        case "Immunization":
-          getImmunizations();
-          break;       
-        case "Observation":
-          getVitals();
-          break;    
-        case "Medication":
-          getMedications();
-          break;        
+      if (data?.source?.type === localStorage.getItem("XCALIBER_SOURCE")) {
+        switch (data?.resource?.resourceType) {
+          case "Condition":
+            getProblems();
+            break;
+          case "AllergyIntolerance":
+            getAllergies();
+            break;
+          case "Immunization":
+            getImmunizations();
+            break;
+          case "Observation":
+            getVitals();
+            break;
+          case "Medication":
+            getMedications();
+            break;
+        }
       }
-    }
-    console.log("Recieved notification",data);
+      console.log("Recieved notification", data);
     });
     return () => {
       socket.off("notification");
@@ -700,6 +702,41 @@ const Chart = () => {
           patientId={id}
           allergyOptions={allergyOptions}
           updateOptions={updateOptions}
+        />
+      </Drawer>
+      <Drawer
+        anchor={"right"}
+        open={isMedicationDrawerOpen}
+        onClose={() => {
+          setIsMedicationDrawerOpen(false);
+        }}
+        variant="temporary"
+        PaperProps={{
+          sx: {
+            width: "40%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            padding: "10px",
+            height: "100%",
+            overflowY: "scroll",
+            position: "absolute",
+            zIndex: 1500,
+          },
+        }}
+      >
+        <CreateMedication
+          disabled={false}
+          onCancelClick={() => {
+            setIsMedicationDrawerOpen(false);
+          }}
+          patientId={id}
+          handleClose={() => setIsMedicationDrawerOpen(false)}
+          onMedicationClick={() => {
+            getMedications();
+            setIsMedicationDrawerOpen(false);
+          }}
+          patientDetails={patientDetails}
         />
       </Drawer>
       <Grid
@@ -1127,84 +1164,109 @@ const Chart = () => {
             </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={5}>
-            <Box
-              alignSelf="flex-start"
-              flexDirection={"row-reverse"}
-              display="flex"
-              // marginLeft={theme.spacing(3)}
-              // marginRight={theme.spacing(3)}
-              marginBottom={theme.spacing(3)}
-              marginLeft={theme.spacing(3)}
-            >
-              {/* <Button variant="contained" display="flex">
-                Create Medications
-              </Button> */}
-            </Box>
-            <TableContainer
-              component={Paper}
-              style={{ marginTop: theme.spacing(3) }}
-            >
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="left">
-                      <Typography>Medication</Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography>Date</Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography>Year</Typography>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {patientMedications &&
-                    patientMedications?.map((medication) => {
-                      let dateObject = Helper.extractFieldsFromDate(
-                        medication?.resource?.effectiveDateTime
-                      );
-                      return (
-                        <TableRow
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                          style={{ cursor: "pointer" }}
-                        >
-                          <TableCell align="left">
-                            <Typography>
-                              {
-                                medication?.resource?.medicationCodeableConcept
-                                  ?.coding?.[0]?.display
-                              }{" "}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="left">
-                            <Typography>
-                              {Object.values(dateObject).every((dateobj) => {
-                                return (
-                                  dateobj !== "Invalid Choice" &&
-                                  dateobj !== NaN
-                                );
-                              })
-                                ? `${dateObject?.DAY} ${dateObject?.MONTH} $
-                              {dateObject?.DATE}`
-                                : "null"}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="left" component="th" scope="row">
-                            <Typography>
-                              {dateObject?.YEAR && dateObject?.YEAR
-                                ? dateObject?.YEAR !== NaN
-                                : "null"}
-                            </Typography>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" && (
+              <Grid>
+                <Box
+                  alignSelf="flex-start"
+                  flexDirection={"row-reverse"}
+                  display="flex"
+                  // marginLeft={theme.spacing(3)}
+                  // marginRight={theme.spacing(3)}
+                  marginBottom={theme.spacing(3)}
+                  marginLeft={theme.spacing(3)}
+                >
+                  <Button
+                    variant="contained"
+                    display="flex"
+                    onClick={() => {
+                      setIsMedicationDrawerOpen(true);
+                    }}
+                  >
+                    Create Medications
+                  </Button>
+                </Box>
+                <TableContainer
+                  component={Paper}
+                  style={{ marginTop: theme.spacing(3) }}
+                >
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell align="left">
+                          <Typography>Medication</Typography>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography>Date</Typography>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography>Year</Typography>
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {patientMedications &&
+                        patientMedications?.map((medication) => {
+                          let dateObject = Helper.extractFieldsFromDate(
+                            medication?.resource?.effectivePeriod?.start
+                          );
+                          return (
+                            <TableRow
+                              sx={{
+                                "&:last-child td, &:last-child th": {
+                                  border: 0,
+                                },
+                              }}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <TableCell align="left">
+                                <Typography>
+                                  {
+                                    medication?.resource
+                                      ?.medicationCodeableConcept?.coding?.[0]
+                                      ?.display
+                                  }{" "}
+                                </Typography>
+                              </TableCell>
+                              <TableCell align="left">
+                                <Typography>
+                                  {Object.values(dateObject).every(
+                                    (dateobj) => {
+                                      return (
+                                        dateobj !== "Invalid Choice" &&
+                                        dateobj !== NaN
+                                      );
+                                    }
+                                  )
+                                    ? `${dateObject?.DAY} ${dateObject?.MONTH} ${dateObject?.DATE}`
+                                    : "null"}
+                                </Typography>
+                              </TableCell>
+                              <TableCell
+                                align="left"
+                                component="th"
+                                scope="row"
+                              >
+                                <Typography>
+                                  {dateObject?.YEAR && dateObject?.YEAR !== NaN
+                                    ? dateObject?.YEAR
+                                    : "null"}
+                                </Typography>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Grid>
+            )}
+            {localStorage.getItem("XCALIBER_SOURCE") === "ELATION" && (
+              <Grid>
+                <Typography variant="h5">
+                  Elation does not support medication
+                </Typography>
+              </Grid>
+            )}
           </TabPanel>
         </Paper>
       </Grid>
