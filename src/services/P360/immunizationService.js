@@ -20,4 +20,40 @@ export const ImmunizationService = {
       console.log(error);
     }
   },
+  createImmunization: async (immunizationPayload) => {
+    try {
+      const result = await axios.post(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Immunization`,
+        immunizationPayload,
+        {
+          headers: {
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          },
+        }
+      );
+      return result?.data?.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getImmunizationById: async (id) => {
+    try {
+      const result = await axios.get(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Immunization/${id}`,
+        {
+          headers: {
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+          },
+        }
+      );
+
+      return result?.data?.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
