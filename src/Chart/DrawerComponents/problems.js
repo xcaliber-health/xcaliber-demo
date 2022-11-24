@@ -170,7 +170,11 @@ export const PatientProblems = ({
                     {...params}
                     label="Snomed-code"
                     onChange={(ev) => {
-                      if (ev.target.value !== "" || ev.target.value !== null) {
+                      if (
+                        ev.target.value !== "" &&
+                        ev.target.value !== null &&
+                        ev.target.value.length > 2
+                      ) {
                         updateOptions(ev.target.value);
                       }
                     }}

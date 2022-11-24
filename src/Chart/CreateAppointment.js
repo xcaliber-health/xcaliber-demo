@@ -33,7 +33,9 @@ const CreateAppointment = ({
       const dateObject = new Date(value);
       updateCurrentTimezoneDate(
         `${dateObject.getFullYear()}-${
-          dateObject.getMonth() + 1
+          dateObject.getMonth() <= 8
+            ? `0${dateObject.getMonth() + 1}`
+            : dateObject.getMonth() + 1
         }-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}:${dateObject.getSeconds()}Z`
       );
       onDateChange(dateObject);

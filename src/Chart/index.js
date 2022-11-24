@@ -34,6 +34,7 @@ import Allergy from "./DrawerComponents/createAllergies";
 import { Helper } from "../core-utils/helper";
 import { ReferenceDataService } from "../services/P360/referenceDataService";
 import { CreateMedication } from "./DrawerComponents/createMedications";
+import { SocketService } from "../socket";
 
 const Chart = () => {
   const { id } = useParams();
@@ -256,9 +257,16 @@ const Chart = () => {
       dateObject.getHours() <= 9
         ? `0${dateObject.getHours()}`
         : `${dateObject.getHours()}`;
+
     let dateInUtc = `${dateObject.getFullYear()}-${
-      dateObject.getMonth() + 1
-    }-${dateObject.getDate()}T${hourValue}:${dateObject.getMinutes()}:0${dateObject.getSeconds()}Z`;
+      dateObject.getMonth() <= 8
+        ? `0${dateObject.getMonth() + 1}`
+        : dateObject.getMonth() + 1
+    }-${
+      dateObject.getDate() <= 9
+        ? `0${dateObject.getDate()}`
+        : `${dateObject.getDate()}`
+    }T${hourValue}:${dateObject.getMinutes()}:0${dateObject.getSeconds()}Z`;
 
     setAppointmentPayload({
       context: {
@@ -291,9 +299,9 @@ const Chart = () => {
         finalDateValue.getMinutes() - finalDateValue.getTimezoneOffset()
       );
     let hourValue =
-      dateObject.getHours() <= 9
-        ? `0${dateObject.getHours()}`
-        : `${dateObject.getHours()}`;
+      finalDateValue.getHours() <= 9
+        ? `0${finalDateValue.getHours()}`
+        : `${finalDateValue.getHours()}`;
     setAppointmentPayload({
       context: {
         departmentId: localStorage.getItem(`DEPARTMENT_ID`),
@@ -301,8 +309,14 @@ const Chart = () => {
       data: {
         ...appointmentPayload?.data,
         start: `${finalDateValue.getFullYear()}-${
-          finalDateValue.getMonth() + 1
-        }-${finalDateValue.getDate()}T${hourValue}:${finalDateValue.getMinutes()}:${finalDateValue.getSeconds()}Z`,
+          finalDateValue.getMonth() <= 8
+            ? `0${finalDateValue.getMonth() + 1}`
+            : finalDateValue.getMonth() + 1
+        }-${
+          finalDateValue.getDate() <= 9
+            ? `0${finalDateValue.getDate()}`
+            : `${finalDateValue.getDate()}`
+        }T${hourValue}:${finalDateValue.getMinutes()}:${finalDateValue.getSeconds()}0Z`,
       },
     });
   };
@@ -377,7 +391,7 @@ const Chart = () => {
                   : `null`,
               display:
                 localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
-                  ? reference?.allergyname
+                  ? reference?.allergenname
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
                   ? reference?.Concept_Name_2
                   : `null`,
@@ -387,35 +401,32 @@ const Chart = () => {
       },
     });
   };
-  const reaction = {};
   const onReactionChange = (reaction1) => {
-    if (reaction1) {
-      reaction["reaction"] = reaction1;
-    }
     setAllergyPayload({
       context: {
         departmentId: localStorage.getItem(`DEPARTMENT_ID`),
       },
       data: {
         ...allergyPayload?.data,
-        reaction: [reaction],
+        reaction: [
+          { ...allergyPayload?.data?.reaction?.[0], description: reaction1 },
+        ],
       },
     });
   };
   const onSeverityChange = (severity) => {
-    if (severity) {
-      // reaction["description"] = severity;
-      reaction["severity"] = severity;
-    }
     setAllergyPayload({
       context: {
         departmentId: localStorage.getItem(`DEPARTMENT_ID`),
       },
       data: {
         ...allergyPayload?.data,
-        reaction: [reaction],
+        reaction: [
+          { ...allergyPayload?.data?.reaction?.[0], severity: severity },
+        ],
       },
     });
+
     setSeverity(severity);
   };
   const onStatusChange = (status) => {
@@ -497,6 +508,36 @@ const Chart = () => {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    const socket = SocketService.getSocket();
+    socket.on("notification", (data) => {
+      if (data?.source?.type === localStorage.getItem("XCALIBER_SOURCE")) {
+        switch (data?.resource?.resourceType) {
+          case "Condition":
+            getProblems();
+            break;
+          case "AllergyIntolerance":
+            getAllergies();
+            break;
+          case "Immunization":
+            getImmunizations();
+            break;
+          case "Observation":
+            getVitals();
+            break;
+          case "Medication":
+            getMedications();
+            break;
+        }
+      }
+      console.log("Recieved notification", data);
+    });
+    return () => {
+      socket.off("notification");
+    };
+  }, []);
+
   useEffect(() => {
     {
       initialiseAllergyOptions();
