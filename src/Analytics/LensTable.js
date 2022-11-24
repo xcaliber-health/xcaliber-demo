@@ -18,6 +18,7 @@ export default function LensTable({ tableRowData, flag }) {
   const [vitalsData, setVitalsData] = useState([]);
   const [procedureData, setProcedureData] = useState([]);
   const [patientData, setPatientData] = useState([]);
+  const [appointmentsData, setAppointmentsData] = useState([]);
   const [k, setK] = useState(0);
   const [columnDefs, setColumnDefs] = useState([
     { field: 'Patient_ID', cellRenderer: 'agGroupCellRenderer' },
@@ -35,6 +36,7 @@ export default function LensTable({ tableRowData, flag }) {
   let procedureArray = [];
   let vitalsArray = [];
   let patientArray = [];
+  let appointmentsArray = [];
   useEffect(() => {
     tableRowData.forEach((row) => {
       if (row.Allergies && row.Allergies !== null) {
@@ -65,6 +67,11 @@ export default function LensTable({ tableRowData, flag }) {
         setK(1);
 
       }
+      if (row.Appointments && row.Appointments !== null) {
+        appointmentsArray.push(row)
+        setK(1);
+
+      }
     })
     setAllergyData(allergyArray);
     setImmunizationData(immunizationArray);
@@ -72,6 +79,7 @@ export default function LensTable({ tableRowData, flag }) {
     setProblemData(problemArray);
     setProcedureData(procedureArray);
     setFamilyHistoryData(familyHistoryArray);
+    setAppointmentsData(appointmentsArray);
   }, []);
   useEffect(() => {
     tableRowData.forEach((row) => {
@@ -199,6 +207,14 @@ export default function LensTable({ tableRowData, flag }) {
       },
     };
   }
+  const appointmentsCall = (data) => {
+    return {
+      detailGridOptions: dataCall(data),
+      getDetailRowData: (params) => {
+        params.successCallback(params.data.Appointments);
+      },
+    };
+  }
   if (flag === 1)
     return (
       <div >
@@ -279,6 +295,19 @@ export default function LensTable({ tableRowData, flag }) {
                 alwaysShowHorizontalScroll={true}
                 rowData={problemData}
                 detailCellRendererParams={problemCall(problemData[0]?.Problems[0])}
+                onFirstDataRendered={onFirstDataRendered}
+                masterDetail={true}
+                defaultColDef={defaultColDef} />
+            </div>}
+            {((appointmentsData.length !== 0) && Object.keys(appointmentsData[0]?.Appointments[0]).length !== 0) &&
+            <div className="ag-theme-alpine" style={{ height: 300, paddingBottom: theme.spacing(9) }}>
+              <Typography>Appointments</Typography>
+              <AgGridReact
+                columnDefs={ColumCall(appointmentsData)}
+                ref={gridRef}
+                alwaysShowHorizontalScroll={true}
+                rowData={appointmentsData}
+                detailCellRendererParams={appointmentsCall(appointmentsData[0]?.Appointments[0])}
                 onFirstDataRendered={onFirstDataRendered}
                 masterDetail={true}
                 defaultColDef={defaultColDef} />
