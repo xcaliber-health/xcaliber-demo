@@ -67,7 +67,24 @@ export const ReferenceDataService = {
           },
         }
       );
-      console.log(result?.data?.data?.result);
+      return result?.data?.data?.result;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getVaccineData: async (searchString) => {
+    try {
+      const result = await axios.get(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=immunization&searchString=${
+          searchString ?? ""
+        }`,
+        {
+          headers: {
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+          },
+        }
+      );
       return result?.data?.data?.result;
     } catch (error) {
       console.log(error);

@@ -35,6 +35,7 @@ import { Helper } from "../core-utils/helper";
 import { ReferenceDataService } from "../services/P360/referenceDataService";
 import { CreateMedication } from "./DrawerComponents/createMedications";
 import { SocketService } from "../socket";
+import Immunization from "./DrawerComponents/createImmunization";
 
 const Chart = () => {
   const { id } = useParams();
@@ -53,6 +54,7 @@ const Chart = () => {
   const [isVitalsDrawerOpen, setVitalsDrawer] = useState(false);
   const [isAllergyDrawerOpen, setIsAllergyDrawerOpen] = useState(false);
   const [isMedicationDrawerOpen, setIsMedicationDrawerOpen] = useState(false);
+  const [isImmunizationDrawerOpen, setIsImmunizationDrawerOpen] = useState(false);
   const [severity, setSeverity] = React.useState(null);
   const [currentTimezoneDate, setCurrentTimezoneDate] = useState(null);
   const handleSeverityChange = (e) => {
@@ -739,6 +741,39 @@ const Chart = () => {
           patientDetails={patientDetails}
         />
       </Drawer>
+      <Drawer
+        anchor={"right"}
+        open={isImmunizationDrawerOpen}
+        onClose={() => {
+          setIsImmunizationDrawerOpen(false);
+        }}
+        variant="temporary"
+        PaperProps={{
+          sx: {
+            width: "40%",
+            display: "flex",
+            flexDirection: "column",
+            // justifyContent: "space-between",
+            padding: "10px",
+            height: "100%",
+            overflowY: "scroll",
+            position: "absolute",
+            zIndex: 1500,
+          },
+        }}
+      >
+        <Immunization
+          disabled={false}
+          handleImmunizationClick={() => {
+            getImmunizations();
+            setIsImmunizationDrawerOpen(false);
+          }}
+          onCancelClick={() => {
+            setIsImmunizationDrawerOpen(false);
+          }}
+          patientId={id}
+        />
+      </Drawer>
       <Grid
         sx={{
           width: theme.spacing(50),
@@ -1100,12 +1135,15 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
-              {/* <Button
+              <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
+                onClick={() => {
+                  setIsImmunizationDrawerOpen(true);
+                }}
               >
                 Create Immunization
-              </Button> */}
+              </Button>
             </Box>
             {/* <PamiV immunizationList={patientImmunizations} patientId={id} /> */}
             <TableContainer
