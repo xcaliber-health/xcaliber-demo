@@ -5,11 +5,13 @@ export const AnalyticService = {
   getDataLenses: async () => {
     try {
       let url = `${LENS_API_ENDPOINT}/api/v1/datalenses`;
-      const response = await axios.get(url, {headers: {
-        Authorization: `${process.env.REACT_APP_AUTHORIZATION}`
-      }});
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `${process.env.REACT_APP_AUTHORIZATION_LENS}`
+        }
+      });
       return response.data;
-    } catch(error) {
+    } catch (error) {
       console.log(`Failed to get lenses from lens-svc: ${error}`);
     }
   },
@@ -19,7 +21,7 @@ export const AnalyticService = {
       let url = `${LENS_API_ENDPOINT}/api/v1/datalenses/${lensId}/discover`;
       const response = await axios.post(url, payload1, {
         headers: {
-          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`
+          Authorization: `${process.env.REACT_APP_AUTHORIZATION_LENS}`
         },
       });
       return response.data?.results;
@@ -35,7 +37,7 @@ export const AnalyticService = {
       let url = `${LENS_API_ENDPOINT}/api/v1/datalenses/${lensId}/timeseries`;
       const response = await axios.post(url, payload1, {
         headers: {
-          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`
+          Authorization: `${process.env.REACT_APP_AUTHORIZATION_LENS}`
         },
       });
       return response.data?.results;
