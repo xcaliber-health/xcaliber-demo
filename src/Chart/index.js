@@ -36,6 +36,8 @@ import { ReferenceDataService } from "../services/P360/referenceDataService";
 import { CreateMedication } from "./DrawerComponents/createMedications";
 import { SocketService } from "../socket";
 import Immunization from "./DrawerComponents/createImmunization";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import IconButton from "@mui/material/IconButton";
 
 const Chart = () => {
   const { id } = useParams();
@@ -54,7 +56,8 @@ const Chart = () => {
   const [isVitalsDrawerOpen, setVitalsDrawer] = useState(false);
   const [isAllergyDrawerOpen, setIsAllergyDrawerOpen] = useState(false);
   const [isMedicationDrawerOpen, setIsMedicationDrawerOpen] = useState(false);
-  const [isImmunizationDrawerOpen, setIsImmunizationDrawerOpen] = useState(false);
+  const [isImmunizationDrawerOpen, setIsImmunizationDrawerOpen] =
+    useState(false);
   const [severity, setSeverity] = React.useState(null);
   const [currentTimezoneDate, setCurrentTimezoneDate] = useState(null);
   const handleSeverityChange = (e) => {
@@ -827,6 +830,20 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={() => {
+                  getVitals();
+                }}
+                sx={{
+                  marginRight: "36px",
+                  marginLeft: "18px",
+                }}
+              >
+                <RefreshIcon />
+              </IconButton>
               <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
@@ -945,6 +962,20 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={() => {
+                  getProblems();
+                }}
+                sx={{
+                  marginRight: "36px",
+                  marginLeft: "18px",
+                }}
+              >
+                <RefreshIcon />
+              </IconButton>
               <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
@@ -1043,6 +1074,20 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={() => {
+                  getAllergies();
+                }}
+                sx={{
+                  marginRight: "36px",
+                  marginLeft: "18px",
+                }}
+              >
+                <RefreshIcon />
+              </IconButton>
               <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
@@ -1135,6 +1180,20 @@ const Chart = () => {
               marginBottom={theme.spacing(3)}
               marginLeft={theme.spacing(3)}
             >
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={() => {
+                  getImmunizations();
+                }}
+                sx={{
+                  marginRight: "36px",
+                  marginLeft: "18px",
+                }}
+              >
+                <RefreshIcon />
+              </IconButton>
               <Button
                 sx={{ display: "flex", alignSelf: "flex-end" }}
                 variant="contained"
@@ -1213,6 +1272,21 @@ const Chart = () => {
                   marginBottom={theme.spacing(3)}
                   marginLeft={theme.spacing(3)}
                 >
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={() => {
+                      getMedications();
+                    }}
+                    sx={{
+                      marginRight: "36px",
+                      marginLeft: "18px",
+                    }}
+                  >
+                    <RefreshIcon />
+                  </IconButton>
+
                   <Button
                     variant="contained"
                     display="flex"
