@@ -212,6 +212,9 @@ const PatientDetailsCard = ({
                     </span>{" "}
                     <span style={{ color: "black" }}>
                       {appointmentDateDetailObject?.YEAR}
+                    </span>{", "}
+                    <span style={{ color: "black" }}>
+                      {appointmentDateDetailObject?.TIME}
                     </span>
                   </Grid>
                 );
