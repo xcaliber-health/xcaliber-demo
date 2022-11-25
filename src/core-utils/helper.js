@@ -58,6 +58,7 @@ export const Helper = {
       MONTH: Helper.getMonthFromIndex(dateObject.getMonth()),
       DATE: dateObject.getDate(),
       YEAR: dateObject.getFullYear(),
+      TIME: dateObject.toLocaleTimeString("en-US",{ hour: '2-digit', minute: '2-digit', hour12: true })
     };
   },
 };
