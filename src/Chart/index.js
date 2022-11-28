@@ -223,7 +223,7 @@ const Chart = () => {
         ? await ReferenceDataService.getAllergyData()
         : localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
         ? await ReferenceDataService.getAllergyData(`ab`)
-        : null;
+        : "";
     setAllergyOptions(result);
   };
 
@@ -387,19 +387,19 @@ const Chart = () => {
                   ? `elation`
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
                   ? `athena`
-                  : `null`,
+                  : ``,
               code:
                 localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
                   ? reference?.allergyid
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
                   ? reference?.Concept_Code_2
-                  : `null`,
+                  : ``,
               display:
                 localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
                   ? reference?.allergenname
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
                   ? reference?.Concept_Name_2
-                  : `null`,
+                  : ``,
             },
           ],
         },
@@ -854,7 +854,7 @@ const Chart = () => {
                   setVitalsDrawer(true);
                 }}
               >
-                Create Vitals
+                Add Vitals
               </Button>
             </Box>
             {/* <PamiV vitalsList={patientVitals} patientId={id} /> */}
@@ -986,7 +986,7 @@ const Chart = () => {
                   setIsProblemsDrawerOpen(true);
                 }}
               >
-                Create Problems
+                Add Problems
               </Button>
             </Box>
             {/* <PamiV problemsList={patientProblems} updateProblem={updateProblemsState} patientId={id} /> */}
@@ -1038,7 +1038,7 @@ const Chart = () => {
                                 ? problem?.resource?.note?.[0]?.text &&
                                   problem?.resource?.note?.[0]?.text !== null
                                   ? problem?.resource?.note?.[0]?.text
-                                  : "null"
+                                  : ""
                                 : localStorage.getItem(`XCALIBER_SOURCE`) ===
                                   "ATHENA"
                                 ? problem?.resource?.contained?.[0]?.notes
@@ -1047,8 +1047,8 @@ const Chart = () => {
                                     ?.text !== null
                                   ? problem?.resource?.contained?.[0]?.notes
                                       ?.text
-                                  : "null"
-                                : "null"}
+                                  : ""
+                                : ""}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
@@ -1098,7 +1098,7 @@ const Chart = () => {
                   setIsAllergyDrawerOpen(true);
                 }}
               >
-                Create Allergies
+                Add Allergies
               </Button>
             </Box>
             {/* <PamiV allergyList={patientAllergies} patientId={id} /> */}
@@ -1144,7 +1144,7 @@ const Chart = () => {
                           </TableCell>
                           <TableCell align="left">
                             {allergy?.resource?.clinicalStatus?.coding?.[0]
-                              ?.display ?? "null"}
+                              ?.display ?? ""}
                           </TableCell>
                           <TableCell align="left">
                             <Typography>
@@ -1156,14 +1156,14 @@ const Chart = () => {
                               })
                                 ? `${dateObject?.DAY} ${dateObject?.MONTH}
                                 ${dateObject?.DATE}`
-                                : `null`}
+                                : ``}
                             </Typography>
                           </TableCell>
                           <TableCell align="left" component="th" scope="row">
                             <Typography>
                               {dateObject?.YEAR && dateObject?.YEAR !== NaN
                                 ? dateObject?.YEAR
-                                : "null"}
+                                : ""}
                             </Typography>
                           </TableCell>
                         </TableRow>
@@ -1204,7 +1204,7 @@ const Chart = () => {
                   setIsImmunizationDrawerOpen(true);
                 }}
               >
-                Create Immunization
+                Add Immunization
               </Button>
             </Box>
             {/* <PamiV immunizationList={patientImmunizations} patientId={id} /> */}
@@ -1297,7 +1297,7 @@ const Chart = () => {
                       setIsMedicationDrawerOpen(true);
                     }}
                   >
-                    Create Medications
+                    Add Medications
                   </Button>
                 </Box>
                 <TableContainer
@@ -1353,7 +1353,7 @@ const Chart = () => {
                                     }
                                   )
                                     ? `${dateObject?.DAY} ${dateObject?.MONTH} ${dateObject?.DATE}`
-                                    : "null"}
+                                    : ""}
                                 </Typography>
                               </TableCell>
                               <TableCell
@@ -1364,7 +1364,7 @@ const Chart = () => {
                                 <Typography>
                                   {dateObject?.YEAR && dateObject?.YEAR !== NaN
                                     ? dateObject?.YEAR
-                                    : "null"}
+                                    : ""}
                                 </Typography>
                               </TableCell>
                             </TableRow>
