@@ -548,6 +548,9 @@ const Chart = () => {
       initialiseAllergyOptions();
     }
   }, []);
+  useEffect(() => {
+    console.log(appointmentPayload);
+  });
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
