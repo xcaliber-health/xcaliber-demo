@@ -910,10 +910,10 @@ const Chart = () => {
                                 "body mass index"
                                   ? vital?.resource?.valueString
                                   : vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
-                                    "blood pressure"
+                                    "blood pressure" 
                                   ? vital?.resource?.component[0]?.valueQuantity
                                       .value
-                                  : vital?.resource?.valueQuantity.value}
+                                  : vital?.resource?.valueQuantity.value +" "+ vital?.resource?.valueQuantity.unit}
                               </Typography>
 
                               {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
