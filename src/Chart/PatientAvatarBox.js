@@ -46,7 +46,7 @@ const PatientDetailsCard = ({
 
   return (
     <Grid container maxWidth={theme.spacing(50)} sx={{ height: "100%" }}>
-      <Accordion>
+      <Accordion sx={{ width: theme.spacing(53) }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -63,19 +63,18 @@ const PatientDetailsCard = ({
             {patientDetails?.extension?.find((ext) => {
               return ext?.url?.endsWith("deleted-date");
             }) && (
-              <Grid color={"black"}>
-                <Chip label="DELETED" />
-              </Grid>
-            )}
+                <Grid color={"black"}>
+                  <Chip label="DELETED" />
+                </Grid>
+              )}
             <Grid>{`${patientDetails?.name?.[0]?.given?.[0]}  ${patientDetails?.name?.[0]?.family} `}</Grid>
             <Grid>
               {`Patient | ${calculateAge(
                 parseInt(patientDetails?.birthDate?.slice(0, 4))
-              )} | ${
-                patientDetails?.extension?.find((extension) => {
-                  return extension?.url?.endsWith("legal-sex") ?? `-`;
-                })?.valueCode ?? `-`
-              }`}
+              )} | ${patientDetails?.extension?.find((extension) => {
+                return extension?.url?.endsWith("legal-sex") ?? `-`;
+              })?.valueCode ?? `-`
+                }`}
             </Grid>
 
             {/* TODO : Edit profile button 
@@ -137,20 +136,20 @@ const PatientDetailsCard = ({
         <CreateAppointment
           patientDetails={null}
           appointmentFormDetails={upcomingAppointments?.[appIndex]}
-          setAppointmentPayload={() => {}}
-          onScheduleClick={() => {}}
-          onReasonChange={() => {}}
+          setAppointmentPayload={() => { }}
+          onScheduleClick={() => { }}
+          onReasonChange={() => { }}
           onCancelClick={() => {
             setIsDrawerOpen(!isDrawerOpen);
           }}
-          onDateChange={() => {}}
-          onTimeChange={() => {}}
-          updatePatientId={() => {}}
+          onDateChange={() => { }}
+          onTimeChange={() => { }}
+          updatePatientId={() => { }}
           disabled={true}
         />
       </Drawer>
 
-      <Grid item sx={{ width: theme.spacing(50) }} alignItems="center">
+      <Grid item sx={{ width: theme.spacing(53), marginTop: theme.spacing(7) }} alignItems="center">
         <Paper style={{ height: "100%", marginTop: theme.spacing(3) }}>
           <Grid container sx={{ padding: theme.spacing(2) }}>
             <EventAvailableIcon />
