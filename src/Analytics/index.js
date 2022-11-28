@@ -1,12 +1,12 @@
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, TextField, FormControl, Select, InputLabel, MenuItem } from "@mui/material";
 import { useTheme } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BUTTON_LABELS } from "../core-utils/constants";
 import { AnalyticService } from "../services/Analytics";
 import LensTable from "./LensTable";
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { Typography } from "@mui/material";
 import { DataObject } from "@mui/icons-material";
 import { MobileDatePicker } from "@mui/x-date-pickers";
@@ -14,12 +14,15 @@ export default function Terminology() {
   let result = []
   const theme = useTheme();
   const [lensData, setLensData] = useState([]);
+  const [lenses, setLenses] = useState([]);
+  const [lensId, setLensId] = useState(null);
   const [flag, setFlag] = useState(0);
   const [data, setData] = useState([
     { Allergies: [] },
     { FamilyHistory: [] },
     { Immunizations: [] },
     { Insurance: [] },
+    { Appointments: [] },
     { Medications: [] },
     { Patient: {} },
     { Patient_ID: '' },
@@ -35,6 +38,13 @@ export default function Terminology() {
   }, [data]);
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
+  useEffect(() => {
+    async function fetchLenses() {
+    const response = await AnalyticService.getDataLenses();
+    setLenses(response);
+    }
+    fetchLenses();
+  }, []);
   useEffect(() => {
     if (start) {
       const dateObject = new Date(start);
@@ -58,6 +68,19 @@ export default function Terminology() {
         justifyContent="space-between"
         sx={{ marginBottom: theme.spacing(2) }}
       >
+        <FormControl sx={{mb: 4,minWidth: 250}}>
+          <InputLabel id="select-lens">Lens Name</InputLabel>
+          <Select
+            labelId="select-lens"
+            id="lens-simple-select"
+            onChange={(e) => { setLensId(e.target.value); }}
+            label="lens-name"
+          >
+            {lenses.map(lens => {
+              return (<MenuItem value={lens.id}>{lens.name}</MenuItem>)
+            })}
+          </Select>
+        </FormControl>
         <Grid item>
           <TextField label="query" sx={{ marginRight: theme.spacing(5), width: theme.spacing(150), marginBottom: theme.spacing(5) }} minRows={10}
             multiline
@@ -102,10 +125,10 @@ export default function Terminology() {
               onClick={async () => {
                 setLoading(true);
                 if (start === null && end === null) {
-                  result = await AnalyticService.discoverLens(lensData);
+                  result = await AnalyticService.discoverLens(lensData, lensId);
                 }
                 else {
-                  result = await AnalyticService.timeSeries(lensData, start, end);
+                  result = await AnalyticService.timeSeries(lensData, lensId, start, end);
                 }
                 setData(result);
                 setFlag(1);
