@@ -15,7 +15,7 @@ export const MedicationService = {
           },
         }
       );
-      return result?.data?.data?.entry?.slice(0, 5);
+      return result?.data?.data?.entry;
     } catch (error) {
       console.log(error);
     }

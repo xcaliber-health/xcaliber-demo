@@ -283,7 +283,6 @@ export default function Vitals({ patientDetails, onVitalsClick, handleClose }) {
         entry: entries,
       },
     };
-    console.log(vitalsPayLoad);
     await VitalService.createVitals(vitalsPayLoad);
     onVitalsClick();
   };

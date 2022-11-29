@@ -268,7 +268,12 @@ const SearchPatients = () => {
             >
               Create Patient
             </Button>
-            <Button onClick={handleDrawerClose} variant="contained">
+            <Button
+              onClick={() => {
+                handleDrawerClose();
+              }}
+              variant="contained"
+            >
               Cancel
             </Button>
           </Box>
