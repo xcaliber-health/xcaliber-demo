@@ -222,17 +222,21 @@ const Chart = () => {
           );
         })?.valueString
       );
-      const name = vital?.resource?.code?.coding?.[0]?.display.toLowerCase();
+      const name = vital?.resource?.code?.coding?.[0]?.display;
       let value;
-      if (name == "body mass index") {
-        value = vital?.resource?.valueString;
-      } else if (name == "blood pressure") {
+      if (name.toLowerCase().includes("body mass index")) {
+        console.log(vital);
+        if (vital?.resource?.valueString) value = vital?.resource?.valueString;
+        else value = vital?.resource?.valueQuantity.value;
+      } else if (name.toLowerCase() == "blood pressure") {
         value = vital?.resource?.component[0]?.valueQuantity.value;
       } else {
-        value =
-          vital?.resource?.valueQuantity.value +
-          " " +
-          vital?.resource?.valueQuantity.unit;
+        if (vital?.resource?.valueQuantity.unit)
+          value =
+            vital?.resource?.valueQuantity.value +
+            " " +
+            vital?.resource?.valueQuantity.unit;
+        else value = vital?.resource?.valueQuantity.value;
       }
       let date =
         dateObject?.DAY + " " + dateObject?.MONTH + " " + dateObject?.DATE;
@@ -242,7 +246,7 @@ const Chart = () => {
       );
       if (
         Object.keys(data).includes(
-          vital?.resource?.code?.coding?.[0]?.display.toLowerCase()
+          vital?.resource?.code?.coding?.[0]?.display
         )
       ) {
         const values = data[name];
@@ -870,6 +874,7 @@ const Chart = () => {
             },
           }}
         >
+          <Typography>Vital Name - {isVitalDisplayDrawerOpen}</Typography>
           <TableContainer
             component={Paper}
             style={{ marginTop: theme.spacing(3) }}
@@ -890,21 +895,23 @@ const Chart = () => {
               </TableHead>
               <TableBody>
                 {patientVitals &&
-                  patientVitals[isVitalDisplayDrawerOpen].slice(1,patientVitals.length).map((vital) => {
-                    return (
-                      <TableRow>
-                        <TableCell>
-                          <Typography>{vital.value}</Typography>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Typography>{vital.date}</Typography>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Typography>{vital.year}</Typography>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                  patientVitals[isVitalDisplayDrawerOpen]
+                    .slice(1, patientVitals.length)
+                    .map((vital) => {
+                      return (
+                        <TableRow>
+                          <TableCell>
+                            <Typography>{vital.value}</Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography>{vital.date}</Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography>{vital.year}</Typography>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
               </TableBody>
             </Table>
           </TableContainer>
@@ -1028,14 +1035,20 @@ const Chart = () => {
                           </TableCell>
                           <TableCell>
                             <Grid display="flex">
-                              <Typography>{patientVitals[key][0].value}</Typography>
+                              <Typography>
+                                {patientVitals[key][0].value}
+                              </Typography>
                             </Grid>
                           </TableCell>
                           <TableCell align="left">
-                            <Typography>{patientVitals[key][0].date}</Typography>
+                            <Typography>
+                              {patientVitals[key][0].date}
+                            </Typography>
                           </TableCell>
                           <TableCell align="left" component="th" scope="row">
-                            <Typography>{patientVitals[key][0].year}</Typography>
+                            <Typography>
+                              {patientVitals[key][0].year}
+                            </Typography>
                           </TableCell>
                         </TableRow>
                       );
