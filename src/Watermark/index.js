@@ -8,14 +8,12 @@ const Watermark = () => {
         position: "absolute",
         bottom: 0,
         right: 0,
-        'z-index': 1300,
+        "z-index": 1000,
         color: "#5c6f84",
         opacity: 0.35,
       }}
     >
-      <Typography variant= "body2" >
-        Powered by
-      </Typography>
+      <Typography variant="body2">Powered by</Typography>
       <Box component="img" sx={{ height: 40 }} src={logo} />
     </Box>
   );
