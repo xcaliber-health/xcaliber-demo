@@ -229,12 +229,20 @@ const Chart = () => {
         if (vital?.resource?.valueString) value = vital?.resource?.valueString;
         else value = vital?.resource?.valueQuantity.value;
       } else if (name.toLowerCase() == "blood pressure") {
-        if(localStorage.getItem("XCALIBER_SOURCE") === "ATHENA"){
-          value = vital?.resource?.component[1]?.valueQuantity.value +"/"+vital?.resource?.component[0]?.valueQuantity.value;
+        var systolic,diastolic;
+        if(vital?.resource?.component[0]?.code?.coding[0]?.code=='8462-4'){
+          diastolic=vital?.resource?.component[0]?.valueQuantity.value
         }
-        else{
-          value = vital?.resource?.component[0]?.valueQuantity.value +"/"+vital?.resource?.component[1]?.valueQuantity.value;
+        else if(vital?.resource?.component[0]?.code?.coding[0]?.code=='8480-6'){
+          systolic=vital?.resource?.component[0]?.valueQuantity.value
         }
+        if(vital?.resource?.component[1]?.code?.coding[0]?.code=='8462-4'){
+          diastolic=vital?.resource?.component[1]?.valueQuantity.value
+        }
+        else if(vital?.resource?.component[1]?.code?.coding[0]?.code=='8480-6'){
+          systolic=vital?.resource?.component[1]?.valueQuantity.value
+        }
+        value = systolic+"/"+diastolic;
       } else {
         if (vital?.resource?.valueQuantity.unit)
           value =
