@@ -229,7 +229,12 @@ const Chart = () => {
         if (vital?.resource?.valueString) value = vital?.resource?.valueString;
         else value = vital?.resource?.valueQuantity.value;
       } else if (name.toLowerCase() == "blood pressure") {
-        value = vital?.resource?.component[0]?.valueQuantity.value;
+        if(localStorage.getItem("XCALIBER_SOURCE") === "ATHENA"){
+          value = vital?.resource?.component[1]?.valueQuantity.value +"/"+vital?.resource?.component[0]?.valueQuantity.value;
+        }
+        else{
+          value = vital?.resource?.component[0]?.valueQuantity.value +"/"+vital?.resource?.component[1]?.valueQuantity.value;
+        }
       } else {
         if (vital?.resource?.valueQuantity.unit)
           value =
