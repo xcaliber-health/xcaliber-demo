@@ -60,6 +60,7 @@ const Chart = () => {
     useState(false);
   const [severity, setSeverity] = React.useState(null);
   const [currentTimezoneDate, setCurrentTimezoneDate] = useState(null);
+  const [isVitalDisplayDrawerOpen, setIsVitalDisplayDrawerOpen] = useState("");
   const handleSeverityChange = (e) => {
     setSeverity(e.target.value);
   };
@@ -210,7 +211,78 @@ const Chart = () => {
 
   const getVitals = async () => {
     const response = await VitalService.getVitals(id);
-    setPatientVitals(response);
+    let data = {};
+
+    response.map((vital) => {
+      let dateObject = Helper.extractFieldsFromDate(
+        vital?.resource?.extension?.find((ext) => {
+          return (
+            ext?.url?.endsWith("observation-document-date") ||
+            ext?.url?.endsWith("created-date")
+          );
+        })?.valueString
+      );
+      const name = vital?.resource?.code?.coding?.[0]?.display;
+      let value;
+      if (name.toLowerCase().includes("body mass index")) {
+        console.log(vital);
+        if (vital?.resource?.valueString) value = vital?.resource?.valueString;
+        else value = vital?.resource?.valueQuantity.value;
+      } else if (name.toLowerCase() == "blood pressure") {
+        value = vital?.resource?.component[0]?.valueQuantity.value;
+      } else {
+        if (vital?.resource?.valueQuantity.unit)
+          value =
+            vital?.resource?.valueQuantity.value +
+            " " +
+            vital?.resource?.valueQuantity.unit;
+        else value = vital?.resource?.valueQuantity.value;
+      }
+      let date =
+        dateObject?.DAY + " " + dateObject?.MONTH + " " + dateObject?.DATE;
+      let year = dateObject?.YEAR;
+      let cal_date = new Date(
+        dateObject?.MONTH + " " + dateObject?.DATE + " " + dateObject?.YEAR
+      );
+      if (
+        Object.keys(data).includes(
+          vital?.resource?.code?.coding?.[0]?.display
+        )
+      ) {
+        const values = data[name];
+        var low = 0;
+        var high = values.length;
+        var val = {
+          value: value,
+          date: date,
+          year: year,
+        };
+        while (low < high) {
+          var mid = (low + high) >>> 1;
+          var dum_date = new Date(
+            values[mid].date.slice(4, 10) + " " + values[mid].year
+          );
+          if (dum_date > cal_date) low = mid + 1;
+          else high = mid;
+        }
+        var temp;
+        for (let i = low; typeof values[i] !== "undefined"; i++) {
+          temp = values[i];
+          values[i] = val;
+          val = temp;
+        }
+        values.push(val);
+      } else {
+        data[name] = [
+          {
+            value: value,
+            date: date,
+            year: year,
+          },
+        ];
+      }
+    });
+    setPatientVitals(data);
   };
   const [allergyOptions, setAllergyOptions] = useState([]);
   const updateOptions = async (searchTerm) => {
@@ -780,6 +852,71 @@ const Chart = () => {
           patientId={id}
         />
       </Drawer>
+      {isVitalDisplayDrawerOpen !== "" && (
+        <Drawer
+          anchor={"right"}
+          open={isVitalDisplayDrawerOpen !== ""}
+          variant="temporary"
+          onClose={() => {
+            setIsVitalDisplayDrawerOpen("");
+          }}
+          PaperProps={{
+            sx: {
+              width: "40%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              padding: "10px",
+              height: "100%",
+              overflowY: "scroll",
+              position: "absolute",
+              zIndex: 1500,
+            },
+          }}
+        >
+          <Typography>Vital Name - {isVitalDisplayDrawerOpen}</Typography>
+          <TableContainer
+            component={Paper}
+            style={{ marginTop: theme.spacing(3) }}
+          >
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <Typography>Value</Typography>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Typography>Date</Typography>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Typography>Year</Typography>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {patientVitals &&
+                  patientVitals[isVitalDisplayDrawerOpen]
+                    .slice(1, patientVitals.length)
+                    .map((vital) => {
+                      return (
+                        <TableRow>
+                          <TableCell>
+                            <Typography>{vital.value}</Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography>{vital.date}</Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography>{vital.year}</Typography>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Drawer>
+      )}
       <Grid
         sx={{
           width: theme.spacing(50),
@@ -882,63 +1019,36 @@ const Chart = () => {
                 </TableHead>
                 <TableBody>
                   {patientVitals &&
-                    patientVitals?.map((vital) => {
-                      let dateObject = Helper.extractFieldsFromDate(
-                        vital?.resource?.extension?.find((ext) => {
-                          return (
-                            ext?.url?.endsWith("observation-document-date") ||
-                            ext?.url?.endsWith("created-date")
-                          );
-                        })?.valueString
-                      );
+                    Object.keys(patientVitals).map((key, index) => {
                       return (
                         <TableRow
                           sx={{
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}
                           style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            setIsVitalDisplayDrawerOpen(key);
+                          }}
                         >
                           <TableCell align="left">
-                            <Typography>
-                              {vital?.resource?.code?.coding?.[0]?.display}
-                            </Typography>
+                            <Typography>{key}</Typography>
                           </TableCell>
                           <TableCell>
                             <Grid display="flex">
                               <Typography>
-                                {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
-                                "body mass index"
-                                  ? vital?.resource?.valueString
-                                  : vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
-                                    "blood pressure" 
-                                  ? vital?.resource?.component[0]?.valueQuantity
-                                      .value
-                                  : vital?.resource?.valueQuantity.value +" "+ vital?.resource?.valueQuantity.unit}
+                                {patientVitals[key][0].value}
                               </Typography>
-
-                              {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
-                                "blood pressure" && (
-                                <>
-                                  <Typography>/</Typography>
-                                  <Typography>
-                                    {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
-                                    "blood pressure"
-                                      ? vital?.resource?.component[1]
-                                          ?.valueQuantity.value
-                                      : ""}
-                                  </Typography>
-                                </>
-                              )}
                             </Grid>
                           </TableCell>
                           <TableCell align="left">
                             <Typography>
-                              {dateObject?.DAY} {dateObject?.MONTH}{" "}
-                              {dateObject?.DATE}
+                              {patientVitals[key][0].date}
                             </Typography>
                           </TableCell>
                           <TableCell align="left" component="th" scope="row">
-                            <Typography>{dateObject?.YEAR}</Typography>
+                            <Typography>
+                              {patientVitals[key][0].year}
+                            </Typography>
                           </TableCell>
                         </TableRow>
                       );
