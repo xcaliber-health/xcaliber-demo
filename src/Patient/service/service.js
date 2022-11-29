@@ -664,7 +664,7 @@ export const getPatientsAtPage = (page, name) => {
       .then(async (response) => {
         const data = await response.data;
         const parsedData = parserFunc(data.data.entry);
-        return parsedData;
+        return parsedData ? parsedData : []
       })
       .catch((error) => {
         console.log(error);
@@ -689,9 +689,9 @@ export const getPatientsAtPage = (page, name) => {
         const parsedData = parserFunc(data.data.entry);
         for(var i=0;i<patientIds.length;i++){
           const dum=await PatientsById(patientIds[i])
-          parsedData.push(...dum)
+          parsedData?.push(...dum)
         }
-        return parsedData;
+        return parsedData ? parsedData : [];
       })
       .catch((error) => {
         console.log(error);
@@ -714,12 +714,13 @@ export const PatientsById=(id)=>{
     .then(async (response) => {
       const data = await response.data;
       const parsedData = parserFunc([{"resource":data.data}]);
-      return parsedData;
+      return parsedData ? parsedData : [];
     })
     .catch((error) => {
       console.log(error);
     });
   }
+  return [];
 }
 
 export const addPatient = (patient) => {
