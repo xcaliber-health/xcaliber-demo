@@ -874,7 +874,7 @@ const Chart = () => {
             },
           }}
         >
-          <Typography>Vital Name - {isVitalDisplayDrawerOpen}</Typography>
+          <Typography>{isVitalDisplayDrawerOpen}</Typography>
           <TableContainer
             component={Paper}
             style={{ marginTop: theme.spacing(3) }}
@@ -896,7 +896,6 @@ const Chart = () => {
               <TableBody>
                 {patientVitals &&
                   patientVitals[isVitalDisplayDrawerOpen]
-                    .slice(1, patientVitals.length)
                     .map((vital) => {
                       return (
                         <TableRow>
