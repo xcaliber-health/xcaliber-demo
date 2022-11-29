@@ -225,7 +225,6 @@ const Chart = () => {
       const name = vital?.resource?.code?.coding?.[0]?.display;
       let value;
       if (name.toLowerCase().includes("body mass index")) {
-        console.log(vital);
         if (vital?.resource?.valueString) value = vital?.resource?.valueString;
         else value = vital?.resource?.valueQuantity.value;
       } else if (name.toLowerCase() == "blood pressure") {
