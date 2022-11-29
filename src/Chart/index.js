@@ -340,7 +340,11 @@ const Chart = () => {
       dateObject.getDate() <= 9
         ? `0${dateObject.getDate()}`
         : `${dateObject.getDate()}`
-    }T${hourValue}:${dateObject.getMinutes()}:0${dateObject.getSeconds()}Z`;
+    }T${hourValue}:${
+      dateObject.getMinutes() <= 9
+        ? `0${dateObject.getMinutes()}`
+        : `${dateObject.getMinutes()}`
+    }:0${dateObject.getSeconds()}Z`;
 
     setAppointmentPayload({
       context: {
@@ -390,7 +394,11 @@ const Chart = () => {
           finalDateValue.getDate() <= 9
             ? `0${finalDateValue.getDate()}`
             : `${finalDateValue.getDate()}`
-        }T${hourValue}:${finalDateValue.getMinutes()}:${finalDateValue.getSeconds()}0Z`,
+        }T${hourValue}:${
+          finalDateValue.getMinutes() <= 9
+            ? `0${finalDateValue.getMinutes()}`
+            : `${finalDateValue.getMinutes()}`
+        }:${finalDateValue.getSeconds()}0Z`,
       },
     });
   };
@@ -582,6 +590,9 @@ const Chart = () => {
         setLoading(false);
       });
   }, []);
+  useEffect(() => {
+    console.log(appointmentPayload);
+  });
 
   useEffect(() => {
     const socket = SocketService.getSocket();
