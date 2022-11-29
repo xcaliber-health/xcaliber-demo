@@ -8,6 +8,30 @@ const DetailsTab = ({ patientDetails }) => {
     let currentYear = new Date().getFullYear();
     return `${currentYear - birthYear}`;
   };
+  const getAthenaRace = (raceCode) => {
+    switch (raceCode) {
+      case "2106-3":
+        return "White";
+      default:
+        return raceCode;
+    }
+  };
+  const getAthenaEthnicity = (ethnicityCode) => {
+    switch (ethnicityCode) {
+      case "2155-0":
+        return "Central American";
+      default:
+        return ethnicityCode;
+    }
+  };
+  const getAthenaLanguage= (languageCode)=>{
+    switch (languageCode) {
+      case "eng":
+        return "English";
+      default:
+        return languageCode;
+    }
+  }
   return (
     <Paper style={{ padding: 2 }} elevation={0}>
       <Grid container direction="column" alignItems={"center"}>
@@ -42,7 +66,14 @@ const DetailsTab = ({ patientDetails }) => {
           </Grid>
           <Grid item p={1}>
             <Typography>Language</Typography>
-            <Typography sx={{ ...commonValueStyles }}>-</Typography>
+            <Typography sx={{ ...commonValueStyles }}>
+              {localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
+                ? patientDetails?.communication?.[0]?.language?.text
+                : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
+                ? getAthenaLanguage(patientDetails?.communication?.[0]?.language?.coding?.[0]?.code)
+                : `-`}
+              {}
+            </Typography>
           </Grid>
         </Grid>
         <Grid container item justifyContent={"space-between"}>
@@ -72,9 +103,11 @@ const DetailsTab = ({ patientDetails }) => {
                     return ext?.url?.endsWith("us-core-race");
                   })?.valueString ?? `-`
                 : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
-                ? patientDetails?.extension?.find((ext) => {
-                    return ext?.url?.endsWith("us-core-race");
-                  })?.extension?.[0]?.valueString?.[0] ?? `-`
+                ? getAthenaRace(
+                    patientDetails?.extension?.find((ext) => {
+                      return ext?.url?.endsWith("us-core-race");
+                    })?.extension?.[0]?.valueString?.[0] ?? `-`
+                  )
                 : `-`}
             </Typography>
           </Grid>
@@ -86,9 +119,11 @@ const DetailsTab = ({ patientDetails }) => {
                     return ext?.url?.endsWith("us-core-ethnicity");
                   })?.valueString ?? `-`
                 : localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
-                ? patientDetails?.extension?.find((ext) => {
-                    return ext?.url?.endsWith("us-core-ethnicity");
-                  })?.extension?.[0]?.valueString ?? `-`
+                ? getAthenaEthnicity(
+                    patientDetails?.extension?.find((ext) => {
+                      return ext?.url?.endsWith("us-core-ethnicity");
+                    })?.extension?.[0]?.valueString ?? `-`
+                  )
                 : `-`}
             </Typography>
           </Grid>
