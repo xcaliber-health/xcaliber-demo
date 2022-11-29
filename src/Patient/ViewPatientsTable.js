@@ -63,62 +63,58 @@ const ViewPatientsTable = (props) => {
   }
 
   return (
-    <>
-      {(localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" && (!localStorage.getItem("DEPARTMENT_ID"))) ? <div ><Typography style={{ textAlign: "center", margin: theme.spacing(2) }}>Select DepartmentId</Typography></div> :
-        <TableContainer component={Paper} style={{ marginTop: theme.spacing(3) }}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="left">
-                  <Typography>name</Typography>
-                </TableCell>
-                <TableCell align="left">
-                  <Typography>gender</Typography>
-                </TableCell>
-                <TableCell align="left">
-                  <Typography>date of birth</Typography>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {newData.patients.map((patient) => (
-                <TableRow
-                  onClick={() => {
-                    navigate("/p360/" + patient.code);
-                  }}
-                  key={patient.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  style={{ cursor: "pointer" }}
-                >
-                  <TableCell align="left">
-                    <Typography color="primary">
-                      {patient.familyName} {patient.givenName}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography>
-                      {patient?.gender ??
-                        patient?.extension?.find((extension) => {
-                          return (
-                            extension?.url ===
-                            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
-                          );
-                        })?.valueCode ??
-                        patient?.extension?.find((extension) => {
-                          return extension?.url?.endsWith("legal-sex");
-                        })?.valueCode}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left" component="th" scope="row">
-                    <Typography>{formatDate(patient.dateOfBirth)}</Typography>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      }
-    </>
+    <TableContainer component={Paper} style={{ marginTop: theme.spacing(3) }}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="left">
+              <Typography>name</Typography>
+            </TableCell>
+            <TableCell align="left">
+              <Typography>gender</Typography>
+            </TableCell>
+            <TableCell align="left">
+              <Typography>date of birth</Typography>
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {newData.patients.map((patient) => (
+            <TableRow
+              onClick={() => {
+                navigate("/p360/" + patient.code);
+              }}
+              key={patient.id}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              style={{ cursor: "pointer" }}
+            >
+              <TableCell align="left">
+                <Typography color="primary">
+                  {patient.familyName} {patient.givenName}
+                </Typography>
+              </TableCell>
+              <TableCell align="left">
+                <Typography>
+                  {patient?.gender ??
+                    patient?.extension?.find((extension) => {
+                      return (
+                        extension?.url ===
+                        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
+                      );
+                    })?.valueCode ??
+                    patient?.extension?.find((extension) => {
+                      return extension?.url?.endsWith("legal-sex");
+                    })?.valueCode}
+                </Typography>
+              </TableCell>
+              <TableCell align="left" component="th" scope="row">
+                <Typography>{formatDate(patient.dateOfBirth)}</Typography>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

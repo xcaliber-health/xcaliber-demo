@@ -214,6 +214,7 @@ function DashboardContent() {
                   <RadioGroup
                     onChange={(e) => {
                       setSourceState(e.target.value);
+                      localStorage.setItem("DEPARTMENT_ID", `150`);
                     }}
                     pt={2}
                   >
