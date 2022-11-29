@@ -26,6 +26,7 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
   const [note, setNote] = useState({});
   const [flag, setFlag] = useState(false);
   const [disabled, setDisabled] = useState(true);
+  const [currentDraftNoteIndex, setCurrentDraftNoteIndex] = useState(null);
   useEffect(() => {
     if (!localStorage.getItem(`notes_${patientDetails?.id}`)) {
       localStorage.setItem(`notes_${patientDetails?.id}`, JSON.stringify([]));
@@ -260,6 +261,7 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
         }}
       >
         <DraftNotes
+          currentDraftNoteIndex={currentDraftNoteIndex}
           patientDetails={patientDetails}
           note={note}
           onCancelClick={() => {
@@ -278,7 +280,7 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
             {localStorage.getItem(`notes_${patientDetails?.id}`) &&
               JSON.parse(
                 localStorage.getItem(`notes_${patientDetails?.id}`)
-              )?.map((note) => {
+              )?.map((note, index) => {
                 return (
                   <ListItemButton
                     style={{
@@ -288,6 +290,7 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
                     divider
                     key={note.id}
                     onClick={() => {
+                      setCurrentDraftNoteIndex(index);
                       setIsUnsignedNoteDisplayDrawerOpen(true);
                       setDisabled(false);
                       setNote(note);
