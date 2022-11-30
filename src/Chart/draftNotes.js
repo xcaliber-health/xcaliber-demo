@@ -22,6 +22,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { NoteService } from "../services/P360/noteService";
 
 const DraftNotes = ({
+  currentDraftNoteIndex,
   patientDetails,
   onCancelClick,
   disabled,
@@ -156,7 +157,7 @@ const DraftNotes = ({
         } else if (attachment?.title === "Lymph" && attachment?.data !== "") {
           setLymph(attachment?.data);
         } else if (attachment?.title === "Psych" && attachment?.data !== "") {
-          setPsych(attachment?.data); 
+          setPsych(attachment?.data);
         } else if (attachment?.title === "Rectal" && attachment?.data !== "") {
           setRectal(attachment?.data);
         }
@@ -188,7 +189,7 @@ const DraftNotes = ({
         } else if (attachment?.title === "Lymph" && attachment?.data !== "") {
           setRosLymph(attachment?.data);
         } else if (attachment?.title === "Psych" && attachment?.data !== "") {
-          setRosPsych(attachment?.data); 
+          setRosPsych(attachment?.data);
         } else if (attachment?.title === "Rectal" && attachment?.data !== "") {
           setRosRectal(attachment?.data);
         }
@@ -514,6 +515,15 @@ const DraftNotes = ({
   const onSignClick = async () => {
     await onSaveNote();
     onCancelClick();
+    if (currentDraftNoteIndex >= 0 && currentDraftNoteIndex !== null) {
+      let updatedDraftNotes = JSON.parse(
+        localStorage.getItem(`notes_${patientDetails?.id}`)
+      )?.filter((_, index) => index !== currentDraftNoteIndex);
+      localStorage.setItem(
+        `notes_${patientDetails?.id}`,
+        JSON.stringify(updatedDraftNotes)
+      );
+    }
     reloadNotes(patientDetails?.id);
   };
   const onSaveNoteAsDraft = async () => {
