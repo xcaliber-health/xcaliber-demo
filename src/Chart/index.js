@@ -228,7 +228,16 @@ const Chart = () => {
         if (vital?.resource?.valueString) value = vital?.resource?.valueString;
         else value = vital?.resource?.valueQuantity.value;
       } else if (name.toLowerCase() == "blood pressure") {
-        value = vital?.resource?.component[0]?.valueQuantity.value;
+        var systolic,diastolic;
+        vital?.resource?.component?.map(code=>{
+          if(code?.code?.coding?.[0]?.code=='8462-4'){
+            diastolic=code?.valueQuantity?.value
+          }
+          else if(code?.code?.coding?.[0]?.code=='8480-6'){
+            systolic=code?.valueQuantity?.value
+          }
+        })
+        value = systolic+"/"+diastolic;
       } else {
         if (vital?.resource?.valueQuantity.unit)
           value =
