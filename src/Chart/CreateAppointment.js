@@ -36,7 +36,19 @@ const CreateAppointment = ({
           dateObject.getMonth() <= 8
             ? `0${dateObject.getMonth() + 1}`
             : dateObject.getMonth() + 1
-        }-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}:${dateObject.getSeconds()}Z`
+        }-${
+          dateObject.getDate() <= 9
+            ? `0${dateObject.getDate()}`
+            : `${dateObject.getDate()}`
+        }T${
+          dateObject.getHours() <= 9
+            ? `0${dateObject.getHours()}`
+            : `${dateObject.getHours()}`
+        }:${
+          dateObject.getMinutes() <= 9
+            ? `0${dateObject.getMinutes()}`
+            : `${dateObject.getMinutes()}`
+        }:${dateObject.getSeconds()}Z`
       );
       onDateChange(dateObject);
     }

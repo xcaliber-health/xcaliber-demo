@@ -319,14 +319,9 @@ const Chart = () => {
     });
   };
   const onDateChange = (dateObject) => {
-    if (dateObject.getTimezoneOffset() < 0)
-      dateObject.setMinutes(
-        dateObject.getMinutes() - -dateObject.getTimezoneOffset()
-      );
-    else
-      dateObject.setMinutes(
-        dateObject.getMinutes() - dateObject.getTimezoneOffset()
-      );
+    dateObject.setMinutes(
+      dateObject.getMinutes() + dateObject.getTimezoneOffset()
+    );
     let hourValue =
       dateObject.getHours() <= 9
         ? `0${dateObject.getHours()}`
@@ -364,18 +359,14 @@ const Chart = () => {
       finalDateValue = currentTimezoneDate?.slice(0, 10);
     }
     const hourMinuteSecondData = time?.slice(1, -1)?.split(":");
-    finalDateValue = new Date(finalDateValue);
+    finalDateValue = new Date(`${finalDateValue}T00:00:00`);
     finalDateValue.setHours(hourMinuteSecondData[0]);
     finalDateValue.setMinutes(hourMinuteSecondData[1]);
     finalDateValue.setSeconds(hourMinuteSecondData[2]);
-    if (finalDateValue.getTimezoneOffset() < 0)
-      finalDateValue.setMinutes(
-        finalDateValue.getMinutes() - -finalDateValue.getTimezoneOffset()
-      );
-    else
-      finalDateValue.setMinutes(
-        finalDateValue.getMinutes() - finalDateValue.getTimezoneOffset()
-      );
+
+    finalDateValue.setMinutes(
+      finalDateValue.getMinutes() + finalDateValue.getTimezoneOffset()
+    );
     let hourValue =
       finalDateValue.getHours() <= 9
         ? `0${finalDateValue.getHours()}`
@@ -590,9 +581,6 @@ const Chart = () => {
         setLoading(false);
       });
   }, []);
-  useEffect(() => {
-    console.log(appointmentPayload);
-  });
 
   useEffect(() => {
     const socket = SocketService.getSocket();
