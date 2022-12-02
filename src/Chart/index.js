@@ -92,23 +92,23 @@ const Chart = () => {
       extension:
         localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
           ? [
-              {
-                url: "http://xcaliber-fhir/structureDefinition/copay",
-                valueString: {
-                  collectedforother: 0,
-                  collectedforappointment: 0,
-                  insurancecopay: 0,
-                },
+            {
+              url: "http://xcaliber-fhir/structureDefinition/copay",
+              valueString: {
+                collectedforother: 0,
+                collectedforappointment: 0,
+                insurancecopay: 0,
               },
-              {
-                url: "http://xcaliber-fhir/structureDefinition/copay",
-                valueString: 0,
-              },
-              {
-                url: "http://xcaliber-fhir/structureDefinition/department-id",
-                valueInteger: localStorage.getItem(`DEPARTMENT_ID`),
-              },
-            ]
+            },
+            {
+              url: "http://xcaliber-fhir/structureDefinition/copay",
+              valueString: 0,
+            },
+            {
+              url: "http://xcaliber-fhir/structureDefinition/department-id",
+              valueInteger: localStorage.getItem(`DEPARTMENT_ID`),
+            },
+          ]
           : [],
       participant: [
         {
@@ -127,10 +127,10 @@ const Chart = () => {
         localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION"
           ? {}
           : {
-              actor: {
-                reference: `Location/${localStorage.getItem(`DEPARTMENT_ID`)}`,
-              },
+            actor: {
+              reference: `Location/${localStorage.getItem(`DEPARTMENT_ID`)}`,
             },
+          },
       ],
     },
   });
@@ -222,10 +222,15 @@ const Chart = () => {
       localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
         ? await ReferenceDataService.getAllergyData()
         : localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
-        ? await ReferenceDataService.getAllergyData(`ab`)
-        : null;
+          ? await ReferenceDataService.getAllergyData(`ab`)
+          : null;
     setAllergyOptions(result);
   };
+  const [appointmentReasonOptions, setAppointmentReasonOptions] = useState([]);
+  const initialiseAppointmentOptions = async () => {
+    const result = await ReferenceDataService.getAppointmentData();
+    setAppointmentReasonOptions(result);
+  }
 
   const onReasonChange = (reason) => {
     setAppointmentPayload({
@@ -241,8 +246,10 @@ const Chart = () => {
               code:
                 localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
                   ? reason
-                  : "422",
-              display: reason,
+                  : reason.appointmenttypeid,
+              display: localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
+                ? reason
+                : reason.name
             },
           ],
         },
@@ -263,15 +270,13 @@ const Chart = () => {
         ? `0${dateObject.getHours()}`
         : `${dateObject.getHours()}`;
 
-    let dateInUtc = `${dateObject.getFullYear()}-${
-      dateObject.getMonth() <= 8
-        ? `0${dateObject.getMonth() + 1}`
-        : dateObject.getMonth() + 1
-    }-${
-      dateObject.getDate() <= 9
+    let dateInUtc = `${dateObject.getFullYear()}-${dateObject.getMonth() <= 8
+      ? `0${dateObject.getMonth() + 1}`
+      : dateObject.getMonth() + 1
+      }-${dateObject.getDate() <= 9
         ? `0${dateObject.getDate()}`
         : `${dateObject.getDate()}`
-    }T${hourValue}:${dateObject.getMinutes()}:0${dateObject.getSeconds()}Z`;
+      }T${hourValue}:${dateObject.getMinutes()}:0${dateObject.getSeconds()}Z`;
 
     setAppointmentPayload({
       context: {
@@ -313,15 +318,13 @@ const Chart = () => {
       },
       data: {
         ...appointmentPayload?.data,
-        start: `${finalDateValue.getFullYear()}-${
-          finalDateValue.getMonth() <= 8
-            ? `0${finalDateValue.getMonth() + 1}`
-            : finalDateValue.getMonth() + 1
-        }-${
-          finalDateValue.getDate() <= 9
+        start: `${finalDateValue.getFullYear()}-${finalDateValue.getMonth() <= 8
+          ? `0${finalDateValue.getMonth() + 1}`
+          : finalDateValue.getMonth() + 1
+          }-${finalDateValue.getDate() <= 9
             ? `0${finalDateValue.getDate()}`
             : `${finalDateValue.getDate()}`
-        }T${hourValue}:${finalDateValue.getMinutes()}:${finalDateValue.getSeconds()}0Z`,
+          }T${hourValue}:${finalDateValue.getMinutes()}:${finalDateValue.getSeconds()}0Z`,
       },
     });
   };
@@ -386,20 +389,20 @@ const Chart = () => {
                 localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
                   ? `elation`
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
-                  ? `athena`
-                  : `null`,
+                    ? `athena`
+                    : `null`,
               code:
                 localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
                   ? reference?.allergyid
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
-                  ? reference?.Concept_Code_2
-                  : `null`,
+                    ? reference?.Concept_Code_2
+                    : `null`,
               display:
                 localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
                   ? reference?.allergenname
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
-                  ? reference?.Concept_Name_2
-                  : `null`,
+                    ? reference?.Concept_Name_2
+                    : `null`,
             },
           ],
         },
@@ -546,6 +549,8 @@ const Chart = () => {
   useEffect(() => {
     {
       initialiseAllergyOptions();
+      initialiseAppointmentOptions();
+      appointmentReasonOptions;
     }
   }, []);
   useEffect(() => {
@@ -598,6 +603,8 @@ const Chart = () => {
           onTimeChange={onTimeChange}
           updatePatientId={updatePatientId}
           updateCurrentTimezoneDate={updateTimezoneDate}
+          initializeAppointmentReasons={initialiseAppointmentOptions}
+          appointmentOptions={appointmentReasonOptions}
         />
       </Drawer>
       <Drawer
@@ -907,28 +914,28 @@ const Chart = () => {
                             <Grid display="flex">
                               <Typography>
                                 {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
-                                "body mass index"
+                                  "body mass index"
                                   ? vital?.resource?.valueString
                                   : vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
                                     "blood pressure"
-                                  ? vital?.resource?.component[0]?.valueQuantity
+                                    ? vital?.resource?.component[0]?.valueQuantity
                                       .value
-                                  : vital?.resource?.valueQuantity.value}
+                                    : vital?.resource?.valueQuantity.value}
                               </Typography>
 
                               {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
                                 "blood pressure" && (
-                                <>
-                                  <Typography>/</Typography>
-                                  <Typography>
-                                    {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
-                                    "blood pressure"
-                                      ? vital?.resource?.component[1]
+                                  <>
+                                    <Typography>/</Typography>
+                                    <Typography>
+                                      {vital?.resource?.code?.coding?.[0]?.display?.toLowerCase() ===
+                                        "blood pressure"
+                                        ? vital?.resource?.component[1]
                                           ?.valueQuantity.value
-                                      : ""}
-                                  </Typography>
-                                </>
-                              )}
+                                        : ""}
+                                    </Typography>
+                                  </>
+                                )}
                             </Grid>
                           </TableCell>
                           <TableCell align="left">
@@ -1034,21 +1041,21 @@ const Chart = () => {
                           <TableCell align="left">
                             <Typography>
                               {localStorage.getItem("XCALIBER_SOURCE") ===
-                              "ELATION"
+                                "ELATION"
                                 ? problem?.resource?.note?.[0]?.text &&
                                   problem?.resource?.note?.[0]?.text !== null
                                   ? problem?.resource?.note?.[0]?.text
                                   : "null"
                                 : localStorage.getItem(`XCALIBER_SOURCE`) ===
                                   "ATHENA"
-                                ? problem?.resource?.contained?.[0]?.notes
-                                    ?.text &&
-                                  problem?.resource?.contained?.[0]?.notes
-                                    ?.text !== null
                                   ? problem?.resource?.contained?.[0]?.notes
+                                    ?.text &&
+                                    problem?.resource?.contained?.[0]?.notes
+                                      ?.text !== null
+                                    ? problem?.resource?.contained?.[0]?.notes
                                       ?.text
-                                  : "null"
-                                : "null"}
+                                    : "null"
+                                  : "null"}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
