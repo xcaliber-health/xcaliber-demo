@@ -39,7 +39,11 @@ export default function Allergy({
   const [loading, setLoading] = React.useState(false);
   useEffect(() => {
     if (value) {
-      const dateObject = new Date(value);
+      const dateObject = new Date(
+        new Date(value).toLocaleString(`en-US`, {
+          timeZone: localStorage.getItem(`DEPARTMENT_TIMEZONE`),
+        })
+      );
       onDateChange(
         `${dateObject.getFullYear()}-${
           dateObject.getMonth() + 1

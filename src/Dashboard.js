@@ -35,7 +35,7 @@ import {
   InputLabel,
   Select,
   OutlinedInput,
-  MenuItem
+  MenuItem,
 } from "@mui/material";
 import Watermark from "./Watermark";
 import { makeStyles } from "@material-ui/styles";
@@ -159,6 +159,8 @@ function DashboardContent() {
       );
       setSourceState("ELATION");
     }
+    if (localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION")
+      localStorage.setItem(`DEPARTMENT_TIMEZONE`, `America/Los_Angeles`);
   };
 
   React.useEffect(() => {
@@ -248,6 +250,22 @@ function DashboardContent() {
                           ? `${process.env.REACT_APP_XSOURCEID}`
                           : `${process.env.REACT_APP_ATHENA_XSOURCEID}`
                       );
+                      if (
+                        localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION"
+                      ) {
+                        localStorage.setItem(
+                          `DEPARTMENT_TIMEZONE`,
+                          `America/Los_Angeles`
+                        );
+                      } else if (
+                        localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
+                      ) {
+                        localStorage.setItem(`DEPARTMENT_ID`, departmentId);
+                        localStorage.setItem(
+                          `DEPARTMENT_TIMEZONE`,
+                          `America/New_York`
+                        );
+                      }
                       setIsModalOpen(false);
                       navigate("/p360");
                       window.location.reload();
@@ -267,7 +285,7 @@ function DashboardContent() {
                 </Grid>
               </Grid>
             </Dialog>
-            {(localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") &&
+            {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" && (
               <FormControl sx={{ m: 1, width: 300 }}>
                 <InputLabel>DepartmentId</InputLabel>
                 <Select
@@ -276,7 +294,12 @@ function DashboardContent() {
                   onChange={(e) => {
                     setDepartmentId(e.target.value);
                     localStorage.setItem(`DEPARTMENT_ID`, e.target.value);
-                    // navigate("/p360");
+                    localStorage.setItem(
+                      `DEPARTMENT_TIMEZONE`,
+                      DEPARTMENTS.find((dep) => {
+                        return dep?.departmentid === e.target.value;
+                      })?.timezonename
+                    );
                     window.location.reload();
                   }}
                 >
@@ -291,7 +314,7 @@ function DashboardContent() {
                   ))}
                 </Select>
               </FormControl>
-            }
+            )}
             <Box display="flex">
               <IconButton
                 sx={{ color: "black", marginRight: "8px" }}
@@ -379,7 +402,7 @@ function DashboardContent() {
           <Watermark />
         </Container>
       </Box>
-    </Box >
+    </Box>
   );
 }
 

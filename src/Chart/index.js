@@ -35,6 +35,7 @@ import { Helper } from "../core-utils/helper";
 import { ReferenceDataService } from "../services/P360/referenceDataService";
 import { CreateMedication } from "./DrawerComponents/createMedications";
 import { SocketService } from "../socket";
+import * as moment from "moment-timezone";
 import Immunization from "./DrawerComponents/createImmunization";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import IconButton from "@mui/material/IconButton";
@@ -319,35 +320,13 @@ const Chart = () => {
     });
   };
   const onDateChange = (dateObject) => {
-    dateObject.setMinutes(
-      dateObject.getMinutes() + dateObject.getTimezoneOffset()
-    );
-    let hourValue =
-      dateObject.getHours() <= 9
-        ? `0${dateObject.getHours()}`
-        : `${dateObject.getHours()}`;
-
-    let dateInUtc = `${dateObject.getFullYear()}-${
-      dateObject.getMonth() <= 8
-        ? `0${dateObject.getMonth() + 1}`
-        : dateObject.getMonth() + 1
-    }-${
-      dateObject.getDate() <= 9
-        ? `0${dateObject.getDate()}`
-        : `${dateObject.getDate()}`
-    }T${hourValue}:${
-      dateObject.getMinutes() <= 9
-        ? `0${dateObject.getMinutes()}`
-        : `${dateObject.getMinutes()}`
-    }:0${dateObject.getSeconds()}Z`;
-
     setAppointmentPayload({
       context: {
         departmentId: localStorage.getItem(`DEPARTMENT_ID`),
       },
       data: {
         ...appointmentPayload?.data,
-        start: dateInUtc,
+        start: dateObject,
       },
     });
   };
@@ -358,38 +337,22 @@ const Chart = () => {
     } else {
       finalDateValue = currentTimezoneDate?.slice(0, 10);
     }
-    const hourMinuteSecondData = time?.slice(1, -1)?.split(":");
-    finalDateValue = new Date(`${finalDateValue}T00:00:00`);
-    finalDateValue.setHours(hourMinuteSecondData[0]);
-    finalDateValue.setMinutes(hourMinuteSecondData[1]);
-    finalDateValue.setSeconds(hourMinuteSecondData[2]);
+    finalDateValue = moment
+      .tz(
+        `${finalDateValue}${time}`,
+        `YYYY-MM-DDTHH:mm:ss`,
+        localStorage.getItem(`DEPARTMENT_TIMEZONE`)
+      )
+      .utc()
+      .format();
 
-    finalDateValue.setMinutes(
-      finalDateValue.getMinutes() + finalDateValue.getTimezoneOffset()
-    );
-    let hourValue =
-      finalDateValue.getHours() <= 9
-        ? `0${finalDateValue.getHours()}`
-        : `${finalDateValue.getHours()}`;
     setAppointmentPayload({
       context: {
         departmentId: localStorage.getItem(`DEPARTMENT_ID`),
       },
       data: {
         ...appointmentPayload?.data,
-        start: `${finalDateValue.getFullYear()}-${
-          finalDateValue.getMonth() <= 8
-            ? `0${finalDateValue.getMonth() + 1}`
-            : finalDateValue.getMonth() + 1
-        }-${
-          finalDateValue.getDate() <= 9
-            ? `0${finalDateValue.getDate()}`
-            : `${finalDateValue.getDate()}`
-        }T${hourValue}:${
-          finalDateValue.getMinutes() <= 9
-            ? `0${finalDateValue.getMinutes()}`
-            : `${finalDateValue.getMinutes()}`
-        }:${finalDateValue.getSeconds()}0Z`,
+        start: finalDateValue,
       },
     });
   };

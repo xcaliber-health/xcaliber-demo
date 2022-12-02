@@ -22,7 +22,9 @@ export default function Immunization({
   const [vaccineCode, setVaccineCode] = useState(null);
   const [manufacturer, setManufacturer] = useState(null);
   const formatDate = (value) => {
-    let dateObject = new Date(value);
+    let dateObject = new Date(new Date(value).toLocaleString(`en-US`, {
+      timeZone: localStorage.getItem(`DEPARTMENT_TIMEZONE`),
+    }));
     if (localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`) {
       return `${dateObject.getFullYear()}-${
         dateObject.getMonth() + 1
