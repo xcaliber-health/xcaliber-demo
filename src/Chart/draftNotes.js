@@ -22,6 +22,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { NoteService } from "../services/P360/noteService";
 
 const DraftNotes = ({
+  currentDraftNoteIndex,
   patientDetails,
   onCancelClick,
   disabled,
@@ -129,15 +130,69 @@ const DraftNotes = ({
           setfollowup(attachment?.data);
         }
       } else if (noteContent?.format?.display?.toLowerCase() === "pe") {
-        physicalExam.push({
-          data: attachment?.data,
-          title: attachment?.title,
-        });
+        if (attachment?.title === "General" && attachment?.data !== "") {
+          setGeneral(attachment?.data);
+        } else if (attachment?.title === "Eyes" && attachment?.data !== "") {
+          setEyes(attachment?.data);
+        } else if (attachment?.title === "HENT" && attachment?.data !== "") {
+          setHENT(attachment?.data);
+        } else if (attachment?.title === "Resp" && attachment?.data !== "") {
+          setResp(attachment?.data);
+        } else if (attachment?.title === "Neck" && attachment?.data !== "") {
+          setNeck(attachment?.data);
+        } else if (attachment?.title === "CVS" && attachment?.data !== "") {
+          setCVS(attachment?.data);
+        } else if (attachment?.title === "Breast" && attachment?.data !== "") {
+          setBreast(attachment?.data);
+        } else if (attachment?.title === "Abdom" && attachment?.data !== "") {
+          setAbdom(attachment?.data);
+        } else if (attachment?.title === "GU" && attachment?.data !== "") {
+          setGU(attachment?.data);
+        } else if (attachment?.title === "MSS" && attachment?.data !== "") {
+          setMSS(attachment?.data);
+        } else if (attachment?.title === "NS" && attachment?.data !== "") {
+          setNS(attachment?.data);
+        } else if (attachment?.title === "Skin" && attachment?.data !== "") {
+          setSkin(attachment?.data);
+        } else if (attachment?.title === "Lymph" && attachment?.data !== "") {
+          setLymph(attachment?.data);
+        } else if (attachment?.title === "Psych" && attachment?.data !== "") {
+          setPsych(attachment?.data);
+        } else if (attachment?.title === "Rectal" && attachment?.data !== "") {
+          setRectal(attachment?.data);
+        }
       } else if (noteContent?.format?.display?.toLowerCase() === "ros") {
-        ros.push({
-          data: attachment?.data,
-          title: attachment?.title,
-        });
+        if (attachment?.title === "General" && attachment?.data !== "") {
+          setRosGeneral(attachment?.data);
+        } else if (attachment?.title === "Eyes" && attachment?.data !== "") {
+          setRosEyes(attachment?.data);
+        } else if (attachment?.title === "HENT" && attachment?.data !== "") {
+          setRosHENT(attachment?.data);
+        } else if (attachment?.title === "Resp" && attachment?.data !== "") {
+          setRosResp(attachment?.data);
+        } else if (attachment?.title === "Neck" && attachment?.data !== "") {
+          setRosNeck(attachment?.data);
+        } else if (attachment?.title === "CVS" && attachment?.data !== "") {
+          setRosCVS(attachment?.data);
+        } else if (attachment?.title === "Breast" && attachment?.data !== "") {
+          setRosBreast(attachment?.data);
+        } else if (attachment?.title === "Abdom" && attachment?.data !== "") {
+          setRosAbdom(attachment?.data);
+        } else if (attachment?.title === "GU" && attachment?.data !== "") {
+          setRosGU(attachment?.data);
+        } else if (attachment?.title === "MSS" && attachment?.data !== "") {
+          setRosMSS(attachment?.data);
+        } else if (attachment?.title === "NS" && attachment?.data !== "") {
+          setRosNS(attachment?.data);
+        } else if (attachment?.title === "Skin" && attachment?.data !== "") {
+          setRosSkin(attachment?.data);
+        } else if (attachment?.title === "Lymph" && attachment?.data !== "") {
+          setRosLymph(attachment?.data);
+        } else if (attachment?.title === "Psych" && attachment?.data !== "") {
+          setRosPsych(attachment?.data);
+        } else if (attachment?.title === "Rectal" && attachment?.data !== "") {
+          setRosRectal(attachment?.data);
+        }
       }
     }
 
@@ -460,6 +515,15 @@ const DraftNotes = ({
   const onSignClick = async () => {
     await onSaveNote();
     onCancelClick();
+    if (currentDraftNoteIndex >= 0 && currentDraftNoteIndex !== null) {
+      let updatedDraftNotes = JSON.parse(
+        localStorage.getItem(`notes_${patientDetails?.id}`)
+      )?.filter((_, index) => index !== currentDraftNoteIndex);
+      localStorage.setItem(
+        `notes_${patientDetails?.id}`,
+        JSON.stringify(updatedDraftNotes)
+      );
+    }
     reloadNotes(patientDetails?.id);
   };
   const onSaveNoteAsDraft = async () => {
@@ -565,6 +629,7 @@ const DraftNotes = ({
                     {!disabled && (
                       <TextField
                         sx={{ width: "100%" }}
+                        value={resp}
                         onChange={(e) => {
                           setResp(e.target?.value);
                         }}

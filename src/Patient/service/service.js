@@ -647,6 +647,7 @@ export const getPatient = (id) => {
 };
 
 export const getPatientsAtPage = (page, name) => {
+  const patientIds=["27895"]
   name = !name ? "" : name;
   const offset = page * 10 - 10;
 
@@ -663,7 +664,7 @@ export const getPatientsAtPage = (page, name) => {
       .then(async (response) => {
         const data = await response.data;
         const parsedData = parserFunc(data.data.entry);
-        return parsedData;
+        return parsedData ? parsedData : []
       })
       .catch((error) => {
         console.log(error);
@@ -686,7 +687,11 @@ export const getPatientsAtPage = (page, name) => {
       .then(async (response) => {
         const data = await response.data;
         const parsedData = parserFunc(data.data.entry);
-        return parsedData;
+        for(var i=0;i<patientIds.length;i++){
+          const dum=await PatientsById(patientIds[i])
+          parsedData?.push(...dum)
+        }
+        return parsedData ? parsedData : [];
       })
       .catch(async (error) => {
         if (error.response.data.issue[0].details.text === "{\"error\":\"The given search parameters would produce a total data set larger than 1000 records.  Please refine your search and try again.\"}") {
@@ -711,6 +716,30 @@ export const getPatientsAtPage = (page, name) => {
       });
   }
 };
+
+export const PatientsById=(id)=>{
+  if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" && localStorage.getItem(`DEPARTMENT_ID`)==150){
+    return axios.get(`${endpointUrl}/Patient/${id}`,
+    {
+      headers: {
+        Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+        "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+      },
+    }
+    )
+    .then(async (response) => {
+      const data = await response.data;
+      const parsedData = parserFunc([{"resource":data.data}]);
+      return parsedData ? parsedData : [];
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+  return [];
+}
 
 export const addPatient = (patient) => {
   let d = deParsefunc(patient);

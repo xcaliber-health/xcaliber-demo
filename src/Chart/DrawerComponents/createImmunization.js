@@ -13,9 +13,8 @@ import Loading from "../../Patient/Loading";
 export default function Immunization({
   onCancelClick,
   handleImmunizationClick,
-  patientId
+  patientId,
 }) {
-
   const [loading, setLoading] = useState(false);
   const [vaccine, setVaccine] = useState(null);
   const [quantity, setQuantity] = useState(null);
@@ -24,25 +23,25 @@ export default function Immunization({
   const [manufacturer, setManufacturer] = useState(null);
   const formatDate = (value) => {
     let dateObject = new Date(value);
-    console.log(dateObject)
-    if(localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`) {
+    if (localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`) {
       return `${dateObject.getFullYear()}-${
         dateObject.getMonth() + 1
       }-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}:${dateObject.getSeconds()}Z`;
-    } 
-    
+    }
+
     return `${dateObject.getFullYear()}-${
       dateObject.getMonth() + 1
     }-${dateObject.getDate()}`;
-    
-    
   };
   const createImmunizationClick = async () => {
     if (!vaccine) {
       alert("Please provide vaccine");
-    } else if(localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION` && !quantity) {
+    } else if (
+      localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION` &&
+      !quantity
+    ) {
       alert("Please provide quantity");
-    } else if(!occurenceDate) {
+    } else if (!occurenceDate) {
       alert("Please provide occurance date");
     } else {
       let immunizationPayload = {
@@ -54,58 +53,58 @@ export default function Immunization({
           occurrenceDateTime: formatDate(occurenceDate),
           vaccineCode: {
             coding: [
-                {
-                    system: "http://hl7.org/fhir/sid/cvx",
-                    code: vaccineCode,
-                    display: vaccine
-                }
-            ]
+              {
+                system: "http://hl7.org/fhir/sid/cvx",
+                code: vaccineCode,
+                display: vaccine,
+              },
+            ],
           },
           patient: {
-            reference: `Patient/${patientId}`
+            reference: `Patient/${patientId}`,
           },
           performer: [
             {
-                actor: {
-                    reference: "Practitioner/140857915539458"
-                },
-                function: {
-                    coding: [
-                        {
-                            system: "http://terminology.hl7.org/CodeSystem/v2-0443",
-                            code: "AP"
-                        }
-                    ]
-                }
+              actor: {
+                reference: "Practitioner/140857915539458",
+              },
+              function: {
+                coding: [
+                  {
+                    system: "http://terminology.hl7.org/CodeSystem/v2-0443",
+                    code: "AP",
+                  },
+                ],
+              },
             },
             {
-                actor: {
-                    reference: "Organization/140857911017476"
-                }
+              actor: {
+                reference: "Organization/140857911017476",
+              },
             },
             {
-                actor: {
-                    reference: "Practitioner/140857915539458"
-                },
-                function: {
-                    coding: [
-                        {
-                            system: "http://terminology.hl7.org/CodeSystem/v2-0443",
-                            code: "OP"
-                        }
-                    ]
-                }
-            }
+              actor: {
+                reference: "Practitioner/140857915539458",
+              },
+              function: {
+                coding: [
+                  {
+                    system: "http://terminology.hl7.org/CodeSystem/v2-0443",
+                    code: "OP",
+                  },
+                ],
+              },
+            },
           ],
           manufacturer: {
-              display: manufacturer
+            display: manufacturer,
           },
           doseQuantity: {
-              value: quantity,
-              unit: "ml"
-          }
-        }
-      }
+            value: quantity,
+            unit: "ml",
+          },
+        },
+      };
       const createdImmunization = await ImmunizationService.createImmunization(
         immunizationPayload
       );
@@ -144,7 +143,11 @@ export default function Immunization({
           <Divider></Divider>
           <Grid display="flex">
             <Typography
-              sx={{ marginTop: "13px", marginRight: "31px", marginBottom: "30px" }}
+              sx={{
+                marginTop: "13px",
+                marginRight: "31px",
+                marginBottom: "30px",
+              }}
             >
               Vaccine:
             </Typography>
@@ -181,9 +184,7 @@ export default function Immunization({
               )}
             />
           </Grid>
-          {
-            (localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`) &&  
-          (
+          {localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION` && (
             <Grid display="flex" sx={{ paddingBottom: "20px" }}>
               <Typography sx={{ marginTop: "13px", marginRight: "17px" }}>
                 Quantity:
@@ -235,7 +236,7 @@ export default function Immunization({
             </Button>
           </Box>
         </React.Fragment>
-          )}
+      )}
     </Grid>
   );
 }
