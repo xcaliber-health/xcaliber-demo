@@ -38,7 +38,6 @@ import { SocketService } from "../socket";
 import Immunization from "./DrawerComponents/createImmunization";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import IconButton from "@mui/material/IconButton";
-import TimeLine from "../TimeLine";
 
 const Chart = () => {
   const { id } = useParams();
@@ -959,7 +958,6 @@ const Chart = () => {
               <Tab label="Allergies" style={{ width: "25%" }} />
               <Tab label="Immunizations" style={{ width: "25%" }} />
               <Tab label="Medications" style={{ width: "25%" }} />
-              <Tab label="Visits" style={{ width: "25%" }} />
               {/* <Tab label="Profile" style={{ width: "25%" }} /> */}
             </Tabs>
           </Box>
@@ -1496,11 +1494,6 @@ const Chart = () => {
               </Grid>
             )}
           </TabPanel>
-          <TabPanel value={value} index={6}>
-            <TimeLine/>
-            {/* <div>hi</div> */}
-          </TabPanel>
-          
         </Paper>
       </Grid>
     </Grid>
