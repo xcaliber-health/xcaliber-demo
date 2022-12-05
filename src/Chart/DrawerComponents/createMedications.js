@@ -60,9 +60,22 @@ export const CreateMedication = ({
         timeZone: localStorage.getItem(`DEPARTMENT_TIMEZONE`),
       })
     );
-    return `${dateObject.getFullYear()}-${
-      dateObject.getMonth() + 1
-    }-${dateObject.getDate()}`;
+    return `${dateObject.getFullYear()}-${dateObject.getMonth() + 1
+      }-${dateObject.getDate()}`;
+  };
+  const formatStopDate = (value) => {
+    if (value === null) {
+      return null;
+    }
+    else {
+      let dateObject = new Date(
+        new Date(value).toLocaleString(`en-US`, {
+          timeZone: localStorage.getItem(`DEPARTMENT_TIMEZONE`),
+        })
+      );
+      return `${dateObject.getFullYear()}-${dateObject.getMonth() + 1
+        }-${dateObject.getDate()}`;
+    }
   };
   const CreateMedication = async () => {
     if (medication !== null) {
@@ -81,7 +94,7 @@ export const CreateMedication = ({
             },
             effectivePeriod: {
               start: formatDate(startDate),
-              end: formatDate(stopDate),
+              end: formatStopDate(stopDate),
             },
             statusReason: [
               {
@@ -111,6 +124,9 @@ export const CreateMedication = ({
         setLoading(false);
       });
   }, []);
+  useEffect(() => {
+    console.log(stopDate);
+  })
   const [startDate, setStartDate] = useState(null);
   const [stopDate, setStopDate] = useState(null);
   return (
