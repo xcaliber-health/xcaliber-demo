@@ -10,6 +10,7 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import * as moment from "moment-timezone";
 import React, { useEffect } from "react";
 
 const CreateAppointment = ({
@@ -31,14 +32,32 @@ const CreateAppointment = ({
   useEffect(() => {
     if (value) {
       const dateObject = new Date(value);
-      updateCurrentTimezoneDate(
-        `${dateObject.getFullYear()}-${
-          dateObject.getMonth() <= 8
-            ? `0${dateObject.getMonth() + 1}`
-            : dateObject.getMonth() + 1
-        }-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}:${dateObject.getSeconds()}Z`
-      );
-      onDateChange(dateObject);
+      let dateInDepartmentTimezone = moment
+        .tz(
+          `${dateObject.getFullYear()}-${
+            dateObject.getMonth() <= 8
+              ? `0${dateObject.getMonth() + 1}`
+              : dateObject.getMonth() + 1
+          }-${
+            dateObject.getDate() <= 9
+              ? `0${dateObject.getDate()}`
+              : `${dateObject.getDate()}`
+          }T${
+            dateObject.getHours() <= 9
+              ? `0${dateObject.getHours()}`
+              : `${dateObject.getHours()}`
+          }:${
+            dateObject.getMinutes() <= 9
+              ? `0${dateObject.getMinutes()}`
+              : `${dateObject.getMinutes()}`
+          }:${dateObject.getSeconds()}Z`,
+          `YYYY-MM-DDTHH:mm:ss`,
+          localStorage.getItem(`DEPARTMENT_TIMEZONE`)
+        )
+        .utc()
+        .format();
+      updateCurrentTimezoneDate(dateInDepartmentTimezone);
+      onDateChange(dateInDepartmentTimezone);
     }
   }, [value]);
 
