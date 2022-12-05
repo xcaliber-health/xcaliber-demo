@@ -315,7 +315,7 @@ function DashboardContent() {
                   ))}
                 </Select>
               </FormControl>
-            }
+            )}
             {(localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") ?
               <Link sx={{ color: "black", marginTop: theme.spacing(4), marginLeft: theme.spacing(20) }} href="https://xcaliberapis.redoc.ly" target="_blank">Documentation</Link> :
               <Link sx={{ color: "black", marginTop: theme.spacing(3), marginLeft: theme.spacing(70) }} href="https://xcaliberapis.redoc.ly" target="_blank">Documentation</Link>}
