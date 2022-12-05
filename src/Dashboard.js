@@ -196,11 +196,12 @@ function DashboardContent() {
           </IconButton>
           <Grid justifyContent="space-between" direction="flex" container>
             <Box display="flex" alignItems={"center"}>
-              <Typography variant="h5">XCALIBER-DEMO</Typography>
-              <Typography variant="body2" sx={{ paddingLeft: "24px" }}>
+              <Typography variant="h5">xcaliber Capabilities Demo</Typography>
+              <Typography variant="body2" sx={{ paddingLeft: "24px", paddingRight: theme.spacing(4) }}>
                 {" "}
                 Do not add any real PII/PHI data here.
               </Typography>
+              <Typography variant="body2">Sandbox in use</Typography>
             </Box>
             <Dialog direction="column" open={isModalOpen}>
               <Grid
@@ -314,15 +315,18 @@ function DashboardContent() {
                   ))}
                 </Select>
               </FormControl>
-            )}
+            }
+            {(localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") ?
+              <Link sx={{ color: "black", marginTop: theme.spacing(4), marginLeft: theme.spacing(20) }} href="https://xcaliberapis.redoc.ly" target="_blank">Documentation</Link> :
+              <Link sx={{ color: "black", marginTop: theme.spacing(3), marginLeft: theme.spacing(70) }} href="https://xcaliberapis.redoc.ly" target="_blank">Documentation</Link>}
             <Box display="flex">
               <IconButton
-                sx={{ color: "black", marginRight: "8px" }}
+                sx={{ color: "black", marginRight: theme.spacing(1) }}
                 onClick={() => {
                   setIsModalOpen(true);
                 }}
               >
-                <SettingsSharpIcon color="action" />
+                <SettingsSharpIcon color="action" sx={{ marginTop: theme.spacing(2) }} />
               </IconButton>
               <Avatar sx={{ marginTop: theme.spacing(2) }}></Avatar>
             </Box>
