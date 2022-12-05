@@ -35,7 +35,7 @@ import {
   InputLabel,
   Select,
   OutlinedInput,
-  MenuItem
+  MenuItem,
 } from "@mui/material";
 import Watermark from "./Watermark";
 import { makeStyles } from "@material-ui/styles";
@@ -159,6 +159,8 @@ function DashboardContent() {
       );
       setSourceState("ELATION");
     }
+    if (localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION")
+      localStorage.setItem(`DEPARTMENT_TIMEZONE`, `America/Los_Angeles`);
   };
 
   React.useEffect(() => {
@@ -194,11 +196,12 @@ function DashboardContent() {
           </IconButton>
           <Grid justifyContent="space-between" direction="flex" container>
             <Box display="flex" alignItems={"center"}>
-              <Typography variant="h5">XCALIBER-DEMO</Typography>
-              <Typography variant="body2" sx={{ paddingLeft: "24px" }}>
+              <Typography variant="h5">xcaliber Capabilities Demo</Typography>
+              <Typography variant="body2" sx={{ paddingLeft: "24px", paddingRight: theme.spacing(4) }}>
                 {" "}
                 Do not add any real PII/PHI data here.
               </Typography>
+              <Typography variant="body2">Sandbox in use</Typography>
             </Box>
             <Dialog direction="column" open={isModalOpen}>
               <Grid
@@ -248,6 +251,22 @@ function DashboardContent() {
                           ? `${process.env.REACT_APP_XSOURCEID}`
                           : `${process.env.REACT_APP_ATHENA_XSOURCEID}`
                       );
+                      if (
+                        localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION"
+                      ) {
+                        localStorage.setItem(
+                          `DEPARTMENT_TIMEZONE`,
+                          `America/Los_Angeles`
+                        );
+                      } else if (
+                        localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
+                      ) {
+                        localStorage.setItem(`DEPARTMENT_ID`, departmentId);
+                        localStorage.setItem(
+                          `DEPARTMENT_TIMEZONE`,
+                          `America/New_York`
+                        );
+                      }
                       setIsModalOpen(false);
                       navigate("/p360");
                       window.location.reload();
@@ -267,7 +286,7 @@ function DashboardContent() {
                 </Grid>
               </Grid>
             </Dialog>
-            {(localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") &&
+            {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" && (
               <FormControl sx={{ m: 1, width: 300 }}>
                 <InputLabel>DepartmentId</InputLabel>
                 <Select
@@ -276,7 +295,12 @@ function DashboardContent() {
                   onChange={(e) => {
                     setDepartmentId(e.target.value);
                     localStorage.setItem(`DEPARTMENT_ID`, e.target.value);
-                    // navigate("/p360");
+                    localStorage.setItem(
+                      `DEPARTMENT_TIMEZONE`,
+                      DEPARTMENTS.find((dep) => {
+                        return dep?.departmentid === e.target.value;
+                      })?.timezonename
+                    );
                     window.location.reload();
                   }}
                 >
@@ -292,14 +316,17 @@ function DashboardContent() {
                 </Select>
               </FormControl>
             }
+            {(localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") ?
+              <Link sx={{ color: "black", marginTop: theme.spacing(4), marginLeft: theme.spacing(20) }} href="https://xcaliberapis.redoc.ly" target="_blank">Documentation</Link> :
+              <Link sx={{ color: "black", marginTop: theme.spacing(3), marginLeft: theme.spacing(70) }} href="https://xcaliberapis.redoc.ly" target="_blank">Documentation</Link>}
             <Box display="flex">
               <IconButton
-                sx={{ color: "black", marginRight: "8px" }}
+                sx={{ color: "black", marginRight: theme.spacing(1) }}
                 onClick={() => {
                   setIsModalOpen(true);
                 }}
               >
-                <SettingsSharpIcon color="action" />
+                <SettingsSharpIcon color="action" sx={{ marginTop: theme.spacing(2) }} />
               </IconButton>
               <Avatar sx={{ marginTop: theme.spacing(2) }}></Avatar>
             </Box>
@@ -379,7 +406,7 @@ function DashboardContent() {
           <Watermark />
         </Container>
       </Box>
-    </Box >
+    </Box>
   );
 }
 

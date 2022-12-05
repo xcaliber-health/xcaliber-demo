@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { ReferenceDataService } from "../../services/P360/referenceDataService";
 import { ProblemService } from "../../services/P360/problemService";
+import * as moment from "moment-timezone";
 import Loading from "../../Patient/Loading";
 export const PatientProblems = ({
   patientId,
@@ -16,6 +17,11 @@ export const PatientProblems = ({
   onCancelClick,
   updateProblems,
 }) => {
+  let dateObject = new Date(
+    new Date().toLocaleString(`en-US`, {
+      timeZone: localStorage.getItem(`DEPARTMENT_TIMEZONE`),
+    })
+  );
   const [problemPayload, setProblemPayload] = useState({
     context: {
       departmentId: localStorage.getItem(`DEPARTMENT_ID`),
@@ -54,7 +60,30 @@ export const PatientProblems = ({
           text: "",
         },
       ],
-      onsetDateTime: "2022-09-16",
+      onsetDateTime: moment
+        .tz(
+          `${dateObject.getFullYear()}-${
+            dateObject.getMonth() <= 8
+              ? `0${dateObject.getMonth() + 1}`
+              : dateObject.getMonth() + 1
+          }-${
+            dateObject.getDate() <= 9
+              ? `0${dateObject.getDate()}`
+              : `${dateObject.getDate()}`
+          }T${
+            dateObject.getHours() <= 9
+              ? `0${dateObject.getHours()}`
+              : `${dateObject.getHours()}`
+          }:${
+            dateObject.getMinutes() <= 9
+              ? `0${dateObject.getMinutes()}`
+              : `${dateObject.getMinutes()}`
+          }:${dateObject.getSeconds()}Z`,
+          `YYYY-MM-DDTHH:mm:ss`,
+          localStorage.getItem(`DEPARTMENT_TIMEZONE`)
+        )
+        .utc()
+        .format(),
       recordedDate: "2022-09-16T12:27:24Z",
       abatementDateTime: "",
       code: {
@@ -90,7 +119,7 @@ export const PatientProblems = ({
       onCancelClick();
     } else if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") {
       onCancelClick();
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
