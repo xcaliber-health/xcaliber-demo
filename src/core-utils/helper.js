@@ -52,13 +52,21 @@ export const Helper = {
   },
 
   extractFieldsFromDate: (date) => {
-    let dateObject = new Date(date);
+    let dateObject = new Date(
+      new Date(date).toLocaleString(`en-US`, {
+        timeZone: localStorage.getItem(`DEPARTMENT_TIMEZONE`),
+      })
+    );
     return {
       DAY: Helper.getDayFromIndex(dateObject.getDay()),
       MONTH: Helper.getMonthFromIndex(dateObject.getMonth()),
       DATE: dateObject.getDate(),
       YEAR: dateObject.getFullYear(),
-      TIME: dateObject.toLocaleTimeString("en-US",{ hour: '2-digit', minute: '2-digit', hour12: true })
+      TIME: dateObject.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      }),
     };
   },
 };

@@ -8,6 +8,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { Autocomplete } from "@mui/material";
 import { ReferenceDataService } from "../../services/P360/referenceDataService";
 import { ImmunizationService } from "../../services/P360/immunizationService";
+import * as moment from "moment-timezone";
 import Loading from "../../Patient/Loading";
 
 export default function Immunization({
@@ -23,15 +24,35 @@ export default function Immunization({
   const [manufacturer, setManufacturer] = useState(null);
   const formatDate = (value) => {
     let dateObject = new Date(value);
+    dateObject = moment
+      .tz(
+        `${dateObject.getFullYear()}-${
+          dateObject.getMonth() <= 8
+            ? `0${dateObject.getMonth() + 1}`
+            : dateObject.getMonth() + 1
+        }-${
+          dateObject.getDate() <= 9
+            ? `0${dateObject.getDate()}`
+            : `${dateObject.getDate()}`
+        }T${
+          dateObject.getHours() <= 9
+            ? `0${dateObject.getHours()}`
+            : `${dateObject.getHours()}`
+        }:${
+          dateObject.getMinutes() <= 9
+            ? `0${dateObject.getMinutes()}`
+            : `${dateObject.getMinutes()}`
+        }:${dateObject.getSeconds()}Z`,
+        `YYYY-MM-DDTHH:mm:ss`,
+        localStorage.getItem(`DEPARTMENT_TIMEZONE`)
+      )
+      .utc()
+      .format();
     if (localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`) {
-      return `${dateObject.getFullYear()}-${
-        dateObject.getMonth() + 1
-      }-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}:${dateObject.getSeconds()}Z`;
+      return `${dateObject}`;
     }
 
-    return `${dateObject.getFullYear()}-${
-      dateObject.getMonth() + 1
-    }-${dateObject.getDate()}`;
+    return `${dateObject?.split("T")[0]}`;
   };
   const createImmunizationClick = async () => {
     if (!vaccine) {

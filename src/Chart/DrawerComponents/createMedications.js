@@ -55,7 +55,11 @@ export const CreateMedication = ({
     }
   };
   const formatDate = (value) => {
-    let dateObject = new Date(value);
+    let dateObject = new Date(
+      new Date(value).toLocaleString(`en-US`, {
+        timeZone: localStorage.getItem(`DEPARTMENT_TIMEZONE`),
+      })
+    );
     return `${dateObject.getFullYear()}-${
       dateObject.getMonth() + 1
     }-${dateObject.getDate()}`;

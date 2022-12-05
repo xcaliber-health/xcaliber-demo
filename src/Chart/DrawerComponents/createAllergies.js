@@ -10,6 +10,7 @@ import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import { Autocomplete } from "@mui/material";
+import * as moment from "moment-timezone";
 const useStyles = makeStyles(() => ({
   // typography:
   // {
@@ -39,12 +40,32 @@ export default function Allergy({
   const [loading, setLoading] = React.useState(false);
   useEffect(() => {
     if (value) {
-      const dateObject = new Date(value);
-      onDateChange(
-        `${dateObject.getFullYear()}-${
-          dateObject.getMonth() + 1
-        }-${dateObject.getDate()}`
-      );
+      let dateObject = new Date(value);
+      dateObject = moment
+        .tz(
+          `${dateObject.getFullYear()}-${
+            dateObject.getMonth() <= 8
+              ? `0${dateObject.getMonth() + 1}`
+              : dateObject.getMonth() + 1
+          }-${
+            dateObject.getDate() <= 9
+              ? `0${dateObject.getDate()}`
+              : `${dateObject.getDate()}`
+          }T${
+            dateObject.getHours() <= 9
+              ? `0${dateObject.getHours()}`
+              : `${dateObject.getHours()}`
+          }:${
+            dateObject.getMinutes() <= 9
+              ? `0${dateObject.getMinutes()}`
+              : `${dateObject.getMinutes()}`
+          }:${dateObject.getSeconds()}Z`,
+          `YYYY-MM-DDTHH:mm:ss`,
+          localStorage.getItem(`DEPARTMENT_TIMEZONE`)
+        )
+        .utc()
+        .format();
+      onDateChange(dateObject?.split(`T`)[0]);
     }
   }, [value]);
   return (
