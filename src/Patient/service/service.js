@@ -708,10 +708,15 @@ export const getPatientsAtPage = (page, name) => {
                   "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
                 },
               }
-            );
-          const data = await response.data;
-          const parsedData = parserFunc(data.data.entry);
-          return parsedData;
+            ).then(async (response) => {
+              const data = await response.data;
+              const parsedData = parserFunc(data.data.entry);
+              for(var i=0;i<patientIds.length;i++){
+                const dum=await PatientsById(patientIds[i])
+                parsedData?.push(...dum)
+              }
+              return parsedData ? parsedData : [];
+            }); 
         }
       });
   }
