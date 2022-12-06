@@ -5,8 +5,7 @@ export const ReferenceDataService = {
   getProblemData: async (searchString) => {
     try {
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?category=problems&resourceType=condition&searchString=${
-          searchString ?? "abc"
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?category=problems&resourceType=condition&searchString=${searchString ?? "abc"
         }`,
         {
           headers: {
@@ -23,8 +22,7 @@ export const ReferenceDataService = {
   getAllergyData: async (searchString) => {
     try {
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=allergy&searchString=${
-          searchString ?? "abe"
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=allergy&searchString=${searchString ?? "abe"
         }`,
         {
           headers: {
@@ -38,11 +36,26 @@ export const ReferenceDataService = {
       console.log(error);
     }
   },
+  getAppointmentData: async () => {
+    try {
+      const result = await axios.get(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=appointment&dataField=type`,
+        {
+          headers: {
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+          },
+        }
+      );
+      return result?.data?.data?.result.appointmenttypes;
+    } catch (error) {
+      console.log(error);
+    }
+  },
   getMedicationData: async (searchString) => {
     try {
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=medicationstatement&searchString=${
-          searchString ?? ""
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=medicationstatement&searchString=${searchString ?? ""
         }`,
         {
           headers: {
@@ -75,8 +88,7 @@ export const ReferenceDataService = {
   getVaccineData: async (searchString) => {
     try {
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=immunization&searchString=${
-          searchString ?? ""
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=immunization&searchString=${searchString ?? ""
         }`,
         {
           headers: {

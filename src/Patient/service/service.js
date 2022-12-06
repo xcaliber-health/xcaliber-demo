@@ -248,8 +248,8 @@ export const deParsefunc = (item) => {
           item?.sex === "man"
             ? "Identifies as Male"
             : item?.sex === "woman"
-            ? `Identifies as Female`
-            : `Gender non-conforming (neither exclusively male nor female)`,
+              ? `Identifies as Female`
+              : `Gender non-conforming (neither exclusively male nor female)`,
         maritalStatus: {
           coding: [
             {
@@ -674,7 +674,7 @@ export const getPatientsAtPage = (page, name) => {
       .get(
         `${endpointUrl}/Patient?departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}&_count=10&_offset=${offset}&given=George&name=${name}`,
+        )}&_count=10&_offset=${offset}&name=${name}`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -693,8 +693,26 @@ export const getPatientsAtPage = (page, name) => {
         }
         return parsedData ? parsedData : [];
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(async (error) => {
+        if (error.response.data.issue[0].details.text === "{\"error\":\"The given search parameters would produce a total data set larger than 1000 records.  Please refine your search and try again.\"}") {
+          const response = await axios
+            .get(
+              `${endpointUrl}/Patient?departmentId=${localStorage.getItem(
+                `DEPARTMENT_ID`
+              )}&_count=10&_offset=${offset}&given=George&name=${name}`,
+              {
+                headers: {
+                  Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+                  "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+                },
+              }
+            );
+          const data = await response.data;
+          const parsedData = parserFunc(data.data.entry);
+          return parsedData;
+        }
       });
   }
 };
@@ -791,7 +809,7 @@ export const usePagination = ({
     }
 
     /*
-    	Calculate left and right sibling index and make sure they are within range 1 and totalPageCount
+      Calculate left and right sibling index and make sure they are within range 1 and totalPageCount
     */
     const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
     const rightSiblingIndex = Math.min(
@@ -809,7 +827,7 @@ export const usePagination = ({
     const lastPageIndex = totalPageCount;
 
     /*
-    	Case 2: No left dots to show, but rights dots to be shown
+      Case 2: No left dots to show, but rights dots to be shown
     */
     if (!shouldShowLeftDots && shouldShowRightDots) {
       let leftItemCount = 3 + 2 * siblingCount;
@@ -819,7 +837,7 @@ export const usePagination = ({
     }
 
     /*
-    	Case 3: No right dots to show, but left dots to be shown
+      Case 3: No right dots to show, but left dots to be shown
     */
     if (shouldShowLeftDots && !shouldShowRightDots) {
       let rightItemCount = 3 + 2 * siblingCount;
@@ -831,7 +849,7 @@ export const usePagination = ({
     }
 
     /*
-    	Case 4: Both left and right dots to be shown
+      Case 4: Both left and right dots to be shown
     */
     if (shouldShowLeftDots && shouldShowRightDots) {
       let middleRange = range(leftSiblingIndex, rightSiblingIndex);

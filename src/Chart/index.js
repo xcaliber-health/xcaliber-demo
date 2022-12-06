@@ -94,23 +94,23 @@ const Chart = () => {
       extension:
         localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
           ? [
-              {
-                url: "http://xcaliber-fhir/structureDefinition/copay",
-                valueString: {
-                  collectedforother: 0,
-                  collectedforappointment: 0,
-                  insurancecopay: 0,
-                },
+            {
+              url: "http://xcaliber-fhir/structureDefinition/copay",
+              valueString: {
+                collectedforother: 0,
+                collectedforappointment: 0,
+                insurancecopay: 0,
               },
-              {
-                url: "http://xcaliber-fhir/structureDefinition/copay",
-                valueString: 0,
-              },
-              {
-                url: "http://xcaliber-fhir/structureDefinition/department-id",
-                valueInteger: localStorage.getItem(`DEPARTMENT_ID`),
-              },
-            ]
+            },
+            {
+              url: "http://xcaliber-fhir/structureDefinition/copay",
+              valueString: 0,
+            },
+            {
+              url: "http://xcaliber-fhir/structureDefinition/department-id",
+              valueInteger: localStorage.getItem(`DEPARTMENT_ID`),
+            },
+          ]
           : [],
       participant: [
         {
@@ -129,10 +129,10 @@ const Chart = () => {
         localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION"
           ? {}
           : {
-              actor: {
-                reference: `Location/${localStorage.getItem(`DEPARTMENT_ID`)}`,
-              },
+            actor: {
+              reference: `Location/${localStorage.getItem(`DEPARTMENT_ID`)}`,
             },
+          },
       ],
     },
   });
@@ -305,6 +305,11 @@ const Chart = () => {
         : "";
     setAllergyOptions(result);
   };
+  const [appointmentReasonOptions, setAppointmentReasonOptions] = useState([]);
+  const initialiseAppointmentOptions = async () => {
+    const result = await ReferenceDataService.getAppointmentData();
+    setAppointmentReasonOptions(result);
+  }
 
   const onReasonChange = (reason) => {
     setAppointmentPayload({
@@ -320,8 +325,10 @@ const Chart = () => {
               code:
                 localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
                   ? reason
-                  : "422",
-              display: reason,
+                  : reason.appointmenttypeid,
+              display: localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
+                ? reason
+                : reason.name
             },
           ],
         },
@@ -586,6 +593,8 @@ const Chart = () => {
   useEffect(() => {
     {
       initialiseAllergyOptions();
+      initialiseAppointmentOptions();
+      appointmentReasonOptions;
     }
   }, []);
   const handleChange = (event, newValue) => {
@@ -635,6 +644,8 @@ const Chart = () => {
           onTimeChange={onTimeChange}
           updatePatientId={updatePatientId}
           updateCurrentTimezoneDate={updateTimezoneDate}
+          initializeAppointmentReasons={initialiseAppointmentOptions}
+          appointmentOptions={appointmentReasonOptions}
         />
       </Drawer>
       <Drawer
@@ -1107,18 +1118,18 @@ const Chart = () => {
                           <TableCell align="left">
                             <Typography>
                               {localStorage.getItem("XCALIBER_SOURCE") ===
-                              "ELATION"
+                                "ELATION"
                                 ? problem?.resource?.note?.[0]?.text &&
                                   problem?.resource?.note?.[0]?.text !== null
                                   ? problem?.resource?.note?.[0]?.text
                                   : ""
                                 : localStorage.getItem(`XCALIBER_SOURCE`) ===
                                   "ATHENA"
-                                ? problem?.resource?.contained?.[0]?.notes
-                                    ?.text &&
-                                  problem?.resource?.contained?.[0]?.notes
-                                    ?.text !== null
                                   ? problem?.resource?.contained?.[0]?.notes
+                                    ?.text &&
+                                    problem?.resource?.contained?.[0]?.notes
+                                      ?.text !== null
+                                    ? problem?.resource?.contained?.[0]?.notes
                                       ?.text
                                   : ""
                                 : ""}

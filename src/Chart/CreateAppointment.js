@@ -12,6 +12,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import * as moment from "moment-timezone";
 import React, { useEffect } from "react";
+import { Autocomplete } from "@mui/material";
 
 const CreateAppointment = ({
   patientDetails,
@@ -23,6 +24,7 @@ const CreateAppointment = ({
   onTimeChange,
   updatePatientId,
   disabled,
+  appointmentOptions,
   updateCurrentTimezoneDate,
 }) => {
   const [value, setValue] = React.useState(null);
@@ -80,7 +82,7 @@ const CreateAppointment = ({
         </Grid> */}
       <Grid item pt={2}>
         <Typography pb={1}> Reason for visit</Typography>
-        {!disabled && (
+        {localStorage.getItem("XCALIBER_SOURCE") === "ELATION" && !disabled && (
           <TextField
             sx={{ width: "100%" }}
             label={"reason"}
@@ -89,6 +91,29 @@ const CreateAppointment = ({
             }}
           />
         )}
+        {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA"
+          && !disabled && (
+            <Autocomplete
+              sx={{ width: "100%" }}
+              id="combo-box-demo"
+              options={appointmentOptions}
+              getOptionLabel={(option) => {
+                return `${option.appointmenttypeid}-${option.name}`
+              }}
+              onChange={(e, v) => {
+                if (v && v !== "" && v !== null) {
+                  onReasonChange(v);
+                }
+              }}
+              renderInput={(params) => (
+                <TextField
+                  sx={{ width: "100%" }}
+                  {...params}
+                  label="Appointment"
+                />
+              )}
+            />
+          )}
         {disabled && (
           <TextField
             sx={{ width: "100%" }}
@@ -135,7 +160,7 @@ const CreateAppointment = ({
             <DatePicker
               label="Appointment date"
               value={new Date(appointmentFormDetails?.resource?.start)}
-              onChange={() => {}}
+              onChange={() => { }}
               renderInput={(params) => <TextField {...params} />}
             />
           )}
