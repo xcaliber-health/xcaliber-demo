@@ -695,7 +695,7 @@ export const getPatientsAtPage = (page, name) => {
       })
       .catch(async (error) => {
         if (error.response.data.issue[0].details.text === "{\"error\":\"The given search parameters would produce a total data set larger than 1000 records.  Please refine your search and try again.\"}") {
-          const response = await axios
+          return await axios
             .get(
               `${endpointUrl}/Patient?departmentId=${localStorage.getItem(
                 `DEPARTMENT_ID`
