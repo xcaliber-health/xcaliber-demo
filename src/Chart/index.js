@@ -39,11 +39,26 @@ import * as moment from "moment-timezone";
 import Immunization from "./DrawerComponents/createImmunization";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import IconButton from "@mui/material/IconButton";
+import { Collapse } from "@mui/material";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { makeStyles } from "@material-ui/styles";
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+    "& .MuiTableCell-root": {
+      borderBottom: "1px solid rgba(224, 224, 224, 1)"
+    }
+  }
+});
 
 const Chart = () => {
+  const classes = useStyles();
   const { id } = useParams();
   const theme = useTheme();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [activeOpen, setActiveOpen] = useState(true);
   const [patientDetails, setPatientDetails] = useState({});
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
   const [patientVitals, setPatientVitals] = useState([]);
@@ -51,6 +66,10 @@ const Chart = () => {
   const [patientAllergies, setPatientAllergies] = useState([]);
   const [patientImmunizations, setPatientImmunizations] = useState([]);
   const [patientMedications, setPatientMedications] = useState([]);
+  const [patientActiveMedications, setPatientActiveMedications] = useState([]);
+  const [patientHistoricalMedications, setPatientHistoricalMedications] = useState([]);
+  const entryHistorical = [];
+  const entryActive = [];
   const [loading, setLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isProblemsDrawerOpen, setIsProblemsDrawerOpen] = useState(false);
@@ -229,16 +248,16 @@ const Chart = () => {
         if (vital?.resource?.valueString) value = vital?.resource?.valueString;
         else value = vital?.resource?.valueQuantity.value;
       } else if (name.toLowerCase() == "blood pressure") {
-        var systolic,diastolic;
-        vital?.resource?.component?.map(code=>{
-          if(code?.code?.coding?.[0]?.code=='8462-4'){
-            diastolic=code?.valueQuantity?.value
+        var systolic, diastolic;
+        vital?.resource?.component?.map(code => {
+          if (code?.code?.coding?.[0]?.code == '8462-4') {
+            diastolic = code?.valueQuantity?.value
           }
-          else if(code?.code?.coding?.[0]?.code=='8480-6'){
-            systolic=code?.valueQuantity?.value
+          else if (code?.code?.coding?.[0]?.code == '8480-6') {
+            systolic = code?.valueQuantity?.value
           }
         })
-        value = systolic+"/"+diastolic;
+        value = systolic + "/" + diastolic;
       } else {
         if (vital?.resource?.valueQuantity.unit)
           value =
@@ -301,8 +320,8 @@ const Chart = () => {
       localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
         ? await ReferenceDataService.getAllergyData()
         : localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
-        ? await ReferenceDataService.getAllergyData(`ab`)
-        : "";
+          ? await ReferenceDataService.getAllergyData(`ab`)
+          : "";
     setAllergyOptions(result);
   };
   const [appointmentReasonOptions, setAppointmentReasonOptions] = useState([]);
@@ -433,20 +452,20 @@ const Chart = () => {
                 localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
                   ? `elation`
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
-                  ? `athena`
-                  : ``,
+                    ? `athena`
+                    : ``,
               code:
                 localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
                   ? reference?.allergyid
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
-                  ? reference?.Concept_Code_2
-                  : ``,
+                    ? reference?.Concept_Code_2
+                    : ``,
               display:
                 localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
                   ? reference?.allergenname
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
-                  ? reference?.Concept_Name_2
-                  : ``,
+                    ? reference?.Concept_Name_2
+                    : ``,
             },
           ],
         },
@@ -1131,8 +1150,8 @@ const Chart = () => {
                                       ?.text !== null
                                     ? problem?.resource?.contained?.[0]?.notes
                                       ?.text
-                                  : ""
-                                : ""}
+                                    : ""
+                                  : ""}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
@@ -1384,78 +1403,178 @@ const Chart = () => {
                     Add Medications
                   </Button>
                 </Box>
+                {patientMedications && patientMedications.map((medication) => {
+                  if (medication?.resource?.effectivePeriod?.end) {
+                    entryHistorical.push(medication);
+                  }
+                  else {
+                    entryActive.push(medication);
+                  }
+
+                })
+                }
+                <IconButton
+                  aria-label="expand row"
+                  size="small"
+                  onClick={() => setActiveOpen(!activeOpen)}
+                >
+                  <Typography>Active({entryActive.length})</Typography>
+                  {activeOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
                 <TableContainer
                   component={Paper}
                   style={{ marginTop: theme.spacing(3) }}
                 >
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell align="left">
-                          <Typography>Medication</Typography>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Typography>Date</Typography>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Typography>Year</Typography>
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {patientMedications &&
-                        patientMedications?.map((medication) => {
-                          let dateObject = Helper.extractFieldsFromDate(
-                            medication?.resource?.effectivePeriod?.start
-                          );
-                          return (
-                            <TableRow
-                              sx={{
-                                "&:last-child td, &:last-child th": {
-                                  border: 0,
-                                },
-                              }}
-                              style={{ cursor: "pointer" }}
-                            >
-                              <TableCell align="left">
-                                <Typography>
-                                  {
-                                    medication?.resource
-                                      ?.medicationCodeableConcept?.coding?.[0]
-                                      ?.display
-                                  }{" "}
-                                </Typography>
-                              </TableCell>
-                              <TableCell align="left">
-                                <Typography>
-                                  {Object.values(dateObject).every(
-                                    (dateobj) => {
-                                      return (
-                                        dateobj !== "Invalid Choice" &&
-                                        dateobj !== NaN
-                                      );
-                                    }
-                                  )
-                                    ? `${dateObject?.DAY} ${dateObject?.MONTH} ${dateObject?.DATE}`
-                                    : ""}
-                                </Typography>
-                              </TableCell>
-                              <TableCell
-                                align="left"
-                                component="th"
-                                scope="row"
+                  <Collapse in={activeOpen} timeout="auto" unmountOnExit>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="left" >
+                            <Typography >Medication</Typography>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Typography marginRight={theme.spacing(20)}>Date</Typography>
+                          </TableCell>
+                          <TableCell align="right">
+                            <Typography >Year</Typography>
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {entryActive &&
+                          entryActive?.map((medication) => {
+                            let dateObject = Helper.extractFieldsFromDate(
+                              medication?.resource?.effectivePeriod?.start
+                            );
+                            return (
+                              <TableRow
+                                sx={{
+                                  "&:last-child td, &:last-child th": {
+                                    border: 0,
+                                  },
+                                }}
+                                style={{ cursor: "pointer" }}
                               >
-                                <Typography>
-                                  {dateObject?.YEAR && dateObject?.YEAR !== NaN
-                                    ? dateObject?.YEAR
-                                    : ""}
-                                </Typography>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                    </TableBody>
-                  </Table>
+                                <TableCell align="left">
+                                  <Typography>
+                                    {
+                                      medication?.resource
+                                        ?.medicationCodeableConcept?.coding?.[0]
+                                        ?.display
+                                    }{" "}
+                                  </Typography>
+                                </TableCell>
+                                <TableCell align="center">
+                                  <Typography marginRight={theme.spacing(20)}>
+                                    {Object.values(dateObject).every(
+                                      (dateobj) => {
+                                        return (
+                                          dateobj !== "Invalid Choice" &&
+                                          dateobj !== NaN
+                                        );
+                                      }
+                                    )
+                                      ? `${dateObject?.DAY} ${dateObject?.MONTH} ${dateObject?.DATE}`
+                                      : ""}
+                                  </Typography>
+                                </TableCell>
+                                <TableCell
+                                  component="th"
+                                  scope="row"
+                                  align="right"
+                                >
+                                  <Typography>
+                                    {dateObject?.YEAR && dateObject?.YEAR !== NaN
+                                      ? dateObject?.YEAR
+                                      : ""}
+                                  </Typography>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                      </TableBody>
+                    </Table>
+                  </Collapse>
+                </TableContainer>
+                <IconButton
+                  aria-label="expand row"
+                  size="small"
+                  onClick={() => setOpen(!open)}
+                >
+                  <Typography>Historical({entryHistorical.length})</Typography>
+                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+                <TableContainer component={Paper}>
+                  <Collapse in={open} timeout="auto" unmountOnExit>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table" >
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="left">
+                            <Typography>Medication</Typography>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Typography marginRight={theme.spacing(20)}>Date</Typography>
+                          </TableCell>
+                          <TableCell align="right" >
+                            <Typography >Year</Typography>
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {entryHistorical &&
+                          entryHistorical?.map((medication) => {
+                            let dateObject = Helper.extractFieldsFromDate(
+                              medication?.resource?.effectivePeriod?.start
+                            );
+                            return (
+                              <TableRow
+                                sx={{
+                                  "&:last-child td, &:last-child th": {
+                                    border: 0,
+                                  },
+                                }}
+                                style={{ cursor: "pointer" }}
+                              >
+                                <TableCell align="left">
+                                  <Typography>
+                                    {
+                                      medication?.resource
+                                        ?.medicationCodeableConcept?.coding?.[0]
+                                        ?.display
+                                    }{" "}
+                                  </Typography>
+                                </TableCell>
+                                <TableCell align="center">
+                                  <Typography marginRight={theme.spacing(20)}>
+                                    {Object.values(dateObject).every(
+                                      (dateobj) => {
+                                        return (
+                                          dateobj !== "Invalid Choice" &&
+                                          dateobj !== NaN
+                                        );
+                                      }
+                                    )
+                                      ? `${dateObject?.DAY} ${dateObject?.MONTH} ${dateObject?.DATE}`
+                                      : ""}
+                                  </Typography>
+                                </TableCell>
+                                <TableCell
+                                  align="right"
+                                  component="th"
+                                  scope="row"
+                                >
+                                  <Typography>
+                                    {dateObject?.YEAR && dateObject?.YEAR !== NaN
+                                      ? dateObject?.YEAR
+                                      : ""}
+                                  </Typography>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                      </TableBody>
+                    </Table>
+                  </Collapse>
                 </TableContainer>
               </Grid>
             )}
