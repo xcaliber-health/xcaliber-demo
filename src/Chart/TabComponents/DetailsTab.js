@@ -1,5 +1,6 @@
 import { Paper, Grid, Typography } from "@mui/material";
 import { useEffect } from "react";
+import { ETHNICITY_MAP, RACE_MAP } from "../../core-utils/constants";
 const DetailsTab = ({ patientDetails }) => {
   const commonValueStyles = {
     color: " #84818a",
@@ -9,29 +10,38 @@ const DetailsTab = ({ patientDetails }) => {
     return `${currentYear - birthYear}`;
   };
   const getAthenaRace = (raceCode) => {
-    switch (raceCode) {
-      case "2106-3":
-        return "White";
-      default:
-        return raceCode;
+    let raceMapValue = "-";
+    for (let i = 0; i < RACE_MAP.length; i++) {
+      let concept = RACE_MAP[i];
+      if (concept?.code === raceCode) return concept?.display;
+      else if (concept.concept?.length > 0) {
+        concept.concept.forEach((conceptFirst) => {
+          if (conceptFirst.code === raceCode) return conceptFirst?.display;
+          else if (conceptFirst?.concept?.length > 0) {
+            conceptFirst?.concept?.forEach((conceptSecond) => {
+              if (conceptSecond.code === raceCode)
+                return conceptSecond?.display;
+            });
+          }
+        });
+      }
     }
+    return raceMapValue;
   };
   const getAthenaEthnicity = (ethnicityCode) => {
-    switch (ethnicityCode) {
-      case "2155-0":
-        return "Central American";
-      default:
-        return ethnicityCode;
-    }
+    const mappedEthnicityValue = ETHNICITY_MAP?.[`${ethnicityCode}`];
+    if (mappedEthnicityValue && mappedEthnicityValue !== null)
+      return mappedEthnicityValue;
+    else return "-";
   };
-  const getAthenaLanguage= (languageCode)=>{
+  const getAthenaLanguage = (languageCode) => {
     switch (languageCode) {
       case "eng":
         return "English";
       default:
         return languageCode;
     }
-  }
+  };
   return (
     <Paper style={{ padding: 2 }} elevation={0}>
       <Grid container direction="column" alignItems={"center"}>
@@ -70,7 +80,10 @@ const DetailsTab = ({ patientDetails }) => {
               {localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
                 ? patientDetails?.communication?.[0]?.language?.text
                 : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
-                ? getAthenaLanguage(patientDetails?.communication?.[0]?.language?.coding?.[0]?.code)
+                ? getAthenaLanguage(
+                    patientDetails?.communication?.[0]?.language?.coding?.[0]
+                      ?.code
+                  )
                 : `-`}
               {}
             </Typography>
