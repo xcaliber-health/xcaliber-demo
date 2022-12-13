@@ -11,6 +11,7 @@ import { Select } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import { Autocomplete } from "@mui/material";
 import * as moment from "moment-timezone";
+import { ElationAllergyValues } from "../../core-utils/constants";
 const useStyles = makeStyles(() => ({
   // typography:
   // {
@@ -33,7 +34,9 @@ export default function Allergy({
   status,
   allergyOptions,
   updateOptions,
-  initializeAllergyOptions,
+  allergyReactionOptions,
+  athenaSeverities,
+  handleSeverityChange,
 }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(null);
@@ -131,13 +134,46 @@ export default function Allergy({
         <Typography sx={{ marginTop: "13px", marginRight: "17px" }}>
           Reaction:
         </Typography>
-        <TextField
-          sx={{ width: "100%" }}
-          label={"Reaction..."}
-          onChange={(e) => {
-            onReactionChange(e.target.value);
-          }}
-        />
+        {localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION` && (
+          <TextField
+            sx={{ width: "100%" }}
+            label={"Reaction..."}
+            onChange={(e) => {
+              onReactionChange(e.target.value);
+            }}
+          />
+        )}
+        {localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA` && (
+          <Autocomplete
+            sx={{ width: "100%" }}
+            id="combo-box-demo"
+            options={allergyReactionOptions}
+            getOptionLabel={(option) => {
+              return `${option?.snomedcode} ${option?.reactionname}` ?? `null`;
+            }}
+            onChange={(e, v) => {
+              if (v && v !== "" && v !== null) {
+                onReactionChange(v);
+              }
+            }}
+            renderInput={(params) => (
+              <TextField
+                sx={{ width: "100%" }}
+                {...params}
+                label="Allergy"
+                onChange={(ev) => {
+                  if (
+                    ev.target.value !== "" &&
+                    ev.target.value !== null &&
+                    ev?.target?.value?.length > 1
+                  ) {
+                  }
+                  // onAllergyChange(ev.target.value);
+                }}
+              />
+            )}
+          />
+        )}
       </Grid>
       <Grid sx={{ paddingTop: "20px" }}>
         <FormControl fullWidth>
@@ -148,13 +184,21 @@ export default function Allergy({
             value={severity}
             label="Severity"
             onChange={(e) => {
+              handleSeverityChange(e.target.value);
               onSeverityChange(e.target.value);
             }}
+            disabled={false}
           >
-            <MenuItem value={"unknown"}>unknown</MenuItem>
-            <MenuItem value={"mild"}>mild</MenuItem>
-            <MenuItem value={"moderate"}>moderate</MenuItem>
-            <MenuItem value={"severe"}>severe</MenuItem>
+            {localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION` &&
+              ElationAllergyValues.map((aller) => {
+                return <MenuItem value={aller?.code}>{aller?.code}</MenuItem>;
+              })}
+            {localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA` &&
+              athenaSeverities?.map((sev) => {
+                return (
+                  <MenuItem value={sev?.snomedcode}>{sev?.severity}</MenuItem>
+                );
+              })}
           </Select>
         </FormControl>
       </Grid>

@@ -234,9 +234,6 @@ const PatientDetailsCard = ({
                     <span style={{ color: "black" }}>
                       {appointmentDateDetailObject?.TIME}
                     </span>
-                    {/* <span style={{ color: "black" }}>
-                      {appointmentDateDetailObject?.TEST}
-                    </span> */}
                   </Grid>
                 );
               })}
