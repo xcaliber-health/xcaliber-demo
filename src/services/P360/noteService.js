@@ -1,7 +1,164 @@
 import axios from "axios";
 import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
+import getPractitionerById, {
+  PractitionerService,
+} from "./practitionerService";
 
 export const NoteService = {
+  getNotesForTimeLine: async (patientId) => {
+    try {
+      const response = await axios.get(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&type=visit-notes&departmentId=${localStorage.getItem(
+          `DEPARTMENT_ID`
+        )}`,
+        {
+          headers: {
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          },
+        }
+      );
+      let count = 0;
+      const notes = [];
+      for (let i = 0; i < response.data?.data?.entry?.length; i++) {
+        const resource = response.data?.data?.entry?.[i];
+        // if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION") {
+        //   if (
+        //     resource?.resource?.category?.[0]?.coding?.[0]?.display ===
+        //     "Complete H&P (2 col A/P)"
+        //   ) {
+        //     notes.push(resource);
+        //     count++;
+        //   }
+        // } else if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") {
+        //   if (
+        //     resource?.resource?.category?.[0]?.coding?.[0]?.display ===
+        //     "Progress note"
+        //   ) {
+        notes.push(resource);
+        //   count++;
+        // }
+      }
+      const encounterIds = [];
+      let conditionUrl;
+      if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION") {
+        conditionUrl=''
+        const invoices = await axios.get(
+          `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Invoice?patient=${patientId}`,
+          {
+            headers: {
+              Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+              "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods":
+                "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+            },
+          }
+        );
+        for (let i in invoices?.data?.data?.entry) {
+          for (let j in invoices?.data?.data?.entry?.[i]?.resource?.extension) {
+            if (
+              invoices?.data?.data?.entry[i]?.resource?.extension?.[
+                j
+              ]?.url.includes("/id")
+            ) {
+              encounterIds.push(
+                invoices?.data?.data?.entry[i]?.resource?.extension?.[j]
+                  ?.valueString
+              );
+            }
+          }
+        }
+      }
+      else{
+        for (let i in notes) {
+          conditionUrl=`&departmentId=${localStorage.getItem(`DEPARTMENT_ID`)}&visitType=note`
+          encounterIds.push(notes[i].resource.id)
+          // if (diagnosisIds.includes(parseInt(notes[i].resource.id))) {
+          //   date.push(notes[i]?.resource?.context?.period?.start);
+          //   practionerIds.push(notes[i]?.resource?.author?.[0]?.reference);
+          //   for (let j in notes[i]?.resource?.content) {
+          //     if (
+          //       notes[i]?.resource?.content?.[j]?.attachment?.title == "Problem"
+          //     ) {
+          //       summary.push(notes[i]?.resource?.content?.[j]?.attachment?.data);
+          //       break;
+          //     }
+          //   }
+          // }
+        }
+      }
+      const diagnosisIds = [];
+      const diagnosisNames = [];
+      for (let i in encounterIds) {
+        const encounters = await axios.get(
+          `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Condition?category=encounter-diagnosis&patient=${patientId}&encounter=${encounterIds[i]}${conditionUrl}`,
+          {
+            headers: {
+              Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+              "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods":
+                "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+            },
+          }
+        );
+        if (encounters?.data?.data?.entry?.[0]?.resource?.code) {
+          diagnosisIds.push(encounterIds[i]);
+          diagnosisNames.push(
+            encounters?.data?.data?.entry?.[0]?.resource?.code?.coding?.[0]
+              ?.display
+          );
+        }
+      }
+
+      const practionerIds = [];
+      const date = [];
+      const summary = [];
+      for (let i in notes) {
+        if (diagnosisIds.includes(parseInt(notes[i].resource.id))) {
+          date.push(notes[i]?.resource?.context?.period?.start);
+          practionerIds.push(notes[i]?.resource?.author?.[0]?.reference);
+          for (let j in notes[i]?.resource?.content) {
+            if (
+              notes[i]?.resource?.content?.[j]?.attachment?.title == "Problem"
+            ) {
+              summary.push(notes[i]?.resource?.content?.[j]?.attachment?.data);
+              break;
+            }
+          }
+        }
+      }
+
+      const practionerName = [];
+      for (let i in practionerIds) {
+        const practioner = await PractitionerService.getPractitionerById(
+          `Practitioner/${practionerIds[i]}`
+        );
+        practionerName.push(
+          practioner?.entry?.[0]?.resource?.name?.[0]?.given?.[0]
+        );
+      }
+
+      const result = [];
+      for (let i in practionerIds) {
+        let note = {
+          date: date[i],
+          provider: practionerName[i],
+          diagnosis: diagnosisNames[i],
+          encounterId: diagnosisIds[i],
+          practionerId: practionerIds[i],
+          summary: summary[i],
+        };
+        result.push(note);
+      }
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  },
   getVisitNotes: async (patientId) => {
     try {
       const response = await axios.get(
