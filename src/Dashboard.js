@@ -197,7 +197,10 @@ function DashboardContent() {
           <Grid justifyContent="space-between" direction="flex" container>
             <Box display="flex" alignItems={"center"}>
               <Typography variant="h5">xcaliber Capabilities Demo</Typography>
-              <Typography variant="body2" sx={{ paddingLeft: "24px", paddingRight: theme.spacing(4) }}>
+              <Typography
+                variant="body2"
+                sx={{ paddingLeft: "24px", paddingRight: theme.spacing(4) }}
+              >
                 {" "}
                 Do not add any real PII/PHI data here.
               </Typography>
@@ -292,6 +295,7 @@ function DashboardContent() {
                 <Select
                   input={<OutlinedInput label="DepartmentId" />}
                   value={localStorage.getItem(`DEPARTMENT_ID`)}
+                  sx={{ height: 30 }}
                   onChange={(e) => {
                     setDepartmentId(e.target.value);
                     localStorage.setItem(`DEPARTMENT_ID`, e.target.value);
@@ -316,19 +320,42 @@ function DashboardContent() {
                 </Select>
               </FormControl>
             )}
-            {(localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") ?
-              <Link sx={{ color: "black", marginTop: theme.spacing(4), marginLeft: theme.spacing(20) }} href="https://xcaliberapis.redoc.ly" target="_blank">Documentation</Link> :
-              <Link sx={{ color: "black", marginTop: theme.spacing(3), marginLeft: theme.spacing(70) }} href="https://xcaliberapis.redoc.ly" target="_blank">Documentation</Link>}
-            <Box display="flex">
+            {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" ? (
+              <Link
+                sx={{
+                  color: "black",
+                  marginTop: theme.spacing(1),
+                  marginLeft: theme.spacing(20),
+              
+                }}
+                href="https://xcaliberapis.redoc.ly"
+                target="_blank"
+              >
+                Documentation
+              </Link>
+            ) : (
+              <Link
+                sx={{
+                  color: "black",
+                  marginTop: theme.spacing(3),
+                  marginLeft: theme.spacing(70),
+                }}
+                href="https://xcaliberapis.redoc.ly"
+                target="_blank"
+              >
+                Documentation
+              </Link>
+            )}
+            <Box sx={{ margin: 0, padding: 0 }} display="flex">
               <IconButton
                 sx={{ color: "black", marginRight: theme.spacing(1) }}
                 onClick={() => {
                   setIsModalOpen(true);
                 }}
               >
-                <SettingsSharpIcon color="action" sx={{ marginTop: theme.spacing(2) }} />
+                <SettingsSharpIcon color="action" />
               </IconButton>
-              <Avatar sx={{ marginTop: theme.spacing(2) }}></Avatar>
+              <Avatar></Avatar>
             </Box>
           </Grid>
         </Toolbar>

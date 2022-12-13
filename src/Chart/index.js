@@ -63,7 +63,7 @@ const Chart = () => {
   const [currentTimezoneDate, setCurrentTimezoneDate] = useState(null);
   const [isVitalDisplayDrawerOpen, setIsVitalDisplayDrawerOpen] = useState("");
   const handleSeverityChange = (e) => {
-    setSeverity(e.target.value);
+    setSeverity(e);
   };
   const [status, setStatus] = React.useState(null);
   const handleStatusChange = (e) => {
@@ -94,23 +94,23 @@ const Chart = () => {
       extension:
         localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
           ? [
-            {
-              url: "http://xcaliber-fhir/structureDefinition/copay",
-              valueString: {
-                collectedforother: 0,
-                collectedforappointment: 0,
-                insurancecopay: 0,
+              {
+                url: "http://xcaliber-fhir/structureDefinition/copay",
+                valueString: {
+                  collectedforother: 0,
+                  collectedforappointment: 0,
+                  insurancecopay: 0,
+                },
               },
-            },
-            {
-              url: "http://xcaliber-fhir/structureDefinition/copay",
-              valueString: 0,
-            },
-            {
-              url: "http://xcaliber-fhir/structureDefinition/department-id",
-              valueInteger: localStorage.getItem(`DEPARTMENT_ID`),
-            },
-          ]
+              {
+                url: "http://xcaliber-fhir/structureDefinition/copay",
+                valueString: 0,
+              },
+              {
+                url: "http://xcaliber-fhir/structureDefinition/department-id",
+                valueInteger: localStorage.getItem(`DEPARTMENT_ID`),
+              },
+            ]
           : [],
       participant: [
         {
@@ -129,10 +129,10 @@ const Chart = () => {
         localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION"
           ? {}
           : {
-            actor: {
-              reference: `Location/${localStorage.getItem(`DEPARTMENT_ID`)}`,
+              actor: {
+                reference: `Location/${localStorage.getItem(`DEPARTMENT_ID`)}`,
+              },
             },
-          },
       ],
     },
   });
@@ -229,16 +229,15 @@ const Chart = () => {
         if (vital?.resource?.valueString) value = vital?.resource?.valueString;
         else value = vital?.resource?.valueQuantity.value;
       } else if (name.toLowerCase() == "blood pressure") {
-        var systolic,diastolic;
-        vital?.resource?.component?.map(code=>{
-          if(code?.code?.coding?.[0]?.code=='8462-4'){
-            diastolic=code?.valueQuantity?.value
+        var systolic, diastolic;
+        vital?.resource?.component?.map((code) => {
+          if (code?.code?.coding?.[0]?.code == "8462-4") {
+            diastolic = code?.valueQuantity?.value;
+          } else if (code?.code?.coding?.[0]?.code == "8480-6") {
+            systolic = code?.valueQuantity?.value;
           }
-          else if(code?.code?.coding?.[0]?.code=='8480-6'){
-            systolic=code?.valueQuantity?.value
-          }
-        })
-        value = systolic+"/"+diastolic;
+        });
+        value = systolic + "/" + diastolic;
       } else {
         if (vital?.resource?.valueQuantity.unit)
           value =
@@ -292,6 +291,8 @@ const Chart = () => {
     setPatientVitals(data);
   };
   const [allergyOptions, setAllergyOptions] = useState([]);
+  const [allergyReactionOptions, setAllergyReactionOptions] = useState([]);
+  const [athenaSeverities, setAthenaSeverities] = useState([]);
   const updateOptions = async (searchTerm) => {
     const result = await ReferenceDataService.getAllergyData(searchTerm);
     setAllergyOptions(result);
@@ -304,12 +305,22 @@ const Chart = () => {
         ? await ReferenceDataService.getAllergyData(`ab`)
         : "";
     setAllergyOptions(result);
+    setAllergyReactionOptions(result);
+  };
+  const initialiseAllergyReactions = async () => {
+    let result = await ReferenceDataService.getAthenaAllergyReactions();
+    setAllergyReactionOptions(result);
+  };
+
+  const initialiseAllergySeverities = async () => {
+    let result = await ReferenceDataService.getAthenaAllergySeverities();
+    setAthenaSeverities(result);
   };
   const [appointmentReasonOptions, setAppointmentReasonOptions] = useState([]);
   const initialiseAppointmentOptions = async () => {
     const result = await ReferenceDataService.getAppointmentData();
     setAppointmentReasonOptions(result);
-  }
+  };
 
   const onReasonChange = (reason) => {
     setAppointmentPayload({
@@ -326,9 +337,10 @@ const Chart = () => {
                 localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
                   ? reason
                   : reason.appointmenttypeid,
-              display: localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
-                ? reason
-                : reason.name
+              display:
+                localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
+                  ? reason
+                  : reason.name,
             },
           ],
         },
@@ -454,31 +466,92 @@ const Chart = () => {
     });
   };
   const onReactionChange = (reaction1) => {
-    setAllergyPayload({
-      context: {
-        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
-      },
-      data: {
-        ...allergyPayload?.data,
-        reaction: [
-          { ...allergyPayload?.data?.reaction?.[0], description: reaction1 },
-        ],
-      },
-    });
+    if (localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`) {
+      setAllergyPayload({
+        context: {
+          departmentId: localStorage.getItem(`DEPARTMENT_ID`),
+        },
+        data: {
+          ...allergyPayload?.data,
+          reaction: [
+            { ...allergyPayload?.data?.reaction?.[0], description: reaction1 },
+          ],
+        },
+      });
+    } else if (localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`) {
+      setAllergyPayload({
+        context: {
+          departmentId: localStorage.getItem(`DEPARTMENT_ID`),
+        },
+        data: {
+          ...allergyPayload?.data,
+          reaction: [
+            {
+              manifestation: [
+                {
+                  coding: [
+                    {
+                      system: "http://snomed.info/sct",
+                      display: reaction1?.reactionname,
+                      code: reaction1?.snomedcode,
+                    },
+                  ],
+                },
+              ],
+              extension: [
+                {
+                  url: `http://xcaliber-fhir/structureDefinition/severity-code`,
+                  valueInteger: severity,
+                },
+              ],
+            },
+          ],
+        },
+      });
+    }
   };
   const onSeverityChange = (severity) => {
-    setAllergyPayload({
-      context: {
-        departmentId: localStorage.getItem(`DEPARTMENT_ID`),
-      },
-      data: {
-        ...allergyPayload?.data,
-        reaction: [
-          { ...allergyPayload?.data?.reaction?.[0], severity: severity },
-        ],
-      },
-    });
-
+    if (localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`) {
+      setAllergyPayload({
+        context: {
+          departmentId: localStorage.getItem(`DEPARTMENT_ID`),
+        },
+        data: {
+          ...allergyPayload?.data,
+          reaction: [
+            { ...allergyPayload?.data?.reaction?.[0], severity: severity },
+          ],
+        },
+      });
+    } else if (localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`) {
+      setAllergyPayload({
+        context: {
+          departmentId: localStorage.getItem(`DEPARTMENT_ID`),
+        },
+        data: {
+          ...allergyPayload?.data,
+          reaction:
+            allergyPayload?.data?.reaction?.length > 0
+              ? [
+                  {
+                    manifestation: [
+                      {
+                        ...allergyPayload?.data?.reaction?.[0]
+                          ?.manifestation?.[0],
+                      },
+                    ],
+                    extension: [
+                      {
+                        url: `http://xcaliber-fhir/structureDefinition/severity-code`,
+                        valueInteger: parseInt(severity),
+                      },
+                    ],
+                  },
+                ]
+              : [],
+        },
+      });
+    }
     setSeverity(severity);
   };
   const onStatusChange = (status) => {
@@ -595,8 +668,13 @@ const Chart = () => {
       initialiseAllergyOptions();
       initialiseAppointmentOptions();
       appointmentReasonOptions;
+      if (localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`) {
+        initialiseAllergyReactions();
+        initialiseAllergySeverities();
+      }
     }
   }, []);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -758,6 +836,8 @@ const Chart = () => {
           patientId={id}
           allergyOptions={allergyOptions}
           updateOptions={updateOptions}
+          allergyReactionOptions={allergyReactionOptions}
+          athenaSeverities={athenaSeverities}
         />
       </Drawer>
       <Drawer
@@ -1118,18 +1198,18 @@ const Chart = () => {
                           <TableCell align="left">
                             <Typography>
                               {localStorage.getItem("XCALIBER_SOURCE") ===
-                                "ELATION"
+                              "ELATION"
                                 ? problem?.resource?.note?.[0]?.text &&
                                   problem?.resource?.note?.[0]?.text !== null
                                   ? problem?.resource?.note?.[0]?.text
                                   : ""
                                 : localStorage.getItem(`XCALIBER_SOURCE`) ===
                                   "ATHENA"
-                                  ? problem?.resource?.contained?.[0]?.notes
+                                ? problem?.resource?.contained?.[0]?.notes
                                     ?.text &&
-                                    problem?.resource?.contained?.[0]?.notes
-                                      ?.text !== null
-                                    ? problem?.resource?.contained?.[0]?.notes
+                                  problem?.resource?.contained?.[0]?.notes
+                                    ?.text !== null
+                                  ? problem?.resource?.contained?.[0]?.notes
                                       ?.text
                                   : ""
                                 : ""}

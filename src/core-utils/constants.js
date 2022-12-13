@@ -926,3 +926,18 @@ export const DEPARTMENTS = [
     communicatorbrandid: "1",
   },
 ];
+
+export const ElationAllergyValues = [
+  {
+    code: "unknown",
+  },
+  {
+    code: "mild",
+  },
+  {
+    code: "moderate",
+  },
+  {
+    code: "severe",
+  },
+];
