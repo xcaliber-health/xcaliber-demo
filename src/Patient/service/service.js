@@ -248,8 +248,8 @@ export const deParsefunc = (item) => {
           item?.sex === "man"
             ? "Identifies as Male"
             : item?.sex === "woman"
-              ? `Identifies as Female`
-              : `Gender non-conforming (neither exclusively male nor female)`,
+            ? `Identifies as Female`
+            : `Gender non-conforming (neither exclusively male nor female)`,
         maritalStatus: {
           coding: [
             {
@@ -584,7 +584,7 @@ const parserFuncSingle = (item) => {
 export const getAllPatients = () => {
   const configHeaders = {
     headers: {
-      Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+      apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
       "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -606,7 +606,7 @@ export const getPatientCount = async (name) => {
   try {
     const configHeaders = {
       headers: {
-        Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+        apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
         "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -628,7 +628,7 @@ export const getPatientCount = async (name) => {
 export const getPatient = (id) => {
   const configHeaders = {
     headers: {
-      Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+      apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
       "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -647,7 +647,7 @@ export const getPatient = (id) => {
 };
 
 export const getPatientsAtPage = (page, name) => {
-  const patientIds=["27895"]
+  const patientIds = ["27895"];
   name = !name ? "" : name;
   const offset = page * 10 - 10;
 
@@ -655,7 +655,7 @@ export const getPatientsAtPage = (page, name) => {
     return axios
       .get(`${endpointUrl}/Patient?_count=10&_offset=${offset}&name=${name}`, {
         headers: {
-          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+          apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -664,7 +664,7 @@ export const getPatientsAtPage = (page, name) => {
       .then(async (response) => {
         const data = await response.data;
         const parsedData = parserFunc(data.data.entry);
-        return parsedData ? parsedData : []
+        return parsedData ? parsedData : [];
       })
       .catch((error) => {
         console.log(error);
@@ -677,7 +677,7 @@ export const getPatientsAtPage = (page, name) => {
         )}&_count=10&_offset=${offset}&name=${name}`,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -687,14 +687,17 @@ export const getPatientsAtPage = (page, name) => {
       .then(async (response) => {
         const data = await response.data;
         const parsedData = parserFunc(data.data.entry);
-        for(var i=0;i<patientIds.length;i++){
-          const dum=await PatientsById(patientIds[i])
-          parsedData?.push(...dum)
+        for (var i = 0; i < patientIds.length; i++) {
+          const dum = await PatientsById(patientIds[i]);
+          parsedData?.push(...dum);
         }
         return parsedData ? parsedData : [];
       })
       .catch(async (error) => {
-        if (error.response.data.issue[0].details.text === "{\"error\":\"The given search parameters would produce a total data set larger than 1000 records.  Please refine your search and try again.\"}") {
+        if (
+          error.response.data.issue[0].details.text ===
+          '{"error":"The given search parameters would produce a total data set larger than 1000 records.  Please refine your search and try again."}'
+        ) {
           return await axios
             .get(
               `${endpointUrl}/Patient?departmentId=${localStorage.getItem(
@@ -702,55 +705,59 @@ export const getPatientsAtPage = (page, name) => {
               )}&_count=10&_offset=${offset}&given=George&name=${name}`,
               {
                 headers: {
-                  Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+                  apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
                   "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                   "Access-Control-Allow-Origin": "*",
-                  "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+                  "Access-Control-Allow-Methods":
+                    "GET,PUT,POST,DELETE,PATCH,OPTIONS",
                 },
               }
-            ).then(async (response) => {
+            )
+            .then(async (response) => {
               const data = await response.data;
               const parsedData = parserFunc(data.data.entry);
-              for(var i=0;i<patientIds.length;i++){
-                const dum=await PatientsById(patientIds[i])
-                parsedData?.push(...dum)
+              for (var i = 0; i < patientIds.length; i++) {
+                const dum = await PatientsById(patientIds[i]);
+                parsedData?.push(...dum);
               }
               return parsedData ? parsedData : [];
-            }); 
+            });
         }
       });
   }
 };
 
-export const PatientsById=(id)=>{
-  if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" && localStorage.getItem(`DEPARTMENT_ID`)==150){
-    return axios.get(`${endpointUrl}/Patient/${id}`,
-    {
-      headers: {
-        Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
-        "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-      },
-    }
-    )
-    .then(async (response) => {
-      const data = await response.data;
-      const parsedData = parserFunc([{"resource":data.data}]);
-      return parsedData ? parsedData : [];
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+export const PatientsById = (id) => {
+  if (
+    localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" &&
+    localStorage.getItem(`DEPARTMENT_ID`) == 150
+  ) {
+    return axios
+      .get(`${endpointUrl}/Patient/${id}`, {
+        headers: {
+          apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+          "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+        },
+      })
+      .then(async (response) => {
+        const data = await response.data;
+        const parsedData = parserFunc([{ resource: data.data }]);
+        return parsedData ? parsedData : [];
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
   return [];
-}
+};
 
 export const addPatient = (patient) => {
   let d = deParsefunc(patient);
   const configHeaders = {
     headers: {
-      Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+      apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
       "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -772,7 +779,7 @@ export const editPatient = (patient, id) => {
   let d = deParsefunc(patient);
   const configHeaders = {
     headers: {
-      Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+      apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
       "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",

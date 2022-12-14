@@ -13,7 +13,7 @@ export const NoteService = {
         )}`,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -44,12 +44,12 @@ export const NoteService = {
       const encounterIds = [];
       let conditionUrl;
       if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION") {
-        conditionUrl=''
+        conditionUrl = "";
         const invoices = await axios.get(
           `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Invoice?patient=${patientId}`,
           {
             headers: {
-              Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+              apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
               "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
               "Access-Control-Allow-Origin": "*",
               "Access-Control-Allow-Methods":
@@ -71,11 +71,12 @@ export const NoteService = {
             }
           }
         }
-      }
-      else{
+      } else {
         for (let i in notes) {
-          conditionUrl=`&departmentId=${localStorage.getItem(`DEPARTMENT_ID`)}&visitType=note`
-          encounterIds.push(notes[i].resource.id)
+          conditionUrl = `&departmentId=${localStorage.getItem(
+            `DEPARTMENT_ID`
+          )}&visitType=note`;
+          encounterIds.push(notes[i].resource.id);
           // if (diagnosisIds.includes(parseInt(notes[i].resource.id))) {
           //   date.push(notes[i]?.resource?.context?.period?.start);
           //   practionerIds.push(notes[i]?.resource?.author?.[0]?.reference);
@@ -97,7 +98,7 @@ export const NoteService = {
           `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Condition?category=encounter-diagnosis&patient=${patientId}&encounter=${encounterIds[i]}${conditionUrl}`,
           {
             headers: {
-              Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+              apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
               "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
               "Access-Control-Allow-Origin": "*",
               "Access-Control-Allow-Methods":
@@ -167,7 +168,7 @@ export const NoteService = {
         )}&start-date=2022-01-01`,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -218,7 +219,7 @@ export const NoteService = {
             },
             {
               headers: {
-                Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+                apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
                 "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods":
@@ -235,7 +236,7 @@ export const NoteService = {
             `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment/${appointmentId}`,
             {
               headers: {
-                Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+                apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
                 "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods":
@@ -258,7 +259,7 @@ export const NoteService = {
         notePayload,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -276,7 +277,7 @@ export const NoteService = {
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference/${noteId}?type=visit-notes`,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -296,7 +297,7 @@ export const NoteService = {
         )}&appointment=${appointmentId}`,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",

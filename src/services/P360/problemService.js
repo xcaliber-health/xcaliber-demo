@@ -10,7 +10,7 @@ export const ProblemService = {
         )}`,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "apikey": `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
@@ -27,7 +27,7 @@ export const ProblemService = {
         problemPayload,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "apikey": `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
@@ -43,7 +43,7 @@ export const ProblemService = {
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Condition/${id}`,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "apikey": `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
