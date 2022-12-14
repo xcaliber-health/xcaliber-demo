@@ -9,7 +9,7 @@ export const PractitionerService = {
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Practitioner?practitioner=${id}`,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "apikey": `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": localStorage.getItem(`XCALIBER_TOKEN`),
           },
         }
