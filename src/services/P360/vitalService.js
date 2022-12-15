@@ -10,7 +10,7 @@ export const VitalService = {
         )}`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem(`XCALIBER_TOKEN`)}`,
           },
         }
@@ -28,7 +28,7 @@ export const VitalService = {
         vitalsPayload,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem(`XCALIBER_TOKEN`)}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",

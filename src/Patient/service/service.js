@@ -584,7 +584,7 @@ const parserFuncSingle = (item) => {
 export const getAllPatients = () => {
   const configHeaders = {
     headers: {
-      apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+      Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
       "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -606,7 +606,7 @@ export const getPatientCount = async (name) => {
   try {
     const configHeaders = {
       headers: {
-        apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+        Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
         "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -628,7 +628,7 @@ export const getPatientCount = async (name) => {
 export const getPatient = (id) => {
   const configHeaders = {
     headers: {
-      apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+      Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
       "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -655,7 +655,7 @@ export const getPatientsAtPage = (page, name) => {
     return axios
       .get(`${endpointUrl}/Patient?_count=10&_offset=${offset}&name=${name}`, {
         headers: {
-          apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -677,7 +677,7 @@ export const getPatientsAtPage = (page, name) => {
         )}&_count=10&_offset=${offset}&name=${name}`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -705,7 +705,7 @@ export const getPatientsAtPage = (page, name) => {
               )}&_count=10&_offset=${offset}&given=George&name=${name}`,
               {
                 headers: {
-                  apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+                  Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
                   "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                   "Access-Control-Allow-Origin": "*",
                   "Access-Control-Allow-Methods":
@@ -735,7 +735,7 @@ export const PatientsById = (id) => {
     return axios
       .get(`${endpointUrl}/Patient/${id}`, {
         headers: {
-          apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -757,7 +757,7 @@ export const addPatient = (patient) => {
   let d = deParsefunc(patient);
   const configHeaders = {
     headers: {
-      apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+      Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
       "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -779,7 +779,7 @@ export const editPatient = (patient, id) => {
   let d = deParsefunc(patient);
   const configHeaders = {
     headers: {
-      apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+      Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
       "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",

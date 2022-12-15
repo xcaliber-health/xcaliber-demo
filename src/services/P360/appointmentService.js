@@ -16,7 +16,7 @@ export const AppointmentService = {
         )}`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
@@ -34,7 +34,7 @@ export const AppointmentService = {
         appointmentPayload,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
@@ -51,7 +51,7 @@ export const AppointmentService = {
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment/${appointmentId}`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
