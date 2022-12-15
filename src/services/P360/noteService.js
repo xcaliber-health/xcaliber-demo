@@ -13,7 +13,7 @@ export const NoteService = {
         )}`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -49,7 +49,7 @@ export const NoteService = {
           `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Invoice?patient=${patientId}`,
           {
             headers: {
-              apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+              Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
               "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
               "Access-Control-Allow-Origin": "*",
               "Access-Control-Allow-Methods":
@@ -98,7 +98,7 @@ export const NoteService = {
           `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Condition?category=encounter-diagnosis&patient=${patientId}&encounter=${encounterIds[i]}${conditionUrl}`,
           {
             headers: {
-              apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+              Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
               "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
               "Access-Control-Allow-Origin": "*",
               "Access-Control-Allow-Methods":
@@ -168,7 +168,7 @@ export const NoteService = {
         )}&start-date=2022-01-01`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -219,7 +219,7 @@ export const NoteService = {
             },
             {
               headers: {
-                apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+                Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
                 "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods":
@@ -236,7 +236,7 @@ export const NoteService = {
             `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment/${appointmentId}`,
             {
               headers: {
-                apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+                Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
                 "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods":
@@ -259,7 +259,7 @@ export const NoteService = {
         notePayload,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -277,7 +277,7 @@ export const NoteService = {
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference/${noteId}?type=visit-notes`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -297,7 +297,7 @@ export const NoteService = {
         )}&appointment=${appointmentId}`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",

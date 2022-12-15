@@ -10,7 +10,7 @@ export const ReferenceDataService = {
         }`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
@@ -28,7 +28,7 @@ export const ReferenceDataService = {
         }`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
@@ -44,7 +44,7 @@ export const ReferenceDataService = {
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=allergy&dataField=reactions`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
@@ -60,7 +60,7 @@ export const ReferenceDataService = {
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=allergy&dataField=severities`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
@@ -76,7 +76,7 @@ export const ReferenceDataService = {
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=appointment&dataField=type`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
@@ -94,7 +94,7 @@ export const ReferenceDataService = {
         }`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
@@ -110,7 +110,7 @@ export const ReferenceDataService = {
         `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=medicationstatement&dataField=reasons`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
@@ -128,7 +128,7 @@ export const ReferenceDataService = {
         }`,
         {
           headers: {
-            apikey: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }

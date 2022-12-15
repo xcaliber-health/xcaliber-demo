@@ -11,7 +11,7 @@ export const PatientService = {
         )}`,
         {
           headers: {
-            "apikey": `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": localStorage.getItem(`XCALIBER_TOKEN`),
           },
         }
