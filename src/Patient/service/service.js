@@ -5,7 +5,7 @@ import moment from "moment";
 import { range } from "lodash";
 import { useMemo } from "react";
 
-const endpointUrl = "https://xchange-blitz.xcaliberapis.com/api/v1";
+const endpointUrl = "https://xchange-staging.xcaliberapis.com/api/v1";
 
 const dateParser = (item) => {
   var date = new Date(item);
