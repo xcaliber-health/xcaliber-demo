@@ -30,7 +30,7 @@ export const mainListItems = (onClick,id,classColor) => (
     <ListItemIcon>
       <PeopleIcon style={{color:'#185DA0'}}/>
     </ListItemIcon>
-    <ListItemText primary="P360" />
+    <ListItemText primary="Patient Longitudinal View" />
   </ListItemButton>
   <ListItemButton onClick={() => {onClick("analytics",4)}}  selected={id===4?classColor:""}>
     <ListItemIcon>
