@@ -327,9 +327,8 @@ const CreateNotes = ({
         {
           coding: [
             {
-              system: "https://sandbox.elationemr.com/api/2.0/visit_note_types",
-              code: "Elation",
-              display: "Complete H&P (2 col A/P)",
+              system: "Elation",
+              code: "visit_notes",
             },
           ],
         },
@@ -365,6 +364,10 @@ const CreateNotes = ({
           url: "http://xcaliber-fhir/structureDefinition/practice",
           valueString: 140857911017476,
         },
+        {
+          url: "http://xcaliber-fhir/structureDefinition/template",
+          valueString: "Complete H&P (2 col A/P)",
+        },
       ],
       content,
       context: {
@@ -399,6 +402,9 @@ const CreateNotes = ({
       );
 
       reloadNotes(createdNote?.[0]);
+    } else {
+      const createdNote = await NoteService.getVisitNoteById(note);
+      reloadNotes({ resource: { ...createdNote } });
     }
   };
   const onSaveNoteAsDraft = async () => {

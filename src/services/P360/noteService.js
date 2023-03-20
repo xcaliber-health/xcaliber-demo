@@ -8,7 +8,7 @@ export const NoteService = {
   getNotesForTimeLine: async (patientId) => {
     try {
       const response = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&type=visit-notes&departmentId=${localStorage.getItem(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&category=visit_notes&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}`,
         {
@@ -163,7 +163,7 @@ export const NoteService = {
   getVisitNotes: async (patientId) => {
     try {
       const response = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&type=visit-notes&departmentId=${localStorage.getItem(
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&category=visit_notes&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}&start-date=2022-01-01`,
         {
@@ -180,10 +180,10 @@ export const NoteService = {
       for (let i = 0; i < response.data?.data?.entry?.length; i++) {
         const resource = response.data?.data?.entry?.[i];
         if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION") {
-          if (
-            resource?.resource?.category?.[0]?.coding?.[0]?.display ===
-            "Complete H&P (2 col A/P)"
-          ) {
+          const template = resource?.resource?.extension?.find((ext) =>
+            ext?.url?.includes("template")
+          )?.valueString;
+          if (template && template === "Complete H&P (2 col A/P)") {
             notes.push(resource);
             count++;
           }
@@ -255,7 +255,7 @@ export const NoteService = {
           });
       }
       const response = await axios.post(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?type=visit-notes&encounter=${encounterId}`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?category=visit_notes&encounter=${encounterId}`,
         notePayload,
         {
           headers: {
@@ -274,7 +274,7 @@ export const NoteService = {
   getVisitNoteById: async (noteId) => {
     try {
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference/${noteId}?type=visit-notes`,
+        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference/${noteId}?category=visit_notes`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
