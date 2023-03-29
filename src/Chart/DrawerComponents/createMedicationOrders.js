@@ -6,6 +6,7 @@ import {
   TextField,
   Autocomplete,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import { ReferenceDataService } from "../../services/P360/referenceDataService";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -24,7 +25,7 @@ export const CreateMedicationOrder = ({
   const [medicationReasonOptionsOpen, setmedicationReasonOptionsOpen] =
     useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [createLoading, setcreateLoading] = useState(false);
   const [medicationOptions, setMedicationOptions] = useState([]);
   const [medicationReason, setMedicationReason] = useState(null);
   const [medication, setMedication] = useState(null);
@@ -110,6 +111,7 @@ export const CreateMedicationOrder = ({
           patientId,
           medicationReason
         );
+        setcreateLoading(false);
         onMedicationClick();
       }
     }
@@ -228,13 +230,21 @@ export const CreateMedicationOrder = ({
           >
             <Button
               onClick={() => {
+                setcreateLoading(true);
                 CreateMedication();
               }}
               disabled={disabled}
               variant="contained"
               sx={{ marginRight: "10px" }}
             >
-              Create
+              {createLoading ? (
+                <CircularProgress
+                  sx={{ color: "#ffffff" }}
+                  size={25}
+                ></CircularProgress>
+              ) : (
+                "Create"
+              )}
             </Button>
             <Button onClick={onCancelClick} variant="contained">
               Cancel
