@@ -40,6 +40,8 @@ import Immunization from "./DrawerComponents/createImmunization";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import IconButton from "@mui/material/IconButton";
 import TimeLine from "./TabComponents/VisitsTab";
+import { MedicationOrderService } from "../services/P360/medicationOrderService";
+import { CreateMedicationOrder } from "./DrawerComponents/createMedicationOrders";
 
 const Chart = () => {
   const { id } = useParams();
@@ -52,12 +54,16 @@ const Chart = () => {
   const [patientAllergies, setPatientAllergies] = useState([]);
   const [patientImmunizations, setPatientImmunizations] = useState([]);
   const [patientMedications, setPatientMedications] = useState([]);
+  const [patientMedicationOrders, setPatientMedicationOrders] = useState([]);
+
   const [loading, setLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isProblemsDrawerOpen, setIsProblemsDrawerOpen] = useState(false);
   const [isVitalsDrawerOpen, setVitalsDrawer] = useState(false);
   const [isAllergyDrawerOpen, setIsAllergyDrawerOpen] = useState(false);
   const [isMedicationDrawerOpen, setIsMedicationDrawerOpen] = useState(false);
+  const [isMedicationOrderDrawerOpen, setIsMedicationOrderDrawerOpen] =
+    useState(false);
   const [isImmunizationDrawerOpen, setIsImmunizationDrawerOpen] =
     useState(false);
   const [severity, setSeverity] = React.useState(null);
@@ -209,6 +215,10 @@ const Chart = () => {
   const getImmunizations = async () => {
     const response = await ImmunizationService.getImmunization(id);
     setPatientImmunizations(response);
+  };
+  const getMedicationOrders = async () => {
+    const response = await MedicationOrderService.getMedicationOrders(id);
+    setPatientMedicationOrders(response);
   };
 
   const getVitals = async () => {
@@ -627,6 +637,7 @@ const Chart = () => {
       getMedications(),
       getImmunizations(),
       getVitals(),
+      getMedicationOrders(),
     ])
       .then()
       .catch()
@@ -878,6 +889,46 @@ const Chart = () => {
       </Drawer>
       <Drawer
         anchor={"right"}
+        open={isMedicationOrderDrawerOpen}
+        onClose={() => {
+          setIsMedicationOrderDrawerOpen(false);
+        }}
+        variant="temporary"
+        PaperProps={{
+          sx: {
+            width: "40%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            padding: "10px",
+            height: "100%",
+            overflowY: "scroll",
+            position: "absolute",
+            zIndex: 1500,
+          },
+        }}
+      >
+        <CreateMedicationOrder
+          disabled={false}
+          onCancelClick={() => {
+            setIsMedicationOrderDrawerOpen(false);
+          }}
+          patientId={id}
+          handleClose={() => setIsMedicationOrderDrawerOpen(false)}
+          onMedicationClick={() => {
+            getMedicationOrders();
+            setIsMedicationOrderDrawerOpen(false);
+          }}
+          patientDetails={patientDetails}
+          bookedNote={upcomingAppointments
+            ?.filter((app) => {
+              return app?.resource?.status === "booked";
+            })
+            ?.slice(0, 1)}
+        />
+      </Drawer>
+      <Drawer
+        anchor={"right"}
         open={isImmunizationDrawerOpen}
         onClose={() => {
           setIsImmunizationDrawerOpen(false);
@@ -1012,6 +1063,7 @@ const Chart = () => {
               <Tab label="Allergies" style={{ width: "25%" }} />
               <Tab label="Immunizations" style={{ width: "25%" }} />
               <Tab label="Medications" style={{ width: "25%" }} />
+              <Tab label="Medication Orders" style={{ width: "25%" }} />
               <Tab label="Visits" style={{ width: "25%" }} />
               {/* <Tab label="Profile" style={{ width: "25%" }} /> */}
             </Tabs>
@@ -1550,10 +1602,128 @@ const Chart = () => {
             )}
           </TabPanel>
           <TabPanel value={value} index={6}>
-            <TimeLine patientDetails={patientDetails}/>
+            {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" && (
+              <Grid>
+                <Box
+                  alignSelf="flex-start"
+                  flexDirection={"row-reverse"}
+                  display="flex"
+                  // marginLeft={theme.spacing(3)}
+                  // marginRight={theme.spacing(3)}
+                  marginBottom={theme.spacing(3)}
+                  marginLeft={theme.spacing(3)}
+                >
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={() => {
+                      getMedicationOrders();
+                    }}
+                    sx={{
+                      marginRight: "36px",
+                      marginLeft: "18px",
+                    }}
+                  >
+                    <RefreshIcon />
+                  </IconButton>
+
+                  <Button
+                    variant="contained"
+                    display="flex"
+                    onClick={() => {
+                      setIsMedicationOrderDrawerOpen(true);
+                    }}
+                  >
+                    Add Medication Order
+                  </Button>
+                </Box>
+                <TableContainer
+                  component={Paper}
+                  style={{ marginTop: theme.spacing(3) }}
+                >
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell align="left">
+                          <Typography>Medication</Typography>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography>Date</Typography>
+                        </TableCell>
+                        <TableCell align="left">
+                          <Typography>Year</Typography>
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {patientMedicationOrders &&
+                        patientMedicationOrders?.map((medication) => {
+                          let dateObject = Helper.extractFieldsFromDate(
+                            medication?.resource?.authoredOn
+                          );
+                          return (
+                            <TableRow
+                              sx={{
+                                "&:last-child td, &:last-child th": {
+                                  border: 0,
+                                },
+                              }}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <TableCell align="left">
+                                <Typography>
+                                  {
+                                    medication?.resource
+                                      ?.medicationCodeableConcept?.text
+                                  }{" "}
+                                </Typography>
+                              </TableCell>
+                              <TableCell align="left">
+                                <Typography>
+                                  {Object.values(dateObject).every(
+                                    (dateobj) => {
+                                      return (
+                                        dateobj !== "Invalid Choice" &&
+                                        dateobj !== NaN
+                                      );
+                                    }
+                                  )
+                                    ? `${dateObject?.DAY} ${dateObject?.MONTH} ${dateObject?.DATE}`
+                                    : ""}
+                                </Typography>
+                              </TableCell>
+                              <TableCell
+                                align="left"
+                                component="th"
+                                scope="row"
+                              >
+                                <Typography>
+                                  {dateObject?.YEAR && dateObject?.YEAR !== NaN
+                                    ? dateObject?.YEAR
+                                    : ""}
+                                </Typography>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Grid>
+            )}
+            {localStorage.getItem("XCALIBER_SOURCE") === "ELATION" && (
+              <Grid>
+                <Typography variant="h5">
+                  Elation does not support medication
+                </Typography>
+              </Grid>
+            )}
+          </TabPanel>
+          <TabPanel value={value} index={7}>
+            <TimeLine patientDetails={patientDetails} />
             {/* <div>hi</div> */}
           </TabPanel>
-          
         </Paper>
       </Grid>
     </Grid>
