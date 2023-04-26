@@ -92,7 +92,7 @@ export default function Allergy({
         <Autocomplete
           sx={{ width: "100%" }}
           id="combo-box-demo"
-          options={allergyOptions}
+          options={allergyOptions ? allergyOptions : []}
           getOptionLabel={(option) => {
             return localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
               ? `${option?.Concept_Code_2} (${option?.Concept_Name_2})`
