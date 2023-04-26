@@ -96,7 +96,7 @@ const CreateAppointment = ({
             <Autocomplete
               sx={{ width: "100%" }}
               id="combo-box-demo"
-              options={appointmentOptions}
+              options={appointmentOptions ? appointmentOptions : []}
               getOptionLabel={(option) => {
                 return `${option.appointmenttypeid}-${option.name}`
               }}
