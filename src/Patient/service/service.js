@@ -292,7 +292,7 @@ export const deParsefunc = (item) => {
             extension: [
               {
                 url: "text",
-                valueString: ["1987-7"],
+                valueCode: ["1987-7"],
               },
             ],
           },
