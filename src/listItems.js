@@ -7,6 +7,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/Code';
 import PeopleIcon from '@mui/icons-material/Person';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import BuildIcon from '@mui/icons-material/Build';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 
@@ -37,6 +38,12 @@ export const mainListItems = (onClick,id,classColor) => (
       <BarChartIcon style={{color:'#185DA0'}}/>
     </ListItemIcon>
     <ListItemText primary="Analytics" />
+  </ListItemButton>
+  <ListItemButton onClick={() => {onClick("hl7",5)}}  selected={id===5?classColor:""}>
+    <ListItemIcon>
+      <BuildIcon style={{color:'#185DA0'}}/>
+    </ListItemIcon>
+    <ListItemText primary="HL7" />
   </ListItemButton>
 </React.Fragment>
 );

@@ -4,6 +4,10 @@ import axios from "axios";
 import moment from "moment";
 import { range } from "lodash";
 import { useMemo } from "react";
+import {
+  XCHANGE_SERVICE_ENDPOINT,
+  BLITZ_XCHANGE_ENDPOINT,
+} from "../../core-utils/constants";
 
 const endpointUrl = "https://xchange-staging.xcaliberapis.com/api/v1";
 
@@ -542,6 +546,13 @@ export const phnEmlParser = (phnData, emlData) => {
   return ads;
 };
 
+export const getSourceUrl = () => {
+  let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+  return sourceType === "EPIC"
+    ? BLITZ_XCHANGE_ENDPOINT
+    : XCHANGE_SERVICE_ENDPOINT;
+};
+
 export const parserFunc = (data) => {
   let dataHolder = [];
   data?.map((item) => {
@@ -558,6 +569,7 @@ export const parserFunc = (data) => {
     tempObj.sex = item.resource.gender;
     tempObj.type = "mockType";
     tempObj.extension = item.resource.extension;
+    tempObj.gender = item.resource.gender;
     dataHolder.push(tempObj);
   });
   return dataHolder;
@@ -582,16 +594,18 @@ const parserFuncSingle = (item) => {
 };
 
 export const getAllPatients = () => {
+  let sourceUrl = getSourceUrl()
+
   const configHeaders = {
     headers: {
       Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
-      "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+      "x-source-id": localStorage.getItem("XCALIBER_TOKEN"),
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
     },
   };
   return axios
-    .get(`${endpointUrl}/Patient`, configHeaders)
+    .get(`${sourceUrl}/api/v1/Patient`, configHeaders)
     .then(async (response) => {
       const data = await response.data;
       const parsedData = parserFunc(data.data.entry);
@@ -604,17 +618,19 @@ export const getAllPatients = () => {
 
 export const getPatientCount = async (name) => {
   try {
+    let sourceUrl = getSourceUrl()
+
     const configHeaders = {
       headers: {
         Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
-        "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+        "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
       },
     };
     name = !name ? "" : name;
     const response = await axios.get(
-      `${endpointUrl}/Patient?_count=1&_offset=0&name=${name}`,
+      `${sourceUrl}/api/v1/Patient?_count=1&_offset=0&name=${name}`,
       configHeaders
     );
 
@@ -626,6 +642,7 @@ export const getPatientCount = async (name) => {
 };
 
 export const getPatient = (id) => {
+  let sourceUrl = getSourceUrl()
   const configHeaders = {
     headers: {
       Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -635,7 +652,7 @@ export const getPatient = (id) => {
     },
   };
   return axios
-    .get(`${endpointUrl}/Patient/${id}`, configHeaders)
+    .get(`${sourceUrl}/api/v1/Patient/${id}`, configHeaders)
     .then(async (response) => {
       const data = await response.data;
       const parsedData = parserFuncSingle(data.data);
@@ -650,10 +667,11 @@ export const getPatientsAtPage = (page, name) => {
   const patientIds = ["27895"];
   name = !name ? "" : name;
   const offset = page * 10 - 10;
+  let sourceUrl = getSourceUrl()
 
   if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION")
     return axios
-      .get(`${endpointUrl}/Patient?_count=10&_offset=${offset}&name=${name}`, {
+      .get(`${sourceUrl}/api/v1/Patient?_count=10&_offset=${offset}&name=${name}`, {
         headers: {
           Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
@@ -672,7 +690,7 @@ export const getPatientsAtPage = (page, name) => {
   else if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") {
     return axios
       .get(
-        `${endpointUrl}/Patient?departmentId=${localStorage.getItem(
+        `${sourceUrl}/api/v1/Patient?departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}&_count=10&_offset=${offset}&name=${name}`,
         {
@@ -698,9 +716,14 @@ export const getPatientsAtPage = (page, name) => {
           error.response.data.issue[0].details.text ===
           '{"error":"The given search parameters would produce a total data set larger than 1000 records.  Please refine your search and try again."}'
         ) {
+          let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+          let sourceUrl =
+            sourceType === "EPIC"
+              ? BLITZ_XCHANGE_ENDPOINT
+              : XCHANGE_SERVICE_ENDPOINT;
           return await axios
             .get(
-              `${endpointUrl}/Patient?departmentId=${localStorage.getItem(
+              `${sourceUrl}/api/v1/Patient?departmentId=${localStorage.getItem(
                 `DEPARTMENT_ID`
               )}&_count=10&_offset=${offset}&given=George&name=${name}`,
               {
@@ -725,6 +748,24 @@ export const getPatientsAtPage = (page, name) => {
         }
       });
   }
+  else if (localStorage.getItem("XCALIBER_SOURCE") === "EPIC")
+    return axios
+      .get(`${sourceUrl}/api/v1/Patient?_count=10&_offset=${offset}&name=${name}`, {
+        headers: {
+          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+          "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+        },
+      })
+      .then((response) => {
+        const data = response.data;
+        const parsedData = parserFunc(data.data.entry);
+        return parsedData ? parsedData : [];
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 };
 
 export const PatientsById = (id) => {
@@ -733,7 +774,27 @@ export const PatientsById = (id) => {
     localStorage.getItem(`DEPARTMENT_ID`) == 150
   ) {
     return axios
-      .get(`${endpointUrl}/Patient/${id}`, {
+      .get(`${endpointUrl}/api/v1/Patient/${id}`, {
+        headers: {
+          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+          "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+        },
+      })
+      .then(async (response) => {
+        const data = await response.data;
+        const parsedData = parserFunc([{ resource: data.data }]);
+        return parsedData ? parsedData : [];
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  else if(localStorage.getItem("XCALIBER_SOURCE") === "EPIC") {
+    let sourceUrl = getSourceUrl();
+    return axios
+      .get(`${sourceUrl}/api/v1/Patient/${id}`, {
         headers: {
           Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
@@ -754,6 +815,7 @@ export const PatientsById = (id) => {
 };
 
 export const addPatient = (patient) => {
+  let sourceUrl = getSourceUrl();
   let d = deParsefunc(patient);
   const configHeaders = {
     headers: {
@@ -765,7 +827,7 @@ export const addPatient = (patient) => {
   };
   console.log(d);
   return axios
-    .post(`${endpointUrl}/Patient`, d, configHeaders)
+    .post(`${sourceUrl}/api/v1/Patient`, d, configHeaders)
     .then(async (response) => {
       const data = await response;
       return data.data.data;
@@ -776,6 +838,7 @@ export const addPatient = (patient) => {
 };
 
 export const editPatient = (patient, id) => {
+  let sourceUrl = getSourceUrl();
   let d = deParsefunc(patient);
   const configHeaders = {
     headers: {
@@ -787,7 +850,7 @@ export const editPatient = (patient, id) => {
   };
 
   return axios
-    .put(`${endpointUrl}/Patient/${id}`, d, configHeaders)
+    .put(`${sourceUrl}/api/v1/Patient/${id}`, d, configHeaders)
     .then(async (response) => {
       const data = await response;
 

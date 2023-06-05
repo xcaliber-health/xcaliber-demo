@@ -314,7 +314,7 @@ const Chart = () => {
         ? await ReferenceDataService.getAllergyData()
         : localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
         ? await ReferenceDataService.getAllergyData(`ab`)
-        : "";
+        : await ReferenceDataService.getAllergyData();
     setAllergyOptions(result);
     setAllergyReactionOptions(result);
   };

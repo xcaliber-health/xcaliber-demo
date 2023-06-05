@@ -1,11 +1,16 @@
 import axios from "axios";
-import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
+import { XCHANGE_SERVICE_ENDPOINT, BLITZ_XCHANGE_ENDPOINT } from "../../core-utils/constants";
 
 export const ReferenceDataService = {
   getProblemData: async (searchString) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?category=problems&resourceType=condition&searchString=${
+        `${sourceUrl}/api/v1/ReferenceData?category=problems&resourceType=condition&searchString=${
           searchString ?? "abc"
         }`,
         {
@@ -22,8 +27,13 @@ export const ReferenceDataService = {
   },
   getAllergyData: async (searchString) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=allergy&searchString=${
+        `${sourceUrl}/api/v1/ReferenceData?resourceType=allergy&searchString=${
           searchString ?? "abe"
         }`,
         {
@@ -40,8 +50,13 @@ export const ReferenceDataService = {
   },
   getAthenaAllergyReactions: async () => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=allergy&dataField=reactions`,
+        `${sourceUrl}/api/v1/ReferenceData?resourceType=allergy&dataField=reactions`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -56,8 +71,13 @@ export const ReferenceDataService = {
   },
   getAthenaAllergySeverities: async () => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=allergy&dataField=severities`,
+        `${sourceUrl}/api/v1/ReferenceData?resourceType=allergy&dataField=severities`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -72,8 +92,13 @@ export const ReferenceDataService = {
   },
   getAppointmentData: async () => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=appointment&dataField=type`,
+        `${sourceUrl}/api/v1/ReferenceData?resourceType=appointment&dataField=type`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -88,8 +113,13 @@ export const ReferenceDataService = {
   },
   getMedicationData: async (searchString) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=medicationstatement&searchString=${
+        `${sourceUrl}/api/v1/ReferenceData?resourceType=medicationstatement&searchString=${
           searchString ?? ""
         }`,
         {
@@ -106,8 +136,13 @@ export const ReferenceDataService = {
   },
   getMedicationStopReasonsData: async () => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=medicationstatement&dataField=reasons`,
+        `${sourceUrl}/api/v1/ReferenceData?resourceType=medicationstatement&dataField=reasons`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -122,8 +157,13 @@ export const ReferenceDataService = {
   },
   getVaccineData: async (searchString) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=immunization&searchString=${
+        `${sourceUrl}/api/v1/ReferenceData?resourceType=immunization&searchString=${
           searchString ?? ""
         }`,
         {
@@ -140,8 +180,14 @@ export const ReferenceDataService = {
   },
   getMedicationOrderData: async (searchString) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
+          console.log(localStorage.getItem("XCALIBER_SOURCE"),sourceUrl);
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/ReferenceData?resourceType=medicationrequest&searchString=${
+        `${sourceUrl}/api/v1/ReferenceData?resourceType=medicationrequest&searchString=${
           searchString ?? ""
         }&dataField=order`,
         {

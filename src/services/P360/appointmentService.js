@@ -1,17 +1,23 @@
 import axios from "axios";
-import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
+import { XCHANGE_SERVICE_ENDPOINT, BLITZ_XCHANGE_ENDPOINT } from "../../core-utils/constants";
 
 export const AppointmentService = {
   getUpcomingAppointments: async (patientId, currentDate) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       let dateVal =
         localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
           ? `date=gt${currentDate}`
           : localStorage.getItem("XCALIBER_SOURCE") === "ATHENA"
           ? `start-date=${currentDate}`
           : "";
+        
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment?patient=${patientId}&${dateVal}&departmentId=${localStorage.getItem(
+        `${sourceUrl}/api/v1/Appointment?patient=${patientId}&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}`,
         {
@@ -29,8 +35,13 @@ export const AppointmentService = {
   },
   createAppointment: async (appointmentPayload) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.post(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment`,
+        `${sourceUrl}/api/v1/Appointment`,
         appointmentPayload,
         {
           headers: {
@@ -47,8 +58,13 @@ export const AppointmentService = {
   },
   getAppointmentById: async (appointmentId) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment/${appointmentId}`,
+        `${sourceUrl}/api/v1/Appointment/${appointmentId}`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,

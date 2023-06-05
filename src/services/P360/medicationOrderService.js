@@ -1,5 +1,5 @@
 import axios from "axios";
-import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
+import { XCHANGE_SERVICE_ENDPOINT, BLITZ_XCHANGE_ENDPOINT } from "../../core-utils/constants";
 export const MedicationOrderService = {
   createMedicationOrder: async (
     payLoad,
@@ -8,6 +8,11 @@ export const MedicationOrderService = {
     medicationReason
   ) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       let encounterId = "0";
       if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
         if (appointmentId === undefined || appointmentId === "0") {
@@ -82,7 +87,7 @@ export const MedicationOrderService = {
             },
           };
           const result = await axios.post(
-            `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment`,
+            `${sourceUrl}/api/v1/Appointment`,
             appointmentPayload,
             {
               headers: {
@@ -95,7 +100,7 @@ export const MedicationOrderService = {
         }
         await axios
           .patch(
-            `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment/${appointmentId}`,
+            `${sourceUrl}/api/v1/Appointment/${appointmentId}`,
             {
               context: {
                 departmentId: localStorage.getItem(`DEPARTMENT_ID`),
@@ -120,7 +125,7 @@ export const MedicationOrderService = {
           });
         await axios
           .get(
-            `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment/${appointmentId}`,
+            `${sourceUrl}/api/v1/Appointment/${appointmentId}`,
             {
               headers: {
                 Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -173,7 +178,7 @@ export const MedicationOrderService = {
         },
       };
       const diagnosisResponse = await axios.post(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Condition`,
+        `${sourceUrl}/api/v1/Condition`,
         diagnosisPayload,
         {
           headers: {
@@ -188,7 +193,7 @@ export const MedicationOrderService = {
         reference: `Encounter/${encounterId}`,
       };
       const response = await axios.post(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/MedicationRequest`,
+        `${sourceUrl}/api/v1/MedicationRequest`,
         payLoad,
         {
           headers: {
@@ -207,9 +212,14 @@ export const MedicationOrderService = {
 
   getMedicationOrders: async (patientId) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
         const encounterResponse = await axios.get(
-          `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Encounter?patient=${patientId}&departmentId=${localStorage.getItem(
+          `${sourceUrl}/api/v1/Encounter?patient=${patientId}&departmentId=${localStorage.getItem(
             `DEPARTMENT_ID`
           )}`,
           {
@@ -228,7 +238,7 @@ export const MedicationOrderService = {
           const encounterId =
             encounterResponse?.data?.data?.entry?.[i]?.resource?.id;
           const medicationOrdersResponse = await axios.get(
-            `${XCHANGE_SERVICE_ENDPOINT}/api/v1/MedicationRequest?patient=${patientId}&encounter=${encounterId}`,
+            `${sourceUrl}/api/v1/MedicationRequest?patient=${patientId}&encounter=${encounterId}`,
             {
               headers: {
                 Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,

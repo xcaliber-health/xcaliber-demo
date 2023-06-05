@@ -1,12 +1,21 @@
 import axios from "axios";
 import { result } from "lodash";
-import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
+import {
+  BLITZ_XCHANGE_ENDPOINT,
+  XCHANGE_SERVICE_ENDPOINT,
+} from "../../core-utils/constants";
 
 export const AllergyService = {
   getAllergies: async (patientId) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
+
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/AllergyIntolerance?patient=${patientId}&departmentId=${localStorage.getItem(
+        `${sourceUrl}/api/v1/AllergyIntolerance?patient=${patientId}&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}`,
         {
@@ -23,8 +32,12 @@ export const AllergyService = {
   },
   createAllergies: async (allergyPayload) => {
     try {
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.post(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/AllergyIntolerance`,
+        `${sourceUrl}/api/v1/AllergyIntolerance`,
         allergyPayload,
         {
           headers: {
@@ -42,15 +55,17 @@ export const AllergyService = {
   },
   getAllergyById: async (id) => {
     try {
-      const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/AllergyIntolerance/${id}`,
-        {
-          headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
-            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
-          },
-        }
-      );
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
+      const result = await axios.get(`${sourceUrl}/api/v1/AllergyIntolerance/${id}`, {
+        headers: {
+          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+          "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+        },
+      });
 
       return result?.data?.data;
     } catch (error) {
