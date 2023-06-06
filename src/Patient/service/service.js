@@ -598,7 +598,7 @@ export const getAllPatients = () => {
 
   const configHeaders = {
     headers: {
-      Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+      Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
       "x-source-id": localStorage.getItem("XCALIBER_TOKEN"),
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -622,7 +622,7 @@ export const getPatientCount = async (name) => {
 
     const configHeaders = {
       headers: {
-        Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+        Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
         "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -645,7 +645,7 @@ export const getPatient = (id) => {
   let sourceUrl = getSourceUrl()
   const configHeaders = {
     headers: {
-      Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+      Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
       "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -673,7 +673,7 @@ export const getPatientsAtPage = (page, name) => {
     return axios
       .get(`${sourceUrl}/api/v1/Patient?_count=10&_offset=${offset}&name=${name}`, {
         headers: {
-          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+          Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -695,7 +695,7 @@ export const getPatientsAtPage = (page, name) => {
         )}&_count=10&_offset=${offset}&name=${name}`,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -728,7 +728,7 @@ export const getPatientsAtPage = (page, name) => {
               )}&_count=10&_offset=${offset}&given=George&name=${name}`,
               {
                 headers: {
-                  Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+                  Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
                   "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                   "Access-Control-Allow-Origin": "*",
                   "Access-Control-Allow-Methods":
@@ -752,7 +752,7 @@ export const getPatientsAtPage = (page, name) => {
     return axios
       .get(`${sourceUrl}/api/v1/Patient?_count=10&_offset=${offset}&name=${name}`, {
         headers: {
-          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+          Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -776,7 +776,7 @@ export const PatientsById = (id) => {
     return axios
       .get(`${endpointUrl}/api/v1/Patient/${id}`, {
         headers: {
-          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+          Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -796,7 +796,7 @@ export const PatientsById = (id) => {
     return axios
       .get(`${sourceUrl}/api/v1/Patient/${id}`, {
         headers: {
-          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+          Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -819,7 +819,7 @@ export const addPatient = (patient) => {
   let d = deParsefunc(patient);
   const configHeaders = {
     headers: {
-      Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+      Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
       "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -842,7 +842,7 @@ export const editPatient = (patient, id) => {
   let d = deParsefunc(patient);
   const configHeaders = {
     headers: {
-      Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+      Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
       "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",

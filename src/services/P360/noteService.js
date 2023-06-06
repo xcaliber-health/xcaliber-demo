@@ -18,7 +18,7 @@ export const NoteService = {
         )}`,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -54,7 +54,7 @@ export const NoteService = {
           `${sourceUrl}/api/v1/Invoice?patient=${patientId}`,
           {
             headers: {
-              Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+              Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
               "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
               "Access-Control-Allow-Origin": "*",
               "Access-Control-Allow-Methods":
@@ -103,7 +103,7 @@ export const NoteService = {
           `${sourceUrl}/api/v1/Condition?category=encounter-diagnosis&patient=${patientId}&encounter=${encounterIds[i]}${conditionUrl}`,
           {
             headers: {
-              Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+              Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
               "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
               "Access-Control-Allow-Origin": "*",
               "Access-Control-Allow-Methods":
@@ -178,7 +178,7 @@ export const NoteService = {
         )}&start-date=2022-01-01`,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -234,7 +234,7 @@ export const NoteService = {
             },
             {
               headers: {
-                Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+                Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
                 "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods":
@@ -251,7 +251,7 @@ export const NoteService = {
             `${sourceUrl}/api/v1/Appointment/${appointmentId}`,
             {
               headers: {
-                Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+                Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
                 "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods":
@@ -274,7 +274,7 @@ export const NoteService = {
         notePayload,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -297,7 +297,7 @@ export const NoteService = {
         `${sourceUrl}/api/v1/DocumentReference/${noteId}?category=visit_notes`,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -322,7 +322,7 @@ export const NoteService = {
         )}&appointment=${appointmentId}`,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",

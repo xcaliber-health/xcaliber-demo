@@ -14,7 +14,7 @@ const HL7DisplayPage = () => {
         { data: textBoxValue },
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
             'x-source-id': `${process.env.REACT_APP_EPIC_XSOURCEID}`
           },
         }

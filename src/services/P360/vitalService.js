@@ -18,7 +18,7 @@ export const VitalService = {
         )}`,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem(`XCALIBER_TOKEN`)}`,
           },
         }
@@ -41,7 +41,7 @@ export const VitalService = {
         vitalsPayload,
         {
           headers: {
-            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
             "x-source-id": `${localStorage.getItem(`XCALIBER_TOKEN`)}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
