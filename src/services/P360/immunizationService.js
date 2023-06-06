@@ -1,5 +1,5 @@
 import axios from "axios";
-import { XCHANGE_SERVICE_ENDPOINT, BLITZ_XCHANGE_ENDPOINT } from "../../core-utils/constants";
+import { XCHANGE_SERVICE_ENDPOINT, EPIC_XCHANGE_ENDPOINT } from "../../core-utils/constants";
 
 export const ImmunizationService = {
   getImmunization: async (patientId) => {
@@ -7,7 +7,7 @@ export const ImmunizationService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
         `${sourceUrl}/api/v1/Immunization?patient=${patientId}&departmentId=${localStorage.getItem(
@@ -30,7 +30,7 @@ export const ImmunizationService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.post(
         `${sourceUrl}/api/v1/Immunization`,
@@ -54,7 +54,7 @@ export const ImmunizationService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
         `${sourceUrl}/api/v1/Immunization/${id}`,
