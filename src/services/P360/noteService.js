@@ -1,5 +1,5 @@
 import axios from "axios";
-import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
+import { XCHANGE_SERVICE_ENDPOINT, BLITZ_XCHANGE_ENDPOINT } from "../../core-utils/constants";
 import getPractitionerById, {
   PractitionerService,
 } from "./practitionerService";
@@ -7,8 +7,13 @@ import getPractitionerById, {
 export const NoteService = {
   getNotesForTimeLine: async (patientId) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const response = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&category=visit_notes&departmentId=${localStorage.getItem(
+        `${sourceUrl}/api/v1/DocumentReference?patient=${patientId}&category=visit_notes&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}`,
         {
@@ -46,7 +51,7 @@ export const NoteService = {
       if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION") {
         conditionUrl = "";
         const invoices = await axios.get(
-          `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Invoice?patient=${patientId}`,
+          `${sourceUrl}/api/v1/Invoice?patient=${patientId}`,
           {
             headers: {
               Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -95,7 +100,7 @@ export const NoteService = {
       const diagnosisNames = [];
       for (let i in encounterIds) {
         const encounters = await axios.get(
-          `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Condition?category=encounter-diagnosis&patient=${patientId}&encounter=${encounterIds[i]}${conditionUrl}`,
+          `${sourceUrl}/api/v1/Condition?category=encounter-diagnosis&patient=${patientId}&encounter=${encounterIds[i]}${conditionUrl}`,
           {
             headers: {
               Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -162,8 +167,13 @@ export const NoteService = {
   },
   getVisitNotes: async (patientId) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const response = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?patient=${patientId}&category=visit_notes&departmentId=${localStorage.getItem(
+        `${sourceUrl}/api/v1/DocumentReference?patient=${patientId}&category=visit_notes&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}&start-date=2022-01-01`,
         {
@@ -204,11 +214,16 @@ export const NoteService = {
   },
   createNote: async (notePayload, appointmentId = "0") => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       let encounterId = "0";
       if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
         await axios
           .patch(
-            `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment/${appointmentId}`,
+            `${sourceUrl}/api/v1/Appointment/${appointmentId}`,
             {
               context: {
                 departmentId: localStorage.getItem(`DEPARTMENT_ID`),
@@ -233,7 +248,7 @@ export const NoteService = {
           });
         await axios
           .get(
-            `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Appointment/${appointmentId}`,
+            `${sourceUrl}/api/v1/Appointment/${appointmentId}`,
             {
               headers: {
                 Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -255,7 +270,7 @@ export const NoteService = {
           });
       }
       const response = await axios.post(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference?category=visit_notes&encounter=${encounterId}`,
+        `${sourceUrl}/api/v1/DocumentReference?category=visit_notes&encounter=${encounterId}`,
         notePayload,
         {
           headers: {
@@ -273,8 +288,13 @@ export const NoteService = {
   },
   getVisitNoteById: async (noteId) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference/${noteId}?category=visit_notes`,
+        `${sourceUrl}/api/v1/DocumentReference/${noteId}?category=visit_notes`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
@@ -291,8 +311,13 @@ export const NoteService = {
   },
   getNoteByAppointmentId: async (patientId, appointmentId) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/DocumentReference/?patient=${patientId}&departmentId=${localStorage.getItem(
+        `${sourceUrl}/api/v1/DocumentReference/?patient=${patientId}&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}&appointment=${appointmentId}`,
         {

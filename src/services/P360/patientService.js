@@ -1,12 +1,17 @@
 import axios from "axios";
-import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
+import { XCHANGE_SERVICE_ENDPOINT, BLITZ_XCHANGE_ENDPOINT } from "../../core-utils/constants";
 import store from "../../Redux/store";
 
 export const PatientService = {
   getPatientById: async (id) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const response = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Patient/${id}?departmentId=${localStorage.getItem(
+        `${sourceUrl}/api/v1/Patient/${id}?departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}`,
         {

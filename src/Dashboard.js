@@ -41,6 +41,7 @@ import Watermark from "./Watermark";
 import { makeStyles } from "@material-ui/styles";
 import { useTheme } from "@mui/system";
 import { DEPARTMENTS } from "./core-utils/constants";
+import HL7DisplayPage from "./HL7/displayPage";
 
 const useStyles = makeStyles({
   root: {
@@ -150,8 +151,16 @@ function DashboardContent() {
         "XCALIBER_TOKEN",
         `${process.env.REACT_APP_ATHENA_XSOURCEID}`
       );
-      setSourceState("ATHENA");
-    } else {
+     setSourceState("ATHENA");
+    } else if(localStorage.getItem("XCALIBER_SOURCE") === "EPIC") {
+      localStorage.setItem("XCALIBER_SOURCE", `EPIC`);
+      localStorage.setItem(
+        "XCALIBER_TOKEN",
+        `${process.env.REACT_APP_EPIC_XSOURCEID}`
+      );
+      setSourceState("EPIC");
+    } 
+    else {
       localStorage.setItem("XCALIBER_SOURCE", `ELATION`);
       localStorage.setItem(
         "XCALIBER_TOKEN",
@@ -234,6 +243,11 @@ function DashboardContent() {
                       control={<Radio />}
                       label="Athena"
                     />
+                    <FormControlLabel
+                      value="EPIC"
+                      control={<Radio />}
+                      label="Epic"
+                    />
                   </RadioGroup>
                 </Grid>
                 <Grid
@@ -265,6 +279,15 @@ function DashboardContent() {
                         localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
                       ) {
                         localStorage.setItem(`DEPARTMENT_ID`, departmentId);
+                        localStorage.setItem(
+                          `DEPARTMENT_TIMEZONE`,
+                          `America/New_York`
+                        );
+                      }
+                      else if (
+                        localStorage.getItem(`XCALIBER_SOURCE`) === "EPIC"
+                      ) {
+                        localStorage.setItem(`DEPARTMENT_ID`, '');
                         localStorage.setItem(
                           `DEPARTMENT_TIMEZONE`,
                           `America/New_York`
@@ -429,6 +452,7 @@ function DashboardContent() {
             <Route path="p360" element={<ViewPatients />} />
             <Route path="p360/:id" element={<Chart />} />
             <Route path="analytics" element={<Analytics />} />
+            <Route path="hl7" element={<HL7DisplayPage />} />
           </Routes>
           <Watermark />
         </Container>

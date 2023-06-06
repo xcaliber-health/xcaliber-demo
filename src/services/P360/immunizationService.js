@@ -1,11 +1,16 @@
 import axios from "axios";
-import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
+import { XCHANGE_SERVICE_ENDPOINT, BLITZ_XCHANGE_ENDPOINT } from "../../core-utils/constants";
 
 export const ImmunizationService = {
   getImmunization: async (patientId) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Immunization?patient=${patientId}&departmentId=${localStorage.getItem(
+        `${sourceUrl}/api/v1/Immunization?patient=${patientId}&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}`,
         {
@@ -22,8 +27,13 @@ export const ImmunizationService = {
   },
   createImmunization: async (immunizationPayload) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.post(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Immunization`,
+        `${sourceUrl}/api/v1/Immunization`,
         immunizationPayload,
         {
           headers: {
@@ -41,8 +51,13 @@ export const ImmunizationService = {
   },
   getImmunizationById: async (id) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Immunization/${id}`,
+        `${sourceUrl}/api/v1/Immunization/${id}`,
         {
           headers: {
             Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,

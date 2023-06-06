@@ -1,11 +1,16 @@
 import axios from "axios";
-import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
+import { XCHANGE_SERVICE_ENDPOINT, BLITZ_XCHANGE_ENDPOINT } from "../../core-utils/constants";
 
 export const MedicationService = {
   getMedications: async (patientId) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/MedicationStatement?patient=${patientId}&category=problem-list-item&departmentId=${localStorage.getItem(
+        `${sourceUrl}/api/v1/MedicationStatement?patient=${patientId}&category=problem-list-item&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}`,
         {
@@ -22,8 +27,13 @@ export const MedicationService = {
   },
   createMedicationInAthena: async (requestPayLoad) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.post(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/MedicationStatement`,
+        `${sourceUrl}/api/v1/MedicationStatement`,
         requestPayLoad,
         {
           headers: {

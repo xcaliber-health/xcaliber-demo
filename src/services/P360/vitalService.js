@@ -1,11 +1,19 @@
 import axios from "axios";
-import { XCHANGE_SERVICE_ENDPOINT } from "../../core-utils/constants";
+import {
+  XCHANGE_SERVICE_ENDPOINT,
+  BLITZ_XCHANGE_ENDPOINT,
+} from "../../core-utils/constants";
 
 export const VitalService = {
   getVitals: async (patientId) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Observation?patient=${patientId}&category=vital-signs&departmentId=${localStorage.getItem(
+        `${sourceUrl}/api/v1/Observation?patient=${patientId}&category=vital-signs&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}`,
         {
@@ -23,8 +31,13 @@ export const VitalService = {
 
   createVitals: async (vitalsPayload) => {
     try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl =
+        sourceType === "EPIC"
+          ? BLITZ_XCHANGE_ENDPOINT
+          : XCHANGE_SERVICE_ENDPOINT;
       const response = await axios.post(
-        `${XCHANGE_SERVICE_ENDPOINT}/api/v1/Observation`,
+        `${sourceUrl}/api/v1/Observation`,
         vitalsPayload,
         {
           headers: {
