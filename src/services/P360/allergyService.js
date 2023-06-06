@@ -1,7 +1,7 @@
 import axios from "axios";
 import { result } from "lodash";
 import {
-  BLITZ_XCHANGE_ENDPOINT,
+  EPIC_XCHANGE_ENDPOINT,
   XCHANGE_SERVICE_ENDPOINT,
 } from "../../core-utils/constants";
 
@@ -11,7 +11,7 @@ export const AllergyService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
 
       const result = await axios.get(
@@ -34,7 +34,7 @@ export const AllergyService = {
     try {
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.post(
         `${sourceUrl}/api/v1/AllergyIntolerance`,
@@ -58,7 +58,7 @@ export const AllergyService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(`${sourceUrl}/api/v1/AllergyIntolerance/${id}`, {
         headers: {

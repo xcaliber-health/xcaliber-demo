@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Button, Box, Typography } from "@mui/material";
 import axios from "axios";
-import { BLITZ_XCHANGE_ENDPOINT } from "../core-utils/constants";
+import { EPIC_XCHANGE_ENDPOINT } from "../core-utils/constants";
 
 const HL7DisplayPage = () => {
   const [textBoxValue, setTextBoxValue] = useState("");
@@ -10,7 +10,7 @@ const HL7DisplayPage = () => {
     // Perform API call using Axios
     axios
       .post(
-        `${BLITZ_XCHANGE_ENDPOINT}/api/v1/convert/hl7`,
+        `${EPIC_XCHANGE_ENDPOINT}/api/v1/convert/hl7`,
         { data: textBoxValue },
         {
           headers: {

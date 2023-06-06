@@ -6,7 +6,7 @@ import { range } from "lodash";
 import { useMemo } from "react";
 import {
   XCHANGE_SERVICE_ENDPOINT,
-  BLITZ_XCHANGE_ENDPOINT,
+  EPIC_XCHANGE_ENDPOINT,
 } from "../../core-utils/constants";
 
 const endpointUrl = "https://xchange-staging.xcaliberapis.com/api/v1";
@@ -549,7 +549,7 @@ export const phnEmlParser = (phnData, emlData) => {
 export const getSourceUrl = () => {
   let sourceType = localStorage.getItem("XCALIBER_SOURCE");
   return sourceType === "EPIC"
-    ? BLITZ_XCHANGE_ENDPOINT
+    ? EPIC_XCHANGE_ENDPOINT
     : XCHANGE_SERVICE_ENDPOINT;
 };
 
@@ -719,7 +719,7 @@ export const getPatientsAtPage = (page, name) => {
           let sourceType = localStorage.getItem("XCALIBER_SOURCE");
           let sourceUrl =
             sourceType === "EPIC"
-              ? BLITZ_XCHANGE_ENDPOINT
+              ? EPIC_XCHANGE_ENDPOINT
               : XCHANGE_SERVICE_ENDPOINT;
           return await axios
             .get(

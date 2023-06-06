@@ -1,5 +1,5 @@
 import axios from "axios";
-import { XCHANGE_SERVICE_ENDPOINT, BLITZ_XCHANGE_ENDPOINT } from "../../core-utils/constants";
+import { XCHANGE_SERVICE_ENDPOINT, EPIC_XCHANGE_ENDPOINT } from "../../core-utils/constants";
 
 export const AppointmentService = {
   getUpcomingAppointments: async (patientId, currentDate) => {
@@ -7,7 +7,7 @@ export const AppointmentService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       let dateVal =
         localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
@@ -38,7 +38,7 @@ export const AppointmentService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.post(
         `${sourceUrl}/api/v1/Appointment`,
@@ -61,7 +61,7 @@ export const AppointmentService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
         `${sourceUrl}/api/v1/Appointment/${appointmentId}`,

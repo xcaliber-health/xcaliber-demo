@@ -1,5 +1,5 @@
 import axios from "axios";
-import { XCHANGE_SERVICE_ENDPOINT, BLITZ_XCHANGE_ENDPOINT } from "../../core-utils/constants";
+import { XCHANGE_SERVICE_ENDPOINT, EPIC_XCHANGE_ENDPOINT } from "../../core-utils/constants";
 
 export const ReferenceDataService = {
   getProblemData: async (searchString) => {
@@ -7,7 +7,7 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
         `${sourceUrl}/api/v1/ReferenceData?category=problems&resourceType=condition&searchString=${
@@ -30,7 +30,7 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
         `${sourceUrl}/api/v1/ReferenceData?resourceType=allergy&searchString=${
@@ -53,7 +53,7 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
         `${sourceUrl}/api/v1/ReferenceData?resourceType=allergy&dataField=reactions`,
@@ -74,7 +74,7 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
         `${sourceUrl}/api/v1/ReferenceData?resourceType=allergy&dataField=severities`,
@@ -95,7 +95,7 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
         `${sourceUrl}/api/v1/ReferenceData?resourceType=appointment&dataField=type`,
@@ -116,7 +116,7 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
         `${sourceUrl}/api/v1/ReferenceData?resourceType=medicationstatement&searchString=${
@@ -139,7 +139,7 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
         `${sourceUrl}/api/v1/ReferenceData?resourceType=medicationstatement&dataField=reasons`,
@@ -160,7 +160,7 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
         `${sourceUrl}/api/v1/ReferenceData?resourceType=immunization&searchString=${
@@ -183,7 +183,7 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
           console.log(localStorage.getItem("XCALIBER_SOURCE"),sourceUrl);
       const result = await axios.get(

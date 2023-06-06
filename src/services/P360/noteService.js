@@ -1,5 +1,5 @@
 import axios from "axios";
-import { XCHANGE_SERVICE_ENDPOINT, BLITZ_XCHANGE_ENDPOINT } from "../../core-utils/constants";
+import { XCHANGE_SERVICE_ENDPOINT, EPIC_XCHANGE_ENDPOINT } from "../../core-utils/constants";
 import getPractitionerById, {
   PractitionerService,
 } from "./practitionerService";
@@ -10,7 +10,7 @@ export const NoteService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const response = await axios.get(
         `${sourceUrl}/api/v1/DocumentReference?patient=${patientId}&category=visit_notes&departmentId=${localStorage.getItem(
@@ -170,7 +170,7 @@ export const NoteService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const response = await axios.get(
         `${sourceUrl}/api/v1/DocumentReference?patient=${patientId}&category=visit_notes&departmentId=${localStorage.getItem(
@@ -217,7 +217,7 @@ export const NoteService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       let encounterId = "0";
       if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
@@ -291,7 +291,7 @@ export const NoteService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
         `${sourceUrl}/api/v1/DocumentReference/${noteId}?category=visit_notes`,
@@ -314,7 +314,7 @@ export const NoteService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       const result = await axios.get(
         `${sourceUrl}/api/v1/DocumentReference/?patient=${patientId}&departmentId=${localStorage.getItem(

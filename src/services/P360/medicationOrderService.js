@@ -1,5 +1,5 @@
 import axios from "axios";
-import { XCHANGE_SERVICE_ENDPOINT, BLITZ_XCHANGE_ENDPOINT } from "../../core-utils/constants";
+import { XCHANGE_SERVICE_ENDPOINT, EPIC_XCHANGE_ENDPOINT } from "../../core-utils/constants";
 export const MedicationOrderService = {
   createMedicationOrder: async (
     payLoad,
@@ -11,7 +11,7 @@ export const MedicationOrderService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       let encounterId = "0";
       if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
@@ -215,7 +215,7 @@ export const MedicationOrderService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl =
         sourceType === "EPIC"
-          ? BLITZ_XCHANGE_ENDPOINT
+          ? EPIC_XCHANGE_ENDPOINT
           : XCHANGE_SERVICE_ENDPOINT;
       if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
         const encounterResponse = await axios.get(
