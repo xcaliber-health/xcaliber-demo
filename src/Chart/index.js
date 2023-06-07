@@ -1166,7 +1166,7 @@ const Chart = () => {
             </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={0}>
-            <NotesTab
+            <NotesTab           
               patientDetails={patientDetails}
               bookedNote={upcomingAppointments
                 ?.filter((app) => {
@@ -1740,6 +1740,7 @@ function TabPanel(props) {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
+      style={{ overflow: 'scroll', width: '100%' }}
     >
       {value === index && (
         <Box sx={{ p: 3 }}>

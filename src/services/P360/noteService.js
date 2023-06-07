@@ -206,6 +206,10 @@ export const NoteService = {
             count++;
           }
         }
+        else if (localStorage.getItem("XCALIBER_SOURCE") === "EPIC") {
+            notes.push(resource);
+            count++;
+        }
       }
       return notes;
     } catch (error) {
