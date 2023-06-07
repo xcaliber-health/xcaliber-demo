@@ -14,6 +14,7 @@ import CreateNotes from "../CreateNotes";
 import { Helper } from "../../core-utils/helper";
 import DisplayNotes from "../displayNotes";
 import DraftNotes from "../draftNotes";
+import NotesBlock from "./HelperComponent";
 import Loading from "../../Patient/Loading";
 
 const NotesTab = ({ patientDetails, bookedNote }) => {
@@ -340,7 +341,8 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
             {notes &&
               notes?.map((note) => {
                 let noteDateValue =
-                  localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
+                  localStorage.getItem("XCALIBER_SOURCE") === "ELATION" ||
+                  localStorage.getItem("XCALIBER_SOURCE") === "EPIC"
                     ? note?.resource?.date
                     : note?.resource?.context?.period?.start;
 
@@ -360,11 +362,18 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
                   >
                     <ListItemText
                       primary={
-                        note?.resource?.description ??
-                        note?.resource?.category?.[0]?.coding?.[0]?.display
+                        <NotesBlock
+                          plainText={Helper.convertRTFToPlainText(
+                            atob(
+                              note.resource?.content?.[0]?.attachment?.data,
+                              "base64"
+                            )
+                          )}
+                        ></NotesBlock>
                       }
                     />
-                    <ListItemText secondary={note?.resource?.docStatus} />
+
+                    {/* <ListItemText secondary={note?.resource?.docStatus} />
                     <ListItemText>
                       <span style={{ color: "black" }}>
                         {Helper.extractFieldsFromDate(noteDateValue)?.DAY}
@@ -378,7 +387,7 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
                       <span style={{ color: "black" }}>
                         {Helper.extractFieldsFromDate(noteDateValue)?.YEAR}
                       </span>
-                    </ListItemText>
+                    </ListItemText> */}
                   </ListItemButton>
                 );
               })}

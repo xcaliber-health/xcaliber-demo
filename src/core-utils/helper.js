@@ -69,4 +69,27 @@ export const Helper = {
       }),
     };
   },
+
+  convertRTFToPlainText: (rtf) => {
+    try {
+      if (rtf) {
+        let str = rtf.toString();
+        str = str.replace(/\\par[d]?/g, '');
+        str = str.replace(/\\X0A\\/g, '\n');
+        str = str.replace(
+          /\{\*?\\[^{}]+}|[{}]|\\\n?[A-Za-z]+\n?(?:-?\d+)?([a-zA-Z]+)?[ ]?/g,
+          '',
+        );
+        str = str.replace(/\\'[0-9a-zA-Z]{2}/g, '').trim();
+        str = str.replace(/\\/g, '');
+        console.log(str);
+        //convert to base 64
+        return str;
+      } else {
+        return '';
+      }
+    } catch (err) {
+      throw `failed to convert rtf to plain text with error - ${err?.message}`;
+    }
+  }
 };

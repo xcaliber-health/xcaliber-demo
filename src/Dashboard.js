@@ -220,7 +220,7 @@ function DashboardContent() {
                 container
                 sx={{ width: theme.spacing(60), height: theme.spacing(30) }}
                 direction={"column"}
-                padding={4}
+                padding={3}
               >
                 <Grid item>
                   <Typography>Switch data source</Typography>
