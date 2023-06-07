@@ -42,6 +42,7 @@ import IconButton from "@mui/material/IconButton";
 import TimeLine from "./TabComponents/VisitsTab";
 import { MedicationOrderService } from "../services/P360/medicationOrderService";
 import { CreateMedicationOrder } from "./DrawerComponents/createMedicationOrders";
+import { OrderService } from "../services/P360/orderService";
 
 const Chart = () => {
   const { id } = useParams();
@@ -52,6 +53,7 @@ const Chart = () => {
   const [patientVitals, setPatientVitals] = useState([]);
   const [patientProblems, setPatientProblems] = useState([]);
   const [patientAllergies, setPatientAllergies] = useState([]);
+  const [patientOrders, setPatientOrders] = useState([]);
   const [patientImmunizations, setPatientImmunizations] = useState([]);
   const [patientMedications, setPatientMedications] = useState([]);
   const [patientMedicationOrders, setPatientMedicationOrders] = useState([]);
@@ -207,6 +209,10 @@ const Chart = () => {
     setPatientAllergies(response);
   };
 
+  const getOrders = async () => {
+    const response = await OrderService.getOrders(id);
+    setPatientOrders(response);
+  };
   const getMedications = async () => {
     const response = await MedicationService.getMedications(id);
     setPatientMedications(response);
@@ -638,6 +644,7 @@ const Chart = () => {
       getImmunizations(),
       getVitals(),
       getMedicationOrders(),
+      getOrders(),
     ])
       .then()
       .catch()
@@ -1060,6 +1067,7 @@ const Chart = () => {
               <Tab label="Notes" style={{ width: "25%" }} />
               <Tab label="Vitals" style={{ width: "25%" }} />
               <Tab label="Problems" style={{ width: "25%" }} />
+              <Tab label="Requests" style={{ width: "25%" }} />
               <Tab label="Allergies" style={{ width: "25%" }} />
               <Tab label="Immunizations" style={{ width: "25%" }} />
               <Tab label="Medications" style={{ width: "25%" }} />
@@ -1166,7 +1174,7 @@ const Chart = () => {
             </TableContainer>
           </TabPanel>
           <TabPanel value={value} index={0}>
-            <NotesTab           
+            <NotesTab
               patientDetails={patientDetails}
               bookedNote={upcomingAppointments
                 ?.filter((app) => {
@@ -1300,6 +1308,90 @@ const Chart = () => {
                 color="inherit"
                 aria-label="open drawer"
                 onClick={() => {
+                  getOrders();
+                }}
+                sx={{
+                  marginRight: "36px",
+                  marginLeft: "18px",
+                }}
+              >
+                <RefreshIcon />
+              </IconButton>
+              <Button
+                sx={{ display: "flex", alignSelf: "flex-end" }}
+                variant="contained"
+                onClick={() => {
+                  //TO-DO
+                  // setIsAllergyDrawerOpen(true);
+                }}
+              >
+                Add Orders
+              </Button>
+            </Box>
+            {/* <PamiV allergyList={patientAllergies} patientId={id} /> */}
+
+            <TableContainer
+              component={Paper}
+              style={{ marginTop: theme.spacing(3) }}
+            >
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="left">
+                      <Typography>Time</Typography>
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography>Request</Typography>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {patientOrders &&
+                    patientOrders?.map((order) => {
+                      let dateObject = Helper.extractFieldsFromDate(
+                        order?.resource?.occurrenceDateTime
+                      );
+                      return (
+                        <TableRow
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <TableCell align="left">
+                            <Typography>
+                              {dateObject?.YEAR && dateObject?.YEAR !== NaN
+                                ? `${dateObject?.DAY} ${dateObject?.MONTH}
+                                ${dateObject?.DATE}`
+                                : ""}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            {order?.resource?.code?.coding[0]?.display}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </TabPanel>
+
+          <TabPanel value={value} index={4}>
+            <Box
+              alignSelf="flex-start"
+              flexDirection={"row-reverse"}
+              display="flex"
+              // marginLeft={theme.spacing(3)}
+              // marginRight={theme.spacing(3)}
+              marginBottom={theme.spacing(3)}
+              marginLeft={theme.spacing(3)}
+            >
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={() => {
                   getAllergies();
                 }}
                 sx={{
@@ -1391,7 +1483,7 @@ const Chart = () => {
               </Table>
             </TableContainer>
           </TabPanel>
-          <TabPanel value={value} index={4}>
+          <TabPanel value={value} index={5}>
             <Box
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
@@ -1481,7 +1573,7 @@ const Chart = () => {
               </Table>
             </TableContainer>
           </TabPanel>
-          <TabPanel value={value} index={5}>
+          <TabPanel value={value} index={6}>
             {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" && (
               <Grid>
                 <Box
@@ -1601,7 +1693,7 @@ const Chart = () => {
               </Grid>
             )}
           </TabPanel>
-          <TabPanel value={value} index={6}>
+          <TabPanel value={value} index={7}>
             {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" && (
               <Grid>
                 <Box
@@ -1720,7 +1812,7 @@ const Chart = () => {
               </Grid>
             )}
           </TabPanel>
-          <TabPanel value={value} index={7}>
+          <TabPanel value={value} index={8}>
             <TimeLine patientDetails={patientDetails} />
             {/* <div>hi</div> */}
           </TabPanel>
@@ -1740,7 +1832,7 @@ function TabPanel(props) {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
-      style={{ overflow: 'scroll', width: '100%' }}
+      style={{ overflowX: "scroll", overflowY: "auto", width: "100%", height: "auto" }}
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
