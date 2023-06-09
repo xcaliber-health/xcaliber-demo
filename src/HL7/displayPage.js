@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import { EPIC_XCHANGE_ENDPOINT } from '../core-utils/constants';
+import { getSourceUrl } from '../Patient/service/service';
+import { Helper } from '../core-utils/helper';
 
 const HL7DisplayPage = () => {
   const [textBoxValue, setTextBoxValue] = useState('');
@@ -17,11 +19,8 @@ const HL7DisplayPage = () => {
         { data: textBoxValue },
         {
           headers: {
-            Authorization:
-              localStorage.getItem('XCALIBER_SOURCE') === 'EPIC'
-                ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}`
-                : `${process.env.REACT_APP_AUTHORIZATION}`,
-            'x-source-id': `${process.env.REACT_APP_EPIC_XSOURCEID}`,
+            Authorization: Helper.getSourceToken(),
+            'x-source-id': localStorage.getItem("XCALIBER_TOKEN"),
           },
         }
       )

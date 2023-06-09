@@ -159,6 +159,14 @@ function DashboardContent() {
         `${process.env.REACT_APP_EPIC_XSOURCEID}`
       );
       setSourceState("EPIC");
+    }
+    else if(localStorage.getItem("XCALIBER_SOURCE") === "ECW") {
+      localStorage.setItem("XCALIBER_SOURCE", `ECW`);
+      localStorage.setItem(
+        "XCALIBER_TOKEN",
+        `${process.env.REACT_APP_ECW_XSOURCEID}`
+      );
+      setSourceState("ECW");
     } 
     else {
       localStorage.setItem("XCALIBER_SOURCE", `ELATION`);
@@ -220,7 +228,7 @@ function DashboardContent() {
                 container
                 sx={{ width: theme.spacing(60), height: theme.spacing(30) }}
                 direction={"column"}
-                padding={3}
+                padding={1}
               >
                 <Grid item>
                   <Typography>Switch data source</Typography>
@@ -247,6 +255,11 @@ function DashboardContent() {
                       value="EPIC"
                       control={<Radio />}
                       label="Epic"
+                    />
+                    <FormControlLabel
+                      value="ECW"
+                      control={<Radio />}
+                      label="Ecw"
                     />
                   </RadioGroup>
                 </Grid>
@@ -286,6 +299,15 @@ function DashboardContent() {
                       }
                       else if (
                         localStorage.getItem(`XCALIBER_SOURCE`) === "EPIC"
+                      ) {
+                        localStorage.setItem(`DEPARTMENT_ID`, '');
+                        localStorage.setItem(
+                          `DEPARTMENT_TIMEZONE`,
+                          `America/New_York`
+                        );
+                      }
+                      else if (
+                        localStorage.getItem(`XCALIBER_SOURCE`) === "ECW"
                       ) {
                         localStorage.setItem(`DEPARTMENT_ID`, '');
                         localStorage.setItem(

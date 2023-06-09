@@ -363,13 +363,9 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
                     <ListItemText
                       primary={
                         <NotesBlock
-                          plainText={Helper.convertRTFToPlainText(
-                            atob(
-                              note.resource?.content?.[0]?.attachment?.data,
-                              "base64"
-                            )
-                          )}
-                        ></NotesBlock>
+                          plainText={
+                            atob(note.resource?.content?.[0]?.attachment?.data,"base64")}>
+                        </NotesBlock>
                       }
                     />
 

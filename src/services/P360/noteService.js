@@ -3,22 +3,20 @@ import { XCHANGE_SERVICE_ENDPOINT, EPIC_XCHANGE_ENDPOINT } from "../../core-util
 import getPractitionerById, {
   PractitionerService,
 } from "./practitionerService";
+import { Helper } from '../../core-utils/helper';
 
 export const NoteService = {
   getNotesForTimeLine: async (patientId) => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-      let sourceUrl =
-        sourceType === "EPIC"
-          ? EPIC_XCHANGE_ENDPOINT
-          : XCHANGE_SERVICE_ENDPOINT;
+      let sourceUrl = Helper.getSourceUrl()
       const response = await axios.get(
         `${sourceUrl}/api/v1/DocumentReference?patient=${patientId}&category=visit_notes&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}`,
         {
           headers: {
-            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: Helper.getSourceToken(),
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -54,7 +52,7 @@ export const NoteService = {
           `${sourceUrl}/api/v1/Invoice?patient=${patientId}`,
           {
             headers: {
-              Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+              Authorization: Helper.getSourceToken(),
               "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
               "Access-Control-Allow-Origin": "*",
               "Access-Control-Allow-Methods":
@@ -103,7 +101,7 @@ export const NoteService = {
           `${sourceUrl}/api/v1/Condition?category=encounter-diagnosis&patient=${patientId}&encounter=${encounterIds[i]}${conditionUrl}`,
           {
             headers: {
-              Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+              Authorization: Helper.getSourceToken(),
               "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
               "Access-Control-Allow-Origin": "*",
               "Access-Control-Allow-Methods":
@@ -142,7 +140,7 @@ export const NoteService = {
       for (let i in practionerIds) {
         const practioner = await PractitionerService.getPractitionerById(
           `Practitioner/${practionerIds[i]}`
-        );
+        );localStorage.getItem("XCALIBER_SOURCE") === "EPIC"
         practionerName.push(
           practioner?.entry?.[0]?.resource?.name?.[0]?.given?.[0]
         );
@@ -168,17 +166,14 @@ export const NoteService = {
   getVisitNotes: async (patientId) => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-      let sourceUrl =
-        sourceType === "EPIC"
-          ? EPIC_XCHANGE_ENDPOINT
-          : XCHANGE_SERVICE_ENDPOINT;
+      let sourceUrl = Helper.getSourceUrl()
       const response = await axios.get(
         `${sourceUrl}/api/v1/DocumentReference?patient=${patientId}&category=visit_notes&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}&start-date=2022-01-01`,
         {
           headers: {
-            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: Helper.getSourceToken(),
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -206,7 +201,7 @@ export const NoteService = {
             count++;
           }
         }
-        else if (localStorage.getItem("XCALIBER_SOURCE") === "EPIC") {
+        else if (localStorage.getItem("XCALIBER_SOURCE") === "EPIC" || localStorage.getItem("XCALIBER_SOURCE") === "ECW") {
             notes.push(resource);
             count++;
         }
@@ -219,10 +214,7 @@ export const NoteService = {
   createNote: async (notePayload, appointmentId = "0") => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-      let sourceUrl =
-        sourceType === "EPIC"
-          ? EPIC_XCHANGE_ENDPOINT
-          : XCHANGE_SERVICE_ENDPOINT;
+      let sourceUrl = Helper.getSourceUrl()
       let encounterId = "0";
       if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
         await axios
@@ -238,7 +230,7 @@ export const NoteService = {
             },
             {
               headers: {
-                Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+                Authorization: Helper.getSourceToken(),
                 "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods":
@@ -255,7 +247,7 @@ export const NoteService = {
             `${sourceUrl}/api/v1/Appointment/${appointmentId}`,
             {
               headers: {
-                Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+                Authorization: Helper.getSourceToken(),
                 "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods":
@@ -278,7 +270,7 @@ export const NoteService = {
         notePayload,
         {
           headers: {
-            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: Helper.getSourceToken(),
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -293,15 +285,12 @@ export const NoteService = {
   getVisitNoteById: async (noteId) => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-      let sourceUrl =
-        sourceType === "EPIC"
-          ? EPIC_XCHANGE_ENDPOINT
-          : XCHANGE_SERVICE_ENDPOINT;
+      let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
         `${sourceUrl}/api/v1/DocumentReference/${noteId}?category=visit_notes`,
         {
           headers: {
-            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: Helper.getSourceToken(),
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -316,17 +305,14 @@ export const NoteService = {
   getNoteByAppointmentId: async (patientId, appointmentId) => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-      let sourceUrl =
-        sourceType === "EPIC"
-          ? EPIC_XCHANGE_ENDPOINT
-          : XCHANGE_SERVICE_ENDPOINT;
+      let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
         `${sourceUrl}/api/v1/DocumentReference/?patient=${patientId}&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}&appointment=${appointmentId}`,
         {
           headers: {
-            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: Helper.getSourceToken(),
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",

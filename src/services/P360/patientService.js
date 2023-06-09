@@ -1,22 +1,20 @@
 import axios from "axios";
 import { XCHANGE_SERVICE_ENDPOINT, EPIC_XCHANGE_ENDPOINT } from "../../core-utils/constants";
 import store from "../../Redux/store";
+import { Helper } from '../../core-utils/helper';
 
 export const PatientService = {
   getPatientById: async (id) => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-      let sourceUrl =
-        sourceType === "EPIC"
-          ? EPIC_XCHANGE_ENDPOINT
-          : XCHANGE_SERVICE_ENDPOINT;
+      let sourceUrl = Helper.getSourceUrl()
       const response = await axios.get(
         `${sourceUrl}/api/v1/Patient/${id}?departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}`,
         {
           headers: {
-            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: Helper.getSourceToken(),
             "x-source-id": localStorage.getItem(`XCALIBER_TOKEN`),
           },
         }
