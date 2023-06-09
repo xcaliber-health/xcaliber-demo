@@ -259,7 +259,7 @@ function DashboardContent() {
                     <FormControlLabel
                       value="ECW"
                       control={<Radio />}
-                      label="Ecw"
+                      label="eCW"
                     />
                   </RadioGroup>
                 </Grid>
