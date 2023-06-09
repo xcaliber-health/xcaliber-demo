@@ -8,6 +8,8 @@ import {
   XCHANGE_SERVICE_ENDPOINT,
   EPIC_XCHANGE_ENDPOINT,
 } from "../../core-utils/constants";
+import { Helper } from '../../core-utils/helper';
+
 
 const endpointUrl = "https://xchange-staging.xcaliberapis.com/api/v1";
 
@@ -546,12 +548,6 @@ export const phnEmlParser = (phnData, emlData) => {
   return ads;
 };
 
-export const getSourceUrl = () => {
-  let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-  return sourceType === "EPIC"
-    ? EPIC_XCHANGE_ENDPOINT
-    : XCHANGE_SERVICE_ENDPOINT;
-};
 
 export const parserFunc = (data) => {
   let dataHolder = [];
@@ -594,11 +590,11 @@ const parserFuncSingle = (item) => {
 };
 
 export const getAllPatients = () => {
-  let sourceUrl = getSourceUrl()
+  let sourceUrl = Helper.getSourceUrl()
 
   const configHeaders = {
     headers: {
-      Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+      Authorization: Helper.getSourceToken(),
       "x-source-id": localStorage.getItem("XCALIBER_TOKEN"),
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -618,11 +614,11 @@ export const getAllPatients = () => {
 
 export const getPatientCount = async (name) => {
   try {
-    let sourceUrl = getSourceUrl()
+    let sourceUrl = Helper.getSourceUrl()
 
     const configHeaders = {
       headers: {
-        Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+        Authorization: Helper.getSourceToken(),
         "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -642,10 +638,10 @@ export const getPatientCount = async (name) => {
 };
 
 export const getPatient = (id) => {
-  let sourceUrl = getSourceUrl()
+  let sourceUrl = Helper.getSourceUrl()
   const configHeaders = {
     headers: {
-      Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+      Authorization: Helper.getSourceToken(),
       "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -667,13 +663,13 @@ export const getPatientsAtPage = (page, name) => {
   const patientIds = ["27895"];
   name = !name ? "" : name;
   const offset = page * 10 - 10;
-  let sourceUrl = getSourceUrl()
+  let sourceUrl = Helper.getSourceUrl()
 
   if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION")
     return axios
       .get(`${sourceUrl}/api/v1/Patient?_count=10&_offset=${offset}&name=${name}`, {
         headers: {
-          Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+          Authorization: Helper.getSourceToken(),
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -695,7 +691,7 @@ export const getPatientsAtPage = (page, name) => {
         )}&_count=10&_offset=${offset}&name=${name}`,
         {
           headers: {
-            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: Helper.getSourceToken(),
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -716,11 +712,7 @@ export const getPatientsAtPage = (page, name) => {
           error.response.data.issue[0].details.text ===
           '{"error":"The given search parameters would produce a total data set larger than 1000 records.  Please refine your search and try again."}'
         ) {
-          let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-          let sourceUrl =
-            sourceType === "EPIC"
-              ? EPIC_XCHANGE_ENDPOINT
-              : XCHANGE_SERVICE_ENDPOINT;
+          let sourceUrl = Helper.getSourceUrl();
           return await axios
             .get(
               `${sourceUrl}/api/v1/Patient?departmentId=${localStorage.getItem(
@@ -728,7 +720,7 @@ export const getPatientsAtPage = (page, name) => {
               )}&_count=10&_offset=${offset}&given=George&name=${name}`,
               {
                 headers: {
-                  Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+                  Authorization: Helper.getSourceToken(),
                   "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                   "Access-Control-Allow-Origin": "*",
                   "Access-Control-Allow-Methods":
@@ -748,11 +740,11 @@ export const getPatientsAtPage = (page, name) => {
         }
       });
   }
-  else if (localStorage.getItem("XCALIBER_SOURCE") === "EPIC")
+  else if (localStorage.getItem("XCALIBER_SOURCE") === "EPIC" || localStorage.getItem("XCALIBER_SOURCE") === "ECW")
     return axios
       .get(`${sourceUrl}/api/v1/Patient?_count=10&_offset=${offset}&name=${name}`, {
         headers: {
-          Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+          Authorization: Helper.getSourceToken(),
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -776,7 +768,7 @@ export const PatientsById = (id) => {
     return axios
       .get(`${endpointUrl}/api/v1/Patient/${id}`, {
         headers: {
-          Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+          Authorization: Helper.getSourceToken(),
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -792,11 +784,11 @@ export const PatientsById = (id) => {
       });
   }
   else if(localStorage.getItem("XCALIBER_SOURCE") === "EPIC") {
-    let sourceUrl = getSourceUrl();
+    let sourceUrl = Helper.getSourceUrl();
     return axios
       .get(`${sourceUrl}/api/v1/Patient/${id}`, {
         headers: {
-          Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+          Authorization: Helper.getSourceToken(),
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -815,11 +807,11 @@ export const PatientsById = (id) => {
 };
 
 export const addPatient = (patient) => {
-  let sourceUrl = getSourceUrl();
+  let sourceUrl = Helper.getSourceUrl();
   let d = deParsefunc(patient);
   const configHeaders = {
     headers: {
-      Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+      Authorization: Helper.getSourceToken(),
       "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -838,11 +830,11 @@ export const addPatient = (patient) => {
 };
 
 export const editPatient = (patient, id) => {
-  let sourceUrl = getSourceUrl();
+  let sourceUrl = Helper.getSourceUrl();
   let d = deParsefunc(patient);
   const configHeaders = {
     headers: {
-      Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+      Authorization: Helper.getSourceToken(),
       "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",

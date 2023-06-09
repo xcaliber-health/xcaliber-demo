@@ -1,5 +1,7 @@
 import axios from "axios";
 import { XCHANGE_SERVICE_ENDPOINT, EPIC_XCHANGE_ENDPOINT } from "../../core-utils/constants";
+import { Helper } from '../../core-utils/helper';
+
 export const MedicationOrderService = {
   createMedicationOrder: async (
     payLoad,
@@ -9,10 +11,7 @@ export const MedicationOrderService = {
   ) => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-      let sourceUrl =
-        sourceType === "EPIC"
-          ? EPIC_XCHANGE_ENDPOINT
-          : XCHANGE_SERVICE_ENDPOINT;
+      let sourceUrl = Helper.getSourceUrl()
       let encounterId = "0";
       if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
         if (appointmentId === undefined || appointmentId === "0") {
@@ -91,7 +90,7 @@ export const MedicationOrderService = {
             appointmentPayload,
             {
               headers: {
-                Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+                Authorization: Helper.getSourceToken(),
                 "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
               },
             }
@@ -111,7 +110,7 @@ export const MedicationOrderService = {
             },
             {
               headers: {
-                Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+                Authorization: Helper.getSourceToken(),
                 "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods":
@@ -128,7 +127,7 @@ export const MedicationOrderService = {
             `${sourceUrl}/api/v1/Appointment/${appointmentId}`,
             {
               headers: {
-                Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+                Authorization: Helper.getSourceToken(),
                 "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods":
@@ -182,7 +181,7 @@ export const MedicationOrderService = {
         diagnosisPayload,
         {
           headers: {
-            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: Helper.getSourceToken(),
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -197,7 +196,7 @@ export const MedicationOrderService = {
         payLoad,
         {
           headers: {
-            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: Helper.getSourceToken(),
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -213,10 +212,7 @@ export const MedicationOrderService = {
   getMedicationOrders: async (patientId) => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-      let sourceUrl =
-        sourceType === "EPIC"
-          ? EPIC_XCHANGE_ENDPOINT
-          : XCHANGE_SERVICE_ENDPOINT;
+      let sourceUrl = Helper.getSourceUrl()
       if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
         const encounterResponse = await axios.get(
           `${sourceUrl}/api/v1/Encounter?patient=${patientId}&departmentId=${localStorage.getItem(
@@ -224,7 +220,7 @@ export const MedicationOrderService = {
           )}`,
           {
             headers: {
-              Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+              Authorization: Helper.getSourceToken(),
               "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
               "Access-Control-Allow-Origin": "*",
               "Access-Control-Allow-Methods":
@@ -241,7 +237,7 @@ export const MedicationOrderService = {
             `${sourceUrl}/api/v1/MedicationRequest?patient=${patientId}&encounter=${encounterId}`,
             {
               headers: {
-                Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+                Authorization: Helper.getSourceToken(),
                 "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods":

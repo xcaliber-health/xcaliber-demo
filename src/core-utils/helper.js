@@ -1,3 +1,5 @@
+import { EPIC_XCHANGE_ENDPOINT, XCHANGE_SERVICE_ENDPOINT } from './constants';
+
 export const Helper = {
   getDayFromIndex: (dayNumber) => {
     switch (dayNumber) {
@@ -91,5 +93,18 @@ export const Helper = {
     } catch (err) {
       throw `failed to convert rtf to plain text with error - ${err?.message}`;
     }
+  },
+
+  getSourceUrl: () => {
+    let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+    return sourceType === "EPIC" || sourceType === 'ECW'
+      ? EPIC_XCHANGE_ENDPOINT
+      : XCHANGE_SERVICE_ENDPOINT;
+  },
+
+  getSourceToken: () => {
+    return localStorage.getItem("XCALIBER_SOURCE") === 'EPIC' || localStorage.getItem("XCALIBER_SOURCE") === 'ECW'
+    ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}`
+    : `${process.env.REACT_APP_AUTHORIZATION}`
   }
 };

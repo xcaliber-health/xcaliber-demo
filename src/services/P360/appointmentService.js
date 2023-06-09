@@ -1,14 +1,12 @@
 import axios from "axios";
 import { XCHANGE_SERVICE_ENDPOINT, EPIC_XCHANGE_ENDPOINT } from "../../core-utils/constants";
+import { Helper } from '../../core-utils/helper';
 
 export const AppointmentService = {
   getUpcomingAppointments: async (patientId, currentDate) => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-      let sourceUrl =
-        sourceType === "EPIC"
-          ? EPIC_XCHANGE_ENDPOINT
-          : XCHANGE_SERVICE_ENDPOINT;
+      let sourceUrl = Helper.getSourceUrl()
       let dateVal =
         localStorage.getItem("XCALIBER_SOURCE") === "ELATION"
           ? `date=gt${currentDate}`
@@ -22,7 +20,7 @@ export const AppointmentService = {
         )}`,
         {
           headers: {
-            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: Helper.getSourceToken(),
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
@@ -36,16 +34,13 @@ export const AppointmentService = {
   createAppointment: async (appointmentPayload) => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-      let sourceUrl =
-        sourceType === "EPIC"
-          ? EPIC_XCHANGE_ENDPOINT
-          : XCHANGE_SERVICE_ENDPOINT;
+      let sourceUrl = Helper.getSourceUrl()
       const result = await axios.post(
         `${sourceUrl}/api/v1/Appointment`,
         appointmentPayload,
         {
           headers: {
-            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: Helper.getSourceToken(),
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
@@ -59,15 +54,12 @@ export const AppointmentService = {
   getAppointmentById: async (appointmentId) => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-      let sourceUrl =
-        sourceType === "EPIC"
-          ? EPIC_XCHANGE_ENDPOINT
-          : XCHANGE_SERVICE_ENDPOINT;
+      let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
         `${sourceUrl}/api/v1/Appointment/${appointmentId}`,
         {
           headers: {
-            Authorization: localStorage.getItem("XCALIBER_SOURCE") === "EPIC" ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}` : `${process.env.REACT_APP_AUTHORIZATION}`,
+            Authorization: Helper.getSourceToken(),
             "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
           },
         }
