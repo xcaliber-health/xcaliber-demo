@@ -215,7 +215,8 @@ export const NoteService = {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
-      let encounterId = "0";
+      let encounterId = "";
+      notePayload.data.content[0].attachment.data = btoa(notePayload.data.content[0].attachment.data);
       if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
         await axios
           .patch(
