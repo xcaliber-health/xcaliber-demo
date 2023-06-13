@@ -1,5 +1,5 @@
 import { Typography, Box } from "@mui/material";
-import logo from "../static/Watermark.png";
+import logo from "../static/xcaliber_logo.png";
 
 const Watermark = () => {
   return (
@@ -7,7 +7,7 @@ const Watermark = () => {
       sx={{
         position: "absolute",
         bottom: 0,
-        left: "15%",
+        right: 0,
         "z-index": 1000,
         color: "#5c6f84",
         opacity: 0.35,

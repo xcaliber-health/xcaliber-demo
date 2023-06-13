@@ -15,47 +15,35 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 
 export const mainListItems = (onClick,id,classColor) => (
   <React.Fragment>
+  <ListItemButton onClick={() => {onClick("terminology",1)}} selected={id===1?classColor:""} >
+    <ListItemIcon color='red'>
+      <DashboardIcon style={{color:'#185DA0'}}/>
+    </ListItemIcon>
+    <ListItemText primary="Terminology-Hub" />
+  </ListItemButton>
   <ListItemButton onClick={() => {onClick("interop",2)}}  selected={id===2?classColor:""}>
     <ListItemIcon>
-      <ShoppingCartIcon style={{color:'white'}}/>
+      <ShoppingCartIcon style={{color:'#185DA0'}}/>
     </ListItemIcon>
-    <ListItemText primary="Interop APIs" sx={{ color: 'white' }}/>
+    <ListItemText primary="Interop APIs" />
   </ListItemButton>
   <ListItemButton onClick={() => {onClick("p360",3)}}  selected={id===3?classColor:""}>
     <ListItemIcon>
-      <PeopleIcon style={{color:'white'}}/>
+      <PeopleIcon style={{color:'#185DA0'}}/>
     </ListItemIcon>
-    <ListItemText primary="Patient-360" sx={{ color: 'white' }}/>
+    <ListItemText primary="Patient Longitudinal View" />
   </ListItemButton>
-  <ListItemButton onClick={() => {onClick("hl7",4)}}  selected={id===4?classColor:""}>
+  <ListItemButton onClick={() => {onClick("analytics",4)}}  selected={id===4?classColor:""}>
     <ListItemIcon>
-      <BuildIcon style={{color:'white'}}/>
+      <BarChartIcon style={{color:'#185DA0'}}/>
     </ListItemIcon>
-    <ListItemText primary="HL7" sx={{ color: 'white' }}/>
+    <ListItemText primary="Analytics" />
   </ListItemButton>
-  <ListItemButton onClick={() => {onClick("service_desk",5)}}  selected={id===5?classColor:""}>
+  <ListItemButton onClick={() => {onClick("hl7",5)}}  selected={id===5?classColor:""}>
     <ListItemIcon>
-      <BuildIcon style={{color:'white'}}/>
+      <BuildIcon style={{color:'#185DA0'}}/>
     </ListItemIcon>
-    <ListItemText primary="Service Desk" sx={{ color: 'white' }}/>
-  </ListItemButton>
-  <ListItemButton onClick={() => {onClick("provider_directory",6)}}  selected={id===6?classColor:""}>
-    <ListItemIcon>
-      <BuildIcon style={{color:'white'}}/>
-    </ListItemIcon>
-    <ListItemText primary="Provider Directory" sx={{ color: 'white' }}/>
-  </ListItemButton>
-  <ListItemButton onClick={() => {onClick("simulator",7)}}  selected={id===7?classColor:""}>
-    <ListItemIcon>
-      <BuildIcon style={{color:'white'}}/>
-    </ListItemIcon>
-    <ListItemText primary="Simulator" sx={{ color: 'white' }}/>
-  </ListItemButton>
-  <ListItemButton onClick={() => {onClick("documentation",8)}}  selected={id===8?classColor:""}>
-    <ListItemIcon>
-      <BuildIcon style={{color:'white'}}/>
-    </ListItemIcon>
-    <ListItemText primary="API Documentation" sx={{ color: 'white' }}/>
+    <ListItemText primary="HL7" />
   </ListItemButton>
 </React.Fragment>
 );
