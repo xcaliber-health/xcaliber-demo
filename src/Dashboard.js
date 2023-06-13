@@ -137,6 +137,30 @@ function DashboardContent() {
     navigate(`/${path}`);
   };
 
+  const handleSelectChange = (event) => {
+    localStorage.setItem("XCALIBER_SOURCE", event.target.value);
+    localStorage.setItem(
+      "XCALIBER_TOKEN",
+      sourceState === "ELATION"
+        ? `${process.env.REACT_APP_XSOURCEID}`
+        : `${process.env.REACT_APP_ATHENA_XSOURCEID}`
+    );
+    if (localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION") {
+      localStorage.setItem(`DEPARTMENT_TIMEZONE`, `America/Los_Angeles`);
+    } else if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
+      localStorage.setItem(`DEPARTMENT_ID`, departmentId);
+      localStorage.setItem(`DEPARTMENT_TIMEZONE`, `America/New_York`);
+    } else if (localStorage.getItem(`XCALIBER_SOURCE`) === "EPIC") {
+      localStorage.setItem(`DEPARTMENT_ID`, "");
+      localStorage.setItem(`DEPARTMENT_TIMEZONE`, `America/New_York`);
+    } else if (localStorage.getItem(`XCALIBER_SOURCE`) === "ECW") {
+      localStorage.setItem(`DEPARTMENT_ID`, "");
+      localStorage.setItem(`DEPARTMENT_TIMEZONE`, `America/New_York`);
+    }
+    navigate("/p360");
+    window.location.reload();
+  };
+
   const setLocalStorageContext = () => {
     if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION") {
       localStorage.setItem("XCALIBER_SOURCE", `ELATION`);
@@ -144,31 +168,28 @@ function DashboardContent() {
         "XCALIBER_TOKEN",
         `${process.env.REACT_APP_XSOURCEID}`
       );
-      setSourceState("ELATION");
     } else if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") {
       localStorage.setItem("XCALIBER_SOURCE", `ATHENA`);
       localStorage.setItem(
         "XCALIBER_TOKEN",
         `${process.env.REACT_APP_ATHENA_XSOURCEID}`
       );
-     setSourceState("ATHENA");
-    } else if(localStorage.getItem("XCALIBER_SOURCE") === "EPIC") {
+      setSourceState("ATHENA");
+    } else if (localStorage.getItem("XCALIBER_SOURCE") === "EPIC") {
       localStorage.setItem("XCALIBER_SOURCE", `EPIC`);
       localStorage.setItem(
         "XCALIBER_TOKEN",
         `${process.env.REACT_APP_EPIC_XSOURCEID}`
       );
       setSourceState("EPIC");
-    }
-    else if(localStorage.getItem("XCALIBER_SOURCE") === "ECW") {
+    } else if (localStorage.getItem("XCALIBER_SOURCE") === "ECW") {
       localStorage.setItem("XCALIBER_SOURCE", `ECW`);
       localStorage.setItem(
         "XCALIBER_TOKEN",
         `${process.env.REACT_APP_ECW_XSOURCEID}`
       );
       setSourceState("ECW");
-    } 
-    else {
+    } else {
       localStorage.setItem("XCALIBER_SOURCE", `ELATION`);
       localStorage.setItem(
         "XCALIBER_TOKEN",
@@ -223,117 +244,6 @@ function DashboardContent() {
               </Typography>
               <Typography variant="body2">Sandbox in use</Typography>
             </Box>
-            <Dialog direction="column" open={isModalOpen}>
-              <Grid
-                container
-                sx={{ width: theme.spacing(60), height: theme.spacing(30) }}
-                direction={"column"}
-                padding={1}
-              >
-                <Grid item>
-                  <Typography>Switch data source</Typography>
-                </Grid>
-                <Grid item>
-                  <RadioGroup
-                    onChange={(e) => {
-                      setSourceState(e.target.value);
-                      localStorage.setItem("DEPARTMENT_ID", `150`);
-                    }}
-                    pt={2}
-                  >
-                    <FormControlLabel
-                      value="ELATION"
-                      control={<Radio />}
-                      label="Elation"
-                    />
-                    <FormControlLabel
-                      value="ATHENA"
-                      control={<Radio />}
-                      label="Athena"
-                    />
-                    <FormControlLabel
-                      value="EPIC"
-                      control={<Radio />}
-                      label="Epic"
-                    />
-                    <FormControlLabel
-                      value="ECW"
-                      control={<Radio />}
-                      label="eCW"
-                    />
-                  </RadioGroup>
-                </Grid>
-                <Grid
-                  paddingLeft={0}
-                  marginLeft={0}
-                  container
-                  item
-                  justifyContent={"space-evenly"}
-                >
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={() => {
-                      localStorage.setItem("XCALIBER_SOURCE", sourceState);
-                      localStorage.setItem(
-                        "XCALIBER_TOKEN",
-                        sourceState === "ELATION"
-                          ? `${process.env.REACT_APP_XSOURCEID}`
-                          : `${process.env.REACT_APP_ATHENA_XSOURCEID}`
-                      );
-                      if (
-                        localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION"
-                      ) {
-                        localStorage.setItem(
-                          `DEPARTMENT_TIMEZONE`,
-                          `America/Los_Angeles`
-                        );
-                      } else if (
-                        localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
-                      ) {
-                        localStorage.setItem(`DEPARTMENT_ID`, departmentId);
-                        localStorage.setItem(
-                          `DEPARTMENT_TIMEZONE`,
-                          `America/New_York`
-                        );
-                      }
-                      else if (
-                        localStorage.getItem(`XCALIBER_SOURCE`) === "EPIC"
-                      ) {
-                        localStorage.setItem(`DEPARTMENT_ID`, '');
-                        localStorage.setItem(
-                          `DEPARTMENT_TIMEZONE`,
-                          `America/New_York`
-                        );
-                      }
-                      else if (
-                        localStorage.getItem(`XCALIBER_SOURCE`) === "ECW"
-                      ) {
-                        localStorage.setItem(`DEPARTMENT_ID`, '');
-                        localStorage.setItem(
-                          `DEPARTMENT_TIMEZONE`,
-                          `America/New_York`
-                        );
-                      }
-                      setIsModalOpen(false);
-                      navigate("/p360");
-                      window.location.reload();
-                    }}
-                  >
-                    Submit
-                  </Button>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={() => {
-                      setIsModalOpen(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </Grid>
-              </Grid>
-            </Dialog>
             {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" && (
               <FormControl sx={{ m: 1, width: 300 }}>
                 <InputLabel>DepartmentId</InputLabel>
@@ -369,9 +279,8 @@ function DashboardContent() {
               <Link
                 sx={{
                   color: "black",
-                  marginTop: theme.spacing(1),
+                  marginTop: theme.spacing(3),
                   marginLeft: theme.spacing(20),
-              
                 }}
                 href="https://xcaliberapis.redoc.ly"
                 target="_blank"
@@ -392,14 +301,16 @@ function DashboardContent() {
               </Link>
             )}
             <Box sx={{ margin: 0, padding: 0 }} display="flex">
-              <IconButton
-                sx={{ color: "black", marginRight: theme.spacing(1) }}
-                onClick={() => {
-                  setIsModalOpen(true);
-                }}
+              <Select
+                onChange={handleSelectChange}
+                value={sourceState}
+                placeholder="Select Source"
               >
-                <SettingsSharpIcon color="action" />
-              </IconButton>
+                <MenuItem value="ELATION">Elation</MenuItem>
+                <MenuItem value="ATHENA">Athena</MenuItem>
+                <MenuItem value="EPIC">Epic</MenuItem>
+                <MenuItem value="ECW">eCW</MenuItem>
+              </Select>
               <Avatar></Avatar>
             </Box>
           </Grid>
@@ -475,6 +386,9 @@ function DashboardContent() {
             <Route path="p360/:id" element={<Chart />} />
             <Route path="analytics" element={<Analytics />} />
             <Route path="hl7" element={<HL7DisplayPage />} />
+            <Route path="service_desk"></Route>
+            <Route path="provider_directory"></Route>
+            <Route path="simulator"></Route>
           </Routes>
           <Watermark />
         </Container>

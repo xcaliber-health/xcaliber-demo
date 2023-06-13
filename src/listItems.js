@@ -45,6 +45,24 @@ export const mainListItems = (onClick,id,classColor) => (
     </ListItemIcon>
     <ListItemText primary="HL7" />
   </ListItemButton>
+  <ListItemButton onClick={() => {onClick("service_desk",6)}}  selected={id===6?classColor:""}>
+    <ListItemIcon>
+      <BuildIcon style={{color:'#185DA0'}}/>
+    </ListItemIcon>
+    <ListItemText primary="Service Desk" />
+  </ListItemButton>
+  <ListItemButton onClick={() => {onClick("provider_directory",7)}}  selected={id===7?classColor:""}>
+    <ListItemIcon>
+      <BuildIcon style={{color:'#185DA0'}}/>
+    </ListItemIcon>
+    <ListItemText primary="Provider Directory" />
+  </ListItemButton>
+  <ListItemButton onClick={() => {onClick("simulator",8)}}  selected={id===8?classColor:""}>
+    <ListItemIcon>
+      <BuildIcon style={{color:'#185DA0'}}/>
+    </ListItemIcon>
+    <ListItemText primary="Simulator" />
+  </ListItemButton>
 </React.Fragment>
 );
 
