@@ -1,4 +1,5 @@
 import { TextField } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
 import React, { useEffect, useState } from "react";
 
 const PatientSearchInput = (props) => {
@@ -22,7 +23,8 @@ const PatientSearchInput = (props) => {
     <TextField
       id="outlined-basic"
       label="search"
-      variant="outlined"
+      variant="standard"
+      InputProps={{endAdornment: <SearchIcon></SearchIcon>}}
       onChange={onSearchBoxChange}
       sx={{ width: "100%" }}
       value={searchText}

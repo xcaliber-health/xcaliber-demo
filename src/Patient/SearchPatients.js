@@ -257,7 +257,7 @@ const SearchPatients = () => {
             sx={{ width: "100%" }}
           ></TextField>
           <TextField placeholder="Email" sx={{ width: "100%" }}></TextField>
-          <TextField placeholder="Address" sx={{ Width: "100%" }}></TextField>
+          <TextField placeholder="Address" sx={{ width: "100%" }}></TextField>
           <Box
             sx={{ display: "flex", width: "100%", justifyContent: "flex-end" }}
           >
@@ -299,8 +299,8 @@ const SearchPatients = () => {
           /> */}
           <Grid>
             <Grid md={12}>
-              <Grid display="flex" justifyContent="flex-end">
-                <Grid md={8} sx={{ paddingLeft: "0px", width: "100%" }}>
+              <Grid display="flex" justifyContent="space-between">
+                <Grid md={8} sx={{ paddingLeft: "0px", width: "25%"}}>
                   <PatientSearchInput
                     data-testid={"searcinput"}
                     onChange={onSearchRequestChange}

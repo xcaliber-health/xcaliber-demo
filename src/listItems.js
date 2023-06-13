@@ -9,112 +9,313 @@ import PeopleIcon from "@mui/icons-material/Person";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import BuildIcon from "@mui/icons-material/Build";
 import LayersIcon from "@mui/icons-material/Layers";
-import GroupsIcon from '@mui/icons-material/Groups';
-import NearMeIcon from '@mui/icons-material/NearMe';
-import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import GroupsIcon from "@mui/icons-material/Groups";
+import NearMeIcon from "@mui/icons-material/NearMe";
+import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import { Box } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 
 export const mainListItems = (onClick, id, classColor) => (
   <React.Fragment>
-    <ListItemButton
-      onClick={() => {
-        onClick("provider_directory", 1);
-      }}
-      selected={id === 1 ? classColor : ""}
-    >
-      <ListItemIcon>
-        <BuildIcon style={{ color: "white", fontWeight: "bolder" }} />
-      </ListItemIcon>
-      <ListItemText primary="Provider Directory" sx={{ color: "white" }} />
-    </ListItemButton>
-
-     <ListItemButton
-      onClick={() => {
-        onClick("p360", 2);
-      }}
-      selected={id === 2 ? classColor : ""}
-    >
-      <ListItemIcon>
-        <GroupsIcon style={{ color: "white" }} />
-      </ListItemIcon>
-      <ListItemText primary="Patient Panel" sx={{ color: "white" }} />
-    </ListItemButton> 
-
-
-    <ListItemButton
-      onClick={() => {
-        onClick("p360", 3);
-      }}
-      selected={id === 3 ? classColor : ""}
-    >
-      <ListItemIcon>
-        <PeopleIcon style={{ color: "white" }} />
-      </ListItemIcon>
-      <ListItemText primary="Patient-360" sx={{ color: "white" }} />
-    </ListItemButton>
-
-    <ListItemButton
-      onClick={() => {
-        onClick("terminology", 4);
-      }}
-      selected={id === 4 ? classColor : ""}
-    >
-      <ListItemIcon color="red">
-        <DashboardIcon style={{ color: "white" }} />
-      </ListItemIcon>
-      <ListItemText primary="Terminology-Hub" sx={{ color: "white" }}/>
-    </ListItemButton>
-
-    <ListItemButton
-      onClick={() => {
-        onClick("service_desk", 5);
-      }}
-      selected={id === 5 ? classColor : ""}
-    >
-      <ListItemIcon>
-        <SupportAgentIcon style={{ color: "white" }} />
-      </ListItemIcon>
-      <ListItemText primary="Service Desk" sx={{ color: "white" }} />
-    </ListItemButton>
-
-
-    <ListItemButton
-      onClick={() => {
-        onClick("hl7", 6);
-      }}
-      selected={id === 6 ? classColor : ""}
-    >
-      <ListItemIcon>
-        <BuildIcon style={{ color: "white" }} />
-      </ListItemIcon>
-      <ListItemText primary="Simulator" sx={{ color: "white" }} />
-    </ListItemButton>
-  
-    <ListItemButton
-      onClick={() => {
-        onClick("interop", 7);
-      }}
-      selected={id === 7 ? classColor : ""}
-    >
-      <ListItemIcon>
-        <NearMeIcon style={{ color: "white" }} />
-      </ListItemIcon>
-      <ListItemText primary="Data Navigator" sx={{ color: "white" }} />
-    </ListItemButton>
-
-    <ListItemButton
-      onClick={() => {
-        onClick("documentation", 8);
-      }}
-      selected={id === 8 ? classColor : ""}
-      display="block"
+    <Box
+      display="flex"
       flexDirection="column"
+      justifyContent="space-evenly"
+      alignItems="space-evenly"
+      width="100%"
+      marginTop="40%"
     >
-      <ListItemIcon>
-        <ShoppingCartIcon style={{ color: "white" }} />
-      </ListItemIcon>
-      <ListItemText primary="API Documentation" sx={{ color: "white" }} />
-    </ListItemButton>
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent={"center"}
+        alignItems="center"
+      >
+        <ListItemButton
+          onClick={() => {
+            onClick("provider_directory", 1);
+          }}
+          selected={id === 1 ? classColor : ""}
+          sx={{ width: "100%" }}
+        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent={"center"}
+            alignItems="center"
+            width="100%"
+          >
+            <ListItemIcon
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+              }}
+            >
+              <BuildIcon
+                style={{
+                  color: "white",
+                  fontWeight: "bolder",
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText
+              primary="Provider Directory"
+              sx={{ color: "white" }}
+            />
+          </Box>
+        </ListItemButton>
+      </Box>
+
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent={"center"}
+        alignItems="center"
+      >
+        <ListItemButton
+          onClick={() => {
+            onClick("p360", 2);
+          }}
+          selected={id === 2 ? classColor : ""}
+          sx={{ width: "100%" }}
+        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent={"center"}
+            alignItems="center"
+            width="100%"
+          >
+            <ListItemIcon
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+              }}
+            >
+              <GroupsIcon style={{ color: "white" }} />
+            </ListItemIcon>
+            <ListItemText primary="Patient Panel" sx={{ color: "white" }} />
+          </Box>
+        </ListItemButton>
+      </Box>
+
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent={"center"}
+        alignItems="center"
+      >
+        <ListItemButton
+          onClick={() => {
+            onClick("p360", 3);
+          }}
+          selected={id === 3 ? classColor : ""}
+          sx={{ width: "100%" }}
+        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent={"center"}
+            alignItems="center"
+            width="100%"
+          >
+            <ListItemIcon
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+              }}
+            >
+              <PeopleIcon style={{ color: "white" }} />
+            </ListItemIcon>
+            <ListItemText primary="Patient-360" sx={{ color: "white" }} />
+          </Box>
+        </ListItemButton>
+      </Box>
+
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent={"center"}
+        alignItems="center"
+      >
+        <ListItemButton
+          onClick={() => {
+            onClick("terminology", 4);
+          }}
+          selected={id === 4 ? classColor : ""}
+          sx={{ width: "100%" }}
+        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent={"center"}
+            alignItems="center"
+            width="100%"
+          >
+            <ListItemIcon
+              color="red"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+              }}
+            >
+              <DashboardIcon style={{ color: "white" }} />
+            </ListItemIcon>
+            <ListItemText primary="Terminology-Hub" sx={{ color: "white" }} />
+          </Box>
+        </ListItemButton>
+      </Box>
+
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent={"center"}
+        alignItems="center"
+      >
+        <ListItemButton
+          onClick={() => {
+            onClick("service_desk", 5);
+          }}
+          selected={id === 5 ? classColor : ""}
+          sx={{ width: "100%" }}
+        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent={"center"}
+            alignItems="center"
+            width="100%"
+          >
+            <ListItemIcon
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+              }}
+            >
+              <SupportAgentIcon style={{ color: "white" }} />
+            </ListItemIcon>
+            <ListItemText primary="Service Desk" sx={{ color: "white" }} />
+          </Box>
+        </ListItemButton>
+      </Box>
+
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent={"center"}
+        alignItems="center"
+        width="100%"
+      >
+        <ListItemButton
+          onClick={() => {
+            onClick("hl7", 6);
+          }}
+          selected={id === 6 ? classColor : ""}
+          sx={{ width: "100%" }}
+        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent={"center"}
+            alignItems="center"
+            width="100%"
+          >
+            <ListItemIcon
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+              }}
+            >
+              <BuildIcon style={{ color: "white" }} />
+            </ListItemIcon>
+            <ListItemText primary="Simulator" sx={{ color: "white" }} />
+          </Box>
+        </ListItemButton>
+      </Box>
+
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent={"center"}
+        alignItems="center"
+        width="100%"
+      >
+        <ListItemButton
+          onClick={() => {
+            onClick("interop", 7);
+          }}
+          selected={id === 7 ? classColor : ""}
+          sx={{ width: "100%" }}
+        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent={"center"}
+            alignItems="center"
+            width="100%"
+          >
+            <ListItemIcon
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+              }}
+            >
+              <NearMeIcon style={{ color: "white" }} />
+            </ListItemIcon>
+            <ListItemText primary="Data Navigator" sx={{ color: "white" }} />
+          </Box>
+        </ListItemButton>
+      </Box>
+
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent={"center"}
+        alignItems="center"
+      >
+        <ListItemButton
+          onClick={() => {
+            onClick("documentation", 8);
+          }}
+          selected={id === 8 ? classColor : ""}
+          sx={{ width: "100%" }}
+        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent={"center"}
+            alignItems="center"
+            width="100%"
+          >
+            <ListItemIcon
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+              }}
+            >
+              <ShoppingCartIcon style={{ color: "white" }} />
+            </ListItemIcon>
+            <ListItemText primary="API Documentation" sx={{ color: "white" }} />
+          </Box>
+        </ListItemButton>
+      </Box>
+    </Box>
   </React.Fragment>
 );
 
