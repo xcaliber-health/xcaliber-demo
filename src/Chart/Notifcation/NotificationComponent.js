@@ -45,6 +45,7 @@ const NotificationComponent = () => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
+        style={{ marginTop: '13px' }}
       >
         {notifications.map((notification) => (
           <MenuItem key={notification.event.id} onClick={handleCloseMenu}>

@@ -125,7 +125,7 @@ const getIFrameForSource = () => {
           frameBorder="0"
           onmousewheel=""
           width="100%"
-          height="533"
+          height="700"
           style={{ background: "transparent", border: "1px solid #ccc" }}
         ></iframe>
       );
@@ -138,7 +138,7 @@ const getIFrameForSource = () => {
           frameBorder="0"
           onmousewheel=""
           width="100%"
-          height="533"
+          height="700"
           style={{ background: "transparent", border: "1px solid #ccc" }}
         ></iframe>
       );
@@ -151,7 +151,7 @@ const getIFrameForSource = () => {
           frameBorder="0"
           onmousewheel=""
           width="100%"
-          height="533"
+          height="700"
           style={{ background: "transparent", border: "1px solid #ccc" }}
         ></iframe>
       );
@@ -164,7 +164,7 @@ const getIFrameForSource = () => {
           frameBorder="0"
           onmousewheel=""
           width="100%"
-          height="533"
+          height="700"
           style={{ background: "transparent", border: "1px solid #ccc" }}
         ></iframe>
       );
@@ -177,7 +177,7 @@ const getIFrameForSource = () => {
           frameBorder="0"
           onmousewheel=""
           width="100%"
-          height="533"
+          height="700"
           style={{ background: "transparent", border: "1px solid #ccc" }}
         ></iframe>
       );
@@ -190,7 +190,7 @@ const getIFrameForSource = () => {
           frameBorder="0"
           onmousewheel=""
           width="100%"
-          height="533"
+          height="700"
           style={{ background: "transparent", border: "1px solid #ccc" }}
         ></iframe>
       );
@@ -254,6 +254,7 @@ function DashboardContent() {
         "XCALIBER_TOKEN",
         `${process.env.REACT_APP_XSOURCEID}`
       );
+      setSourceState("ELATION")
     } else if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") {
       localStorage.setItem("XCALIBER_SOURCE", `ATHENA`);
       localStorage.setItem(
@@ -454,7 +455,9 @@ function DashboardContent() {
         >
           <Routes>
             <Route path="interop" element={getIFrameForSource()} />
+            <Route path="terminology" element={<Terminology />} />
             <Route path="p360" element={<ViewPatients />} />
+            <Route path="patient_panel" element={<></>}></Route>
             <Route path="p360/:id" element={<Chart />} />
             <Route path="hl7" element={<HL7DisplayPage />} />
             <Route path="service_desk"></Route>
