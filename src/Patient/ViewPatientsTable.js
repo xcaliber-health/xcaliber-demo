@@ -67,14 +67,26 @@ const ViewPatientsTable = (props) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="left">
-              <Typography>name</Typography>
+            <TableCell align="left" color="primary">
+              <Typography color="primary" fontWeight={'bold'}>Name</Typography>
+            </TableCell>
+            <TableCell align="left" color="primary">
+              <Typography color="primary" fontWeight={'bold'}>Gender</Typography>
+            </TableCell>
+            <TableCell align="left" color="primary">
+              <Typography color="primary" fontWeight={'bold'}>Date Of Birth</Typography>
             </TableCell>
             <TableCell align="left">
-              <Typography>gender</Typography>
+              <Typography color="primary" fontWeight={'bold'}>Email</Typography>
             </TableCell>
             <TableCell align="left">
-              <Typography>date of birth</Typography>
+              <Typography color="primary" fontWeight={'bold'}>City</Typography>
+            </TableCell>
+            <TableCell align="left">
+              <Typography color="primary" fontWeight={'bold'}>State</Typography>
+            </TableCell>
+            <TableCell align="left">
+              <Typography color="primary" fontWeight={'bold'}>Phone</Typography>
             </TableCell>
           </TableRow>
         </TableHead>
@@ -89,7 +101,7 @@ const ViewPatientsTable = (props) => {
               style={{ cursor: "pointer" }}
             >
               <TableCell align="left">
-                <Typography color="primary">
+                <Typography>
                   {patient.familyName} {patient.givenName}
                 </Typography>
               </TableCell>
@@ -109,6 +121,18 @@ const ViewPatientsTable = (props) => {
               </TableCell>
               <TableCell align="left" component="th" scope="row">
                 <Typography>{formatDate(patient.dateOfBirth)}</Typography>
+              </TableCell>
+              <TableCell align="left" component="th" scope="row">
+                <Typography>{patient.email}</Typography>
+              </TableCell>
+              <TableCell align="left" component="th" scope="row">
+                <Typography>{formatDate(patient.dateOfBirth)}</Typography>
+              </TableCell>
+              <TableCell align="left" component="th" scope="row">
+                <Typography>{}</Typography>
+              </TableCell>
+              <TableCell align="left" component="th" scope="row">
+                <Typography>{patient.phone}</Typography>
               </TableCell>
             </TableRow>
           ))}
