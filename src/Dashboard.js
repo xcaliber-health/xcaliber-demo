@@ -459,7 +459,7 @@ function DashboardContent() {
             <Route path="hl7" element={<HL7DisplayPage />} />
             <Route path="service_desk"></Route>
             <Route path="provider_directory"></Route>
-            <Route path="simulator"></Route>
+            <Route path="simulator" element={<HL7DisplayPage />} />
             <Route path="documentation"></Route>
           </Routes>
           <Watermark />
