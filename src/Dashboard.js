@@ -42,6 +42,7 @@ import { makeStyles } from "@material-ui/styles";
 import { useTheme } from "@mui/system";
 import { DEPARTMENTS } from "./core-utils/constants";
 import HL7DisplayPage from "./HL7/displayPage";
+import NotificationComponent from "./Chart/Notifcation/NotificationComponent.js";
 
 const useStyles = makeStyles({
   root: {
@@ -113,6 +114,91 @@ const Drawer = styled(MuiDrawer, {
     }),
   },
 }));
+
+const getIFrameForSource = () => {
+  switch (localStorage.getItem("XCALIBER_SOURCE")) {
+    case "CANVAS":
+      return (
+        <iframe
+          className="airtable-embed"
+          src="https://airtable.com/embed/shrL8mlNpedWL5ias?backgroundColor=green&viewControls=on&layout=card&viewControls=on"
+          frameBorder="0"
+          onmousewheel=""
+          width="100%"
+          height="533"
+          style={{ background: "transparent", border: "1px solid #ccc" }}
+        ></iframe>
+      );
+
+    case "ELATION":
+      return (
+        <iframe
+          className="airtable-embed"
+          src="https://airtable.com/embed/shrs6LgSpuBgt976V?backgroundColor=green&layout=card&viewControls=on&layout=card&viewControls=on"
+          frameBorder="0"
+          onmousewheel=""
+          width="100%"
+          height="533"
+          style={{ background: "transparent", border: "1px solid #ccc" }}
+        ></iframe>
+      );
+
+    case "ATHENA":
+      return (
+        <iframe
+          className="airtable-embed"
+          src="https://airtable.com/embed/shrld6aBFCCtQxkh2?backgroundColor=green&viewControls=on&layout=card&viewControls=on"
+          frameBorder="0"
+          onmousewheel=""
+          width="100%"
+          height="533"
+          style={{ background: "transparent", border: "1px solid #ccc" }}
+        ></iframe>
+      );
+
+    case "EPIC":
+      return (
+        <iframe
+          className="airtable-embed"
+          src="https://airtable.com/embed/shrCDfMDfviaRfq54?backgroundColor=green&layout=card&viewControls=on"
+          frameBorder="0"
+          onmousewheel=""
+          width="100%"
+          height="533"
+          style={{ background: "transparent", border: "1px solid #ccc" }}
+        ></iframe>
+      );
+
+    case "ECW":
+      return (
+        <iframe
+          className="airtable-embed"
+          src="https://airtable.com/embed/shr0zAvpgHa0exIFp?backgroundColor=green&layout=card&viewControls=on"
+          frameBorder="0"
+          onmousewheel=""
+          width="100%"
+          height="533"
+          style={{ background: "transparent", border: "1px solid #ccc" }}
+        ></iframe>
+      );
+
+    case "HIE":
+      return (
+        <iframe
+          className="airtable-embed"
+          src="https://airtable.com/embed/shrKc0Wsnrzmb8PKC?backgroundColor=green&layout=card&viewControls=on"
+          frameBorder="0"
+          onmousewheel=""
+          width="100%"
+          height="533"
+          style={{ background: "transparent", border: "1px solid #ccc" }}
+        ></iframe>
+      );
+
+    default:
+      return null;
+  }
+};
 
 const mdTheme = createTheme();
 
@@ -212,7 +298,7 @@ function DashboardContent() {
         position="absolute"
         open={open}
         style={{
-          background: "linear-gradient(to right,#1D5D9E, #2D93AC,#3DC6B8)",
+          background: "white",
         }}
       >
         <Toolbar
@@ -228,16 +314,28 @@ function DashboardContent() {
             sx={{
               marginRight: "36px",
               ...(open && { display: "none" }),
+              color: "black !important",
             }}
           >
             <MenuIcon />
           </IconButton>
-          <Grid justifyContent="space-between" direction="flex" container>
+          <Grid
+            display="flex"
+            container
+            alignItems="center"
+            justifyContent="space-between"
+          >
             <Box display="flex" alignItems={"center"}>
-              <Typography variant="h5">xcaliber Capabilities Demo</Typography>
+              <Typography variant="h5" color="black">
+                xcaliber Capabilities Demo
+              </Typography>
               <Typography
                 variant="body2"
-                sx={{ paddingLeft: "24px", paddingRight: theme.spacing(4) }}
+                sx={{
+                  paddingLeft: "24px",
+                  paddingRight: theme.spacing(4),
+                  color: "black",
+                }}
               >
                 {" "}
                 Do not add any real PII/PHI data here.
@@ -275,43 +373,20 @@ function DashboardContent() {
                 </Select>
               </FormControl>
             )}
-            {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" ? (
-              <Link
-                sx={{
-                  color: "black",
-                  marginTop: theme.spacing(3),
-                  marginLeft: theme.spacing(20),
-                }}
-                href="https://xcaliberapis.redoc.ly"
-                target="_blank"
-              >
-                Documentation
-              </Link>
-            ) : (
-              <Link
-                sx={{
-                  color: "black",
-                  marginTop: theme.spacing(3),
-                  marginLeft: theme.spacing(70),
-                }}
-                href="https://xcaliberapis.redoc.ly"
-                target="_blank"
-              >
-                Documentation
-              </Link>
-            )}
-            <Box sx={{ margin: 0, padding: 0 }} display="flex">
-              <Select
-                onChange={handleSelectChange}
-                value={sourceState}
-                placeholder="Select Source"
-              >
-                <MenuItem value="ELATION">Elation</MenuItem>
-                <MenuItem value="ATHENA">Athena</MenuItem>
-                <MenuItem value="EPIC">Epic</MenuItem>
-                <MenuItem value="ECW">eCW</MenuItem>
-              </Select>
-              <Avatar></Avatar>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <Box sx={{ margin: 0, padding: 0 }} display="flex">
+                <Select
+                  onChange={handleSelectChange}
+                  value={sourceState}
+                  placeholder="Select Source"
+                >
+                  <MenuItem value="ELATION">Elation</MenuItem>
+                  <MenuItem value="ATHENA">Athena</MenuItem>
+                  <MenuItem value="EPIC">Epic</MenuItem>
+                  <MenuItem value="ECW">eCW</MenuItem>
+                </Select>
+              </Box>
+              <NotificationComponent></NotificationComponent>
             </Box>
           </Grid>
         </Toolbar>
@@ -330,9 +405,11 @@ function DashboardContent() {
             justifyContent: "flex-end",
             px: [1],
           }}
-          style={{ background: "#D6FFFD" }}
+          style={{
+            background: "linear-gradient(to bottom,#1D5D9E, #2D93AC,#3DC6B8)",
+          }}
         >
-          <IconButton onClick={toggleDrawer}>
+          <IconButton onClick={toggleDrawer} sx={{ color: "white" }}>
             {open && (
               <Typography
                 variant="h5"
@@ -343,7 +420,13 @@ function DashboardContent() {
           </IconButton>
         </Toolbar>
         <Divider />
-        <List component="nav">
+        <List
+          component="nav"
+          sx={{
+            background: "linear-gradient(to bottom,#1D5D9E, #2D93AC,#3DC6B8)",
+            height: "100%",
+          }}
+        >
           {mainListItems(onMenuClick, id, classes.root)}
           {/* <Divider sx={{ my: 1 }} />
                 {secondaryListItems} */}
@@ -370,25 +453,14 @@ function DashboardContent() {
           height="100%"
         >
           <Routes>
-            <Route path="terminology" element={<Terminology />} />
-            <Route
-              path="interop"
-              element={
-                <iframe
-                  src="https://docs.xcaliberapis.com/apireference/xchangeapis"
-                  style={{ width: "100%", height: "1500px" }}
-                >
-                  {" "}
-                </iframe>
-              }
-            />
+            <Route path="interop" element={getIFrameForSource()} />
             <Route path="p360" element={<ViewPatients />} />
             <Route path="p360/:id" element={<Chart />} />
-            <Route path="analytics" element={<Analytics />} />
             <Route path="hl7" element={<HL7DisplayPage />} />
             <Route path="service_desk"></Route>
             <Route path="provider_directory"></Route>
             <Route path="simulator"></Route>
+            <Route path="documentation"></Route>
           </Routes>
           <Watermark />
         </Container>
