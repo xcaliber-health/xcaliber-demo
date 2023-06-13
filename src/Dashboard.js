@@ -21,6 +21,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Terminology from "./Terminology";
+import ProviderDirectory from "./ProviderDirectory";
 import ViewPatients from "./Patient/ViewPatients";
 import Analytics from "./Analytics";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
@@ -458,7 +459,7 @@ function DashboardContent() {
             <Route path="p360/:id" element={<Chart />} />
             <Route path="hl7" element={<HL7DisplayPage />} />
             <Route path="service_desk"></Route>
-            <Route path="provider_directory"></Route>
+            <Route path="provider_directory" element={<ProviderDirectory />} />
             <Route path="simulator" element={<HL7DisplayPage />} />
             <Route path="documentation"></Route>
           </Routes>

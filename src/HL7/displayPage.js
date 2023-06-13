@@ -108,6 +108,7 @@ const HL7DisplayPage = () => {
         ))}
       </Select>
     </FormControl>
+    <br></br>
       <Box
         display="flex"
         flexDirection="column"
