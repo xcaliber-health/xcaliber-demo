@@ -7,9 +7,9 @@ const Watermark = () => {
       sx={{
         position: "absolute",
         bottom: 0,
-        left: "15%",
+        left: 0,
         "z-index": 1000,
-        color: "#5c6f84",
+        color: "black",
         opacity: 0.35,
       }}
     >
