@@ -195,8 +195,8 @@ const SearchPatients = () => {
   };
 
   return (
-    <LabelsContext.Provider value={filterLabelsValue}>
-      <div>
+    <LabelsContext.Provider value={filterLabelsValue} sx={{maxWidth: "100%"}}>
+      <div style={{margin: "0px", maxWidth: "100%"}}>
         <Drawer
           anchor={"right"}
           open={toggleDrawer}
@@ -278,7 +278,7 @@ const SearchPatients = () => {
             </Button>
           </Box>
         </Drawer>
-        <Container>
+        <Container style={{margin: "0px", maxWidth: "100%"}}>
           {/* <FilterMenu
             filterMenuState={filterMenuState}
             handleClose={handleClose}
