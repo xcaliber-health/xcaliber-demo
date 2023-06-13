@@ -624,24 +624,24 @@ export const getAllPatients = () => {
 
 export const getPatientCount = async (name) => {
   try {
-    let sourceUrl = Helper.getSourceUrl()
+    // let sourceUrl = Helper.getSourceUrl()
 
-    const configHeaders = {
-      headers: {
-        Authorization: Helper.getSourceToken(),
-        "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-      },
-    };
-    name = !name ? "" : name;
-    const response = await axios.get(
-      `${sourceUrl}/api/v1/Patient?_count=1&_offset=0&name=${name}`,
-      configHeaders
-    );
-
-    const patients = response.data.data.total;
-    return patients;
+    // const configHeaders = {
+    //   headers: {
+    //     Authorization: Helper.getSourceToken(),
+    //     "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+    //   },
+    // };
+    // name = !name ? "" : name;
+    // const response = await axios.get(
+    //   `${sourceUrl}/api/v1/Patient?_count=1&_offset=0&name=${name}`,
+    //   configHeaders
+    // );
+    return 1000;
+    // const patients = response.data.data.total;
+    // return patients;
   } catch (err) {
     console.log(err);
   }
@@ -672,12 +672,12 @@ export const getPatient = (id) => {
 export const getPatientsAtPage = (page, name) => {
   const patientIds = ["27895"];
   name = !name ? "" : name;
-  const offset = page * 10 - 10;
+  const offset = page * 11 - 11;
   let sourceUrl = Helper.getSourceUrl()
 
   if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION")
     return axios
-      .get(`${sourceUrl}/api/v1/Patient?_count=10&_offset=${offset}&name=${name}`, {
+      .get(`${sourceUrl}/api/v1/Patient?_count=11&_offset=${offset}&name=${name}`, {
         headers: {
           Authorization: Helper.getSourceToken(),
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
@@ -698,7 +698,7 @@ export const getPatientsAtPage = (page, name) => {
       .get(
         `${sourceUrl}/api/v1/Patient?departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}&_count=10&_offset=${offset}&name=${name}`,
+        )}&_count=11&_offset=${offset}&name=${name}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -752,7 +752,7 @@ export const getPatientsAtPage = (page, name) => {
   }
   else if (localStorage.getItem("XCALIBER_SOURCE") === "EPIC" || localStorage.getItem("XCALIBER_SOURCE") === "ECW")
     return axios
-      .get(`${sourceUrl}/api/v1/Patient?_count=10&_offset=${offset}&name=${name}`, {
+      .get(`${sourceUrl}/api/v1/Patient?_count=11&_offset=${offset}&name=${name}`, {
         headers: {
           Authorization: Helper.getSourceToken(),
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
