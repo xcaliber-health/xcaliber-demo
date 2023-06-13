@@ -42,7 +42,6 @@ import { makeStyles } from "@material-ui/styles";
 import { useTheme } from "@mui/system";
 import { DEPARTMENTS } from "./core-utils/constants";
 import HL7DisplayPage from "./HL7/displayPage";
-import NotificationComponent from "./Chart/Notifcation/NotificationComponent.js";
 
 const useStyles = makeStyles({
   root: {
@@ -115,91 +114,6 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-const getIFrameForSource = () => {
-  switch (localStorage.getItem("XCALIBER_SOURCE")) {
-    case "CANVAS":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrL8mlNpedWL5ias?backgroundColor=green&viewControls=on&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="533"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "ELATION":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrs6LgSpuBgt976V?backgroundColor=green&layout=card&viewControls=on&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="533"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "ATHENA":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrld6aBFCCtQxkh2?backgroundColor=green&viewControls=on&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="533"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "EPIC":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrCDfMDfviaRfq54?backgroundColor=green&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="533"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "ECW":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shr0zAvpgHa0exIFp?backgroundColor=green&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="533"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "HIE":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrKc0Wsnrzmb8PKC?backgroundColor=green&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="533"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    default:
-      return null;
-  }
-};
-
 const mdTheme = createTheme();
 
 function DashboardContent() {
@@ -223,30 +137,6 @@ function DashboardContent() {
     navigate(`/${path}`);
   };
 
-  const handleSelectChange = (event) => {
-    localStorage.setItem("XCALIBER_SOURCE", event.target.value);
-    localStorage.setItem(
-      "XCALIBER_TOKEN",
-      sourceState === "ELATION"
-        ? `${process.env.REACT_APP_XSOURCEID}`
-        : `${process.env.REACT_APP_ATHENA_XSOURCEID}`
-    );
-    if (localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION") {
-      localStorage.setItem(`DEPARTMENT_TIMEZONE`, `America/Los_Angeles`);
-    } else if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
-      localStorage.setItem(`DEPARTMENT_ID`, departmentId);
-      localStorage.setItem(`DEPARTMENT_TIMEZONE`, `America/New_York`);
-    } else if (localStorage.getItem(`XCALIBER_SOURCE`) === "EPIC") {
-      localStorage.setItem(`DEPARTMENT_ID`, "");
-      localStorage.setItem(`DEPARTMENT_TIMEZONE`, `America/New_York`);
-    } else if (localStorage.getItem(`XCALIBER_SOURCE`) === "ECW") {
-      localStorage.setItem(`DEPARTMENT_ID`, "");
-      localStorage.setItem(`DEPARTMENT_TIMEZONE`, `America/New_York`);
-    }
-    navigate("/p360");
-    window.location.reload();
-  };
-
   const setLocalStorageContext = () => {
     if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION") {
       localStorage.setItem("XCALIBER_SOURCE", `ELATION`);
@@ -254,28 +144,31 @@ function DashboardContent() {
         "XCALIBER_TOKEN",
         `${process.env.REACT_APP_XSOURCEID}`
       );
+      setSourceState("ELATION");
     } else if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") {
       localStorage.setItem("XCALIBER_SOURCE", `ATHENA`);
       localStorage.setItem(
         "XCALIBER_TOKEN",
         `${process.env.REACT_APP_ATHENA_XSOURCEID}`
       );
-      setSourceState("ATHENA");
-    } else if (localStorage.getItem("XCALIBER_SOURCE") === "EPIC") {
+     setSourceState("ATHENA");
+    } else if(localStorage.getItem("XCALIBER_SOURCE") === "EPIC") {
       localStorage.setItem("XCALIBER_SOURCE", `EPIC`);
       localStorage.setItem(
         "XCALIBER_TOKEN",
         `${process.env.REACT_APP_EPIC_XSOURCEID}`
       );
       setSourceState("EPIC");
-    } else if (localStorage.getItem("XCALIBER_SOURCE") === "ECW") {
+    }
+    else if(localStorage.getItem("XCALIBER_SOURCE") === "ECW") {
       localStorage.setItem("XCALIBER_SOURCE", `ECW`);
       localStorage.setItem(
         "XCALIBER_TOKEN",
         `${process.env.REACT_APP_ECW_XSOURCEID}`
       );
       setSourceState("ECW");
-    } else {
+    } 
+    else {
       localStorage.setItem("XCALIBER_SOURCE", `ELATION`);
       localStorage.setItem(
         "XCALIBER_TOKEN",
@@ -298,7 +191,7 @@ function DashboardContent() {
         position="absolute"
         open={open}
         style={{
-          background: "white",
+          background: "linear-gradient(to right,#1D5D9E, #2D93AC,#3DC6B8)",
         }}
       >
         <Toolbar
@@ -314,34 +207,133 @@ function DashboardContent() {
             sx={{
               marginRight: "36px",
               ...(open && { display: "none" }),
-              color: "black !important",
             }}
           >
             <MenuIcon />
           </IconButton>
-          <Grid
-            display="flex"
-            container
-            alignItems="center"
-            justifyContent="space-between"
-          >
+          <Grid justifyContent="space-between" direction="flex" container>
             <Box display="flex" alignItems={"center"}>
-              <Typography variant="h5" color="black">
-                xcaliber Capabilities Demo
-              </Typography>
+              <Typography variant="h5">xcaliber Capabilities Demo</Typography>
               <Typography
                 variant="body2"
-                sx={{
-                  paddingLeft: "24px",
-                  paddingRight: theme.spacing(4),
-                  color: "black",
-                }}
+                sx={{ paddingLeft: "24px", paddingRight: theme.spacing(4) }}
               >
                 {" "}
                 Do not add any real PII/PHI data here.
               </Typography>
               <Typography variant="body2">Sandbox in use</Typography>
             </Box>
+            <Dialog direction="column" open={isModalOpen}>
+              <Grid
+                container
+                sx={{ width: theme.spacing(60), height: theme.spacing(30) }}
+                direction={"column"}
+                padding={1}
+              >
+                <Grid item>
+                  <Typography>Switch data source</Typography>
+                </Grid>
+                <Grid item>
+                  <RadioGroup
+                    onChange={(e) => {
+                      setSourceState(e.target.value);
+                      localStorage.setItem("DEPARTMENT_ID", `150`);
+                    }}
+                    pt={2}
+                  >
+                    <FormControlLabel
+                      value="ELATION"
+                      control={<Radio />}
+                      label="Elation"
+                    />
+                    <FormControlLabel
+                      value="ATHENA"
+                      control={<Radio />}
+                      label="Athena"
+                    />
+                    <FormControlLabel
+                      value="EPIC"
+                      control={<Radio />}
+                      label="Epic"
+                    />
+                    <FormControlLabel
+                      value="ECW"
+                      control={<Radio />}
+                      label="eCW"
+                    />
+                  </RadioGroup>
+                </Grid>
+                <Grid
+                  paddingLeft={0}
+                  marginLeft={0}
+                  container
+                  item
+                  justifyContent={"space-evenly"}
+                >
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={() => {
+                      localStorage.setItem("XCALIBER_SOURCE", sourceState);
+                      localStorage.setItem(
+                        "XCALIBER_TOKEN",
+                        sourceState === "ELATION"
+                          ? `${process.env.REACT_APP_XSOURCEID}`
+                          : `${process.env.REACT_APP_ATHENA_XSOURCEID}`
+                      );
+                      if (
+                        localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION"
+                      ) {
+                        localStorage.setItem(
+                          `DEPARTMENT_TIMEZONE`,
+                          `America/Los_Angeles`
+                        );
+                      } else if (
+                        localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
+                      ) {
+                        localStorage.setItem(`DEPARTMENT_ID`, departmentId);
+                        localStorage.setItem(
+                          `DEPARTMENT_TIMEZONE`,
+                          `America/New_York`
+                        );
+                      }
+                      else if (
+                        localStorage.getItem(`XCALIBER_SOURCE`) === "EPIC"
+                      ) {
+                        localStorage.setItem(`DEPARTMENT_ID`, '');
+                        localStorage.setItem(
+                          `DEPARTMENT_TIMEZONE`,
+                          `America/New_York`
+                        );
+                      }
+                      else if (
+                        localStorage.getItem(`XCALIBER_SOURCE`) === "ECW"
+                      ) {
+                        localStorage.setItem(`DEPARTMENT_ID`, '');
+                        localStorage.setItem(
+                          `DEPARTMENT_TIMEZONE`,
+                          `America/New_York`
+                        );
+                      }
+                      setIsModalOpen(false);
+                      navigate("/p360");
+                      window.location.reload();
+                    }}
+                  >
+                    Submit
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={() => {
+                      setIsModalOpen(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Grid>
+              </Grid>
+            </Dialog>
             {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" && (
               <FormControl sx={{ m: 1, width: 300 }}>
                 <InputLabel>DepartmentId</InputLabel>
@@ -373,20 +365,42 @@ function DashboardContent() {
                 </Select>
               </FormControl>
             )}
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Box sx={{ margin: 0, padding: 0 }} display="flex">
-                <Select
-                  onChange={handleSelectChange}
-                  value={sourceState}
-                  placeholder="Select Source"
-                >
-                  <MenuItem value="ELATION">Elation</MenuItem>
-                  <MenuItem value="ATHENA">Athena</MenuItem>
-                  <MenuItem value="EPIC">Epic</MenuItem>
-                  <MenuItem value="ECW">eCW</MenuItem>
-                </Select>
-              </Box>
-              <NotificationComponent></NotificationComponent>
+            {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" ? (
+              <Link
+                sx={{
+                  color: "black",
+                  marginTop: theme.spacing(1),
+                  marginLeft: theme.spacing(20),
+              
+                }}
+                href="https://xcaliberapis.redoc.ly"
+                target="_blank"
+              >
+                Documentation
+              </Link>
+            ) : (
+              <Link
+                sx={{
+                  color: "black",
+                  marginTop: theme.spacing(3),
+                  marginLeft: theme.spacing(70),
+                }}
+                href="https://xcaliberapis.redoc.ly"
+                target="_blank"
+              >
+                Documentation
+              </Link>
+            )}
+            <Box sx={{ margin: 0, padding: 0 }} display="flex">
+              <IconButton
+                sx={{ color: "black", marginRight: theme.spacing(1) }}
+                onClick={() => {
+                  setIsModalOpen(true);
+                }}
+              >
+                <SettingsSharpIcon color="action" />
+              </IconButton>
+              <Avatar></Avatar>
             </Box>
           </Grid>
         </Toolbar>
@@ -405,11 +419,9 @@ function DashboardContent() {
             justifyContent: "flex-end",
             px: [1],
           }}
-          style={{
-            background: "linear-gradient(to bottom,#1D5D9E, #2D93AC,#3DC6B8)",
-          }}
+          style={{ background: "#D6FFFD" }}
         >
-          <IconButton onClick={toggleDrawer} sx={{ color: "white" }}>
+          <IconButton onClick={toggleDrawer}>
             {open && (
               <Typography
                 variant="h5"
@@ -420,13 +432,7 @@ function DashboardContent() {
           </IconButton>
         </Toolbar>
         <Divider />
-        <List
-          component="nav"
-          sx={{
-            background: "linear-gradient(to bottom,#1D5D9E, #2D93AC,#3DC6B8)",
-            height: "100%",
-          }}
-        >
+        <List component="nav">
           {mainListItems(onMenuClick, id, classes.root)}
           {/* <Divider sx={{ my: 1 }} />
                 {secondaryListItems} */}
@@ -453,14 +459,22 @@ function DashboardContent() {
           height="100%"
         >
           <Routes>
-            <Route path="interop" element={getIFrameForSource()} />
+            <Route path="terminology" element={<Terminology />} />
+            <Route
+              path="interop"
+              element={
+                <iframe
+                  src="https://docs.xcaliberapis.com/apireference/xchangeapis"
+                  style={{ width: "100%", height: "1500px" }}
+                >
+                  {" "}
+                </iframe>
+              }
+            />
             <Route path="p360" element={<ViewPatients />} />
             <Route path="p360/:id" element={<Chart />} />
+            <Route path="analytics" element={<Analytics />} />
             <Route path="hl7" element={<HL7DisplayPage />} />
-            <Route path="service_desk"></Route>
-            <Route path="provider_directory"></Route>
-            <Route path="simulator"></Route>
-            <Route path="documentation"></Route>
           </Routes>
           <Watermark />
         </Container>
