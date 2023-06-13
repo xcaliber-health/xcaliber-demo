@@ -449,7 +449,7 @@ function DashboardContent() {
       >
         <Toolbar />
         <Container
-          maxWidth="xl"
+          maxWidth="100%"
           sx={{ mt: 4, mb: 4 }}
           style={{ background: "#F2F2F2" }}
           height="100%"

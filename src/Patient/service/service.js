@@ -566,6 +566,16 @@ export const parserFunc = (data) => {
     tempObj.type = "mockType";
     tempObj.extension = item.resource.extension;
     tempObj.gender = item.resource.gender;
+    tempObj.email;
+    tempObj.phone;
+    item.resource?.telecom?.forEach((telecom) => {
+      if(telecom?.system==='email'){
+        tempObj.email = telecom?.value
+      }
+      else {
+        tempObj.phone = telecom?.value
+      }
+    })
     dataHolder.push(tempObj);
   });
   return dataHolder;
