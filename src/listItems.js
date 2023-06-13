@@ -9,6 +9,9 @@ import PeopleIcon from "@mui/icons-material/Person";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import BuildIcon from "@mui/icons-material/Build";
 import LayersIcon from "@mui/icons-material/Layers";
+import GroupsIcon from '@mui/icons-material/Groups';
+import NearMeIcon from '@mui/icons-material/NearMe';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import AssignmentIcon from "@mui/icons-material/Assignment";
 
 export const mainListItems = (onClick, id, classColor) => (
@@ -20,19 +23,19 @@ export const mainListItems = (onClick, id, classColor) => (
       selected={id === 1 ? classColor : ""}
     >
       <ListItemIcon>
-        <BuildIcon style={{ color: "white" }} />
+        <BuildIcon style={{ color: "white", fontWeight: "bolder" }} />
       </ListItemIcon>
       <ListItemText primary="Provider Directory" sx={{ color: "white" }} />
     </ListItemButton>
 
      <ListItemButton
       onClick={() => {
-        onClick("patient_panel", 2);
+        onClick("p360", 2);
       }}
       selected={id === 2 ? classColor : ""}
     >
       <ListItemIcon>
-        <PeopleIcon style={{ color: "white" }} />
+        <GroupsIcon style={{ color: "white" }} />
       </ListItemIcon>
       <ListItemText primary="Patient Panel" sx={{ color: "white" }} />
     </ListItemButton> 
@@ -69,7 +72,7 @@ export const mainListItems = (onClick, id, classColor) => (
       selected={id === 5 ? classColor : ""}
     >
       <ListItemIcon>
-        <BuildIcon style={{ color: "white" }} />
+        <SupportAgentIcon style={{ color: "white" }} />
       </ListItemIcon>
       <ListItemText primary="Service Desk" sx={{ color: "white" }} />
     </ListItemButton>
@@ -94,9 +97,9 @@ export const mainListItems = (onClick, id, classColor) => (
       selected={id === 7 ? classColor : ""}
     >
       <ListItemIcon>
-        <ShoppingCartIcon style={{ color: "white" }} />
+        <NearMeIcon style={{ color: "white" }} />
       </ListItemIcon>
-      <ListItemText primary="Healthcare Data Navigator" sx={{ color: "white" }} />
+      <ListItemText primary="Data Navigator" sx={{ color: "white" }} />
     </ListItemButton>
 
     <ListItemButton
@@ -104,9 +107,11 @@ export const mainListItems = (onClick, id, classColor) => (
         onClick("documentation", 8);
       }}
       selected={id === 8 ? classColor : ""}
+      display="block"
+      flexDirection="column"
     >
       <ListItemIcon>
-        <BuildIcon style={{ color: "white" }} />
+        <ShoppingCartIcon style={{ color: "white" }} />
       </ListItemIcon>
       <ListItemText primary="API Documentation" sx={{ color: "white" }} />
     </ListItemButton>

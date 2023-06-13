@@ -125,7 +125,7 @@ const getIFrameForSource = () => {
           frameBorder="0"
           onmousewheel=""
           width="100%"
-          height="700"
+          height="800"
           style={{ background: "transparent", border: "1px solid #ccc" }}
         ></iframe>
       );
@@ -138,7 +138,7 @@ const getIFrameForSource = () => {
           frameBorder="0"
           onmousewheel=""
           width="100%"
-          height="700"
+          height="800"
           style={{ background: "transparent", border: "1px solid #ccc" }}
         ></iframe>
       );
@@ -151,7 +151,7 @@ const getIFrameForSource = () => {
           frameBorder="0"
           onmousewheel=""
           width="100%"
-          height="700"
+          height="800"
           style={{ background: "transparent", border: "1px solid #ccc" }}
         ></iframe>
       );
@@ -164,7 +164,7 @@ const getIFrameForSource = () => {
           frameBorder="0"
           onmousewheel=""
           width="100%"
-          height="700"
+          height="800"
           style={{ background: "transparent", border: "1px solid #ccc" }}
         ></iframe>
       );
@@ -177,7 +177,7 @@ const getIFrameForSource = () => {
           frameBorder="0"
           onmousewheel=""
           width="100%"
-          height="700"
+          height="800"
           style={{ background: "transparent", border: "1px solid #ccc" }}
         ></iframe>
       );
@@ -190,7 +190,7 @@ const getIFrameForSource = () => {
           frameBorder="0"
           onmousewheel=""
           width="100%"
-          height="700"
+          height="800"
           style={{ background: "transparent", border: "1px solid #ccc" }}
         ></iframe>
       );
