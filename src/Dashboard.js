@@ -43,6 +43,8 @@ import { makeStyles } from "@material-ui/styles";
 import { useTheme } from "@mui/system";
 import { DEPARTMENTS } from "./core-utils/constants";
 import HL7DisplayPage from "./HL7/displayPage";
+import ApiDoc from "./APIDoc";
+
 import NotificationComponent from "./Chart/Notifcation/NotificationComponent.js";
 
 const useStyles = makeStyles({
@@ -462,9 +464,9 @@ function DashboardContent() {
             <Route path="p360/:id" element={<Chart />} />
             <Route path="hl7" element={<HL7DisplayPage />} />
             <Route path="service_desk"></Route>
-            <Route path="provider_directory" element={<ProviderDirectory />} />
-            <Route path="simulator" element={<HL7DisplayPage />} />
-            <Route path="documentation"></Route>
+            <Route path="provider_directory"></Route>
+            <Route path="simulator"></Route>
+            <Route path="documentation" element={<ApiDoc />} />
           </Routes>
           <Watermark />
         </Container>
