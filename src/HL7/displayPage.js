@@ -4,10 +4,34 @@ import axios from 'axios';
 import { EPIC_XCHANGE_ENDPOINT } from '../core-utils/constants';
 import { getSourceUrl } from '../Patient/service/service';
 import { Helper } from '../core-utils/helper';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { ADTMessage, DFTMessage, MDMMessage, ORMMessage, SIUMessage } from './defaultMessages';
+
+const options = [
+  {
+    value: 'ADT',
+    label: 'ADT'
+  },
+  {
+    value: 'MDM',
+    label: 'MDM'
+  },  {
+    value: 'ORM',
+    label: 'ORM'
+  },  {
+    value: 'SIU',
+    label: 'SIU'
+  },  {
+    value: 'DFT',
+    label: 'DFT'
+  },
+]
+
 
 const HL7DisplayPage = () => {
   const [textBoxValue, setTextBoxValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedOption, setSelectedOption] = useState('');
 
   const handleButtonClick = () => {
     setIsLoading(true); // Set loading state to true
@@ -39,18 +63,52 @@ const HL7DisplayPage = () => {
     setTextBoxValue(event.target.value);
   };
 
+  const getMessage = (type) => {
+    switch(type) {
+      case 'ADT' : 
+        return ADTMessage
+      case 'MDM' : 
+        return MDMMessage
+      case 'ORM' : 
+        return ORMMessage
+      case 'DFT' : 
+        return DFTMessage
+      case 'SIU' : 
+        return SIUMessage
+      default:
+        return ''
+    }
+  }
+
+  const onChangeMessageType = (event) => {
+    setTextBoxValue(getMessage(event.target.value));
+    setSelectedOption(event.target.value)
+  }
+
   return (
     <Box
       display="flex"
       flexDirection="column"
       justifyContent="space-evenly"
-      alignItems="center"
-      height="50vh"
+      alignItems="left"
       width="80vw"
     >
-      <Typography variant="h5" gutterBottom fontWeight="bold">
-        HL7 Message
-      </Typography>
+    <FormControl>
+      <InputLabel id="select-label" variant='body'>Choose a message type</InputLabel>
+      <Select
+        labelId="select-label"
+        value={selectedOption}
+        onChange={onChangeMessageType}
+        style={{width : "500px"}}
+      >
+        {options.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+    <br></br>
       <Box
         display="flex"
         flexDirection="column"
