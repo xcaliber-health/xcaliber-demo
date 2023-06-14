@@ -20,10 +20,9 @@ export const mainListItems = (onClick, id, classColor) => (
     <Box
       display="flex"
       flexDirection="column"
-      justifyContent="space-evenly"
-      alignItems="space-evenly"
+      // justifyContent="space-evenly"
+      // alignItems="space-evenly"
       width="100%"
-      marginTop="40%"
     >
       <Box
         display="flex"

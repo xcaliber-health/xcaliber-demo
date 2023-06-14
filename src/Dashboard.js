@@ -72,7 +72,7 @@ function Copyright(props) {
   );
 }
 
-const drawerWidth = 240;
+const drawerWidth = 150;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -82,14 +82,13 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  ...(open && {
+  
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-  }),
 }));
 
 const Drawer = styled(MuiDrawer, {
@@ -110,10 +109,8 @@ const Drawer = styled(MuiDrawer, {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9),
-      },
+      width: '150px',
+     
     }),
   },
 }));
@@ -208,7 +205,7 @@ const mdTheme = createTheme();
 function DashboardContent() {
   const theme = useTheme();
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [sourceState, setSourceState] = React.useState("");
   const [departmentId, setDepartmentId] = React.useState(`150`);
   const [isModalOpen, setIsModalOpen] = React.useState();
@@ -218,7 +215,7 @@ function DashboardContent() {
   const [id, setId] = React.useState(0);
   const navigate = useNavigate();
   const toggleDrawer = () => {
-    setOpen(!open);
+    // setOpen(!open);
   };
 
   const onMenuClick = (path, id) => {
@@ -300,7 +297,7 @@ function DashboardContent() {
       <CssBaseline />
       <AppBar
         position="absolute"
-        open={open}
+        // open={open}
         style={{
           background: "white",
         }}
@@ -310,19 +307,7 @@ function DashboardContent() {
             pr: "24px", // keep right padding when drawer closed
           }}
         >
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={toggleDrawer}
-            sx={{
-              marginRight: "36px",
-              ...(open && { display: "none" }),
-              color: "black !important",
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
+          
           <Grid
             display="flex"
             container
@@ -397,7 +382,6 @@ function DashboardContent() {
       </AppBar>
       <Drawer
         variant="permanent"
-        open={open}
         style={{ background: "#D6FFFD" }}
         PaperProps={{ style: { background: "#D6FFFD" } }}
         SlideProps={{ style: { color: "#185DA0" } }}
