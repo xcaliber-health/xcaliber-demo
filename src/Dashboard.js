@@ -72,7 +72,7 @@ function Copyright(props) {
   );
 }
 
-const drawerWidth = 240;
+const drawerWidth = 150;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -82,14 +82,13 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  ...(open && {
+  
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-  }),
 }));
 
 const Drawer = styled(MuiDrawer, {
@@ -110,105 +109,17 @@ const Drawer = styled(MuiDrawer, {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9),
-      },
+      width: '150px',
+     
     }),
   },
 }));
 
-const getIFrameForSource = () => {
-  switch (localStorage.getItem("XCALIBER_SOURCE")) {
-    case "CANVAS":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrL8mlNpedWL5ias?backgroundColor=green&viewControls=on&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="800"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "ELATION":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrs6LgSpuBgt976V?backgroundColor=green&layout=card&viewControls=on&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="800"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "ATHENA":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrld6aBFCCtQxkh2?backgroundColor=green&viewControls=on&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="800"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "EPIC":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrCDfMDfviaRfq54?backgroundColor=green&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="800"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "ECW":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shr0zAvpgHa0exIFp?backgroundColor=green&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="800"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "HIE":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrKc0Wsnrzmb8PKC?backgroundColor=green&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="800"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    default:
-      return null;
-  }
-};
-
-const mdTheme = createTheme();
 
 function DashboardContent() {
   const theme = useTheme();
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [sourceState, setSourceState] = React.useState("");
   const [departmentId, setDepartmentId] = React.useState(`150`);
   const [isModalOpen, setIsModalOpen] = React.useState();
@@ -218,7 +129,7 @@ function DashboardContent() {
   const [id, setId] = React.useState(0);
   const navigate = useNavigate();
   const toggleDrawer = () => {
-    setOpen(!open);
+    // setOpen(!open);
   };
 
   const onMenuClick = (path, id) => {
@@ -300,7 +211,7 @@ function DashboardContent() {
       <CssBaseline />
       <AppBar
         position="absolute"
-        open={open}
+        // open={open}
         style={{
           background: "white",
         }}
@@ -310,19 +221,7 @@ function DashboardContent() {
             pr: "24px", // keep right padding when drawer closed
           }}
         >
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={toggleDrawer}
-            sx={{
-              marginRight: "36px",
-              ...(open && { display: "none" }),
-              color: "black !important",
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
+          
           <Grid
             display="flex"
             container
@@ -331,7 +230,7 @@ function DashboardContent() {
           >
             <Box display="flex" alignItems={"center"}>
               <Typography variant="h5" color="black">
-                xcaliber Capabilities Demo
+              Platform Demo Application
               </Typography>
               <Typography
                 variant="body2"
@@ -397,7 +296,6 @@ function DashboardContent() {
       </AppBar>
       <Drawer
         variant="permanent"
-        open={open}
         style={{ background: "#D6FFFD" }}
         PaperProps={{ style: { background: "#D6FFFD" } }}
         SlideProps={{ style: { color: "#185DA0" } }}
@@ -457,7 +355,11 @@ function DashboardContent() {
           height="100%"
         >
           <Routes>
-            <Route path="interop" element={getIFrameForSource()} />
+            <Route path="interop" element={
+                <div>
+                  
+                </div  >
+            } />
             <Route path="terminology" element={<Terminology />} />
             <Route path="p360" element={<ViewPatients />} />
             <Route path="patient_panel" element={<></>}></Route>
