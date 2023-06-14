@@ -230,7 +230,7 @@ function DashboardContent() {
           >
             <Box display="flex" alignItems={"center"}>
               <Typography variant="h5" color="black">
-              Platform Demo Application
+              xcaliber Platform Demo Application
               </Typography>
               <Typography
                 variant="body2"
