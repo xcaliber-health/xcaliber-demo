@@ -115,92 +115,6 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-const getIFrameForSource = () => {
-  switch (localStorage.getItem("XCALIBER_SOURCE")) {
-    case "CANVAS":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrL8mlNpedWL5ias?backgroundColor=green&viewControls=on&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="800"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "ELATION":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrs6LgSpuBgt976V?backgroundColor=green&layout=card&viewControls=on&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="800"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "ATHENA":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrld6aBFCCtQxkh2?backgroundColor=green&viewControls=on&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="800"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "EPIC":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrCDfMDfviaRfq54?backgroundColor=green&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="800"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "ECW":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shr0zAvpgHa0exIFp?backgroundColor=green&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="800"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    case "HIE":
-      return (
-        <iframe
-          className="airtable-embed"
-          src="https://airtable.com/embed/shrKc0Wsnrzmb8PKC?backgroundColor=green&layout=card&viewControls=on"
-          frameBorder="0"
-          onmousewheel=""
-          width="100%"
-          height="800"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        ></iframe>
-      );
-
-    default:
-      return null;
-  }
-};
-
-const mdTheme = createTheme();
 
 function DashboardContent() {
   const theme = useTheme();
@@ -316,7 +230,7 @@ function DashboardContent() {
           >
             <Box display="flex" alignItems={"center"}>
               <Typography variant="h5" color="black">
-                xcaliber Capabilities Demo
+              Platform Demo Application
               </Typography>
               <Typography
                 variant="body2"
@@ -441,7 +355,11 @@ function DashboardContent() {
           height="100%"
         >
           <Routes>
-            <Route path="interop" element={getIFrameForSource()} />
+            <Route path="interop" element={
+                <div>
+                  
+                </div  >
+            } />
             <Route path="terminology" element={<Terminology />} />
             <Route path="p360" element={<ViewPatients />} />
             <Route path="patient_panel" element={<></>}></Route>
