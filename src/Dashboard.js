@@ -311,15 +311,6 @@ function DashboardContent() {
             background: "linear-gradient(to bottom,#1D5D9E, #2D93AC,#3DC6B8)",
           }}
         >
-          <IconButton onClick={toggleDrawer} sx={{ color: "white" }}>
-            {open && (
-              <Typography
-                variant="h5"
-                style={{ display: "inline-block" }}
-              ></Typography>
-            )}
-            <ChevronLeftIcon />
-          </IconButton>
         </Toolbar>
         <Divider />
         <List

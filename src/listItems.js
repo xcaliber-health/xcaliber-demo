@@ -23,6 +23,7 @@ export const mainListItems = (onClick, id, classColor) => (
       // justifyContent="space-evenly"
       // alignItems="space-evenly"
       width="100%"
+      marginTop="50%"
     >
       <Box
         display="flex"
