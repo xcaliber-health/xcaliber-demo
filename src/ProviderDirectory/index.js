@@ -33,7 +33,7 @@ export const getToken = async (managerView) => {
     try {
 
         const httpLink = createHttpLink({
-            uri: 'https://blitz.xcaliberapis.com/xcaliber-dev/bff/',
+            uri: 'https://xc2.codametrix.com/constellation/hfhs/bff/',
         });
         const authLink = setContext((_, { headers }) => {
             return {
