@@ -250,7 +250,7 @@ export const mainListItems = (onClick, id, classColor) => (
       >
         <ListItemButton
           onClick={() => {
-            onClick("interop", 7);
+            onClick("simulator", 7);
           }}
           selected={id === 7 ? classColor : ""}
           sx={{ width: "100%" }}
