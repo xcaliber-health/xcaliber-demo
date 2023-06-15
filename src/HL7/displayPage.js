@@ -21,10 +21,7 @@ const options = [
   },  {
     value: 'SIU',
     label: 'Appointments'
-  },  {
-    value: 'DFT',
-    label: 'Invoices & Payments'
-  },
+  }
 ]
 
 
