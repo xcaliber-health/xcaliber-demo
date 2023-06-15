@@ -26,7 +26,7 @@ const ViewPatientsTable = (props) => {
   const func = async () => {
     setAwait(true);
     const d = await getPatientsAtPage(props.page, searchRequest.queryString);
-    let mock = { patients: d, totalCount: d.length };
+    let mock = { patients: d, totalCount: d?.length };
 
     setNewData(mock);
     setAwait(false);
@@ -91,7 +91,7 @@ const ViewPatientsTable = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {newData.patients.map((patient) => (
+          {newData.patients?.map((patient) => (
             <TableRow
               onClick={() => {
                 navigate("/p360/" + patient.code);

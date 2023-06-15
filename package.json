@@ -9,6 +9,7 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.15",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
     "@material-ui/styles": "^4.11.5",
@@ -25,6 +26,7 @@
     "dayjs": "^1.11.6",
     "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
+    "graphql": "^16.6.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.39",
