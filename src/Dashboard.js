@@ -356,9 +356,9 @@ function DashboardContent() {
             <Route path="patient_panel" element={<></>}></Route>
             <Route path="p360/:id" element={<Chart />} />
             <Route path="hl7" element={<HL7DisplayPage />} />
-            <Route path="service_desk" element={<Box height="50vh" width="100%" display={"flex"} justifyContent="center" alignItems="center"><h1>Coming Soon</h1></Box>}></Route>
             <Route path="provider_directory" element={<PDPage/>}></Route>
-            <Route path="simulator"></Route>
+            <Route path="service_desk" element={<Box height="50vh" width="100%" display={"flex"} justifyContent="center" alignItems="center"><h1>Coming Soon</h1></Box>}></Route>
+            <Route path="simulator" element={<Box><iframe class="airtable-embed" src="https://airtable.com/embed/shr7sTvV1I0Ad3PMt?backgroundColor=green&layout=card&viewControls=on" frameborder="0" onmousewheel="" width="100%" height="733"></iframe></Box>}></Route>
             <Route path="documentation" element={<ApiDoc />} />
           </Routes>
           <Watermark />
