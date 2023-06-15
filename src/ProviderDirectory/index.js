@@ -39,7 +39,7 @@ export const getToken = async (managerView) => {
             return {
                 headers: {
                     ...headers,
-                    authorization: process.env.REACT_APP_AUTHORIZATION,
+                    authorization: process.env.AUTH_TOKEN2,
                 },
             };
         });
@@ -51,7 +51,7 @@ export const getToken = async (managerView) => {
             .query({
                 query: GenerateToken,
                 variables: {
-                    token: process.env.REACT_APP_AUTHORIZATION,
+                    token: process.env.AUTH_TOKEN2,
                     managerView,
                     userId: managerView ? '36645a2d-5b44-4e47-a980-4b283267fbc0' : 'b53ef72f-ef46-4d9b-b28b-2de2692bacat',
                 },
