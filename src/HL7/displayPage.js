@@ -5,7 +5,7 @@ import { EPIC_XCHANGE_ENDPOINT } from '../core-utils/constants';
 import { getSourceUrl } from '../Patient/service/service';
 import { Helper } from '../core-utils/helper';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import { ADTMessage, DFTMessage, MDMMessage, ORMMessage, SIUMessage } from './defaultMessages';
+import { eCWADTMessage, eCWDFTMessage, eCWMDMMessage, eCWORMMessage, eCWSIUMessage, EpicADTMessage, EpicDFTMessage, EpicMDMMessage, EpicORMMessage, EpicSIUMessage } from './defaultMessages';
 
 const options = [
   {
@@ -66,15 +66,15 @@ const HL7DisplayPage = () => {
   const getMessage = (type) => {
     switch(type) {
       case 'ADT' : 
-        return ADTMessage
+        return localStorage.getItem("XCALIBER_SOURCE")==='EPIC' ? EpicADTMessage : eCWADTMessage
       case 'MDM' : 
-        return MDMMessage
+        return localStorage.getItem("XCALIBER_SOURCE")==='EPIC' ? EpicMDMMessage : eCWMDMMessage
       case 'ORM' : 
-        return ORMMessage
+        return localStorage.getItem("XCALIBER_SOURCE")==='EPIC' ? EpicORMMessage : eCWORMMessage
       case 'DFT' : 
-        return DFTMessage
+        return localStorage.getItem("XCALIBER_SOURCE")==='EPIC' ? EpicDFTMessage : eCWDFTMessage
       case 'SIU' : 
-        return SIUMessage
+        return localStorage.getItem("XCALIBER_SOURCE")==='EPIC' ? EpicSIUMessage : eCWSIUMessage
       default:
         return ''
     }
