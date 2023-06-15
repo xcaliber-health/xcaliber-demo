@@ -126,7 +126,7 @@ const ViewPatientsTable = (props) => {
                 <Typography>{patient.email}</Typography>
               </TableCell>
               <TableCell align="left" component="th" scope="row">
-                <Typography>{formatDate(patient.dateOfBirth)}</Typography>
+                <Typography>{}</Typography>
               </TableCell>
               <TableCell align="left" component="th" scope="row">
                 <Typography>{}</Typography>

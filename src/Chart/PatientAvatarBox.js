@@ -26,6 +26,8 @@ import Athena from "../../src/static/athena_logo.ico";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DetailsTab from "./TabComponents/DetailsTab";
+import EpicPatientImage from "../static/epic.ico";
+import EcwPatientImage from "../static/eCW.png";
 import NorthEastIcon from "@mui/icons-material/NorthEast";
 import { useEffect } from "react";
 const PatientDetailsCard = ({
@@ -38,6 +40,18 @@ const PatientDetailsCard = ({
   const commonGridElements = { pt: theme.spacing(1.5), pb: theme.spacing(1.5) };
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [appIndex, setAppIndex] = useState(null);
+
+  const getSourceIcon = () => {
+    if (localStorage.getItem("XCALIBER_SOURCE") === "EPIC") {
+      return (EpicPatientImage);
+    } else if(localStorage.getItem("XCALIBER_SOURCE") === "ELATION") {
+      return (Elation);
+    } else if(localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") {
+      return (Athena);
+    } else if(localStorage.getItem("XCALIBER_SOURCE") === "ECW") {
+      return (EcwPatientImage);
+    }
+  };
 
   const calculateAge = (birthYear) => {
     let currentYear = new Date().getFullYear();
@@ -98,11 +112,7 @@ const PatientDetailsCard = ({
                 }}
               >
                 <img
-                  src={
-                    localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION"
-                      ? Elation
-                      : Athena
-                  }
+                  src={getSourceIcon()}
                   style={{ height: "24px", width: "24px" }}
                 />
               </IconButton>

@@ -13,6 +13,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import NearMeIcon from "@mui/icons-material/NearMe";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import { Box } from "@mui/material";
+import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import AssignmentIcon from "@mui/icons-material/Assignment";
 
 export const mainListItems = (onClick, id, classColor) => (
@@ -53,12 +54,7 @@ export const mainListItems = (onClick, id, classColor) => (
                 height: "100%",
               }}
             >
-              <BuildIcon
-                style={{
-                  color: "white",
-                  fontWeight: "bolder",
-                }}
-              />
+              <PermContactCalendarIcon style={{color: "white"}}></PermContactCalendarIcon>
             </ListItemIcon>
             <ListItemText
               primary="Provider Directory"
