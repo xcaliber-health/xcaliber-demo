@@ -240,7 +240,7 @@ export const mainListItems = (onClick, id, classColor) => (
             >
               <BuildIcon style={{ color: "white" }} />
             </ListItemIcon>
-            <ListItemText primary="Simulator" sx={{ color: "white" }} />
+            <ListItemText primary="Workflow Simulator" sx={{ color: "white" }} />
           </Box>
         </ListItemButton>
       </Box>

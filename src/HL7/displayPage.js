@@ -10,20 +10,20 @@ import { ADTMessage, DFTMessage, MDMMessage, ORMMessage, SIUMessage } from './de
 const options = [
   {
     value: 'ADT',
-    label: 'ADT: Registration & Intake'
+    label: 'Registration & Intake'
   },
   {
     value: 'MDM',
-    label: 'MDM: Documents/Notes'
+    label: 'Documents/Notes'
   },  {
     value: 'ORM',
-    label: 'ORM: Orders'
+    label: 'Orders'
   },  {
     value: 'SIU',
-    label: 'SIU: Appointments'
+    label: 'Appointments'
   },  {
     value: 'DFT',
-    label: 'DFT: Invoices & Payments'
+    label: 'Invoices & Payments'
   },
 ]
 
