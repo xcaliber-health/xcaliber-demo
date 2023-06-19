@@ -56,7 +56,7 @@ const HL7DisplayPage = () => {
         alignItems="flex-start"
         overflow="auto"
         marginBottom="16px"
-        height="60vh"
+        height="75vh"
 
       >
         <iframe

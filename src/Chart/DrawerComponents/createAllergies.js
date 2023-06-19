@@ -98,7 +98,7 @@ export default function Allergy({
               ? `${option?.Concept_Code_2} (${option?.Concept_Name_2})`
               : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
               ? `${option?.allergyid} ${option?.allergenname} `
-              : `null`;
+              : `${option?.Concept_Code_2} (${option?.Concept_Name_2})`;
           }}
           onChange={(e, v) => {
             if (v && v !== "" && v !== null) {
