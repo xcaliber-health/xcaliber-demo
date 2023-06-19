@@ -174,6 +174,15 @@ export default function Allergy({
             )}
           />
         )}
+        {(localStorage.getItem(`XCALIBER_SOURCE`) === `EPIC` || localStorage.getItem("XCALIBER_SOURCE") ==='ECW')  && (
+          <TextField
+            sx={{ width: "100%" }}
+            label={"Reaction..."}
+            onChange={(e) => {
+              onReactionChange(e.target.value);
+            }}
+          />
+        )}
       </Grid>
       <Grid sx={{ paddingTop: "20px" }}>
         <FormControl fullWidth>
@@ -198,6 +207,10 @@ export default function Allergy({
                 return (
                   <MenuItem value={sev?.snomedcode}>{sev?.severity}</MenuItem>
                 );
+              })}
+            {(localStorage.getItem(`XCALIBER_SOURCE`) === `EPIC` || localStorage.getItem(`XCALIBER_SOURCE`) === `ECW`) &&
+              ElationAllergyValues.map((aller) => {
+                return <MenuItem value={aller?.code}>{aller?.code}</MenuItem>;
               })}
           </Select>
         </FormControl>
