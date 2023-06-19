@@ -469,13 +469,13 @@ const Chart = () => {
                   ? reference?.allergyid
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
                   ? reference?.Concept_Code_2
-                  : ``,
+                  : reference?.Concept_Code_2,
               display:
                 localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
                   ? reference?.allergenname
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
                   ? reference?.Concept_Name_2
-                  : ``,
+                  : reference?.Concept_Code_2,
             },
           ],
         },
@@ -629,6 +629,19 @@ const Chart = () => {
           allergyPayload
         );
         window.location.reload();
+      }
+      else {
+        const createdAllergy = await AllergyService.createAllergies(
+          allergyPayload
+        );
+        const createdAllergyData = await AllergyService.getAllergyById(
+          createdAllergy?.id
+        );
+        setPatientAllergies([
+          ...patientAllergies,
+          { resource: { ...createdAllergyData } },
+        ]);
+        setIsAllergyDrawerOpen(false);
       }
     }
   };

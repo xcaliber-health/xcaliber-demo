@@ -8,13 +8,13 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/ReferenceData?category=problems&resourceType=condition&searchString=${
+        `${process.env.REACT_APP_URL}/api/v1/ReferenceData?category=problems&resourceType=condition&searchString=${
           searchString ?? "abc"
         }`,
         {
           headers: {
-            Authorization: Helper.getSourceToken(),
-            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
           },
         }
       );
@@ -28,13 +28,13 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/ReferenceData?resourceType=allergy&searchString=${
+        `${process.env.REACT_APP_URL}/api/v1/ReferenceData?resourceType=allergy&searchString=${
           searchString ?? "abe"
         }`,
         {
           headers: {
-            Authorization: Helper.getSourceToken(),
-            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
           },
         }
       );
@@ -48,11 +48,11 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/ReferenceData?resourceType=allergy&dataField=reactions`,
+        `${process.env.REACT_APP_URL}/api/v1/ReferenceData?resourceType=allergy&dataField=reactions`,
         {
           headers: {
-            Authorization: Helper.getSourceToken(),
-            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
           },
         }
       );
@@ -66,11 +66,11 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/ReferenceData?resourceType=allergy&dataField=severities`,
+        `${process.env.REACT_APP_URL}/api/v1/ReferenceData?resourceType=allergy&dataField=severities`,
         {
           headers: {
-            Authorization: Helper.getSourceToken(),
-            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
           },
         }
       );
@@ -84,11 +84,11 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/ReferenceData?resourceType=appointment&dataField=type`,
+        `${process.env.REACT_APP_URL}/api/v1/ReferenceData?resourceType=appointment&dataField=type`,
         {
           headers: {
-            Authorization: Helper.getSourceToken(),
-            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
           },
         }
       );
@@ -102,13 +102,13 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/ReferenceData?resourceType=medicationstatement&searchString=${
+        `${process.env.REACT_APP_URL}/api/v1/ReferenceData?resourceType=medicationstatement&searchString=${
           searchString ?? ""
         }`,
         {
           headers: {
-            Authorization: Helper.getSourceToken(),
-            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
           },
         }
       );
@@ -122,11 +122,11 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/ReferenceData?resourceType=medicationstatement&dataField=reasons`,
+        `${process.env.REACT_APP_URL}/api/v1/ReferenceData?resourceType=medicationstatement&dataField=reasons`,
         {
           headers: {
-            Authorization: Helper.getSourceToken(),
-            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
           },
         }
       );
@@ -140,13 +140,13 @@ export const ReferenceDataService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/ReferenceData?resourceType=immunization&searchString=${
+        `${process.env.REACT_APP_URL}/api/v1/ReferenceData?resourceType=immunization&searchString=${
           searchString ?? ""
         }`,
         {
           headers: {
-            Authorization: Helper.getSourceToken(),
-            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
           },
         }
       );
@@ -161,13 +161,13 @@ export const ReferenceDataService = {
       let sourceUrl = Helper.getSourceUrl()
           console.log(localStorage.getItem("XCALIBER_SOURCE"),sourceUrl);
       const result = await axios.get(
-        `${sourceUrl}/api/v1/ReferenceData?resourceType=medicationrequest&searchString=${
+        `${process.env.REACT_APP_URL}/api/v1/ReferenceData?resourceType=medicationrequest&searchString=${
           searchString ?? ""
         }&dataField=order`,
         {
           headers: {
-            Authorization: Helper.getSourceToken(),
-            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+            "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
           },
         }
       );
