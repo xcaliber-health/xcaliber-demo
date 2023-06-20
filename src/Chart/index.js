@@ -475,7 +475,7 @@ const Chart = () => {
                   ? reference?.allergenname
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
                   ? reference?.Concept_Name_2
-                  : reference?.Concept_Code_2,
+                  : reference?.Concept_Name_2,
             },
           ],
         },
