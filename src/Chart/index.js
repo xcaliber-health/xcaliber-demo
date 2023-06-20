@@ -413,6 +413,7 @@ const Chart = () => {
             actor: {
               reference: `Patient/${patientId}`,
             },
+            "type":{"coding":{"code":"patient","system":"http://terminology.hl7.org/CodeSystem/participant-type"}}
           },
           ...appointmentPayload?.data?.participant,
         ],
