@@ -12,7 +12,7 @@ export const EpicDFTMessage=`
 
 export const EpicSIUMessage='MSH|^~\\&|SendingApp|SendingFacility|ReceivingApp|ReceivingFacility|202306061200||SIU^S12|MSG00999|P|2.5\nSCH||1773174|||||||7200|S|^^^20230322102000|||||||||JS388794^PARAMORE^TONYA^^|||||Sch^Scheduled^SCHEDULING||\nPID|1|1234567^4^M11^test^MR^University Hospital^19241011^19241012|PATID144^5^M11^test1&2.16.1&HCD^MR^GOOD HEALTH HOSPITAL~123456789^^^USSSA^SS|PATID567^^^test2|Doe&&&&Aniston^Sean^A^III^Dr.^MD^D^^^19241012^^^^PF^Addsm~Josh&&&&Bing^^stanley^^^^L^^^^^19241010^19241015|SMITH^Angela^L|198808181126+0215|M|elbert^Son|2106-3^White^HL70005~2028-9^Asian^HL70005|1000&Hospital Lane^Ste. 123^Ann Arbor ^MI^99999^USA^M^^&W^^^20000110&20000120^^^^^^^Near Highway|GL|78788788^^CP^5555^^^1111^^^^^2222^20010110^20020110^^^^18~12121212^^CP|7777^^CP~1111^^TDD|ara^^HL70296^eng^English-us^HL70296^v2^v2.1^TextInEnglish|M^Married|AME|4000776^^^AccMgr&1.3.6.1.4.1.44750.1.2.2&ISO^VN^1^19241011^19241012|PSSN123121234|DLN-123^US^20010123|1212121^^^NTH&rt23&HCD^AND^^19241011^19241012|N^NOT HISPANIC OR LATINO^HL70189|St. Francis Community Hospital of Lower South Side|N|2|US^United States of America^ISO3166_1|Vet123^retired^ART|BT^Bhutan^ISO3166_1|20080825111630+0115|Y|||20050110015014+0315||125097000^Goat^SCT|4880003^Beagle^SCT|||CA^Canada^ISO3166_1|89898989^WPN^Internet';
 
-export const eCWMDMMessage =  'MSH|^~\\&|TEST|TEST|PracticePartner||||MDM^T02|123|P|2.3|||NE|\nEVN|T02|200901301235|\nPID||2|123||KENNEDY^MORGAN||19920115|M||||||||||G83186|009729488|\nPV1||1|CE||||12345^WILLIS^SAM^H|||||||||||\nTXA|1|HP^History & Physical|TX|200901151010|||||||||||||DO||AV|||||visit_notes\nOBX|2|TX|||Morrisville, Vermont05661||||||P||||||\n';
+export const eCWMDMMessage =  'MSH|^~\\&amp;|TEST|TEST|PracticePartner||||MDM^T02|MessageControlID|P|2.3|||NE|\nEVN|T02|200901301235|\nPID|1|123456789|987654321||Doe^John^Henry||19800101|M||123 Main St^Anytown^CA^12345^USA|(555) 123-4567^johndoe@email.com\nPV1||1|CE||||12345^WILLIS^SAM^H|||||||||||\nTXA|1|HP^History &amp; Physical|TX|200901151010|||||||||||||DO||AV|||||visit_notes\nOBX|2|TX|||Morrisville, Vermont05661||||||P||||||';
 
 export const eCWADTMessage = '';
 
@@ -20,7 +20,7 @@ export const eCWADTMessage = '';
 export const eCWORMMessage = '';
 
 
-export const eCWSIUMessage = '';
+export const eCWSIUMessage = 'MSH|^~\\&|SendingApp|SendingFac|ReceivingApp|ReceivingFac|20230613120000||SIU^S12|MessageControlID|P|2.5\nSCH|1|AppointmentID1|||20220401100000|20220401110000|||||^^^20230322102000|||||\nPID|1|123456789|987654321||Doe^John^Henry||19800101|M||123 Main St^Anytown^CA^12345^USA|(555) 123-4567^johndoe@email.com\nPV1|1|O|^Consulting Room 1||||||NPI|||||1234567890';
 
 
 export const eCWDFTMessage = '';
