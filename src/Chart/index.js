@@ -48,7 +48,7 @@ const Chart = () => {
   const { id } = useParams();
   const theme = useTheme();
   const navigate = useNavigate();
-  const [patientDetails, setPatientDetails] = useState({});
+  const [patientDetails, setPatientDetails] = useState({id: id});
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
   const [patientVitals, setPatientVitals] = useState([]);
   const [patientProblems, setPatientProblems] = useState([]);
