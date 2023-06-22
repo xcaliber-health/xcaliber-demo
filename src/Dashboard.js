@@ -229,7 +229,7 @@ function DashboardContent() {
             justifyContent="space-between"
           >
             <Box display="flex" alignItems={"center"} flexDirection="column" justifyContent="center">
-              <Typography variant="h5" color="black" fontSize="1.5rem">
+              <Typography variant="h5" color="black" fontSize="1.5rem" marginTop="12px">
               xcaliber Platform Demo Application
               </Typography>
               <Typography
