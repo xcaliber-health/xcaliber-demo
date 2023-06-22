@@ -42,7 +42,6 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
       setFlag(true);
     }
   }, [notes]);
-
   const [notesPayload, setNotesPayload] = useState({
     data: {
       resourceType: "DocumentReference",
@@ -152,6 +151,9 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
             ],
           },
         ],
+        subject: {
+          reference: `Patient/${patientDetails?.id}`
+        }
       },
     });
   };
@@ -362,10 +364,11 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
                   >
                     <ListItemText
                       primary={
-                        <NotesBlock
-                          plainText={
-                            atob(note.resource?.content?.[0]?.attachment?.data,"base64")}>
-                        </NotesBlock>
+                        note.resource?.content?.map((item) => {
+                          return <NotesBlock
+                                    plainText={atob(item?.attachment?.data,"base64")}>
+                          </NotesBlock>
+                        })
                       }
                     />
 
