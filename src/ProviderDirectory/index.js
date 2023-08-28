@@ -1,13 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { Helper } from '../core-utils/helper';
-import { Grid } from '@mui/material';
+import { Grid,Box,Switch, Typography } from '@mui/material';
 import axios from 'axios';
 import { Help } from '@mui/icons-material';
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { GenerateToken } from './Token';
 import { setContext } from "@apollo/client/link/context";
 
-
+const httpLink = createHttpLink({
+    uri: 'https://blitz.xcaliberapis.com/xcaliber-dev/bff/',
+});
+const authLink = setContext((_, { headers }) => {
+    return {
+        headers: {
+            ...headers,
+            authorization: process.env.REACT_APP_AUTH_TOKEN2,
+        },
+    };
+});
+const client = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+});
 export const PDPage = () => {
     const [managerView, setManagerView] = useState(false);
     useEffect(() => {
@@ -23,30 +37,38 @@ export const PDPage = () => {
     }, [managerView]);
 
     return (
-        <>
-            <Grid sx={{ height: "calc(100vh - 125px)" }} id="pd"></Grid>
-        </>
+        <Box sx={{height:"83vh"}}>
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    flexDirection: "column-reverse",
+                    alignItems: "flex-end",
+                    marginRight: "10px",
+                    height:"10%"
+                }}
+                >
+                <Typography color="black" sx={{ marginRight: "10px" }}>
+                    {managerView ? "Manager" : "Coder"}
+                </Typography>
+                <Switch
+                    defaultChecked
+                    size="small"
+                    checked={managerView}
+                    color="default"
+                    onChange={() => {
+                    setManagerView(!managerView);
+                    }}
+                />
+            </Box>
+            <Grid sx={{ height: "90%" }} id="pd"></Grid>
+        </Box>
     );
 }
 
 export const getToken = async (managerView) => {
     try {
 
-        const httpLink = createHttpLink({
-            uri: 'https://blitz.xcaliberapis.com/xcaliber-dev/bff/',
-        });
-        const authLink = setContext((_, { headers }) => {
-            return {
-                headers: {
-                    ...headers,
-                    authorization: process.env.REACT_APP_AUTH_TOKEN2,
-                },
-            };
-        });
-        const client = new ApolloClient({
-            link: authLink.concat(httpLink),
-            cache: new InMemoryCache(),
-        });
         const res = client
             .query({
                 query: GenerateToken,
