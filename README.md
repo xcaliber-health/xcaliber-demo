@@ -1,11 +1,17 @@
-# Create React App example
+# Xcaliber demo
 
-## How to use
+## Installation
 
+```bash
+$ npm install
+```
+## Env Configuration
 
-Install it and run:
+Add .env file for the env variables defined in .env.example
 
-```sh
-npm install
-npm start
+## Running the app
+
+```bash
+# development
+$ npm run start
 ```
