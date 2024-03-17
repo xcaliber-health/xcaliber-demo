@@ -15,8 +15,6 @@ import IconButton from '@mui/material/IconButton';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
-// ----------------------------------------------------------------------
-
 export default function UserTableRow({
   selected,
   name,
@@ -49,7 +47,18 @@ export default function UserTableRow({
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
-        <TableCell padding="checkbox">
+        <TableCell
+          style={{
+            position: 'sticky',
+            left: 0,
+            background: 'white',
+            '&:hover': {
+              background: 'red',
+            },
+            zIndex: 800,
+            
+          }}
+        >
           <Checkbox disableRipple checked={selected} onChange={handleClick} />
         </TableCell>
 
@@ -57,11 +66,21 @@ export default function UserTableRow({
           component="th"
           scope="row"
           padding="none"
-          sx={{ cursor: 'pointer' }}
+          style={{
+            position: 'sticky',
+            left: 74,
+            background: 'white',
+            zIndex: 800,
+            '&:hover': {
+              padding: 40,
+            },
+          }}
           onClick={handleOpenDrawer}
         >
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} src={avatarUrl} />
+            <Avatar alt={name} >
+            {name.charAt(0).toUpperCase() }{name.charAt(1)}
+            </Avatar>
             <Typography variant="subtitle2" noWrap>
               {name}
             </Typography>
@@ -74,41 +93,6 @@ export default function UserTableRow({
 
         <TableCell align="center">{isVerified ? 'Yes' : 'No'}</TableCell>
 
-        <TableCell>
-          <Label color={(status === 'banned' && 'error') || 'success'}>
-            {status}
-          </Label>
-        </TableCell>
-        <TableCell>
-          <Label color={(status === 'banned' && 'error') || 'success'}>
-            {status}
-          </Label>
-        </TableCell>
-        <TableCell>
-          <Label color={(status === 'banned' && 'error') || 'success'}>
-            {status}
-          </Label>
-        </TableCell>
-        <TableCell>
-          <Label color={(status === 'banned' && 'error') || 'success'}>
-            {status}
-          </Label>
-        </TableCell>
-        <TableCell>
-          <Label color={(status === 'banned' && 'error') || 'success'}>
-            {status}
-          </Label>
-        </TableCell>
-        <TableCell>
-          <Label color={(status === 'banned' && 'error') || 'success'}>
-            {status}
-          </Label>
-        </TableCell>
-        <TableCell>
-          <Label color={(status === 'banned' && 'error') || 'success'}>
-            {status}
-          </Label>
-        </TableCell>
         <TableCell>
           <Label color={(status === 'banned' && 'error') || 'success'}>
             {status}

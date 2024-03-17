@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
+import { Container } from '@mui/material';
 import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
@@ -13,7 +13,6 @@ import TablePagination from '@mui/material/TablePagination';
 import { users } from 'src/_mock/user';
 
 import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
 
 import TableNoData from '../table-no-data';
 import UserTableRow from '../user-table-row';
@@ -95,14 +94,14 @@ export default function UserPage() {
   const notFound = !dataFiltered.length && !!filterName;
 
   return (
-    <Container>
+    <>
       <Stack
         direction="row"
         alignItems="center"
         justifyContent="space-between"
         mb={5}
       >
-        <Typography variant="h4">Patients Data</Typography>
+        <Typography variant="h4">Patient 360</Typography>
 
         <Button
           variant="contained"
@@ -113,6 +112,7 @@ export default function UserPage() {
         </Button>
       </Stack>
 
+      <Container>
       <Card>
         <UserTableToolbar
           numSelected={selected.length}
@@ -120,9 +120,8 @@ export default function UserPage() {
           onFilterName={handleFilterByName}
         />
 
-        <Scrollbar>
-          <TableContainer sx={{ overflow: 'unset' }}>
-            <Table sx={{ minWidth: 800 }}>
+          <TableContainer >
+            <Table sx={{ minWidth: 800 }} stickyHeader>
               <UserTableHead
                 order={order}
                 orderBy={orderBy}
@@ -131,15 +130,16 @@ export default function UserPage() {
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
-                  { id: 'role', label: 'Role' },
+                  { id: 'name', label: 'Name', minWidth: 470 },
+                  { id: 'company', label: 'Company', minWidth: 470 },
+                  { id: 'role', label: 'Role', minWidth: 470 },
                   {
                     id: 'isVerified',
                     label: 'Verified',
                     align: 'center',
+                    minWidth: 470,
                   },
-                  { id: 'status', label: 'Status' },
+                  { id: 'status', label: 'Status', minWidth: 470 },
                   { id: '' },
                 ]}
               />
@@ -169,7 +169,6 @@ export default function UserPage() {
               </TableBody>
             </Table>
           </TableContainer>
-        </Scrollbar>
 
         <TablePagination
           page={page}
@@ -181,6 +180,7 @@ export default function UserPage() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>
-    </Container>
+      </Container>
+    </>
   );
 }

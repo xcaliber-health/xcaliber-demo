@@ -27,7 +27,12 @@ export default function UserTableHead({
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
+        <TableCell  sx={{
+          position: 'sticky',
+          left: 0,
+          background: 'white',
+          zIndex: 800,
+        }}>
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
@@ -40,10 +45,21 @@ export default function UserTableHead({
             key={headCell.id}
             align={headCell.align || 'left'}
             sortDirection={orderBy === headCell.id ? order : false}
-            sx={{
-              width: headCell.width,
-              minWidth: headCell.minWidth,
-            }}
+            sx={
+              headCell.id === 'name'
+                ? {
+                    position: 'sticky',
+                    left: 74,
+                    background: 'white',
+                    zIndex: 800,
+                    width: headCell.width,
+                    minWidth: headCell.minWidth,
+                  }
+                : {
+                    width: headCell.width,
+                    minWidth: headCell.minWidth,
+                  }
+            }
           >
             <TableSortLabel
               hideSortIcon
