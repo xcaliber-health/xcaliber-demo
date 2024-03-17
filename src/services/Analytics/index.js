@@ -7,8 +7,8 @@ export const AnalyticService = {
       let url = `${LENS_API_ENDPOINT}/api/v1/datalenses`;
       const response = await axios.get(url, {
         headers: {
-          Authorization: `${process.env.REACT_APP_AUTHORIZATION_LENS}`
-        }
+          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
+        },
       });
       return response.data;
     } catch (error) {
@@ -17,11 +17,11 @@ export const AnalyticService = {
   },
   discoverLens: async (payload, lensId) => {
     try {
-      let payload1 = { "query": `${payload}` }
+      let payload1 = { query: `${payload}` };
       let url = `${LENS_API_ENDPOINT}/api/v1/datalenses/${lensId}/discover`;
       const response = await axios.post(url, payload1, {
         headers: {
-          Authorization: `${process.env.REACT_APP_AUTHORIZATION_LENS}`
+          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
         },
       });
       return response.data?.results;
@@ -33,11 +33,11 @@ export const AnalyticService = {
   },
   timeSeries: async (payload, lensId, start, end) => {
     try {
-      let payload1 = { "query": `${payload}`, "start": `${start}`, "end": `${end}` }
+      let payload1 = { query: `${payload}`, start: `${start}`, end: `${end}` };
       let url = `${LENS_API_ENDPOINT}/api/v1/datalenses/${lensId}/timeseries`;
       const response = await axios.post(url, payload1, {
         headers: {
-          Authorization: `${process.env.REACT_APP_AUTHORIZATION_LENS}`
+          Authorization: `${process.env.REACT_APP_AUTHORIZATION}`,
         },
       });
       return response.data?.results;
