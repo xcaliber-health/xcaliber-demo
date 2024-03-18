@@ -94,14 +94,14 @@ export default function UserPage() {
   const notFound = !dataFiltered.length && !!filterName;
 
   return (
-    <>
+    <Container maxWidth="xl">
       <Stack
         direction="row"
         alignItems="center"
         justifyContent="space-between"
         mb={5}
       >
-        <Typography variant="h4">Patient 360</Typography>
+        <Typography variant="h3">Patient 360</Typography>
 
         <Button
           variant="contained"
@@ -111,16 +111,13 @@ export default function UserPage() {
           New User
         </Button>
       </Stack>
-
-      <Container>
       <Card>
         <UserTableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
         />
-
-          <TableContainer >
+          <TableContainer sx={{scrollbarWidth: 'thin'}}>
             <Table sx={{ minWidth: 800 }} stickyHeader>
               <UserTableHead
                 order={order}
@@ -130,7 +127,7 @@ export default function UserPage() {
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'name', label: 'Name', minWidth: 470 },
+                  { id: 'name', label: 'Name' },
                   { id: 'company', label: 'Company', minWidth: 470 },
                   { id: 'role', label: 'Role', minWidth: 470 },
                   {
@@ -169,7 +166,6 @@ export default function UserPage() {
               </TableBody>
             </Table>
           </TableContainer>
-
         <TablePagination
           page={page}
           component="div"
@@ -180,7 +176,6 @@ export default function UserPage() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>
-      </Container>
-    </>
+    </Container>
   );
 }
