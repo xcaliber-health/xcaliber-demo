@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import { Container } from '@mui/material';
 import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
+import { Box, Tab, Tabs, Container } from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
@@ -22,6 +23,39 @@ import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
 // ----------------------------------------------------------------------
+
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 
 export default function UserPage() {
   const [page, setPage] = useState(0);
@@ -93,6 +127,12 @@ export default function UserPage() {
 
   const notFound = !dataFiltered.length && !!filterName;
 
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
     <Container maxWidth="xl">
       <Stack
@@ -111,6 +151,18 @@ export default function UserPage() {
           New User
         </Button>
       </Stack>
+      <Box sx={{ width: '100%' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+          <Tab label="Patient" {...a11yProps(0)} />
+          <Tab label="Medication" {...a11yProps(1)} />
+          <Tab label="Allergies" {...a11yProps(2)} />
+          <Tab label="Procedures" {...a11yProps(3)} />
+          <Tab label="Visits" {...a11yProps(4)} />
+          <Tab label="Immunization" {...a11yProps(5)} />
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={value} index={0}>
       <Card>
         <UserTableToolbar
           numSelected={selected.length}
@@ -176,6 +228,24 @@ export default function UserPage() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+      Medication
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+      Allergies
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={3}>
+      Procedures
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={4}>
+      Visits
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={5}>
+      Immunization
+      </CustomTabPanel>
+    </Box>
+      
     </Container>
   );
 }
