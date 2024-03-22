@@ -8,7 +8,7 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title> P360 | xcaliber </title>
+        <title> P360 | XCaliber </title>
       </Helmet>
 
       <UserView />

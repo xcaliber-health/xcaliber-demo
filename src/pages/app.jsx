@@ -8,7 +8,7 @@ export default function AppPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | xcaliber </title>
+        <title> Dashboard | XCaliber </title>
       </Helmet>
 
       <AppView />

@@ -8,7 +8,7 @@ export default function BlogPage() {
   return (
     <>
       <Helmet>
-        <title> Blog | xcaliber </title>
+        <title> Blog | XCaliber </title>
       </Helmet>
 
       <BlogView />
