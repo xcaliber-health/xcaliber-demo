@@ -5,7 +5,8 @@ import checker from 'vite-plugin-checker';
 
 // ----------------------------------------------------------------------
 
-export default defineConfig({
+export default defineConfig(({command}) =>{
+  const config = {
   plugins: [
     react(),
     checker({
@@ -14,6 +15,7 @@ export default defineConfig({
       },
     }),
   ],
+  base: '/',
   resolve: {
     alias: [
       {
@@ -32,4 +34,11 @@ export default defineConfig({
   preview: {
     port: 3030,
   },
+}
+
+if (command !== 'serve') {
+  config.base = '/xcaliber-demo/';
+}
+
+return config;
 });

@@ -49,7 +49,7 @@ function AppResultsSourcesRecordChange({ title, subheader, sx, ...other }) {
           <Typography sx={{ fontWeight: 200 }}>New source records</Typography>
           <Stack direction="row" spacing={3} alignItems="center">
             <img
-              src="/assets/icons/plus.svg"
+              src="./assets/icons/plus.svg"
               width={25}
               height={25}
               alt="images"
@@ -62,7 +62,7 @@ function AppResultsSourcesRecordChange({ title, subheader, sx, ...other }) {
             Moved between entities
           </Typography>
           <Stack direction="row" spacing={3} alignItems="center">
-            <img src="/assets/icons/copy_entity.svg" alt="images" />
+            <img src="./assets/icons/copy_entity.svg" alt="images" />
             <Typography variant="h4">8</Typography>
           </Stack>
         </Box>
@@ -71,7 +71,7 @@ function AppResultsSourcesRecordChange({ title, subheader, sx, ...other }) {
             Removed source records
           </Typography>
           <Stack direction="row" spacing={3} alignItems="center">
-            <img src="/assets/icons/trash.svg" alt="images" />
+            <img src="./assets/icons/trash.svg" alt="images" />
             <Typography variant="h4">0</Typography>
           </Stack>
         </Box>

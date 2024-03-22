@@ -29,7 +29,7 @@ const dataporoducts = [
     lastRefreshed: '2023-05-18 09:30:00 UTC',
     owner: 'Dr. Emily Johnson (Clinical Domain Expert)',
     color: 'success',
-    icon: '/assets/icons/glass/ic_glass_bag.png',
+    icon: './assets/icons/glass/ic_glass_bag.png',
   },
   {
     title: 'Provider',
@@ -39,7 +39,7 @@ const dataporoducts = [
     lastRefreshed: '2023-05-17 15:45:00 UTC',
     owner: 'Michael Thompson (Technical Product Manager)',
     color: 'info',
-    icon: '/assets/icons/glass/ic_glass_users.png',
+    icon: './assets/icons/glass/ic_glass_users.png',
   },
   {
     title: 'Patient Directory',
@@ -49,7 +49,7 @@ const dataporoducts = [
     lastRefreshed: '2023-05-18 11:15:00 UTC',
     owner: 'Sarah Davis (Data Scientist)',
     color: 'warning',
-    icon: '/assets/icons/glass/ic_glass_buy.png',
+    icon: './assets/icons/glass/ic_glass_buy.png',
   },
   {
     title: 'Observability',
@@ -59,7 +59,7 @@ const dataporoducts = [
     lastRefreshed: '2023-05-18 08:00:00 UTC',
     owner: 'John Anderson (DevOps Engineer)',
     color: 'warning',
-    icon: '/assets/icons/glass/ic_glass_buy.png',
+    icon: './assets/icons/glass/ic_glass_buy.png',
   },
 ];
 
