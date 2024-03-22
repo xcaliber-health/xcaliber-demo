@@ -49,7 +49,7 @@ function AppResultsEntitiesRecordChange({ title, subheader, sx, ...other }) {
           <Typography sx={{ fontWeight: 200 }}>New customers</Typography>
           <Stack direction="row" spacing={3} alignItems="center">
             <img
-              src="/assets/icons/plus_1.svg"
+              src="./assets/icons/plus_1.svg"
               width={25}
               height={25}
               alt="images"
@@ -60,14 +60,14 @@ function AppResultsEntitiesRecordChange({ title, subheader, sx, ...other }) {
         <Box display="flex" flexDirection="column" alignItems="center">
           <Typography sx={{ fontWeight: 200 }}>Updated customers</Typography>
           <Stack direction="row" spacing={3} alignItems="center">
-            <img src="/assets/icons/copy_entity_1.svg" alt="images" />
+            <img src="./assets/icons/copy_entity_1.svg" alt="images" />
             <Typography variant="h4">1</Typography>
           </Stack>
         </Box>
         <Box display="flex" flexDirection="column" alignItems="center">
           <Typography sx={{ fontWeight: 200 }}>Removed customers</Typography>
           <Stack direction="row" spacing={3} alignItems="center">
-            <img src="/assets/icons/trash_1.svg" alt="images" />
+            <img src="./assets/icons/trash_1.svg" alt="images" />
             <Typography variant="h4">0</Typography>
           </Stack>
         </Box>

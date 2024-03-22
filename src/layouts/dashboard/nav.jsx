@@ -108,7 +108,7 @@ export default function Nav({ openNav, onCloseNav }) {
           variant="contained"
           color="inherit"
         >
-          Xcaliber Docs
+          XCaliber Docs
         </Button>
       </Stack>
     </Box>

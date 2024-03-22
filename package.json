@@ -1,6 +1,7 @@
 {
-  "name": "@minimal/material-kit-react",
-  "author": "minimals.cc",
+  "name": "@xcaliber-demo/xcaliber-demo",
+  "author": "XCaliber",
+  "homepage": "https://xcaliber-health.github.io/xcaliber-demo/",
   "licence": "MIT",
   "version": "1.8.0",
   "private": false,
@@ -12,6 +13,8 @@
     "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "rm:all": "rm -rf node_modules .next out dist build",
+    "predeploy" : "npm run build",
+    "deploy" : "gh-pages -d dist",
     "re:start": "yarn rm:all && yarn install && yarn dev",
     "re:build": "yarn rm:all && yarn install && yarn build",
     "re:build-npm": "npm run rm:all && npm install && npm run build",
@@ -55,6 +58,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-unused-imports": "^3.0.0",
+    "gh-pages": "^6.1.1",
     "prettier": "3.2.5",
     "vite": "^4.4.11",
     "vite-plugin-checker": "^0.6.2"

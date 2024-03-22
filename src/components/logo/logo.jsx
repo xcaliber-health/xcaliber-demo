@@ -41,7 +41,7 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
       alignItems="center"
       {...other}
     >
-      <img src="/assets/logo.png" alt="favicon" />
+      <img src="./assets/logo.png" alt="favicon" />
     </Box>
   );
 
