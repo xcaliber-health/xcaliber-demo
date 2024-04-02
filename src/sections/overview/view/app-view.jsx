@@ -11,8 +11,12 @@ import Typography from '@mui/material/Typography';
 // import AppOrderTimeline from '../app-order-timeline';
 // import AppCurrentVisits from '../app-current-visits';
 // import AppWebsiteVisits from '../app-website-visits';
-import AppWidgetSummary from '../app-widget-summary';
 // import AppTrafficBySite from '../app-traffic-by-site';
+import { useEffect } from 'react';
+
+import axiosInstance from 'src/service/axiosInstance';
+
+import AppWidgetSummary from '../app-widget-summary';
 // import AppCurrentSubject from '../app-current-subject';
 import AppResultsSourcesRecordChange from '../app-results-source';
 import AppResultsEntitiesRecordChange from '../app-results-entities';
@@ -64,6 +68,21 @@ const dataporoducts = [
 ];
 
 export default function AppView() {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axiosInstance.get(
+          '/data_products?instanceId=852',
+        );
+        console.log(response.data);
+      } catch (error) {
+        console.error('Request failed:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <Container maxWidth="xl">
       <Typography variant="h3" sx={{ mb: 5 }}>
@@ -72,7 +91,7 @@ export default function AppView() {
 
       <Grid container spacing={3}>
         {dataporoducts.map((data, index) => (
-          <Grid xs={12} sm={6} md={4}>
+          <Grid xs={12} sm={6} md={3}>
             <AppWidgetSummary
               title={data.title}
               description={data.description}

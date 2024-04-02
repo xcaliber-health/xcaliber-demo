@@ -31,6 +31,10 @@ export default function Router() {
       ],
     },
     {
+      path: 'login',
+      element: <LoginPage />,
+    },
+    {
       path: '404',
       element: <Page404 />,
     },

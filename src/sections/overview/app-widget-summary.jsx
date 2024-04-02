@@ -67,7 +67,7 @@ export default function AppWidgetSummary({
             direction="row"
             justifyContent="flex-start"
             flexWrap="nowrap"
-            sx={{ minHeight: '14vh' }}
+            sx={{ minHeight: '20vh' }}
           >
             <Grid item xs={12} sm={6} md={4}>
               <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
