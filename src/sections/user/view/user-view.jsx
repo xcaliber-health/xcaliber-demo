@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { AgGridReact } from 'ag-grid-react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -20,7 +21,9 @@ import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
-import { emptyRows, applyFilter, getComparator } from '../utils';
+import { emptyRows, applyFilter, getComparator } from '../utils'; // AG Grid Component
+import 'ag-grid-community/styles/ag-grid.css'; // Mandatory CSS required by the grid
+import 'ag-grid-community/styles/ag-theme-quartz.css'; // Optional Theme applied to the grid
 
 // ----------------------------------------------------------------------
 
@@ -133,6 +136,20 @@ export default function UserPage() {
     setValue(newValue);
   };
 
+  // Column Definitions: Defines & controls grid columns.
+  const [colDefs] = useState([
+    {
+      field: 'name',
+      pinned: 'left',
+      lockPinned: true,
+      cellClass: 'lock-pinned',
+    },
+    { field: 'company', resizable: true },
+    { field: 'role' },
+    { field: 'isVerified' },
+    { field: 'status' },
+  ]);
+
   return (
     <Container maxWidth="xl">
       <Stack
@@ -152,100 +169,110 @@ export default function UserPage() {
         </Button>
       </Stack>
       <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Patient" {...a11yProps(0)} />
-          <Tab label="Medication" {...a11yProps(1)} />
-          <Tab label="Allergies" {...a11yProps(2)} />
-          <Tab label="Procedures" {...a11yProps(3)} />
-          <Tab label="Visits" {...a11yProps(4)} />
-          <Tab label="Immunization" {...a11yProps(5)} />
-        </Tabs>
-      </Box>
-      <CustomTabPanel value={value} index={0}>
-      <Card>
-        <UserTableToolbar
-          numSelected={selected.length}
-          filterName={filterName}
-          onFilterName={handleFilterByName}
-        />
-          <TableContainer sx={{scrollbarWidth: 'thin'}}>
-            <Table sx={{ minWidth: 800 }} stickyHeader>
-              <UserTableHead
-                order={order}
-                orderBy={orderBy}
-                rowCount={users.length}
-                numSelected={selected.length}
-                onRequestSort={handleSort}
-                onSelectAllClick={handleSelectAllClick}
-                headLabel={[
-                  { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company', minWidth: 470 },
-                  { id: 'role', label: 'Role', minWidth: 470 },
-                  {
-                    id: 'isVerified',
-                    label: 'Verified',
-                    align: 'center',
-                    minWidth: 470,
-                  },
-                  { id: 'status', label: 'Status', minWidth: 470 },
-                  { id: '' },
-                ]}
-              />
-              <TableBody>
-                {dataFiltered
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <UserTableRow
-                      key={row.id}
-                      name={row.name}
-                      role={row.role}
-                      status={row.status}
-                      company={row.company}
-                      avatarUrl={row.avatarUrl}
-                      isVerified={row.isVerified}
-                      selected={selected.indexOf(row.name) !== -1}
-                      handleClick={(event) => handleClick(event, row.name)}
-                    />
-                  ))}
-
-                <TableEmptyRows
-                  height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab label="Patient" {...a11yProps(0)} />
+            <Tab label="Medication" {...a11yProps(1)} />
+            <Tab label="Allergies" {...a11yProps(2)} />
+            <Tab label="Procedures" {...a11yProps(3)} />
+            <Tab label="Visits" {...a11yProps(4)} />
+            <Tab label="Immunization" {...a11yProps(5)} />
+          </Tabs>
+        </Box>
+        <CustomTabPanel value={value} index={0}>
+          <Card>
+            <UserTableToolbar
+              numSelected={selected.length}
+              filterName={filterName}
+              onFilterName={handleFilterByName}
+            />
+            <TableContainer sx={{ scrollbarWidth: 'thin' }}>
+              <Table sx={{ minWidth: 800 }} stickyHeader>
+                <UserTableHead
+                  order={order}
+                  orderBy={orderBy}
+                  rowCount={users.length}
+                  numSelected={selected.length}
+                  onRequestSort={handleSort}
+                  onSelectAllClick={handleSelectAllClick}
+                  headLabel={[
+                    { id: 'name', label: 'Name' },
+                    { id: 'company', label: 'Company', minWidth: 470 },
+                    { id: 'role', label: 'Role', minWidth: 470 },
+                    {
+                      id: 'isVerified',
+                      label: 'Verified',
+                      align: 'center',
+                      minWidth: 470,
+                    },
+                    { id: 'status', label: 'Status', minWidth: 470 },
+                    { id: '' },
+                  ]}
                 />
+                <TableBody>
+                  {dataFiltered
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => (
+                      <UserTableRow
+                        key={row.id}
+                        name={row.name}
+                        role={row.role}
+                        status={row.status}
+                        company={row.company}
+                        avatarUrl={row.avatarUrl}
+                        isVerified={row.isVerified}
+                        selected={selected.indexOf(row.name) !== -1}
+                        handleClick={(event) => handleClick(event, row.name)}
+                      />
+                    ))}
 
-                {notFound && <TableNoData query={filterName} />}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        <TablePagination
-          page={page}
-          component="div"
-          count={users.length}
-          rowsPerPage={rowsPerPage}
-          onPageChange={handleChangePage}
-          rowsPerPageOptions={[5, 10, 25]}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Card>
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-      Medication
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-      Allergies
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={3}>
-      Procedures
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={4}>
-      Visits
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={5}>
-      Immunization
-      </CustomTabPanel>
-    </Box>
-      
+                  <TableEmptyRows
+                    height={77}
+                    emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                  />
+
+                  {notFound && <TableNoData query={filterName} />}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              page={page}
+              component="div"
+              count={users.length}
+              rowsPerPage={rowsPerPage}
+              onPageChange={handleChangePage}
+              rowsPerPageOptions={[5, 10, 25]}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Card>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          <Card>
+            <div
+              className="ag-theme-quartz" // applying the grid theme
+              style={{ height: 600 }} // the grid will fill the size of the parent container
+            >
+              <AgGridReact rowData={users} columnDefs={colDefs} pagination />
+            </div>
+          </Card>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={2}>
+          Allergies
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={3}>
+          Procedures
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={4}>
+          Visits
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={5}>
+          Immunization
+        </CustomTabPanel>
+      </Box>
     </Container>
   );
 }
