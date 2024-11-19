@@ -750,7 +750,7 @@ export const getPatientsAtPage = (page, name) => {
         }
       });
   }
-  else if (localStorage.getItem("XCALIBER_SOURCE") === "EPIC" || localStorage.getItem("XCALIBER_SOURCE") === "ECW")
+  else if (localStorage.getItem("XCALIBER_SOURCE") === "EPIC")
     return axios
       .get(`${sourceUrl}/api/v1/Patient?_count=11&_offset=${offset}&name=${name}`, {
         headers: {
@@ -763,6 +763,24 @@ export const getPatientsAtPage = (page, name) => {
       .then((response) => {
         const data = response.data;
         const parsedData = parserFunc(data.data.entry);
+        return parsedData ? parsedData : [];
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  else if (localStorage.getItem("XCALIBER_SOURCE") === "ECW")
+    return axios
+      .get(`${sourceUrl}/hp/fhir-gateway/fhir/R4/Patient?_count=11&_offset=${offset}&name=${name}`, {
+        headers: {
+          Authorization: Helper.getSourceToken(),
+          "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+        },
+      })
+      .then((response) => {
+        const data = response.data;
+        const parsedData = parserFunc(data.entry);
         return parsedData ? parsedData : [];
       })
       .catch((error) => {
