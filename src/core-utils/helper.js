@@ -94,16 +94,22 @@ export const Helper = {
       throw `failed to convert rtf to plain text with error - ${err?.message}`;
     }
   },
-
+  
   getSourceUrl: () => {
     let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-    return sourceType === "EPIC" || sourceType === 'ECW'
+    if (sourceType === 'ECW') {
+      return "https://sandbox.xcaliberapis.com"  
+    }
+    return sourceType === "EPIC"
       ? EPIC_XCHANGE_ENDPOINT
       : XCHANGE_SERVICE_ENDPOINT;
   },
-
+  
   getSourceToken: () => {
-    return localStorage.getItem("XCALIBER_SOURCE") === 'EPIC' || localStorage.getItem("XCALIBER_SOURCE") === 'ECW'
+    if (localStorage.getItem("XCALIBER_SOURCE") === 'ECW') {
+      return `U2FsdGVkX18fBnPrIlIV6TYkZYAILjiY8JkxkWdiYk6hxjUTALqYczvifBwf13iNVTm90kW1OyEPk8VaFiXjquObO5QFdDZ7F85s017oQsQtmhdG7mm+9O7pR9fdmGvBk2OVlWMsnXyGPb9iuXDEEdeWfH28+DvhxzzoiGMwk3+qrbrOP4Me+av3MSbUJdXr/0KQ2u6A7SFY2L/dMnGgjn2hDZvDb2Mr7WuVjktxc8bKqzUC3Wd2ZPncY07oq8Z1ssohOMFqFw0feTcMy3QbHLd0AqjSaIkhAyDr6I0HJebQBYVnkhUr0uD4DC3WG7CvHsMvPw5HmdPaBwuxD0OgfRQTNJGX5A1lYXui12t5gtqOQyNImng/t2DrABn0PtPFTq2ShtPTSvFlX9EgZU9LEw==`
+    }
+    return localStorage.getItem("XCALIBER_SOURCE") === 'EPIC'
     ? `${process.env.REACT_APP_EPIC_AUTHORIZATION}`
     : `${process.env.REACT_APP_AUTHORIZATION}`
   }
