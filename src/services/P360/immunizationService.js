@@ -8,9 +8,9 @@ export const ImmunizationService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/Immunization?patient=${patientId}${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
+        `${sourceUrl}/Immunization?patient=${patientId}${sourceType !== 'ECW' ? `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}`}`,
+        )}` : ""}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),

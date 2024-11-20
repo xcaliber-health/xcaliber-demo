@@ -8,9 +8,9 @@ export const MedicationService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/MedicationStatement?patient=${patientId}&category=problem-list-item${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
+        `${sourceUrl}/MedicationStatement?patient=${patientId}&category=problem-list-item${sourceType !== 'ECW' ? `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}`}`,
+        )}` : ""}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),

@@ -11,9 +11,9 @@ export const NoteService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const response = await axios.get(
-        `${sourceUrl}/DocumentReference?patient=${patientId}&category=visit_notes${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
+        `${sourceUrl}/DocumentReference?patient=${patientId}&category=visit_notes${sourceType !== 'ECW' ? `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}`}`,
+        )}` : ""}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -168,9 +168,9 @@ export const NoteService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const response = await axios.get(
-        `${sourceUrl}/DocumentReference?patient=${patientId}&category=visit_notes${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
+        `${sourceUrl}/DocumentReference?patient=${patientId}&category=visit_notes${sourceType !== 'ECW' ? `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}&start-date=2022-01-01`}`,
+        )}&start-date=2022-01-01` : ""}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),

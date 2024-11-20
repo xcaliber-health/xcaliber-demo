@@ -11,9 +11,9 @@ export const VitalService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/Observation?patient=${patientId}&category=vital-signs${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
+        `${sourceUrl}/Observation?patient=${patientId}&category=vital-signs${sourceType !== 'ECW' ? `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}`}`,
+        )}` : ""}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),

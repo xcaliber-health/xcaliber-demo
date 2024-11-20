@@ -15,9 +15,9 @@ export const AppointmentService = {
           : "";
         
       const result = await axios.get(
-        `${sourceUrl}/Appointment?patient=${patientId}${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
+        `${sourceUrl}/Appointment?patient=${patientId}${sourceType !== 'ECW' ? `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}`}`,
+        )}` : ""}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),

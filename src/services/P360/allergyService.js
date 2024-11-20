@@ -14,9 +14,9 @@ export const AllergyService = {
       let sourceUrl = Helper.getSourceUrl()
 
       const result = await axios.get(
-        `${sourceUrl}/AllergyIntolerance?patient=${patientId}${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
+        `${sourceUrl}/AllergyIntolerance?patient=${patientId}${sourceType !== 'ECW' ? `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}`}`,
+        )}` : ""}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
