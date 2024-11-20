@@ -344,10 +344,9 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
               notes?.map((note) => {
                 let noteDateValue =
                   localStorage.getItem("XCALIBER_SOURCE") === "ELATION" ||
-                  localStorage.getItem("XCALIBER_SOURCE") === "EPIC"
+                    localStorage.getItem("XCALIBER_SOURCE") === "EPIC"
                     ? note?.resource?.date
                     : note?.resource?.context?.period?.start;
-
                 return (
                   <ListItemButton
                     style={{
@@ -365,8 +364,15 @@ const NotesTab = ({ patientDetails, bookedNote }) => {
                     <ListItemText
                       primary={
                         note.resource?.content?.map((item) => {
+                          let plainText = "";
+                          try {
+                            plainText = atob(item?.attachment?.data, "base64");
+                          }
+                          catch (e) {
+                            console.log(e);
+                          }
                           return <NotesBlock
-                                    plainText={atob(item?.attachment?.data,"base64")}>
+                            plainText={plainText}>
                           </NotesBlock>
                         })
                       }
