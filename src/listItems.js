@@ -99,7 +99,7 @@ export const mainListItems = (onClick, id, classColor) => (
         </ListItemButton>
       </Box>
 
-      <Box
+      {/* <Box
         display="flex"
         flexDirection="column"
         justifyContent={"center"}
@@ -132,7 +132,7 @@ export const mainListItems = (onClick, id, classColor) => (
             <ListItemText primary="Patient-360" sx={{ color: "white" }} />
           </Box>
         </ListItemButton>
-      </Box>
+      </Box> */}
 
       <Box
         display="flex"
@@ -170,7 +170,7 @@ export const mainListItems = (onClick, id, classColor) => (
         </ListItemButton>
       </Box>
 
-      <Box
+      {/* <Box
         display="flex"
         flexDirection="column"
         justifyContent={"center"}
@@ -203,7 +203,7 @@ export const mainListItems = (onClick, id, classColor) => (
             <ListItemText primary="Service Desk" sx={{ color: "white" }} />
           </Box>
         </ListItemButton>
-      </Box>
+      </Box> */}
 
       <Box
         display="flex"
