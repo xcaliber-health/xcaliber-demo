@@ -6,12 +6,19 @@ export const OrderService = {
   getOrders: async (patientId) => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
-      let sourceUrl = Helper.getSourceUrl()
-        
-      const result = await axios.get(
-        `${sourceUrl}/api/v1/ServiceRequest?patient=${patientId}&departmentId=${localStorage.getItem(
+      let sourceUrl = Helper.getSourceUrl();
+      let url = '';
+      // hardcode encounter id for now 
+      if (sourceType === "ATHENA") {
+        url = `${sourceUrl}/api/v1/ServiceRequest?patient=${patientId}&departmentId=${localStorage.getItem(
+          `DEPARTMENT_ID`)}&encounter=44602&categorycode=108252007'`
+      } else {
+        url = `${sourceUrl}/api/v1/ServiceRequest?patient=${patientId}&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}`,
+        )}`
+      }
+      const result = await axios.get(
+        url,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
