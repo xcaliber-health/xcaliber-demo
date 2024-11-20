@@ -11,9 +11,9 @@ export const NoteService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const response = await axios.get(
-        `${sourceUrl}/api/v1/DocumentReference?patient=${patientId}&category=visit_notes&departmentId=${localStorage.getItem(
+        `${sourceUrl}/DocumentReference?patient=${patientId}&category=visit_notes${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}`,
+        )}`}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -49,7 +49,7 @@ export const NoteService = {
       if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION") {
         conditionUrl = "";
         const invoices = await axios.get(
-          `${sourceUrl}/api/v1/Invoice?patient=${patientId}`,
+          `${sourceUrl}/Invoice?patient=${patientId}`,
           {
             headers: {
               Authorization: Helper.getSourceToken(),
@@ -98,7 +98,7 @@ export const NoteService = {
       const diagnosisNames = [];
       for (let i in encounterIds) {
         const encounters = await axios.get(
-          `${sourceUrl}/api/v1/Condition?category=encounter-diagnosis&patient=${patientId}&encounter=${encounterIds[i]}${conditionUrl}`,
+          `${sourceUrl}/Condition?category=encounter-diagnosis&patient=${patientId}&encounter=${encounterIds[i]}${conditionUrl}`,
           {
             headers: {
               Authorization: Helper.getSourceToken(),
@@ -168,9 +168,9 @@ export const NoteService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const response = await axios.get(
-        `${sourceUrl}/api/v1/DocumentReference?patient=${patientId}&category=visit_notes&departmentId=${localStorage.getItem(
+        `${sourceUrl}/DocumentReference?patient=${patientId}&category=visit_notes${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}&start-date=2022-01-01`,
+        )}&start-date=2022-01-01`}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -222,7 +222,7 @@ export const NoteService = {
       if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
         await axios
           .patch(
-            `${sourceUrl}/api/v1/Appointment/${appointmentId}`,
+            `${sourceUrl}/Appointment/${appointmentId}`,
             {
               context: {
                 departmentId: localStorage.getItem(`DEPARTMENT_ID`),
@@ -247,7 +247,7 @@ export const NoteService = {
           });
         await axios
           .get(
-            `${sourceUrl}/api/v1/Appointment/${appointmentId}`,
+            `${sourceUrl}/Appointment/${appointmentId}`,
             {
               headers: {
                 Authorization: Helper.getSourceToken(),
@@ -269,7 +269,7 @@ export const NoteService = {
           });
       }
       const response = await axios.post(
-        `${sourceUrl}/api/v1/DocumentReference?category=visit_notes&encounter=${encounterId}`,
+        `${sourceUrl}/DocumentReference?category=visit_notes&encounter=${encounterId}`,
         notePayload,
         {
           headers: {
@@ -280,7 +280,7 @@ export const NoteService = {
           },
         }
       );
-      return response.data?.data?.id;
+      return response.data?.data?.id ? response.data?.data?.id : response.data?.id;
     } catch (error) {
       console.log(error);
     }
@@ -290,7 +290,7 @@ export const NoteService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/DocumentReference/${noteId}?category=visit_notes`,
+        `${sourceUrl}/DocumentReference/${noteId}?category=visit_notes`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -300,7 +300,7 @@ export const NoteService = {
           },
         }
       );
-      return result?.data?.data;
+      return result?.data?.data ? result?.data?.data : result?.data;
     } catch (error) {
       console.log(error);
     }
@@ -310,7 +310,7 @@ export const NoteService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/DocumentReference/?patient=${patientId}&departmentId=${localStorage.getItem(
+        `${sourceUrl}/DocumentReference/?patient=${patientId}&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}&appointment=${appointmentId}`,
         {
@@ -322,7 +322,7 @@ export const NoteService = {
           },
         }
       );
-      return result?.data?.data?.entry;
+      return result?.data?.data?.entry ? result?.data?.data?.entry : result?.data?.entry;;
     } catch (error) {
       console.log(error);
     }

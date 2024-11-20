@@ -15,9 +15,9 @@ export const AppointmentService = {
           : "";
         
       const result = await axios.get(
-        `${sourceUrl}/api/v1/Appointment?patient=${patientId}&departmentId=${localStorage.getItem(
+        `${sourceUrl}/Appointment?patient=${patientId}${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}`,
+        )}`}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -36,7 +36,7 @@ export const AppointmentService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.post(
-        `${sourceUrl}/api/v1/Appointment`,
+        `${sourceUrl}/Appointment`,
         appointmentPayload,
         {
           headers: {
@@ -56,7 +56,7 @@ export const AppointmentService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/Appointment/${appointmentId}`,
+        `${sourceUrl}/Appointment/${appointmentId}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -64,7 +64,7 @@ export const AppointmentService = {
           },
         }
       );
-      return result?.data?.data;
+      return result?.data?.data ? result?.data?.data : result?.data;
     } catch (error) {
       console.log(error);
     }

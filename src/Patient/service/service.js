@@ -611,7 +611,7 @@ export const getAllPatients = () => {
     },
   };
   return axios
-    .get(`${sourceUrl}/api/v1/Patient`, configHeaders)
+    .get(`${sourceUrl}/Patient`, configHeaders)
     .then(async (response) => {
       const data = await response.data;
       const parsedData = parserFunc(data.data.entry);
@@ -636,7 +636,7 @@ export const getPatientCount = async (name) => {
     // };
     // name = !name ? "" : name;
     // const response = await axios.get(
-    //   `${sourceUrl}/api/v1/Patient?_count=1&_offset=0&name=${name}`,
+    //   `${sourceUrl}/Patient?_count=1&_offset=0&name=${name}`,
     //   configHeaders
     // );
     return 1000;
@@ -658,7 +658,7 @@ export const getPatient = (id) => {
     },
   };
   return axios
-    .get(`${sourceUrl}/api/v1/Patient/${id}`, configHeaders)
+    .get(`${sourceUrl}/Patient/${id}`, configHeaders)
     .then(async (response) => {
       const data = await response.data;
       const parsedData = parserFuncSingle(data.data);
@@ -677,7 +677,7 @@ export const getPatientsAtPage = (page, name) => {
 
   if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION")
     return axios
-      .get(`${sourceUrl}/api/v1/Patient?_count=11&_offset=${offset}&name=${name}`, {
+      .get(`${sourceUrl}/Patient?_count=11&_offset=${offset}&name=${name}`, {
         headers: {
           Authorization: Helper.getSourceToken(),
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
@@ -697,7 +697,7 @@ export const getPatientsAtPage = (page, name) => {
     name = 'william';
     return axios
       .get(
-        `${sourceUrl}/api/v1/Patient?departmentId=${localStorage.getItem(
+        `${sourceUrl}/Patient?departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}&_count=11&_offset=${offset}&name=${name}`,
         {
@@ -726,7 +726,7 @@ export const getPatientsAtPage = (page, name) => {
           let sourceUrl = Helper.getSourceUrl();
           return await axios
             .get(
-              `${sourceUrl}/api/v1/Patient?departmentId=${localStorage.getItem(
+              `${sourceUrl}/Patient?departmentId=${localStorage.getItem(
                 `DEPARTMENT_ID`
               )}&_count=10&_offset=${offset}&given=George&name=${name}`,
               {
@@ -753,7 +753,7 @@ export const getPatientsAtPage = (page, name) => {
   }
   else if (localStorage.getItem("XCALIBER_SOURCE") === "EPIC")
     return axios
-      .get(`${sourceUrl}/api/v1/Patient?_count=11&_offset=${offset}&name=${name}`, {
+      .get(`${sourceUrl}/Patient?_count=11&_offset=${offset}&name=${name}`, {
         headers: {
           Authorization: Helper.getSourceToken(),
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
@@ -771,7 +771,7 @@ export const getPatientsAtPage = (page, name) => {
       });
   else if (localStorage.getItem("XCALIBER_SOURCE") === "ECW")
     return axios
-      .get(`${sourceUrl}/hp/fhir-gateway/fhir/R4/Patient?_count=11&_offset=${offset}${ name && '&name=' + name}`, {
+      .get(`${sourceUrl}/Patient?_count=11&_offset=${offset}${ name && '&name=' + name}`, {
         headers: {
           Authorization: Helper.getSourceToken(),
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
@@ -815,7 +815,7 @@ export const PatientsById = (id) => {
   else if(localStorage.getItem("XCALIBER_SOURCE") === "EPIC") {
     let sourceUrl = Helper.getSourceUrl();
     return axios
-      .get(`${sourceUrl}/api/v1/Patient/${id}`, {
+      .get(`${sourceUrl}/Patient/${id}`, {
         headers: {
           Authorization: Helper.getSourceToken(),
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
@@ -848,7 +848,7 @@ export const addPatient = (patient) => {
   };
   console.log(d);
   return axios
-    .post(`${sourceUrl}/api/v1/Patient`, d, configHeaders)
+    .post(`${sourceUrl}/Patient`, d, configHeaders)
     .then(async (response) => {
       const data = await response;
       return data.data.data;
@@ -871,7 +871,7 @@ export const editPatient = (patient, id) => {
   };
 
   return axios
-    .put(`${sourceUrl}/api/v1/Patient/${id}`, d, configHeaders)
+    .put(`${sourceUrl}/Patient/${id}`, d, configHeaders)
     .then(async (response) => {
       const data = await response;
 

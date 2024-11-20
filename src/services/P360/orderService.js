@@ -10,12 +10,12 @@ export const OrderService = {
       let url = '';
       // hardcode encounter id for now 
       if (sourceType === "ATHENA") {
-        url = `${sourceUrl}/api/v1/ServiceRequest?patient=${patientId}&departmentId=${localStorage.getItem(
+        url = `${sourceUrl}/ServiceRequest?patient=${patientId}&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`)}&encounter=44602&categorycode=108252007`
       } else {
-        url = `${sourceUrl}/api/v1/ServiceRequest?patient=${patientId}&departmentId=${localStorage.getItem(
+        url = `${sourceUrl}/ServiceRequest?patient=${patientId}${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}`
+        )}`}`
       }
       const result = await axios.get(
         url,

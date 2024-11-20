@@ -8,9 +8,9 @@ export const ProblemService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/Condition?patient=${patientId}&category=problem-list-item&departmentId=${localStorage.getItem(
+        `${sourceUrl}/Condition?patient=${patientId}&category=problem-list-item${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}`,
+        )}`}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -18,7 +18,7 @@ export const ProblemService = {
           },
         }
       );
-      return result?.data?.data?.entry;
+      return result?.data?.data?.entry ? result?.data?.data?.entry : result?.data?.entry;;
     } catch (error) {
       console.log(error);
     }
@@ -28,7 +28,7 @@ export const ProblemService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.post(
-        `${sourceUrl}/api/v1/Condition`,
+        `${sourceUrl}/Condition`,
         problemPayload,
         {
           headers: {
@@ -47,7 +47,7 @@ export const ProblemService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/Condition/${id}`,
+        `${sourceUrl}/Condition/${id}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -56,7 +56,7 @@ export const ProblemService = {
         }
       );
 
-      return result?.data?.data;
+      return result?.data?.data ? result?.data?.data : result?.data;
     } catch (error) {
       console.log(error);
     }

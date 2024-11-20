@@ -8,9 +8,9 @@ export const ImmunizationService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/Immunization?patient=${patientId}&departmentId=${localStorage.getItem(
+        `${sourceUrl}/Immunization?patient=${patientId}${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}`,
+        )}`}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -18,7 +18,7 @@ export const ImmunizationService = {
           },
         }
       );
-      return result?.data?.data?.entry;
+      return result?.data?.data?.entry ? result?.data?.data?.entry : result?.data?.entry;;
     } catch (error) {
       console.log(error);
     }
@@ -28,7 +28,7 @@ export const ImmunizationService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.post(
-        `${sourceUrl}/api/v1/Immunization`,
+        `${sourceUrl}/Immunization`,
         immunizationPayload,
         {
           headers: {
@@ -39,7 +39,7 @@ export const ImmunizationService = {
           },
         }
       );
-      return result?.data?.data;
+      return result?.data?.data ? result?.data?.data : result?.data;
     } catch (error) {
       console.log(error);
     }
@@ -49,7 +49,7 @@ export const ImmunizationService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/Immunization/${id}`,
+        `${sourceUrl}/Immunization/${id}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -58,7 +58,7 @@ export const ImmunizationService = {
         }
       );
 
-      return result?.data?.data;
+      return result?.data?.data ? result?.data?.data : result?.data;
     } catch (error) {
       console.log(error);
     }

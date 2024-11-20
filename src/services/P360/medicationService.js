@@ -8,9 +8,9 @@ export const MedicationService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/MedicationStatement?patient=${patientId}&category=problem-list-item&departmentId=${localStorage.getItem(
+        `${sourceUrl}/MedicationStatement?patient=${patientId}&category=problem-list-item${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}`,
+        )}`}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -18,7 +18,7 @@ export const MedicationService = {
           },
         }
       );
-      return result?.data?.data?.entry;
+      return result?.data?.data?.entry ? result?.data?.data?.entry : result?.data?.entry;;
     } catch (error) {
       console.log(error);
     }
@@ -28,7 +28,7 @@ export const MedicationService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.post(
-        `${sourceUrl}/api/v1/MedicationStatement`,
+        `${sourceUrl}/MedicationStatement`,
         requestPayLoad,
         {
           headers: {
@@ -39,7 +39,7 @@ export const MedicationService = {
           },
         }
       );
-      return result?.data?.data;
+      return result?.data?.data ? result?.data?.data : result?.data;
     } catch (error) {
       console.log(error);
     }
