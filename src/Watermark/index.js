@@ -1,5 +1,5 @@
 import { Typography, Box } from "@mui/material";
-import logo from "../static/Watermark.png";
+import logo from "../static/xcaliber_logo.png";
 
 const Watermark = () => {
   return (

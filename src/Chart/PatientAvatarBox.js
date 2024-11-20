@@ -81,7 +81,7 @@ const PatientDetailsCard = ({
                 <Chip label="DELETED" />
               </Grid>
             )}
-            <Grid>{`${patientDetails?.name?.[0]?.given?.[0]}  ${patientDetails?.name?.[0]?.family} `}</Grid>
+            <Grid>{`${patientDetails?.name?.[0]?.given?.[0] ? `${patientDetails?.name?.[0]?.given?.[0]} ` : ``}  ${patientDetails?.name?.[0]?.family ? patientDetails?.name?.[0]?.family : ``} `}</Grid>
             <Grid>
               {`Patient | ${calculateAge(
                 parseInt(patientDetails?.birthDate?.slice(0, 4))

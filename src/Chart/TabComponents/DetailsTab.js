@@ -50,7 +50,7 @@ const DetailsTab = ({ patientDetails }) => {
             <Typography>Name</Typography>
             <Typography
               sx={{ ...commonValueStyles }}
-            >{`${patientDetails?.name?.[0]?.given?.[0]}  ${patientDetails?.name?.[0]?.family} `}</Typography>
+            >{`${patientDetails?.name?.[0]?.given?.[0] ? `${patientDetails?.name?.[0]?.given?.[0]} ` : ``}  ${patientDetails?.name?.[0]?.family ? `${patientDetails?.name?.[0]?.family}` : ``} `}</Typography>
           </Grid>
         </Grid>
         <Grid container item justifyContent={"space-between"}>
