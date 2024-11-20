@@ -9,7 +9,7 @@ export const PatientService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const response = await axios.get(
-        `${sourceUrl}/api/v1/Patient/${id}?departmentId=${localStorage.getItem(
+        `${sourceUrl}/Patient/${id}?departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
         )}`,
         {
@@ -19,7 +19,7 @@ export const PatientService = {
           },
         }
       );
-      return response.data?.data;
+      return response.data?.data ? response.data?.data : response.data;
     } catch (error) {
       //Handle Exception
       console.log(error);

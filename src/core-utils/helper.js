@@ -98,7 +98,7 @@ export const Helper = {
   getSourceUrl: () => {
     let sourceType = localStorage.getItem("XCALIBER_SOURCE");
     if (sourceType === 'ECW') {
-      return "https://sandbox.xcaliberapis.com"  
+      return "https://sandbox.xcaliberapis.com/hp/fhir-gateway/fhir/R4"  
     }
     return sourceType === "EPIC"
       ? EPIC_XCHANGE_ENDPOINT

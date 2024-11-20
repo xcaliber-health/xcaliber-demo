@@ -11,9 +11,9 @@ export const VitalService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const result = await axios.get(
-        `${sourceUrl}/api/v1/Observation?patient=${patientId}&category=vital-signs&departmentId=${localStorage.getItem(
+        `${sourceUrl}/Observation?patient=${patientId}&category=vital-signs${sourceType !== 'ECW' && `&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
-        )}`,
+        )}`}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -21,7 +21,7 @@ export const VitalService = {
           },
         }
       );
-      return result?.data?.data?.entry;
+      return result?.data?.data?.entry ? result?.data?.data?.entry : result?.data?.entry;;
     } catch (error) {
       console.log(error);
     }
@@ -32,7 +32,7 @@ export const VitalService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const response = await axios.post(
-        `${sourceUrl}/api/v1/Observation`,
+        `${sourceUrl}/Observation`,
         vitalsPayload,
         {
           headers: {

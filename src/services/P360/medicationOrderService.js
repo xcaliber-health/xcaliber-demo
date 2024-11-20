@@ -86,7 +86,7 @@ export const MedicationOrderService = {
             },
           };
           const result = await axios.post(
-            `${sourceUrl}/api/v1/Appointment`,
+            `${sourceUrl}/Appointment`,
             appointmentPayload,
             {
               headers: {
@@ -99,7 +99,7 @@ export const MedicationOrderService = {
         }
         await axios
           .patch(
-            `${sourceUrl}/api/v1/Appointment/${appointmentId}`,
+            `${sourceUrl}/Appointment/${appointmentId}`,
             {
               context: {
                 departmentId: localStorage.getItem(`DEPARTMENT_ID`),
@@ -124,7 +124,7 @@ export const MedicationOrderService = {
           });
         await axios
           .get(
-            `${sourceUrl}/api/v1/Appointment/${appointmentId}`,
+            `${sourceUrl}/Appointment/${appointmentId}`,
             {
               headers: {
                 Authorization: Helper.getSourceToken(),
@@ -177,7 +177,7 @@ export const MedicationOrderService = {
         },
       };
       const diagnosisResponse = await axios.post(
-        `${sourceUrl}/api/v1/Condition`,
+        `${sourceUrl}/Condition`,
         diagnosisPayload,
         {
           headers: {
@@ -192,7 +192,7 @@ export const MedicationOrderService = {
         reference: `Encounter/${encounterId}`,
       };
       const response = await axios.post(
-        `${sourceUrl}/api/v1/MedicationRequest`,
+        `${sourceUrl}/MedicationRequest`,
         payLoad,
         {
           headers: {
@@ -203,7 +203,7 @@ export const MedicationOrderService = {
           },
         }
       );
-      return response.data?.data?.id;
+      return response.data?.data?.id ? response.data?.data?.id : response.data?.id;
     } catch (error) {
       console.log(error);
     }
@@ -215,7 +215,7 @@ export const MedicationOrderService = {
       let sourceUrl = Helper.getSourceUrl()
       if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
         // const encounterResponse = await axios.get(
-        //   `${sourceUrl}/api/v1/Encounter?patient=${patientId}&departmentId=${localStorage.getItem(
+        //   `${sourceUrl}/Encounter?patient=${patientId}&departmentId=${localStorage.getItem(
         //     `DEPARTMENT_ID`
         //   )}`,
         //   {
@@ -233,7 +233,7 @@ export const MedicationOrderService = {
         for (let i = 0; i < 1; i++) {
           const encounterId = 44602;
           const medicationOrdersResponse = await axios.get(
-            `${sourceUrl}/api/v1/MedicationRequest?patient=${patientId}&encounter=${encounterId}`,
+            `${sourceUrl}/MedicationRequest?patient=${patientId}&encounter=${encounterId}`,
             {
               headers: {
                 Authorization: Helper.getSourceToken(),

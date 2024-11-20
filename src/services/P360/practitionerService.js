@@ -9,7 +9,7 @@ export const PractitionerService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       const response = await axios.get(
-        `${sourceUrl}/api/v1/Practitioner?practitioner=${id}`,
+        `${sourceUrl}/Practitioner?practitioner=${id}`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -19,7 +19,7 @@ export const PractitionerService = {
       );
       console.log(id);
       console.log(response.data?.data);
-      return response.data?.data;
+      return response.data?.data ? response.data?.data : response.data;
     } catch (error) {
       //Handle Exception
       console.log(error);
