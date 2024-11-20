@@ -11,7 +11,7 @@ export const OrderService = {
       // hardcode encounter id for now 
       if (sourceType === "ATHENA") {
         url = `${sourceUrl}/api/v1/ServiceRequest?patient=${patientId}&departmentId=${localStorage.getItem(
-          `DEPARTMENT_ID`)}&encounter=44602&categorycode=108252007'`
+          `DEPARTMENT_ID`)}&encounter=44602&categorycode=108252007`
       } else {
         url = `${sourceUrl}/api/v1/ServiceRequest?patient=${patientId}&departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`

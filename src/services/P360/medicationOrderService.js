@@ -214,25 +214,24 @@ export const MedicationOrderService = {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl()
       if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
-        const encounterResponse = await axios.get(
-          `${sourceUrl}/api/v1/Encounter?patient=${patientId}&departmentId=${localStorage.getItem(
-            `DEPARTMENT_ID`
-          )}`,
-          {
-            headers: {
-              Authorization: Helper.getSourceToken(),
-              "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Methods":
-                "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-            },
-          }
-        );
+        // const encounterResponse = await axios.get(
+        //   `${sourceUrl}/api/v1/Encounter?patient=${patientId}&departmentId=${localStorage.getItem(
+        //     `DEPARTMENT_ID`
+        //   )}`,
+        //   {
+        //     headers: {
+        //       Authorization: Helper.getSourceToken(),
+        //       "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+        //       "Access-Control-Allow-Origin": "*",
+        //       "Access-Control-Allow-Methods":
+        //         "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+        //     },
+        //   }
+        // );
         let count = 0;
         const medicationOrders = [];
-        for (let i = 0; i < encounterResponse?.data?.data?.entry?.length; i++) {
-          const encounterId =
-            encounterResponse?.data?.data?.entry?.[i]?.resource?.id;
+        for (let i = 0; i < 1; i++) {
+          const encounterId = 44602;
           const medicationOrdersResponse = await axios.get(
             `${sourceUrl}/api/v1/MedicationRequest?patient=${patientId}&encounter=${encounterId}`,
             {

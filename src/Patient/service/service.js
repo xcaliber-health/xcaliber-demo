@@ -11,7 +11,7 @@ import {
 import { Helper } from '../../core-utils/helper';
 
 
-const endpointUrl = "https://xchange-staging.xcaliberapis.com/api/v1";
+const endpointUrl = "https://xchange-staging.xcaliberapis.com";
 
 const dateParser = (item) => {
   var date = new Date(item);
@@ -694,6 +694,7 @@ export const getPatientsAtPage = (page, name) => {
         console.log(error);
       });
   else if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") {
+    name = 'william';
     return axios
       .get(
         `${sourceUrl}/api/v1/Patient?departmentId=${localStorage.getItem(
@@ -719,7 +720,7 @@ export const getPatientsAtPage = (page, name) => {
       })
       .catch(async (error) => {
         if (
-          error.response.data.issue[0].details.text ===
+          error.response?.data.issue[0].details.text ===
           '{"error":"The given search parameters would produce a total data set larger than 1000 records.  Please refine your search and try again."}'
         ) {
           let sourceUrl = Helper.getSourceUrl();
@@ -770,7 +771,7 @@ export const getPatientsAtPage = (page, name) => {
       });
   else if (localStorage.getItem("XCALIBER_SOURCE") === "ECW")
     return axios
-      .get(`${sourceUrl}/hp/fhir-gateway/fhir/R4/Patient?_count=11&_offset=${offset}&name=${name}`, {
+      .get(`${sourceUrl}/hp/fhir-gateway/fhir/R4/Patient?_count=11&_offset=${offset}${ name && '&name=' + name}`, {
         headers: {
           Authorization: Helper.getSourceToken(),
           "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
