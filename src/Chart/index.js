@@ -1268,7 +1268,7 @@ const Chart = () => {
                             <Typography>
                               {problem?.resource?.text?.div &&
                                 problem?.resource?.text?.div}
-                              {problem?.resource?.code?.coding?.[0]?.display}
+                              {problem?.resource?.code?.text ? problem?.resource?.code?.text : problem?.resource?.code?.coding?.[0]?.display}
                             </Typography>
                           </TableCell>
                           <TableCell align="left">
@@ -1469,7 +1469,7 @@ const Chart = () => {
                           </TableCell>
                           <TableCell align="left">
                             {allergy?.resource?.clinicalStatus?.coding?.[0]
-                              ?.display ?? ""}
+                              ?.display ?? "ACTIVE"}
                           </TableCell>
                           <TableCell align="left">
                             <Typography>
