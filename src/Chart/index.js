@@ -241,8 +241,6 @@ const Chart = () => {
         })?.valueString
       );
       const name = vital?.resource?.code?.coding?.[0]?.display;
-      const effectiveDateTime = vital?.resource?.effectiveDateTime;
-      const effectiveYear = vital?.resource?.effectiveDateTime?.slice(0, 4);
       let value;
       if (name.toLowerCase().includes("body mass index")) {
         if (vital?.resource?.valueString) value = vital?.resource?.valueString;
@@ -301,8 +299,8 @@ const Chart = () => {
         data[name] = [
           {
             value: value,
-            date: localStorage.getItem('XCALIBER_SOURCE') === 'ECW' ? effectiveDateTime :  date,
-            year: localStorage.getItem('XCALIBER_SOURCE') === 'ECW' ? effectiveYear : year,
+            date: date,
+            year: year,
           },
         ];
       }
