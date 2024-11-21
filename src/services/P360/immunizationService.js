@@ -18,7 +18,7 @@ export const ImmunizationService = {
           },
         }
       );
-      return result?.data?.data?.entry ? result?.data?.data?.entry : result?.data?.entry;;
+      return result?.data?.data?.entry ? result?.data?.data?.entry : result?.data?.entry;
     } catch (error) {
       console.log(error);
     }

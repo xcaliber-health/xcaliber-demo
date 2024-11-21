@@ -26,7 +26,7 @@ export const OrderService = {
           },
         }
       );
-      return result.data?.data?.entry;
+      return result.data?.data?.entry ? result.data?.data?.entry : result.data?.entry;
     } catch (error) {
       //Handle Exception
       console.log(error);
