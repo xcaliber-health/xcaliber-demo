@@ -232,7 +232,7 @@ const Chart = () => {
     let data = {};
 
     response.map((vital) => {
-      let dateObject = Helper.extractFieldsFromDate(
+      let dateObject = localStorage.getItem("XCALIBER_SOURCE") === "ECW" ? Helper.extractFieldsFromDate(vital?.resource?.effectiveDateTime) : Helper.extractFieldsFromDate(
         vital?.resource?.extension?.find((ext) => {
           return (
             ext?.url?.endsWith("observation-document-date") ||
