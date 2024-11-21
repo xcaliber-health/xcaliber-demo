@@ -241,6 +241,8 @@ const Chart = () => {
         })?.valueString
       );
       const name = vital?.resource?.code?.coding?.[0]?.display;
+      const effectiveDateTime = vital?.resource?.effectiveDateTime;
+      const effectiveYear = vital?.resource?.effectiveDateTime?.slice(0, 4);
       let value;
       if (name.toLowerCase().includes("body mass index")) {
         if (vital?.resource?.valueString) value = vital?.resource?.valueString;
@@ -299,8 +301,8 @@ const Chart = () => {
         data[name] = [
           {
             value: value,
-            date: date,
-            year: year,
+            date: localStorage.getItem('XCALIBER_SOURCE') === 'ECW' ? effectiveDateTime :  date,
+            year: localStorage.getItem('XCALIBER_SOURCE') === 'ECW' ? effectiveYear : year,
           },
         ];
       }
@@ -1080,13 +1082,13 @@ const Chart = () => {
             >
               <Tab label="Vitals" style={{ width: "25%" }} />
               <Tab label="Problems" style={{ width: "25%" }} />
-              <Tab label="Requests" style={{ width: "25%" }} />
               <Tab label="Allergies" style={{ width: "25%" }} />
               <Tab label="Immunizations" style={{ width: "25%" }} />
               <Tab label="Medications" style={{ width: "25%" }} />
               <Tab label="Medication Orders" style={{ width: "25%" }} />
               <Tab label="Visits" style={{ width: "25%" }} />
               <Tab label="Notes" style={{ width: "25%" }} />
+              <Tab label="Requests" style={{ width: "25%" }} />
               {/* <Tab label="Profile" style={{ width: "25%" }} /> */}
             </Tabs>
           </Box>
@@ -1187,7 +1189,7 @@ const Chart = () => {
               </Table>
             </TableContainer>
           </TabPanel>
-          <TabPanel value={value} index={8}>
+          <TabPanel value={value} index={7}>
             <NotesTab
               patientDetails={patientDetails}
               bookedNote={upcomingAppointments
@@ -1308,7 +1310,7 @@ const Chart = () => {
               </Table>
             </TableContainer>
           </TabPanel>
-          <TabPanel value={value} index={2}>
+          <TabPanel value={value} index={8}>
             <Box
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
@@ -1392,7 +1394,7 @@ const Chart = () => {
             </TableContainer>
           </TabPanel>
 
-          <TabPanel value={value} index={3}>
+          <TabPanel value={value} index={2}>
             <Box
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
@@ -1498,7 +1500,7 @@ const Chart = () => {
               </Table>
             </TableContainer>
           </TabPanel>
-          <TabPanel value={value} index={4}>
+          <TabPanel value={value} index={3}>
             <Box
               alignSelf="flex-start"
               flexDirection={"row-reverse"}
@@ -1588,7 +1590,7 @@ const Chart = () => {
               </Table>
             </TableContainer>
           </TabPanel>
-          <TabPanel value={value} index={5}>
+          <TabPanel value={value} index={4}>
             {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" && (
               <Grid>
                 <Box
@@ -1708,7 +1710,7 @@ const Chart = () => {
               </Grid>
             )}
           </TabPanel>
-          <TabPanel value={value} index={6}>
+          <TabPanel value={value} index={5}>
             {localStorage.getItem("XCALIBER_SOURCE") === "ATHENA" && (
               <Grid>
                 <Box
@@ -1827,7 +1829,7 @@ const Chart = () => {
               </Grid>
             )}
           </TabPanel>
-          <TabPanel value={value} index={7}>
+          <TabPanel value={value} index={6}>
             <TimeLine patientDetails={patientDetails} />
             {/* <div>hi</div> */}
           </TabPanel>
