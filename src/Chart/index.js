@@ -48,7 +48,7 @@ const Chart = () => {
   const { id } = useParams();
   const theme = useTheme();
   const navigate = useNavigate();
-  const [patientDetails, setPatientDetails] = useState({id: id});
+  const [patientDetails, setPatientDetails] = useState({ id: id });
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
   const [patientVitals, setPatientVitals] = useState([]);
   const [patientProblems, setPatientProblems] = useState([]);
@@ -103,23 +103,23 @@ const Chart = () => {
       extension:
         localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
           ? [
-              {
-                url: "http://xcaliber-fhir/structureDefinition/copay",
-                valueString: {
-                  collectedforother: 0,
-                  collectedforappointment: 0,
-                  insurancecopay: 0,
-                },
+            {
+              url: "http://xcaliber-fhir/structureDefinition/copay",
+              valueString: {
+                collectedforother: 0,
+                collectedforappointment: 0,
+                insurancecopay: 0,
               },
-              {
-                url: "http://xcaliber-fhir/structureDefinition/copay",
-                valueString: 0,
-              },
-              {
-                url: "http://xcaliber-fhir/structureDefinition/department-id",
-                valueInteger: localStorage.getItem(`DEPARTMENT_ID`),
-              },
-            ]
+            },
+            {
+              url: "http://xcaliber-fhir/structureDefinition/copay",
+              valueString: 0,
+            },
+            {
+              url: "http://xcaliber-fhir/structureDefinition/department-id",
+              valueInteger: localStorage.getItem(`DEPARTMENT_ID`),
+            },
+          ]
           : [],
       participant: [
         {
@@ -138,10 +138,10 @@ const Chart = () => {
         localStorage.getItem(`XCALIBER_SOURCE`) === "ELATION"
           ? {}
           : {
-              actor: {
-                reference: `Location/${localStorage.getItem(`DEPARTMENT_ID`)}`,
-              },
+            actor: {
+              reference: `Location/${localStorage.getItem(`DEPARTMENT_ID`)}`,
             },
+          },
       ],
     },
   });
@@ -319,8 +319,8 @@ const Chart = () => {
       localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
         ? await ReferenceDataService.getAllergyData()
         : localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA"
-        ? await ReferenceDataService.getAllergyData(`ab`)
-        : await ReferenceDataService.getAllergyData();
+          ? await ReferenceDataService.getAllergyData(`ab`)
+          : await ReferenceDataService.getAllergyData();
     setAllergyOptions(result);
     setAllergyReactionOptions(result);
   };
@@ -413,7 +413,7 @@ const Chart = () => {
             actor: {
               reference: `Patient/${patientId}`,
             },
-            "type":{"coding":{"code":"patient","system":"http://terminology.hl7.org/CodeSystem/participant-type"}}
+            "type": { "coding": { "code": "patient", "system": "http://terminology.hl7.org/CodeSystem/participant-type" } }
           },
           ...appointmentPayload?.data?.participant,
         ],
@@ -463,20 +463,20 @@ const Chart = () => {
                 localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
                   ? `elation`
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
-                  ? `athena`
-                  : ``,
+                    ? `athena`
+                    : ``,
               code:
                 localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
                   ? reference?.allergyid
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
-                  ? reference?.Concept_Code_2
-                  : reference?.Concept_Code_2,
+                    ? reference?.Concept_Code_2
+                    : reference?.Concept_Code_2,
               display:
                 localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
                   ? reference?.allergenname
                   : localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
-                  ? reference?.Concept_Name_2
-                  : reference?.Concept_Name_2,
+                    ? reference?.Concept_Name_2
+                    : reference?.Concept_Name_2,
             },
           ],
         },
@@ -551,21 +551,21 @@ const Chart = () => {
           reaction:
             allergyPayload?.data?.reaction?.length > 0
               ? [
-                  {
-                    manifestation: [
-                      {
-                        ...allergyPayload?.data?.reaction?.[0]
-                          ?.manifestation?.[0],
-                      },
-                    ],
-                    extension: [
-                      {
-                        url: `http://xcaliber-fhir/structureDefinition/severity-code`,
-                        valueInteger: parseInt(severity),
-                      },
-                    ],
-                  },
-                ]
+                {
+                  manifestation: [
+                    {
+                      ...allergyPayload?.data?.reaction?.[0]
+                        ?.manifestation?.[0],
+                    },
+                  ],
+                  extension: [
+                    {
+                      url: `http://xcaliber-fhir/structureDefinition/severity-code`,
+                      valueInteger: parseInt(severity),
+                    },
+                  ],
+                },
+              ]
               : [],
         },
       });
@@ -1274,21 +1274,22 @@ const Chart = () => {
                           <TableCell align="left">
                             <Typography>
                               {localStorage.getItem("XCALIBER_SOURCE") ===
-                              "ELATION"
+                                "ELATION" || localStorage.getItem("XCALIBER_SOURCE") ===
+                                "ECW"
                                 ? problem?.resource?.note?.[0]?.text &&
                                   problem?.resource?.note?.[0]?.text !== null
                                   ? problem?.resource?.note?.[0]?.text
                                   : ""
                                 : localStorage.getItem(`XCALIBER_SOURCE`) ===
                                   "ATHENA"
-                                ? problem?.resource?.contained?.[0]?.notes
-                                    ?.text &&
-                                  problem?.resource?.contained?.[0]?.notes
-                                    ?.text !== null
                                   ? problem?.resource?.contained?.[0]?.notes
+                                    ?.text &&
+                                    problem?.resource?.contained?.[0]?.notes
+                                      ?.text !== null
+                                    ? problem?.resource?.contained?.[0]?.notes
                                       ?.text
-                                  : ""
-                                : ""}
+                                    : ""
+                                  : ""}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
