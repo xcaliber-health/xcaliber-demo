@@ -49,7 +49,7 @@ const NotificationComponent = () => {
       >
         {notifications.map((notification) => (
           <MenuItem key={notification.event.id} onClick={handleCloseMenu}>
-            <ListItemText primary={`${notification.event.resource.resourceType} created`} />
+            <ListItemText primary={`${notification?.event?.resource?.resourceType} created`} />
           </MenuItem>
         ))}
       </Menu>
