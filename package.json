@@ -1,58 +1,19 @@
 {
-  "name": "create-react-app",
-  "version": "5.0.0",
+  "name": "xcaliber-demo",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
-  "dependencies": {
-    "@apollo/client": "^3.7.15",
-    "@emotion/react": "latest",
-    "@emotion/styled": "latest",
-    "@material-ui/styles": "^4.11.5",
-    "@mui/icons-material": "^5.10.9",
-    "@mui/lab": "^5.0.0-alpha.104",
-    "@mui/material": "latest",
-    "@mui/x-date-pickers": "^5.0.5",
-    "@reduxjs/toolkit": "^1.8.6",
-    "ag-grid-community": "^28.2.1",
-    "ag-grid-enterprise": "^28.2.1",
-    "ag-grid-react": "^28.2.1",
-    "axios": "^1.1.3",
-    "date-fns": "^2.29.3",
-    "dayjs": "^1.11.6",
-    "dotenv": "^16.0.3",
-    "fs": "^0.0.1-security",
-    "graphql": "^16.6.0",
-    "lodash": "^4.17.21",
-    "moment": "^2.29.4",
-    "moment-timezone": "^0.5.39",
-    "os": "^0.1.2",
-    "path": "^0.12.7",
-    "react": "latest",
-    "react-bootstrap": "^2.5.0",
-    "react-dom": "latest",
-    "react-redux": "^8.0.4",
-    "react-router-dom": "^6.4.2",
-    "react-scripts": "latest",
-    "recharts": "^2.1.15",
-    "redux": "^4.2.0",
-    "socket.io-client": "^4.5.4",
-    "tinymce": "^6.2.0"
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "turbo": "^2.3.3",
+    "typescript": "5.5.4"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18"
   }
 }

@@ -1,0 +1,45 @@
+{
+  "name": "@xcaliber/privacy-preservation",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "exports": {
+    "./DeIdentificationComponent": "./src/components/de-identification/index.tsx"
+  },
+  "dependencies": {
+    "@codemirror/lang-sql": "^6.8.0",
+    "@mui/lab": "5.0.0-alpha.160",
+    "@mui/material": "5.15.4",
+    "@tanstack/match-sorter-utils": "^8.19.4",
+    "@tanstack/react-table": "^8.20.5",
+    "@tanstack/table-core": "^8.20.5",
+    "@uiw/react-codemirror": "^4.23.6",
+    "classnames": "2.5.1",
+    "react": "^18.3.1",
+    "react-apexcharts": "^1.5.0",
+    "react-diff-viewer-continued": "^3.4.0",
+    "react-dom": "^18.3.1",
+    "react-perfect-scrollbar": "1.5.8",
+    "react-use": "17.4.2",
+    "react18-json-view": "^0.2.8"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.18.2",
+    "vite": "^6.0.5"
+  }
+}
