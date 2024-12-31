@@ -40,18 +40,18 @@ type Props = {
   scrollMenu: (container: any, isPerfectScrollbar: boolean) => void
 }
 
-const menuData = [
-  {
-    title: 'Privacy Preservation',
-    icon: 'ri-add-box-fill',
-    href: '/de-identification'
-  },
-  {
-    title: 'Provider Directory',
-    icon: 'ri-home-smile-line',
-    href: '/provider-directory'
-  }
-]
+// const menuData = [
+//   {
+//     title: 'Privacy Preservation',
+//     icon: 'ri-add-box-fill',
+//     href: '/de-identification'
+//   },
+//   {
+//     title: 'Provider Directory',
+//     icon: 'ri-home-smile-line',
+//     href: '/provider-directory'
+//   }
+// ]
 
 const RenderExpandIcon = ({ open, transitionDuration }: RenderExpandIconProps) => (
   <StyledVerticalNavExpandIcon open={open} transitionDuration={transitionDuration}>
@@ -141,7 +141,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
           menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
         >
           {/* Core Menu Items */}
-          {menuData.map((item, index) => (
+          {/* {menuData.map((item, index) => (
             <MenuItem 
               key={index} 
               href={item.href}
@@ -149,7 +149,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
             >
               {item.title}
             </MenuItem>
-          ))}
+          ))} */}
 
           {/* Plugin Menu Items */}
           {Object.entries(groupedPluginRoutes).map(([pluginName, routes]) => {

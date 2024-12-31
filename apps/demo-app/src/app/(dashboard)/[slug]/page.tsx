@@ -4,9 +4,6 @@ import { useParams } from 'next/navigation'
 
 import { SessionProvider } from 'next-auth/react'
 
-// import DeIdentification from '../../../views/de-identification'
-import DeIdentification from '@xcaliber/privacy-preservation/DeIdentificationComponent'
-import ProviderDirectory from '../../../views/provider-directory'
 import ComingSoon from '../../../views/ComingSoon'
 import PluginManager from '../../../views/plugin-manager/page'
 import { PluginProvider } from '../../../lib/plugin-context'
@@ -17,8 +14,6 @@ import { registerPlugins } from '../../../lib/register-plugins'
 registerPlugins().catch(console.error)
 
 type BuiltInRoutes = {
-  'de-identification': () => JSX.Element
-  'provider-directory': () => JSX.Element
   'plugin-manager': () => JSX.Element
 }
 
@@ -49,12 +44,12 @@ export default function Page() {
 
   // Handle built-in routes
   const builtInRoutes: BuiltInRoutes = {
-    'de-identification': () => <DeIdentification />,
-    'provider-directory': () => (
-      <SessionProvider refetchOnWindowFocus={false}>
-        <ProviderDirectory />
-      </SessionProvider>
-    ),
+    // 'de-identification': () => <DeIdentification />,
+    // 'provider-directory': () => (
+    //   <SessionProvider refetchOnWindowFocus={false}>
+    //     <ProviderDirectory />
+    //   </SessionProvider>
+    // ),
     'plugin-manager': () => <PluginManager />
   }
 

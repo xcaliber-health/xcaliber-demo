@@ -11,8 +11,8 @@ import '@/app/globals.css'
 import '@assets/iconify-icons/generated-icons.css'
 
 export const metadata = {
-  title: 'XCaliber Data Studio',
-  description: 'An XCaliber Data Studio.'
+  title: 'XCaliber Demo Apps',
+  description: 'An XCaliber Application to demonstrate XCaliber capabilities.'
 }
 
 const RootLayout = ({ children }: ChildrenType) => {

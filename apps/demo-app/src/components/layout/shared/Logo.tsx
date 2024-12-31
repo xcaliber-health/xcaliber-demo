@@ -40,7 +40,7 @@ const Logo = () => {
     <Link href='/' className='flex items-center min-bs-[24px]'>
       <img
         alt='error-illustration'
-        src={'/images/xc-data-studio.svg'}
+        src={'/images/xc-demo-apps.svg'}
         height={40}
       />
     </Link>
