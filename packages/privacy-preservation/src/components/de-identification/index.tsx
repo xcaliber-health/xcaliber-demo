@@ -231,29 +231,54 @@ export default function DeIdentification() {
         <Grid item xs={12}>
           <Box sx={{ width: '100%', height: "100%" }}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider', position: 'sticky', top: 64, zIndex: 11, backgroundColor: 'white' }}>
-                  <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                  <Tab label="Dashboards" {...a11yProps(0)} />
-                  <Tab label="Synthetic Data" {...a11yProps(1)} />
-                  <Tab label="Patient Documentation" {...a11yProps(2)} />
-                  <Tab label="Data Products" {...a11yProps(3)} />
-                  <Tab label="Tuning" {...a11yProps(4)} />
+                  <Tabs 
+                    value={value} 
+                    onChange={handleChange} 
+                    aria-label="basic tabs example"
+                    id="deid-tabs"
+                  >
+                    <Tab 
+                      label="Dashboards" 
+                      {...a11yProps(0)} 
+                      id="deid-tab-dashboard"
+                    />
+                    <Tab 
+                      label="Synthetic Data" 
+                      {...a11yProps(1)} 
+                      id="deid-tab-synthetic"
+                    />
+                    <Tab 
+                      label="Patient Documentation" 
+                      {...a11yProps(2)} 
+                      id="deid-tab-docs"
+                    />
+                    <Tab 
+                      label="Data Products" 
+                      {...a11yProps(3)} 
+                      id="deid-tab-products"
+                    />
+                    <Tab 
+                      label="Tuning" 
+                      {...a11yProps(4)} 
+                      id="deid-tab-tuning"
+                    />
                   </Tabs>
               </Box>
-              <CustomTabPanel value={value} index={0}>
+              <CustomTabPanel value={value} index={0} id="deid-panel-dashboard">
                 <div style={{
                   padding: "1rem",
                 }}>
                   <DeIDDashboard />
                 </div>
               </CustomTabPanel>
-              <CustomTabPanel value={value} index={1}>
+              <CustomTabPanel value={value} index={1} id="deid-panel-synthetic">
                 <div style={{
                   padding: "1rem",
                 }}>
                   <DeIDGrid filesData={filesList} token={token} />
                 </div>
               </CustomTabPanel>
-              <CustomTabPanel value={value} index={2}>
+              <CustomTabPanel value={value} index={2} id="deid-panel-docs">
                 <Card sx={{
                   margin: "1rem",
                   display: "flex",
@@ -262,14 +287,14 @@ export default function DeIdentification() {
                   <iframe src="https://merlin-blitz.xcaliberapis.com/" style={{ flex: 1, border: "none" }} />
                 </Card>
               </CustomTabPanel>
-              <CustomTabPanel value={value} index={3}>
-              <div style={{
+              <CustomTabPanel value={value} index={3} id="deid-panel-products">
+                <div style={{
                   padding: "1rem"
                 }}>
                   <SQLDataProduct TablesData={db} token={token} />
                 </div>
               </CustomTabPanel>
-              <CustomTabPanel value={value} index={4}>
+              <CustomTabPanel value={value} index={4} id="deid-panel-tuning">
                 <div className='h-full p-4'>
                   <ConfigurePolicy />
                 </div>

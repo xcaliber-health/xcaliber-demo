@@ -3,16 +3,20 @@
 // Import your icons from lucide-react or any other icon library
 import { Box } from 'lucide-react';
 
+import React from 'react';
+import { Card } from '@mui/material';
+
 import type { Plugin } from '../types/plugin';
-import DeIdentification from '@xcaliber/privacy-preservation/DeIdentificationComponent';
+import DeIdentificationDemo from '@/components/DeIdentificationDemo';
+import WalkthroughDemo from '@/components/WalkthroughDemo';
 
 /**
  * Main component for your plugin
- * This will be the default view when users navigate to your plugin
+ * @returns JSX.Element
  */
 const PrivacyPreservation = () => {
   return (
-    <DeIdentification />
+    <DeIdentificationDemo />
   );
 };
 
