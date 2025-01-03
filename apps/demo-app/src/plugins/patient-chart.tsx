@@ -4,6 +4,7 @@
 import { Box } from 'lucide-react';
 
 import type { Plugin } from '../types/plugin';
+
 import PatientChart from '@xcaliber/patient-chart/PatientChartComponent';
 
 /**

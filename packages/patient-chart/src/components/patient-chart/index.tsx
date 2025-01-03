@@ -1,8 +1,14 @@
+"use client";
+
+import PatientTable from "./PatientTable";
 
 function PatientChartComponent() {
   return (
-    <div>PatientChartComponent</div>
-  )
+    <div>
+      <PatientTable />
+      
+    </div>
+  );
 }
 
-export default PatientChartComponent
+export default PatientChartComponent;
