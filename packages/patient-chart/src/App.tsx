@@ -1,10 +1,11 @@
-
+import PatientChartComponent from "./components/patient-chart";
 
 function App() {
-
   return (
-    <h1>Hello world</h1>
-  )
+    <>
+      <PatientChartComponent />
+    </>
+  );
 }
 
-export default App
+export default App;
