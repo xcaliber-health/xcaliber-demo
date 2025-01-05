@@ -1,7 +1,7 @@
 "use client";
 
 // React Imports
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 // MUI Imports
@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
+import { getPatientsAtPage } from "./services/service.ts";
 
 // Third-party Imports
 import {
@@ -23,127 +24,54 @@ import {
 // Style Imports
 import styles from "@core/styles/table.module.css";
 
-// Dummy Data
-const defaultData = [
-  {
-    id: 1,
-    name: "#(kalitha) Fname",
-    gender: "unknown",
-    dob: "01/13/1967",
-    email: "test@gmail.com",
-    city: "Test City",
-    state: "Test State",
-    phone: "9876543456",
-  },
-  {
-    id: 2,
-    name: "#(kalitha) Fname",
-    gender: "unknown",
-    dob: "01/13/1968",
-    email: "test@gmail.com",
-    city: "Test City",
-    state: "Test State",
-    phone: "9876543456",
-  },
-  {
-    id: 3,
-    name: "#(returnName) Fname",
-    gender: "man",
-    dob: "01/13/1967",
-    email: "test@gmail.com",
-    city: "Test City",
-    state: "Test State",
-    phone: "9876543456",
-  },
-  {
-    id: 4,
-    name: "#(returnName) Fname",
-    gender: "man",
-    dob: "01/13/1967",
-    email: "test@gmail.com",
-    city: "Test City",
-    state: "Test State",
-    phone: "9876543456",
-  },
-  {
-    id: 5,
-    name: "#(returnName) Fname",
-    gender: "man",
-    dob: "01/13/1967",
-    email: "test@gmail.com",
-    city: "Test City",
-    state: "Test State",
-    phone: "9876543456",
-  },
-  {
-    id: 6,
-    name: "#(returnName) Fname",
-    gender: "man",
-    dob: "01/13/1967",
-    email: "test@gmail.com",
-    city: "Test City",
-    state: "Test State",
-    phone: "9876543456",
-  },
-  {
-    id: 7,
-    name: "#(returnName) Fname",
-    gender: "man",
-    dob: "01/13/1967",
-    email: "test@gmail.com",
-    city: "Test City",
-    state: "Test State",
-    phone: "9876543456",
-  },
-  {
-    id: 8,
-    name: "#(returnName) Fname",
-    gender: "man",
-    dob: "01/13/1967",
-    email: "test@gmail.com",
-    city: "Test City",
-    state: "Test State",
-    phone: "9876543456",
-  },
-];
-
 // Column Definitions
 const columnHelper = createColumnHelper<any>();
 
 const columns = [
-  columnHelper.accessor("name", {
+  columnHelper.accessor("fullName", {
     cell: (info) => info.getValue(),
     header: "Name",
   }),
-  columnHelper.accessor("gender", {
-    cell: (info) => info.getValue(),
-    header: "Gender",
-  }),
-  columnHelper.accessor("dob", {
+  columnHelper.accessor(
+    (row) => {
+      const legalSex = row.extension?.find(
+        (ext: any) =>
+          ext.url === "http://xcaliber-fhir/structureDefinition/legal-sex"
+      )?.valueCode;
+      return legalSex || "Unknown";
+    },
+    {
+      id: "gender",
+      header: "Gender",
+    }
+  ),
+  columnHelper.accessor("dateOfBirth", {
     cell: (info) => info.getValue(),
     header: "Date Of Birth",
   }),
   columnHelper.accessor("email", {
-    cell: (info) => info.getValue(),
+    cell: (info) => info.getValue() || "-",
     header: "Email",
   }),
-  columnHelper.accessor("city", {
-    cell: (info) => info.getValue(),
-    header: "City",
-  }),
-  columnHelper.accessor("state", {
-    cell: (info) => info.getValue(),
-    header: "State",
-  }),
+  columnHelper.accessor(
+    (row) => {
+      const address = row.addresses?.[0]?.value;
+      return address || "-";
+    },
+    {
+      id: "address",
+      header: "Address",
+    }
+  ),
   columnHelper.accessor("phone", {
-    cell: (info) => info.getValue(),
+    cell: (info) => info.getValue() || "-",
     header: "Phone",
   }),
 ];
 
 function PatientTable() {
   // States
-  const [data, setData] = useState(() => [...defaultData]);
+  const [data, setData] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const router = useRouter();
 
@@ -158,9 +86,20 @@ function PatientTable() {
     setSearch(e.target.value);
   };
 
-  const handleRowClick = (id: number) => {
+  const handleRowClick = (id: string) => {
     router.push(`/patient/${id}`);
   };
+
+  const func = async () => {
+    const d = await getPatientsAtPage(1, "");
+    if (d) {
+      setData(d);
+    }
+  };
+
+  useEffect(() => {
+    func();
+  }, []);
 
   return (
     <Card>
@@ -182,7 +121,7 @@ function PatientTable() {
           }}
           style={{ width: "300px" }}
         />
-        <Button variant='contained' color='primary'>
+        <Button variant='contained' color='primary' onClick={func}>
           Create Patient
         </Button>
       </div>
