@@ -14,9 +14,11 @@ applications:
             - echo "BASEPATH=" >> apps/demo-app/.env.production
             - pnpm build --filter=@xcaliber/demo-app
       artifacts:
-        baseDirectory: apps/demo-app/.next
+        baseDirectory: apps/demo-app/.next/standalone/apps/demo-app
         files:
           - '**/*'
+          - ../.next/static/**/*
+          - ../public/**/*
       cache:
         paths:
           - node_modules/**/*

@@ -1,12 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: process.env.BASEPATH,
-  // distDir: 'build',
-  // output: "export",
   images: {
     unoptimized: true
   },
-
   typescript: {
     ignoreBuildErrors: true
   },
