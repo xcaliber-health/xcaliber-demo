@@ -7,13 +7,11 @@ applications:
             - npm install -g pnpm
             - pnpm install
             # Run postinstall script to build icons
-            - cd apps/demo-app && pnpm run build:icons && cd ..
+            - cd apps/demo-app && pnpm run build:icons && cd ../../
         build:
           commands:
-            - cd apps/demo-app
-            - echo "NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL" >> .env.production
-            - echo "BASEPATH=" >> .env.production
-            - cd ../..
+            - echo "NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL" >> apps/demo-app/.env.production
+            - echo "BASEPATH=" >> apps/demo-app/.env.production
             - pnpm build --filter=@xcaliber/demo-app
       artifacts:
         baseDirectory: apps/demo-app/.next
