@@ -10,7 +10,8 @@
     "preview": "vite preview"
   },
   "exports": {
-    "./PatientChartComponent": "./src/components/patient-chart/index.tsx"
+    "./PatientChartComponent": "./src/components/patient-chart/index.tsx",
+    "./PatientDetails": "./src/components/PatientDetails/PatientDetails.tsx"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

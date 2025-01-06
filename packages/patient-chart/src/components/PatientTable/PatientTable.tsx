@@ -1,8 +1,4 @@
-"use client";
-
-// React Imports
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 
 // MUI Imports
 import Card from "@mui/material/Card";
@@ -73,7 +69,14 @@ function PatientTable() {
   // States
   const [data, setData] = useState<any[]>([]);
   const [search, setSearch] = useState("");
-  const router = useRouter();
+  const onPatientSelect = (id: string) => {
+    // Emit an event that parent application can listen to
+    const event = new CustomEvent("patientSelected", {
+      detail: { patientId: id },
+    });
+    window.dispatchEvent(event);
+  };
+  const [page, setPage] = useState(1);
 
   // Hooks
   const table = useReactTable({
@@ -87,18 +90,18 @@ function PatientTable() {
   };
 
   const handleRowClick = (id: string) => {
-    router.push(`/patient/${id}`);
+    onPatientSelect(id);
   };
 
-  const func = async () => {
-    const d = await getPatientsAtPage(1, "");
+  const fetchPatients = async () => {
+    const d = await getPatientsAtPage(page, search);
     if (d) {
       setData(d);
     }
   };
 
   useEffect(() => {
-    func();
+    fetchPatients();
   }, []);
 
   return (
@@ -121,7 +124,7 @@ function PatientTable() {
           }}
           style={{ width: "300px" }}
         />
-        <Button variant='contained' color='primary' onClick={func}>
+        <Button variant='contained' color='primary'>
           Create Patient
         </Button>
       </div>
