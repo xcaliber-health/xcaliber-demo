@@ -3,6 +3,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
 import { VitalService } from "../../services/vitalService";
 import { useEffect, useState } from "react";
+import PatientSidebar from "./PatientSidebar";
 
 interface PatientDetailsProps {
   id?: string;
@@ -23,9 +24,9 @@ function PatientDetails({ id }: PatientDetailsProps) {
   console.log(vitals);
 
   return (
-    <div className='p-4'>
+    <div className="p-4">
       <Button
-        variant='outlined'
+        variant="outlined"
         onClick={() => window.history.back()}
         style={{ marginBottom: "20px" }}
       >
