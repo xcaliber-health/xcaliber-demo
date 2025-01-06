@@ -14,12 +14,12 @@ applications:
       artifacts:
         baseDirectory: apps/demo-app/build
         files:
-          - .next/**/*
+          - build/**/*
           - public/**/*
           - package.json
       cache:
         paths:
           - node_modules/**/*
           - apps/demo-app/node_modules/**/*
-          - apps/demo-app/.next/cache/**/*
+          - apps/demo-app/build/cache/**/*
           - packages/*/node_modules/**/*
