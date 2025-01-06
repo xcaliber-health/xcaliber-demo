@@ -7,19 +7,20 @@ applications:
             - npm install -g pnpm
             - pnpm install
             # Run postinstall script to build icons
-            - cd apps/demo-app && pnpm run build:icons && cd ..
+            - cd apps/demo-app && pnpm run build:icons
         build:
           commands:
             - pnpm build --filter=@xcaliber/demo-app
       artifacts:
-        baseDirectory: apps/demo-app/build
+        baseDirectory: apps/demo-app
         files:
-          - build/**/*
+          - .next/**/*
           - public/**/*
           - package.json
+          - next.config.js
       cache:
         paths:
           - node_modules/**/*
           - apps/demo-app/node_modules/**/*
-          - apps/demo-app/build/cache/**/*
+          - apps/demo-app/.next/cache/**/*
           - packages/*/node_modules/**/*
