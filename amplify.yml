@@ -12,7 +12,7 @@ applications:
           commands:
             - pnpm build --filter=@xcaliber/demo-app
       artifacts:
-        baseDirectory: apps/demo-app
+        baseDirectory: apps/demo-app/build
         files:
           - .next/**/*
           - public/**/*
