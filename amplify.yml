@@ -10,14 +10,15 @@ applications:
             - cd apps/demo-app && pnpm run build:icons && cd ..
         build:
           commands:
+            - cd apps/demo-app
+            - echo "NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL" >> .env.production
+            - echo "BASEPATH=" >> .env.production
+            - cd ../..
             - pnpm build --filter=@xcaliber/demo-app
       artifacts:
-        baseDirectory: apps/demo-app
+        baseDirectory: apps/demo-app/.next
         files:
-          - .next/**/*
-          - public/**/*
-          - package.json
-          - next.config.js
+          - '**/*'
       cache:
         paths:
           - node_modules/**/*
