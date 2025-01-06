@@ -10,7 +10,8 @@
     "preview": "vite preview"
   },
   "exports": {
-    "./PatientChartComponent": "./src/components/patient-chart/index.tsx"
+    "./PatientChartComponent": "./src/components/patient-chart/index.tsx",
+    "./PatientDetails": "./src/components/PatientDetails/PatientDetails.tsx"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -18,11 +19,16 @@
     "@mui/icons-material": "^6.3.1",
     "@mui/material": "^6.3.1",
     "@tanstack/react-table": "^8.20.6",
+    "axios": "^1.7.9",
+    "lodash": "^4.17.21",
+    "moment": "^2.30.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@types/lodash": "^4.17.14",
+    "@types/node": "^22.10.5",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",

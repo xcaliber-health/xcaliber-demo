@@ -1,22 +1,42 @@
-'use client';
+'use client'
 
-// Import your icons from lucide-react or any other icon library
-import { Box } from 'lucide-react';
+import { Box } from 'lucide-react'
+import { useParams, useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
-import type { Plugin } from '../types/plugin';
+import type { Plugin } from '../types/plugin'
 
-import PatientChart from '@xcaliber/patient-chart/PatientChartComponent';
+import PatientChart from '@xcaliber/patient-chart/PatientChartComponent'
+import PatientDetails from '@xcaliber/patient-chart/PatientDetails'
 
 /**
  * Main component for your plugin
  * This will be the default view when users navigate to your plugin
  */
 const PatientChartComponent = () => {
-  return (
-    <PatientChart />
-  );
-};
+  const router = useRouter()
 
+  useEffect(() => {
+    const handlePatientSelect = (event: CustomEvent) => {
+      const { patientId } = event.detail
+      router.push(`/patient-chart/${patientId}`)
+    }
+
+    window.addEventListener('patientSelected', handlePatientSelect as EventListener)
+    return () => {
+      window.removeEventListener('patientSelected', handlePatientSelect as EventListener)
+    }
+  }, [router])
+
+  return <PatientChart />
+}
+
+const PatientDetailsComponent = () => {
+  const params = useParams()
+  const id = params?.id as string
+
+  return <PatientDetails id={id} />
+}
 
 /**
  * Main Plugin Definition
@@ -31,25 +51,30 @@ const PatientChartPlugin: Plugin = {
 
   // Lifecycle Methods
   async initialize() {
-    console.log('Patient Chart plugin initialized');
+    console.log('Patient Chart plugin initialized')
   },
 
   async cleanup() {
-    console.log('Patient Chart plugin cleaned up');
+    console.log('Patient Chart plugin cleaned up')
   },
 
   // Define the routes for your plugin
   routes: [
     {
-      path: '/patient-chart', // The URL path for this route
-      component: PatientChartComponent, // The component to render
-      icon: Box, // The icon to show in navigation
-      label: 'Patient Chart', // The label shown in navigation
-      group: 'Patient Chart Group', // Group in the navigation menu
-      showInSidebar: true, // Whether to show in sidebar navigation
+      path: '/patient-chart',
+      component: PatientChartComponent,
+      icon: Box,
+      label: 'Patient Chart',
+      group: 'Patient Chart Group',
+      showInSidebar: true
     },
-  ],
+    {
+      path: '/patient-chart/[id]',
+      component: PatientDetailsComponent,
+      label: 'Patient Details',
+      showInSidebar: false
+    }
+  ]
+}
 
-};
-
-export default PatientChartPlugin;
+export default PatientChartPlugin
