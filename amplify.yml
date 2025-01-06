@@ -11,7 +11,7 @@ applications:
             - npm install -g pnpm
             - pnpm install
             # Run postinstall script to build icons
-            - cd apps/demo-app && pnpm run build:icons
+            - cd apps/demo-app && pnpm run build:icons && cd ..
         build:
           commands:
             - cd apps/demo-app
