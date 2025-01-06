@@ -1,22 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: process.env.BASEPATH,
-  distDir: 'build',
-  // output: "export",
+  output: 'standalone',
   images: {
-      unoptimized: true,
-    },
-
+    unoptimized: true
+  },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: true
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: true
   },
   // TODO: below line is added to resolve twice event dispatch in the calendar reducer
-  reactStrictMode: false,
-  output: "standalone"
-  
+  reactStrictMode: false
 }
 
 module.exports = nextConfig

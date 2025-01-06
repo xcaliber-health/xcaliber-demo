@@ -4,27 +4,25 @@ applications:
       phases:
         preBuild:
           commands:
-            # Set latest Node.js version
-            - nvm install 20
-            - nvm use 20
-            - node -v
             - npm install -g pnpm
-            - pnpm install
-            # Run postinstall script to build icons
-            - cd apps/demo-app && pnpm run build:icons && cd ..
+            - pnpm install --frozen-lockfile
         build:
           commands:
+            - pnpm --filter "@xcaliber/privacy-preservation" build
+            - pnpm --filter "@xcaliber/patient-chart" build
+            - pnpm --filter "@xcaliber/demo-app" build
             - cd apps/demo-app
-            - pnpm run build
+            - cp -r .next/static .next/standalone/.next/
       artifacts:
-        baseDirectory: apps/demo-app
+        baseDirectory: apps/demo-app/.next/standalone
         files:
-          - .next/**/*
-          - public/**/*
-          - package.json
+          - '**/*'
       cache:
         paths:
           - node_modules/**/*
           - apps/demo-app/node_modules/**/*
+          - apps/demo-app/.turbo/**/*
           - apps/demo-app/.next/cache/**/*
           - packages/*/node_modules/**/*
+          - packages/*/.turbo/**/*
+          - .turbo/**/*
