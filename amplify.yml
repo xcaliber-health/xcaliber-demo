@@ -13,12 +13,14 @@ applications:
             - echo "NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL" >> apps/demo-app/.env.production
             - echo "BASEPATH=" >> apps/demo-app/.env.production
             - pnpm build --filter=@xcaliber/demo-app
+            # Debug the build output structure
+            - ls -la apps/demo-app/.next/
       artifacts:
-        baseDirectory: apps/demo-app/.next/standalone/apps/demo-app
+        baseDirectory: apps/demo-app/.next/standalone
         files:
           - '**/*'
-          - ../.next/static/**/*
-          - ../public/**/*
+          - ../static/**/*
+          - ../../public/**/*
       cache:
         paths:
           - node_modules/**/*
