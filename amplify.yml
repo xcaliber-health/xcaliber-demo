@@ -1,0 +1,26 @@
+version: 1
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - npm install -g pnpm
+            - pnpm install
+            # Run postinstall script to build icons
+            - cd apps/demo-app && pnpm run build:icons
+        build:
+          commands:
+            - cd apps/demo-app
+            - pnpm run build
+      artifacts:
+        baseDirectory: apps/demo-app
+        files:
+          - .next/**/*
+          - public/**/*
+          - package.json
+      cache:
+        paths:
+          - node_modules/**/*
+          - apps/demo-app/node_modules/**/*
+          - apps/demo-app/.next/cache/**/*
+          - packages/*/node_modules/**/*
