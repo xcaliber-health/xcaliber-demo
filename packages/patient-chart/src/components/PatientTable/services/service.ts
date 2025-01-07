@@ -206,7 +206,7 @@ export const getPatientsAtPage = async (
         const departmentId = localStorage.getItem("DEPARTMENT_ID");
         try {
           const response = await axios.get(
-            `${sourceUrl}/Patient?departmentId=${departmentId}&_count=${config.pageSize}&_offset=${offset}&name=william`,
+            `${sourceUrl}/Patient?departmentId=${departmentId}&_count=${config.pageSize}&_offset=${offset}&name=${searchName}`,
             { headers: getCommonHeaders() }
           );
           const parsedData = parserFunc(response.data.data.entry) || [];
@@ -227,7 +227,7 @@ export const getPatientsAtPage = async (
             )
           ) {
             const fallbackResponse = await axios.get(
-              `${sourceUrl}/Patient?departmentId=${departmentId}&_count=${config.pageSize}&_offset=${offset}&given=George&name=william`,
+              `${sourceUrl}/Patient?departmentId=${departmentId}&_count=${config.pageSize}&_offset=${offset}&given=George&name=${searchName}`,
               { headers: getCommonHeaders() }
             );
             const parsedData =

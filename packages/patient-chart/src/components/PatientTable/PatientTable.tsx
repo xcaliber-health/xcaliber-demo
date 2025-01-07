@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 // MUI Imports
 import Card from "@mui/material/Card";
@@ -7,6 +7,9 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
+import Skeleton from "@mui/material/Skeleton";
+
+// Service Import
 import { getPatientsAtPage } from "./services/service.ts";
 
 // Third-party Imports
@@ -17,7 +20,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-// Style Imports
+// Style Import
 import styles from "@core/styles/table.module.css";
 
 // Column Definitions
@@ -66,70 +69,99 @@ const columns = [
 ];
 
 function PatientTable() {
-  // States
   const [data, setData] = useState<any[]>([]);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState(""); // Debounced search state
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+
   const onPatientSelect = (id: string) => {
-    // Emit an event that parent application can listen to
     const event = new CustomEvent("patientSelected", {
       detail: { patientId: id },
     });
     window.dispatchEvent(event);
   };
-  const [page, setPage] = useState(1);
 
-  // Hooks
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
+  // Debouncing function
+  const debounce = (func: Function, delay: number) => {
+    let timer: NodeJS.Timeout;
+    return (...args: any[]) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => func(...args), delay);
+    };
   };
+
+  // Fetch Patients
+  const fetchPatients = async () => {
+    setLoading(true);
+    try {
+      const result = await getPatientsAtPage(page, debouncedSearch);
+      if (result) {
+        setData(result);
+      }
+    } catch (error) {
+      console.error("Error fetching patients:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Debounced Search Handler
+  const handleSearch = useCallback(
+    debounce((query: string) => {
+      setDebouncedSearch(query);
+    }, 500),
+    []
+  );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearch(query);
+    handleSearch(query);
+  };
+
+  useEffect(() => {
+    fetchPatients();
+  }, [debouncedSearch, page]);
 
   const handleRowClick = (id: string) => {
     onPatientSelect(id);
   };
 
-  const fetchPatients = async () => {
-    const d = await getPatientsAtPage(page, search);
-    if (d) {
-      setData(d);
-    }
-  };
-
-  useEffect(() => {
-    fetchPatients();
-  }, []);
-
   return (
     <Card>
-      <CardHeader title='Patient Table' />
-      <div className='p-4 flex justify-between items-center'>
+      <CardHeader title="Patient Table" />
+      <div className="p-4 flex justify-between items-center">
         <TextField
-          variant='outlined'
-          placeholder='Search'
+          variant="outlined"
+          placeholder="Search by Name"
           value={search}
-          onChange={handleSearch}
-          margin='normal'
-          size='small'
+          onChange={handleInputChange}
+          margin="normal"
+          size="small"
           InputProps={{
             startAdornment: (
-              <InputAdornment position='start'>
+              <InputAdornment position="start">
                 <SearchIcon />
               </InputAdornment>
             ),
           }}
           style={{ width: "300px" }}
         />
-        <Button variant='contained' color='primary'>
+        <Button variant="contained" color="primary">
           Create Patient
         </Button>
       </div>
-      <div className='overflow-x-auto'>
+
+      <div className="overflow-x-auto">
         <table className={styles.table}>
+          {/* Table Header */}
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -146,20 +178,37 @@ function PatientTable() {
               </tr>
             ))}
           </thead>
+
+          {/* Table Body */}
           <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                onClick={() => handleRowClick(row.original.id)}
-                style={{ cursor: "pointer" }}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
+            {loading
+              ? // Shimmer Effect: Render Skeleton Rows for Loading State
+                Array.from({ length: 10 }).map((_, index) => (
+                  <tr key={`skeleton-${index}`}>
+                    {columns.map((col, colIndex) => (
+                      <td key={`skeleton-${index}-${colIndex}`}>
+                        <Skeleton variant="text" width="100%" height={24} />
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              : // Render Actual Data
+                table.getRowModel().rows.map((row) => (
+                  <tr
+                    key={row.id}
+                    onClick={() => handleRowClick(row.original.id)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <td key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
                 ))}
-              </tr>
-            ))}
           </tbody>
         </table>
       </div>
