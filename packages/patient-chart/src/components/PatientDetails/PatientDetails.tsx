@@ -33,6 +33,7 @@ function PatientDetails({ id }: PatientDetailsProps) {
         Back to Patient List
       </Button>
 
+      <PatientSidebar id={id || ""} />
       <Card>
         <CardHeader title={`Patient Details - ${id}`} />
       </Card>
