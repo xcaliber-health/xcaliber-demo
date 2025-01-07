@@ -10,8 +10,7 @@ const nextConfig = {
     ignoreDuringBuilds: true
   },
   // TODO: below line is added to resolve twice event dispatch in the calendar reducer
-  reactStrictMode: false,
-  output: 'standalone'
+  reactStrictMode: false
 }
 
 module.exports = nextConfig
