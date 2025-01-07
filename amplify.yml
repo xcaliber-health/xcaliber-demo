@@ -10,7 +10,7 @@ applications:
             - pnpm run build:icons
         build:
           commands:
-            - pnpm build --filter=@xcaliber/demo-app
+            - pnpm build
       artifacts:
         baseDirectory: apps/demo-app/.next
         files:
