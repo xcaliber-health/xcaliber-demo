@@ -12,7 +12,7 @@ applications:
       artifacts:
         baseDirectory: apps/demo-app/.next
         files:
-          - apps/demo-app/.next/**/*
+          - '**/*'
       cache:
         paths:
           - node_modules/**/*
