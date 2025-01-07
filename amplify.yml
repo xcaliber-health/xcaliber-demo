@@ -6,23 +6,19 @@ applications:
           commands:
             - npm install -g pnpm
             - pnpm install
-            # Build all workspace packages first
-            - pnpm run --filter "./packages/**" build
-            # Run postinstall script to build icons
-            - pnpm run build:icons
         build:
           commands:
-            - pnpm run --filter "demo-app" build
+            - pnpm build --filter=@xcaliber/demo-app
       artifacts:
         baseDirectory: apps/demo-app/.next
         files:
-          - "**/*"
+          - apps/demo-app/.next/**/*
       cache:
         paths:
           - node_modules/**/*
           - apps/demo-app/node_modules/**/*
+          - apps/demo-app/.turbo/**/*
           - apps/demo-app/.next/cache/**/*
           - packages/*/node_modules/**/*
           - packages/*/.turbo/**/*
           - .turbo/**/*
-    appRoot: apps/demo-app
