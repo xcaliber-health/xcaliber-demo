@@ -12,7 +12,7 @@ applications:
           commands:
             - pnpm build
       artifacts:
-        baseDirectory: apps/demo-app/.next
+        baseDirectory: .next
         files:
           - "**/*"
       cache:
