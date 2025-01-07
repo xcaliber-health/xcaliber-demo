@@ -7,7 +7,7 @@ applications:
             - npm install -g pnpm
             - pnpm install
             # Run postinstall script to build icons
-            - cd apps/demo-app && pnpm run build:icons && cd ../
+            - pnpm run build:icons
         build:
           commands:
             - pnpm build --filter=@xcaliber/demo-app
@@ -21,3 +21,4 @@ applications:
           - apps/demo-app/node_modules/**/*
           - apps/demo-app/.next/cache/**/*
           - packages/*/node_modules/**/*
+    appRoot: apps/demo-app
