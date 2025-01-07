@@ -10,9 +10,10 @@ applications:
           commands:
             - pnpm build --filter=@xcaliber/demo-app
       artifacts:
-        baseDirectory: apps/demo-app/.next
+        baseDirectory: apps/demo-app
         files:
           - '**/*'
+        discard-paths: false
       cache:
         paths:
           - node_modules/**/*
