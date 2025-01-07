@@ -6,13 +6,15 @@ applications:
           commands:
             - npm install -g pnpm
             - pnpm install
+            # Build all workspace packages first
+            - pnpm run --filter "./packages/**" build
             # Run postinstall script to build icons
             - pnpm run build:icons
         build:
           commands:
-            - pnpm build && ls -la
+            - pnpm run --filter "demo-app" build
       artifacts:
-        baseDirectory: .next
+        baseDirectory: apps/demo-app/.next
         files:
           - "**/*"
       cache:
@@ -21,4 +23,6 @@ applications:
           - apps/demo-app/node_modules/**/*
           - apps/demo-app/.next/cache/**/*
           - packages/*/node_modules/**/*
+          - packages/*/.turbo/**/*
+          - .turbo/**/*
     appRoot: apps/demo-app
