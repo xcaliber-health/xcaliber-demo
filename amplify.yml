@@ -10,7 +10,7 @@ applications:
             - pnpm run build:icons
         build:
           commands:
-            - pnpm build
+            - pnpm build && ls -la
       artifacts:
         baseDirectory: .next
         files:
