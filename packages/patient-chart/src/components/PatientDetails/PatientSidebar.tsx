@@ -10,11 +10,20 @@ import { PatientService } from "../../services/patientService";
 function PatientSidebar({ id }: { id: string }) {
   const [patientDetails, setPatientDetails] = useState({ id: id });
 
+  const getAthenaLanguage = (languageCode: string) => {
+    switch (languageCode) {
+      case "eng":
+        return "English";
+      default:
+        return languageCode;
+    }
+  };
+
   useEffect(() => {
     const getPatientDetails = async () => {
       const response = await PatientService.getPatientById(id);
       setPatientDetails(response);
-      // console.log("Patient details", response);
+      console.log("Patient details", response);
     };
 
     getPatientDetails();
@@ -33,12 +42,8 @@ function PatientSidebar({ id }: { id: string }) {
           className="w-[100px] h-[100px] rounded-lg mt-4"
         />
         <h2 className="text-lg font-medium mt-2">
-          {" "}
-          {patientDetails?.name
-            ? patientDetails?.name[0]?.text
-            : "Patient"}{" "}
+          {`${patientDetails?.name?.[0]?.given?.[0] ? `${patientDetails?.name?.[0]?.given?.[0]} ` : ``}  ${patientDetails?.name?.[0]?.family ? patientDetails?.name?.[0]?.family : ``} `}
         </h2>
-
         {/* Tags */}
         <div className="flex gap-2 mt-2">
           <Chip
@@ -94,13 +99,14 @@ function PatientSidebar({ id }: { id: string }) {
         <Divider className="my-2" />
         <div className="space-y-2">
           <p className="text-md mb-2">
-            <strong>Username:</strong> @shallamb
+            <strong>Username:</strong> @
+            {`${patientDetails?.name?.[0]?.given?.[0] ? `${patientDetails?.name?.[0]?.given?.[0]} ` : ``}  ${patientDetails?.name?.[0]?.family ? patientDetails?.name?.[0]?.family : ``} `}
           </p>
           <p className="text-md mb-2">
             <strong>Email:</strong>{" "}
-            {patientDetails?.telecom
-              ? patientDetails?.telecom[0]?.value
-              : "Email not available"}
+            {patientDetails?.telecom?.find((tele) => {
+              return tele?.system === "email";
+            })?.value ?? "-"}
           </p>
           <p className="text-md mb-2">
             <strong>Status:</strong> Active
@@ -116,10 +122,21 @@ function PatientSidebar({ id }: { id: string }) {
 
         <div className="space-y-2">
           <p className="text-md mb-2">
-            <strong>Phone #:</strong> +1 (234) 464-0600
+            <strong>Phone #:</strong>{" "}
+            {patientDetails?.telecom?.find((tele) => {
+              return tele?.system === "phone";
+            })?.value ?? "-"}
           </p>
           <p className="text-md mb-2">
-            <strong>Primary Language:</strong> English
+            <strong>Primary Language:</strong>{" "}
+            {localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
+              ? patientDetails?.communication?.[0]?.language?.text
+              : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
+                ? getAthenaLanguage(
+                    patientDetails?.communication?.[0]?.language?.coding?.[0]
+                      ?.code
+                  )
+                : `-`}
           </p>
           <p className="text-md mb-2">
             <strong>Primary State of Residence:</strong>{" "}
