@@ -29,7 +29,7 @@ const PatientDetails = ({ id }: PatientDetailsProps) => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={12} lg={4} md={5}>
-        <PatientSidebar />
+        <PatientSidebar id={id || ""} />
       </Grid>
       <Grid item xs={12} lg={8} md={7}>
         <PatientRightView tabContentList={tabContentList(id)} />
