@@ -7,8 +7,10 @@ import Divider from "@mui/material/Divider";
 
 function PatientSidebar() {
   return (
-    
-    <div style={{ maxWidth: "24rem", width: "100%" }} className="p-6 shadow-md rounded-lg h-full w-[10rem] max-w-[10rem] bg-white overflow-hidden">
+    <div
+      style={{ maxWidth: "24rem", width: "100%" }}
+      className="p-6 shadow-md rounded-lg h-full w-[10rem] max-w-[10rem] bg-white overflow-hidden"
+    >
       {/* Avatar Section */}
       <div className="flex flex-col items-center gap-4">
         <img
