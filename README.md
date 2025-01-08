@@ -47,7 +47,7 @@ pnpm build
 
 - **Lint**: Run linting across all projects
   ```bash
-  pnpm lint
+  pnpm lint 
   ```
 
 - **Format**: Format all files using Prettier
