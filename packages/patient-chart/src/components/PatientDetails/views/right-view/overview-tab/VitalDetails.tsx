@@ -96,9 +96,10 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
     const fetchData = async () => {
       try {
         const response = await fetchVitals(id);
-        setData(response);
+        setData(response.length ? response : [...vitalDetails]); //dummy data for fallback
       } catch (error) {
         console.error("Error fetching vitals:", error);
+        setData([...vitalDetails]);
       }
     };
 
