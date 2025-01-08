@@ -37,52 +37,6 @@ export interface VitalsProps {
   action: string;
 }
 
-// Vital Details Data
-const vitalDetails = [
-  {
-    measurement: "Weight",
-    value: "165 lbs",
-    last_updated: "Tue Dec 31 2024, 04:00 PM",
-    action: "view/edit",
-  },
-  {
-    measurement: "Blood Pressure",
-    value: "118/76 mmHg",
-    last_updated: "N/A",
-    action: "view/edit",
-  },
-  {
-    measurement: "Height",
-    value: "69 inches",
-    last_updated: "N/A",
-    action: "view/edit",
-  },
-  {
-    measurement: "BMI",
-    value: "24.4",
-    last_updated: "N/A",
-    action: "view/edit",
-  },
-  {
-    measurement: "Body Temperature",
-    value: "98.2 F",
-    last_updated: "N/A",
-    action: "view/edit",
-  },
-  {
-    measurement: "Pulse Rate",
-    value: "72 bpm",
-    last_updated: "N/A",
-    action: "view/edit",
-  },
-  {
-    measurement: "Respiration Rate",
-    value: "14 breaths/min",
-    last_updated: "N/A",
-    action: "view/edit",
-  },
-];
-
 // Column Definitions
 const columnHelper = createColumnHelper();
 
