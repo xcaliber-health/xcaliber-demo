@@ -1,9 +1,9 @@
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
-import { VitalService } from "../../services/vitalService";
+import Grid from "@mui/material/Grid";
 import { useEffect, useState } from "react";
+import { VitalService } from "../../services/vitalService";
 import PatientSidebar from "./PatientSidebar";
+import MedicationsTable from "./MedicationsDetails";
 
 interface PatientDetailsProps {
   id?: string;
@@ -32,11 +32,14 @@ function PatientDetails({ id }: PatientDetailsProps) {
       >
         Back to Patient List
       </Button>
-
-      <PatientSidebar id={id || ""} />
-      <Card>
-        <CardHeader title={`Patient Details - ${id}`} />
-      </Card>
+      <Grid container spacing={6}>
+        <Grid item xs={12} lg={4} md={5}>
+          <PatientSidebar id={id || ""} />
+        </Grid>
+        <Grid item xs={12} lg={8} md={7}>
+          <MedicationsTable id={id || ""} />
+        </Grid>
+      </Grid>
     </div>
   );
 }
