@@ -21,7 +21,7 @@ import {
 } from "@tanstack/react-table";
 
 // Style Import
-import styles from "@core/styles/table.module.css";
+import styles from "../../styles/table.module.css";
 
 // Column Definitions
 const columnHelper = createColumnHelper<any>();
