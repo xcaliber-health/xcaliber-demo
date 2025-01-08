@@ -5,7 +5,7 @@ import PatientRecentEvents from "./PatientRecentEvents";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import { useState, useEffect } from "react";
-import { PatientService } from "../../services/patientService";
+import { PatientService } from "../../../../services/patientService.js";
 
 function PatientSidebar({ id }: { id: string }) {
   const [patientDetails, setPatientDetails] = useState({ id: id });
