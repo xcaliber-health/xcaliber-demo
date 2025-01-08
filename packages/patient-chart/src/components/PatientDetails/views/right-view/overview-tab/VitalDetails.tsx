@@ -106,8 +106,6 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
     fetchData();
   }, [id]);
 
-  console.log("vitals", data);
-
   // Columns definition
   const columns = useMemo(
     () => [
