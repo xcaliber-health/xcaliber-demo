@@ -89,17 +89,15 @@ const columnHelper = createColumnHelper();
 const VitalsTable = ({ id }: VitalsTableProps) => {
   // States
   const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<VitalsProps[]>([...vitalDetails]);
-  // const [data, setData] = useState<VitalsProps[]>([]);
+  const [data, setData] = useState<VitalsProps[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetchVitals(id);
-        setData(response.length ? response : [...vitalDetails]); //dummy data for fallback
+        setData(response);
       } catch (error) {
         console.error("Error fetching vitals:", error);
-        setData([...vitalDetails]);
       }
     };
 
