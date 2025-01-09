@@ -1,9 +1,13 @@
 import { VitalService } from "../../../../../../services/vitalService";
 import { VitalsProps } from "../VitalDetails";
+import { Helper } from "../../../../../../core-utils/helper";
 
 export const fetchVitals = async (id): Promise<VitalsProps[]> => {
   const response = await VitalService.getVitals(id);
-  let data: VitalsProps[] = [];
+  let data: Record<
+    string,
+    Array<{ value: string; date: string; year: string }>
+  > = {};
 
   response.map((vital) => {
     let dateObject =
@@ -22,12 +26,12 @@ export const fetchVitals = async (id): Promise<VitalsProps[]> => {
     if (name.toLowerCase().includes("body mass index")) {
       if (vital?.resource?.valueString) value = vital?.resource?.valueString;
       else value = vital?.resource?.valueQuantity.value;
-    } else if (name.toLowerCase() == "blood pressure") {
+    } else if (name.toLowerCase() === "blood pressure") {
       var systolic, diastolic;
       vital?.resource?.component?.map((code) => {
-        if (code?.code?.coding?.[0]?.code == "8462-4") {
+        if (code?.code?.coding?.[0]?.code === "8462-4") {
           diastolic = code?.valueQuantity?.value;
-        } else if (code?.code?.coding?.[0]?.code == "8480-6") {
+        } else if (code?.code?.coding?.[0]?.code === "8480-6") {
           systolic = code?.valueQuantity?.value;
         }
       });
@@ -82,5 +86,19 @@ export const fetchVitals = async (id): Promise<VitalsProps[]> => {
       ];
     }
   });
-  return data;
+
+  const transformedData = Object.keys(data).flatMap((key) => {
+    const values = data[key];
+
+    return [
+      {
+        measurement: key,
+        value: values[0].value,
+        last_updated: `${values[0].date}, ${values[0].year}`,
+        action: "view/edit",
+      },
+    ];
+  });
+
+  return transformedData;
 };
