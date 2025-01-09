@@ -1,20 +1,26 @@
+// React Imports
+import { useState, useEffect, useMemo } from "react";
+
+// Mui Imports
 import tableStyles from "@core/styles/table.module.css";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
+
+// Third-party Imports
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import { fetchAllergies } from "./utils/getPatientAllergies";
+
 // React Icons
 import { FaEye, FaPen } from "react-icons/fa";
-// import { fetchAllergies } from "./utils/getPatientAllergies";
 
-interface AllergyProps {
+export interface AllergyProps {
   allergy: string;
   status: string;
   description: string;
@@ -22,46 +28,22 @@ interface AllergyProps {
   action: string;
 }
 
-const allergyDetails = [
-  {
-    allergy: "Name",
-    status: "Active",
-    description: "asdf",
-    last_updated: "Tue Dec 31 2024, 04:00 PM",
-    action: "view/edit",
-  },
-  {
-    allergy: "Name",
-    status: "Active",
-    description: "asdf",
-    last_updated: "Tue Dec 31 2024, 04:00 PM",
-    action: "view/edit",
-  },
-  {
-    allergy: "Name",
-    status: "Inactive",
-    description: "asdf",
-    last_updated: "Tue Dec 31 2024, 04:00 PM",
-    action: "view/edit",
-  },
-];
-
 const AllergiesTable = ({ id }: { id?: string }) => {
   const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<AllergyProps[]>([...allergyDetails]);
+  const [data, setData] = useState<AllergyProps[]>([]);
 
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const response = await fetchProblems(id);
-  //         setData(response);
-  //       } catch (error) {
-  //         console.error("Error fetching problems:", error);
-  //       }
-  //     };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchAllergies(id);
+        setData(response);
+      } catch (error) {
+        console.error("Error fetching vitals:", error);
+      }
+    };
 
-  //     fetchData();
-  //   }, [id]);
+    fetchData();
+  }, [id]);
 
   const columnHelper = createColumnHelper<AllergyProps>();
 
