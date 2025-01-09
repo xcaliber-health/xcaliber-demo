@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid";
 // Component Imports
 import VitalsTable from "./VitalDetails";
 import ProblemsTable from "./ProblemDetails";
+import AllergiesTable from "./AllergiesDetails";
 
 // const getData = async () => {
 //   const res = await fetch(`${process.env.API_URL}/apps/invoice`);
@@ -26,7 +27,10 @@ const OverViewTab = ({ id }: OverViewTabProps) => {
         <VitalsTable id={id} />
       </Grid>
       <Grid item xs={12}>
-        <ProblemsTable />
+        <ProblemsTable id={id} />
+      </Grid>
+      <Grid item xs={12}>
+        <AllergiesTable id={id} />
       </Grid>
     </Grid>
   );

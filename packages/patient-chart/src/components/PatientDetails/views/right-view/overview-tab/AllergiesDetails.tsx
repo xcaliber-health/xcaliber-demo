@@ -1,7 +1,8 @@
 // React Imports
-import { useEffect, useMemo, useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 // Mui Imports
+import tableStyles from "@core/styles/table.module.css";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -14,46 +15,45 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import tableStyles from "@core/styles/table.module.css";
-import { fetchProblems } from "./utils/getPatientProblems";
+import { fetchAllergies } from "./utils/getPatientAllergies";
 
 // React Icons
 import { FaEye, FaPen } from "react-icons/fa";
 
-export interface ProblemProps {
-  problem: string;
+export interface AllergyProps {
+  allergy: string;
   status: string;
   description: string;
   last_updated: string;
   action: string;
 }
 
-const ProblemsTable = ({ id }: { id?: string }) => {
+const AllergiesTable = ({ id }: { id?: string }) => {
   const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<ProblemProps[]>([]);
+  const [data, setData] = useState<AllergyProps[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchProblems(id);
+        const response = await fetchAllergies(id);
         setData(response);
       } catch (error) {
-        console.error("Error fetching problems:", error);
+        console.error("Error fetching vitals:", error);
       }
     };
 
     fetchData();
   }, [id]);
 
-  const columnHelper = createColumnHelper<ProblemProps>();
+  const columnHelper = createColumnHelper<AllergyProps>();
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor("problem", {
-        header: "Problem",
+      columnHelper.accessor("allergy", {
+        header: "Allergy",
         cell: ({ row }) => (
           <Typography sx={{ color: "#0047FF" }} className="font-medium">
-            {row.original.problem}
+            {row.original.allergy}
           </Typography>
         ),
       }),
@@ -108,7 +108,7 @@ const ProblemsTable = ({ id }: { id?: string }) => {
   return (
     <Card>
       <div className="p-4 flex justify-between items-center">
-        <CardHeader title="Problems" />
+        <CardHeader title="Allergies" />
         <Button variant="outlined" color="inherit">
           +CREATE
         </Button>
@@ -147,4 +147,4 @@ const ProblemsTable = ({ id }: { id?: string }) => {
   );
 };
 
-export default ProblemsTable;
+export default AllergiesTable;

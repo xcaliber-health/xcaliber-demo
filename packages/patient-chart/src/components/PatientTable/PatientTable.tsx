@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import Skeleton from "@mui/material/Skeleton";
+import TablePagination from "@mui/material/TablePagination";
 
 // Service Import
 import { getPatientsAtPage } from "./services/service.ts";
@@ -72,7 +73,8 @@ function PatientTable() {
   const [data, setData] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState(""); // Debounced search state
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0); // Pagination Page
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Rows Per Page
   const [loading, setLoading] = useState(false);
 
   const onPatientSelect = (id: string) => {
@@ -101,7 +103,9 @@ function PatientTable() {
   const fetchPatients = async () => {
     setLoading(true);
     try {
-      const result = await getPatientsAtPage(page, debouncedSearch);
+      const result = await getPatientsAtPage(page + 1, debouncedSearch, {
+        pageSize: rowsPerPage,
+      });
       if (result) {
         setData(result);
       }
@@ -128,10 +132,21 @@ function PatientTable() {
 
   useEffect(() => {
     fetchPatients();
-  }, [debouncedSearch, page]);
+  }, [debouncedSearch, page, rowsPerPage]); // Trigger fetch on search, page, or rows change
 
   const handleRowClick = (id: string) => {
     onPatientSelect(id);
+  };
+
+  const handlePageChange = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleRowsPerPageChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to first page on rows change
   };
 
   return (
@@ -183,7 +198,7 @@ function PatientTable() {
           <tbody>
             {loading
               ? // Shimmer Effect: Render Skeleton Rows for Loading State
-                Array.from({ length: 10 }).map((_, index) => (
+                Array.from({ length: rowsPerPage }).map((_, index) => (
                   <tr key={`skeleton-${index}`}>
                     {columns.map((col, colIndex) => (
                       <td key={`skeleton-${index}-${colIndex}`}>
@@ -212,6 +227,18 @@ function PatientTable() {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Component */}
+      <TablePagination
+        component="div"
+        count={200}
+        page={page}
+        onPageChange={handlePageChange}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        rowsPerPageOptions={[10, 25, 50]}
+        
+      />
     </Card>
   );
 }
