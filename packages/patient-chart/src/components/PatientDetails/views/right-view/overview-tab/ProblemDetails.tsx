@@ -1,21 +1,26 @@
-import tableStyles from "@core/styles/table.module.css";
+// React Imports
+import { useEffect, useMemo, useState } from "react";
+
+// Mui Imports
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
+
+// Third-party Imports
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
-// import { fetchProblems } from "./utils/getPatientProblems";
+import tableStyles from "@core/styles/table.module.css";
+import { fetchProblems } from "./utils/getPatientProblems";
 
 // React Icons
 import { FaEye, FaPen } from "react-icons/fa";
 
-interface ProblemProps {
+export interface ProblemProps {
   problem: string;
   status: string;
   description: string;
@@ -23,46 +28,22 @@ interface ProblemProps {
   action: string;
 }
 
-const problemDetails = [
-  {
-    problem: "Name",
-    status: "Active",
-    description: "asdf",
-    last_updated: "Tue Dec 31 2024, 04:00 PM",
-    action: "view/edit",
-  },
-  {
-    problem: "Name",
-    status: "Active",
-    description: "asdf",
-    last_updated: "Tue Dec 31 2024, 04:00 PM",
-    action: "view/edit",
-  },
-  {
-    problem: "Name",
-    status: "Inactive",
-    description: "asdf",
-    last_updated: "Tue Dec 31 2024, 04:00 PM",
-    action: "view/edit",
-  },
-];
-
 const ProblemsTable = ({ id }: { id?: string }) => {
   const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<ProblemProps[]>([...problemDetails]);
+  const [data, setData] = useState<ProblemProps[]>([]);
 
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const response = await fetchProblems(id);
-  //         setData(response);
-  //       } catch (error) {
-  //         console.error("Error fetching problems:", error);
-  //       }
-  //     };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchProblems(id);
+        setData(response);
+      } catch (error) {
+        console.error("Error fetching problems:", error);
+      }
+    };
 
-  //     fetchData();
-  //   }, [id]);
+    fetchData();
+  }, [id]);
 
   const columnHelper = createColumnHelper<ProblemProps>();
 
