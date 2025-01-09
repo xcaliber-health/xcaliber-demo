@@ -1,19 +1,29 @@
+// React Imports
+import { useEffect, useMemo, useState } from "react";
+
+// Mui Imports
 import tableStyles from "@core/styles/table.module.css";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
+
+// Third-party Imports
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import { fetchImmunizations } from "./utils/getPatientImmunizations";
+
 // React Icons
 import { FaEye, FaPen } from "react-icons/fa";
 
-interface ImmunizationProps {
+export interface ImmunizationProps {
   immunization: string;
   status: string;
   description: string;
@@ -51,18 +61,18 @@ const ImmunizationsTable = ({ id }: { id?: string }) => {
     ...immunizationDetails,
   ]);
 
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const response = await fetchProblems(id);
-  //         setData(response);
-  //       } catch (error) {
-  //         console.error("Error fetching problems:", error);
-  //       }
-  //     };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchImmunizations(id);
+        setData(response);
+      } catch (error) {
+        console.error("Error fetching immunizations:", error);
+      }
+    };
 
-  //     fetchData();
-  //   }, [id]);
+    fetchData();
+  }, [id]);
 
   const columnHelper = createColumnHelper<ImmunizationProps>();
 
@@ -119,9 +129,20 @@ const ImmunizationsTable = ({ id }: { id?: string }) => {
   const table = useReactTable({
     data,
     columns,
-    state: { rowSelection },
+    state: {
+      rowSelection,
+    },
+    initialState: {
+      pagination: {
+        pageSize: 7,
+      },
+    },
+    enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
@@ -149,17 +170,33 @@ const ImmunizationsTable = ({ id }: { id?: string }) => {
               </tr>
             ))}
           </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
+          {table.getFilteredRowModel().rows.length === 0 ? (
+            <tbody>
+              <tr>
+                <td
+                  colSpan={table.getVisibleFlatColumns().length}
+                  className="text-center"
+                >
+                  No data available
+                </td>
               </tr>
-            ))}
-          </tbody>
+            </tbody>
+          ) : (
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          )}
         </table>
       </div>
     </Card>
