@@ -27,7 +27,7 @@ const OverViewTab = ({ id }: OverViewTabProps) => {
         <VitalsTable id={id} />
       </Grid>
       <Grid item xs={12}>
-        <ProblemsTable />
+        <ProblemsTable id={id} />
       </Grid>
       <Grid item xs={12}>
         <AllergiesTable id={id} />
