@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid";
 
 // Component Imports
 import AllergiesTable from "./AllergiesDetails";
+import ImmunizationsTable from "./ImmunizationDetails";
 import MedicationsTable from "./MedicationsDetails";
 import ProblemsTable from "./ProblemDetails";
 import VitalsTable from "./VitalDetails";
@@ -35,6 +36,9 @@ const OverViewTab = ({ id }: OverViewTabProps) => {
       </Grid>
       <Grid item xs={12}>
         <MedicationsTable id={id} />
+      </Grid>
+      <Grid item xs={12}>
+        <ImmunizationsTable id={id} />
       </Grid>
     </Grid>
   );
