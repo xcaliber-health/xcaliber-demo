@@ -1,47 +1,41 @@
-import Button from "@mui/material/Button";
+// MUI Imports
 import Grid from "@mui/material/Grid";
-import { useEffect, useState } from "react";
-import { VitalService } from "../../services/vitalService";
-import PatientSidebar from "./PatientSidebar";
-import ImmunizationsTable from "./ImmunizationDetails";
+
+// Component Imports
+import PatientSidebar from "./views/left-view/PatientSidebar";
+import BillingDetailsTab from "./views/right-view/BillingTab";
+import CareTeamTab from "./views/right-view/CareTeamTab";
+import NotesTab from "./views/right-view/NotesTab";
+import OverViewTab from "./views/right-view/overview-tab/OverviewTab";
+import PatientRightView from "./views/right-view/PatientRightView";
+
+// Vars
+const tabContentList = (id) => [
+  { label: "Overview", value: "overview", content: <OverViewTab id={id} /> },
+  { label: "Notes", value: "notes", content: <NotesTab /> },
+  { label: "Care Team", value: "care-team", content: <CareTeamTab /> },
+  {
+    label: "Billing Details",
+    value: "billing-details",
+    content: <BillingDetailsTab />,
+  },
+];
 
 interface PatientDetailsProps {
   id?: string;
 }
 
-function PatientDetails({ id }: PatientDetailsProps) {
-  const [vitals, setVitals] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fetchVitals = async () => {
-      const vitals = await VitalService.getVitals(id);
-      setVitals(vitals);
-    };
-
-    fetchVitals();
-  }, []);
-
-  console.log(vitals);
-
+const PatientDetails = ({ id }: PatientDetailsProps) => {
   return (
-    <div className="p-4">
-      <Button
-        variant="outlined"
-        onClick={() => window.history.back()}
-        style={{ marginBottom: "20px" }}
-      >
-        Back to Patient List
-      </Button>
-      <Grid container spacing={6}>
-        <Grid item xs={12} lg={4} md={5}>
-          <PatientSidebar id={id || ""} />
-        </Grid>
-        <Grid item xs={12} lg={8} md={7}>
-          <ImmunizationsTable id={id || ""} />
-        </Grid>
+    <Grid container spacing={6}>
+      <Grid item xs={12} lg={4} md={5}>
+        <PatientSidebar id={id || ""} />
       </Grid>
-    </div>
+      <Grid item xs={12} lg={8} md={7}>
+        <PatientRightView tabContentList={tabContentList(id)} />
+      </Grid>
+    </Grid>
   );
-}
+};
 
 export default PatientDetails;
