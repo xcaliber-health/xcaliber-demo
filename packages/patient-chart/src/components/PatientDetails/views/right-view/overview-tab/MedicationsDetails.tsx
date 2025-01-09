@@ -40,7 +40,7 @@ const MedicationsTable = ({ id }: { id?: string }) => {
         const response = await fetchMedications(id);
         setData(response || []);
       } catch (error) {
-        console.error("Error fetching problems:", error);
+        console.error("Error fetching medications:", error);
       }
     };
 
