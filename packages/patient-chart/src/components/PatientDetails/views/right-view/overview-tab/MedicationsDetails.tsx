@@ -1,7 +1,7 @@
 // React Imports
 import { useEffect, useMemo, useState } from "react";
 
-// Mui Imports
+// MUI Imports
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -12,51 +12,50 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import tableStyles from "@core/styles/table.module.css";
-import { fetchProblems } from "./utils/getPatientProblems";
+import { fetchMedications } from "./utils/getPatientMedications";
 
 // React Icons
 import { FaEye, FaPen } from "react-icons/fa";
 
-export interface ProblemProps {
-  problem: string;
+// Style Imports
+import tableStyles from "@core/styles/table.module.css";
+
+export interface MedicationProps {
+  medication: string;
   status: string;
   description: string;
   last_updated: string;
   action: string;
 }
 
-const ProblemsTable = ({ id }: { id?: string }) => {
+const MedicationsTable = ({ id }: { id?: string }) => {
   const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<ProblemProps[]>([]);
+  const [data, setData] = useState<MedicationProps[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchProblems(id);
-        setData(response);
+        const response = await fetchMedications(id);
+        setData(response || []);
       } catch (error) {
-        console.error("Error fetching problems:", error);
+        console.error("Error fetching medications:", error);
       }
     };
 
     fetchData();
   }, [id]);
 
-  const columnHelper = createColumnHelper<ProblemProps>();
+  const columnHelper = createColumnHelper<MedicationProps>();
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor("problem", {
-        header: "Problem",
+      columnHelper.accessor("medications", {
+        header: "Medication",
         cell: ({ row }) => (
           <Typography sx={{ color: "#0047FF" }} className="font-medium">
-            {row.original.problem}
+            {row.original.medication}
           </Typography>
         ),
       }),
@@ -103,31 +102,19 @@ const ProblemsTable = ({ id }: { id?: string }) => {
   const table = useReactTable({
     data,
     columns,
-    state: {
-      rowSelection,
-    },
-    initialState: {
-      pagination: {
-        pageSize: 7,
-      },
-    },
-    enableRowSelection: true,
+    state: { rowSelection },
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
     <Card>
       <div className="p-4 flex justify-between items-center">
-        <CardHeader title="Problems" />
+        <CardHeader title="Medications" />
         <Button variant="outlined" color="inherit">
           +CREATE
         </Button>
       </div>
-
       <div className="overflow-x-auto">
         <table className={tableStyles.table}>
           <thead>
@@ -144,37 +131,21 @@ const ProblemsTable = ({ id }: { id?: string }) => {
               </tr>
             ))}
           </thead>
-          {table.getFilteredRowModel().rows.length === 0 ? (
-            <tbody>
-              <tr>
-                <td
-                  colSpan={table.getVisibleFlatColumns().length}
-                  className="text-center"
-                >
-                  No data available
-                </td>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
               </tr>
-            </tbody>
-          ) : (
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          )}
+            ))}
+          </tbody>
         </table>
       </div>
     </Card>
   );
 };
 
-export default ProblemsTable;
+export default MedicationsTable;

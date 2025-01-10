@@ -19,6 +19,10 @@ export const MedicationService = {
           },
         }
       );
+      console.log(
+        "MedicationService -> getMedications -> result",
+        result?.data?.data?.entry
+      );
       return result?.data?.data?.entry
         ? result?.data?.data?.entry
         : result?.data?.entry;

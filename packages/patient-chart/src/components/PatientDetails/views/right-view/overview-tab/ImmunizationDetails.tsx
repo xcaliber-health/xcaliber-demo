@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 // Mui Imports
+import tableStyles from "@core/styles/table.module.css";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -17,46 +18,71 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import tableStyles from "@core/styles/table.module.css";
-import { fetchProblems } from "./utils/getPatientProblems";
+import { fetchImmunizations } from "./utils/getPatientImmunizations";
 
 // React Icons
 import { FaEye, FaPen } from "react-icons/fa";
 
-export interface ProblemProps {
-  problem: string;
+export interface ImmunizationProps {
+  immunization: string;
   status: string;
   description: string;
   last_updated: string;
   action: string;
 }
 
-const ProblemsTable = ({ id }: { id?: string }) => {
+const immunizationDetails = [
+  {
+    immunization: "COVID-19 Vaccine",
+    status: "Active",
+    description: "First and second dose completed.",
+    last_updated: "Fri Dec 27 2024, 03:45 PM",
+    action: "view/edit",
+  },
+  {
+    immunization: "Tetanus",
+    status: "Active",
+    description: "Up to date with the booster.",
+    last_updated: "Thu Dec 26 2024, 10:15 AM",
+    action: "view/edit",
+  },
+  {
+    immunization: "Flu Shot",
+    status: "Inactive",
+    description: "Missed for the current year.",
+    last_updated: "Wed Dec 25 2024, 01:00 PM",
+    action: "view/edit",
+  },
+];
+
+const ImmunizationsTable = ({ id }: { id?: string }) => {
   const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<ProblemProps[]>([]);
+  const [data, setData] = useState<ImmunizationProps[]>([
+    ...immunizationDetails,
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchProblems(id);
+        const response = await fetchImmunizations(id);
         setData(response);
       } catch (error) {
-        console.error("Error fetching problems:", error);
+        console.error("Error fetching immunizations:", error);
       }
     };
 
     fetchData();
   }, [id]);
 
-  const columnHelper = createColumnHelper<ProblemProps>();
+  const columnHelper = createColumnHelper<ImmunizationProps>();
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor("problem", {
-        header: "Problem",
+      columnHelper.accessor("immunization", {
+        header: "Immunization",
         cell: ({ row }) => (
           <Typography sx={{ color: "#0047FF" }} className="font-medium">
-            {row.original.problem}
+            {row.original.immunization}
           </Typography>
         ),
       }),
@@ -122,7 +148,7 @@ const ProblemsTable = ({ id }: { id?: string }) => {
   return (
     <Card>
       <div className="p-4 flex justify-between items-center">
-        <CardHeader title="Problems" />
+        <CardHeader title="Immunizations" />
         <Button variant="outlined" color="inherit">
           +CREATE
         </Button>
@@ -177,4 +203,4 @@ const ProblemsTable = ({ id }: { id?: string }) => {
   );
 };
 
-export default ProblemsTable;
+export default ImmunizationsTable;
