@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Helper } from "../../core-utils/helper";
+import { Helper } from "../core-utils/helper";
 
 export const ProblemService = {
   getProblems: async (patientId) => {
