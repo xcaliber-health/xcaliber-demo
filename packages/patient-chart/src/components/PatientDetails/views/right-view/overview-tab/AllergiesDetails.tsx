@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
+import TablePagination from "@mui/material/TablePagination";
 
 // Third-party Imports
 import {
@@ -34,6 +35,8 @@ export interface AllergyProps {
 const AllergiesTable = ({ id }: { id?: string }) => {
   const [rowSelection, setRowSelection] = useState({});
   const [data, setData] = useState<AllergyProps[]>([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -108,7 +111,7 @@ const AllergiesTable = ({ id }: { id?: string }) => {
     },
     initialState: {
       pagination: {
-        pageSize: 7,
+        pageSize: 5,
       },
     },
     enableRowSelection: true,
@@ -118,6 +121,16 @@ const AllergiesTable = ({ id }: { id?: string }) => {
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  // Pagination handlers
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleRowsPerPageChange = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to the first page when rows per page change
+  };
 
   return (
     <Card>
@@ -173,6 +186,16 @@ const AllergiesTable = ({ id }: { id?: string }) => {
           )}
         </table>
       </div>
+
+      <TablePagination
+        component="div"
+        count={data.length}
+        page={page}
+        onPageChange={handlePageChange}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        rowsPerPageOptions={[7, 10, 25]}
+      />
     </Card>
   );
 };
