@@ -1,21 +1,30 @@
-import tableStyles from "@core/styles/table.module.css";
+// React Imports
+import { useEffect, useMemo, useState } from "react";
+
+// Mui Imports
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
+import TablePagination from "@mui/material/TablePagination";
+
+// Third-party Imports
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
-// import { fetchProblems } from "./utils/getPatientProblems";
+import tableStyles from "@core/styles/table.module.css";
+import { fetchProblems } from "./utils/getPatientProblems";
 
 // React Icons
 import { FaEye, FaPen } from "react-icons/fa";
 
-interface ProblemProps {
+export interface ProblemProps {
   problem: string;
   status: string;
   description: string;
@@ -23,46 +32,24 @@ interface ProblemProps {
   action: string;
 }
 
-const problemDetails = [
-  {
-    problem: "Name",
-    status: "Active",
-    description: "asdf",
-    last_updated: "Tue Dec 31 2024, 04:00 PM",
-    action: "view/edit",
-  },
-  {
-    problem: "Name",
-    status: "Active",
-    description: "asdf",
-    last_updated: "Tue Dec 31 2024, 04:00 PM",
-    action: "view/edit",
-  },
-  {
-    problem: "Name",
-    status: "Inactive",
-    description: "asdf",
-    last_updated: "Tue Dec 31 2024, 04:00 PM",
-    action: "view/edit",
-  },
-];
-
 const ProblemsTable = ({ id }: { id?: string }) => {
   const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<ProblemProps[]>([...problemDetails]);
+  const [data, setData] = useState<ProblemProps[]>([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const response = await fetchProblems(id);
-  //         setData(response);
-  //       } catch (error) {
-  //         console.error("Error fetching problems:", error);
-  //       }
-  //     };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchProblems(id);
+        setData(response);
+      } catch (error) {
+        console.error("Error fetching problems:", error);
+      }
+    };
 
-  //     fetchData();
-  //   }, [id]);
+    fetchData();
+  }, [id]);
 
   const columnHelper = createColumnHelper<ProblemProps>();
 
@@ -119,10 +106,31 @@ const ProblemsTable = ({ id }: { id?: string }) => {
   const table = useReactTable({
     data,
     columns,
-    state: { rowSelection },
+    state: {
+      rowSelection,
+    },
+    initialState: {
+      pagination: {
+        pageSize: 5,
+      },
+    },
+    enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
+
+  // Pagination handlers
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleRowsPerPageChange = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to the first page when rows per page change
+  };
 
   return (
     <Card>
@@ -149,19 +157,45 @@ const ProblemsTable = ({ id }: { id?: string }) => {
               </tr>
             ))}
           </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
+          {table.getFilteredRowModel().rows.length === 0 ? (
+            <tbody>
+              <tr>
+                <td
+                  colSpan={table.getVisibleFlatColumns().length}
+                  className="text-center"
+                >
+                  No data available
+                </td>
               </tr>
-            ))}
-          </tbody>
+            </tbody>
+          ) : (
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          )}
         </table>
       </div>
+
+      <TablePagination
+        component="div"
+        count={data.length}
+        page={page}
+        onPageChange={handlePageChange}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        rowsPerPageOptions={[7, 10, 25]}
+      />
     </Card>
   );
 };

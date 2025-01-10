@@ -18,8 +18,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import classnames from "classnames";
-import { fetchVitals } from "./utils/getPatientVitals";
+import { fetchMedications } from "./utils/getPatientMedications";
 
 // React Icons
 import { FaEye, FaPen } from "react-icons/fa";
@@ -27,66 +26,64 @@ import { FaEye, FaPen } from "react-icons/fa";
 // Style Imports
 import tableStyles from "@core/styles/table.module.css";
 
-interface VitalsTableProps {
-  id?: string;
-}
-
-export interface VitalsProps {
-  measurement: string;
-  value: string;
+export interface MedicationProps {
+  medication: string;
+  status: string;
+  description: string;
   last_updated: string;
   action: string;
 }
 
-// Column Definitions
-const columnHelper = createColumnHelper();
-
-const VitalsTable = ({ id }: VitalsTableProps) => {
-  // States
+const MedicationsTable = ({ id }: { id?: string }) => {
   const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<VitalsProps[]>([]);
+  const [data, setData] = useState<MedicationProps[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchVitals(id);
-        setData(response);
+        const response = await fetchMedications(id);
+        setData(response || []);
       } catch (error) {
-        console.error("Error fetching vitals:", error);
+        console.error("Error fetching medications:", error);
       }
     };
 
     fetchData();
   }, [id]);
 
-  // Columns definition
+  const columnHelper = createColumnHelper<MedicationProps>();
+
   const columns = useMemo(
     () => [
-      columnHelper.accessor("measurement", {
-        header: "Measurement",
+      columnHelper.accessor("medications", {
+        header: "Medication",
         cell: ({ row }) => (
           <Typography sx={{ color: "#0047FF" }} className="font-medium">
-            {row.original.measurement}
+            {row.original.medication}
           </Typography>
         ),
       }),
-      columnHelper.accessor("value", {
-        header: "Value",
+      columnHelper.accessor("status", {
+        header: "Status",
         cell: ({ row }) => (
           <Typography sx={{ color: "#2e263dd3" }}>
-            {row.original.value}
+            {row.original.status}
+          </Typography>
+        ),
+      }),
+      columnHelper.accessor("description", {
+        header: "Description",
+        cell: ({ row }) => (
+          <Typography sx={{ color: "#2e263dd3" }}>
+            {row.original.description}
           </Typography>
         ),
       }),
       columnHelper.accessor("last_updated", {
         header: "Last Updated",
-        cell: ({ row }) => (
-          <Typography color="text.primary">
-            {row.original.last_updated}
-          </Typography>
-        ),
+        cell: ({ row }) => <Typography>{row.original.last_updated}</Typography>,
       }),
       columnHelper.accessor("action", {
         header: "Action",
@@ -140,12 +137,11 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
   return (
     <Card>
       <div className="p-4 flex justify-between items-center">
-        <CardHeader title="Vitals" className="flex flex-wrap gap-4" />
-        <Button variant="outlined" color="inherit" className="mr-12">
+        <CardHeader title="Medications" />
+        <Button variant="outlined" color="inherit">
           +CREATE
         </Button>
       </div>
-
       <div className="overflow-x-auto">
         <table className={tableStyles.table}>
           <thead>
@@ -153,63 +149,26 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th key={header.id}>
-                    {header.isPlaceholder ? null : (
-                      <div
-                        className={classnames({
-                          "flex items-center": header.column.getIsSorted(),
-                          "cursor-pointer select-none text-[#2e263d] font-medium":
-                            header.column.getCanSort(),
-                        })}
-                        onClick={header.column.getToggleSortingHandler()}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                        {{
-                          asc: <i className="ri-arrow-up-s-line text-xl" />,
-                          desc: <i className="ri-arrow-down-s-line text-xl" />,
-                        }[header.column.getIsSorted()] ?? null}
-                      </div>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
                     )}
                   </th>
                 ))}
               </tr>
             ))}
           </thead>
-          {table.getFilteredRowModel().rows.length === 0 ? (
-            <tbody>
-              <tr>
-                <td
-                  colSpan={table.getVisibleFlatColumns().length}
-                  className="text-center"
-                >
-                  No data available
-                </td>
-              </tr>
-            </tbody>
-          ) : (
-            <tbody>
-              {table
-                .getRowModel()
-                .rows.slice(0, table.getState().pagination.pageSize)
-                .map((row) => (
-                  <tr
-                    key={row.id}
-                    className={classnames({ selected: row.getIsSelected() })}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    ))}
-                  </tr>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
                 ))}
-            </tbody>
-          )}
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
 
@@ -226,4 +185,4 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
   );
 };
 
-export default VitalsTable;
+export default MedicationsTable;

@@ -1,7 +1,8 @@
 // React Imports
 import { useEffect, useMemo, useState } from "react";
 
-// MUI Imports
+// Mui Imports
+import tableStyles from "@core/styles/table.module.css";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -18,75 +19,69 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import classnames from "classnames";
-import { fetchVitals } from "./utils/getPatientVitals";
+import { fetchImmunizations } from "./utils/getPatientImmunizations";
 
 // React Icons
 import { FaEye, FaPen } from "react-icons/fa";
 
-// Style Imports
-import tableStyles from "@core/styles/table.module.css";
-
-interface VitalsTableProps {
-  id?: string;
-}
-
-export interface VitalsProps {
-  measurement: string;
-  value: string;
+export interface ImmunizationProps {
+  immunization: string;
+  status: string;
+  description: string;
   last_updated: string;
   action: string;
 }
 
-// Column Definitions
-const columnHelper = createColumnHelper();
-
-const VitalsTable = ({ id }: VitalsTableProps) => {
-  // States
+const ImmunizationsTable = ({ id }: { id?: string }) => {
   const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<VitalsProps[]>([]);
+  const [data, setData] = useState<ImmunizationProps[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchVitals(id);
+        const response = await fetchImmunizations(id);
         setData(response);
       } catch (error) {
-        console.error("Error fetching vitals:", error);
+        console.error("Error fetching immunizations:", error);
       }
     };
 
     fetchData();
   }, [id]);
 
-  // Columns definition
+  const columnHelper = createColumnHelper<ImmunizationProps>();
+
   const columns = useMemo(
     () => [
-      columnHelper.accessor("measurement", {
-        header: "Measurement",
+      columnHelper.accessor("immunization", {
+        header: "Immunization",
         cell: ({ row }) => (
           <Typography sx={{ color: "#0047FF" }} className="font-medium">
-            {row.original.measurement}
+            {row.original.immunization}
           </Typography>
         ),
       }),
-      columnHelper.accessor("value", {
-        header: "Value",
+      columnHelper.accessor("status", {
+        header: "Status",
         cell: ({ row }) => (
           <Typography sx={{ color: "#2e263dd3" }}>
-            {row.original.value}
+            {row.original.status}
+          </Typography>
+        ),
+      }),
+      columnHelper.accessor("description", {
+        header: "Description",
+        cell: ({ row }) => (
+          <Typography sx={{ color: "#2e263dd3" }}>
+            {row.original.description}
           </Typography>
         ),
       }),
       columnHelper.accessor("last_updated", {
         header: "Last Updated",
-        cell: ({ row }) => (
-          <Typography color="text.primary">
-            {row.original.last_updated}
-          </Typography>
-        ),
+        cell: ({ row }) => <Typography>{row.original.last_updated}</Typography>,
       }),
       columnHelper.accessor("action", {
         header: "Action",
@@ -140,8 +135,8 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
   return (
     <Card>
       <div className="p-4 flex justify-between items-center">
-        <CardHeader title="Vitals" className="flex flex-wrap gap-4" />
-        <Button variant="outlined" color="inherit" className="mr-12">
+        <CardHeader title="Immunizations" />
+        <Button variant="outlined" color="inherit">
           +CREATE
         </Button>
       </div>
@@ -153,24 +148,9 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th key={header.id}>
-                    {header.isPlaceholder ? null : (
-                      <div
-                        className={classnames({
-                          "flex items-center": header.column.getIsSorted(),
-                          "cursor-pointer select-none text-[#2e263d] font-medium":
-                            header.column.getCanSort(),
-                        })}
-                        onClick={header.column.getToggleSortingHandler()}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                        {{
-                          asc: <i className="ri-arrow-up-s-line text-xl" />,
-                          desc: <i className="ri-arrow-down-s-line text-xl" />,
-                        }[header.column.getIsSorted()] ?? null}
-                      </div>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
                     )}
                   </th>
                 ))}
@@ -190,24 +170,18 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
             </tbody>
           ) : (
             <tbody>
-              {table
-                .getRowModel()
-                .rows.slice(0, table.getState().pagination.pageSize)
-                .map((row) => (
-                  <tr
-                    key={row.id}
-                    className={classnames({ selected: row.getIsSelected() })}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
             </tbody>
           )}
         </table>
@@ -226,4 +200,4 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
   );
 };
 
-export default VitalsTable;
+export default ImmunizationsTable;
