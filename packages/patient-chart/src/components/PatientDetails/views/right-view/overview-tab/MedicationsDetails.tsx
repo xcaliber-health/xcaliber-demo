@@ -6,12 +6,16 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
+import TablePagination from "@mui/material/TablePagination";
 
 // Third-party Imports
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { fetchMedications } from "./utils/getPatientMedications";
@@ -33,6 +37,8 @@ export interface MedicationProps {
 const MedicationsTable = ({ id }: { id?: string }) => {
   const [rowSelection, setRowSelection] = useState({});
   const [data, setData] = useState<MedicationProps[]>([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -102,10 +108,31 @@ const MedicationsTable = ({ id }: { id?: string }) => {
   const table = useReactTable({
     data,
     columns,
-    state: { rowSelection },
+    state: {
+      rowSelection,
+    },
+    initialState: {
+      pagination: {
+        pageSize: 5,
+      },
+    },
+    enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
+
+  // Pagination handlers
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleRowsPerPageChange = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to the first page when rows per page change
+  };
 
   return (
     <Card>
@@ -144,6 +171,16 @@ const MedicationsTable = ({ id }: { id?: string }) => {
           </tbody>
         </table>
       </div>
+
+      <TablePagination
+        component="div"
+        count={data.length}
+        page={page}
+        onPageChange={handlePageChange}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        rowsPerPageOptions={[7, 10, 25]}
+      />
     </Card>
   );
 };
