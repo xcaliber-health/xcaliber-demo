@@ -33,7 +33,14 @@ const PatientRightView = ({ tabContentList }) => {
               minHeight: 38,
               padding: (theme) => theme.spacing(2, 5.5),
               borderRadius: "var(--mui-shape-borderRadius)",
-              backgroundColor: "transparent", // No background for the tabs
+              backgroundColor: "transparent",
+              textTransform: "none",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "4px",
+              fontWeight: 600,
+              fontSize: "14px",
               "&:hover": {
                 border: 0,
                 backgroundColor: "var(--mui-palette-primary-lightOpacity)",
@@ -48,11 +55,17 @@ const PatientRightView = ({ tabContentList }) => {
           }}
         >
           {tabContentList.map((tab, index) => (
-            <Tab key={index} label={tab.label} value={tab.value} />
+            <Tab
+              key={index}
+              label={tab.label}
+              value={tab.value}
+              icon={tab.icon}
+              iconPosition="start"
+            />
           ))}
         </Tabs>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{ paddingTop: "24px" }}>
         {tabContentList.find((tab) => tab.value === activeTab)?.content}
       </Grid>
     </Grid>
