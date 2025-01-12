@@ -23,7 +23,6 @@ function PatientSidebar({ id }: { id: string }) {
     const getPatientDetails = async () => {
       const response = await PatientService.getPatientById(id);
       setPatientDetails(response);
-      console.log("Patient details", response);
     };
 
     getPatientDetails();

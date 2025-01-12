@@ -1,11 +1,30 @@
+// React Imports
+import { useEffect } from "react";
+
 // Mui Imports
 import Chip from "@mui/material/Chip";
+
+//Third-party Imports
+import { CareTeamService } from "../../../../services/CareTeamService";
 
 interface CareTeamTabProps {
   id?: string;
 }
 
 const CareTeamTab = ({ id }: CareTeamTabProps) => {
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try{
+      const response = await CareTeamService.getCareTeamList(id);
+      }catch(error){
+        console.error("Error fetching care team list" ,error); 
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
   return (
     <div className="flex justify-between">
       <div
@@ -24,7 +43,7 @@ const CareTeamTab = ({ id }: CareTeamTabProps) => {
               marginTop: "16px",
             }}
           />
-          <div>
+          <div className="flex flex-col items-center">
             <h2 className="text-lg font-medium my-2">Mark Gilbert</h2>
             <p className="text-md mb-2">Primary Care Provider</p>
           </div>
@@ -72,7 +91,7 @@ const CareTeamTab = ({ id }: CareTeamTabProps) => {
               marginTop: "16px",
             }}
           />
-          <div>
+          <div className="flex flex-col items-center">
             <h2 className="text-lg font-medium my-2">Eugenia Parsons</h2>
             <p className="text-md mb-2">Opthamologist</p>
           </div>
@@ -120,7 +139,7 @@ const CareTeamTab = ({ id }: CareTeamTabProps) => {
               marginTop: "16px",
             }}
           />
-          <div>
+          <div className="flex flex-col items-center">
             <h2 className="text-lg font-medium my-2">Francis Byrd</h2>
             <p className="text-md mb-2">Nurse</p>
           </div>
