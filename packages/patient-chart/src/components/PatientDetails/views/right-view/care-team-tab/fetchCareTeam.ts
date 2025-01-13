@@ -5,8 +5,6 @@ export const fetchCareTeam = async (id): Promise<PractitionerDetails[]> => {
   try {
     const response = await CareTeamService.getCareTeamList(id);
 
-    console.log("Raw response:", response);
-
     const data = response?.[0];
 
     if (!data) {
