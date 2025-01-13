@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
+import TablePagination from "@mui/material/TablePagination";
 
 // Third-party Imports
 import {
@@ -31,35 +32,11 @@ export interface ImmunizationProps {
   action: string;
 }
 
-const immunizationDetails = [
-  {
-    immunization: "COVID-19 Vaccine",
-    status: "Active",
-    description: "First and second dose completed.",
-    last_updated: "Fri Dec 27 2024, 03:45 PM",
-    action: "view/edit",
-  },
-  {
-    immunization: "Tetanus",
-    status: "Active",
-    description: "Up to date with the booster.",
-    last_updated: "Thu Dec 26 2024, 10:15 AM",
-    action: "view/edit",
-  },
-  {
-    immunization: "Flu Shot",
-    status: "Inactive",
-    description: "Missed for the current year.",
-    last_updated: "Wed Dec 25 2024, 01:00 PM",
-    action: "view/edit",
-  },
-];
-
 const ImmunizationsTable = ({ id }: { id?: string }) => {
   const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<ImmunizationProps[]>([
-    ...immunizationDetails,
-  ]);
+  const [data, setData] = useState<ImmunizationProps[]>([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -134,7 +111,7 @@ const ImmunizationsTable = ({ id }: { id?: string }) => {
     },
     initialState: {
       pagination: {
-        pageSize: 7,
+        pageSize: 5,
       },
     },
     enableRowSelection: true,
@@ -144,6 +121,16 @@ const ImmunizationsTable = ({ id }: { id?: string }) => {
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  // Pagination handlers
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleRowsPerPageChange = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to the first page when rows per page change
+  };
 
   return (
     <Card>
@@ -199,6 +186,16 @@ const ImmunizationsTable = ({ id }: { id?: string }) => {
           )}
         </table>
       </div>
+
+      <TablePagination
+        component="div"
+        count={data.length}
+        page={page}
+        onPageChange={handlePageChange}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        rowsPerPageOptions={[7, 10, 25]}
+      />
     </Card>
   );
 };
