@@ -64,11 +64,12 @@ const PatientRightView = ({ tabContentList }) => {
               iconPosition="start"
               label={tab.label}
               value={tab.value}
+
             />
           ))}
         </Tabs>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{ paddingTop: "24px" }}>
         {tabContentList.find((tab) => tab.value === activeTab)?.content}
       </Grid>
     </Grid>
