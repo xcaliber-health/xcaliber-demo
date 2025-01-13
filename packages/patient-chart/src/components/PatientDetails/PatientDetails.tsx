@@ -1,23 +1,23 @@
 // Component Imports
 import PatientSidebar from "./views/left-view/PatientSidebar";
 import BillingDetailsTab from "./views/right-view/BillingTab";
-import CareTeamTab from "./views/right-view/CareTeamTab";
+import CareTeamTab from "./views/right-view/care-team-tab/CareTeamTab";
 import NotesTab from "./views/right-view/NotesTab";
 import OverViewTab from "./views/right-view/overview-tab/OverviewTab";
 import PatientRightView from "./views/right-view/PatientRightView";
 
 // React Icons Imports
-import { MdPersonOutline } from "react-icons/md"; 
-import { BsJournalText } from "react-icons/bs"; 
-import { FaUsers } from "react-icons/fa"; 
-import { MdOutlineReceiptLong } from "react-icons/md"; 
+import { MdPersonOutline } from "react-icons/md";
+import { BsJournalText } from "react-icons/bs";
+import { FaUsers } from "react-icons/fa";
+import { MdOutlineReceiptLong } from "react-icons/md";
 
 // Vars
 const tabContentList = (id) => [
   {
     label: "Overview",
     value: "overview",
-    icon: <MdPersonOutline  />,
+    icon: <MdPersonOutline />,
     content: <OverViewTab id={id} />,
   },
   {
@@ -30,7 +30,7 @@ const tabContentList = (id) => [
     label: "Care Team",
     value: "care-team",
     icon: <FaUsers />,
-    content: <CareTeamTab />,
+    content: <CareTeamTab id={id} />,
   },
   {
     label: "Billing Details",
@@ -50,14 +50,14 @@ const PatientDetails = ({ id }: PatientDetailsProps) => {
       style={{
         display: "flex",
         height: "fit-content",
-        backgroundColor: "#f4f2f2",
+        backgroundColor: "#f4f5fa",
       }}
     >
       {/* Left Panel */}
       <div
         style={{
           flex: 1,
-          backgroundColor: "#f4f2f2",
+          backgroundColor: "#f4f5fa",
           padding: "16px",
           overflowY: "auto",
         }}
@@ -69,7 +69,7 @@ const PatientDetails = ({ id }: PatientDetailsProps) => {
       <div
         style={{
           flex: 3,
-          backgroundColor: "#f4f2f2",
+          backgroundColor: "#f4f5fa",
           padding: "16px",
           overflowY: "auto",
         }}
@@ -79,5 +79,4 @@ const PatientDetails = ({ id }: PatientDetailsProps) => {
     </div>
   );
 };
-
 export default PatientDetails;
