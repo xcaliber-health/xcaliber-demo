@@ -2,11 +2,11 @@ import axios from "axios";
 import { Helper } from "../core-utils/helper";
 
 export const CareTeamService = {
-    getCareTeamList: async (patientId) => {
+  getCareTeamList: async (patientId) => {
     try {
-      const sourceUrl = Helper.getSourceUrl(); 
+      const sourceUrl = Helper.getSourceUrl();
       const token = Helper.getSourceToken();
-  
+
       const response = await axios.get(
         `${sourceUrl}/CareTeam?patient=Patient/${patientId}&departmentId=${localStorage.getItem(`DEPARTMENT_ID`)}`,
         {
@@ -18,20 +18,23 @@ export const CareTeamService = {
           },
         }
       );
-  
-      if (!response?.data?.data?.entry || response.data.data.entry.length === 0) {
+
+      if (
+        !response?.data?.data?.entry ||
+        response.data.data.entry.length === 0
+      ) {
         console.log("No care team data found for the given patient.");
         return [];
       }
-  
+
       const careTeamList = response.data.data.entry.map((item) => {
         const resource = item?.resource;
-  
+
         if (!resource) {
           console.log("Entry resource is null or undefined.");
-          return null; 
+          return null;
         }
-  
+
         return {
           resourceType: resource.resourceType || "Unknown",
           subject: resource.subject || "N/A",
@@ -39,11 +42,10 @@ export const CareTeamService = {
           participant: resource.participant || [],
         };
       });
-  
-      console.log("Care team list:", careTeamList);
+
       return careTeamList.filter((team) => team !== null);
     } catch (error) {
       console.error("Error fetching care team list:", error);
     }
   },
-}
+};
