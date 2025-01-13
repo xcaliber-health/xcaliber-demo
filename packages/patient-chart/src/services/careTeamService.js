@@ -12,7 +12,7 @@ export const CareTeamService = {
         {
           headers: {
             Authorization: token,
-            "X-Source-Id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
           },
