@@ -7,24 +7,24 @@ import OverViewTab from "./views/right-view/overview-tab/OverviewTab";
 import PatientRightView from "./views/right-view/PatientRightView";
 
 // React Icons Imports
-import { MdPersonOutline } from "react-icons/md"; 
-import { BsJournalText } from "react-icons/bs"; 
-import { FaUsers } from "react-icons/fa"; 
-import { MdOutlineReceiptLong } from "react-icons/md"; 
+import { MdPersonOutline } from "react-icons/md";
+import { BsJournalText } from "react-icons/bs";
+import { FaUsers } from "react-icons/fa";
+import { MdOutlineReceiptLong } from "react-icons/md";
 
 // Vars
 const tabContentList = (id) => [
   {
     label: "Overview",
     value: "overview",
-    icon: <MdPersonOutline  />,
+    icon: <MdPersonOutline />,
     content: <OverViewTab id={id} />,
   },
   {
     label: "Notes",
     value: "notes",
     icon: <BsJournalText />,
-    content: <NotesTab />,
+    content: <NotesTab patientId={id} />, // Pass the patientId to NotesTab
   },
   {
     label: "Care Team",

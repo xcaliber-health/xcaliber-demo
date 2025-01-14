@@ -1,154 +1,142 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import Typography from "@mui/material/Typography";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { FiExternalLink } from "react-icons/fi";
-import NotesModal from "./notes/NotesModal";
 import Notes from "./notes/Notes";
+import NotesModal from "./notes/NotesModal";
+import { fetchNotes, TransformedNote } from "../right-view/notes/utils/getNotes";
 
-const NotesTab = () => {
-  const notesData = [
-    {
-      date: "December 30, 2024",
-      title: "Physical Exam",
-      tags: [
-        { text: "Nurse: Francis Byrd", color: "#ffe5e5", textColor: "#e53935" },
-        { text: "Elation", color: "#2e8ada", textColor: "white" },
-      ],
-      sections: [
-        {
-          heading: "Patient Information",
-          content: [
-            "Patient: Sean Hallam",
-            "DOB: 01/15/1980",
-            "Date: 12/30/2024 Time: 14:30",
-            "Reason for Visit: Routine check-up",
-          ],
-        },
-        {
-          heading: "Vitals",
-          content: [
-            "BP: 120/80 mmHg",
-            "HR: 72 bpm, regular",
-            "RR: 18 breaths/min",
-            "Temp: 98.6°F (oral)",
-            "O2 Sat: 99% on room air",
-            "Height: 5'10\"",
-            "Weight: 175 lbs",
-            "BMI: 25.1",
-          ],
-        },
-        {
-          heading: "General Appearance",
-          content: [
-            "Patient is alert, oriented, and in no acute distress. Appears well-nourished and well-groomed.",
-          ],
-        },
-        {
-          heading: "Plan",
-          content: [
-            "Continue with preventative health measures. Recommend annual physical exams. Discussed diet and exercise.",
-          ],
-        },
-      ],
-    },
-    {
-      date: "October 27, 2024",
-      title: "Care Plan",
-      tags: [
-        { text: "Ophthalmologist: Eugenia Parsons", color: "#fde4e4", textColor: "#e53935" },
-        { text: "Epic", color: "#ff0000", textColor: "white" },
-      ],
-      sections: [
-        {
-          heading: "Eye Care",
-          content: [
-            "Needs: Ensure regular checkups are scheduled and attended.",
-            "Interventions: Remind of, schedule, and provide transportation to appointments.",
-          ],
-        },
-      ],
-    },
-  ];
-
+const NotesTab = ({ patientId }: { patientId: string }) => {
+  const [notesData, setNotesData] = useState<TransformedNote[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  const [selectedNote, setSelectedNote] = useState(null);
+  const [selectedNoteDetails, setSelectedNoteDetails] = useState<any>(null);
 
-  const handleOpenModal = (note:any) => {
-    setSelectedNote(note);
+  const handleOpenModal = (note: TransformedNote) => {
+    const transformedNote = transformToNoteDetails(note); 
+    setSelectedNoteDetails(transformedNote);
     setOpenModal(true);
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    setSelectedNote(null);
+    setSelectedNoteDetails(null);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const notes = await fetchNotes(patientId);
+        console.log("Fetched notes:", notes);
+        setNotesData(notes || []);
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+        setError("Failed to fetch notes. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [patientId]);
+
+  if (loading) {
+    return <Typography>Loading notes...</Typography>;
+  }
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
+  }
+
+  if (notesData.length === 0) {
+    return <Typography>No notes available for this patient.</Typography>;
+  }
+
+  const transformToNoteDetails = (note: TransformedNote) => {
+    return {
+      date: note.date,
+      title: "Patient Note",
+      tags: [
+        {
+          text: "Note",
+          color: "#e3f2fd",
+          textColor: "#1976d2",
+        },
+      ],
+      sections: [
+        {
+          heading: "Details",
+          content: note.plainTextContent,
+        },
+      ],
+    };
   };
 
   return (
     <div style={{ margin: "16px 0" }}>
-      {notesData.map((note, index) => (
-        <Accordion
-          key={index}
-          style={{
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-            marginBottom: "16px",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-          }}
-          defaultExpanded={index === 0}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            id={`panel-header-${index + 1}`}
-            aria-controls={`panel-content-${index + 1}`}
+      {notesData.map((note, index) => {
+        const noteDetails = transformToNoteDetails(note);
+        return (
+          <Accordion
+            key={index}
             style={{
-              backgroundColor: "#f9f9f9",
-              borderTopLeftRadius: "8px",
-              borderTopRightRadius: "8px",
+              borderRadius: "8px",
+              border: "1px solid #ccc",
+              marginBottom: "16px",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
             }}
+            defaultExpanded={index === 0}
           >
-            <Typography style={{ fontWeight: "bold", fontSize: "16px" }}>
-              {note.title}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails style={{ backgroundColor: "#f9f9f9" }}>
-            <Notes note={note} />
-            <div
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              id={`panel-header-${index + 1}`}
+              aria-controls={`panel-content-${index + 1}`}
               style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                marginTop: "16px",
-                gap: "12px",
+                backgroundColor: "#f9f9f9",
+                borderTopLeftRadius: "8px",
+                borderTopRightRadius: "8px",
               }}
             >
-              <button
+              <Typography style={{ fontWeight: "bold", fontSize: "16px" }}>
+                {note.date || "Unknown Date"}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails style={{ backgroundColor: "#f9f9f9" }}>
+              <Notes note={noteDetails} />
+              <div
                 style={{
                   display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  backgroundColor: "#007bff",
-                  color: "white",
-                  border: "none",
-                  padding: "8px 16px",
-                  borderRadius: "4px",
-                  cursor: "pointer",
+                  justifyContent: "flex-end",
+                  marginTop: "16px",
+                  gap: "12px",
                 }}
-                onClick={() => handleOpenModal(note)}
               >
-                <FiExternalLink /> Open
-              </button>
-            </div>
-          </AccordionDetails>
-        </Accordion>
-      ))}
+                <button
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    backgroundColor: "#007bff",
+                    color: "white",
+                    border: "none",
+                    padding: "8px 16px",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleOpenModal(note)}
+                >
+                  Open
+                </button>
+              </div>
+            </AccordionDetails>
+          </Accordion>
+        );
+      })}
 
-      <NotesModal
-        open={openModal}
-        onClose={handleCloseModal}
-        note={selectedNote}
-      />
+      <NotesModal open={openModal} onClose={handleCloseModal} note={selectedNoteDetails} />
     </div>
   );
 };
