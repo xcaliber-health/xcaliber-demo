@@ -24,7 +24,7 @@ const tabContentList = (id) => [
     label: "Notes",
     value: "notes",
     icon: <BsJournalText />,
-    content: <NotesTab patientId={id} />, // Pass the patientId to NotesTab
+    content: <NotesTab patientId={id} />, 
   },
   {
     label: "Care Team",

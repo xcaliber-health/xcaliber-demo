@@ -68,7 +68,7 @@ const PatientRightView = ({ tabContentList }) => {
           ))}
         </Tabs>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{ paddingTop: "24px" }}>
         {tabContentList.find((tab) => tab.value === activeTab)?.content}
       </Grid>
     </Grid>
