@@ -34,19 +34,11 @@ const PatientRightView = ({ tabContentList }) => {
               padding: (theme) => theme.spacing(2, 5.5),
               borderRadius: "var(--mui-shape-borderRadius)",
               backgroundColor: "transparent",
-              textTransform: "none",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "4px",
-              fontWeight: 600,
-              fontSize: "14px",
               "&:hover": {
-                border: 0,
                 backgroundColor: "var(--mui-palette-primary-lightOpacity)",
               },
               "&.Mui-selected": {
-                backgroundColor: "var(--mui-palette-primary-main)", // Modify selected tab background
+                backgroundColor: "var(--mui-palette-primary-main)",
               },
             },
             "& .MuiTabs-indicator": {
@@ -57,10 +49,22 @@ const PatientRightView = ({ tabContentList }) => {
           {tabContentList.map((tab, index) => (
             <Tab
               key={index}
+              icon={
+                <div
+                  style={{
+                    fontSize: "1.25rem",
+                    fontWeight: "800", 
+                    paddingRight: "4px", 
+                    color: activeTab === tab.value ? "white" : "#555",
+                  }}
+                >
+                  {tab.icon}
+                </div>
+              }
+              iconPosition="start"
               label={tab.label}
               value={tab.value}
-              icon={tab.icon}
-              iconPosition="start"
+
             />
           ))}
         </Tabs>
