@@ -1,5 +1,11 @@
+import BillingDetails from "./billing-details/BillingDetails";
+
 const BillingDetailsTab = () => {
-  return <div>Billing Details Tab</div>;
+  return (
+    <>
+      <BillingDetails />
+    </>
+  );
 };
 
 export default BillingDetailsTab;
