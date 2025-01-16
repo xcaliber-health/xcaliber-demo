@@ -1,7 +1,7 @@
 // Component Imports
 import PatientSidebar from "./views/left-view/PatientSidebar";
 import BillingDetailsTab from "./views/right-view/BillingTab";
-import CareTeamTab from "./views/right-view/CareTeamTab";
+import CareTeamTab from "./views/right-view/care-team-tab/CareTeamTab";
 import NotesTab from "./views/right-view/NotesTab";
 import OverViewTab from "./views/right-view/overview-tab/OverviewTab";
 import PatientRightView from "./views/right-view/PatientRightView";
@@ -30,7 +30,7 @@ const tabContentList = (id) => [
     label: "Care Team",
     value: "care-team",
     icon: <FaUsers />,
-    content: <CareTeamTab />,
+    content: <CareTeamTab id={id}/>,
   },
   {
     label: "Billing Details",

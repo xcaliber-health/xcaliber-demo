@@ -7,6 +7,7 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 import TablePagination from "@mui/material/TablePagination";
+import Skeleton from "@mui/material/Skeleton";
 
 // Third-party Imports
 import {
@@ -39,14 +40,18 @@ const MedicationsTable = ({ id }: { id?: string }) => {
   const [data, setData] = useState<MedicationProps[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await fetchMedications(id);
         setData(response || []);
       } catch (error) {
         console.error("Error fetching medications:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -87,19 +92,12 @@ const MedicationsTable = ({ id }: { id?: string }) => {
       }),
       columnHelper.accessor("action", {
         header: "Action",
-        cell: ({ row }) => {
-          // const action = row.original.action;
-
-          return (
-            <div className="flex gap-2">
-              <FaEye className="cursor-pointer" />
-              <FaPen
-                className="
-                 cursor-pointer"
-              />
-            </div>
-          );
-        },
+        cell: ({ row }) => (
+          <div className="flex gap-2">
+            <FaEye className="cursor-pointer" />
+            <FaPen className="cursor-pointer" />
+          </div>
+        ),
       }),
     ],
     []
@@ -123,6 +121,20 @@ const MedicationsTable = ({ id }: { id?: string }) => {
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  const renderShimmer = () => (
+    <tbody>
+      {Array.from({ length: rowsPerPage }).map((_, index) => (
+        <tr key={`skeleton-${index}`}>
+          {columns.map((_, colIndex) => (
+            <td key={`skeleton-${index}-${colIndex}`} className="p-4">
+              <Skeleton variant="text" width="100%" height={24} />
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  );
 
   // Pagination handlers
   const handlePageChange = (event, newPage) => {
@@ -158,17 +170,24 @@ const MedicationsTable = ({ id }: { id?: string }) => {
               </tr>
             ))}
           </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
+          {loading ? (
+            renderShimmer()
+          ) : (
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          )}
         </table>
       </div>
 
