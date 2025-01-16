@@ -16,7 +16,7 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
   const [selectedNoteDetails, setSelectedNoteDetails] = useState<any>(null);
 
   const handleOpenModal = (note: TransformedNote) => {
-    const transformedNote = transformToNoteDetails(note); 
+    const transformedNote = transformToNoteDetails(note);
     setSelectedNoteDetails(transformedNote);
     setOpenModal(true);
   };
@@ -43,18 +43,6 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
     fetchData();
   }, [patientId]);
 
-  if (loading) {
-    return <Typography>Loading notes...</Typography>;
-  }
-
-  if (error) {
-    return <Typography color="error">{error}</Typography>;
-  }
-
-  if (notesData.length === 0) {
-    return <Typography>No notes available for this patient.</Typography>;
-  }
-
   const transformToNoteDetails = (note: TransformedNote) => {
     return {
       date: note.date,
@@ -75,6 +63,81 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
     };
   };
 
+  const renderShimmer = () => (
+    <div >
+      {Array.from({ length: 3 }).map((_, index) => (
+        <Accordion
+          key={index}
+          style={{
+            borderRadius: "8px",
+            
+            marginBottom: "16px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+            backgroundColor: "#fff",
+          }}
+          defaultExpanded={index === 0}
+          disabled
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            style={{
+              backgroundColor: "#fff",
+             
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  height: "16px",
+                  backgroundColor: "#f0f0f0",
+                  borderRadius: "4px",
+                  width: "25%",
+                }}
+              ></div>
+              <div
+                style={{
+                  height: "16px",
+                  backgroundColor: "#e0e0e0",
+                  borderRadius: "4px",
+                  width: "10%",
+                }}
+              ></div>
+            </div>
+          </AccordionSummary>
+          <AccordionDetails
+            style={{
+              backgroundColor: "#fff",
+            }}
+          >
+            <div style={{ marginBottom: "8px", height: "16px", backgroundColor: "#f0f0f0", borderRadius: "4px", width: "50%" }}></div>
+            <div style={{ marginBottom: "8px", height: "16px", backgroundColor: "#f0f0f0", borderRadius: "4px", width: "100%" }}></div>
+            <div style={{ marginBottom: "8px", height: "16px", backgroundColor: "#f0f0f0", borderRadius: "4px", width: "75%" }}></div>
+            <div style={{ marginBottom: "8px", height: "16px", backgroundColor: "#f0f0f0", borderRadius: "4px", width: "60%" }}></div>
+          </AccordionDetails>
+        </Accordion>
+      ))}
+    </div>
+  );
+
+  if (loading) {
+    return renderShimmer();
+  }
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
+  }
+
+  if (notesData.length === 0) {
+    return <Typography>No notes available for this patient.</Typography>;
+  }
+
   return (
     <div style={{ margin: "16px 0" }}>
       {notesData.map((note, index) => {
@@ -84,9 +147,10 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
             key={index}
             style={{
               borderRadius: "8px",
-              border: "1px solid #ccc",
+             
               marginBottom: "16px",
               boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              backgroundColor: "#fff",
             }}
             defaultExpanded={index === 0}
           >
@@ -95,7 +159,7 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
               id={`panel-header-${index + 1}`}
               aria-controls={`panel-content-${index + 1}`}
               style={{
-                backgroundColor: "#f9f9f9",
+                backgroundColor: "#fff",
                 borderTopLeftRadius: "8px",
                 borderTopRightRadius: "8px",
               }}
@@ -104,7 +168,7 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
                 {note.date || "Unknown Date"}
               </Typography>
             </AccordionSummary>
-            <AccordionDetails style={{ backgroundColor: "#f9f9f9" }}>
+            <AccordionDetails style={{ backgroundColor: "#fff" }}>
               <Notes note={noteDetails} />
               <div
                 style={{
