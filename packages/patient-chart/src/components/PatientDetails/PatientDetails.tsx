@@ -24,13 +24,13 @@ const tabContentList = (id) => [
     label: "Notes",
     value: "notes",
     icon: <BsJournalText />,
-    content: <NotesTab />,
+    content: <NotesTab patientId={id} />,
   },
   {
     label: "Care Team",
     value: "care-team",
     icon: <FaUsers />,
-    content: <CareTeamTab id={id} />,
+    content: <CareTeamTab id={id}/>,
   },
   {
     label: "Billing Details",
@@ -50,14 +50,14 @@ const PatientDetails = ({ id }: PatientDetailsProps) => {
       style={{
         display: "flex",
         height: "fit-content",
-        backgroundColor: "#f4f5fa",
+        backgroundColor: "#f4f2f2",
       }}
     >
       {/* Left Panel */}
       <div
         style={{
           flex: 1,
-          backgroundColor: "#f4f5fa",
+          backgroundColor: "#f4f2f2",
           padding: "16px",
           overflowY: "auto",
         }}
@@ -69,7 +69,7 @@ const PatientDetails = ({ id }: PatientDetailsProps) => {
       <div
         style={{
           flex: 3,
-          backgroundColor: "#f4f5fa",
+          backgroundColor: "#f4f2f2",
           padding: "16px",
           overflowY: "auto",
         }}
@@ -79,4 +79,5 @@ const PatientDetails = ({ id }: PatientDetailsProps) => {
     </div>
   );
 };
+
 export default PatientDetails;

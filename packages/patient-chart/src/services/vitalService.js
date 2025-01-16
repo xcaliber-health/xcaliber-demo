@@ -29,7 +29,6 @@ export const VitalService = {
 
   createVitals: async (vitalsPayload) => {
     try {
-      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl();
       const response = await axios.post(
         `${sourceUrl}/Observation`,

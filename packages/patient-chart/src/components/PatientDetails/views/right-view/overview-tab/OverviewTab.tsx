@@ -5,8 +5,8 @@ import Grid from "@mui/material/Grid";
 import AllergiesTable from "./AllergiesDetails";
 import ImmunizationsTable from "./ImmunizationDetails";
 import MedicationsTable from "./MedicationsDetails";
-import ProblemsTable from "./ProblemDetails";
-import VitalsTable from "./VitalDetails";
+import ProblemsTable from "./problems/ProblemDetails";
+import VitalsTable from "./vitals/VitalDetails";
 
 // const getData = async () => {
 //   const res = await fetch(`${process.env.API_URL}/apps/invoice`);

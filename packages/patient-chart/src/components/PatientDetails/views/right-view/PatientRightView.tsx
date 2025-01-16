@@ -64,7 +64,6 @@ const PatientRightView = ({ tabContentList }) => {
               iconPosition="start"
               label={tab.label}
               value={tab.value}
-
             />
           ))}
         </Tabs>
