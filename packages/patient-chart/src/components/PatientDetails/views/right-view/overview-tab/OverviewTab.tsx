@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid";
 import AllergiesTable from "./AllergiesDetails";
 import ImmunizationsTable from "./ImmunizationDetails";
 import MedicationsTable from "./MedicationsDetails";
-import ProblemsTable from "./ProblemDetails";
+import ProblemsTable from "./problems/ProblemDetails";
 import VitalsTable from "./VitalDetails";
 
 // const getData = async () => {
