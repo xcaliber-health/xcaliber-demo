@@ -178,8 +178,8 @@ export default function CreateVitals({ title, patientId }: CreateVitalsProps) {
     };
 
     try {
-      // await VitalService.createVitals(vitalsPayload);
-      console.log("Vitals created successfully.", vitalsPayload);
+      await VitalService.createVitals(vitalsPayload);
+      // console.log("Vitals created successfully.", vitalsPayload);
       setIsOpen(false);
     } catch (error) {
       console.error("Error creating vitals:", error);
