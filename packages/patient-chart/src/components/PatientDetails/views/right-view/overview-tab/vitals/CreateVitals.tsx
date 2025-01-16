@@ -5,7 +5,7 @@ import { ReactNode, useState } from "react";
 import Button from "@mui/material/Button";
 
 // Third-party Imports
-import { VitalService } from "../../../../../../services/VitalService";
+import { VitalService } from "../../../../../../services/vitalService";
 import SideDrawer from "../../../../../ui/SideDrawer";
 
 interface CreateVitalsProps {
@@ -190,16 +190,16 @@ export default function CreateVitals({ title, patientId }: CreateVitalsProps) {
   return (
     <>
       <Button
-        variant="outlined"
-        color="inherit"
-        className="mr-12"
+        variant='outlined'
+        color='inherit'
+        className='mr-12'
         onClick={() => setIsOpen(true)}
       >
         +CREATE
       </Button>
 
       <SideDrawer
-        title="Add Vitals"
+        title='Add Vitals'
         formFields={formFields}
         initialData={formData}
         isOpen={isOpen}
