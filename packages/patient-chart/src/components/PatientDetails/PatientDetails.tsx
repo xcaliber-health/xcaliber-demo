@@ -30,7 +30,7 @@ const tabContentList = (id) => [
     label: "Care Team",
     value: "care-team",
     icon: <FaUsers />,
-    content: <CareTeamTab />,
+    content: <CareTeamTab id={id}/>,
   },
   {
     label: "Billing Details",
