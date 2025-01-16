@@ -7,6 +7,7 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 import TablePagination from "@mui/material/TablePagination";
+import Skeleton from "@mui/material/Skeleton";
 
 // Third-party Imports
 import {
@@ -47,14 +48,18 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
   const [data, setData] = useState<VitalsProps[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await fetchVitals(id);
         setData(response);
       } catch (error) {
         console.error("Error fetching vitals:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -90,19 +95,12 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
       }),
       columnHelper.accessor("action", {
         header: "Action",
-        cell: ({ row }) => {
-          // const action = row.original.action;
-
-          return (
-            <div className="flex gap-2">
-              <FaEye className="cursor-pointer" />
-              <FaPen
-                className="
-                 cursor-pointer"
-              />
-            </div>
-          );
-        },
+        cell: ({ row }) => (
+          <div className="flex gap-2">
+            <FaEye className="cursor-pointer" />
+            <FaPen className="cursor-pointer" />
+          </div>
+        ),
       }),
     ],
     []
@@ -126,6 +124,20 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  const renderShimmer = () => (
+    <tbody>
+      {Array.from({ length: rowsPerPage }).map((_, index) => (
+        <tr key={`skeleton-${index}`}>
+          {columns.map((col, colIndex) => (
+            <td key={`skeleton-${index}-${colIndex}`} className="p-4">
+              <Skeleton variant="text" width="100%" height={24} />
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  );
 
   // Pagination handlers
   const handlePageChange = (event, newPage) => {
@@ -177,7 +189,9 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
               </tr>
             ))}
           </thead>
-          {table.getFilteredRowModel().rows.length === 0 ? (
+          {loading ? (
+            renderShimmer()
+          ) : table.getFilteredRowModel().rows.length === 0 ? (
             <tbody>
               <tr>
                 <td
