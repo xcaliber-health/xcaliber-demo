@@ -195,7 +195,7 @@ export default function CreateVitals({ title, patientId }: CreateVitalsProps) {
         className="mr-12"
         onClick={() => setIsOpen(true)}
       >
-        {title}
+        +CREATE
       </Button>
 
       <SideDrawer
