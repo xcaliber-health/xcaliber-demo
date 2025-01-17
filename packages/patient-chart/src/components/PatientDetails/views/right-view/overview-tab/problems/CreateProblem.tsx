@@ -1,9 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { Button } from "@mui/material";
-import { ReferenceDataService } from "../../../../../../services/referenceDataService";
-import { ProblemService } from "../../../../../../services/problemService";
+import { useEffect, useState } from "react";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Box,
+  Divider,
+  Drawer,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import * as moment from "moment-timezone";
-import SideDrawer from "../../../../../ui/SideDrawer";
+import { ProblemService } from "../../../../../../services/problemService";
+import { ReferenceDataService } from "../../../../../../services/referenceDataService";
 
 interface CreateProblemProps {
   patientId: string;
@@ -96,69 +107,63 @@ export const CreateProblem = ({
   });
 
   const [loading, setLoading] = useState(false);
-  const [problemIcd10Options, setProblemIcd10Options] = useState([]);
+  const [problemIcd10Options, setProblemIcd10Options] = useState<any[]>([]);
+  const [selectedIcd10Code, setSelectedIcd10Code] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  const updateOptions = async (searchTerm: string) => {
-    const result = await ReferenceDataService.getProblemData(searchTerm);
-    setProblemIcd10Options(result);
-  };
+  const [formData, setFormData] = useState({
+    problemSynopsis: "",
+  });
 
   const initialiseProblemOptions = async () => {
-    const result = await ReferenceDataService.getProblemData();
-    setProblemIcd10Options(result);
+    try {
+      setLoading(true);
+      const result = await ReferenceDataService.getProblemData();
+      setProblemIcd10Options(result);
+    } catch (error) {
+      console.error("Error initializing problem options:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const createProblem = async (problemPayload) => {
-    const createdProblem = await ProblemService.createProblem(problemPayload);
-    if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION") {
-      const createdProblemData = await ProblemService.getProblemById(
-        createdProblem?.data?.id
-      );
-      updateProblems({ resource: { ...createdProblemData } });
+  const createProblem = async (problemPayload: any) => {
+    try {
+      const createdProblem = await ProblemService.createProblem(problemPayload);
+      if (localStorage.getItem("XCALIBER_SOURCE") === "ELATION") {
+        const createdProblemData = await ProblemService.getProblemById(
+          createdProblem?.data?.id
+        );
+        updateProblems({ resource: { ...createdProblemData } });
+      }
       setIsDrawerOpen(false);
-    } else if (localStorage.getItem("XCALIBER_SOURCE") === "ATHENA") {
-      setIsDrawerOpen(false);
+    } catch (error) {
+      console.error("Error creating problem:", error);
     }
   };
 
   useEffect(() => {
-    setLoading(true);
-    Promise.all([initialiseProblemOptions()]).finally(() => {
-      setLoading(false);
-    });
+    initialiseProblemOptions();
   }, []);
 
-  const formFields = [
-    {
-      name: "SNOMED_CID",
-      label: "Snomed-Code",
-      type: "text",
-    },
-    {
-      name: "problemSynopsis",
-      label: "Problem Synopsis",
-      type: "text",
-    },
-  ];
-
-  const onSubmit = (data: { [key: string]: any }) => {
+  const onSubmit = () => {
     const updatedProblemPayload = {
       ...problemPayload,
       data: {
         ...problemPayload.data,
-        text: { status: "generated", div: data.problemSynopsis },
+        text: { status: "generated", div: formData.problemSynopsis },
         code: {
           coding: [
-            {
-              system: "http://snomed.info/sct",
-              code: data.SNOMED_CID,
-            },
+            { system: "http://snomed.info/sct", code: selectedIcd10Code },
           ],
         },
       },
     };
     createProblem(updatedProblemPayload);
+    setIsDrawerOpen(false);
+  };
+
+  const handleInputChange = (name: string, value: string | number) => {
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   return (
@@ -172,17 +177,87 @@ export const CreateProblem = ({
         +CREATE
       </Button>
 
-      <SideDrawer
-        title="Create Problem"
-        formFields={formFields}
-        initialData={{
-          SNOMED_CID: problemPayload.data.code?.coding[0]?.code || "",
-          problemSynopsis: problemPayload.data.note[0]?.text || "",
-        }}
-        onSubmit={onSubmit}
-        isOpen={isDrawerOpen}
+      <Drawer
+        anchor="right"
+        open={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
-      />
+        variant="temporary"
+        PaperProps={{
+          sx: {
+            width: "40%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            padding: "10px",
+            height: "100%",
+            overflowY: "scroll",
+            position: "absolute",
+            zIndex: 1500,
+          },
+        }}
+      >
+        <div className="flex items-center justify-between p-2">
+          <Typography variant="h5">Create Problems</Typography>
+          <IconButton onClick={() => setIsDrawerOpen(false)}>
+            <i className="ri-close-line" />
+          </IconButton>
+        </div>
+        <Divider />
+
+        <div style={{ padding: "20px" }}>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Snomed-Code</InputLabel>
+            <Select
+              value={selectedIcd10Code}
+              onChange={(e) => setSelectedIcd10Code(e.target.value)}
+              label="Snomed-Code"
+            >
+              {loading ? (
+                <MenuItem disabled>Loading...</MenuItem>
+              ) : (problemIcd10Options?.length ?? 0) === 0 ? (
+                <MenuItem disabled>No options available</MenuItem>
+              ) : (
+                problemIcd10Options?.map((option) => (
+                  <MenuItem key={option.code} value={option.code}>
+                    {option.display}
+                  </MenuItem>
+                ))
+              )}
+            </Select>
+          </FormControl>
+
+          <TextField
+            label="Problem Synopsis"
+            fullWidth
+            type="text"
+            value={formData.problemSynopsis || ""}
+            onChange={(e) =>
+              handleInputChange("problemSynopsis", e.target.value)
+            }
+            placeholder="Enter Problem Synopsis"
+            sx={{ marginBottom: 2 }}
+          />
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "15px",
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={onSubmit}
+              style={{ marginRight: "10px" }}
+            >
+              Save
+            </Button>
+            <Button variant="outlined" onClick={() => setIsDrawerOpen(false)}>
+              Cancel
+            </Button>
+          </Box>
+        </div>
+      </Drawer>
     </>
   );
 };

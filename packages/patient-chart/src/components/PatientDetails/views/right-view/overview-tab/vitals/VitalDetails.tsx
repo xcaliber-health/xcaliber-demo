@@ -1,13 +1,12 @@
 // React Imports
 import { useEffect, useMemo, useState } from "react";
 
-// Mui Imports
-import Button from "@mui/material/Button";
+// MUI Imports
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import Typography from "@mui/material/Typography";
-import TablePagination from "@mui/material/TablePagination";
 import Skeleton from "@mui/material/Skeleton";
+import TablePagination from "@mui/material/TablePagination";
+import Typography from "@mui/material/Typography";
 
 // Third-party Imports
 import {
@@ -19,40 +18,46 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import tableStyles from "@core/styles/table.module.css";
-import { fetchProblems } from "../utils/getPatientProblems";
-import { CreateProblem } from "./CreateProblem";
+import classnames from "classnames";
+import { fetchVitals } from "../utils/getPatientVitals";
+import CreateVitals from "./CreateVitals";
 
 // React Icons
 import { FaEye, FaPen } from "react-icons/fa";
 
-export interface ProblemProps {
-  problem: string;
-  status: string;
-  description: string;
+// Style Imports
+import tableStyles from "@core/styles/table.module.css";
+
+interface VitalsTableProps {
+  id?: string;
+}
+
+export interface VitalsProps {
+  measurement: string;
+  value: string;
   last_updated: string;
   action: string;
 }
 
-const ProblemsTable = ({ id }: { id?: string }) => {
+// Column Definitions
+const columnHelper = createColumnHelper();
+
+const VitalsTable = ({ id }: VitalsTableProps) => {
+  // States
   const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<ProblemProps[]>([]);
+  const [data, setData] = useState<VitalsProps[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [loading, setLoading] = useState(false);
-
-  const updateProblemsState = (createdProblemData) => {
-    setData([...data, createdProblemData]);
-  };
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetchProblems(id);
+        const response = await fetchVitals(id);
         setData(response);
       } catch (error) {
-        console.error("Error fetching problems:", error);
+        console.error("Error fetching vitals:", error);
       } finally {
         setLoading(false);
       }
@@ -61,37 +66,32 @@ const ProblemsTable = ({ id }: { id?: string }) => {
     fetchData();
   }, [id]);
 
-  const columnHelper = createColumnHelper<ProblemProps>();
-
+  // Columns definition
   const columns = useMemo(
     () => [
-      columnHelper.accessor("problem", {
-        header: "Problem",
+      columnHelper.accessor("measurement", {
+        header: "Measurement",
         cell: ({ row }) => (
           <Typography sx={{ color: "#0047FF" }} className="font-medium">
-            {row.original.problem}
+            {row.original.measurement}
           </Typography>
         ),
       }),
-      columnHelper.accessor("status", {
-        header: "Status",
+      columnHelper.accessor("value", {
+        header: "Value",
         cell: ({ row }) => (
           <Typography sx={{ color: "#2e263dd3" }}>
-            {row.original.status}
-          </Typography>
-        ),
-      }),
-      columnHelper.accessor("description", {
-        header: "Description",
-        cell: ({ row }) => (
-          <Typography sx={{ color: "#2e263dd3" }}>
-            {row.original.description}
+            {row.original.value}
           </Typography>
         ),
       }),
       columnHelper.accessor("last_updated", {
         header: "Last Updated",
-        cell: ({ row }) => <Typography>{row.original.last_updated}</Typography>,
+        cell: ({ row }) => (
+          <Typography color="text.primary">
+            {row.original.last_updated}
+          </Typography>
+        ),
       }),
       columnHelper.accessor("action", {
         header: "Action",
@@ -139,21 +139,22 @@ const ProblemsTable = ({ id }: { id?: string }) => {
     </tbody>
   );
 
-  const handlePageChange = (event, newPage) => {
+  // Pagination handlers
+  const handlePageChange = (newPage) => {
     setPage(newPage);
   };
 
   const handleRowsPerPageChange = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setPage(0); // Reset to the first page when rows per page change
   };
 
   return (
     <>
       <Card>
         <div className="p-4 flex justify-between items-center">
-          <CardHeader title="Problems" />
-          <CreateProblem patientId={id} updateProblems={updateProblemsState} />
+          <CardHeader title="Vitals" className="flex flex-wrap gap-4" />
+          <CreateVitals patientId={id} title="Add Vitals" />
         </div>
 
         <div className="overflow-x-auto">
@@ -163,16 +164,35 @@ const ProblemsTable = ({ id }: { id?: string }) => {
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
                     <th key={header.id}>
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
+                      {header.isPlaceholder ? null : (
+                        <div
+                          className={classnames({
+                            "flex items-center": header.column.getIsSorted(),
+                            "cursor-pointer select-none text-[#2e263d] font-medium":
+                              header.column.getCanSort(),
+                          })}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {{
+                            asc: <i className="ri-arrow-up-s-line text-xl" />,
+                            desc: (
+                              <i className="ri-arrow-down-s-line text-xl" />
+                            ),
+                          }[header.column.getIsSorted()] ?? null}
+                        </div>
                       )}
                     </th>
                   ))}
                 </tr>
               ))}
             </thead>
-            {table.getFilteredRowModel().rows.length === 0 ? (
+            {loading ? (
+              renderShimmer()
+            ) : table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
                 <tr>
                   <td
@@ -185,18 +205,24 @@ const ProblemsTable = ({ id }: { id?: string }) => {
               </tbody>
             ) : (
               <tbody>
-                {table.getRowModel().rows.map((row) => (
-                  <tr key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
+                {table
+                  .getRowModel()
+                  .rows.slice(0, table.getState().pagination.pageSize)
+                  .map((row) => (
+                    <tr
+                      key={row.id}
+                      className={classnames({ selected: row.getIsSelected() })}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <td key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
               </tbody>
             )}
           </table>
@@ -216,4 +242,4 @@ const ProblemsTable = ({ id }: { id?: string }) => {
   );
 };
 
-export default ProblemsTable;
+export default VitalsTable;
