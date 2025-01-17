@@ -39,6 +39,7 @@ const ProblemsTable = ({ id }: { id?: string }) => {
   const [data, setData] = useState<ProblemProps[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [loading, setLoading] = useState(false);
 
   const updateProblemsState = (createdProblemData) => {
     setData([...data, createdProblemData]);
@@ -171,7 +172,9 @@ const ProblemsTable = ({ id }: { id?: string }) => {
                 </tr>
               ))}
             </thead>
-            {table.getFilteredRowModel().rows.length === 0 ? (
+            {loading ? (
+            renderShimmer()
+          ) : table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
                 <tr>
                   <td
