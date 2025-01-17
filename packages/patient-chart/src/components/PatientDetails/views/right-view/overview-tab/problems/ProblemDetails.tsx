@@ -139,7 +139,7 @@ const ProblemsTable = ({ id }: { id?: string }) => {
     </tbody>
   );
 
-  const handlePageChange = (event, newPage) => {
+  const handlePageChange = (newPage) => {
     setPage(newPage);
   };
 

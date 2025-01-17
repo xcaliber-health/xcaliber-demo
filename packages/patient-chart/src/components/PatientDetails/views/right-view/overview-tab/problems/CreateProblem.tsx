@@ -150,12 +150,20 @@ export const CreateProblem = ({
       ...problemPayload,
       data: {
         ...problemPayload.data,
-        text: { status: "generated", div: formData.problemSynopsis },
+        text: {
+          status: "generated",
+          div: formData.problemSynopsis,
+        },
         code: {
           coding: [
             { system: "http://snomed.info/sct", code: selectedIcd10Code },
           ],
         },
+        note: [
+          {
+            text: formData.problemSynopsis,
+          },
+        ],
       },
     };
     createProblem(updatedProblemPayload);
@@ -197,7 +205,7 @@ export const CreateProblem = ({
         }}
       >
         <div className="flex items-center justify-between p-2">
-          <Typography variant="h5">Create Problems</Typography>
+          <Typography variant="h5">Create Problem</Typography>
           <IconButton onClick={() => setIsDrawerOpen(false)}>
             <i className="ri-close-line" />
           </IconButton>
@@ -218,8 +226,8 @@ export const CreateProblem = ({
                 <MenuItem disabled>No options available</MenuItem>
               ) : (
                 problemIcd10Options?.map((option) => (
-                  <MenuItem key={option.code} value={option.code}>
-                    {option.display}
+                  <MenuItem key={option?.SNOMED_CID} value={option?.SNOMED_CID}>
+                    {option?.SNOMED_FSN}
                   </MenuItem>
                 ))
               )}
