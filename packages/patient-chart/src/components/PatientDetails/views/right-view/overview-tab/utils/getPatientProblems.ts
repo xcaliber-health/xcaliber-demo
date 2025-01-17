@@ -1,5 +1,5 @@
 import { ProblemService } from "../../../../../../services/problemService.js";
-import { ProblemProps } from "../ProblemDetails.js";
+import { ProblemProps } from "../problems/ProblemDetails.js";
 import { Helper } from "../../../../../../core-utils/helper";
 
 export const fetchProblems = async (id): Promise<ProblemProps[]> => {

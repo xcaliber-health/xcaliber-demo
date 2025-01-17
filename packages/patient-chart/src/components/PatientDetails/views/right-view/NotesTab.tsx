@@ -227,3 +227,4 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
 };
 
 export default NotesTab;
+
