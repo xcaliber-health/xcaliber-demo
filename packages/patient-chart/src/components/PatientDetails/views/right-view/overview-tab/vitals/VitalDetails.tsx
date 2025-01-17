@@ -154,7 +154,7 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
       <Card>
         <div className="p-4 flex justify-between items-center">
           <CardHeader title="Vitals" className="flex flex-wrap gap-4" />
-          <CreateVitals patientId={id} title="Add Vitals" />
+          <CreateVitals patientId={id} />
         </div>
 
         <div className="overflow-x-auto">

@@ -8,7 +8,7 @@ export const fetchVitals = async (id): Promise<VitalsProps[]> => {
     string,
     Array<{ value: string; date: string; year: string }>
   > = {};
-
+  
   response.map((vital) => {
     let dateObject =
       localStorage.getItem("XCALIBER_SOURCE") === "ECW"
