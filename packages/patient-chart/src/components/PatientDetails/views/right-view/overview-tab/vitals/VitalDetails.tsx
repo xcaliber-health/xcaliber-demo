@@ -66,7 +66,6 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
     fetchData();
   }, [id]);
 
-  // Columns definition
   const columns = useMemo(
     () => [
       columnHelper.accessor("measurement", {
