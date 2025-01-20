@@ -172,7 +172,9 @@ const ProblemsTable = ({ id }: { id?: string }) => {
                 </tr>
               ))}
             </thead>
-            {table.getFilteredRowModel().rows.length === 0 ? (
+            {loading ? (
+            renderShimmer()
+          ) : table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
                 <tr>
                   <td
