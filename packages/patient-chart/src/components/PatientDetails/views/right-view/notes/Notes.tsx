@@ -1,3 +1,6 @@
+import DOMPurify from "dompurify";
+import Chip from "@mui/material/Chip";
+
 interface Tag {
   text: string;
   color: string;
@@ -5,13 +8,11 @@ interface Tag {
 }
 
 interface Section {
-  heading: string;
-  content: string[];
+  content: string;
 }
 
 interface NoteDetails {
   date: string;
-  title: string;
   tags: Tag[];
   sections: Section[];
 }
@@ -21,42 +22,64 @@ interface NotesProps {
 }
 
 const Notes = ({ note }: NotesProps) => {
-  const { date, tags, sections } = note;
+  const { tags, sections } = note;
 
   return (
-    <div className="p-4 space-y-4 bg-white rounded-md shadow-md">
-      {/* Date and Tags Section */}
-      <div className="flex justify-between items-center">
-        <span className="text-gray-600 text-sm">{date}</span>
-        <div className="flex gap-1">
+    <div
+      style={{
+        fontFamily: "Helvetica, Arial, sans-serif",
+        fontSize: "16px",
+        lineHeight: "1.8",
+        color: "#333",
+
+        borderRadius: "12px",
+
+        backgroundColor: "#fff",
+        width: "100%",
+      }}
+    >
+      {/* Header Section */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "16px",
+        }}
+      >
+        <span style={{ fontSize: "14px", color: "#888" }}>Nurse: Francis Byrd</span>
+        <div style={{ display: "flex", gap: "8px" }}>
           {tags.map(({ text, color, textColor }, index) => (
-            <span
+            <Chip
               key={index}
-              className="font-medium text-xs rounded-full"
+              label={text}
               style={{
-                display: "inline-block",
                 backgroundColor: color,
                 color: textColor,
-                padding: "3px 8px",
+                fontSize: "12px",
+                padding: "4px 12px",
+                borderRadius: "16px",
               }}
-            >
-              {text}
-            </span>
+            />
           ))}
         </div>
       </div>
 
-      {/* Sections */}
-      {sections.map(({ heading, content }, index) => (
-        <div key={index}>
-          <p className="text-gray-800 font-semibold">{heading}</p>
-          {content?.[0].map((line, idx) => (
-            <p key={idx} className="text-gray-600 text-sm">
-              {line}
-            </p>
-          ))}
-        </div>
-      ))}
+      {/* Main Content Section */}
+      <div
+        style={{
+          padding: "24px",
+          borderRadius: "8px",
+          backgroundColor: "#f9f9f9",
+          border: "1px solid #ddd",
+          width: "100%",
+        }}
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(
+            sections.map((section) => section.content).join("")
+          ),
+        }}
+      ></div>
     </div>
   );
 };

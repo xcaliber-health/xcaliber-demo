@@ -6,18 +6,29 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Notes from "./notes/Notes";
 import NotesModal from "./notes/NotesModal";
-import { fetchNotes, TransformedNote } from "../right-view/notes/utils/getNotes";
+import { fetchNotes } from "../right-view/notes/utils/getNotes";
 
 const NotesTab = ({ patientId }: { patientId: string }) => {
-  const [notesData, setNotesData] = useState<TransformedNote[]>([]);
+  const [notesData, setNotesData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [selectedNoteDetails, setSelectedNoteDetails] = useState<any>(null);
 
-  const handleOpenModal = (note: TransformedNote) => {
-    const transformedNote = transformToNoteDetails(note);
-    setSelectedNoteDetails(transformedNote);
+  const handleOpenModal = (note: any) => {
+    setSelectedNoteDetails({
+      date: note.date || "Unknown Date",
+      tags: [
+        {
+          text: "Note",
+          color: "#e3f2fd",
+          textColor: "#1976d2",
+        },
+      ],
+      sections: note.content.map((item: any) => ({
+        content: item?.attachment?.data || "No Content Available",
+      })),
+    });
     setOpenModal(true);
   };
 
@@ -30,7 +41,6 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
     const fetchData = async () => {
       try {
         const notes = await fetchNotes(patientId);
-        console.log("Fetched notes:", notes);
         setNotesData(notes || []);
       } catch (error) {
         console.error("Error fetching notes:", error);
@@ -43,34 +53,13 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
     fetchData();
   }, [patientId]);
 
-  const transformToNoteDetails = (note: TransformedNote) => {
-    return {
-      date: note.date,
-      title: "Patient Note",
-      tags: [
-        {
-          text: "Note",
-          color: "#e3f2fd",
-          textColor: "#1976d2",
-        },
-      ],
-      sections: [
-        {
-          heading: "Details",
-          content: note.plainTextContent,
-        },
-      ],
-    };
-  };
-
   const renderShimmer = () => (
-    <div >
+    <div>
       {Array.from({ length: 3 }).map((_, index) => (
         <Accordion
           key={index}
           style={{
             borderRadius: "8px",
-            
             marginBottom: "16px",
             boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
             backgroundColor: "#fff",
@@ -82,7 +71,6 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
             expandIcon={<ExpandMoreIcon />}
             style={{
               backgroundColor: "#fff",
-             
             }}
           >
             <div
@@ -116,10 +104,24 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
               backgroundColor: "#fff",
             }}
           >
-            <div style={{ marginBottom: "8px", height: "16px", backgroundColor: "#f0f0f0", borderRadius: "4px", width: "50%" }}></div>
-            <div style={{ marginBottom: "8px", height: "16px", backgroundColor: "#f0f0f0", borderRadius: "4px", width: "100%" }}></div>
-            <div style={{ marginBottom: "8px", height: "16px", backgroundColor: "#f0f0f0", borderRadius: "4px", width: "75%" }}></div>
-            <div style={{ marginBottom: "8px", height: "16px", backgroundColor: "#f0f0f0", borderRadius: "4px", width: "60%" }}></div>
+            <div
+              style={{
+                height: "16px",
+                backgroundColor: "#f0f0f0",
+                borderRadius: "4px",
+                width: "50%",
+                marginBottom: "8px",
+              }}
+            ></div>
+            <div
+              style={{
+                height: "16px",
+                backgroundColor: "#f0f0f0",
+                borderRadius: "4px",
+                width: "100%",
+                marginBottom: "8px",
+              }}
+            ></div>
           </AccordionDetails>
         </Accordion>
       ))}
@@ -140,69 +142,89 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
 
   return (
     <div style={{ margin: "16px 0" }}>
-      {notesData.map((note, index) => {
-        const noteDetails = transformToNoteDetails(note);
-        return (
-          <Accordion
-            key={index}
+      {notesData.map((note, index) => (
+        <Accordion
+          key={index}
+          style={{
+            borderRadius: "8px",
+            marginBottom: "16px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+            backgroundColor: "#fff",
+          }}
+          defaultExpanded={index === 0}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            id={`panel-header-${index + 1}`}
+            aria-controls={`panel-content-${index + 1}`}
             style={{
-              borderRadius: "8px",
-             
-              marginBottom: "16px",
-              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
               backgroundColor: "#fff",
+              borderTopLeftRadius: "8px",
+              borderTopRightRadius: "8px",
             }}
-            defaultExpanded={index === 0}
           >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              id={`panel-header-${index + 1}`}
-              aria-controls={`panel-content-${index + 1}`}
+            <Typography style={{ fontWeight: "bold", fontSize: "16px" }}>
+              {note.date || "Unknown Date"}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails
+            onClick={() => handleOpenModal(note)}
+            style={{ backgroundColor: "#fff",cursor: "pointer" }}
+          >
+            <Notes
+              note={{
+                date: note.date || "Unknown Date",
+                tags: [
+                  {
+                    text: "Note",
+                    color: "#e3f2fd",
+                    textColor: "#1976d2",
+                  },
+                ],
+                sections: note.content.map((item: any) => ({
+                  content: item?.attachment?.data || "No Content Available",
+                })),
+              }}
+            />
+            <div
               style={{
-                backgroundColor: "#fff",
-                borderTopLeftRadius: "8px",
-                borderTopRightRadius: "8px",
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "16px",
+                gap: "12px",
               }}
             >
-              <Typography style={{ fontWeight: "bold", fontSize: "16px" }}>
-                {note.date || "Unknown Date"}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails style={{ backgroundColor: "#fff" }}>
-              <Notes note={noteDetails} />
-              <div
+              <button
                 style={{
                   display: "flex",
-                  justifyContent: "flex-end",
-                  marginTop: "16px",
-                  gap: "12px",
+                  alignItems: "center",
+                  gap: "8px",
+                  backgroundColor: "#007bff",
+                  color: "white",
+                  border: "none",
+                  padding: "8px 16px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
                 }}
+                onClick={() => handleOpenModal(note)}
               >
-                <button
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    backgroundColor: "#007bff",
-                    color: "white",
-                    border: "none",
-                    padding: "8px 16px",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => handleOpenModal(note)}
-                >
-                  Open
-                </button>
-              </div>
-            </AccordionDetails>
-          </Accordion>
-        );
-      })}
+                Open
+              </button>
+            </div>
+          </AccordionDetails>
+        </Accordion>
+      ))}
 
-      <NotesModal open={openModal} onClose={handleCloseModal} note={selectedNoteDetails} />
+      {selectedNoteDetails && (
+        <NotesModal
+          open={openModal}
+          onClose={handleCloseModal}
+          note={selectedNoteDetails}
+        />
+      )}
     </div>
   );
 };
 
 export default NotesTab;
+
