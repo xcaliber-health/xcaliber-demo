@@ -66,7 +66,6 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
     fetchData();
   }, [id]);
 
-  // Columns definition
   const columns = useMemo(
     () => [
       columnHelper.accessor("measurement", {
@@ -139,14 +138,13 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
     </tbody>
   );
 
-  // Pagination handlers
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
 
   const handleRowsPerPageChange = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset to the first page when rows per page change
+    setPage(0);
   };
 
   return (
@@ -154,7 +152,7 @@ const VitalsTable = ({ id }: VitalsTableProps) => {
       <Card>
         <div className="p-4 flex justify-between items-center">
           <CardHeader title="Vitals" className="flex flex-wrap gap-4" />
-          <CreateVitals patientId={id} title="Add Vitals" />
+          <CreateVitals patientId={id} />
         </div>
 
         <div className="overflow-x-auto">

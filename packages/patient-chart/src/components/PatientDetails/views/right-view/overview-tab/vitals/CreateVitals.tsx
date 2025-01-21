@@ -1,5 +1,5 @@
 // React Imports
-import { ReactNode, useState } from "react";
+import { useEffect, useState } from "react";
 
 // Mui Imports
 import Button from "@mui/material/Button";
@@ -9,11 +9,10 @@ import { VitalService } from "../../../../../../services/vitalService";
 import SideDrawer from "../../../../../ui/SideDrawer";
 
 interface CreateVitalsProps {
-  title: string;
   patientId: string;
 }
 
-export default function CreateVitals({ title, patientId }: CreateVitalsProps) {
+export default function CreateVitals({ patientId }: CreateVitalsProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     height: 0,
@@ -179,13 +178,16 @@ export default function CreateVitals({ title, patientId }: CreateVitalsProps) {
 
     try {
       await VitalService.createVitals(vitalsPayload);
-      // console.log("Vitals created successfully.", vitalsPayload);
       setIsOpen(false);
     } catch (error) {
       console.error("Error creating vitals:", error);
       alert("Failed to create vitals. Please try again.");
     }
   };
+
+  useEffect(() => {
+    handleSubmit();
+  }, [formData]);
 
   return (
     <>
@@ -206,7 +208,6 @@ export default function CreateVitals({ title, patientId }: CreateVitalsProps) {
         onClose={() => setIsOpen(false)}
         onSubmit={(data) => {
           setFormData(data);
-          handleSubmit();
         }}
       />
     </>
