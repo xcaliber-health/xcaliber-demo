@@ -2,14 +2,14 @@
 import { useEffect, useMemo, useState } from "react";
 
 // Mui Imports
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import Typography from "@mui/material/Typography";
-import TablePagination from "@mui/material/TablePagination";
 import Skeleton from "@mui/material/Skeleton";
+import TablePagination from "@mui/material/TablePagination";
+import Typography from "@mui/material/Typography";
 
 // Third-party Imports
+import tableStyles from "@core/styles/table.module.css";
 import {
   createColumnHelper,
   flexRender,
@@ -19,14 +19,14 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import tableStyles from "@core/styles/table.module.css";
 import { fetchProblems } from "../utils/getPatientProblems";
-import { CreateProblem } from "./CreateProblem";
+import { CreateOrEditProblem } from "./CreateOrEditProblem";
 
 // React Icons
-import { FaEye, FaPen } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 
 export interface ProblemProps {
+  id: string;
   problem: string;
   status: string;
   description: string;
@@ -98,7 +98,12 @@ const ProblemsTable = ({ id }: { id?: string }) => {
         cell: ({ row }) => (
           <div className="flex gap-2">
             <FaEye className="cursor-pointer" />
-            <FaPen className="cursor-pointer" />
+            <CreateOrEditProblem
+              patientId={id}
+              problemId={row.original.id}
+              updateProblems={updateProblemsState}
+              mode="edit"
+            />
           </div>
         ),
       }),
@@ -153,7 +158,11 @@ const ProblemsTable = ({ id }: { id?: string }) => {
       <Card>
         <div className="p-4 flex justify-between items-center">
           <CardHeader title="Problems" />
-          <CreateProblem patientId={id} updateProblems={updateProblemsState} />
+          <CreateOrEditProblem
+            patientId={id}
+            updateProblems={updateProblemsState}
+            mode="create"
+          />
         </div>
 
         <div className="overflow-x-auto">
@@ -173,8 +182,8 @@ const ProblemsTable = ({ id }: { id?: string }) => {
               ))}
             </thead>
             {loading ? (
-            renderShimmer()
-          ) : table.getFilteredRowModel().rows.length === 0 ? (
+              renderShimmer()
+            ) : table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
                 <tr>
                   <td
