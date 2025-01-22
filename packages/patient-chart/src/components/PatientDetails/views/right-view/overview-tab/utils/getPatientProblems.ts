@@ -4,13 +4,12 @@ import { Helper } from "../../../../../../core-utils/helper";
 
 export const fetchProblems = async (id): Promise<ProblemProps[]> => {
   const response = await ProblemService.getProblems(id);
-
   const transformedData = response?.map((problem) => {
     const dateObject = Helper.extractFieldsFromDate(
       problem?.resource?.onsetDateTime
     );
-
     return {
+      id: problem?.resource?.id,
       problem:
         problem?.resource?.text?.div ||
         problem?.resource?.code?.text ||
