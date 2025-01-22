@@ -192,12 +192,11 @@ export default function CreateVitals({ patientId }: CreateVitalsProps) {
   return (
     <>
       <Button
-        variant='outlined'
-        color='inherit'
-        className='mr-12'
+        variant='contained'
+        color='primary'
         onClick={() => setIsOpen(true)}
       >
-        +CREATE
+        Add
       </Button>
 
       <SideDrawer
