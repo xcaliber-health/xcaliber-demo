@@ -5,9 +5,9 @@ import { useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import Typography from "@mui/material/Typography";
-import TablePagination from "@mui/material/TablePagination";
 import Skeleton from "@mui/material/Skeleton";
+import TablePagination from "@mui/material/TablePagination";
+import Typography from "@mui/material/Typography";
 
 // Third-party Imports
 import {
@@ -38,8 +38,6 @@ export interface MedicationProps {
 const MedicationsTable = ({ id }: { id?: string }) => {
   const [rowSelection, setRowSelection] = useState({});
   const [data, setData] = useState<MedicationProps[]>([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -124,7 +122,7 @@ const MedicationsTable = ({ id }: { id?: string }) => {
 
   const renderShimmer = () => (
     <tbody>
-      {Array.from({ length: rowsPerPage }).map((_, index) => (
+      {Array.from({ length: 5 }).map((_, index) => (
         <tr key={`skeleton-${index}`}>
           {columns.map((_, colIndex) => (
             <td key={`skeleton-${index}-${colIndex}`} className="p-4">
@@ -135,16 +133,6 @@ const MedicationsTable = ({ id }: { id?: string }) => {
       ))}
     </tbody>
   );
-
-  // Pagination handlers
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleRowsPerPageChange = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset to the first page when rows per page change
-  };
 
   return (
     <Card>
@@ -193,11 +181,14 @@ const MedicationsTable = ({ id }: { id?: string }) => {
 
       <TablePagination
         component="div"
-        count={data.length}
-        page={page}
-        onPageChange={handlePageChange}
-        rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleRowsPerPageChange}
+        count={table.getFilteredRowModel().rows.length}
+        page={table.getState().pagination.pageIndex}
+        onPageChange={(_, newPage) => table.setPageIndex(newPage)}
+        rowsPerPage={table.getState().pagination.pageSize}
+        onRowsPerPageChange={(event) => {
+          const newPageSize = parseInt(event.target.value, 10);
+          table.setPageSize(newPageSize);
+        }}
         rowsPerPageOptions={[7, 10, 25]}
       />
     </Card>
