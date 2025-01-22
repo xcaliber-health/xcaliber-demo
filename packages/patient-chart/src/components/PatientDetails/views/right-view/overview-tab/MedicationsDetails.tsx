@@ -138,8 +138,8 @@ const MedicationsTable = ({ id }: { id?: string }) => {
     <Card>
       <div className="p-4 flex justify-between items-center">
         <CardHeader title="Medications" />
-        <Button variant="outlined" color="inherit">
-          +CREATE
+        <Button variant="contained" color="primary">
+          Add
         </Button>
       </div>
       <div className="overflow-x-auto">

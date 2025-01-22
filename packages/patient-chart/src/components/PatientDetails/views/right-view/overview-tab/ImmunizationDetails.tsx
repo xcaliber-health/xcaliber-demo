@@ -136,8 +136,8 @@ const ImmunizationsTable = ({ id }: { id?: string }) => {
     <Card>
       <div className="p-4 flex justify-between items-center">
         <CardHeader title="Immunizations" />
-        <Button variant="outlined" color="inherit">
-          +CREATE
+        <Button variant="contained" color="primary">
+          Add
         </Button>
       </div>
 
