@@ -37,8 +37,6 @@ export interface ProblemProps {
 const ProblemsTable = ({ id }: { id?: string }) => {
   const [rowSelection, setRowSelection] = useState({});
   const [data, setData] = useState<ProblemProps[]>([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [loading, setLoading] = useState(false);
 
   const updateProblemsState = (createdProblemData) => {
@@ -132,7 +130,7 @@ const ProblemsTable = ({ id }: { id?: string }) => {
 
   const renderShimmer = () => (
     <tbody>
-      {Array.from({ length: rowsPerPage }).map((_, index) => (
+      {Array.from({ length: 5 }).map((_, index) => (
         <tr key={`skeleton-${index}`}>
           {columns.map((col, colIndex) => (
             <td key={`skeleton-${index}-${colIndex}`} className="p-4">
@@ -143,15 +141,6 @@ const ProblemsTable = ({ id }: { id?: string }) => {
       ))}
     </tbody>
   );
-
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
-  };
-
-  const handleRowsPerPageChange = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   return (
     <>
@@ -215,11 +204,14 @@ const ProblemsTable = ({ id }: { id?: string }) => {
 
         <TablePagination
           component="div"
-          count={data.length}
-          page={page}
-          onPageChange={handlePageChange}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleRowsPerPageChange}
+          count={table.getFilteredRowModel().rows.length}
+          page={table.getState().pagination.pageIndex}
+          onPageChange={(_, newPage) => table.setPageIndex(newPage)}
+          rowsPerPage={table.getState().pagination.pageSize}
+          onRowsPerPageChange={(event) => {
+            const newPageSize = parseInt(event.target.value, 10);
+            table.setPageSize(newPageSize);
+          }}
           rowsPerPageOptions={[7, 10, 25]}
         />
       </Card>

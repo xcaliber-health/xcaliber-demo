@@ -249,8 +249,8 @@ export const CreateOrEditProblem = ({
   return (
     <>
       <Button
-        variant="outlined"
-        color="inherit"
+        variant={mode === "edit" ? "outlined" : "contained"}
+        color={mode === "edit" ? "inherit" : "primary"}
         className="mr-12"
         style={{
           border: mode === "edit" ? "none" : "",
@@ -260,7 +260,7 @@ export const CreateOrEditProblem = ({
         }}
         onClick={() => setIsDrawerOpen(true)}
       >
-        {mode === "create" ? "+CREATE" : <FaPen className="cursor-pointer" />}
+        {mode === "create" ? "Add" : <FaPen className="cursor-pointer" />}
       </Button>
 
       <Drawer

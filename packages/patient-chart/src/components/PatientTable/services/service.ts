@@ -11,6 +11,45 @@ interface ContactInfo {
   type: string;
 }
 
+interface PatientResource {
+  id: string;
+  birthDate: string;
+  name: Array<{
+    family: string;
+    text: string;
+    given: string[];
+  }>;
+  gender: string;
+  extension: any;
+  address: any[];
+  telecom?: Array<{
+    system: string;
+    value: string;
+  }>;
+}
+
+interface PatientData {
+  resource: PatientResource;
+}
+
+interface Patient {
+  bloodType: string;
+  addresses: ContactInfo[];
+  code: string;
+  dateOfBirth: string;
+  familyName: string;
+  fullName: string;
+  givenName: string;
+  suffix: string;
+  id: string;
+  sex: string;
+  type: string;
+  extension: any;
+  gender: string;
+  email?: string;
+  phone?: string;
+}
+
 export const tableObjParser = (
   dataM: any[] | undefined,
   type: string
@@ -58,45 +97,6 @@ export const tableObjParser = (
   return results;
 };
 
-interface PatientResource {
-  id: string;
-  birthDate: string;
-  name: Array<{
-    family: string;
-    text: string;
-    given: string[];
-  }>;
-  gender: string;
-  extension: any;
-  address: any[];
-  telecom?: Array<{
-    system: string;
-    value: string;
-  }>;
-}
-
-interface PatientData {
-  resource: PatientResource;
-}
-
-interface Patient {
-  bloodType: string;
-  addresses: ContactInfo[];
-  code: string;
-  dateOfBirth: string;
-  familyName: string;
-  fullName: string;
-  givenName: string;
-  suffix: string;
-  id: string;
-  sex: string;
-  type: string;
-  extension: any;
-  gender: string;
-  email?: string;
-  phone?: string;
-}
-
 export const parserFunc = (data: PatientData[] | undefined): Patient[] => {
   if (!data) return [];
 
@@ -137,6 +137,45 @@ export const parserFunc = (data: PatientData[] | undefined): Patient[] => {
     .filter((patient): patient is Patient => patient !== null);
 };
 
+const formatPhoneNumber = (number: string): string | null => {
+  // Ensure the phone number follows NANP
+  const match = number.match(/^(\d{3})(\d{3})(\d{4})$/);
+  if (match) {
+    return `(${match[1]}) ${match[2]}-${match[3]}`;
+  }
+  return null; 
+};
+
+export const phnEmlParser = (phnData, emlData) => {
+  let parsedTelecom = [];
+
+  // Parse and format phone numbers
+  phnData?.forEach((item) => {
+    if (item.value) {
+      const formattedNumber = formatPhoneNumber(item.value);
+      if (formattedNumber) {
+        parsedTelecom.push({
+          system: "phone",
+          value: formattedNumber,
+          use: item.type || "home", 
+        });
+      }
+    }
+  });
+
+  // Parse email addresses
+  emlData?.forEach((item) => {
+    if (item.value) {
+      parsedTelecom.push({
+        system: "email",
+        value: item.value,
+      });
+    }
+  });
+
+  return parsedTelecom;
+};
+
 const getCommonHeaders = () => ({
   Authorization: Helper.getSourceToken(),
   "x-source-id": localStorage.getItem("XCALIBER_TOKEN") || "",
@@ -171,6 +210,246 @@ export const PatientsById = async (id: string): Promise<Patient[]> => {
   }
 };
 
+export const addPatient = (patient) => {
+  let sourceUrl = Helper.getSourceUrl();
+  let d = deParsefunc(patient);
+  const configHeaders = {
+    headers: {
+      Authorization: Helper.getSourceToken(),
+      "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+    },
+  };
+  console.log(d);
+  return axios
+    .post(`${sourceUrl}/Patient`, d, configHeaders)
+    .then(async (response) => {
+      const data = await response;
+      return data.data.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+const dateParser = (item: string): string => {
+  if (!item) return "";
+  const date = new Date(item);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+export const tableObjDeparser = (data, type) => {
+  let parsedData = [];
+
+  if (type === "address") {
+    data?.forEach((item) => {
+      let addressObj = {
+        line: [item.value || ""],
+        city: item.city || "",
+        state: item.state || "",
+        postalCode: item.postalCode || "",
+        country: item.country || "USA", // Default to "USA" if country is not provided
+      };
+      parsedData.push(addressObj);
+    });
+  }
+  return parsedData;
+};
+
+
+export const deParsefunc = (item) => {
+  const finalDate = item.dateOfBirth || "";
+
+  // Function to format phone numbers (for example, stripping unwanted characters)
+  const formatPhoneNumber = (phone) => {
+    if (!phone) return "";
+    return phone.replace(/[^\d]/g, "").replace(/^(\d{3})(\d{3})(\d{4})$/, "($1) $2-$3");
+  };
+
+  // Helper to safely process addresses
+  const parseAddress = (address) => {
+    if (typeof address !== "string") return { line: [], city: "", state: "", postalCode: "", country: "USA" };
+
+    const parts = address.split(",").map((part) => part.trim());
+    return {
+      line: parts.slice(0, 2), // First two lines
+      city: parts[2] || "",
+      state: parts[3]?.split(" ")[0] || "",
+      postalCode: parts[3]?.split(" ")[1] || "",
+      country: "USA",
+    };
+  };
+
+  // Parse the main address
+  const mainAddress = parseAddress(item.address);
+
+  // Parse emergency contact address
+  const emergencyContactAddress = parseAddress(item.emergencyContact?.address || "");
+
+  return {
+    context: {
+      departmentId: localStorage.getItem("DEPARTMENT_ID") || "1",
+    },
+    data: {
+      resourceType: "Patient",
+      name: [
+        {
+          use: "official",
+          family: item.familyName,
+          given: [item.givenName, item.middleName || ""],
+          text: `${item.givenName} ${item.middleName || ""} ${item.familyName}`,
+        },
+        {
+          use: "old",
+          given: ["Willy"], 
+        },
+      ],
+      communication: [
+        {
+          language: {
+            coding: [
+              {
+                system: "http://hl7.org/fhir/ValueSet/all-languages",
+                code: "deu", 
+              },
+            ],
+          },
+        },
+      ],
+      address: [
+        {
+          line: mainAddress.line,
+          city: mainAddress.city,
+          state: mainAddress.state,
+          postalCode: mainAddress.postalCode,
+          country: mainAddress.country,
+        },
+      ],
+      birthDate: finalDate,
+      gender: item.sex,
+      maritalStatus: {
+        coding: [
+          {
+            system: "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+            code: "UNK",
+            display: "unknown",
+          },
+        ],
+      },
+      generalPractitioner: [
+        {
+          reference: "Practitioner/89", 
+        },
+      ],
+      contact: [
+        {
+          name: {
+            text: item.emergencyContact?.name || "",
+          },
+          relationship: [
+            {
+              coding: [
+                {
+                  system: "http://terminology.hl7.org/3.1.0/CodeSystem-v2-0131.html",
+                  code: "EP",
+                  display: item.emergencyContact?.relationship || "Spouse",
+                },
+              ],
+            },
+          ],
+          telecom: [
+            {
+              system: "phone",
+              value: formatPhoneNumber(item.emergencyContact?.phone) || "",
+              use: "home",
+            },
+          ],
+          address: {
+            line: emergencyContactAddress.line,
+            city: emergencyContactAddress.city,
+            state: emergencyContactAddress.state,
+            postalCode: emergencyContactAddress.postalCode,
+            country: emergencyContactAddress.country,
+          },
+        },
+      ],
+      extension: [
+        {
+          url: "http://xcaliber-fhir/structureDefinition/legal-sex",
+          valueCode: item.sex === "Male" ? "M" : "F",
+        },
+        {
+          url: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
+          valueCode: item.sex === "Male" ? "M" : "F",
+        },
+        {
+          url: "http://xcaliber-fhir/structureDefinition/country-code",
+          valueString: "USA",
+        },
+        {
+          url: "http://xcaliber-fhir/structureDefinition/notes",
+          valueString: item.notes || "",
+        },
+        {
+          url: "http://xcaliber-fhir/structureDefinition/portal-access-given",
+          valueBoolean: true,
+        },
+        {
+          url: "http://xcaliber-fhir/structureDefinition/preferred-pronouns",
+          valueString: "he/him",
+        },
+        {
+          url: "http://xcaliber-fhir/structureDefinition/primary-department-id",
+          valueString: "150",
+        },
+        {
+          url: "http://xcaliber-fhir/structureDefinition/referral-source-id",
+          valueString: "1",
+        },
+      ],
+      telecom: [
+        ...item.phoneNumbers.map((phone) => ({
+          system: "phone",
+          value: formatPhoneNumber(phone.value),
+          use: phone.type || "home",
+        })),
+        ...item.emails.map((email) => ({
+          system: "email",
+          value: email.value,
+        })),
+      ],
+    },
+  };
+};
+
+
+export const editPatient = (patient, id) => {
+  let sourceUrl = Helper.getSourceUrl();
+  let d = deParsefunc(patient);
+  const configHeaders = {
+    headers: {
+      Authorization: Helper.getSourceToken(),
+      "x-source-id": `${process.env.REACT_APP_XSOURCEID}`,
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+    },
+  };
+
+  return axios
+    .put(`${sourceUrl}/Patient/${id}`, d, configHeaders)
+    .then(async (response) => {
+      const data = await response;
+
+      return data.data.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 interface PaginationConfig {
   pageSize: number;
   defaultSearchName?: string;
