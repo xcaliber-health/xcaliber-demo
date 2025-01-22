@@ -177,12 +177,11 @@ export const CreateProblem = ({
   return (
     <>
       <Button
-        variant="outlined"
-        color="inherit"
-        className="mr-12"
+        variant="contained"
+        color="primary"
         onClick={() => setIsDrawerOpen(true)}
       >
-        +CREATE
+        Add
       </Button>
 
       <Drawer
