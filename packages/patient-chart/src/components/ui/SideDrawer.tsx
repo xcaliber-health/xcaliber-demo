@@ -1,5 +1,4 @@
-// React Imports
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // Mui Imports
 import Box from "@mui/material/Box";
@@ -35,6 +34,16 @@ const SideDrawer: React.FC<SideDrawerProps> = ({
   onClose,
 }) => {
   const [formData, setFormData] = useState(initialData);
+
+  // Update formData when initialData changes, but only if they are different
+  useEffect(() => {
+    if (
+      initialData &&
+      JSON.stringify(initialData) !== JSON.stringify(formData)
+    ) {
+      setFormData(initialData);
+    }
+  }, [initialData]);
 
   const handleInputChange = (name: string, value: string | number) => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -84,6 +93,9 @@ const SideDrawer: React.FC<SideDrawerProps> = ({
             value={formData[field.name] || ""}
             onChange={(e) => handleInputChange(field.name, e.target.value)}
             placeholder={`Enter ${field.label.toLowerCase()}`}
+            InputLabelProps={{
+              shrink: field.type === "date" ? true : undefined, 
+            }}
             sx={{ marginBottom: 2 }}
           />
         ))}
