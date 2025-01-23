@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 
 // Third-party Imports
-import { VitalService } from "../../../../../../services/VitalService";
+import { VitalService } from "../../../../../../services/vitalService";
 import SideDrawer from "../../../../../ui/SideDrawer";
 
 interface CreateVitalsProps {
@@ -192,15 +192,15 @@ export default function CreateVitals({ patientId }: CreateVitalsProps) {
   return (
     <>
       <Button
-        variant="contained"
-        color="primary"
+        variant='contained'
+        color='primary'
         onClick={() => setIsOpen(true)}
       >
         Add
       </Button>
 
       <SideDrawer
-        title="Add Vitals"
+        title='Add Vitals'
         formFields={formFields}
         initialData={formData}
         isOpen={isOpen}

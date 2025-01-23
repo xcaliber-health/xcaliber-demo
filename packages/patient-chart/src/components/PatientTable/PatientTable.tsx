@@ -27,7 +27,7 @@ import "react-toastify/dist/ReactToastify.css";
 import SideDrawer from "../ui/SideDrawer.tsx";
 
 // Style Import
-import styles from "@core/styles/table.module.css";
+import styles from "../../styles/table.module.css";
 
 // Column Definitions
 const columnHelper = createColumnHelper<any>();
