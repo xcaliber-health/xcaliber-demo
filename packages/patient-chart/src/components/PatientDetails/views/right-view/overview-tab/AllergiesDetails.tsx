@@ -136,8 +136,8 @@ const AllergiesTable = ({ id }: { id?: string }) => {
     <Card>
       <div className="p-4 flex justify-between items-center">
         <CardHeader title="Allergies" />
-        <Button variant="outlined" color="inherit">
-          +CREATE
+        <Button variant="contained" color="primary">
+          Add
         </Button>
       </div>
 

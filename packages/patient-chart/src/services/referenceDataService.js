@@ -17,7 +17,6 @@ export const ReferenceDataService = {
           },
         }
       );
-      console.log(result?.data);
 
       return result?.data?.data?.result;
     } catch (error) {

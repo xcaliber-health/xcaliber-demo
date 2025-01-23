@@ -20,12 +20,13 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { fetchProblems } from "../utils/getPatientProblems";
-import { CreateProblem } from "./CreateProblem";
+import { CreateOrEditProblem } from "./CreateOrEditProblem";
 
 // React Icons
-import { FaEye, FaPen } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 
 export interface ProblemProps {
+  id: string;
   problem: string;
   status: string;
   description: string;
@@ -95,7 +96,12 @@ const ProblemsTable = ({ id }: { id?: string }) => {
         cell: ({ row }) => (
           <div className="flex gap-2">
             <FaEye className="cursor-pointer" />
-            <FaPen className="cursor-pointer" />
+            <CreateOrEditProblem
+              patientId={id}
+              problemId={row.original.id}
+              updateProblems={updateProblemsState}
+              mode="edit"
+            />
           </div>
         ),
       }),
@@ -141,7 +147,11 @@ const ProblemsTable = ({ id }: { id?: string }) => {
       <Card>
         <div className="p-4 flex justify-between items-center">
           <CardHeader title="Problems" />
-          <CreateProblem patientId={id} updateProblems={updateProblemsState} />
+          <CreateOrEditProblem
+            patientId={id}
+            updateProblems={updateProblemsState}
+            mode="create"
+          />
         </div>
 
         <div className="overflow-x-auto">

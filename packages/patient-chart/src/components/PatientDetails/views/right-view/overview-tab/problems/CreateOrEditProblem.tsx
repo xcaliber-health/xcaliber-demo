@@ -1,30 +1,42 @@
+// React Imports
 import { useEffect, useState } from "react";
+
+// Mui Imports
 import {
+  Box,
   Button,
+  Divider,
+  Drawer,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
   TextField,
-  Box,
-  Divider,
-  Drawer,
-  IconButton,
   Typography,
 } from "@mui/material";
+
+// Third-party Imports
 import * as moment from "moment-timezone";
 import { ProblemService } from "../../../../../../services/problemService";
 import { ReferenceDataService } from "../../../../../../services/referenceDataService";
 
-interface CreateProblemProps {
+// React Icons
+import { FaPen } from "react-icons/fa";
+
+interface CreateOrEditProblemProps {
   patientId: string;
+  problemId?: string;
   updateProblems: (data: any) => void;
+  mode: "create" | "edit";
 }
 
-export const CreateProblem = ({
+export const CreateOrEditProblem = ({
   patientId,
+  problemId,
   updateProblems,
-}: CreateProblemProps) => {
+  mode,
+}: CreateOrEditProblemProps) => {
   let dateObject = new Date(
     new Date().toLocaleString(`en-US`, {
       timeZone: localStorage.getItem(`DEPARTMENT_TIMEZONE`),
@@ -141,9 +153,63 @@ export const CreateProblem = ({
     }
   };
 
+  const updateProblem = async (problemPayload: any) => {
+    try {
+      const response = await ProblemService.updateProblem(
+        problemId,
+        patientId,
+        problemPayload
+      );
+      setIsDrawerOpen(false);
+    } catch (error) {
+      console.error("Error updating problem:", error);
+    }
+  };
+
   useEffect(() => {
+    const fetchProblemDetails = async () => {
+      if (mode === "edit" && problemId) {
+        try {
+          const problemDetails = await ProblemService.getProblemById(
+            problemId,
+            patientId
+          );
+          setFormData({
+            problemSynopsis: problemDetails?.text?.div || "",
+          });
+          setSelectedIcd10Code(problemDetails?.code?.coding?.[0]?.code || "");
+          setProblemPayload((prevPayload) => ({
+            ...prevPayload,
+            data: {
+              ...prevPayload.data,
+              text: {
+                status: problemDetails?.text?.status || "generated",
+                div: problemDetails?.text?.div || "",
+              },
+              code: {
+                coding: [
+                  {
+                    system: problemDetails?.code?.coding?.[0]?.system || "",
+                    code: problemDetails?.code?.coding?.[0]?.code || "",
+                  },
+                ],
+              },
+              note: [
+                {
+                  text: problemDetails?.note?.[0]?.text || "",
+                },
+              ],
+            },
+          }));
+        } catch (error) {
+          console.error("Error fetching problem details:", error);
+        }
+      }
+    };
+
     initialiseProblemOptions();
-  }, []);
+    fetchProblemDetails();
+  }, [mode, problemId]);
 
   const onSubmit = () => {
     const updatedProblemPayload = {
@@ -166,7 +232,13 @@ export const CreateProblem = ({
         ],
       },
     };
-    createProblem(updatedProblemPayload);
+
+    if (mode === "edit") {
+      updateProblem(updatedProblemPayload);
+    } else {
+      createProblem(updatedProblemPayload);
+    }
+
     setIsDrawerOpen(false);
   };
 
@@ -177,12 +249,18 @@ export const CreateProblem = ({
   return (
     <>
       <Button
-        variant="outlined"
-        color="inherit"
+        variant={mode === "edit" ? "outlined" : "contained"}
+        color={mode === "edit" ? "inherit" : "primary"}
         className="mr-12"
+        style={{
+          border: mode === "edit" ? "none" : "",
+          marginTop: mode === "edit" ? "-4px" : "",
+          marginLeft: mode === "edit" ? "-16px" : "",
+          backgroundColor: mode === "edit" ? "transparent" : "",
+        }}
         onClick={() => setIsDrawerOpen(true)}
       >
-        +CREATE
+        {mode === "create" ? "Add" : <FaPen className="cursor-pointer" />}
       </Button>
 
       <Drawer
@@ -205,7 +283,9 @@ export const CreateProblem = ({
         }}
       >
         <div className="flex items-center justify-between p-2">
-          <Typography variant="h5">Create Problem</Typography>
+          <Typography variant="h5">
+            {mode === "create" ? "Create Problem" : "Edit Problem"}
+          </Typography>
           <IconButton onClick={() => setIsDrawerOpen(false)}>
             <i className="ri-close-line" />
           </IconButton>
