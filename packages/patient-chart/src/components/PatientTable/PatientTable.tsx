@@ -84,6 +84,8 @@ function PatientTable() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+
+  
   const formFields = [
     { name: "givenName", label: "Given Name", type: "text" },
     { name: "middleName", label: "Middle Name", type: "text" },
