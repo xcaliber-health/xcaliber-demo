@@ -11,7 +11,11 @@ import Skeleton from "@mui/material/Skeleton";
 import TablePagination from "@mui/material/TablePagination";
 
 // Service Import
-import { getPatientsAtPage, addPatient } from "./services/service.ts";
+import {
+  getPatientsAtPage,
+  addPatient,
+  getPractitionerData,
+} from "./services/service.ts";
 
 // Third-party Imports
 import {
@@ -24,7 +28,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Components
-import SideDrawer from "../ui/SideDrawer.tsx";
+import PatientSideDrawer from "./PatientSideDrawer.tsx";
 
 // Style Import
 import styles from "../../styles/table.module.css";
@@ -82,25 +86,68 @@ function PatientTable() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-
-
-  
-  const formFields = [
+  const [practitionerData, setPractitionerData] = useState([]);
+  const [practitionerNames, setPractitionerNames] = useState([]);
+  const [practitionerOptions, setPractitionerOptions] = useState([]);
+  const formFields: FormField[] = [
     { name: "givenName", label: "Given Name", type: "text" },
     { name: "middleName", label: "Middle Name", type: "text" },
     { name: "familyName", label: "Family Name", type: "text" },
     { name: "dateOfBirth", label: "Date of Birth", type: "date" },
-    { name: "sex", label: "Gender", type: "select", options: ["Male", "Female", "Gender non-conforming"] },
+    {
+      name: "gender",
+      label: "Gender",
+      type: "select",
+      options: [
+        { value: "Male", label: "Male" },
+        { value: "Female", label: "Female" },
+        { value: "Other", label: "Other" },
+      ],
+    },
+    {
+      name: "practitioner",
+      label: "Practitioner",
+      type: "select",
+      options: practitionerOptions, // Pass the array of { value, label }
+    },
     { name: "address", label: "Address", type: "textarea" },
-    { name: "phoneNumbers", label: "Phone Numbers (Comma-separated)", type: "text" },
+    {
+      name: "phoneNumbers",
+      label: "Phone Numbers (Comma-separated)",
+      type: "text",
+    },
     { name: "emails", label: "Emails (Comma-separated)", type: "text" },
-    { name: "emergencyContactName", label: "Emergency Contact Name", type: "text" },
-    { name: "emergencyContactPhone", label: "Emergency Contact Phone", type: "text" },
-    { name: "emergencyContactRelationship", label: "Emergency Contact Relationship", type: "text" },
-    { name: "emergencyContactAddress", label: "Emergency Contact Address", type: "textarea" },
+    {
+      name: "emergencyContactName",
+      label: "Emergency Contact Name",
+      type: "text",
+    },
+    {
+      name: "emergencyContactPhone",
+      label: "Emergency Contact Phone",
+      type: "text",
+    },
+    {
+      name: "emergencyContactRelationship",
+      label: "Emergency Contact Relationship",
+      type: "text",
+    },
+    {
+      name: "emergencyContactAddress",
+      label: "Emergency Contact Address",
+      type: "textarea",
+    },
     { name: "notes", label: "Notes", type: "textarea" },
+    
   ];
+  const [formData, setFormData] = useState(() => {
+    const defaultValues = {};
+    formFields.forEach((field) => {
+      defaultValues[field.name] = field.value || ""; 
+    });
+    return defaultValues;
+  });
+
 
   const table = useReactTable({
     data,
@@ -146,6 +193,31 @@ function PatientTable() {
     fetchPatients();
   }, [debouncedSearch, page, rowsPerPage]);
 
+  useEffect(() => {
+    const fetchPractitionerData = async () => {
+      try {
+        const fetchedData = await getPractitionerData();
+        // console.log("Practitioner Data:", fetchedData.data.entry);
+
+        const options = fetchedData.data.entry.map((entry) => {
+          const nameObj = entry.resource.name[0];
+          return {
+            value: entry.resource.id,
+            label:
+              nameObj.text || `${nameObj.given.join(" ")} ${nameObj.family}`,
+          };
+        });
+        // console.log("Practitioner names with ID:", options);
+
+        setPractitionerOptions(options);
+      } catch (error) {
+        console.error("Error fetching practitioner data:", error);
+      }
+    };
+
+    fetchPractitionerData();
+  }, []);
+
   const formatPhoneNumber = (number: string) => {
     const cleaned = number.replace(/\D/g, "");
     if (cleaned.length === 10) {
@@ -155,32 +227,35 @@ function PatientTable() {
   };
 
   const handleCreatePatient = async (formData) => {
-    const address = typeof formData.address === "string" ? formData.address : "";
+    console.log("Form Data Submitted:", formData);
+    const address =
+      typeof formData.address === "string" ? formData.address : "";
 
-    const patientData = {
-      givenName: formData.givenName,
-      middleName: formData.middleName,
-      familyName: formData.familyName,
-      dateOfBirth: formData.dateOfBirth,
-      sex: formData.sex,
-      address,
-      phoneNumbers: formData.phoneNumbers
-        ? formData.phoneNumbers.split(",").map((phone, index) => ({
-            value: formatPhoneNumber(phone.trim()),
-            type: ["home", "work", "mobile"][index] || "other",
-          }))
-        : [],
-      emails: formData.emails
-        ? formData.emails.split(",").map((email) => ({ value: email.trim() }))
-        : [],
-      emergencyContact: {
-        name: formData.emergencyContactName,
-        phone: formatPhoneNumber(formData.emergencyContactPhone),
-        relationship: formData.emergencyContactRelationship,
-        address: formData.emergencyContactAddress,
-      },
-      notes: formData.notes,
-    };
+      const patientData = {
+        givenName: formData.givenName,
+        middleName: formData.middleName,
+        familyName: formData.familyName,
+        dateOfBirth: formData.dateOfBirth,
+        gender: formData.gender,
+        practitioner: formData.practitioner,
+        address,
+        phoneNumbers: formData.phoneNumbers
+          ? formData.phoneNumbers.split(",").map((phone, index) => ({
+              value: phone.trim(),
+              type: ["home", "work", "mobile"][index] || "other",
+            }))
+          : [],
+        emails: formData.emails
+          ? formData.emails.split(",").map((email) => ({ value: email.trim() }))
+          : [],
+        emergencyContact: {
+          name: formData.emergencyContactName,
+          phone: formData.emergencyContactPhone,
+          relationship: formData.emergencyContactRelationship,
+          address: formData.emergencyContactAddress,
+        },
+        notes: formData.notes,
+      };
 
     try {
       await addPatient(patientData);
@@ -220,7 +295,11 @@ function PatientTable() {
           }}
           style={{ width: "300px" }}
         />
-        <Button variant="contained" color="primary" onClick={() => setIsDrawerOpen(true)}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setIsDrawerOpen(true)}
+        >
           Create Patient
         </Button>
       </div>
@@ -233,7 +312,10 @@ function PatientTable() {
                   <th key={header.id}>
                     {header.isPlaceholder
                       ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </th>
                 ))}
               </tr>
@@ -258,7 +340,10 @@ function PatientTable() {
                   >
                     {row.getVisibleCells().map((cell) => (
                       <td key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
                       </td>
                     ))}
                   </tr>
@@ -272,16 +357,20 @@ function PatientTable() {
         page={page}
         onPageChange={(_, newPage) => setPage(newPage)}
         rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={(e) => setRowsPerPage(parseInt(e.target.value, 10))}
+        onRowsPerPageChange={(e) =>
+          setRowsPerPage(parseInt(e.target.value, 10))
+        }
         rowsPerPageOptions={[10, 25, 50]}
       />
-      <SideDrawer
+      <PatientSideDrawer
         title="Create New Patient"
         formFields={formFields}
+        initialData={{}} 
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
         onSubmit={handleCreatePatient}
       />
+
       <ToastContainer />
     </Card>
   );
