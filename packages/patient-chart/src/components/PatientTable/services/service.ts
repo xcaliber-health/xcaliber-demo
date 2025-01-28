@@ -210,9 +210,51 @@ export const PatientsById = async (id: string): Promise<Patient[]> => {
   }
 };
 
+
+export const getPractitionerData = () => {
+  const sourceUrl = Helper.getSourceUrl();
+  const source = localStorage.getItem("XCALIBER_SOURCE"); 
+  let xSourceId;
+
+  switch (source) {
+    case "ATHENA":
+      xSourceId = process.env.NEXT_PUBLIC_ATHENA_XSOURCEID;
+      break;
+    case "EPIC":
+      xSourceId = process.env.NEXT_PUBLIC_EPIC_XSOURCEID;
+      break;
+    case "ECW":
+      xSourceId = process.env.NEXT_PUBLIC_ECW_XSOURCEID;
+      break;
+    default:
+      xSourceId = process.env.NEXT_PUBLIC_XSOURCEID;
+  }
+
+  const configHeaders = {
+    headers: {
+      Authorization: Helper.getSourceToken(),
+      "x-source-id": xSourceId,
+      "Content-Type": "application/json",
+    },
+  };
+
+  // Make the API call
+  return axios
+    .get(`${sourceUrl}/Practitioner`, configHeaders)
+    .then((response) => {
+      // console.log("Practitioner Data:", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error fetching practitioner data:", error.response?.data || error);
+      throw error;
+    });
+};
+
 export const addPatient = (patient) => {
   let sourceUrl = Helper.getSourceUrl();
   let d = deParsefunc(patient);
+  // console.log("deparsed",d)
   const configHeaders = {
     headers: {
       Authorization: Helper.getSourceToken(),
@@ -221,7 +263,6 @@ export const addPatient = (patient) => {
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
     },
   };
-  console.log(d);
   return axios
     .post(`${sourceUrl}/Patient`, d, configHeaders)
     .then(async (response) => {
@@ -262,6 +303,8 @@ export const tableObjDeparser = (data, type) => {
 
 
 export const deParsefunc = (item) => {
+  console.log("first", item);
+
   const finalDate = item.dateOfBirth || "";
 
   // Function to format phone numbers
@@ -270,36 +313,35 @@ export const deParsefunc = (item) => {
     return phone.replace(/[^\d]/g, "").replace(/^(\d{3})(\d{3})(\d{4})$/, "($1) $2-$3");
   };
 
-  // Helper function to safely parse addresses
-  const parseAddress = (address, city, state, postalCode, country) => {
+  // Helper function to parse addresses
+  const parseAddress = (address) => {
+    if (!address) return { line: [], city: "", state: "", postalCode: "", country: "USA" };
+    const parts = address.split(",").map((part) => part.trim());
+    const [line, city, stateZip, country] = [
+      parts[0],
+      parts[1],
+      parts.slice(2, -1).join(" "), // Combine the state and postal code
+      parts[parts.length - 1],
+    ];
+    const [state, postalCode] = stateZip.split(" ").length > 1 ? stateZip.split(" ") : [stateZip, ""];
     return {
-      line: address ? [address.trim()] : [],
+      line: [line],
       city: city || "",
       state: state || "",
       postalCode: postalCode || "",
-      country: country || "USA", // Default to USA if not provided
+      country: country || "USA",
     };
   };
+  
+ 
 
-  // Parse the main address
-  const mainAddress = parseAddress(item.address, item.city, item.state, item.postalCode, item.country);
-
-  // Parse the emergency contact address
-  const emergencyContactAddress = parseAddress(
-    item.emergencyContactAddress,
-    item.emergencyContactCity || "",
-    item.emergencyContactState || "",
-    item.emergencyContactPostalCode || "",
-    item.emergencyContactCountry || "USA"
-  );
-
-  // Debugging logs
-  console.log("Parsed Main Address:", mainAddress);
-  console.log("Parsed Emergency Contact Address:", emergencyContactAddress);
+  // Parse main and emergency contact addresses
+  const mainAddress = parseAddress(item.address);
+  const emergencyContactAddress = parseAddress(item.emergencyContact?.address);
 
   return {
     context: {
-      departmentId: localStorage.getItem("DEPARTMENT_ID"),
+      departmentId: localStorage.getItem("DEPARTMENT_ID") || "150", // Default to 150
     },
     data: {
       resourceType: "Patient",
@@ -321,7 +363,7 @@ export const deParsefunc = (item) => {
             coding: [
               {
                 system: "http://hl7.org/fhir/ValueSet/all-languages",
-                code: item.primaryLanguage || "en",
+                code: "deu",
               },
             ],
           },
@@ -329,7 +371,7 @@ export const deParsefunc = (item) => {
       ],
       address: [mainAddress],
       birthDate: finalDate,
-      gender: item.sex,
+      gender: item.gender || undefined, 
       maritalStatus: {
         coding: [
           {
@@ -339,15 +381,17 @@ export const deParsefunc = (item) => {
           },
         ],
       },
-      generalPractitioner: [
-        {
-          reference: "Practitioner/89",
-        },
-      ],
+      generalPractitioner: item.practitioner
+        ? [
+            {
+              reference: `Practitioner/${item.practitioner}`,
+            },
+          ]
+        : undefined,
       contact: [
         {
           name: {
-            text: item.emergencyContactName || "",
+            text: item.emergencyContact?.name || "",
           },
           relationship: [
             {
@@ -355,7 +399,7 @@ export const deParsefunc = (item) => {
                 {
                   system: "http://terminology.hl7.org/3.1.0/CodeSystem-v2-0131.html",
                   code: "EP",
-                  display: item.emergencyContactRelationship || "Spouse",
+                  display: item.emergencyContact?.relationship || "Spouse",
                 },
               ],
             },
@@ -363,7 +407,7 @@ export const deParsefunc = (item) => {
           telecom: [
             {
               system: "phone",
-              value: formatPhoneNumber(item.emergencyContactPhone) || "",
+              value: formatPhoneNumber(item.emergencyContact?.phone) || "",
               use: "home",
             },
           ],
@@ -373,11 +417,11 @@ export const deParsefunc = (item) => {
       extension: [
         {
           url: "http://xcaliber-fhir/structureDefinition/legal-sex",
-          valueCode: item.sex === "Male" ? "M" : "F",
+          valueCode: item.gender === "Male" ? "M" : item.gender === "Female" ? "F" : "O",
         },
         {
           url: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
-          valueCode: item.sex === "Male" ? "M" : "F",
+          valueCode: item.gender === "Male" ? "M" : item.gender === "Female" ? "F" : "O",
         },
         {
           url: "http://xcaliber-fhir/structureDefinition/country-code",
@@ -393,7 +437,7 @@ export const deParsefunc = (item) => {
         },
         {
           url: "http://xcaliber-fhir/structureDefinition/preferred-pronouns",
-          valueString: "he/him",
+          valueString: item.gender === "Male" ? "he/him" : item.gender === "Female" ? "she/her" : "they/them",
         },
         {
           url: "http://xcaliber-fhir/structureDefinition/primary-department-id",
@@ -405,38 +449,21 @@ export const deParsefunc = (item) => {
         },
       ],
       telecom: [
-        ...(Array.isArray(item.phoneNumbers)
-          ? item.phoneNumbers.map((phone) => ({
-              system: "phone",
-              value: formatPhoneNumber(phone.value),
-              use: phone.type || "home",
-            }))
-          : item.phone
-          ? [
-              {
-                system: "phone",
-                value: formatPhoneNumber(item.phone),
-                use: "home",
-              },
-            ]
-          : []),
-        ...(Array.isArray(item.emails)
-          ? item.emails.map((email) => ({
-              system: "email",
-              value: email.value,
-            }))
-          : item.email
-          ? [
-              {
-                system: "email",
-                value: item.email,
-              },
-            ]
-          : []),
+        ...(item.phoneNumbers?.map((phoneObj) => ({
+          system: "phone",
+          value: formatPhoneNumber(phoneObj.value),
+          use: phoneObj.type || "home",
+        })) || []),
+        ...(item.emails?.map((emailObj) => ({
+          system: "email",
+          value: emailObj.value,
+        })) || []),
       ],
     },
   };
 };
+
+
 
 export const editPatient = (patient, id) => {
   let sourceUrl = Helper.getSourceUrl();

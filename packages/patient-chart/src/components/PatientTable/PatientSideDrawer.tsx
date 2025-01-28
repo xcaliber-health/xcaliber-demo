@@ -7,21 +7,20 @@ import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
-import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import Autocomplete from "@mui/material/Autocomplete";
+import MenuItem from "@mui/material/MenuItem";
 
 interface FormField {
   name: string;
   label: string;
-  type: string; 
-  options?: Array<string | { value: string | number; label: string }>; 
+  type: string; // 'text', 'number', 'select', 'date', etc.
+  options?: Array<string | { value: string | number; label: string }>;
   value?: string | number;
 }
 
-interface SideDrawerProps {
+interface PatientSideDrawerProps {
   title: string;
   formFields: FormField[];
   initialData?: { [key: string]: any };
@@ -30,7 +29,7 @@ interface SideDrawerProps {
   onClose: () => void;
 }
 
-const SideDrawer: React.FC<SideDrawerProps> = ({
+const PatientSideDrawer: React.FC<PatientSideDrawerProps> = ({
   title,
   formFields,
   initialData = {},
@@ -40,7 +39,6 @@ const SideDrawer: React.FC<SideDrawerProps> = ({
 }) => {
   const [formData, setFormData] = useState(initialData);
 
-  // Update formData when initialData changes
   useEffect(() => {
     if (
       initialData &&
@@ -50,7 +48,7 @@ const SideDrawer: React.FC<SideDrawerProps> = ({
     }
   }, [initialData]);
 
-  const handleInputChange = (name: string, value: string | number) => {
+  const handleInputChange = (name: string, value: any) => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
@@ -74,7 +72,6 @@ const SideDrawer: React.FC<SideDrawerProps> = ({
           padding: "10px",
           height: "100%",
           overflowY: "scroll",
-          position: "absolute",
           zIndex: 1500,
         },
       }}
@@ -90,34 +87,62 @@ const SideDrawer: React.FC<SideDrawerProps> = ({
       {/* Form Fields */}
       <div style={{ padding: "20px" }}>
         {formFields.map((field) =>
-          field.type === "select" ? (
+          field.type === "practitioner" ? ( // Check if the field is a practitioner autocomplete
             <FormControl fullWidth key={field.name} sx={{ mb: 2 }}>
-              <InputLabel>{field.label}</InputLabel>
-              <Select
-                value={formData[field.name] || ""}
-                onChange={(e) => handleInputChange(field.name, e.target.value)}
-                label={field.label}
-              >
-                {field.options?.map((option, index) => {
-                  if (typeof option === "string") {
-                    return (
-                      <MenuItem key={`${field.name}-${index}`} value={option}>
-                        {option}
-                      </MenuItem>
-                    );
-                  } else {
-                    return (
-                      <MenuItem
-                        key={`${field.name}-${index}`}
-                        value={option.value}
-                      >
-                        {option.label}
-                      </MenuItem>
-                    );
-                  }
-                })}
-              </Select>
+              <Autocomplete
+                options={field.options || []}
+                getOptionLabel={(option: any) =>
+                  typeof option === "string" ? option : option.label
+                }
+                value={
+                  field.options?.find(
+                    (option: any) => option.value === formData[field.name]
+                  ) || null
+                }
+                onChange={(_, newValue) =>
+                  handleInputChange(field.name, newValue?.value || "")
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label={field.label} />
+                )}
+              />
             </FormControl>
+          ) : field.type === "select" ? (
+            <FormControl fullWidth key={field.name} sx={{ mb: 2 }}>
+  <Autocomplete
+    options={field.options || []}
+    getOptionLabel={(option: any) =>
+      typeof option === "string" ? option : option.label
+    }
+    value={
+      field.options?.find(
+        (option: any) => option.value === formData[field.name]
+      ) || null
+    }
+    onChange={(_, newValue) =>
+      handleInputChange(field.name, newValue?.value || "")
+    }
+    renderInput={(params) => (
+      <TextField {...params} label={field.label} fullWidth />
+    )}
+    PaperProps={{
+      sx: {
+        maxHeight: 150, 
+        width: 250, 
+        mt: 1, 
+      },
+    }}
+    sx={{
+      "& .MuiAutocomplete-input": {
+        padding: "8px 12px", 
+      },
+      "& .MuiAutocomplete-inputRoot": {
+        fontSize: "0.875rem", 
+      },
+    }}
+  />
+</FormControl>
+
           ) : (
             <TextField
               key={field.name}
@@ -154,4 +179,4 @@ const SideDrawer: React.FC<SideDrawerProps> = ({
   );
 };
 
-export default SideDrawer;
+export default PatientSideDrawer;

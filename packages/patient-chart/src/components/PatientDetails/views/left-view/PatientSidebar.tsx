@@ -87,7 +87,11 @@ function PatientSidebar({ id }: { id: string }) {
     { name: "middleName", label: "Middle Name", type: "text" },
     { name: "familyName", label: "Family Name", type: "text" },
     { name: "dateOfBirth", label: "Date of Birth", type: "date" },
-    { name: "sex", label: "Gender", type: "select", options: ["Male", "Female"] },
+    { name: "sex", label: "Gender", type: "select", options: [
+      { value: "male", label: "Male" },
+      { value: "female", label: "Female" },
+      { value: "other", label: "Other" },
+    ], },
     { name: "address", label: "Address", type: "textarea" },
     { name: "city", label: "City", type: "text" },
     { name: "state", label: "State", type: "text" },
