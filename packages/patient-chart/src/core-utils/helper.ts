@@ -84,7 +84,6 @@ export const Helper = {
         );
         str = str.replace(/\\'[0-9a-zA-Z]{2}/g, "").trim();
         str = str.replace(/\\/g, "");
-        console.log(str);
         //convert to base 64
         return str;
       } else {

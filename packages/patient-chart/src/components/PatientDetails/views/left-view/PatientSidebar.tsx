@@ -97,7 +97,11 @@ function PatientSidebar({ id }: { id: string }) {
       name: "sex",
       label: "Gender",
       type: "select",
-      options: ["Male", "Female"],
+      options: [
+        { value: "male", label: "Male" },
+        { value: "female", label: "Female" },
+        { value: "other", label: "Other" },
+      ],
     },
     { name: "address", label: "Address", type: "textarea" },
     { name: "city", label: "City", type: "text" },
