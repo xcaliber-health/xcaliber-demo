@@ -94,7 +94,7 @@ const SideDrawer: React.FC<SideDrawerProps> = ({
             onChange={(e) => handleInputChange(field.name, e.target.value)}
             placeholder={`Enter ${field.label.toLowerCase()}`}
             InputLabelProps={{
-              shrink: field.type === "date" ? true : undefined, 
+              shrink: field.type === "date" ? true : undefined,
             }}
             sx={{ marginBottom: 2 }}
           />
