@@ -11,7 +11,11 @@ import Skeleton from "@mui/material/Skeleton";
 import TablePagination from "@mui/material/TablePagination";
 
 // Service Import
-import { getPatientsAtPage } from "./services/service.ts";
+import {
+  getPatientsAtPage,
+  addPatient,
+  getPractitionerData,
+} from "./services/service.ts";
 
 // Third-party Imports
 import {
@@ -20,9 +24,14 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+// Components
+import PatientSideDrawer from "./PatientSideDrawer.tsx";
 
 // Style Import
-import styles from "@core/styles/table.module.css";
+import styles from "../../styles/table.module.css";
 
 // Column Definitions
 const columnHelper = createColumnHelper<any>();
@@ -72,17 +81,73 @@ const columns = [
 function PatientTable() {
   const [data, setData] = useState<any[]>([]);
   const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState(""); // Debounced search state
-  const [page, setPage] = useState(0); // Pagination Page
-  const [rowsPerPage, setRowsPerPage] = useState(10); // Rows Per Page
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(false);
-
-  const onPatientSelect = (id: string) => {
-    const event = new CustomEvent("patientSelected", {
-      detail: { patientId: id },
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [practitionerData, setPractitionerData] = useState([]);
+  const [practitionerNames, setPractitionerNames] = useState([]);
+  const [practitionerOptions, setPractitionerOptions] = useState([]);
+  const formFields: FormField[] = [
+    { name: "givenName", label: "Given Name", type: "text" },
+    { name: "middleName", label: "Middle Name", type: "text" },
+    { name: "familyName", label: "Family Name", type: "text" },
+    { name: "dateOfBirth", label: "Date of Birth", type: "date" },
+    {
+      name: "gender",
+      label: "Gender",
+      type: "select",
+      options: [
+        { value: "Male", label: "Male" },
+        { value: "Female", label: "Female" },
+        { value: "Other", label: "Other" },
+      ],
+    },
+    {
+      name: "practitioner",
+      label: "Practitioner",
+      type: "select",
+      options: practitionerOptions, // Pass the array of { value, label }
+    },
+    { name: "address", label: "Address", type: "textarea" },
+    {
+      name: "phoneNumbers",
+      label: "Phone Numbers (Comma-separated)",
+      type: "text",
+    },
+    { name: "emails", label: "Emails (Comma-separated)", type: "text" },
+    {
+      name: "emergencyContactName",
+      label: "Emergency Contact Name",
+      type: "text",
+    },
+    {
+      name: "emergencyContactPhone",
+      label: "Emergency Contact Phone",
+      type: "text",
+    },
+    {
+      name: "emergencyContactRelationship",
+      label: "Emergency Contact Relationship",
+      type: "text",
+    },
+    {
+      name: "emergencyContactAddress",
+      label: "Emergency Contact Address",
+      type: "textarea",
+    },
+    { name: "notes", label: "Notes", type: "textarea" },
+    
+  ];
+  const [formData, setFormData] = useState(() => {
+    const defaultValues = {};
+    formFields.forEach((field) => {
+      defaultValues[field.name] = field.value || ""; 
     });
-    window.dispatchEvent(event);
-  };
+    return defaultValues;
+  });
+
 
   const table = useReactTable({
     data,
@@ -90,7 +155,6 @@ function PatientTable() {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  // Debouncing function
   const debounce = (func: Function, delay: number) => {
     let timer: NodeJS.Timeout;
     return (...args: any[]) => {
@@ -99,16 +163,13 @@ function PatientTable() {
     };
   };
 
-  // Fetch Patients
   const fetchPatients = async () => {
     setLoading(true);
     try {
       const result = await getPatientsAtPage(page + 1, debouncedSearch, {
         pageSize: rowsPerPage,
       });
-      if (result) {
-        setData(result);
-      }
+      setData(result || []);
     } catch (error) {
       console.error("Error fetching patients:", error);
     } finally {
@@ -116,7 +177,6 @@ function PatientTable() {
     }
   };
 
-  // Debounced Search Handler
   const handleSearch = useCallback(
     debounce((query: string) => {
       setDebouncedSearch(query);
@@ -125,28 +185,94 @@ function PatientTable() {
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    setSearch(query);
-    handleSearch(query);
+    setSearch(e.target.value);
+    handleSearch(e.target.value);
   };
 
   useEffect(() => {
     fetchPatients();
-  }, [debouncedSearch, page, rowsPerPage]); // Trigger fetch on search, page, or rows change
+  }, [debouncedSearch, page, rowsPerPage]);
+
+  useEffect(() => {
+    const fetchPractitionerData = async () => {
+      try {
+        const fetchedData = await getPractitionerData();
+        // console.log("Practitioner Data:", fetchedData.data.entry);
+
+        const options = fetchedData.data.entry.map((entry) => {
+          const nameObj = entry.resource.name[0];
+          return {
+            value: entry.resource.id,
+            label:
+              nameObj.text || `${nameObj.given.join(" ")} ${nameObj.family}`,
+          };
+        });
+        // console.log("Practitioner names with ID:", options);
+
+        setPractitionerOptions(options);
+      } catch (error) {
+        console.error("Error fetching practitioner data:", error);
+      }
+    };
+
+    fetchPractitionerData();
+  }, []);
+
+  const formatPhoneNumber = (number: string) => {
+    const cleaned = number.replace(/\D/g, "");
+    if (cleaned.length === 10) {
+      return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+    }
+    return number; // Return unmodified if not 10 digits
+  };
+
+  const handleCreatePatient = async (formData) => {
+    console.log("Form Data Submitted:", formData);
+    const address =
+      typeof formData.address === "string" ? formData.address : "";
+
+      const patientData = {
+        givenName: formData.givenName,
+        middleName: formData.middleName,
+        familyName: formData.familyName,
+        dateOfBirth: formData.dateOfBirth,
+        gender: formData.gender,
+        practitioner: formData.practitioner,
+        address,
+        phoneNumbers: formData.phoneNumbers
+          ? formData.phoneNumbers.split(",").map((phone, index) => ({
+              value: phone.trim(),
+              type: ["home", "work", "mobile"][index] || "other",
+            }))
+          : [],
+        emails: formData.emails
+          ? formData.emails.split(",").map((email) => ({ value: email.trim() }))
+          : [],
+        emergencyContact: {
+          name: formData.emergencyContactName,
+          phone: formData.emergencyContactPhone,
+          relationship: formData.emergencyContactRelationship,
+          address: formData.emergencyContactAddress,
+        },
+        notes: formData.notes,
+      };
+
+    try {
+      await addPatient(patientData);
+      setIsDrawerOpen(false);
+      fetchPatients();
+      toast.success("Patient created successfully!");
+    } catch (error) {
+      console.error("Error adding patient:", error);
+      toast.error("Failed to create patient. Please try again.");
+    }
+  };
 
   const handleRowClick = (id: string) => {
-    onPatientSelect(id);
-  };
-
-  const handlePageChange = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleRowsPerPageChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset to first page on rows change
+    const event = new CustomEvent("patientSelected", {
+      detail: { patientId: id },
+    });
+    window.dispatchEvent(event);
   };
 
   return (
@@ -169,14 +295,16 @@ function PatientTable() {
           }}
           style={{ width: "300px" }}
         />
-        <Button variant="contained" color="primary">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setIsDrawerOpen(true)}
+        >
           Create Patient
         </Button>
       </div>
-
       <div className="overflow-x-auto">
         <table className={styles.table}>
-          {/* Table Header */}
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -193,22 +321,18 @@ function PatientTable() {
               </tr>
             ))}
           </thead>
-
-          {/* Table Body */}
           <tbody>
             {loading
-              ? // Shimmer Effect: Render Skeleton Rows for Loading State
-                Array.from({ length: rowsPerPage }).map((_, index) => (
+              ? Array.from({ length: rowsPerPage }).map((_, index) => (
                   <tr key={`skeleton-${index}`}>
-                    {columns.map((col, colIndex) => (
+                    {columns.map((_, colIndex) => (
                       <td key={`skeleton-${index}-${colIndex}`}>
                         <Skeleton variant="text" width="100%" height={24} />
                       </td>
                     ))}
                   </tr>
                 ))
-              : // Render Actual Data
-                table.getRowModel().rows.map((row) => (
+              : table.getRowModel().rows.map((row) => (
                   <tr
                     key={row.id}
                     onClick={() => handleRowClick(row.original.id)}
@@ -227,18 +351,27 @@ function PatientTable() {
           </tbody>
         </table>
       </div>
-
-      {/* Pagination Component */}
       <TablePagination
         component="div"
         count={200}
         page={page}
-        onPageChange={handlePageChange}
+        onPageChange={(_, newPage) => setPage(newPage)}
         rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleRowsPerPageChange}
+        onRowsPerPageChange={(e) =>
+          setRowsPerPage(parseInt(e.target.value, 10))
+        }
         rowsPerPageOptions={[10, 25, 50]}
-        
       />
+      <PatientSideDrawer
+        title="Create New Patient"
+        formFields={formFields}
+        initialData={{}} 
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        onSubmit={handleCreatePatient}
+      />
+
+      <ToastContainer />
     </Card>
   );
 }

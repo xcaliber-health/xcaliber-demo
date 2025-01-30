@@ -31,13 +31,7 @@ const Timeline = styled(MuiTimeline)<TimelineProps>({
 const PatientRecentEvents = () => {
   return (
     <div className="flex flex-col items-center w-full">
-      {/* Edit Button with Spacing */}
-      <div className="mt-10 mb-4">
-        <Button variant="contained" color="primary">
-          Edit
-        </Button>
-      </div>
-
+  
       <Card className="w-full max-w-md shadow-lg rounded-lg">
         <CardHeader title="Recent Events" />
         <CardContent>

@@ -6,8 +6,9 @@ import tableStyles from "@core/styles/table.module.css";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import Typography from "@mui/material/Typography";
+import Skeleton from "@mui/material/Skeleton";
 import TablePagination from "@mui/material/TablePagination";
+import Typography from "@mui/material/Typography";
 
 // Third-party Imports
 import {
@@ -35,16 +36,18 @@ export interface ImmunizationProps {
 const ImmunizationsTable = ({ id }: { id?: string }) => {
   const [rowSelection, setRowSelection] = useState({});
   const [data, setData] = useState<ImmunizationProps[]>([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await fetchImmunizations(id);
         setData(response);
       } catch (error) {
         console.error("Error fetching immunizations:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -85,19 +88,12 @@ const ImmunizationsTable = ({ id }: { id?: string }) => {
       }),
       columnHelper.accessor("action", {
         header: "Action",
-        cell: ({ row }) => {
-          // const action = row.original.action;
-
-          return (
-            <div className="flex gap-2">
-              <FaEye className="cursor-pointer" />
-              <FaPen
-                className="
-                 cursor-pointer"
-              />
-            </div>
-          );
-        },
+        cell: ({ row }) => (
+          <div className="flex gap-2">
+            <FaEye className="cursor-pointer" />
+            <FaPen className="cursor-pointer" />
+          </div>
+        ),
       }),
     ],
     []
@@ -122,22 +118,26 @@ const ImmunizationsTable = ({ id }: { id?: string }) => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  // Pagination handlers
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleRowsPerPageChange = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset to the first page when rows per page change
-  };
+  const renderShimmer = () => (
+    <tbody>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <tr key={`skeleton-${index}`}>
+          {columns.map((col, colIndex) => (
+            <td key={`skeleton-${index}-${colIndex}`} className="p-4">
+              <Skeleton variant="text" width="100%" height={24} />
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  );
 
   return (
     <Card>
       <div className="p-4 flex justify-between items-center">
         <CardHeader title="Immunizations" />
-        <Button variant="outlined" color="inherit">
-          +CREATE
+        <Button variant="contained" color="primary">
+          Add
         </Button>
       </div>
 
@@ -157,7 +157,9 @@ const ImmunizationsTable = ({ id }: { id?: string }) => {
               </tr>
             ))}
           </thead>
-          {table.getFilteredRowModel().rows.length === 0 ? (
+          {loading ? (
+            renderShimmer()
+          ) : table.getFilteredRowModel().rows.length === 0 ? (
             <tbody>
               <tr>
                 <td
@@ -189,11 +191,14 @@ const ImmunizationsTable = ({ id }: { id?: string }) => {
 
       <TablePagination
         component="div"
-        count={data.length}
-        page={page}
-        onPageChange={handlePageChange}
-        rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleRowsPerPageChange}
+        count={table.getFilteredRowModel().rows.length}
+        page={table.getState().pagination.pageIndex}
+        onPageChange={(_, newPage) => table.setPageIndex(newPage)}
+        rowsPerPage={table.getState().pagination.pageSize}
+        onRowsPerPageChange={(event) => {
+          const newPageSize = parseInt(event.target.value, 10);
+          table.setPageSize(newPageSize);
+        }}
         rowsPerPageOptions={[7, 10, 25]}
       />
     </Card>

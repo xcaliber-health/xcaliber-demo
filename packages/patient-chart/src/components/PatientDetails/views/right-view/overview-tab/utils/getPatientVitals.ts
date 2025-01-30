@@ -1,5 +1,5 @@
 import { VitalService } from "../../../../../../services/vitalService";
-import { VitalsProps } from "../VitalDetails";
+import { VitalsProps } from "../vitals/VitalDetails";
 import { Helper } from "../../../../../../core-utils/helper";
 
 export const fetchVitals = async (id): Promise<VitalsProps[]> => {
@@ -8,7 +8,7 @@ export const fetchVitals = async (id): Promise<VitalsProps[]> => {
     string,
     Array<{ value: string; date: string; year: string }>
   > = {};
-
+  
   response.map((vital) => {
     let dateObject =
       localStorage.getItem("XCALIBER_SOURCE") === "ECW"
