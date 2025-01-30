@@ -1,34 +1,31 @@
 "use client";
 
 import CheckIcon from "@mui/icons-material/Check";
-import PatientRecentEvents from "./PatientRecentEvents";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
-import { useState, useEffect } from "react";
-import SideDrawer from "../../../ui/SideDrawer";
-import { PatientService } from "../../../../services/patientService";
-import { editPatient } from "../../../PatientTable/services/service";
-
+import { iso6392 } from "iso-639-2";
+import { useEffect, useState } from "react";
+import { PatientService } from "../../../../services/patientService.js";
+import PatientRecentEvents from "./PatientRecentEvents";
 
 function PatientSidebar({ id }: { id: string }) {
-  const [patientDetails, setPatientDetails] = useState({ id });
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [editableFields, setEditableFields] = useState({});
+  const [patientDetails, setPatientDetails] = useState({ id: id });
 
-  const getAthenaLanguage = (languageCode: string) => {
-    switch (languageCode) {
-      case "eng":
-        return "English";
-      default:
-        return languageCode;
-    }
-  };
+  function getLanguageName(languageCode: string): string {
+    const languageInfo = iso6392.find(
+      (lang) =>
+        lang.iso6392B === languageCode ||
+        lang.iso6392T === languageCode ||
+        lang.iso6391 === languageCode
+    );
+
+    return languageInfo ? languageInfo.name : "-";
+  }
 
   useEffect(() => {
     const getPatientDetails = async () => {
       const response = await PatientService.getPatientById(id);
-      console.log("Fetched Patient Details:", response); // Verify response
+      console.log(response);
       setPatientDetails(response);
   
       setEditableFields({
@@ -204,42 +201,31 @@ function PatientSidebar({ id }: { id: string }) {
             <p className="text-md pl-4">• (logo) Epic: 91038948</p>
           </div>
 
-          <div className="space-y-2">
-            <p className="text-md mb-2">
-              <strong>Phone #:</strong>{" "}
-              {patientDetails?.telecom?.find((tele) => {
-                return tele?.system === "phone";
-              })?.value ?? "-"}
-            </p>
-            <p className="text-md mb-2">
-              <strong>Primary Language:</strong>{" "}
-              {localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
-                ? patientDetails?.communication?.[0]?.language?.text
-                : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
-                  ? getAthenaLanguage(
-                      patientDetails?.communication?.[0]?.language?.coding?.[0]
-                        ?.code
-                    )
-                  : `-`}
-            </p>
-            <p className="text-md mb-2">
-              <strong>Primary State of Residence:</strong>{" "}
-              {patientDetails?.address ? patientDetails?.address[0]?.state : ""}
-            </p>
-          </div>
-        </div>
-        {/* Edit Button */}
-        <div className="mt-10 mb-4">
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleEditClick}
-            className="mt-4"
-          >
-            Edit
-          </Button>
+        <div className="space-y-2">
+          <p className="text-md mb-2">
+            <strong>Phone #:</strong>{" "}
+            {patientDetails?.telecom?.find((tele) => {
+              return tele?.system === "phone";
+            })?.value ?? "-"}
+          </p>
+          <p className="text-md mb-2">
+            <strong>Primary Language:</strong>{" "}
+            {localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
+              ? patientDetails?.communication?.[0]?.language?.text
+              : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
+                ? getLanguageName(
+                    patientDetails?.communication?.[0]?.language?.coding?.[0]
+                      ?.code
+                  )
+                : `-`}
+          </p>
+          <p className="text-md mb-2">
+            <strong>Primary State of Residence:</strong>{" "}
+            {patientDetails?.address ? patientDetails?.address[0]?.state : ""}
+          </p>
         </div>
       </div>
+
       {/* Events Section */}
       <div className="mt-8">
         <PatientRecentEvents />
