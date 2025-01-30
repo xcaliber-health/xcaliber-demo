@@ -15,14 +15,16 @@ function PatientSidebar({ id }: { id: string }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [editableFields, setEditableFields] = useState({});
 
-  const getAthenaLanguage = (languageCode: string) => {
-    switch (languageCode) {
-      case "eng":
-        return "English";
-      default:
-        return languageCode;
-    }
-  };
+  function getLanguageName(languageCode: string): string {
+    const languageInfo = iso6392.find(
+      (lang) =>
+        lang.iso6392B === languageCode ||
+        lang.iso6392T === languageCode ||
+        lang.iso6391 === languageCode
+    );
+
+    return languageInfo ? languageInfo.name : "-";
+  }
 
   useEffect(() => {
     const getPatientDetails = async () => {
@@ -235,7 +237,7 @@ function PatientSidebar({ id }: { id: string }) {
               {localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
                 ? patientDetails?.communication?.[0]?.language?.text
                 : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
-                  ? getAthenaLanguage(
+                  ? getLanguageName(
                       patientDetails?.communication?.[0]?.language?.coding?.[0]
                         ?.code
                     )

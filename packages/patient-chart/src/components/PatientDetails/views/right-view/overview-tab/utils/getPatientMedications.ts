@@ -13,7 +13,7 @@ export const fetchMedications = async (id): Promise<MedicationProps[]> => {
       id: medication?.resource?.id,
       medication:
         medication?.resource?.medicationCodeableConcept?.coding?.[0]?.display,
-      status: "Active",
+      status: medication?.resource?.status || medication?.resource?.statusReason?.[0].coding?.[0].display || "No status available",
       description: "-",
       last_updated: Object.values(dateObject).every((dateobj) => {
         return dateobj !== "Invalid Choice" && !Number.isNaN(dateobj);
