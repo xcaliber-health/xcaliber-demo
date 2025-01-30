@@ -1,19 +1,13 @@
+import { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
-import Chip from "@mui/material/Chip";
-
-interface Tag {
-  text: string;
-  color: string;
-  textColor: string;
-}
 
 interface Section {
   content: string;
 }
 
 interface NoteDetails {
+  id: string; // Practitioner ID
   date: string;
-  tags: Tag[];
   sections: Section[];
 }
 
@@ -22,7 +16,14 @@ interface NotesProps {
 }
 
 const Notes = ({ note }: NotesProps) => {
-  const { tags, sections } = note;
+  const { id, date, sections } = note;
+  const [isElation, setIsElation] = useState(false);
+
+  // Check localStorage for "elation" or other values
+  useEffect(() => {
+    const systemType = localStorage.getItem("elation") || "athena";
+    setIsElation(systemType === "elation");
+  }, []);
 
   return (
     <div
@@ -31,11 +32,10 @@ const Notes = ({ note }: NotesProps) => {
         fontSize: "16px",
         lineHeight: "1.8",
         color: "#333",
-
         borderRadius: "12px",
-
         backgroundColor: "#fff",
         width: "100%",
+        padding: "16px",
       }}
     >
       {/* Header Section */}
@@ -47,39 +47,60 @@ const Notes = ({ note }: NotesProps) => {
           marginBottom: "16px",
         }}
       >
-        <span style={{ fontSize: "14px", color: "#888" }}>Nurse: Francis Byrd</span>
-        <div style={{ display: "flex", gap: "8px" }}>
-          {tags.map(({ text, color, textColor }, index) => (
-            <Chip
-              key={index}
-              label={text}
-              style={{
-                backgroundColor: color,
-                color: textColor,
-                fontSize: "12px",
-                padding: "4px 12px",
-                borderRadius: "16px",
-              }}
-            />
-          ))}
-        </div>
+        <span style={{ fontSize: "14px", color: "#888" }}>
+          Practitioner ID: {id}
+        </span>
+      </div>
+
+      {/* Notes Date */}
+      <div style={{ fontSize: "14px", color: "#666", marginBottom: "10px" }}>
+        {date}
       </div>
 
       {/* Main Content Section */}
       <div
         style={{
-          padding: "24px",
+          padding: "16px",
           borderRadius: "8px",
           backgroundColor: "#f9f9f9",
           border: "1px solid #ddd",
           width: "100%",
         }}
-        dangerouslySetInnerHTML={{
-          __html: DOMPurify.sanitize(
-            sections.map((section) => section.content).join("")
-          ),
-        }}
-      ></div>
+      >
+        {isElation ? (
+          sections.length > 0 ? (
+            sections.map((section, index) => {
+              // Split content into title and actual text
+              const match = section.content.match(/^(.*?):\s*(.*)$/);
+              const title = match ? match[1] : "";
+              const data = match ? match[2] : section.content;
+
+              return (
+                <div key={index} style={{ marginBottom: "16px" }}>
+                  {/* Title */}
+                  {title && (
+                    <div style={{ fontWeight: "800" }}>
+                      {title}:
+                    </div>
+                  )}
+                  {/* Data Content */}
+                  <div style={{ marginBottom: "8px" }}>{data}</div>
+                </div>
+              );
+            })
+          ) : (
+            <p>No content available.</p>
+          )
+        ) : (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(
+                sections.map((section) => section.content).join("<br /><br />")
+              ),
+            }}
+          ></div>
+        )}
+      </div>
     </div>
   );
 };

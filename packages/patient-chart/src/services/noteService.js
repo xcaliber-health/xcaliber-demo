@@ -194,7 +194,7 @@ export const NoteService = {
           const template = resource?.resource?.extension?.find((ext) =>
             ext?.url?.includes("template")
           )?.valueString;
-          if (template && template === "Complete H&P (2 col A/P)") {
+          if (template && template === "Simple") {
             notes.push(resource);
             count++;
           }
@@ -214,6 +214,7 @@ export const NoteService = {
           count++;
         }
       }
+      // console.log("NoteService log: ",notes)
       return notes;
     } catch (error) {
       console.log(error);

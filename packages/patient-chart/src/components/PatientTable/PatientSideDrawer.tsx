@@ -109,40 +109,39 @@ const PatientSideDrawer: React.FC<PatientSideDrawerProps> = ({
             </FormControl>
           ) : field.type === "select" ? (
             <FormControl fullWidth key={field.name} sx={{ mb: 2 }}>
-  <Autocomplete
-    options={field.options || []}
-    getOptionLabel={(option: any) =>
-      typeof option === "string" ? option : option.label
-    }
-    value={
-      field.options?.find(
-        (option: any) => option.value === formData[field.name]
-      ) || null
-    }
-    onChange={(_, newValue) =>
-      handleInputChange(field.name, newValue?.value || "")
-    }
-    renderInput={(params) => (
-      <TextField {...params} label={field.label} fullWidth />
-    )}
-    PaperProps={{
-      sx: {
-        maxHeight: 150, 
-        width: 250, 
-        mt: 1, 
-      },
-    }}
-    sx={{
-      "& .MuiAutocomplete-input": {
-        padding: "8px 12px", 
-      },
-      "& .MuiAutocomplete-inputRoot": {
-        fontSize: "0.875rem", 
-      },
-    }}
-  />
-</FormControl>
-
+              <Autocomplete
+                options={field.options || []}
+                getOptionLabel={(option: any) =>
+                  typeof option === "string" ? option : option.label
+                }
+                value={
+                  field.options?.find(
+                    (option: any) => option.value === formData[field.name]
+                  ) || null
+                }
+                onChange={(_, newValue) =>
+                  handleInputChange(field.name, newValue?.value || "")
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label={field.label} fullWidth />
+                )}
+                PaperProps={{
+                  sx: {
+                    maxHeight: 150,
+                    width: 250,
+                    mt: 1,
+                  },
+                }}
+                sx={{
+                  "& .MuiAutocomplete-input": {
+                    padding: "8px 12px",
+                  },
+                  "& .MuiAutocomplete-inputRoot": {
+                    fontSize: "0.875rem",
+                  },
+                }}
+              />
+            </FormControl>
           ) : (
             <TextField
               key={field.name}

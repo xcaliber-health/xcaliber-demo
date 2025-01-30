@@ -41,6 +41,7 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
     const fetchData = async () => {
       try {
         const notes = await fetchNotes(patientId);
+        console.log("Fetched notes:", notes); // Logging raw notes data
         setNotesData(notes || []);
       } catch (error) {
         console.error("Error fetching notes:", error);
@@ -49,9 +50,10 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [patientId]);
+  
+  
 
   const renderShimmer = () => (
     <div>
@@ -182,7 +184,7 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
                   },
                 ],
                 sections: note.content.map((item: any) => ({
-                  content: item?.attachment?.data || "No Content Available",
+                  content: `${item?.attachment?.title}: ${item?.attachment?.data || "No Content Available"}`,
                 })),
               }}
             />

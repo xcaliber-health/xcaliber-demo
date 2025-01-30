@@ -33,6 +33,7 @@ export const fetchNotes = async (patientId: string): Promise<Note[]> => {
   try {
     // Fetch notes from the NoteService
     const notes = await NoteService.getVisitNotes(patientId);
+    console.log("log from the hook",notes)
 
     if (!notes || notes.length === 0) {
       console.warn("No notes data found for the given patient.");
@@ -52,4 +53,5 @@ export const fetchNotes = async (patientId: string): Promise<Note[]> => {
     console.error("Error fetching notes:", error);
     throw error;
   }
+
 };
