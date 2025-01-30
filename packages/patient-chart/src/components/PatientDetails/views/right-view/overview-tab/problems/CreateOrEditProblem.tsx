@@ -252,7 +252,7 @@ export const CreateOrEditProblem = ({
         variant={mode === "edit" ? "outlined" : "contained"}
         color={mode === "edit" ? "inherit" : "primary"}
         className="mr-12"
-        style={{
+        sx={{
           border: mode === "edit" ? "none" : "",
           marginTop: mode === "edit" ? "-4px" : "",
           marginLeft: mode === "edit" ? "-16px" : "",

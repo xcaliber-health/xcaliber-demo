@@ -8,6 +8,7 @@ import {
   Divider,
   Drawer,
   FormControl,
+  FormHelperText,
   IconButton,
   InputLabel,
   MenuItem,
@@ -20,6 +21,7 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import dayjs from "dayjs";
 import { FaPen } from "react-icons/fa";
 import { MedicationService } from "../../../../../../services/medicationService";
 import { ReferenceDataService } from "../../../../../../services/referenceDataService";
@@ -31,35 +33,35 @@ interface ICreateOrEditMedicationProps {
   medicationId?: string;
 }
 
+interface IMedicationOption {
+  medicationid: string;
+  medication: string;
+}
+
+interface IStopReasonOption {
+  stopreasonid: string;
+  stopreason: string;
+}
+
 export const CreateOrEditMedication = ({
   patientId,
   onMedicationClick,
   mode,
   medicationId,
 }: ICreateOrEditMedicationProps) => {
-  const [medicationOptions, setMedicationOptions] = useState([]);
-  const [stopReasonOptions, setStopReasonOptions] = useState([]);
+  const [medicationOptions, setMedicationOptions] = useState<
+    IMedicationOption[]
+  >([]);
+  const [stopReasonOptions, setStopReasonOptions] = useState<
+    IStopReasonOption[]
+  >([]);
   const [medication, setMedication] = useState<string | "">("");
   const [medicationStopReason, setMedicationStopReason] = useState(null);
-  const [startDate, setStartDate] = useState(null);
-  const [stopDate, setStopDate] = useState(null);
+  const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(null);
+  const [stopDate, setStopDate] = useState<dayjs.Dayjs | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [stopReasonError, setStopReasonError] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading(true);
-    Promise.all([
-      // ReferenceDataService.getMedicationData(""),
-      ReferenceDataService.getMedicationData("cyclo"),
-      ReferenceDataService.getMedicationStopReasonsData(),
-    ])
-      .then(([medications, stopReasons]) => {
-        setMedicationOptions(medications);
-        setStopReasonOptions(stopReasons);
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
 
   const formatDate = (date) => {
     const d = new Date(date);
@@ -78,20 +80,26 @@ export const CreateOrEditMedication = ({
   const createMedication = async () => {
     if (!medication) return;
 
+    if (mode === "edit" && !medicationStopReason && !stopReasonError) {
+      setStopReasonError(true);
+      return;
+    } else if (stopReasonError) {
+      setStopReasonError(false);
+    }
+
     const payload = {
       context: {
         departmentId: localStorage.getItem(`DEPARTMENT_ID`),
       },
       data: {
         resourceType: "MedicationStatement",
-        id: String(medication),
         subject: {
           reference: `Patient/${patientId}`,
         },
         medicationCodeableConcept: {
           coding: [
             {
-              code: String(medication),
+              code: medication,
               display: medicationOptions.find(
                 (option) => option.medicationid === medication
               )?.medication,
@@ -113,7 +121,7 @@ export const CreateOrEditMedication = ({
           {
             coding: [
               {
-                display: null,
+                display: mode === "create" ? null : medicationStopReason,
               },
             ],
           },
@@ -121,9 +129,72 @@ export const CreateOrEditMedication = ({
       },
     };
 
-    await MedicationService.createMedicationInAthena(payload);
+    try {
+      if (mode === "create") {
+        await MedicationService.createMedicationInAthena(payload);
+      } else {
+        await MedicationService.updateMedicationInAthena(medicationId, payload);
+      }
+    } catch (error) {
+      console.error(error);
+    }
     setIsDrawerOpen(false);
   };
+
+  useEffect(() => {
+    const fetchMedicationById = async () => {
+      if (mode === "edit" && medicationId) {
+        try {
+          const response = await MedicationService.getMedicationById(
+            medicationId,
+            patientId
+          );
+
+          const medicationSelected = response?.medicationReference?.reference;
+          const medicationCode = medicationSelected.split("/")[1];
+
+          setMedication(medicationCode);
+          setStartDate(
+            response?.effectivePeriod?.start
+              ? dayjs(response?.effectivePeriod?.start)
+              : null
+          );
+          setStopDate(
+            response?.effectivePeriod?.end
+              ? dayjs(response?.effectivePeriod?.end)
+              : null
+          );
+          setMedicationStopReason(
+            response?.statusReason[0]?.coding[0]?.display
+          );
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+
+    fetchMedicationById();
+  }, [mode, medicationId]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [medications, stopReasons] = await Promise.all([
+          ReferenceDataService.getMedicationData("ab"),
+          ReferenceDataService.getMedicationStopReasonsData(),
+        ]);
+        setMedicationOptions(medications);
+        setStopReasonOptions(stopReasons);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -131,7 +202,7 @@ export const CreateOrEditMedication = ({
         variant={mode === "edit" ? "outlined" : "contained"}
         color={mode === "edit" ? "inherit" : "primary"}
         className="mr-12"
-        style={{
+        sx={{
           border: mode === "edit" ? "none" : "",
           marginTop: mode === "edit" ? "-4px" : "",
           marginLeft: mode === "edit" ? "-16px" : "",
@@ -159,12 +230,14 @@ export const CreateOrEditMedication = ({
         <Divider />
 
         <div style={{ padding: "20px" }}>
-          <FormControl fullWidth margin="normal">
+          <FormControl fullWidth sx={{ mb: 2 }}>
             <InputLabel>Medication</InputLabel>
             <Select
-              labelId="medication-label"
-              value={medication || ""}
-              onChange={(e) => setMedication(e.target.value)}
+              label="medication"
+              value={medication}
+              onChange={(e) => {
+                setMedication(e.target.value);
+              }}
             >
               {loading ? (
                 <MenuItem disabled>Loading...</MenuItem>
@@ -188,13 +261,13 @@ export const CreateOrEditMedication = ({
               <DesktopDatePicker
                 label="Start Date"
                 value={startDate}
-                onChange={setStartDate}
+                onChange={(date) => setStartDate(date ? dayjs(date) : null)}
                 renderInput={(params) => <TextField {...params} fullWidth />}
               />
               <DesktopDatePicker
                 label="Stop Date"
                 value={stopDate}
-                onChange={setStopDate}
+                onChange={(date) => setStopDate(date ? dayjs(date) : null)}
                 renderInput={(params) => <TextField {...params} fullWidth />}
               />
             </LocalizationProvider>
@@ -203,15 +276,19 @@ export const CreateOrEditMedication = ({
           <FormControl fullWidth sx={{ mt: 2 }}>
             <InputLabel>Stop Reason</InputLabel>
             <Select
+              label="stop-reason"
               value={medicationStopReason || ""}
               onChange={(e) => setMedicationStopReason(e.target.value)}
             >
               {stopReasonOptions?.map((option) => (
-                <MenuItem key={option.stopreasonid} value={option.stopreasonid}>
+                <MenuItem key={option.stopreasonid} value={option.stopreason}>
                   {option.stopreason}
                 </MenuItem>
               ))}
             </Select>
+            {stopReasonError && (
+              <FormHelperText>Stop Reason is required.</FormHelperText>
+            )}
           </FormControl>
 
           <Box display="flex" justifyContent="flex-end" mt={3} gap={2}>
