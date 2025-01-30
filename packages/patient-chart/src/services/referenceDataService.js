@@ -159,7 +159,6 @@ export const ReferenceDataService = {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl();
-      console.log(localStorage.getItem("XCALIBER_SOURCE"), sourceUrl);
       const result = await axios.get(
         `${process.env.NEXT_PUBLIC_URL}/ReferenceData?resourceType=medicationrequest&searchString=${
           searchString ?? ""

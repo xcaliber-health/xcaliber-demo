@@ -16,8 +16,8 @@ import FormControl from "@mui/material/FormControl";
 interface FormField {
   name: string;
   label: string;
-  type: string; 
-  options?: Array<string | { value: string | number; label: string }>; 
+  type: string;
+  options?: Array<string | { value: string | number; label: string }>;
   value?: string | number;
 }
 
@@ -40,7 +40,6 @@ const SideDrawer: React.FC<SideDrawerProps> = ({
 }) => {
   const [formData, setFormData] = useState(initialData);
 
-  // Update formData when initialData changes
   useEffect(() => {
     if (
       initialData &&

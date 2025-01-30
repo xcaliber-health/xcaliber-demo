@@ -1,15 +1,19 @@
 "use client";
 
 import CheckIcon from "@mui/icons-material/Check";
+import PatientRecentEvents from "./PatientRecentEvents";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
-import { iso6392 } from "iso-639-2";
-import { useEffect, useState } from "react";
-import { PatientService } from "../../../../services/patientService.js";
-import PatientRecentEvents from "./PatientRecentEvents";
+import Button from "@mui/material/Button";
+import { useState, useEffect } from "react";
+import SideDrawer from "../../../ui/SideDrawer";
+import { PatientService } from "../../../../services/patientService";
+import { editPatient } from "../../../PatientTable/services/service";
 
 function PatientSidebar({ id }: { id: string }) {
-  const [patientDetails, setPatientDetails] = useState({ id: id });
+  const [patientDetails, setPatientDetails] = useState({ id });
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [editableFields, setEditableFields] = useState({});
 
   function getLanguageName(languageCode: string): string {
     const languageInfo = iso6392.find(
@@ -25,9 +29,8 @@ function PatientSidebar({ id }: { id: string }) {
   useEffect(() => {
     const getPatientDetails = async () => {
       const response = await PatientService.getPatientById(id);
-      console.log(response);
       setPatientDetails(response);
-  
+
       setEditableFields({
         givenName: response?.name?.[0]?.given?.[0] || "",
         middleName: response?.name?.[0]?.given?.[1] || "",
@@ -39,22 +42,35 @@ function PatientSidebar({ id }: { id: string }) {
         state: response?.address?.[0]?.state || "",
         postalCode: response?.address?.[0]?.postalCode || "",
         country: response?.address?.[0]?.country || "USA",
-        phone: response?.telecom?.find((tele) => tele.system === "phone")?.value || "",
-        email: response?.telecom?.find((tele) => tele.system === "email")?.value || "",
-        primaryLanguage: localStorage.getItem("XCALIBER_SOURCE") === "ATHENA"
-          ? getAthenaLanguage(response?.communication?.[0]?.language?.coding?.[0]?.code)
-          : response?.communication?.[0]?.language?.text || "",
+        phone:
+          response?.telecom?.find((tele) => tele.system === "phone")?.value ||
+          "",
+        email:
+          response?.telecom?.find((tele) => tele.system === "email")?.value ||
+          "",
+        primaryLanguage:
+          localStorage.getItem("XCALIBER_SOURCE") === "ATHENA"
+            ? getAthenaLanguage(
+                response?.communication?.[0]?.language?.coding?.[0]?.code
+              )
+            : response?.communication?.[0]?.language?.text || "",
         emergencyContactName: response?.contact?.[0]?.name?.text || "",
-        emergencyContactPhone: response?.contact?.[0]?.telecom?.[0]?.value || "",
-        emergencyContactRelationship: response?.contact?.[0]?.relationship?.[0]?.coding?.[0]?.display || "",
-        emergencyContactAddress: response?.contact?.[0]?.address?.line?.join(", ") || "",
-        notes: response?.extension?.find(ext => ext.url === "http://xcaliber-fhir/structureDefinition/notes")?.valueString || "",
+        emergencyContactPhone:
+          response?.contact?.[0]?.telecom?.[0]?.value || "",
+        emergencyContactRelationship:
+          response?.contact?.[0]?.relationship?.[0]?.coding?.[0]?.display || "",
+        emergencyContactAddress:
+          response?.contact?.[0]?.address?.line?.join(", ") || "",
+        notes:
+          response?.extension?.find(
+            (ext) =>
+              ext.url === "http://xcaliber-fhir/structureDefinition/notes"
+          )?.valueString || "",
       });
     };
-  
+
     getPatientDetails();
   }, [id]);
-  
 
   const handleEditClick = () => {
     setIsDrawerOpen(true);
@@ -66,13 +82,8 @@ function PatientSidebar({ id }: { id: string }) {
 
   const handleSave = async (formData) => {
     try {
-      console.log("Form Data Submitted:", formData); 
       await editPatient(formData, id);
       setPatientDetails({ ...patientDetails, ...formData });
-      console.log("Updated Patient Details:", {
-        ...patientDetails,
-        ...formData,
-      }); 
       setIsDrawerOpen(false);
     } catch (error) {
       console.error("Error saving patient details:", error);
@@ -84,11 +95,16 @@ function PatientSidebar({ id }: { id: string }) {
     { name: "middleName", label: "Middle Name", type: "text" },
     { name: "familyName", label: "Family Name", type: "text" },
     { name: "dateOfBirth", label: "Date of Birth", type: "date" },
-    { name: "sex", label: "Gender", type: "select", options: [
-      { value: "male", label: "Male" },
-      { value: "female", label: "Female" },
-      { value: "other", label: "Other" },
-    ], },
+    {
+      name: "sex",
+      label: "Gender",
+      type: "select",
+      options: [
+        { value: "male", label: "Male" },
+        { value: "female", label: "Female" },
+        { value: "other", label: "Other" },
+      ],
+    },
     { name: "address", label: "Address", type: "textarea" },
     { name: "city", label: "City", type: "text" },
     { name: "state", label: "State", type: "text" },
@@ -97,8 +113,16 @@ function PatientSidebar({ id }: { id: string }) {
     { name: "phone", label: "Phone", type: "text" },
     { name: "email", label: "Email", type: "text" },
     { name: "primaryLanguage", label: "Primary Language", type: "text" },
-    { name: "emergencyContactName", label: "Emergency Contact Name", type: "text" },
-    { name: "emergencyContactPhone", label: "Emergency Contact Phone", type: "text" },
+    {
+      name: "emergencyContactName",
+      label: "Emergency Contact Name",
+      type: "text",
+    },
+    {
+      name: "emergencyContactPhone",
+      label: "Emergency Contact Phone",
+      type: "text",
+    },
     {
       name: "emergencyContactRelationship",
       label: "Emergency Contact Relationship",
@@ -201,38 +225,49 @@ function PatientSidebar({ id }: { id: string }) {
             <p className="text-md pl-4">• (logo) Epic: 91038948</p>
           </div>
 
-        <div className="space-y-2">
-          <p className="text-md mb-2">
-            <strong>Phone #:</strong>{" "}
-            {patientDetails?.telecom?.find((tele) => {
-              return tele?.system === "phone";
-            })?.value ?? "-"}
-          </p>
-          <p className="text-md mb-2">
-            <strong>Primary Language:</strong>{" "}
-            {localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
-              ? patientDetails?.communication?.[0]?.language?.text
-              : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
-                ? getLanguageName(
-                    patientDetails?.communication?.[0]?.language?.coding?.[0]
-                      ?.code
-                  )
-                : `-`}
-          </p>
-          <p className="text-md mb-2">
-            <strong>Primary State of Residence:</strong>{" "}
-            {patientDetails?.address ? patientDetails?.address[0]?.state : ""}
-          </p>
+          <div className="space-y-2">
+            <p className="text-md mb-2">
+              <strong>Phone #:</strong>{" "}
+              {patientDetails?.telecom?.find((tele) => {
+                return tele?.system === "phone";
+              })?.value ?? "-"}
+            </p>
+            <p className="text-md mb-2">
+              <strong>Primary Language:</strong>{" "}
+              {localStorage.getItem(`XCALIBER_SOURCE`) === `ELATION`
+                ? patientDetails?.communication?.[0]?.language?.text
+                : localStorage.getItem(`XCALIBER_SOURCE`) === `ATHENA`
+                  ? getLanguageName(
+                      patientDetails?.communication?.[0]?.language?.coding?.[0]
+                        ?.code
+                    )
+                  : `-`}
+            </p>
+            <p className="text-md mb-2">
+              <strong>Primary State of Residence:</strong>{" "}
+              {patientDetails?.address ? patientDetails?.address[0]?.state : ""}
+            </p>
+          </div>
+        </div>
+        {/* Edit Button */}
+        <div className="mt-10 mb-4">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleEditClick}
+            className="mt-4"
+          >
+            Edit
+          </Button>
         </div>
       </div>
-
       {/* Events Section */}
       <div className="mt-8">
         <PatientRecentEvents />
       </div>
 
       {/* SideDrawer Component */}
-       <SideDrawer
+      <SideDrawer
         title="Edit Patient"
         formFields={formFields}
         isOpen={isDrawerOpen}

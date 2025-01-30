@@ -26,12 +26,51 @@ export const MedicationService = {
       console.log(error);
     }
   },
+  getMedicationById: async (medicationId, patientId) => {
+    try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl = Helper.getSourceUrl();
+      const result = await axios.get(
+        `${sourceUrl}/MedicationStatement/${medicationId}?patient=${patientId}`,
+        {
+          headers: {
+            Authorization: Helper.getSourceToken(),
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+          },
+        }
+      );
+      return result?.data?.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
   createMedicationInAthena: async (requestPayLoad) => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl();
       const result = await axios.post(
         `${sourceUrl}/MedicationStatement`,
+        requestPayLoad,
+        {
+          headers: {
+            Authorization: Helper.getSourceToken(),
+            "x-source-id": `${localStorage.getItem("XCALIBER_TOKEN")}`,
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          },
+        }
+      );
+      return result?.data?.data ? result?.data?.data : result?.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  updateMedicationInAthena: async (medicationId, requestPayLoad) => {
+    try {
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl = Helper.getSourceUrl();
+      const result = await axios.put(
+        `${sourceUrl}/MedicationStatement/${medicationId}`,
         requestPayLoad,
         {
           headers: {
