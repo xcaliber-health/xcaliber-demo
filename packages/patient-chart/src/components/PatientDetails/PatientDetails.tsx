@@ -30,7 +30,7 @@ const tabContentList = (id) => [
     label: "Care Team",
     value: "care-team",
     icon: <FaUsers />,
-    content: <CareTeamTab id={id}/>,
+    content: <CareTeamTab id={id} />,
   },
   {
     label: "Billing Details",
@@ -50,14 +50,14 @@ const PatientDetails = ({ id }: PatientDetailsProps) => {
       style={{
         display: "flex",
         height: "fit-content",
-        backgroundColor: "#f4f2f2",
+        backgroundColor: "#f4f5fa",
       }}
     >
       {/* Left Panel */}
       <div
         style={{
           flex: 1,
-          backgroundColor: "#f4f2f2",
+          backgroundColor: "#f4f5fa",
           padding: "16px",
           overflowY: "auto",
         }}
@@ -69,7 +69,7 @@ const PatientDetails = ({ id }: PatientDetailsProps) => {
       <div
         style={{
           flex: 3,
-          backgroundColor: "#f4f2f2",
+          backgroundColor: "#f4f5fa",
           padding: "16px",
           overflowY: "auto",
         }}
@@ -79,5 +79,4 @@ const PatientDetails = ({ id }: PatientDetailsProps) => {
     </div>
   );
 };
-
 export default PatientDetails;

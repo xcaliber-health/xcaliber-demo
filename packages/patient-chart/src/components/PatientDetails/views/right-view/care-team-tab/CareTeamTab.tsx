@@ -16,7 +16,9 @@ export interface PractitionerDetails {
 }
 
 const CareTeamTab = ({ id }: CareTeamTabProps) => {
-  const [careTeamMembers, setCareTeamMembers] = useState<PractitionerDetails[]>([]);
+  const [careTeamMembers, setCareTeamMembers] = useState<PractitionerDetails[]>(
+    []
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -160,8 +162,12 @@ const CareTeamTab = ({ id }: CareTeamTabProps) => {
                     marginBottom: "16px",
                   }}
                 />
-                <h2 style={{ fontSize: "1rem", margin: "8px 0" }}>{member.name}</h2>
-                <p style={{ fontSize: "0.875rem", color: "#6b7280" }}>{member.role}</p>
+                <h2 style={{ fontSize: "1rem", margin: "8px 0" }}>
+                  {member.name}
+                </h2>
+                <p style={{ fontSize: "0.875rem", color: "#6b7280" }}>
+                  {member.role}
+                </p>
               </div>
 
               {/* Chip Section */}
@@ -181,8 +187,12 @@ const CareTeamTab = ({ id }: CareTeamTabProps) => {
                 <p>Provider ID: {member.id}</p>
                 <p>Phone #: {member.phone}</p>
                 <p>Fax: {member.fax}</p>
-                <p style={{ fontWeight: "bold", marginTop: "8px" }}>Other provider attributes</p>
-                <p style={{ fontSize: "0.875rem", color: "#6b7280" }}>Address: {member.address}</p>
+                <p style={{ fontWeight: "bold", marginTop: "8px" }}>
+                  Other provider attributes
+                </p>
+                <p style={{ fontSize: "0.875rem", color: "#6b7280" }}>
+                  Address: {member.address}
+                </p>
               </div>
             </div>
           ))}

@@ -143,7 +143,7 @@ const formatPhoneNumber = (number: string): string | null => {
   if (match) {
     return `(${match[1]}) ${match[2]}-${match[3]}`;
   }
-  return null; 
+  return null;
 };
 
 export const phnEmlParser = (phnData, emlData) => {
@@ -157,7 +157,7 @@ export const phnEmlParser = (phnData, emlData) => {
         parsedTelecom.push({
           system: "phone",
           value: formattedNumber,
-          use: item.type || "home", 
+          use: item.type || "home",
         });
       }
     }
@@ -221,7 +221,6 @@ export const addPatient = (patient) => {
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
     },
   };
-  console.log(d);
   return axios
     .post(`${sourceUrl}/Patient`, d, configHeaders)
     .then(async (response) => {
@@ -252,7 +251,7 @@ export const tableObjDeparser = (data, type) => {
         city: item.city || "",
         state: item.state || "",
         postalCode: item.postalCode || "",
-        country: item.country || "USA", 
+        country: item.country || "USA",
       };
       parsedData.push(addressObj);
     });
@@ -260,14 +259,15 @@ export const tableObjDeparser = (data, type) => {
   return parsedData;
 };
 
-
 export const deParsefunc = (item) => {
   const finalDate = item.dateOfBirth || "";
 
   // Function to format phone numbers
   const formatPhoneNumber = (phone) => {
     if (!phone) return "";
-    return phone.replace(/[^\d]/g, "").replace(/^(\d{3})(\d{3})(\d{4})$/, "($1) $2-$3");
+    return phone
+      .replace(/[^\d]/g, "")
+      .replace(/^(\d{3})(\d{3})(\d{4})$/, "($1) $2-$3");
   };
 
   // Helper function to safely parse addresses
@@ -282,7 +282,13 @@ export const deParsefunc = (item) => {
   };
 
   // Parse the main address
-  const mainAddress = parseAddress(item.address, item.city, item.state, item.postalCode, item.country);
+  const mainAddress = parseAddress(
+    item.address,
+    item.city,
+    item.state,
+    item.postalCode,
+    item.country
+  );
 
   // Parse the emergency contact address
   const emergencyContactAddress = parseAddress(
@@ -292,10 +298,6 @@ export const deParsefunc = (item) => {
     item.emergencyContactPostalCode || "",
     item.emergencyContactCountry || "USA"
   );
-
-  // Debugging logs
-  console.log("Parsed Main Address:", mainAddress);
-  console.log("Parsed Emergency Contact Address:", emergencyContactAddress);
 
   return {
     context: {
@@ -353,7 +355,8 @@ export const deParsefunc = (item) => {
             {
               coding: [
                 {
-                  system: "http://terminology.hl7.org/3.1.0/CodeSystem-v2-0131.html",
+                  system:
+                    "http://terminology.hl7.org/3.1.0/CodeSystem-v2-0131.html",
                   code: "EP",
                   display: item.emergencyContactRelationship || "Spouse",
                 },
@@ -412,27 +415,27 @@ export const deParsefunc = (item) => {
               use: phone.type || "home",
             }))
           : item.phone
-          ? [
-              {
-                system: "phone",
-                value: formatPhoneNumber(item.phone),
-                use: "home",
-              },
-            ]
-          : []),
+            ? [
+                {
+                  system: "phone",
+                  value: formatPhoneNumber(item.phone),
+                  use: "home",
+                },
+              ]
+            : []),
         ...(Array.isArray(item.emails)
           ? item.emails.map((email) => ({
               system: "email",
               value: email.value,
             }))
           : item.email
-          ? [
-              {
-                system: "email",
-                value: item.email,
-              },
-            ]
-          : []),
+            ? [
+                {
+                  system: "email",
+                  value: item.email,
+                },
+              ]
+            : []),
       ],
     },
   };
@@ -441,9 +444,8 @@ export const deParsefunc = (item) => {
 export const editPatient = (patient, id) => {
   let sourceUrl = Helper.getSourceUrl();
   let d = deParsefunc(patient);
-  console.log("Deparsed Patient Data:", d); 
-  
-  const source = localStorage.getItem("XCALIBER_SOURCE"); 
+
+  const source = localStorage.getItem("XCALIBER_SOURCE");
   let xSourceId;
 
   switch (source) {
@@ -457,7 +459,7 @@ export const editPatient = (patient, id) => {
       xSourceId = process.env.NEXT_PUBLIC_ECW_XSOURCEID;
       break;
     default:
-      xSourceId = process.env.NEXT_PUBLIC_XSOURCEID; 
+      xSourceId = process.env.NEXT_PUBLIC_XSOURCEID;
   }
 
   const configHeaders = {

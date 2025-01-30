@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 // Component Imports
 import AllergiesTable from "./AllergiesDetails";
 import ImmunizationsTable from "./ImmunizationDetails";
-import MedicationsTable from "./MedicationsDetails";
+import MedicationsTable from "./medications/MedicationsDetails";
 import ProblemsTable from "./problems/ProblemDetails";
 import VitalsTable from "./vitals/VitalDetails";
 
