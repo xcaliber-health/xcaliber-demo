@@ -4,7 +4,7 @@ import { ImmunizationProps } from "../ImmunizationDetails";
 
 export const fetchImmunizations = async (id): Promise<ImmunizationProps[]> => {
   const response = await ImmunizationService.getImmunization(id);
-
+  
   const transformedData = response.map((immunization) => {
     let dateObject = Helper.extractFieldsFromDate(
       immunization?.resource?.occurrenceDateTime
@@ -12,8 +12,8 @@ export const fetchImmunizations = async (id): Promise<ImmunizationProps[]> => {
 
     return {
       immunization: immunization?.resource?.vaccineCode?.coding?.[0]?.display,
-      status: "Active",
-      description: "-",
+      status: immunization?.resource?.status || "No status available",
+      description: immunization?.resource?.vaccineCode?.text || "-",
       last_updated: Object.values(dateObject).every((dateobj) => {
         return dateobj !== "Invalid Choice" && !Number.isNaN(dateobj);
       })
