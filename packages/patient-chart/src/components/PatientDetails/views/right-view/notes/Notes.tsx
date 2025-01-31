@@ -21,8 +21,9 @@ const Notes = ({ note }: NotesProps) => {
 
   // Check localStorage for "elation" or other values
   useEffect(() => {
-    const systemType = localStorage.getItem("elation") || "athena";
-    setIsElation(systemType === "elation");
+    const systemType = localStorage.getItem("XCALIBER_SOURCE") || "ATHENA";
+    console.log("first",systemType);
+    setIsElation(systemType === "ELATION");
   }, []);
 
   return (
@@ -79,7 +80,7 @@ const Notes = ({ note }: NotesProps) => {
                 <div key={index} style={{ marginBottom: "16px" }}>
                   {/* Title */}
                   {title && (
-                    <div style={{ fontWeight: "800" }}>
+                    <div style={{ fontWeight: "600" }}>
                       {title}:
                     </div>
                   )}

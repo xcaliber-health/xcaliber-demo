@@ -16,7 +16,8 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
   const [selectedNoteDetails, setSelectedNoteDetails] = useState<any>(null);
 
   const handleOpenModal = (note: any) => {
-    setSelectedNoteDetails({
+    const formattedNote = {
+      id: note.id || "No ID", // Include note ID
       date: note.date || "Unknown Date",
       tags: [
         {
@@ -26,9 +27,12 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
         },
       ],
       sections: note.content.map((item: any) => ({
-        content: item?.attachment?.data || "No Content Available",
+        content: `${item?.attachment?.title}: ${item?.attachment?.data || "No Content Available"}`,
       })),
-    });
+    };
+
+    console.log("Opening modal with note:", formattedNote); // Debug log
+    setSelectedNoteDetails(formattedNote);
     setOpenModal(true);
   };
 
@@ -52,8 +56,6 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
     };
     fetchData();
   }, [patientId]);
-  
-  
 
   const renderShimmer = () => (
     <div>
@@ -171,10 +173,11 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
           </AccordionSummary>
           <AccordionDetails
             onClick={() => handleOpenModal(note)}
-            style={{ backgroundColor: "#fff",cursor: "pointer" }}
+            style={{ backgroundColor: "#fff", cursor: "pointer" }}
           >
             <Notes
               note={{
+                id: note.id || "No ID", // Passing note ID
                 date: note.date || "Unknown Date",
                 tags: [
                   {
@@ -221,7 +224,7 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
         <NotesModal
           open={openModal}
           onClose={handleCloseModal}
-          note={selectedNoteDetails}
+          note={selectedNoteDetails} 
         />
       )}
     </div>
@@ -229,4 +232,3 @@ const NotesTab = ({ patientId }: { patientId: string }) => {
 };
 
 export default NotesTab;
-
