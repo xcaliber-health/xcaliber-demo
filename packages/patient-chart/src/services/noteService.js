@@ -194,7 +194,7 @@ export const NoteService = {
           const template = resource?.resource?.extension?.find((ext) =>
             ext?.url?.includes("template")
           )?.valueString;
-          if (template && template === "Complete H&P (2 col A/P)") {
+          if (template && template === "Simple") {
             notes.push(resource);
             count++;
           }
@@ -214,6 +214,7 @@ export const NoteService = {
           count++;
         }
       }
+      // console.log("NoteService log: ",notes)
       return notes;
     } catch (error) {
       console.log(error);
@@ -292,6 +293,7 @@ export const NoteService = {
       console.log(error);
     }
   },
+  
   getVisitNoteById: async (noteId) => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
@@ -336,4 +338,117 @@ export const NoteService = {
       console.log(error);
     }
   },
+  createOrUpdateNote: async (notePayload, noteId, appointmentId = "0") => {
+    try {
+      console.log("Executing createOrUpdateNote function...");
+  
+      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceUrl = Helper.getSourceUrl();
+      let encounterId = "";
+  
+      const authToken = Helper.getSourceToken();
+      const xSourceId = localStorage.getItem("XCALIBER_TOKEN");
+  
+      console.log("Authorization Token:", authToken ? "Present" : "Missing");
+      console.log("x-source-id:", xSourceId ? "Present" : "Missing");
+  
+      notePayload.data.content.forEach((obj) => {
+        if (obj.attachment && obj.attachment.data) {
+          obj.attachment.data = btoa(obj.attachment.data);
+        }
+      });
+  
+      console.log("Formatted note payload:", JSON.stringify(notePayload, null, 2));
+  
+      if (localStorage.getItem(`XCALIBER_SOURCE`) === "ATHENA") {
+        console.log("ATHENA source detected. Processing encounter ID...");
+  
+        // Patch appointment status to "checked-in" if needed
+        try {
+          await axios.patch(
+            `${sourceUrl}/Appointment/${appointmentId}`,
+            {
+              context: {
+                departmentId: localStorage.getItem(`DEPARTMENT_ID`),
+              },
+              data: {
+                status: "checked-in",
+              },
+            },
+            {
+              headers: {
+                Authorization: authToken,
+                "x-source-id": xSourceId,
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+              },
+            }
+          );
+          console.log("Appointment successfully checked in.");
+        } catch (error) {
+          console.error("Error checking in appointment:", error);
+        }
+  
+        // Fetch encounter ID
+        try {
+          const res = await axios.get(`${sourceUrl}/Appointment/${appointmentId}`, {
+            headers: {
+              Authorization: authToken,
+              "x-source-id": xSourceId,
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+            },
+          });
+  
+          encounterId =
+            res.data?.data?.supportingInformation?.[0]?.reference?.split("Encounter/")[1];
+  
+          console.log("Encounter ID retrieved:", encounterId);
+        } catch (error) {
+          console.error("Error retrieving encounter ID:", error);
+        }
+      }
+  
+      // Define headers explicitly
+      const headers = {
+        Authorization: authToken || "",
+        "x-source-id": xSourceId || "",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+      };
+  
+      console.log("Final headers for API request:", headers);
+  
+      let response;
+      if (noteId) {
+        console.log(`Updating existing note with ID: ${noteId}`);
+  
+        // If noteId exists, update the existing note using PUT
+        response = await axios.put(
+          `${sourceUrl}/DocumentReference/${noteId}`,
+          notePayload,
+          { headers }
+          
+        );
+        console.log(`Updating existing note with ID 2#: ${noteId}`);
+
+      } else {
+        console.log("Creating a new note...");
+  
+        // Otherwise, create a new note using POST
+        response = await axios.post(
+          `${sourceUrl}/DocumentReference?category=visit_notes&encounter=${encounterId}`,
+          notePayload,
+          { headers }
+        );
+      }
+  
+      console.log("API response received:", response.data);
+      return response.data?.data?.id ? response.data?.data?.id : response.data?.id;
+    } catch (error) {
+      console.error("Error in createOrUpdateNote:", error);
+    }
+  }
+    
 };

@@ -1,14 +1,15 @@
 "use client";
 
 import CheckIcon from "@mui/icons-material/Check";
-import PatientRecentEvents from "./PatientRecentEvents";
+import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
-import { useState, useEffect } from "react";
-import SideDrawer from "../../../ui/SideDrawer";
+import { iso6392 } from "iso-639-2";
+import { useEffect, useState } from "react";
 import { PatientService } from "../../../../services/patientService";
 import { editPatient } from "../../../PatientTable/services/service";
+import SideDrawer from "../../../ui/SideDrawer";
+import PatientRecentEvents from "./PatientRecentEvents";
 
 function PatientSidebar({ id }: { id: string }) {
   const [patientDetails, setPatientDetails] = useState({ id });
@@ -50,7 +51,7 @@ function PatientSidebar({ id }: { id: string }) {
           "",
         primaryLanguage:
           localStorage.getItem("XCALIBER_SOURCE") === "ATHENA"
-            ? getAthenaLanguage(
+            ? getLanguageName(
                 response?.communication?.[0]?.language?.coding?.[0]?.code
               )
             : response?.communication?.[0]?.language?.text || "",
