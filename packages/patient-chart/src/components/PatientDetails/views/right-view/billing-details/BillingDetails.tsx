@@ -81,10 +81,10 @@ const BillingDetails = () => {
 
   return (
     <>
-    {data.length === 0 ? (
-      <div
-      style={{
-        padding: "24px",
+      {data.length === 0 ? (
+        <div
+          style={{
+            padding: "24px",
             boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
             borderRadius: "8px",
             backgroundColor: "#fff",
@@ -92,33 +92,33 @@ const BillingDetails = () => {
             justifyContent: "center",
             alignItems: "center",
           }}
-          >
+        >
           <p>No billing details available.</p>
-          </div>
-        ) : (
-        <div className="p-6 bg-white min-h-screen rounded-lg">
-        data.map((section, sectionIndex) => (
-          <div
-            key={sectionIndex}
-            className="mb-8"
-            style={{ marginBottom: "2rem" }}
-          >
-            <h3
-              className="text-lg font-semibold text-gray-700 mb-6"
-              style={{ marginBottom: "1.5rem" }}
+        </div>
+      ) : (
+        <div className='p-6 bg-white min-h-screen rounded-lg'>
+          {data.map((section, sectionIndex) => (
+            <div
+              key={sectionIndex}
+              className='mb-8'
+              style={{ marginBottom: "2rem" }}
             >
-              {section.title}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {section.cards.map((card, cardIndex) => (
-                <Card key={cardIndex} card={card} />
-              ))}
+              <h3
+                className='text-lg font-semibold text-gray-700 mb-6'
+                style={{ marginBottom: "1.5rem" }}
+              >
+                {section.title}
+              </h3>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                {section.cards.map((card, cardIndex) => (
+                  <Card key={cardIndex} card={card} />
+                ))}
+              </div>
             </div>
-          </div>
-        ))
+          ))}
         </div>
       )}
-      </>
+    </>
   );
 };
 
