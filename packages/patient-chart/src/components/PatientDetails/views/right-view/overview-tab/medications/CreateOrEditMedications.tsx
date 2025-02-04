@@ -151,7 +151,7 @@ export const CreateOrEditMedication = ({
           );
 
           const medicationSelected = response?.medicationReference?.reference;
-          const medicationCode = medicationSelected.split("/")[1];
+          const medicationCode = medicationSelected?.split("/")[1];
 
           setMedication(medicationCode);
           setStartDate(
@@ -165,7 +165,7 @@ export const CreateOrEditMedication = ({
               : null
           );
           setMedicationStopReason(
-            response?.statusReason[0]?.coding[0]?.display
+            response?.statusReason?.[0]?.coding?.[0]?.display
           );
         } catch (error) {
           console.error(error);
