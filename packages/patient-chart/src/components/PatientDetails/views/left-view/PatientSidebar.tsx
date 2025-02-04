@@ -9,6 +9,7 @@ import { iso6392 } from "iso-639-2";
 import { PatientService } from "../../../../services/patientService";
 import { editPatient } from "../../../PatientTable/services/service";
 import SideDrawer from "../../../ui/SideDrawer";
+import PatientRecentEvents from "./PatientRecentEvents";
 
 function PatientSidebar({ id }: { id: string }) {
   const [patientDetails, setPatientDetails] = useState({ id });
