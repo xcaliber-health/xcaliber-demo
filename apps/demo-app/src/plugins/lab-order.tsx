@@ -54,7 +54,7 @@ const LabOrderPlugin: Plugin = {
   // Define the routes for your plugin
   routes: [
     {
-      path: '/lab-order',
+      path: '/xc-fhir-on-app',
       component: LabOrderComponent,
       icon: Box,
       label: 'Lab Order',
