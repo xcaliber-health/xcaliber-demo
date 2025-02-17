@@ -37,7 +37,7 @@ const LabOrderComponent = () => {
  */
 const LabOrderPlugin: Plugin = {
   // Basic plugin metadata
-  name: 'lab-order', // Unique identifier for your plugin
+  name: 'xc-fhir-on-app', // Unique identifier for your plugin
   version: '1.0.0',
   description: 'A plugin for lab order management',
   author: 'Xcaliber',
