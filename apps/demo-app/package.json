@@ -13,8 +13,6 @@
     "postinstall": "npm run build:icons"
   },
   "dependencies": {
-    "@xcaliber/privacy-preservation": "workspace:*",
-    "@xcaliber/patient-chart": "workspace:*",
     "@apollo/client": "^3.11.10",
     "@codemirror/lang-sql": "^6.8.0",
     "@emotion/cache": "11.11.0",
@@ -29,6 +27,7 @@
     "@mui/lab": "5.0.0-alpha.160",
     "@mui/material": "5.15.4",
     "@mui/material-nextjs": "5.15.3",
+    "@tailwindcss/postcss": "^4.0.6",
     "@tanstack/match-sorter-utils": "^8.19.4",
     "@tanstack/react-table": "^8.20.5",
     "@types/next-auth": "^3.15.0",
@@ -39,6 +38,9 @@
     "@typescript-eslint/parser": "6.18.1",
     "@uiw/codemirror-extensions-basic-setup": "^4.23.6",
     "@uiw/react-codemirror": "^4.23.6",
+    "@xcaliber/lab-order": "workspace:*",
+    "@xcaliber/patient-chart": "workspace:*",
+    "@xcaliber/privacy-preservation": "workspace:*",
     "apexcharts": "^3.54.1",
     "autoprefixer": "10.4.16",
     "classnames": "2.5.1",
