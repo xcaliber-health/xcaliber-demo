@@ -16,5 +16,5 @@ export async function GET(request: NextRequest) {
     console.log("here 1")
   const {searchParams} = new URL(request.url);
   const data = await launchFhirApp(searchParams);
-  return NextResponse.json(data, { status: 200 });
+  return new NextResponse(data, {status: 200, headers: { 'Content-Type': 'text/html' }});
 }
