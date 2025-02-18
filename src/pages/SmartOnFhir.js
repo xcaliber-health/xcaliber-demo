@@ -8,11 +8,11 @@ const SmartOnFhir = () => {
   const [error, setError] = useState(null);
 
   const iss = searchParams.get("iss");
-  const launch = searchParams.get("launch");
+  const launchValue = searchParams.get("launch");
 
   useEffect(() => {
 		const launch = async () => {
-    axios
+    await axios
       .get(
         "https://api.preview.platform.athenahealth.com/oauth2/v1/authorize",
         {
@@ -23,7 +23,7 @@ const SmartOnFhir = () => {
             scope:
               "launch user/AllergyIntolerance.read user/Appointment.read user/Assessment.read user/Binary.read user/CarePlan.read user/CareTeam.read user/ClinicalImpression.read user/Condition.read user/Device.read user/DiagnosticReport.read user/DocumentReference.read user/Encounter.read user/Goal.read user/Immunization.read user/Location.read user/MedicalAdministration.read user/Medication.read user/MedicationDispense.read user/MedicationOrder.read user/MedicationRequest.read user/MedicationStatement.read user/Observation.read user/Organization.read user/Patient.read user/PracticeConfiguration.read user/Practitioner.read user/Procedure.read user/Provenance.read user/Provider.read",
             aud: iss,
-            launch: launch,
+            launch: launchValue,
             state: "12345",
           },
         }
