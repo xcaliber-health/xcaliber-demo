@@ -1,11 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import LabResults from "./lab-results";
 import PatientDetails from "./patient-details";
+import PatientDetailsTab from "./PatientDetailsTab";
 import Laborder from "./lab-order";
 
 const LabOrderDetails = () => {
   return (
-    <Tabs defaultValue="patient-details" className="h-full w-full">
+    <Tabs defaultValue="patient-details" className="h-full w-full bg-[#F8FAFC] ">
       <TabsList className="rounded-none h-auto bg-white w-full flex justify-start">
         <TabsTrigger
           value="patient-details"
@@ -27,7 +28,8 @@ const LabOrderDetails = () => {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="patient-details" className="p-4">
-        <PatientDetails />
+        {/* <PatientDetails /> */}
+        <PatientDetailsTab />
       </TabsContent>
       <TabsContent value="lab-order" className="p-4">
         <Laborder />
