@@ -33,8 +33,8 @@ const SmartOnFhir = () => {
         setData(response.data);
       })
       .catch((error) => setError(error.message));
-			launch();
 		};
+		launch();
   }, [iss, launchValue]);
 
   return (
