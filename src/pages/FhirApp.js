@@ -21,7 +21,7 @@ const FhirApp = () => {
         try {
             const CLIENT_ID = "0oaw7snv22DdD8hP5297";
             const REDIRECT_URI = "https://dev-demo.xcaliberhealth.ai/fhir-app";
-            const TOKEN_URL = "https://api.preview.platform.athenahealth.com/oauth2/v1/authorize";
+            const TOKEN_URL = "https://api.preview.platform.athenahealth.com/oauth2/v1/token";
             const codeVerifier = "M25iVXpKU3puUjFaYWg3T1NDTDQtcW1ROUY5YXlwalNoc0hhakxifmZHag"; // Retrieve stored verifier
             const response = await fetch(TOKEN_URL, {
                 method: "POST",
