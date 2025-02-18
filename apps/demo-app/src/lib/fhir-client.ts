@@ -11,16 +11,16 @@ export const initializeFHIR = async (launchParams: URLSearchParams, ehrType: EHR
       console.log(launchParams.toString())
       console.log(`${process.env.NEXT_PUBLIC_AUTHORIZE_URL}`);
 
+      console.log('Starting authorization')
       const response = await axios.get(`${process.env.NEXT_PUBLIC_AUTHORIZE_URL}`, {
         params: {
           client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
           response_type: 'code',
-          scope:
-            'openid fhirUser  user/AllergyIntolerance.read user/Appointment.read user/Assessment.read user/Binary.read user/CarePlan.read user/CareTeam.read user/ClinicalImpression.read user/Condition.read user/Device.read user/DiagnosticReport.read user/DocumentReference.read user/Encounter.read user/Goal.read user/Immunization.read user/Location.read user/MedicalAdministration.read user/Medication.read user/MedicationDispense.read user/MedicationOrder.read user/MedicationRequest.read user/MedicationStatement.read user/Observation.read user/Organization.read user/Patient.read user/PracticeConfiguration.read user/Practitioner.read user/Procedure.read user/Provenance.read user/Provider.read',
-          launch: launchId,
-          aud: iss,
           redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI,
-          state: '1234'
+          scope:
+            'launch user/AllergyIntolerance.read user/Appointment.read user/Assessment.read user/Binary.read user/CarePlan.read user/CareTeam.read user/ClinicalImpression.read user/Condition.read user/Device.read user/DiagnosticReport.read user/DocumentReference.read user/Encounter.read user/Goal.read user/Immunization.read user/Location.read user/MedicalAdministration.read user/Medication.read user/MedicationDispense.read user/MedicationOrder.read user/MedicationRequest.read user/MedicationStatement.read user/Observation.read user/Organization.read user/Patient.read user/PracticeConfiguration.read user/Practitioner.read user/Procedure.read user/Provenance.read user/Provider.read',
+          aud: iss,
+          state: '12345'
         }
       })
 
