@@ -3,16 +3,16 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import LabResults from "./lab-results";
 import PatientDetailsTab from "./PatientDetailsTab";
-import Laborder from "./lab-order";
+import LabOrder from "./LabOrder";
 
 const LabOrderDetails = ({
   patientId = 4406,
   encounterId = 46318,
   sourceId,
   departmentId,
+  practitionerId,
+  practiceId
 }) => {
-  console.log("PatientId", patientId);
-  console.log("EncounterId", encounterId);
   if (!patientId) return <></>;
   return (
     <Tabs
@@ -47,7 +47,15 @@ const LabOrderDetails = ({
         />
       </TabsContent>
       <TabsContent value="lab-order" className="p-4">
-        <Laborder />
+        <LabOrder
+          patientId={patientId}
+          categoryCode="363679005"
+          departmentId={departmentId}
+          encounterId={encounterId}
+          sourceId={sourceId}
+          practitionerId={practitionerId}
+          practiceId={practiceId}
+        />
       </TabsContent>
       <TabsContent value="lab-results" className="p-4">
         {/* <LabResults /> */}
