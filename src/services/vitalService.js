@@ -2,20 +2,18 @@ import axios from "axios";
 import { Helper } from "../core-utils/helper";
 
 export const VitalService = {
-  getVitals: async (patientId) => {
+  getVitals: async (patientId, sourceId, departmentId) => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl();
       const result = await axios.get(
         `${sourceUrl}/Observation?patient=${patientId}&category=vital-signs${
-          sourceType !== "ECW"
-            ? `&departmentId=${localStorage.getItem(`DEPARTMENT_ID`)}`
-            : ""
+          sourceType !== "ECW" ? `&departmentId=${departmentId}` : ""
         }`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
-            "x-source-id": `${localStorage.getItem(`XCALIBER_TOKEN`)}`,
+            "x-source-id": sourceId,
           },
         }
       );

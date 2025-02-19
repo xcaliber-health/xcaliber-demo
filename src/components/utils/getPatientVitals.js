@@ -1,8 +1,8 @@
 import { VitalService } from "../../services/vitalService";
 import { Helper } from "../../core-utils/helper";
 
-export const fetchVitals = async (id) => {
-  const response = await VitalService.getVitals(id);
+export const fetchVitals = async (id, sourceId, departmentId) => {
+  const response = await VitalService.getVitals(id, sourceId, departmentId);
   let data = {};
 
   response.forEach((vital) => {
@@ -22,7 +22,8 @@ export const fetchVitals = async (id) => {
     let value;
 
     if (name.toLowerCase().includes("body mass index")) {
-      value = vital?.resource?.valueString || vital?.resource?.valueQuantity?.value;
+      value =
+        vital?.resource?.valueString || vital?.resource?.valueQuantity?.value;
     } else if (name.toLowerCase() === "blood pressure") {
       let systolic, diastolic;
       vital?.resource?.component?.forEach((code) => {
@@ -41,7 +42,9 @@ export const fetchVitals = async (id) => {
 
     let date = `${dateObject?.DAY} ${dateObject?.MONTH} ${dateObject?.DATE}`;
     let year = dateObject?.YEAR;
-    let cal_date = new Date(`${dateObject?.MONTH} ${dateObject?.DATE} ${dateObject?.YEAR}`);
+    let cal_date = new Date(
+      `${dateObject?.MONTH} ${dateObject?.DATE} ${dateObject?.YEAR}`
+    );
 
     if (Object.keys(data).includes(name)) {
       const values = data[name];
@@ -51,7 +54,9 @@ export const fetchVitals = async (id) => {
 
       while (low < high) {
         let mid = (low + high) >>> 1;
-        let dum_date = new Date(`${values[mid].date.slice(4, 10)} ${values[mid].year}`);
+        let dum_date = new Date(
+          `${values[mid].date.slice(4, 10)} ${values[mid].year}`
+        );
         if (dum_date > cal_date) low = mid + 1;
         else high = mid;
       }

@@ -5,6 +5,8 @@ const FhirApp = (props) => {
   const [code, setCode] = useState(null);
   const [patient, setPatientId] = useState(null);
   const [encounter, setEncounterId] = useState(null);
+  const [sourceId ,setSourceId] = useState(null);
+  const [departmentId, setDepartmentId] = useState(null);
 
   useEffect(() => {
     setCode(new URLSearchParams(window.location.search).get("code"));
@@ -23,9 +25,9 @@ const FhirApp = (props) => {
     return {
       patientId: data.patient.split(".")[1].split("-")[1],
       encounterId: data.encounter?.split(".")[1]?.split("-")[1] || null,
-      practiceId : data.ah_practice?.split(".")[1]?.split("-")[1] || null,
-      departmentId : data.ah_department?.split(".")[1]?.split("-")[1] || null,
-      sourceId: "083fe714-e36e-4851-b2e7-a7166b439f67"
+      practiceId: data.ah_practice?.split(".")[1]?.split("-")[1] || null,
+      departmentId: data.ah_department?.split(".")[1]?.split("-")[1] || null,
+      sourceId: "083fe714-e36e-4851-b2e7-a7166b439f67",
     };
   }
 
@@ -33,8 +35,10 @@ const FhirApp = (props) => {
     try {
       const CLIENT_ID = "0oaw7snv22DdD8hP5297";
       const REDIRECT_URI = "https://dev-demo.xcaliberhealth.ai/fhir-app";
-      const TOKEN_URL = "https://api.preview.platform.athenahealth.com/oauth2/v1/token";
-      const codeVerifier = "M25iVXpKU3puUjFaYWg3T1NDTDQtcW1ROUY5YXlwalNoc0hhakxifmZHag"; // Retrieve stored verifier
+      const TOKEN_URL =
+        "https://api.preview.platform.athenahealth.com/oauth2/v1/token";
+      const codeVerifier =
+        "M25iVXpKU3puUjFaYWg3T1NDTDQtcW1ROUY5YXlwalNoc0hhakxifmZHag"; // Retrieve stored verifier
       const response = await fetch(TOKEN_URL, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -48,11 +52,13 @@ const FhirApp = (props) => {
       });
 
       const data = await response.json();
-      const {patientId,encounterId } = extractIds(data);
+      const { patientId, encounterId, sourceId, departmentId} = extractIds(data);
       setPatientId(patientId);
       setEncounterId(encounterId);
+      setSourceId(sourceId);
+      setDepartmentId(departmentId);
       console.log("Access Token:", data.access_token); // Print token
-      console.log("first", patientId)
+      console.log("first", patientId);
 
       // navigate("/landing"); // Redirect to landing page
     } catch (error) {
@@ -62,7 +68,12 @@ const FhirApp = (props) => {
 
   return (
     <>
-      <LabOrderDetails patientId={patient} encounterId={encounter} />
+      <LabOrderDetails
+        patientId={patient}
+        encounterId={encounter}
+        sourceId={sourceId}
+        departmentId={departmentId}
+      />
     </>
   );
 };

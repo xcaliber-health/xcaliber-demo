@@ -11,6 +11,7 @@ import { Separator } from "./ui/separator";
 import { Input } from "./ui/input";
 import { Activity, Heart, Ruler, Thermometer, Weight } from "lucide-react";
 import { fetchVitals } from "./utils/getPatientVitals";
+import { InsuranceService } from "../services/insuranceService";
 import { PatientService } from "../services/patientService";
 import {
   Accordion,
@@ -31,7 +32,6 @@ const CustomInput = ({ id, value }) => (
                  "
   />
 );
-
 
 // ✅ Map API Data to Form Structure
 const mapFHIRDataToForm = (data) => {
@@ -105,25 +105,49 @@ const mapFHIRDataToForm = (data) => {
         ?.relationship?.[0]?.text || "",
 
     // 🔹 Primary Insurance
-    primaryInsurerName: "N/A",
-    primaryInsurerAddress: "N/A",
-    primaryGroupNumber: "N/A",
-    primaryPolicyNumber: "N/A",
-    primaryInsuredName: "N/A",
-    primaryInsuredAddress1: "N/A",
-    primaryInsuredAddress2: "N/A",
-    primaryInsuredRelation: "N/A",
+   primaryInsurerName: data?.entry?.[0]?.resource?.class?.[0]?.name || "N/A",
+    primaryInsurerAddress: data?.policyHolder?.extension?.find((ext) =>
+      ext.url?.includes("insurance-policy-holder-address")
+    )?.valueAddress?.line?.join(", ") || "N/A",
+    primaryGroupNumber: data?.identifier?.find((id) =>
+      id.system?.includes("insurance-id-number")
+    )?.value || "N/A",
+    primaryPolicyNumber: data?.identifier?.find((id) =>
+      id.system?.includes("insurance-package-id")
+    )?.value || "N/A",
+    primaryInsuredName:
+      data?.policyHolder?.extension?.find((ext) =>
+        ext.url?.includes("policy-holder/name")
+      )?.valueHumanName?.given?.join(" ") +
+      " " +
+      data?.policyHolder?.extension?.find((ext) =>
+        ext.url?.includes("policy-holder/name")
+      )?.valueHumanName?.family || "N/A",
+    primaryInsuredRelation: data?.relationship?.text || "N/A",
 
     // 🔹 Secondary Insurance
-    secondaryInsurerName: "N/A",
-    secondaryInsurerAddress: "N/A",
-    secondaryGroupNumber: "N/A",
-    secondaryPolicyNumber: "N/A",
-    secondaryInsuredName: "N/A",
-    secondaryInsuredAddress: "N/A",
-    secondaryInsuredRelation: "N/A",
+    secondaryInsurerName: data?.class?.[0]?.name || "N/A",
+    secondaryInsurerAddress: data?.policyHolder?.extension?.find((ext) =>
+      ext.url?.includes("insurance-policy-holder-address")
+    )?.valueAddress?.line?.join(", ") || "N/A",
+    secondaryGroupNumber: data?.identifier?.find((id) =>
+      id.system?.includes("insurance-id-number")
+    )?.value || "N/A",
+    secondaryPolicyNumber: data?.identifier?.find((id) =>
+      id.system?.includes("insurance-package-id")
+    )?.value || "N/A",
+    secondaryInsuredName:
+      data?.policyHolder?.extension?.find((ext) =>
+        ext.url?.includes("policy-holder/name")
+      )?.valueHumanName?.given?.join(" ") +
+      " " +
+      data?.policyHolder?.extension?.find((ext) =>
+        ext.url?.includes("policy-holder/name")
+      )?.valueHumanName?.family || "N/A",
+    secondaryInsuredRelation: data?.relationship?.text || "N/A",
   };
 };
+console.log("first",primaryInsurerName)
 
 // ✅ UI Schema (Removes Form Titles)
 const uiSchema = {
@@ -134,15 +158,15 @@ const uiSchema = {
   }, {}),
 };
 
-export default function PatientDetails(patientId) {
-  const id = patientId.patientId;
-  console.log("first",id)
+export default function PatientDetails({ patientId, departmentId, sourceId }) {
+  const id = patientId;
   const [patientDetails, setPatientDetails] = useState(null);
   const [vitalDetails, setVitalDetails] = useState([]);
+  const [insuranceDetails, setInsuranceDetails] = useState([]);
 
   useEffect(() => {
-    if (!id) return;  // Prevent API calls if ID is undefined
-  
+    if (!id) return; // Prevent API calls if ID is undefined
+
     const getPatientDetails = async () => {
       try {
         const response = await PatientService.getPatientById(id);
@@ -152,21 +176,35 @@ export default function PatientDetails(patientId) {
         console.error("Error fetching patient data:", error);
       }
     };
-  
+
+    const fetchInsurance = async () => {
+      try {
+        const response = await InsuranceService.getCoverage(
+          id,
+          departmentId,
+          sourceId
+        );
+        console.log("Fetched Insurance:", insuranceDetails);
+        setInsuranceDetails(response);
+      } catch (error) {
+        console.error("Error fetching Insurance data:", error);
+      }
+    };
+
     const fetchVitalsData = async () => {
       try {
-        const response = await fetchVitals(id);
+        const response = await fetchVitals(id, sourceId, departmentId);
         console.log("Fetched Vitals:", response);
         setVitalDetails(response);
       } catch (error) {
         console.error("Error fetching vitals data:", error);
       }
     };
-  
+
     getPatientDetails();
+    fetchInsurance();
     fetchVitalsData();
-  }, [id]);  // Only runs when a valid ID is available
-  
+  }, [id]); // Only runs when a valid ID is available
 
   if (!patientDetails) return <p>Loading...</p>;
 
@@ -319,7 +357,7 @@ export default function PatientDetails(patientId) {
                         title: "Insured Relation",
                       },
                     }}
-                    formData={mapFHIRDataToForm(patientDetails)}
+                    formData={mapFHIRDataToForm(insuranceDetails)}
                   />
                 </AccordionContent>
               </AccordionItem>
@@ -367,7 +405,7 @@ export default function PatientDetails(patientId) {
                         title: "Insured Relation",
                       },
                     }}
-                    formData={mapFHIRDataToForm(patientDetails)}
+                    formData={mapFHIRDataToForm(insuranceDetails)}
                   />
                 </AccordionContent>
               </AccordionItem>
@@ -385,8 +423,7 @@ export default function PatientDetails(patientId) {
 
 // ✅ Reusable Form Section Component
 function Section({ title, schema, formData }) {
-
-  console.log(formData)
+  console.log(formData);
   return (
     <>
       <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
@@ -433,7 +470,7 @@ const vitalColors = {
   "Respiratory rate": "text-red-500",
 };
 
-export function RecentVitals(vitals) {
+export function RecentVitals({ vitals }) {
   return (
     <>
       {/* Recent Vitals Section */}
