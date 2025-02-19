@@ -19,12 +19,12 @@ const FhirApp = (props) => {
     }
   }, [code]);
 
-//   function extractIds(data) {
-//     return {
-//       patientId: data.patient.split(".")[1].split("-")[1],
-//       encounterId: data.encounter.split(".")[1].split("-")[1],
-//     };
-//   }
+  function extractIds(data) {
+    return {
+      patientId: data.patient.split(".")[1].split("-")[1],
+      encounterId: data.encounter.split(".")[1].split("-")[1],
+    };
+  }
 
   const fetchAccessToken = async (code) => {
     try {
