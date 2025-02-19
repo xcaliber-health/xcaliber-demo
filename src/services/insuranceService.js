@@ -2,7 +2,7 @@ import axios from "axios";
 import { Helper } from "../core-utils/helper";
 
 export const InsuranceService = {
-  getCoverage: async (patientId, departmentId) => {
+  getCoverage: async (patientId, departmentId, sourceId) => {
     try {
       let sourceUrl = Helper.getSourceUrl();
       const response = await axios.get(
@@ -10,7 +10,7 @@ export const InsuranceService = {
         {
           headers: {
             Authorization: Helper.getSourceToken(),
-            "X-Source-Id": localStorage.getItem("XCALIBER_TOKEN"),
+            "X-Source-Id": sourceId,
           },
         }
       );

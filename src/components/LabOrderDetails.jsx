@@ -40,7 +40,11 @@ const LabOrderDetails = ({
         </TabsTrigger>
       </TabsList>
       <TabsContent value="patient-details" className="p-4">
-        <PatientDetailsTab patientId={patientId} />
+        <PatientDetailsTab
+          patientId={patientId}
+          departmentId={departmentId}
+          sourceId={sourceId}
+        />
       </TabsContent>
       <TabsContent value="lab-order" className="p-4">
         <Laborder />
