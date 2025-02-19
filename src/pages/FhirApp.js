@@ -50,6 +50,9 @@ const FhirApp = (props) => {
       setEncounterId(encounterId);
       console.log("Access Token:", data.access_token); // Print token
       console.log("first", patientId);
+            console.log("patient", patient);
+      console.log("encounter", encounter);
+
       // navigate("/landing"); // Redirect to landing page
     } catch (error) {
       console.error("Error fetching access token", error);
