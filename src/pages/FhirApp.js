@@ -25,6 +25,7 @@ const FhirApp = (props) => {
       encounterId: data.encounter?.split(".")[1]?.split("-")[1] || null,
       practiceId : data.ah_practice?.split(".")[1]?.split("-")[1] || null,
       departmentId : data.ah_department?.split(".")[1]?.split("-")[1] || null,
+      sourceId: "083fe714-e36e-4851-b2e7-a7166b439f67"
     };
   }
 
