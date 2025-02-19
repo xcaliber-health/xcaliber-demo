@@ -20,10 +20,10 @@ import {
 } from "./ui/accordion";
 
 // ✅ Custom ShadCN UI Input Field for RJSF
-const CustomInput = (id, value) => (
+const CustomInput = ({ id, value }) => (
   <Input
     id={id}
-    value={value}
+    value={value || ""} // Ensure default value is an empty string
     readOnly
     className="w-full bg-gray-50 border-2 border-gray-100 shadow-[0px_1px_2px_rgba(0,0,0,0.07)] 
                  rounded-md text-gray-800 py-3 mb-4 mt-1 text-lg transition-all duration-300 
@@ -32,8 +32,10 @@ const CustomInput = (id, value) => (
   />
 );
 
+
 // ✅ Map API Data to Form Structure
 const mapFHIRDataToForm = (data) => {
+  // console.log(data)
   if (!data) return {};
 
   return {
@@ -133,33 +135,38 @@ const uiSchema = {
 };
 
 export default function PatientDetails(patientId) {
-  const id = patientId;
+  const id = patientId.patientId;
+  console.log("first",id)
   const [patientDetails, setPatientDetails] = useState(null);
   const [vitalDetails, setVitalDetails] = useState([]);
 
   useEffect(() => {
+    if (!id) return;  // Prevent API calls if ID is undefined
+  
     const getPatientDetails = async () => {
       try {
         const response = await PatientService.getPatientById(id);
+        console.log("Fetched Patient Data:", response); // ✅ Debugging log
         setPatientDetails(response);
       } catch (error) {
         console.error("Error fetching patient data:", error);
       }
     };
-
+  
     const fetchVitalsData = async () => {
       try {
         const response = await fetchVitals(id);
-        console.log("Fetched Vitals:", response); // ✅ Console log vitals
+        console.log("Fetched Vitals:", response);
         setVitalDetails(response);
       } catch (error) {
         console.error("Error fetching vitals data:", error);
       }
     };
-
+  
     getPatientDetails();
     fetchVitalsData();
-  }, [id]);
+  }, [id]);  // Only runs when a valid ID is available
+  
 
   if (!patientDetails) return <p>Loading...</p>;
 
@@ -378,6 +385,8 @@ export default function PatientDetails(patientId) {
 
 // ✅ Reusable Form Section Component
 function Section({ title, schema, formData }) {
+
+  console.log(formData)
   return (
     <>
       <h2 className="text-lg font-semibold text-gray-900">{title}</h2>

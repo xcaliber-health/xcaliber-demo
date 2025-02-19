@@ -5,7 +5,7 @@ import LabResults from "./lab-results";
 import PatientDetailsTab from "./PatientDetailsTab";
 import Laborder from "./lab-order";
 
-const LabOrderDetails = (patientId, encounterId) => {
+const LabOrderDetails = ({patientId = 4406, encounterId = 46318}) => {
   console.log("PatientId", patientId);
   console.log("EncounterId", encounterId);
   if (!patientId) return <></>;
@@ -35,10 +35,10 @@ const LabOrderDetails = (patientId, encounterId) => {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="patient-details" className="p-4">
-        <PatientDetailsTab patientId={patientId} />
+        <PatientDetailsTab patientId={patientId}  />
       </TabsContent>
       <TabsContent value="lab-order" className="p-4">
-        {/* <Laborder /> */}
+        <Laborder />
       </TabsContent>
       <TabsContent value="lab-results" className="p-4">
         {/* <LabResults /> */}

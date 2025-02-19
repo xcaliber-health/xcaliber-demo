@@ -7,9 +7,13 @@ export const TERMINOLOGY_API_ENDPOINT =
 
 export const TERMINOLOGY_TAG_API_ENDPOINT =
   "https://browser.ihtsdotools.org/snowstorm/snomed-ct/browser/MAIN/SNOMEDCT-US/2022-09-01/descriptions?&limit=${LIMIT_VALUE}&term=${SEARCH_TERM_VALUE}&semanticTags=${TAGS}&active=true&conceptActive=true&lang=english&groupByConcept=true";
+const NEXT_PUBLIC_EPIC_SERVERURL =
+  "https://blitz.xcaliberapis.com/xcaliber-dev/xchange/api/v1";
+const NEXT_PUBLIC_URL = "https://xchange-staging.xcaliberapis.com/api/v1";
 export const LENS_API_ENDPOINT = `https://lens-staging.xcaliberapis.com`;
-export const XCHANGE_SERVICE_ENDPOINT = `${process.env.NEXT_PUBLIC_URL}`;
-export const EPIC_XCHANGE_ENDPOINT = `${process.env.NEXT_PUBLIC_EPIC_SERVERURL}`;
+export const XCHANGE_SERVICE_ENDPOINT = `${NEXT_PUBLIC_URL}`;
+export const EPIC_XCHANGE_ENDPOINT = `${NEXT_PUBLIC_EPIC_SERVERURL}`;
+
 export const BUTTON_LABELS = {
   RUN: "Run",
   EDIT_PROFILE: "Edit Profile",
@@ -80,7 +84,7 @@ export const SOURCE_CONFIG = {
   },
 };
 
-export const DEPARTMENTS= [
+export const DEPARTMENTS = [
   {
     medicationhistoryconsent: false,
     timezoneoffset: -5,

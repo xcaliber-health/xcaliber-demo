@@ -6,6 +6,7 @@ export const PatientService = {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl();
+      console.log(sourceUrl);
       const response = await axios.get(
         `${sourceUrl}/Patient/${id}?departmentId=${localStorage.getItem(
           `DEPARTMENT_ID`
