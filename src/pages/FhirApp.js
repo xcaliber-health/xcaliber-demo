@@ -23,6 +23,8 @@ const FhirApp = (props) => {
     return {
       patientId: data.patient.split(".")[1].split("-")[1],
       encounterId: data.encounter?.split(".")[1]?.split("-")[1] || null,
+      practiceId : data.ah_practice?.split(".")[1]?.split("-")[1] || null,
+      departmentId : data.ah_department?.split(".")[1]?.split("-")[1] || null,
     };
   }
 
