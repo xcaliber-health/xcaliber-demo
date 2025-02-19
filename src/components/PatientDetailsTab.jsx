@@ -147,7 +147,6 @@ const mapFHIRDataToForm = (data) => {
     secondaryInsuredRelation: data?.relationship?.text || "N/A",
   };
 };
-console.log("first",primaryInsurerName)
 
 // ✅ UI Schema (Removes Form Titles)
 const uiSchema = {
