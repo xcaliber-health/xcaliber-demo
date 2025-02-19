@@ -4,7 +4,7 @@ import { Helper } from "../core-utils/helper";
 export const VitalService = {
   getVitals: async (patientId, sourceId, departmentId) => {
     try {
-      let sourceType = localStorage.getItem("XCALIBER_SOURCE");
+      let sourceType = "ATHENA";
       let sourceUrl = Helper.getSourceUrl();
       const result = await axios.get(
         `${sourceUrl}/Observation?patient=${patientId}&category=vital-signs${
