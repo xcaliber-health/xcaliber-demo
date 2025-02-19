@@ -3,8 +3,8 @@ import LabOrderDetails from "../components/LabOrderDetails";
 
 const FhirApp = (props) => {
   const [code, setCode] = useState(null);
-  const [patientId, setPatientId] = useState(null);
-  const [encounterId, setEncounterId] = useState(null);
+  const [patient, setPatientId] = useState(null);
+  const [encounter, setEncounterId] = useState(null);
 
   useEffect(() => {
     setCode(new URLSearchParams(window.location.search).get("code"));
@@ -45,11 +45,11 @@ const FhirApp = (props) => {
       });
 
       const data = await response.json();
-      const extractedIds = extractIds(data);
-      setPatientId(extractedIds.patientId);
-      setEncounterId(extractedIds.encounterId);
+      const {patientId,encounterId } = extractIds(data);
+      setPatientId(patientId);
+      setEncounterId(encounterId);
       console.log("Access Token:", data.access_token); // Print token
-      console.log("first", extractedIds);
+      console.log("first", patientId);
       // navigate("/landing"); // Redirect to landing page
     } catch (error) {
       console.error("Error fetching access token", error);
@@ -58,7 +58,7 @@ const FhirApp = (props) => {
 
   return (
     <>
-      <LabOrderDetails patientId={patientId} encounterId={encounterId} />
+      <LabOrderDetails patientId={patient} encounterId={encounter} />
     </>
   );
 };
