@@ -49,9 +49,7 @@ const FhirApp = (props) => {
       setPatientId(patientId);
       setEncounterId(encounterId);
       console.log("Access Token:", data.access_token); // Print token
-      console.log("first", patientId);
-            console.log("patient", patient);
-      console.log("encounter", encounter);
+      console.log("first", patientId)
 
       // navigate("/landing"); // Redirect to landing page
     } catch (error) {
@@ -61,7 +59,7 @@ const FhirApp = (props) => {
 
   return (
     <>
-      <LabOrderDetails patientId={patient} encounterId={encounter} />
+      <LabOrderDetails patientId={patient?.patientId} encounterId={patient?.encounterId} />
     </>
   );
 };
