@@ -162,6 +162,16 @@ export default function PatientDetails(patientId) {
         console.error("Error fetching vitals data:", error);
       }
     };
+
+    const fetchInsurance = async () => {
+      try {
+        const response = await fetchVitals(id);
+        console.log("Fetched Vitals:", response);
+        setVitalDetails(response);
+      } catch (error) {
+        console.error("Error fetching vitals data:", error);
+      }
+    };
   
     getPatientDetails();
     fetchVitalsData();
@@ -433,7 +443,7 @@ const vitalColors = {
   "Respiratory rate": "text-red-500",
 };
 
-export function RecentVitals(vitals) {
+export function RecentVitals({vitals}) {
   return (
     <>
       {/* Recent Vitals Section */}
