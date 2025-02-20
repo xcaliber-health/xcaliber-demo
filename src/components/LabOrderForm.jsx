@@ -2,20 +2,12 @@ import { Badge } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import { Checkbox } from "./ui/checkbox";
-import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { Textarea } from "./ui/textarea";
-import { LabOrderService } from "../services/labOrderService";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "./ui/select";
-import { ReferenceDataService } from "../services/referenceDataService";
 import { Combobox } from "./ui/combobox";
+import { ReferenceDataService } from "../services/referenceDataService";
+import { ProblemService } from "../services/problemService";
+import { LabOrderService } from "../services/labOrderService";
+
 export default function LabOrderForm({
   patientId,
   departmentId,
@@ -24,7 +16,6 @@ export default function LabOrderForm({
   practitionerId,
   practiceId,
 }) {
-  // console.log(practiceId);
   const [formData, setFormData] = useState({
     collectionDate: "",
     collectionTime: "",
@@ -41,75 +32,116 @@ export default function LabOrderForm({
     standingOrder: false,
     publishResults: false,
     reference: "",
+    problem: "", // ✅ Stores selected problem
+    encounterDiagnosis: "", // ✅ Stores selected encounter diagnosis
   });
+
   const [referenceOptions, setReferenceOptions] = useState([]);
+  const [problemOptions, setProblemOptions] = useState([]);
+  const [encounterDiagnosisOptions, setEncounterDiagnosisOptions] = useState([]); // ✅ New state for encounter diagnosis
 
-  const handleReferenceChange = (value) => {
-    setFormData((prev) => ({
-      ...prev,
-      reference: value,
-    }));
-  };
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
+  // ✅ Fetch Reference Data
   const fetchReferenceData = async () => {
     try {
-      const referenceData = await ReferenceDataService.getReferenceData(
-        practiceId,
-        sourceId
-      );
-      console.log("Reference Data Response:", referenceData);
+      const response = await ReferenceDataService.getReferenceData(practiceId, sourceId);
+      console.log("Reference Data Response:", response);
 
-      // Ensure it's always an array
-      if (Array.isArray(referenceData)) {
-        setReferenceOptions(referenceData);
+      if (response?.data?.result && Array.isArray(response.data.result)) {
+        setReferenceOptions(response.data.result);
       } else {
-        setReferenceOptions([]); // Fallback to empty array
+        console.warn("API Response did not contain 'result' array.");
+        setReferenceOptions([]);
       }
     } catch (error) {
       console.error("Error fetching reference data:", error);
-      setReferenceOptions([]); // Fallback in case of error
+      setReferenceOptions([]);
     }
   };
 
-  useEffect(() => {
-    const fetchReferenceData = async () => {
-      try {
-        const referenceData = await ReferenceDataService.getReferenceData(
-          practiceId,
-          sourceId
-        );
-        console.log("Raw API Response:", referenceData);
+  // ✅ Fetch Problem Data (Ensure Unique Keys)
+  const fetchProblemData = async () => {
+    try {
+      const response = await ProblemService.getProblems(patientId, "problem-list-item", departmentId, sourceId);
+      console.log("Problem Data Response:", response);
 
-        // Ensure we correctly access the nested 'result' array
-        if (
-          referenceData?.data?.result &&
-          Array.isArray(referenceData.data.result)
-        ) {
-          console.log("Extracted Reference Data:", referenceData.data.result);
-          setReferenceOptions(referenceData.data.result);
-        } else {
-          console.warn(
-            "API Response did not contain 'result' array inside 'data'"
-          );
-          setReferenceOptions([]);
-        }
-      } catch (error) {
-        console.error("Error fetching reference data:", error);
-        setReferenceOptions([]);
+      if (response && Array.isArray(response)) {
+        const formattedProblems = response
+          .map((item) => {
+            if (item.resource?.code?.coding?.length > 0) {
+              return {
+                value: `${item.resource.code.coding[0].code}-${item.resource.id}`, // ✅ Ensure uniqueness
+                label: item.resource.code.coding[0].display || "Unknown Problem",
+              };
+            }
+            return null;
+          })
+          .filter(Boolean); // Remove null values if any
+
+        console.log("Formatted Problem Options:", formattedProblems); // 🔍 Debug Log
+        setProblemOptions(formattedProblems);
+      } else {
+        console.warn("API Response did not contain expected structure.");
+        setProblemOptions([]);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching problem data:", error);
+      setProblemOptions([]);
+    }
+  };
 
-    fetchReferenceData();
+  // ✅ Fetch Encounter Diagnosis Data (Ensure Unique Keys)
+  const fetchEncounterDiagnosisData = async () => {
+    try {
+      const response = await ProblemService.getDiagnosis(patientId, departmentId, sourceId, encounterId, practiceId);
+      console.log("Encounter Diagnosis Data Response:", response);
+
+      if (response && Array.isArray(response)) {
+        const formattedDiagnoses = response
+          .map((item) => {
+            if (item.resource?.code?.coding?.length > 0) {
+              return {
+                value: `${item.resource.code.coding[0].code}-${item.resource.id}`, // ✅ Ensure uniqueness
+                label: item.resource.code.coding[0].display || "Unknown Diagnosis",
+              };
+            }
+            return null;
+          })
+          .filter(Boolean); // Remove null values if any
+
+        console.log("Formatted Encounter Diagnosis Options:", formattedDiagnoses); // 🔍 Debug Log
+        setEncounterDiagnosisOptions(formattedDiagnoses);
+      } else {
+        console.warn("API Response did not contain expected structure.");
+        setEncounterDiagnosisOptions([]);
+      }
+    } catch (error) {
+      console.error("Error fetching encounter diagnosis data:", error);
+      setEncounterDiagnosisOptions([]);
+    }
+  };
+
+  // ✅ useEffect for Reference Data
+  useEffect(() => {
+    if (practiceId && sourceId) {
+      fetchReferenceData();
+    }
   }, [practiceId, sourceId]);
 
+  // ✅ useEffect for Problem Data
+  useEffect(() => {
+    if (patientId && sourceId) {
+      fetchProblemData();
+    }
+  }, [patientId, sourceId]);
+
+  // ✅ useEffect for Encounter Diagnosis Data
+  useEffect(() => {
+    if (patientId && sourceId) {
+      fetchEncounterDiagnosisData();
+    }
+  }, [patientId, sourceId]);
+
+  // ✅ Handles form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -146,8 +178,17 @@ export default function LabOrderForm({
             coding: [
               {
                 system: "http://snomed.info/sct",
-                code: "16331000",
-                display: "injury of hip region",
+                code: formData.problem,
+                display: problemOptions.find((p) => p.value === formData.problem)?.label || "Unknown",
+              },
+            ],
+          },
+          {
+            coding: [
+              {
+                system: "http://snomed.info/sct",
+                code: formData.encounterDiagnosis,
+                display: encounterDiagnosisOptions.find((d) => d.value === formData.encounterDiagnosis)?.label || "Unknown",
               },
             ],
           },
@@ -155,19 +196,14 @@ export default function LabOrderForm({
         priority: formData.stat ? "urgent" : "routine",
         authoredOn: new Date().toISOString(),
         requester: { reference: `Practitioner/${practitionerId}` },
-        performer: [
-          { reference: "Organization/10848074", display: "CVS/Pharmacy #5590" },
-        ],
+        performer: [{ reference: "Organization/10848074", display: "CVS/Pharmacy #5590" }],
         status: "REVIEW",
       },
     };
 
     try {
-      const createLabOrder = await LabOrderService.createLabOrder(
-        payload,
-        sourceId
-      );
-      console.log("Create Lab Order Response:", createLabOrder);
+      const response = await LabOrderService.createLabOrder(payload, sourceId);
+      console.log("Create Lab Order Response:", response);
       alert("Form submitted successfully!");
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -180,31 +216,11 @@ export default function LabOrderForm({
       <form onSubmit={handleSubmit}>
         <div className="flex justify-between mb-8">
           <h1 className="text-2xl font-bold">LAB ORDER DETAILS</h1>
-          <Badge className="bg-[#40E0D0] text-black">COMPLETE</Badge>
         </div>
+
         {/* Reference Dropdown */}
         <div>
-          {/* <Select onValueChange={handleReferenceChange}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a reference" />
-            </SelectTrigger>
-            <SelectContent>
-              {referenceOptions.length > 0 ? (
-                referenceOptions.map((option) => (
-                  <SelectItem
-                    key={option.ordertypeid}
-                    value={option.ordertypeid.toString()}
-                  >
-                    {option.name}
-                  </SelectItem>
-                ))
-              ) : (
-                <p className="p-2 text-gray-500">No references found</p>
-              )}
-            </SelectContent>
-          </Select> */}
-
-          <Label>Reference</Label>
+          <Label>Select Order Type</Label>
           <Combobox
             label="Select a reference"
             options={referenceOptions.map((option) => ({
@@ -212,67 +228,31 @@ export default function LabOrderForm({
               label: option.name,
             }))}
             value={formData.reference}
-            onChange={(value) =>
-              setFormData((prev) => ({ ...prev, reference: value }))
-            }
+            onChange={(value) => setFormData((prev) => ({ ...prev, reference: value }))}
           />
         </div>
 
-        {/* <div className="grid gap-6 mb-6">
-          <Label>Collection Date:</Label>
-          <Input type="date" name="collectionDate" onChange={handleChange} />
-          <Label>Collection Time:</Label>
-          <Input type="time" name="collectionTime" onChange={handleChange} />
+        {/* ✅ Problem Selection Dropdown */}
+        <div className="mt-4">
+          <Label>Select Problem</Label>
+          <Combobox
+            label="Select a problem"
+            options={problemOptions}
+            value={formData.problem}
+            onChange={(value) => setFormData((prev) => ({ ...prev, problem: value }))}
+          />
         </div>
 
-        <h2 className="text-lg font-semibold mt-4">PROVIDER INFORMATION</h2>
-        <Label>Approving Provider:</Label>
-        <Input name="approvingProvider" defaultValue="Ach, Chip" />
-        <Label>NPI:</Label>
-        <Input name="npi1" onChange={handleChange} />
-        <Label>Ordering Provider:</Label>
-        <Input name="orderingProvider" defaultValue="Ach, Chip" />
-        <Label>NPI:</Label>
-        <Input name="npi2" onChange={handleChange} />
-
-        <h2 className="text-lg font-semibold mt-4">
-          CLIENT / ORDERING SITE INFO
-        </h2>
-        <Label>Account Name:</Label>
-        <Input name="accountName" onChange={handleChange} />
-        <Label>Address:</Label>
-        <Input name="address" onChange={handleChange} />
-        <Label>Phone:</Label>
-        <Input name="phone" onChange={handleChange} />
-
-        <Label>Note to lab:</Label>
-        <Textarea name="noteToLab" onChange={handleChange} />
-        <Label>Internal note:</Label>
-        <Textarea name="internalNote" onChange={handleChange} />
-
-        <Checkbox
-          id="stat"
-          name="stat"
-          onChange={handleChange}
-          className="m-2"
-        />
-        <Label htmlFor="stat">STAT</Label>
-        <Checkbox
-          id="standingOrder"
-          name="standingOrder"
-          onChange={handleChange}
-          className="m-2"
-        />
-        <Label htmlFor="standingOrder">Standing order</Label>
-        <Checkbox
-          id="publishResults"
-          name="publishResults"
-          onChange={handleChange}
-          className="m-2"
-        />
-        <Label htmlFor="publishResults">
-          Do not immediately publish results upon receipt
-        </Label> */}
+        {/* ✅ Encounter Diagnosis Selection Dropdown */}
+        <div className="mt-4">
+          <Label>Select Encounter Diagnosis</Label>
+          <Combobox
+            label="Select a diagnosis"
+            options={encounterDiagnosisOptions}
+            value={formData.encounterDiagnosis}
+            onChange={(value) => setFormData((prev) => ({ ...prev, encounterDiagnosis: value }))}
+          />
+        </div>
 
         <div className="flex justify-end gap-4 mt-6">
           <Button variant="outline" type="submit">
