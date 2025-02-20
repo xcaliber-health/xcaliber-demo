@@ -3,7 +3,6 @@ import axios from "axios";
 // import { TableData } from '../patients/search/ViewPatientsTable'
 import { Helper } from "../../../core-utils/helper";
 
-const endpointUrl = "https://xchange-staging.xcaliberapis.com";
 
 export const tableObjParser = (dataM, type) => {
   if (!dataM) return [];
@@ -142,15 +141,15 @@ export const PatientsById = async (id) => {
   const departmentId = Number(localStorage.getItem("DEPARTMENT_ID"));
 
   try {
+    const sourceUrl = Helper.getSourceUrl();
     if (source === "ATHENA" && departmentId === 150) {
-      const response = await axios.get(`${endpointUrl}/api/v1/Patient/${id}`, {
+      const response = await axios.get(`${sourceUrl}/api/v1/Patient/${id}`, {
         headers: getCommonHeaders(),
       });
       return parserFunc([{ resource: response.data.data }]);
     }
 
     if (source === "EPIC") {
-      const sourceUrl = Helper.getSourceUrl();
       const response = await axios.get(`${sourceUrl}/Patient/${id}`, {
         headers: getCommonHeaders(),
       });
