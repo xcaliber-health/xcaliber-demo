@@ -14,6 +14,7 @@ export default function LabResults({ patientId, departmentId, sourceId }) {
   const [patientInfo, setPatientInfo] = useState({ name: "", id: "" });
   const [collectionDate, setCollectionDate] = useState("");
   const [reportDate, setReportDate] = useState("");
+  const [loading, setLoading] = useState(true);
 
   function formatDateTime(dateString) {
     if (!dateString) return "Unknown";
@@ -31,6 +32,7 @@ export default function LabResults({ patientId, departmentId, sourceId }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await DiagnosticService.getDiagnosticReport(
           patientId,
           departmentId,
@@ -87,6 +89,8 @@ export default function LabResults({ patientId, departmentId, sourceId }) {
         setLabData([...latestReportsMap.values()]);
       } catch (error) {
         console.error("Error fetching diagnostic report:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -111,26 +115,40 @@ export default function LabResults({ patientId, departmentId, sourceId }) {
         </div>
       </div>
 
-      <Accordion type="multiple" className="space-y-4">
-        {labData.map((panel) => (
-          <AccordionItem
-            key={panel.name}
-            value={panel.name}
-            className="border rounded-lg"
-          >
-            <AccordionTrigger className="hover:no-underline bg-white px-6 rounded-lg transition-colors duration-300 data-[state=open]:bg-[#D1E9FF]">
-              <div className="flex items-center gap-2">
-                <h2 className="text-xl font-semibold">{panel.name}</h2>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="py-4">
-                <div className="border border-gray-300 rounded-lg overflow-hidden">
-                  <div className="grid grid-cols-1 md:grid-cols-2 bg-white">
-                    {panel.tests.map((test, index) => (
-                      <div
-                        key={test.name}
-                        className={`flex items-center justify-between gap-4 md:gap-10 px-6 py-3 border-b border-gray-300 
+      {loading ? (
+        // Shimmer Effect While Loading
+        <div className="space-y-4">
+          {[...Array(3)].map((_, index) => (
+            <div
+              key={index}
+              className="border rounded-lg animate-pulse bg-gray-200 p-4"
+            >
+              <div className="h-6 bg-gray-300 rounded w-3/4 mb-3"></div>
+              <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <Accordion type="multiple" className="space-y-4">
+          {labData.map((panel) => (
+            <AccordionItem
+              key={panel.name}
+              value={panel.name}
+              className="border rounded-lg"
+            >
+              <AccordionTrigger className="hover:no-underline bg-white px-6 rounded-lg transition-colors duration-300 data-[state=open]:bg-[#D1E9FF]">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-xl font-semibold">{panel.name}</h2>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="py-4">
+                  <div className="border border-gray-300 rounded-lg overflow-hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-2 bg-white">
+                      {panel.tests.map((test, index) => (
+                        <div
+                          key={test.name}
+                          className={`flex items-center justify-between gap-4 md:gap-10 px-6 py-3 border-b border-gray-300 
               ${index % 2 !== 0 ? "md:border-l border-gray-300" : ""} 
               bg-white hover:bg-gray-50 transition
              ${
@@ -138,22 +156,23 @@ export default function LabResults({ patientId, departmentId, sourceId }) {
                  ? "md:border-r border-gray-300"
                  : ""
              }`}
-                      >
-                        <div className="font-medium text-gray-700">
-                          {test.name}
+                        >
+                          <div className="font-medium text-gray-700">
+                            {test.name}
+                          </div>
+                          <div className="font-semibold text-blue-700">
+                            {test.value}
+                          </div>
                         </div>
-                        <div className="font-semibold text-blue-700">
-                          {test.value}
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      )}
 
       <div className="text-sm text-muted-foreground space-y-1">
         <div className="flex items-center gap-2">
