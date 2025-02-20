@@ -2,11 +2,11 @@ import axios from "axios";
 import { Helper } from "../core-utils/helper";
 
 export const PatientService = {
-  getPatientById: async (id,departmentId="150") => {
+  getPatientById: async (id, departmentId = "150") => {
     try {
       let sourceType = localStorage.getItem("XCALIBER_SOURCE");
       let sourceUrl = Helper.getSourceUrl();
-      console.log(sourceUrl);
+      sourceUrl;
       const response = await axios.get(
         `${sourceUrl}/Patient/${id}?departmentId=${departmentId}`,
         {
