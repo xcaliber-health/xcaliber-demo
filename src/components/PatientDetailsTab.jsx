@@ -104,51 +104,148 @@ const mapFHIRDataToForm = (data) => {
       data.contained?.find((c) => c.resourceType === "RelatedPerson")
         ?.relationship?.[0]?.text || "",
 
-    // 🔹 Primary Insurance
-    primaryInsurerName: data?.entry?.[0]?.resource?.class?.[0]?.name || "N/A",
-    primaryInsurerAddress:
-      data?.policyHolder?.extension
-        ?.find((ext) => ext.url?.includes("insurance-policy-holder-address"))
-        ?.valueAddress?.line?.join(", ") || "N/A",
-    primaryGroupNumber:
-      data?.identifier?.find((id) => id.system?.includes("insurance-id-number"))
-        ?.value || "N/A",
-    primaryPolicyNumber:
-      data?.identifier?.find((id) =>
-        id.system?.includes("insurance-package-id")
-      )?.value || "N/A",
-    primaryInsuredName:
-      data?.policyHolder?.extension
-        ?.find((ext) => ext.url?.includes("policy-holder/name"))
-        ?.valueHumanName?.given?.join(" ") +
-        " " +
-        data?.policyHolder?.extension?.find((ext) =>
-          ext.url?.includes("policy-holder/name")
-        )?.valueHumanName?.family || "N/A",
-    primaryInsuredRelation: data?.relationship?.text || "N/A",
+    // // 🔹 Primary Insurance
+    // primaryInsurerName: data?.entry?.[0]?.resource?.class?.[0]?.name || "N/A",
+    // primaryInsurerAddress:
+    //   data?.policyHolder?.extension
+    //     ?.find((ext) => ext.url?.includes("insurance-policy-holder-address"))
+    //     ?.valueAddress?.line?.join(", ") || "N/A",
+    // primaryGroupNumber:
+    //   data?.identifier?.find((id) => id.system?.includes("insurance-id-number"))
+    //     ?.value || "N/A",
+    // primaryPolicyNumber:
+    //   data?.identifier?.find((id) =>
+    //     id.system?.includes("insurance-package-id")
+    //   )?.value || "N/A",
+    // primaryInsuredName:
+    //   data?.policyHolder?.extension
+    //     ?.find((ext) => ext.url?.includes("policy-holder/name"))
+    //     ?.valueHumanName?.given?.join(" ") +
+    //     " " +
+    //     data?.policyHolder?.extension?.find((ext) =>
+    //       ext.url?.includes("policy-holder/name")
+    //     )?.valueHumanName?.family || "N/A",
+    // primaryInsuredRelation: data?.relationship?.text || "N/A",
 
-    // 🔹 Secondary Insurance
-    secondaryInsurerName: data?.class?.[0]?.name || "N/A",
+    // // 🔹 Secondary Insurance
+    // secondaryInsurerName: data?.class?.[0]?.name || "N/A",
+    // secondaryInsurerAddress:
+    //   data?.policyHolder?.extension
+    //     ?.find((ext) => ext.url?.includes("insurance-policy-holder-address"))
+    //     ?.valueAddress?.line?.join(", ") || "N/A",
+    // secondaryGroupNumber:
+    //   data?.identifier?.find((id) => id.system?.includes("insurance-id-number"))
+    //     ?.value || "N/A",
+    // secondaryPolicyNumber:
+    //   data?.identifier?.find((id) =>
+    //     id.system?.includes("insurance-package-id")
+    //   )?.value || "N/A",
+    // secondaryInsuredName:
+    //   data?.policyHolder?.extension
+    //     ?.find((ext) => ext.url?.includes("policy-holder/name"))
+    //     ?.valueHumanName?.given?.join(" ") +
+    //     " " +
+    //     data?.policyHolder?.extension?.find((ext) =>
+    //       ext.url?.includes("policy-holder/name")
+    //     )?.valueHumanName?.family || "N/A",
+    // secondaryInsuredRelation: data?.relationship?.text || "N/A",
+  };
+};
+
+const mapFHIRInsuranceDataToForm = (insuranceData) => {
+  console.log(insuranceData);
+
+  if (!insuranceData || !insuranceData.data || !insuranceData.data.entry) {
+    return {};
+  }
+
+  const insuranceEntries = insuranceData.data.entry.map(
+    (entry) => entry.resource
+  );
+
+  const getAddress = (extensions) => {
+    const addressExt = extensions?.find(
+      (ext) =>
+        ext.url ===
+        "http://xcaliber-fhir/structureDefinition/insurance-policy-holder-address"
+    );
+    if (addressExt?.valueAddress) {
+      const { line, city, state, country, postalCode } =
+        addressExt.valueAddress;
+      return `${line?.join(
+        ", "
+      )}, ${city}, ${state}, ${country}, ${postalCode}`;
+    }
+    return "N/A";
+  };
+
+  const getSequenceNumber = (extensions) => {
+    const seqExt = extensions?.find(
+      (ext) =>
+        ext.url === "http://xcaliber-fhir/structureDefinition/sequence-number"
+    );
+    return seqExt?.valueInteger || null;
+  };
+
+  let primaryInsurance = null;
+  let secondaryInsurance = null;
+  let availableInsurances = [];
+
+  insuranceEntries.forEach((insurance) => {
+    const sequenceNumber = getSequenceNumber(insurance.extension);
+    if (sequenceNumber === 1) {
+      primaryInsurance = insurance;
+    } else if (sequenceNumber === 2) {
+      secondaryInsurance = insurance;
+    } else {
+      availableInsurances.push(insurance);
+    }
+  });
+
+  if (!primaryInsurance && availableInsurances.length > 0) {
+    primaryInsurance = availableInsurances.shift();
+  }
+
+  if (!secondaryInsurance && availableInsurances.length > 0) {
+    secondaryInsurance = availableInsurances.shift();
+  }
+
+  const mapInsuranceDetails = (insurance) => {
+    if (!insurance) return null;
+
+    return {
+      insurerName: insurance.class?.[0]?.name || "N/A",
+      insurerAddress: getAddress(insurance.policyHolder?.extension),
+      groupNumber:
+        insurance.identifier?.find((id) => id.system === "insurance-package-id")
+          ?.value || "N/A",
+      policyNumber:
+        insurance.identifier?.find((id) => id.system === "insurance-id-number")
+          ?.value || "N/A",
+      insuredName: insurance.policyHolder?.display || "N/A",
+      insuredRelation: insurance.relationship?.text || "N/A",
+    };
+  };
+
+  return {
+    primaryInsurerName: mapInsuranceDetails(primaryInsurance)?.insurerName,
+    primaryInsurerAddress:
+      mapInsuranceDetails(primaryInsurance)?.insurerAddress,
+    primaryGroupNumber: mapInsuranceDetails(primaryInsurance)?.groupNumber,
+    primaryPolicyNumber: mapInsuranceDetails(primaryInsurance)?.policyNumber,
+    primaryInsuredName: mapInsuranceDetails(primaryInsurance)?.insuredName,
+    primaryInsuredRelation:
+      mapInsuranceDetails(primaryInsurance)?.insuredRelation,
+
+    secondaryInsurerName: mapInsuranceDetails(secondaryInsurance)?.insurerName,
     secondaryInsurerAddress:
-      data?.policyHolder?.extension
-        ?.find((ext) => ext.url?.includes("insurance-policy-holder-address"))
-        ?.valueAddress?.line?.join(", ") || "N/A",
-    secondaryGroupNumber:
-      data?.identifier?.find((id) => id.system?.includes("insurance-id-number"))
-        ?.value || "N/A",
+      mapInsuranceDetails(secondaryInsurance)?.insurerAddress,
+    secondaryGroupNumber: mapInsuranceDetails(secondaryInsurance)?.groupNumber,
     secondaryPolicyNumber:
-      data?.identifier?.find((id) =>
-        id.system?.includes("insurance-package-id")
-      )?.value || "N/A",
-    secondaryInsuredName:
-      data?.policyHolder?.extension
-        ?.find((ext) => ext.url?.includes("policy-holder/name"))
-        ?.valueHumanName?.given?.join(" ") +
-        " " +
-        data?.policyHolder?.extension?.find((ext) =>
-          ext.url?.includes("policy-holder/name")
-        )?.valueHumanName?.family || "N/A",
-    secondaryInsuredRelation: data?.relationship?.text || "N/A",
+      mapInsuranceDetails(secondaryInsurance)?.policyNumber,
+    secondaryInsuredName: mapInsuranceDetails(secondaryInsurance)?.insuredName,
+    secondaryInsuredRelation:
+      mapInsuranceDetails(secondaryInsurance)?.insuredRelation,
   };
 };
 
@@ -159,6 +256,25 @@ const uiSchema = {
     acc[key] = { "ui:widget": CustomInput };
     return acc;
   }, {}),
+};
+const uiSchema2 = {
+  "ui:options": { submitButtonOptions: { norender: true } },
+
+  // 🔹 Primary Insurance Fields
+  primaryInsurerName: { "ui:widget": CustomInput },
+  primaryInsurerAddress: { "ui:widget": CustomInput },
+  primaryGroupNumber: { "ui:widget": CustomInput },
+  primaryPolicyNumber: { "ui:widget": CustomInput },
+  primaryInsuredName: { "ui:widget": CustomInput },
+  primaryInsuredRelation: { "ui:widget": CustomInput },
+
+  // 🔹 Secondary Insurance Fields
+  secondaryInsurerName: { "ui:widget": CustomInput },
+  secondaryInsurerAddress: { "ui:widget": CustomInput },
+  secondaryGroupNumber: { "ui:widget": CustomInput },
+  secondaryPolicyNumber: { "ui:widget": CustomInput },
+  secondaryInsuredName: { "ui:widget": CustomInput },
+  secondaryInsuredRelation: { "ui:widget": CustomInput },
 };
 
 export default function PatientDetails({ patientId, departmentId, sourceId }) {
@@ -213,133 +329,190 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[350px_1fr] gap-6 p-4">
-  {/* Left Side Fixed Card (Patient Details) */}
-  <div className="lg:sticky lg:top-4">
-    <Card className="bg-white rounded-lg border shadow-md p-4">
-      <CardHeader>
-        <CardTitle className="text-xl font-bold text-gray-800">
-          PATIENT DETAILS
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <Section
-          title="Patient Information"
-          schema={{
-            patientName: { type: "string", title: "Patient Name" },
-            gender: { type: "string", title: "Gender" },
-            dateOfBirth: { type: "string", title: "Date of Birth" },
-            phone: { type: "string", title: "Phone Number" },
-          }}
-          formData={mapFHIRDataToForm(patientDetails)}
-        />
-        <Section
-          title="Address Information"
-          schema={{
-            address1: { type: "string", title: "Address Line 1" },
-            address2: { type: "string", title: "Address Line 2" },
-            address3: { type: "string", title: "Address Line 3" },
-          }}
-          formData={mapFHIRDataToForm(patientDetails)}
-        />
-      </CardContent>
-    </Card>
-  </div>
+      {/* Left Side Fixed Card (Patient Details) */}
+      <div className="lg:sticky lg:top-4">
+        <Card className="bg-white rounded-lg border shadow-md p-4">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold text-gray-800">
+              PATIENT DETAILS
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <Section
+              title="Patient Information"
+              schema={{
+                patientName: { type: "string", title: "Patient Name" },
+                gender: { type: "string", title: "Gender" },
+                dateOfBirth: { type: "string", title: "Date of Birth" },
+                phone: { type: "string", title: "Phone Number" },
+              }}
+              formData={mapFHIRDataToForm(patientDetails)}
+            />
+            <Section
+              title="Address Information"
+              schema={{
+                address1: { type: "string", title: "Address Line 1" },
+                address2: { type: "string", title: "Address Line 2" },
+                address3: { type: "string", title: "Address Line 3" },
+              }}
+              formData={mapFHIRDataToForm(patientDetails)}
+            />
+          </CardContent>
+        </Card>
+      </div>
 
-  {/* Right Side - Accordions */}
-  <div className="space-y-6 w-full">
-    <Card className="max-w-full bg-[#F8FAFC] rounded-lg border-none shadow-none">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold text-gray-800">
-          DETAILS :
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-8">
-        <div className="space-y-6">
-          <Accordion type="multiple" className="space-y-4">
-            {/* Responsible Party Accordion */}
-            <AccordionItem
-              value="RESPONSIBLE PARTY"
-              className="border rounded-lg shadow-sm"
-            >
-              <AccordionTrigger className="hover:no-underline bg-white py-4 px-6 transition-colors duration-300 data-[state=open]:bg-[#D1E9FF] rounded-md">
-                <h2 className="text-lg font-semibold text-[#0C4A6E]">
-                  RESPONSIBLE PARTY / GUARANTOR
-                </h2>
-              </AccordionTrigger>
-              <AccordionContent className="px-6 py-4 bg-white rounded-md">
-                <Section
-                  schema={{
-                    rpName: { type: "string", title: "Responsible Party Name" },
-                    rpPhone: { type: "string", title: "RP Phone" },
-                    rpRelation: { type: "string", title: "Relation to Patient" },
-                    rpAddress1: { type: "string", title: "RP Address Line 1" },
-                    rpAddress2: { type: "string", title: "RP Address Line 2" },
-                    rpAddress3: { type: "string", title: "RP Address Line 3" },
-                  }}
-                  formData={mapFHIRDataToForm(patientDetails)}
-                />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+      {/* Right Side - Accordions */}
+      <div className="space-y-6 w-full">
+        <Card className="max-w-full bg-[#F8FAFC] rounded-lg border-none shadow-none">
+          <CardContent className="space-y-8">
+            <div className="space-y-6">
+              <Accordion type="multiple" collapsible className="space-y-4">
+                {/* Responsible Party / Guarantor */}
+                <AccordionItem
+                  value="RESPONSIBLE PARTY"
+                  className="border rounded-lg shadow-sm"
+                >
+                  <AccordionTrigger className="hover:no-underline bg-white py-4 px-6 transition-colors duration-300 data-[state=open]:bg-[#D1E9FF] rounded-md">
+                    <h2 className="text-lg font-semibold text-[#0C4A6E]">
+                      RESPONSIBLE PARTY / GUARANTOR
+                    </h2>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-6 py-4 bg-white rounded-md">
+                    <Section
+                      schema={{
+                        rpName: {
+                          type: "string",
+                          title: "Responsible Party Name",
+                        },
+                        rpPhone: { type: "string", title: "RP Phone" },
+                        rpRelation: {
+                          type: "string",
+                          title: "Relation to Patient",
+                        },
+                        rpAddress1: {
+                          type: "string",
+                          title: "RP Address Line 1",
+                        },
+                        rpAddress2: {
+                          type: "string",
+                          title: "RP Address Line 2",
+                        },
+                        rpAddress3: {
+                          type: "string",
+                          title: "RP Address Line 3",
+                        },
+                      }}
+                      formData={mapFHIRDataToForm(patientDetails)}
+                      uiSchema={{
+                        rpName: { "ui:widget": CustomInput },
+                        rpPhone: { "ui:widget": CustomInput },
+                        rpRelation: { "ui:widget": CustomInput },
+                        rpAddress1: { "ui:widget": CustomInput },
+                        rpAddress2: { "ui:widget": CustomInput },
+                        rpAddress3: { "ui:widget": CustomInput },
+                      }}
+                    />
+                  </AccordionContent>
+                </AccordionItem>
 
-          {/* Right Column - Insurance Accordions */}
-          <div className="space-y-6">
-            <Accordion type="multiple" className="space-y-4">
-              {/* Primary Insurance */}
-              <AccordionItem value="PRIMARY INSURANCE" className="border rounded-lg shadow-sm">
-                <AccordionTrigger className="hover:no-underline bg-white py-4 px-6 transition-colors duration-300 data-[state=open]:bg-[#D1E9FF] rounded-md">
-                  <h2 className="text-lg font-semibold text-[#0C4A6E]">
-                    PRIMARY INSURANCE INFORMATION
-                  </h2>
-                </AccordionTrigger>
-                <AccordionContent className="px-6 py-4 bg-white rounded-md">
-                  <Section
-                    schema={{
-                      primaryInsurerName: { type: "string", title: "Primary Insurer Name" },
-                      primaryInsurerAddress: { type: "string", title: "Primary Insurer Address" },
-                      primaryGroupNumber: { type: "string", title: "Primary Group Number" },
-                      primaryPolicyNumber: { type: "string", title: "Primary Policy Number" },
-                      primaryInsuredName: { type: "string", title: "Primary Insured Name" },
-                      primaryInsuredRelation: { type: "string", title: "Insured Relation" },
-                    }}
-                    formData={mapFHIRDataToForm(insuranceDetails)}
-                  />
-                </AccordionContent>
-              </AccordionItem>
+                <AccordionItem
+                  value="PRIMARY INSURANCE"
+                  className="border rounded-lg shadow-sm"
+                >
+                  <AccordionTrigger className="hover:no-underline bg-white py-4 px-6 transition-colors duration-300 data-[state=open]:bg-[#D1E9FF] rounded-md">
+                    <h2 className="text-lg font-semibold text-[#0C4A6E]">
+                      PRIMARY INSURANCE INFORMATION
+                    </h2>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-6 py-4 bg-white rounded-md">
+                    <SectionIns
+                      schema={{
+                        primaryInsurerName: {
+                          type: "string",
+                          title: "Primary Insurer Name",
+                        },
+                        primaryInsurerAddress: {
+                          type: "string",
+                          title: "Primary Insurer Address",
+                        },
+                        primaryGroupNumber: {
+                          type: "string",
+                          title: "Primary Group Number",
+                        },
+                        primaryPolicyNumber: {
+                          type: "string",
+                          title: "Primary Policy Number",
+                        },
+                        primaryInsuredName: {
+                          type: "string",
+                          title: "Primary Insured Name",
+                        },
+                        primaryInsuredRelation: {
+                          type: "string",
+                          title: "Insured Relation",
+                        },
+                      }}
+                      formData={mapFHIRInsuranceDataToForm(insuranceDetails)}
+                      uiSchema={uiSchema2} // ✅ FIXED
+                    />
+                  </AccordionContent>
+                </AccordionItem>
 
-              {/* Secondary Insurance */}
-              <AccordionItem value="SECONDARY INSURANCE" className="border rounded-lg shadow-sm">
-                <AccordionTrigger className="hover:no-underline bg-white py-4 px-6 transition-colors duration-300 data-[state=open]:bg-[#D1E9FF] rounded-md">
-                  <h2 className="text-lg font-semibold text-[#0C4A6E]">
-                    SECONDARY INSURANCE INFORMATION
-                  </h2>
-                </AccordionTrigger>
-                <AccordionContent className="px-6 py-4 bg-white rounded-md">
-                  <Section
-                    schema={{
-                      secondaryInsurerName: { type: "string", title: "Secondary Insurer Name" },
-                      secondaryInsurerAddress: { type: "string", title: "Secondary Insurer Address" },
-                      secondaryGroupNumber: { type: "string", title: "Secondary Group Number" },
-                      secondaryPolicyNumber: { type: "string", title: "Secondary Policy Number" },
-                      secondaryInsuredName: { type: "string", title: "Secondary Insured Name" },
-                      secondaryInsuredRelation: { type: "string", title: "Insured Relation" },
-                    }}
-                    formData={mapFHIRDataToForm(insuranceDetails)}
-                  />
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
-        </div>
-        <Separator />
+                {/* Secondary Insurance */}
+                {/* ✅ Secondary Insurance Accordion */}
+                <AccordionItem
+                  value="SECONDARY INSURANCE"
+                  className="border rounded-lg shadow-sm"
+                >
+                  <AccordionTrigger className="hover:no-underline bg-white py-4 px-6 transition-colors duration-300 data-[state=open]:bg-[#D1E9FF] rounded-md">
+                    <h2 className="text-lg font-semibold text-[#0C4A6E]">
+                      SECONDARY INSURANCE INFORMATION
+                    </h2>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-6 py-4 bg-white rounded-md">
+                    <SectionIns
+                      schema={{
+                        secondaryInsurerName: {
+                          type: "string",
+                          title: "Secondary Insurer Name",
+                        },
+                        secondaryInsurerAddress: {
+                          type: "string",
+                          title: "Secondary Insurer Address",
+                        },
+                        secondaryGroupNumber: {
+                          type: "string",
+                          title: "Secondary Group Number",
+                        },
+                        secondaryPolicyNumber: {
+                          type: "string",
+                          title: "Secondary Policy Number",
+                        },
+                        secondaryInsuredName: {
+                          type: "string",
+                          title: "Secondary Insured Name",
+                        },
+                        secondaryInsuredRelation: {
+                          type: "string",
+                          title: "Insured Relation",
+                        },
+                      }}
+                      formData={mapFHIRInsuranceDataToForm(insuranceDetails)}
+                      uiSchema={uiSchema2} // ✅ Fixed: Explicitly passing correct uiSchema2
+                    />
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
 
-        {/* Recent Vitals */}
-        <RecentVitals vitals={vitalDetails} />
-      </CardContent>
-    </Card>
-  </div>
-</div>
+            <Separator />
 
+            {/* Recent Vitals */}
+            <RecentVitals vitals={vitalDetails} />
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 }
 
@@ -354,6 +527,20 @@ function Section({ title, schema, formData }) {
         schema={{ type: "object", properties: schema }}
         formData={formData}
         uiSchema={uiSchema}
+        validator={validator}
+      />
+    </>
+  );
+}
+function SectionIns({ title, schema, formData }) {
+  return (
+    <>
+      <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+      <Separator />
+      <Form
+        schema={{ type: "object", properties: schema }}
+        formData={formData}
+        uiSchema={uiSchema2} // ✅ FIXED
         validator={validator}
       />
     </>
