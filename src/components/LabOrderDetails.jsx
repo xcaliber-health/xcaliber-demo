@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent } from "./ui/tabs";
-import LabResults from "./lab-results";
+import LabResults from "./LabResults";
 import PatientDetailsTab from "./PatientDetailsTab";
 import LabOrder from "./LabOrder";
 import { Button } from "./ui/button";
@@ -29,7 +29,11 @@ const LabOrderDetails = ({
   return (
     <div className="relative h-full w-full bg-[#F8FAFC]">
       {/* Tabs Content */}
-      <Tabs defaultValue={selectedTab} value={selectedTab} className="h-full w-full">
+      <Tabs
+        defaultValue={selectedTab}
+        value={selectedTab}
+        className="h-full w-full"
+      >
         <TabsContent value="patient-details" className="p-4">
           <PatientDetailsTab
             patientId={patientId}
@@ -49,7 +53,11 @@ const LabOrderDetails = ({
           />
         </TabsContent>
         <TabsContent value="lab-results" className="p-4">
-          {/* <LabResults /> */}
+          <LabResults
+            patientId={patientId}
+            departmentId={departmentId}
+            sourceId={sourceId}
+          />
         </TabsContent>
       </Tabs>
 
@@ -72,7 +80,11 @@ const LabOrderDetails = ({
           {/* Header with Close Button */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-gray-800">Navigation</h2>
-            <Button variant="outline" className="p-1" onClick={() => setIsSidebarOpen(false)}>
+            <Button
+              variant="outline"
+              className="p-1"
+              onClick={() => setIsSidebarOpen(false)}
+            >
               <X className="w-5 h-5 text-gray-700" />
             </Button>
           </div>
@@ -88,7 +100,9 @@ const LabOrderDetails = ({
               onClick={() => handleTabChange("patient-details")}
             >
               <ClipboardList className="w-6 h-6 text-blue-500" />
-              <p className="text-md font-medium text-gray-800">Patient Details</p>
+              <p className="text-md font-medium text-gray-800">
+                Patient Details
+              </p>
             </Card>
 
             <Card

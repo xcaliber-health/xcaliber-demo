@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import SmartOnFhir from "./pages/SmartOnFhir";
-import FhirApp from "./pages/FhirApp";
+import SmartOnFhir from "../pages/SmartOnFhir";
+import FhirApp from "../pages/FhirApp";
 
 function App() {
   return (
