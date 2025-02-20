@@ -5,7 +5,7 @@ const FhirApp = (props) => {
   const [code, setCode] = useState(null);
   const [patient, setPatientId] = useState(null);
   const [encounter, setEncounterId] = useState(null);
-  const [sourceId ,setSourceId] = useState(null);
+  const [sourceId, setSourceId] = useState(null);
   const [departmentId, setDepartmentId] = useState(null);
 
   useEffect(() => {
@@ -52,7 +52,8 @@ const FhirApp = (props) => {
       });
 
       const data = await response.json();
-      const { patientId, encounterId, sourceId, departmentId} = extractIds(data);
+      const { patientId, encounterId, sourceId, departmentId } =
+        extractIds(data);
       setPatientId(patientId);
       setEncounterId(encounterId);
       setSourceId(sourceId);

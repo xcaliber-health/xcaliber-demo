@@ -1,265 +1,171 @@
-import { Badge } from "lucide-react";
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { Tabs, TabsContent } from "./ui/tabs";
+import LabResults from "./LabResults";
+import PatientDetailsTab from "./PatientDetailsTab";
+import LabOrder from "./LabOrder";
 import { Button } from "./ui/button";
+import { Sheet, SheetTrigger, SheetContent } from "./ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogHeader,
+} from "./ui/dialog";
+import { Menu, X, FileText, HeartPulse } from "lucide-react";
 import { Card } from "./ui/card";
-import { Label } from "./ui/label";
-import { Combobox } from "./ui/combobox";
-import { ReferenceDataService } from "../services/referenceDataService";
-import { ProblemService } from "../services/problemService";
-import { LabOrderService } from "../services/labOrderService";
 
-export default function LabOrderForm({
-  patientId,
-  departmentId,
-  encounterId,
+const LabOrderDetails = ({
+  patientId = 4406,
+  encounterId = 46318,
   sourceId,
+  departmentId,
   practitionerId,
   practiceId,
-}) {
-  const [formData, setFormData] = useState({
-    collectionDate: "",
-    collectionTime: "",
-    approvingProvider: "Ach, Chip",
-    orderingProvider: "Ach, Chip",
-    npi1: "",
-    npi2: "",
-    accountName: "",
-    address: "",
-    phone: "",
-    noteToLab: "",
-    internalNote: "",
-    stat: false,
-    standingOrder: false,
-    publishResults: false,
-    reference: "",
-    problem: "", // ✅ Stores selected problem
-    encounterDiagnosis: "", // ✅ Stores selected encounter diagnosis
-  });
+}) => {
+  const [selectedTab, setSelectedTab] = useState("patient-details");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [openLabOrderModal, setOpenLabOrderModal] = useState(false);
+  const [openLabResultsModal, setOpenLabResultsModal] = useState(false);
 
-  const [referenceOptions, setReferenceOptions] = useState([]);
-  const [problemOptions, setProblemOptions] = useState([]);
-  const [encounterDiagnosisOptions, setEncounterDiagnosisOptions] = useState([]); // ✅ New state for encounter diagnosis
-
-  // ✅ Fetch Reference Data
-  const fetchReferenceData = async () => {
-    try {
-      const response = await ReferenceDataService.getReferenceData(practiceId, sourceId);
-      console.log("Reference Data Response:", response);
-
-      if (response?.data?.result && Array.isArray(response.data.result)) {
-        setReferenceOptions(response.data.result);
-      } else {
-        console.warn("API Response did not contain 'result' array.");
-        setReferenceOptions([]);
-      }
-    } catch (error) {
-      console.error("Error fetching reference data:", error);
-      setReferenceOptions([]);
-    }
-  };
-
-  // ✅ Fetch Problem Data (Ensure Unique Keys)
-  const fetchProblemData = async () => {
-    try {
-      const response = await ProblemService.getProblems(patientId, "problem-list-item", departmentId, sourceId);
-      console.log("Problem Data Response:", response);
-
-      if (response && Array.isArray(response)) {
-        const formattedProblems = response
-          .map((item) => {
-            if (item.resource?.code?.coding?.length > 0) {
-              return {
-                value: `${item.resource.code.coding[0].code}-${item.resource.id}`, // ✅ Ensure uniqueness
-                label: item.resource.code.coding[0].display || "Unknown Problem",
-              };
-            }
-            return null;
-          })
-          .filter(Boolean); // Remove null values if any
-
-        console.log("Formatted Problem Options:", formattedProblems); // 🔍 Debug Log
-        setProblemOptions(formattedProblems);
-      } else {
-        console.warn("API Response did not contain expected structure.");
-        setProblemOptions([]);
-      }
-    } catch (error) {
-      console.error("Error fetching problem data:", error);
-      setProblemOptions([]);
-    }
-  };
-
-  // ✅ Fetch Encounter Diagnosis Data (Ensure Unique Keys)
-  const fetchEncounterDiagnosisData = async () => {
-    try {
-      const response = await ProblemService.getDiagnosis(patientId, departmentId, sourceId, encounterId, practiceId);
-      console.log("Encounter Diagnosis Data Response:", response);
-
-      if (response && Array.isArray(response)) {
-        const formattedDiagnoses = response
-          .map((item) => {
-            if (item.resource?.code?.coding?.length > 0) {
-              return {
-                value: `${item.resource.code.coding[0].code}-${item.resource.id}`, // ✅ Ensure uniqueness
-                label: item.resource.code.coding[0].display || "Unknown Diagnosis",
-              };
-            }
-            return null;
-          })
-          .filter(Boolean); // Remove null values if any
-
-        console.log("Formatted Encounter Diagnosis Options:", formattedDiagnoses); // 🔍 Debug Log
-        setEncounterDiagnosisOptions(formattedDiagnoses);
-      } else {
-        console.warn("API Response did not contain expected structure.");
-        setEncounterDiagnosisOptions([]);
-      }
-    } catch (error) {
-      console.error("Error fetching encounter diagnosis data:", error);
-      setEncounterDiagnosisOptions([]);
-    }
-  };
-
-  // ✅ useEffect for Reference Data
-  useEffect(() => {
-    if (practiceId && sourceId) {
-      fetchReferenceData();
-    }
-  }, [practiceId, sourceId]);
-
-  // ✅ useEffect for Problem Data
-  useEffect(() => {
-    if (patientId && sourceId) {
-      fetchProblemData();
-    }
-  }, [patientId, sourceId]);
-
-  // ✅ useEffect for Encounter Diagnosis Data
-  useEffect(() => {
-    if (patientId && sourceId) {
-      fetchEncounterDiagnosisData();
-    }
-  }, [patientId, sourceId]);
-
-  // ✅ Handles form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const payload = {
-      context: { departmentId: departmentId },
-      data: {
-        resourceType: "ServiceRequest",
-        encounter: { reference: `Encounter/${encounterId}` },
-        subject: { reference: `Patient/${patientId}` },
-        contained: [],
-        category: [
-          {
-            coding: [
-              {
-                system: "http://hl7.org/fhir/ValueSet/servicerequest-category",
-                code: "108252007",
-                display: "Lab",
-              },
-            ],
-          },
-          {
-            coding: [
-              {
-                code: 342223,
-                display: "Lab",
-                system: "ATHENA",
-              },
-            ],
-            text: "CMP, serum or plasma",
-          },
-        ],
-        reasonCode: [
-          {
-            coding: [
-              {
-                system: "http://snomed.info/sct",
-                code: formData.problem,
-                display: problemOptions.find((p) => p.value === formData.problem)?.label || "Unknown",
-              },
-            ],
-          },
-          {
-            coding: [
-              {
-                system: "http://snomed.info/sct",
-                code: formData.encounterDiagnosis,
-                display: encounterDiagnosisOptions.find((d) => d.value === formData.encounterDiagnosis)?.label || "Unknown",
-              },
-            ],
-          },
-        ],
-        priority: formData.stat ? "urgent" : "routine",
-        authoredOn: new Date().toISOString(),
-        requester: { reference: `Practitioner/${practitionerId}` },
-        performer: [{ reference: "Organization/10848074", display: "CVS/Pharmacy #5590" }],
-        status: "REVIEW",
-      },
-    };
-
-    try {
-      const response = await LabOrderService.createLabOrder(payload, sourceId);
-      console.log("Create Lab Order Response:", response);
-      alert("Form submitted successfully!");
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("Error submitting form");
-    }
-  };
+  if (!patientId) return <></>;
 
   return (
-    <Card className="p-6">
-      <form onSubmit={handleSubmit}>
-        <div className="flex justify-between mb-8">
-          <h1 className="text-2xl font-bold">LAB ORDER DETAILS</h1>
-        </div>
-
-        {/* Reference Dropdown */}
-        <div>
-          <Label>Select Order Type</Label>
-          <Combobox
-            label="Select a reference"
-            options={referenceOptions.map((option) => ({
-              value: option.ordertypeid.toString(),
-              label: option.name,
-            }))}
-            value={formData.reference}
-            onChange={(value) => setFormData((prev) => ({ ...prev, reference: value }))}
+    <div className="relative h-full w-full bg-[#F8FAFC]">
+      {/* Patient Details as Main Content */}
+      <Tabs
+        defaultValue={selectedTab}
+        value={selectedTab}
+        className="h-full w-full"
+      >
+        <TabsContent value="patient-details" className="p-4">
+          <PatientDetailsTab
+            patientId={patientId}
+            departmentId={departmentId}
+            sourceId={sourceId}
           />
-        </div>
+        </TabsContent>
+      </Tabs>
 
-        {/* ✅ Problem Selection Dropdown */}
-        <div className="mt-4">
-          <Label>Select Problem</Label>
-          <Combobox
-            label="Select a problem"
-            options={problemOptions}
-            value={formData.problem}
-            onChange={(value) => setFormData((prev) => ({ ...prev, problem: value }))}
-          />
-        </div>
-
-        {/* ✅ Encounter Diagnosis Selection Dropdown */}
-        <div className="mt-4">
-          <Label>Select Encounter Diagnosis</Label>
-          <Combobox
-            label="Select a diagnosis"
-            options={encounterDiagnosisOptions}
-            value={formData.encounterDiagnosis}
-            onChange={(value) => setFormData((prev) => ({ ...prev, encounterDiagnosis: value }))}
-          />
-        </div>
-
-        <div className="flex justify-end gap-4 mt-6">
-          <Button variant="outline" type="submit">
-            SUBMIT ORDER
+      {/* Sidebar Button */}
+      <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+        <SheetTrigger asChild>
+          <Button
+            variant="outline"
+            className="fixed top-4 right-4 z-50 bg-white border-gray-300 shadow-md hover:bg-gray-100 p-2 rounded-full"
+          >
+            <Menu className="w-6 h-6 text-gray-700" />
           </Button>
-        </div>
-      </form>
-    </Card>
+        </SheetTrigger>
+
+        {/* Sidebar Content */}
+        <SheetContent
+          side="right"
+          className="w-72 p-6 bg-white shadow-lg overflow-y-auto rounded-l-2xl"
+        >
+          {/* Header with Close Button */}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-gray-800">Navigation</h2>
+            <Button
+              variant="outline"
+              className="p-1"
+              onClick={() => setIsSidebarOpen(false)}
+            >
+              <X className="w-5 h-5 text-gray-700" />
+            </Button>
+          </div>
+
+          {/* Navigation Items */}
+          <div className="space-y-4">
+            {/* Lab Order Button */}
+            <Dialog
+              open={openLabOrderModal}
+              onOpenChange={setOpenLabOrderModal}
+            >
+              <DialogTrigger asChild>
+                <Card
+                  className="w-full h-16 flex items-center gap-4 justify-center rounded-lg cursor-pointer transition-all duration-300 hover:bg-gray-100 border-gray-200 px-4"
+                  onClick={() => setOpenLabOrderModal(true)}
+                >
+                  <FileText className="w-6 h-6 text-blue-500" />
+                  <p className="text-md font-medium text-gray-800">Lab Order</p>
+                </Card>
+              </DialogTrigger>
+              <DialogContent className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl h-[90vh] bg-white shadow-lg rounded-lg flex flex-col">
+                {/* ✅ Removed extra border line */}
+                <div className="flex items-center justify-between px-4 pt-4">
+                  <h2 className="text-xl font-semibold text-gray-800">
+                    Lab Order
+                  </h2>
+                  <Button
+                    variant="outline"
+                    className="p-2"
+                    onClick={() => setOpenLabOrderModal(false)}
+                  >
+                    <X className="w-5 h-5 text-gray-700" />
+                  </Button>
+                </div>
+
+                {/* Modal Content */}
+                <div className="flex-1 overflow-y-auto p-4">
+                  <LabOrder
+                    patientId={patientId}
+                    categoryCode="108252007"
+                    departmentId={departmentId}
+                    encounterId={encounterId}
+                    sourceId={sourceId}
+                    practitionerId={practitionerId}
+                    practiceId={practiceId}
+                  />
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            {/* Lab Results Button */}
+            <Dialog
+              open={openLabResultsModal}
+              onOpenChange={setOpenLabResultsModal}
+            >
+              <DialogTrigger asChild>
+                <Card
+                  className="w-full h-16 flex items-center gap-4 justify-center rounded-lg cursor-pointer transition-all duration-300 hover:bg-gray-100 border-gray-200 px-4"
+                  onClick={() => setOpenLabResultsModal(true)}
+                >
+                  <HeartPulse className="w-6 h-6 text-blue-500" />
+                  <p className="text-md font-medium text-gray-800">
+                    Lab Results
+                  </p>
+                </Card>
+              </DialogTrigger>
+              <DialogContent className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl h-[90vh] bg-white shadow-lg rounded-lg flex flex-col">
+                {/* ✅ Removed extra border line */}
+                <div className="flex items-center justify-between px-4 pt-4">
+                  <h2 className="text-xl font-semibold text-gray-800">
+                    Lab Results
+                  </h2>
+                  <Button
+                    variant="outline"
+                    className="p-2"
+                    onClick={() => setOpenLabResultsModal(false)}
+                  >
+                    <X className="w-5 h-5 text-gray-700" />
+                  </Button>
+                </div>
+
+                {/* Modal Content */}
+                <div className="flex-1 overflow-y-auto p-4">
+                  <LabResults
+                    patientId={patientId}
+                    departmentId={departmentId}
+                    sourceId={sourceId}
+                  />
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </SheetContent>
+      </Sheet>
+    </div>
   );
-}
+};
+
+export default LabOrderDetails;
