@@ -7,7 +7,7 @@ import { Combobox } from "./ui/combobox";
 import { ReferenceDataService } from "../services/referenceDataService";
 import { ProblemService } from "../services/problemService";
 import { LabOrderService } from "../services/labOrderService";
-
+import { PractitionerService } from "../services/practitionerService";
 export default function LabOrderForm({
   patientId,
   departmentId,
@@ -32,18 +32,25 @@ export default function LabOrderForm({
     standingOrder: false,
     publishResults: false,
     reference: "",
-    problem: "", // ✅ Stores selected problem
-    encounterDiagnosis: "", // ✅ Stores selected encounter diagnosis
+    problem: "",
+    encounterDiagnosis: "",
+    zip: "",
   });
 
   const [referenceOptions, setReferenceOptions] = useState([]);
   const [problemOptions, setProblemOptions] = useState([]);
-  const [encounterDiagnosisOptions, setEncounterDiagnosisOptions] = useState([]); // ✅ New state for encounter diagnosis
+  const [encounterDiagnosisOptions, setEncounterDiagnosisOptions] = useState(
+    []
+  );
+  const [practitioners, setPractitioners] = useState([]);
 
   // ✅ Fetch Reference Data
   const fetchReferenceData = async () => {
     try {
-      const response = await ReferenceDataService.getReferenceData(practiceId, sourceId);
+      const response = await ReferenceDataService.getReferenceData(
+        practiceId,
+        sourceId
+      );
       console.log("Reference Data Response:", response);
 
       if (response?.data?.result && Array.isArray(response.data.result)) {
@@ -58,67 +65,78 @@ export default function LabOrderForm({
     }
   };
 
-  // ✅ Fetch Problem Data (Ensure Unique Keys)
-  const fetchProblemData = async () => {
-    try {
-      const response = await ProblemService.getProblems(patientId, "problem-list-item", departmentId, sourceId);
-      console.log("Problem Data Response:", response);
 
-      if (response && Array.isArray(response)) {
-        const formattedProblems = response
-          .map((item) => {
-            if (item.resource?.code?.coding?.length > 0) {
-              return {
-                value: `${item.resource.code.coding[0].code}-${item.resource.id}`, // ✅ Ensure uniqueness
-                label: item.resource.code.coding[0].display || "Unknown Problem",
-              };
-            }
-            return null;
-          })
-          .filter(Boolean); // Remove null values if any
+  // ✅ Combine Problems & Encounter Diagnosis in a Single Dropdown
+  const [diagnosisOptions, setDiagnosisOptions] = useState([]);
 
-        console.log("Formatted Problem Options:", formattedProblems); // 🔍 Debug Log
-        setProblemOptions(formattedProblems);
-      } else {
-        console.warn("API Response did not contain expected structure.");
-        setProblemOptions([]);
+  // ✅ Fetch & Merge Problems + Encounter Diagnoses
+  useEffect(() => {
+    const fetchDiagnosisData = async () => {
+      try {
+        const problems = await ProblemService.getProblems(
+          patientId,
+          "problem-list-item",
+          departmentId,
+          sourceId
+        );
+        const diagnoses = await ProblemService.getDiagnosis(
+          patientId,
+          departmentId,
+          sourceId,
+          encounterId,
+          practiceId
+        );
+
+        // ✅ Format & Merge Problems & Diagnoses
+        const formattedProblems =
+          problems?.map((item) => ({
+            value: `${item.resource.code.coding[0].code}-${item.resource.id}`,
+            label: `Problem: ${item.resource.code.coding[0].display}`,
+          })) || [];
+
+        const formattedDiagnoses =
+          diagnoses?.map((item) => ({
+            value: `${item.resource.code.coding[0].code}-${item.resource.id}`,
+            label: `Diagnosis: ${item.resource.code.coding[0].display}`,
+          })) || [];
+
+        setDiagnosisOptions([...formattedProblems, ...formattedDiagnoses]);
+      } catch (error) {
+        console.error("Error fetching diagnosis data:", error);
+        setDiagnosisOptions([]);
       }
-    } catch (error) {
-      console.error("Error fetching problem data:", error);
-      setProblemOptions([]);
+    };
+
+    if (patientId && sourceId) {
+      fetchDiagnosisData();
     }
-  };
+  }, [patientId, sourceId, departmentId, encounterId, practiceId]);
 
-  // ✅ Fetch Encounter Diagnosis Data (Ensure Unique Keys)
-  const fetchEncounterDiagnosisData = async () => {
-    try {
-      const response = await ProblemService.getDiagnosis(patientId, departmentId, sourceId, encounterId, practiceId);
-      console.log("Encounter Diagnosis Data Response:", response);
+  // ✅ Fetch Practitioners based on Zipcode
+  useEffect(() => {
+    if (formData.zip && practiceId) {
+      const fetchPractitioners = async () => {
+        try {
+          console.log("Fetching practitioners with zip:", formData.zip); // Debugging log
 
-      if (response && Array.isArray(response)) {
-        const formattedDiagnoses = response
-          .map((item) => {
-            if (item.resource?.code?.coding?.length > 0) {
-              return {
-                value: `${item.resource.code.coding[0].code}-${item.resource.id}`, // ✅ Ensure uniqueness
-                label: item.resource.code.coding[0].display || "Unknown Diagnosis",
-              };
-            }
-            return null;
-          })
-          .filter(Boolean); // Remove null values if any
+          const response = await PractitionerService.getPractitioners(
+            "clinical-provider",
+            "roc",
+            formData.zip, // Ensure this is correct
+            practiceId,
+            sourceId
+          );
 
-        console.log("Formatted Encounter Diagnosis Options:", formattedDiagnoses); // 🔍 Debug Log
-        setEncounterDiagnosisOptions(formattedDiagnoses);
-      } else {
-        console.warn("API Response did not contain expected structure.");
-        setEncounterDiagnosisOptions([]);
-      }
-    } catch (error) {
-      console.error("Error fetching encounter diagnosis data:", error);
-      setEncounterDiagnosisOptions([]);
+          console.log("Fetched Practitioners:", response);
+          setPractitioners(response || []);
+        } catch (error) {
+          console.error("Error fetching practitioners:", error);
+          setPractitioners([]);
+        }
+      };
+      fetchPractitioners();
     }
-  };
+  }, [formData.zip, practiceId, sourceId]);
 
   // ✅ useEffect for Reference Data
   useEffect(() => {
@@ -127,19 +145,6 @@ export default function LabOrderForm({
     }
   }, [practiceId, sourceId]);
 
-  // ✅ useEffect for Problem Data
-  useEffect(() => {
-    if (patientId && sourceId) {
-      fetchProblemData();
-    }
-  }, [patientId, sourceId]);
-
-  // ✅ useEffect for Encounter Diagnosis Data
-  useEffect(() => {
-    if (patientId && sourceId) {
-      fetchEncounterDiagnosisData();
-    }
-  }, [patientId, sourceId]);
 
   // ✅ Handles form submission
   const handleSubmit = async (e) => {
@@ -163,14 +168,14 @@ export default function LabOrderForm({
             ],
           },
           {
+            text: "CMP, serum or plasma",
             coding: [
               {
+                system: "ATHENA",
                 code: 342223,
                 display: "Lab",
-                system: "ATHENA",
               },
             ],
-            text: "CMP, serum or plasma",
           },
         ],
         reasonCode: [
@@ -178,8 +183,10 @@ export default function LabOrderForm({
             coding: [
               {
                 system: "http://snomed.info/sct",
-                code: formData.problem,
-                display: problemOptions.find((p) => p.value === formData.problem)?.label || "Unknown",
+                code: parseInt(formData.problem), // ✅ Ensuring it's an integer.
+                display:
+                  problemOptions.find((p) => p.value === formData.problem)
+                    ?.label || "Unknown",
               },
             ],
           },
@@ -187,8 +194,11 @@ export default function LabOrderForm({
             coding: [
               {
                 system: "http://snomed.info/sct",
-                code: formData.encounterDiagnosis,
-                display: encounterDiagnosisOptions.find((d) => d.value === formData.encounterDiagnosis)?.label || "Unknown",
+                code: parseInt(formData.encounterDiagnosis), // ✅ Ensuring it's an integer.
+                display:
+                  encounterDiagnosisOptions.find(
+                    (d) => d.value === formData.encounterDiagnosis
+                  )?.label || "Unknown",
               },
             ],
           },
@@ -196,7 +206,9 @@ export default function LabOrderForm({
         priority: formData.stat ? "urgent" : "routine",
         authoredOn: new Date().toISOString(),
         requester: { reference: `Practitioner/${practitionerId}` },
-        performer: [{ reference: "Organization/10848074", display: "CVS/Pharmacy #5590" }],
+        performer: [
+          { reference: "Organization/10848074", display: "CVS/Pharmacy #5590" },
+        ],
         status: "REVIEW",
       },
     };
@@ -210,14 +222,53 @@ export default function LabOrderForm({
       alert("Error submitting form");
     }
   };
-
+  // ✅ Handles form input changes
+  const handleInputChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
   return (
-    <Card className="p-6">
+    <div className="p-6">
       <form onSubmit={handleSubmit}>
         <div className="flex justify-between mb-8">
           <h1 className="text-2xl font-bold">LAB ORDER DETAILS</h1>
         </div>
-
+         {/* Zipcode Input */}
+         <div className="mt-4">
+          <Label>Enter Zip Code</Label>
+          <input
+            type="text"
+            name="zip"
+            value={formData.zip}
+            onChange={handleInputChange}
+            placeholder="Enter Zip Code"
+            className="border px-4 py-2 w-full rounded-md"
+          />
+        </div>
+        {/* Practitioners Dropdown */}
+        <div className="mt-4">
+          <Label>Select Practitioner</Label>
+          {practitioners.length === 0 && !formData.zip ? (
+            // ✅ Show a disabled input field with the text instead of the dropdown
+            <input
+              type="text"
+              value="Enter a ZIP to see Practitioners"
+              disabled
+              className="border px-4 py-2 w-full rounded-md bg-gray-100 text-gray-500 cursor-not-allowed"
+            />
+          ) : (
+            <Combobox
+              label="Select a Practitioner"
+              options={practitioners.map((p) => ({
+                value: p.resource.id,
+                label: p.resource.name?.[0]?.text || "Unknown Practitioner",
+              }))}
+              value={formData.orderingProvider}
+              onChange={(value) =>
+                setFormData((prev) => ({ ...prev, orderingProvider: value }))
+              }
+            />
+          )}
+        </div>
         {/* Reference Dropdown */}
         <div>
           <Label>Select Order Type</Label>
@@ -228,38 +279,30 @@ export default function LabOrderForm({
               label: option.name,
             }))}
             value={formData.reference}
-            onChange={(value) => setFormData((prev) => ({ ...prev, reference: value }))}
+            onChange={(value) =>
+              setFormData((prev) => ({ ...prev, reference: value }))
+            }
           />
         </div>
-
-        {/* ✅ Problem Selection Dropdown */}
+        
         <div className="mt-4">
-          <Label>Select Problem</Label>
+          <Label>Select Problem or Diagnosis</Label>
           <Combobox
-            label="Select a problem"
-            options={problemOptions}
+            label="Select a problem or diagnosis"
+            options={diagnosisOptions}
             value={formData.problem}
-            onChange={(value) => setFormData((prev) => ({ ...prev, problem: value }))}
+            onChange={(value) =>
+              setFormData((prev) => ({ ...prev, problem: value }))
+            }
           />
         </div>
-
-        {/* ✅ Encounter Diagnosis Selection Dropdown */}
-        <div className="mt-4">
-          <Label>Select Encounter Diagnosis</Label>
-          <Combobox
-            label="Select a diagnosis"
-            options={encounterDiagnosisOptions}
-            value={formData.encounterDiagnosis}
-            onChange={(value) => setFormData((prev) => ({ ...prev, encounterDiagnosis: value }))}
-          />
-        </div>
-
+       
         <div className="flex justify-end gap-4 mt-6">
           <Button variant="outline" type="submit">
             SUBMIT ORDER
           </Button>
         </div>
       </form>
-    </Card>
+    </div>
   );
 }
