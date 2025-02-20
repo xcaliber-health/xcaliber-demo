@@ -86,7 +86,19 @@ export default function LabResults({ patientId, departmentId, sourceId }) {
           }
         });
 
-        setLabData([...latestReportsMap.values()]);
+        const sortedPanels = [...latestReportsMap.values()].sort((a, b) => {
+          const createdA = a.tests.find(
+            (test) => test.name === "Createddatetime"
+          )?.value;
+          const createdB = b.tests.find(
+            (test) => test.name === "Createddatetime"
+          )?.value;
+
+          return new Date(createdB) - new Date(createdA);
+        });
+
+        latestReportsMap;
+        setLabData(sortedPanels);
       } catch (error) {
         console.error("Error fetching diagnostic report:", error);
       } finally {
@@ -130,25 +142,33 @@ export default function LabResults({ patientId, departmentId, sourceId }) {
         </div>
       ) : (
         <Accordion type="multiple" className="space-y-4">
-          {labData.map((panel) => (
-            <AccordionItem
-              key={panel.name}
-              value={panel.name}
-              className="border rounded-lg"
-            >
-              <AccordionTrigger className="hover:no-underline bg-white px-6 rounded-lg transition-colors duration-300 data-[state=open]:bg-[#D1E9FF]">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-xl font-semibold">{panel.name}</h2>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="py-4">
-                  <div className="border border-gray-300 rounded-lg overflow-hidden">
-                    <div className="grid grid-cols-1 md:grid-cols-2 bg-white">
-                      {panel.tests.map((test, index) => (
-                        <div
-                          key={test.name}
-                          className={`flex items-center justify-between gap-4 md:gap-10 px-6 py-3 border-b border-gray-300 
+          {labData.map((panel) => {
+            const createdDateTime = panel.tests.find(
+              (test) => test.name === "Createddatetime"
+            )?.value;
+
+            return (
+              <AccordionItem
+                key={panel.name}
+                value={panel.name}
+                className="border rounded-lg"
+              >
+                <AccordionTrigger className="hover:no-underline bg-white px-6 rounded-lg transition-colors duration-300 data-[state=open]:bg-[#D1E9FF]">
+                  <div className="flex flex-col gap-2 justify-center w-full">
+                    <h2 className="text-xl font-semibold">{panel.name}</h2>
+                    <span className="text-sm text-gray-500">
+                      Created: {formatDateTime(createdDateTime)}
+                    </span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="pb-0 border-none">
+                  <div className="pt-2">
+                    <div className="border border-gray-300 rounded-lg overflow-hidden">
+                      <div className="grid grid-cols-1 md:grid-cols-2 bg-white">
+                        {panel.tests.map((test, index) => (
+                          <div
+                            key={test.name}
+                            className={`flex items-center justify-between gap-4 md:gap-10 px-6 py-3 border-b border-gray-300 
               ${index % 2 !== 0 ? "md:border-l border-gray-300" : ""} 
               bg-white hover:bg-gray-50 transition
              ${
@@ -156,21 +176,22 @@ export default function LabResults({ patientId, departmentId, sourceId }) {
                  ? "md:border-r border-gray-300"
                  : ""
              }`}
-                        >
-                          <div className="font-medium text-gray-700">
-                            {test.name}
+                          >
+                            <div className="font-medium text-gray-700">
+                              {test.name}
+                            </div>
+                            <div className="font-semibold text-blue-700">
+                              {test.value}
+                            </div>
                           </div>
-                          <div className="font-semibold text-blue-700">
-                            {test.value}
-                          </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          ))}
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
         </Accordion>
       )}
 
