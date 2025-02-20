@@ -3,8 +3,6 @@ import { Helper } from "../core-utils/helper";
 
 export const ReferenceDataService = {
   getReferenceData: async (practiceId, sourceId) => {
-    console.log("first", sourceId)
-    console.log("second", practiceId)
     try {
       let sourceUrl = Helper.getSourceUrl();
       const response = await axios.get(

@@ -35,7 +35,6 @@ const CustomInput = ({ id, value }) => (
 
 // ✅ Map API Data to Form Structure
 const mapFHIRDataToForm = (data) => {
-  // console.log(data)
   if (!data) return {};
 
   return {
@@ -153,8 +152,6 @@ const mapFHIRDataToForm = (data) => {
 };
 
 const mapFHIRInsuranceDataToForm = (insuranceData) => {
-  console.log(insuranceData);
-
   if (!insuranceData || !insuranceData.data || !insuranceData.data.entry) {
     return {};
   }
@@ -289,7 +286,6 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
     const getPatientDetails = async () => {
       try {
         const response = await PatientService.getPatientById(id);
-        console.log("Fetched Patient Data:", response); // ✅ Debugging log
         setPatientDetails(response);
       } catch (error) {
         console.error("Error fetching patient data:", error);
@@ -303,7 +299,6 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
           departmentId,
           sourceId
         );
-        console.log("Fetched Insurance:", insuranceDetails);
         setInsuranceDetails(response);
       } catch (error) {
         console.error("Error fetching Insurance data:", error);
@@ -313,7 +308,6 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
     const fetchVitalsData = async () => {
       try {
         const response = await fetchVitals(id, sourceId, departmentId);
-        console.log("Fetched Vitals:", response);
         setVitalDetails(response);
       } catch (error) {
         console.error("Error fetching vitals data:", error);
@@ -339,7 +333,6 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
           </CardHeader>
           <CardContent className="space-y-6">
             <Section
-              title="Patient Information"
               schema={{
                 patientName: { type: "string", title: "Patient Name" },
                 gender: { type: "string", title: "Gender" },
@@ -518,11 +511,14 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
 
 // ✅ Reusable Form Section Component
 function Section({ title, schema, formData }) {
-  console.log(formData);
   return (
     <>
-      <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-      <Separator />
+      {title && (
+        <>
+          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+          <Separator />
+        </>
+      )}
       <Form
         schema={{ type: "object", properties: schema }}
         formData={formData}
@@ -548,14 +544,21 @@ function SectionIns({ title, schema, formData }) {
 }
 
 function VitalCard({ icon: Icon, label, value, color }) {
+  const formattedLabel = label
+    .replace(/^vitals\./i, "")
+    .split(".")
+    .join(" ");
+
   return (
     <Card>
-      <CardContent className="pt-6 h-full bg-white rounded-lg">
-        <div className="flex items-center gap-2">
+      <CardContent className="p-4 h-full bg-white rounded-lg">
+        <div className="flex items-center gap-2 w-full">
           <Icon className={`w-5 h-5 ${color}`} />
-          <div>
-            <p className="text-sm text-muted-foreground">{label}</p>
-            <p className="text-xl font-semibold">{value || "N/A"}</p>
+          <div className="flex flex-col gap-1 w-full">
+            <p className="text-sm text-muted-foreground break-words">
+              {formattedLabel}
+            </p>
+            <p className="text-xl font-semibold truncate">{value || "N/A"}</p>
           </div>
         </div>
       </CardContent>

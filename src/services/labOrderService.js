@@ -22,7 +22,7 @@ export const LabOrderService = {
   },
 
   createLabOrder: async (payload, sourceId) => {
-    console.log(sourceId)
+    sourceId;
     try {
       let sourceUrl = Helper.getSourceUrl();
       const response = await axios.post(

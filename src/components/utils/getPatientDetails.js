@@ -195,7 +195,6 @@ export const getPractitionerData = () => {
   return axios
     .get(`${sourceUrl}/Practitioner`, configHeaders)
     .then((response) => {
-      // console.log("Practitioner Data:", response.data);
       return response.data;
     })
     .catch((error) => {
@@ -235,8 +234,6 @@ export const tableObjDeparser = (data, type) => {
 };
 
 export const deParsefunc = (item) => {
-  console.log("first", item);
-
   const finalDate = item.dateOfBirth || "";
 
   // Function to format phone numbers
