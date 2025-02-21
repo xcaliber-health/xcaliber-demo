@@ -7,7 +7,9 @@ const FhirApp = (props) => {
   const [encounter, setEncounterId] = useState(null);
   const [sourceId, setSourceId] = useState(null);
   const [departmentId, setDepartmentId] = useState(null);
-
+  const [practitionerId, setPractitionerId] = useState(null);
+  const [practiceId, setPracticeId] = useState(null);
+  
   useEffect(() => {
     setCode(new URLSearchParams(window.location.search).get("code"));
   }, []); // ✅ Runs exactly once
@@ -21,12 +23,15 @@ const FhirApp = (props) => {
     }
   }, [code]);
 
+
+
   function extractIds(data) {
     return {
       patientId: data.patient.split(".")[1].split("-")[1],
       encounterId: data.encounter?.split(".")[1]?.split("-")[1] || null,
       practiceId: data.ah_practice?.split(".")[1]?.split("-")[1] || null,
       departmentId: data.ah_department?.split(".")[1]?.split("-")[1] || null,
+      practitionerId: data.fhir_user_reference?.split(".")[1]?.split("-")[1] || null,
       sourceId: "083fe714-e36e-4851-b2e7-a7166b439f67",
     };
   }
@@ -51,13 +56,15 @@ const FhirApp = (props) => {
         }),
       });
 
+      
       const data = await response.json();
-      const { patientId, encounterId, sourceId, departmentId } =
-        extractIds(data);
+      const { patientId, encounterId, sourceId, departmentId, practitionerId, practiceId} = extractIds(data);
       setPatientId(patientId);
       setEncounterId(encounterId);
-      setSourceId(sourceId);
       setDepartmentId(departmentId);
+      setSourceId(sourceId);
+      setPractitionerId(practitionerId);
+      setPracticeId(practiceId);
       console.log("Access Token:", data.access_token); // Print token
       console.log("first", patientId);
 
@@ -74,6 +81,8 @@ const FhirApp = (props) => {
         encounterId={encounter}
         sourceId={sourceId}
         departmentId={departmentId}
+        practitionerId={practitionerId}
+        practiceId={practiceId}
       />
     </>
   );
