@@ -1,13 +1,11 @@
-import { Badge } from "lucide-react";
-import { useState, useEffect } from "react";
-import { Button } from "./ui/button";
-import { Card } from "./ui/card";
-import { Label } from "./ui/label";
-import { Combobox } from "./ui/combobox";
-import { ReferenceDataService } from "../services/referenceDataService";
-import { ProblemService } from "../services/problemService";
+import { useEffect, useState } from "react";
 import { LabOrderService } from "../services/labOrderService";
 import { PractitionerService } from "../services/practitionerService";
+import { ProblemService } from "../services/problemService";
+import { ReferenceDataService } from "../services/referenceDataService";
+import { Button } from "./ui/button";
+import { Combobox } from "./ui/combobox";
+import { Label } from "./ui/label";
 export default function LabOrderForm({
   patientId,
   departmentId,
@@ -64,7 +62,6 @@ export default function LabOrderForm({
       setReferenceOptions([]);
     }
   };
-
 
   // ✅ Combine Problems & Encounter Diagnosis in a Single Dropdown
   const [diagnosisOptions, setDiagnosisOptions] = useState([]);
@@ -144,7 +141,6 @@ export default function LabOrderForm({
       fetchReferenceData();
     }
   }, [practiceId, sourceId]);
-
 
   // ✅ Handles form submission
   const handleSubmit = async (e) => {
@@ -232,8 +228,11 @@ export default function LabOrderForm({
         <div className="flex justify-between mb-8">
           <h1 className="text-2xl font-bold">LAB ORDER DETAILS</h1>
         </div>
-         {/* Zipcode Input */}
-         <div className="mt-4">
+        {/* Zipcode Input */}
+        <p className="text-base">
+          <strong>Select Receiver</strong>
+        </p>
+        <div className="mt-4">
           <Label>Enter Zip Code</Label>
           <input
             type="text"
@@ -269,9 +268,12 @@ export default function LabOrderForm({
             />
           )}
         </div>
+
+        <div className="border-b border-gray-300 my-5"></div>
+
         {/* Reference Dropdown */}
         <div>
-          <Label>Select Order Type</Label>
+          <Label className="text-base">Select Order Type</Label>
           <Combobox
             label="Select a reference"
             options={referenceOptions.map((option) => ({
@@ -284,9 +286,9 @@ export default function LabOrderForm({
             }
           />
         </div>
-        
+
         <div className="mt-4">
-          <Label>Select Problem or Diagnosis</Label>
+          <Label className="text-base">Select Problem or Diagnosis</Label>
           <Combobox
             label="Select a problem or diagnosis"
             options={diagnosisOptions}
@@ -296,7 +298,7 @@ export default function LabOrderForm({
             }
           />
         </div>
-       
+
         <div className="flex justify-end gap-4 mt-6">
           <Button variant="outline" type="submit">
             SUBMIT ORDER
