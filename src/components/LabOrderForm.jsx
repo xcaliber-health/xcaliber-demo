@@ -231,9 +231,7 @@ export default function LabOrderForm({
           <h1 className="text-2xl font-bold">LAB ORDER DETAILS</h1>
         </div>
 
-        <p className="text-base">
-          <strong>Select Receiver</strong>
-        </p>
+        <Label className="text-base">Select Receiver</Label>
         {/* Zipcode Input */}
         <div className="mt-4">
           <Label>Enter Zip Code</Label>

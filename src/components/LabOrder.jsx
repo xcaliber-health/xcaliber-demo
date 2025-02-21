@@ -17,7 +17,7 @@ export default function LabOrder({
   const [labOrders, setLabOrders] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [loading, setLoading] = useState(true); // ✅ Loading state for shimmer effect
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,7 +32,10 @@ export default function LabOrder({
 
         if (Array.isArray(serviceRequest)) {
           setLabOrders(serviceRequest);
-        } else if (serviceRequest?.data?.entry && Array.isArray(serviceRequest.data.entry)) {
+        } else if (
+          serviceRequest?.data?.entry &&
+          Array.isArray(serviceRequest.data.entry)
+        ) {
           setLabOrders(serviceRequest.data.entry);
         } else {
           setLabOrders([]);
@@ -49,10 +52,10 @@ export default function LabOrder({
   }, [patientId, categoryCode, encounterId, sourceId]);
 
   return (
-    <div className="p-6">
+    <div>
       {isCreating ? (
-        <Card className="p-6 shadow-lg border border-gray-300 rounded-xl">
-          <div className="flex items-center mb-4">
+        <div>
+          <div className="w-full h-full flex items-center mb-4">
             <button
               onClick={() => setIsCreating(false)}
               className="flex items-center text-blue-600 hover:text-blue-800"
@@ -70,9 +73,9 @@ export default function LabOrder({
             practitionerId={practitionerId}
             practiceId={practiceId}
           />
-        </Card>
+        </div>
       ) : selectedOrder ? (
-        <Card className="p-6 shadow-lg border border-gray-300 rounded-xl">
+        <>
           <div className="flex items-center mb-4">
             <button
               onClick={() => setSelectedOrder(null)}
@@ -83,60 +86,97 @@ export default function LabOrder({
             </button>
           </div>
 
-          <h1 className="text-2xl font-bold mb-4 text-gray-800">Lab Order Details</h1>
+          <h1 className="text-2xl font-bold mb-4 text-gray-800">
+            Lab Order Details
+          </h1>
 
-          <div className="space-y-3 text-gray-700">
-            <p><strong>ID:</strong> {selectedOrder.id}</p>
-            <p><strong>Provider:</strong> {selectedOrder.extension?.find((ext) =>
-              ext.url.includes("ordering-provider"))?.valueString || "Unknown"}</p>
-            <p><strong>Encounter:</strong> {selectedOrder.encounter?.reference || "N/A"}</p>
-            <p><strong>Status:</strong> {selectedOrder.status}</p>
-            <p><strong>Priority:</strong> {selectedOrder.priority}</p>
-            <p><strong>Reason:</strong> {selectedOrder.reasonCode
-              ?.flatMap((rc) => rc.coding.map((code) => code.display))
-              .join(", ") || "No reason specified"}</p>
-            <p><strong>Category:</strong> {selectedOrder.category
-              ?.flatMap((cat) => cat.coding.map((code) => code.display))
-              .join(", ") || "No category specified"}</p>
-            <p><strong>Collection Date:</strong> {selectedOrder.occurrenceDateTime
-              ? new Date(selectedOrder.occurrenceDateTime).toLocaleDateString()
-              : "N/A"}</p>
-            <p><strong>Authored On:</strong> {selectedOrder.authoredOn
-              ? new Date(selectedOrder.authoredOn).toLocaleDateString()
-              : "N/A"}</p>
-            <p><strong>Performer:</strong> {selectedOrder.performer
-              ?.map((p) => p.reference || p.extension?.[0]?.valueString)
-              .join(", ") || "N/A"}</p>
+          <div className="space-y-3 text-gray-700 p-4">
+            <p>
+              <strong>ID:</strong> {selectedOrder.id}
+            </p>
+            <p>
+              <strong>Provider:</strong>{" "}
+              {selectedOrder.extension?.find((ext) =>
+                ext.url.includes("ordering-provider")
+              )?.valueString || "Unknown"}
+            </p>
+            <p>
+              <strong>Encounter:</strong>{" "}
+              {selectedOrder.encounter?.reference || "N/A"}
+            </p>
+            <p>
+              <strong>Status:</strong> {selectedOrder.status}
+            </p>
+            <p>
+              <strong>Priority:</strong> {selectedOrder.priority}
+            </p>
+            <p>
+              <strong>Reason:</strong>{" "}
+              {selectedOrder.reasonCode
+                ?.flatMap((rc) => rc.coding.map((code) => code.display))
+                .join(", ") || "No reason specified"}
+            </p>
+            <p>
+              <strong>Category:</strong>{" "}
+              {selectedOrder.category
+                ?.flatMap((cat) => cat.coding.map((code) => code.display))
+                .join(", ") || "No category specified"}
+            </p>
+            <p>
+              <strong>Collection Date:</strong>{" "}
+              {selectedOrder.occurrenceDateTime
+                ? new Date(
+                    selectedOrder.occurrenceDateTime
+                  ).toLocaleDateString()
+                : "N/A"}
+            </p>
+            <p>
+              <strong>Authored On:</strong>{" "}
+              {selectedOrder.authoredOn
+                ? new Date(selectedOrder.authoredOn).toLocaleDateString()
+                : "N/A"}
+            </p>
+            <p>
+              <strong>Performer:</strong>{" "}
+              {selectedOrder.performer
+                ?.map((p) => p.reference || p.extension?.[0]?.valueString)
+                .join(", ") || "N/A"}
+            </p>
           </div>
-        </Card>
+        </>
       ) : (
         <Card className="p-6 shadow-lg border border-gray-300 rounded-xl">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold text-gray-800">Lab Orders</h1>
-            <Button onClick={() => setIsCreating(true)} className="bg-[#D1E9FF] text-[#0C4A6E] px-4 py-2 rounded-lg shadow-md hover:bg-[#c7e2fa]">
+            <Button
+              onClick={() => setIsCreating(true)}
+              className="bg-[#D1E9FF] text-[#0C4A6E] px-4 py-2 rounded-lg shadow-md hover:bg-[#c7e2fa]"
+            >
               + Create Order
             </Button>
           </div>
 
           <div className="space-y-4">
             {loading
-              ? /*** 🔥 Shimmer Effect for Loading ***/
-                [...Array(5)].map((_, index) => (
-                  <div key={index} className="animate-pulse p-4 border border-gray-200 rounded-lg shadow-md bg-gray-100">
+              ? [...Array(5)].map((_, index) => (
+                  <div
+                    key={index}
+                    className="animate-pulse p-4 border border-gray-200 rounded-lg shadow-md bg-gray-100"
+                  >
                     <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
                     <div className="h-3 bg-gray-300 rounded w-1/2"></div>
                   </div>
                 ))
-              : /*** 🔥 Show Lab Orders ***/
-                labOrders?.map?.((order) => {
+              : labOrders?.map?.((order) => {
                   const resource = order.resource || order;
 
                   const id = resource.id;
                   const status = resource.status;
                   const priority = resource.priority;
-                  const provider = resource.extension?.find((ext) =>
-                    ext.url.includes("ordering-provider")
-                  )?.valueString || "Unknown Provider";
+                  const provider =
+                    resource.extension?.find((ext) =>
+                      ext.url.includes("ordering-provider")
+                    )?.valueString || "Unknown Provider";
                   const collectionDate = resource.occurrenceDateTime
                     ? new Date(resource.occurrenceDateTime).toLocaleDateString()
                     : "N/A";
@@ -149,7 +189,9 @@ export default function LabOrder({
                     >
                       <div className="flex justify-between items-center">
                         <div>
-                          <h2 className="text-lg font-semibold text-gray-900">{provider}</h2>
+                          <h2 className="text-lg font-semibold text-gray-900">
+                            {provider}
+                          </h2>
                           <p className="text-sm text-gray-600">
                             <strong>Collection Date:</strong> {collectionDate}
                           </p>
@@ -173,7 +215,9 @@ export default function LabOrder({
                       <div className="mt-2">
                         <span
                           className={`inline-block px-3 py-1 text-xs font-semibold uppercase rounded-lg ${
-                            priority === "urgent" ? "bg-red-500 text-white" : "bg-gray-300 text-black"
+                            priority === "urgent"
+                              ? "bg-red-500 text-white"
+                              : "bg-gray-300 text-black"
                           }`}
                         >
                           {priority}
