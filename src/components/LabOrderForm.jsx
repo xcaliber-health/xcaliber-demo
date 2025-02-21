@@ -99,7 +99,7 @@ export default function LabOrderForm({
             label: `Diagnosis: ${item.resource.code.coding[0].display}`,
           })) || [];
 
-        setDiagnosisOptions([...formattedProblems, ...formattedDiagnoses]);
+        setDiagnosisOptions([ ...formattedDiagnoses,...formattedProblems]);
       } catch (error) {
         console.error("Error fetching diagnosis data:", error);
         setDiagnosisOptions([]);
