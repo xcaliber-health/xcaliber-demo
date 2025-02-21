@@ -53,7 +53,6 @@ export default function LabOrderForm({
         practiceId,
         sourceId
       );
-      console.log("Reference Data Response:", response);
 
       if (response?.data?.result && Array.isArray(response.data.result)) {
         setReferenceOptions(response.data.result);
@@ -117,8 +116,6 @@ export default function LabOrderForm({
     if (formData.zip && practiceId) {
       const fetchPractitioners = async () => {
         try {
-          console.log("Fetching practitioners with zip:", formData.zip); // Debugging log
-
           const response = await PractitionerService.getPractitioners(
             "clinical-provider",
             "roc",
@@ -127,7 +124,6 @@ export default function LabOrderForm({
             sourceId
           );
 
-          console.log("Fetched Practitioners:", response);
           setPractitioners(response || []);
         } catch (error) {
           console.error("Error fetching practitioners:", error);
@@ -210,7 +206,6 @@ export default function LabOrderForm({
 
     try {
       const response = await LabOrderService.createLabOrder(payload, sourceId);
-      console.log("Create Lab Order Response:", response);
 
       if (response.data.status === "success") {
         toast.success("Form submitted successfully!", {
@@ -241,12 +236,6 @@ export default function LabOrderForm({
   const handleInputChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
-  console.log(
-    "Comparing:",
-    formData.problem,
-    diagnosisOptions.map((p) => p.value)
-  );
 
   return (
     <div className="p-6">
@@ -316,12 +305,10 @@ export default function LabOrderForm({
                 : null
             } // Ensure the value is an object
             onChange={(selectedOption) => {
-              console.log("Selected Order Type ID:", selectedOption?.value); // Debugging log
               const selectedOptionData = referenceOptions.find(
                 (option) =>
                   option.ordertypeid.toString() === selectedOption?.value
               );
-              console.log("Selected Order Type Data:", selectedOptionData); // Debugging log
 
               if (selectedOptionData) {
                 setFormData((prev) => ({
@@ -346,12 +333,6 @@ export default function LabOrderForm({
               (option) => option.value === formData.problem
             )}
             onChange={(value) => {
-              console.log(
-                "Selected problem ID:",
-                value?.value,
-                typeof value?.value
-              );
-
               setFormData((prev) => ({ ...prev, problem: value?.value }));
             }}
             isSearchable

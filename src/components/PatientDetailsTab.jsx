@@ -238,7 +238,6 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
   const [insuranceDetails, setInsuranceDetails] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  console.log(patientDetails);
   useEffect(() => {
     if (!id) return; // Prevent API calls if ID is undefined
 
