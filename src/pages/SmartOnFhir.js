@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
+import Logo from "../assets/Group.png";
 
 const SmartOnFhir = () => {
   const [searchParams] = useSearchParams();
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const iss = searchParams.get("iss");
   const launchValue = searchParams.get("launch");
 
   useEffect(() => {
     const launch = async () => {
+      setLoading(true);
       const CLIENT_ID = "0oaw7snv22DdD8hP5297";
       const REDIRECT_URI = "https://dev-demo.xcaliberhealth.ai/fhir-app";
       const AUTH_URL = `https://api.preview.platform.athenahealth.com/oauth2/v1/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(
@@ -48,12 +52,26 @@ const SmartOnFhir = () => {
   }, [iss, launchValue]);
 
   return (
-    <div>
-      <h1>Smart On FHIR Page</h1>
-      {error ? (
-        <p style={{ color: "red" }}>Error: {error}</p>
+    <div className="flex flex-col items-center justify-center h-screen">
+      {loading ? (
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75">
+        <div className="relative flex flex-col items-center">
+          {/* Logo */}
+          <img src={Logo} alt="Logo" className="w-14 h-14 mb-4" />
+
+          {/* Circular Loader */}
+          <Loader2 className="animate-spin w-24 h-12 text-blue-600" />
+        </div>
+      </div>
       ) : (
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <>
+          <h1>Smart On FHIR Page</h1>
+          {error ? (
+            <p style={{ color: "red" }}>Error: {error}</p>
+          ) : (
+            <pre>{JSON.stringify(data, null, 2)}</pre>
+          )}
+        </>
       )}
     </div>
   );

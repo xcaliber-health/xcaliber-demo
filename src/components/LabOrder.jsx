@@ -44,7 +44,7 @@ export default function LabOrder({
         console.error("Error fetching lab orders:", error);
         setLabOrders([]);
       } finally {
-        setLoading(false); // ✅ Stop loading
+        setLoading(false); 
       }
     };
 

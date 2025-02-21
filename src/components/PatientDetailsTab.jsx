@@ -19,6 +19,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
+import { Loader2 } from "lucide-react"; 
+import Logo from "../assets/Group.png";
+
 
 // ✅ Custom ShadCN UI Input Field for RJSF
 const CustomInput = ({ id, value }) => (
@@ -276,7 +279,19 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
     fetchVitalsData();
   }, [id]); // Only runs when a valid ID is available
 
-  if (!patientDetails) return <p>Loading...</p>;
+   if (!patientDetails) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75">
+        <div className="relative flex flex-col items-center">
+          {/* Logo */}
+          <img src={Logo} alt="Logo" className="w-14 h-14 mb-4" />
+
+          {/* Circular Loader */}
+          <Loader2 className="animate-spin w-24 h-12 text-blue-600" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[350px_1fr] gap-6 p-4">
@@ -569,25 +584,58 @@ const vitalColors = {
 };
 
 export function RecentVitals({ vitals }) {
+  const [loadingVitals, setLoadingVitals] = useState(true);
+
+  useEffect(() => {
+    if (vitals.length > 0) {
+      setLoadingVitals(false);
+    }
+  }, [vitals]);
+
   return (
     <>
-      {/* Recent Vitals Section */}
-      <h2 className="text-lg font-semibold  mt-2">PATIENT'S RECENT VITALS</h2>
+      <h2 className="text-lg font-semibold mt-2">PATIENT'S RECENT VITALS</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {vitals.length > 0 ? (
-          vitals.map((vital) => (
-            <VitalCard
-              key={vital.measurement}
-              icon={vitalIcons[vital.measurement] || Activity} // Default icon
-              label={vital.measurement}
-              value={vital.value}
-              color={vitalColors[vital.measurement] || "text-gray-500"} // Default color
-            />
-          ))
-        ) : (
-          <p className="text-gray-500">No vitals available</p>
-        )}
+        {loadingVitals
+          ? // ✅ Show Shimmer Effect while loading
+            [...Array(5)].map((_, index) => (
+              <ShimmerVitalCard key={index} />
+            ))
+          : vitals.length > 0
+          ? vitals.map((vital) => (
+              <VitalCard
+                key={vital.measurement}
+                icon={vitalIcons[vital.measurement] || Activity} // Default icon
+                label={vital.measurement}
+                value={vital.value}
+                color={vitalColors[vital.measurement] || "text-gray-500"} // Default color
+              />
+            ))
+          : // Show a message if no vitals available
+            <p className="text-gray-500 col-span-full">No vitals available</p>}
       </div>
     </>
+  );
+}
+
+function ShimmerVitalCard() {
+  return (
+    <Card className="animate-pulse shadow-md rounded-lg">
+      <CardContent className="p-4 h-full bg-white rounded-lg">
+        <div className="flex flex-col gap-1 w-full">
+          {/* Title (Simulating "Body mass index (BMI) [Ratio]") */}
+          <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+
+          {/* Icon & Value Row */}
+          <div className="flex items-center gap-2">
+            {/* Placeholder for Icon */}
+            <div className="w-5 h-5 bg-gray-300 rounded-full"></div>
+
+            {/* Placeholder for Value */}
+            <div className="h-6 bg-gray-400 rounded w-1/4"></div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
