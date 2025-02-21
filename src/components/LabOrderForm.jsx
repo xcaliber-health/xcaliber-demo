@@ -148,6 +148,11 @@ export default function LabOrderForm({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const selectedOrderType = referenceOptions.find(
+      (option) =>
+        option.ordertypeid.toString() === formData.reference?.ordertypeid
+    );
+
     const payload = {
       context: { departmentId: departmentId },
       data: {
@@ -166,12 +171,12 @@ export default function LabOrderForm({
             ],
           },
           {
-            text: "CMP, serum or plasma",
+            text: selectedOrderType?.name || "Unknown Order Type",
             coding: [
               {
                 system: "ATHENA",
-                code: 342223,
-                display: "Lab",
+                code: selectedOrderType?.ordertypeid || "Unknown Code",
+                display: selectedOrderType?.name || "Unknown Order Type",
               },
             ],
           },
@@ -181,22 +186,10 @@ export default function LabOrderForm({
             coding: [
               {
                 system: "http://snomed.info/sct",
-                code: parseInt(formData.problem), // ✅ Ensuring it's an integer.
+                code: parseInt(formData.problem),
                 display:
-                  problemOptions.find((p) => p.value === formData.problem)
+                  diagnosisOptions.find((p) => p.value === formData.problem)
                     ?.label || "Unknown",
-              },
-            ],
-          },
-          {
-            coding: [
-              {
-                system: "http://snomed.info/sct",
-                code: parseInt(formData.encounterDiagnosis), // ✅ Ensuring it's an integer.
-                display:
-                  encounterDiagnosisOptions.find(
-                    (d) => d.value === formData.encounterDiagnosis
-                  )?.label || "Unknown",
               },
             ],
           },
@@ -239,6 +232,7 @@ export default function LabOrderForm({
       });
     }
   };
+
   // ✅ Handles form input changes
   const handleInputChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -298,13 +292,31 @@ export default function LabOrderForm({
           <Combobox
             label="Select a reference"
             options={referenceOptions.map((option) => ({
-              value: option.ordertypeid.toString(),
-              label: option.name,
+              value: option.ordertypeid.toString(), // Ensure this is a string
+              label: option.name, // Display name correctly
             }))}
-            value={formData.reference}
-            onChange={(value) =>
-              setFormData((prev) => ({ ...prev, reference: value }))
-            }
+            value={
+              formData.reference?.ordertypeid
+                ? formData.reference.ordertypeid.toString()
+                : ""
+            } // Ensure value is set correctly
+            onChange={(value) => {
+              console.log("Selected Order Type ID:", value); // Debugging log
+              const selectedOption = referenceOptions.find(
+                (option) => option.ordertypeid.toString() === value
+              );
+              console.log("Selected Order Type Data:", selectedOption); // Debugging log
+
+              if (selectedOption) {
+                setFormData((prev) => ({
+                  ...prev,
+                  reference: {
+                    ordertypeid: selectedOption.ordertypeid.toString(),
+                    name: selectedOption.name,
+                  },
+                }));
+              }
+            }}
           />
         </div>
 
