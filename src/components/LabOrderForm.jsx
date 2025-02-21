@@ -10,6 +10,7 @@ import { Label } from "./ui/label";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import Select from "react-select";
 export default function LabOrderForm({
   patientId,
   departmentId,
@@ -53,7 +54,6 @@ export default function LabOrderForm({
         practiceId,
         sourceId
       );
-      console.log("Reference Data Response:", response);
 
       if (response?.data?.result && Array.isArray(response.data.result)) {
         setReferenceOptions(response.data.result);
@@ -101,6 +101,7 @@ export default function LabOrderForm({
           })) || [];
 
         setDiagnosisOptions([...formattedDiagnoses, ...formattedProblems]);
+        setDiagnosisOptions([...formattedDiagnoses, ...formattedProblems]);
       } catch (error) {
         console.error("Error fetching diagnosis data:", error);
         setDiagnosisOptions([]);
@@ -117,8 +118,6 @@ export default function LabOrderForm({
     if (formData.zip && practiceId) {
       const fetchPractitioners = async () => {
         try {
-          console.log("Fetching practitioners with zip:", formData.zip); // Debugging log
-
           const response = await PractitionerService.getPractitioners(
             "clinical-provider",
             "roc",
@@ -127,7 +126,6 @@ export default function LabOrderForm({
             sourceId
           );
 
-          console.log("Fetched Practitioners:", response);
           setPractitioners(response || []);
         } catch (error) {
           console.error("Error fetching practitioners:", error);
@@ -182,19 +180,22 @@ export default function LabOrderForm({
             ],
           },
         ],
-        reasonCode: [
-          {
-            coding: [
+        reasonCode: formData.problem
+          ? [
               {
-                system: "http://snomed.info/sct",
-                code: parseInt(formData.problem),
-                display:
-                  diagnosisOptions.find((p) => p.value === formData.problem)
-                    ?.label || "Unknown",
+                coding: [
+                  {
+                    system: "http://snomed.info/sct",
+                    code: parseInt(formData.problem),
+                    display:
+                      diagnosisOptions.find((p) => p.value === formData.problem)
+                        ?.label || "Unknown",
+                  },
+                ],
               },
-            ],
-          },
-        ],
+            ]
+          : [],
+
         priority: formData.stat ? "urgent" : "routine",
         authoredOn: new Date().toISOString(),
         requester: { reference: `Practitioner/${practitionerId}` },
@@ -413,6 +414,7 @@ export default function LabOrderForm({
   const handleInputChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
   return (
     <div className="p-6">
       <form onSubmit={handleSubmit}>
@@ -445,7 +447,7 @@ export default function LabOrderForm({
               className="border px-4 py-2 w-full rounded-md bg-gray-100 text-gray-500 cursor-not-allowed"
             />
           ) : (
-            <Combobox
+            <Select
               label="Select a Practitioner"
               options={practitioners.map((p) => ({
                 value: p.resource.id,
@@ -455,6 +457,8 @@ export default function LabOrderForm({
               onChange={(value) =>
                 setFormData((prev) => ({ ...prev, orderingProvider: value }))
               }
+              isSearchable
+              placeholder="Select a reference"
             />
           )}
         </div>
@@ -464,47 +468,53 @@ export default function LabOrderForm({
         {/* Reference Dropdown */}
         <div>
           <Label className="text-base">Select Order Type</Label>
-          <Label className="text-base">Select Order Type</Label>
-          <Combobox
+          <Select
             label="Select a reference"
             options={referenceOptions.map((option) => ({
               value: option.ordertypeid.toString(), // Ensure this is a string
               label: option.name, // Display name correctly
             }))}
             value={
-              formData.reference?.ordertypeid
-                ? formData.reference.ordertypeid.toString()
-                : ""
-            } // Ensure value is set correctly
-            onChange={(value) => {
-              console.log("Selected Order Type ID:", value); // Debugging log
-              const selectedOption = referenceOptions.find(
-                (option) => option.ordertypeid.toString() === value
+              formData.reference
+                ? {
+                    value: formData.reference.ordertypeid.toString(),
+                    label: formData.reference.name,
+                  }
+                : null
+            } // Ensure the value is an object
+            onChange={(selectedOption) => {
+              const selectedOptionData = referenceOptions.find(
+                (option) =>
+                  option.ordertypeid.toString() === selectedOption?.value
               );
-              console.log("Selected Order Type Data:", selectedOption); // Debugging log
 
-              if (selectedOption) {
+              if (selectedOptionData) {
                 setFormData((prev) => ({
                   ...prev,
                   reference: {
-                    ordertypeid: selectedOption.ordertypeid.toString(),
-                    name: selectedOption.name,
+                    ordertypeid: selectedOptionData.ordertypeid.toString(),
+                    name: selectedOptionData.name,
                   },
                 }));
               }
             }}
+            isSearchable
+            placeholder="Select a reference"
           />
         </div>
 
         <div className="mt-4">
-          <Label className="text-base"> Select Problem or Diagnosis</Label>
-          <Combobox
-            label="Select a problem or diagnosis"
+          <Label className="text-base">Select Problem or Diagnosis</Label>
+          <Select
             options={diagnosisOptions}
-            value={formData.problem}
-            onChange={(value) =>
-              setFormData((prev) => ({ ...prev, problem: value }))
-            }
+            value={diagnosisOptions.find(
+              (option) => option.value === formData.problem
+            )}
+            onChange={(value) => {
+              setFormData((prev) => ({ ...prev, problem: value?.value }));
+            }}
+            isSearchable
+            placeholder="Select Problem or Diagnosis"
           />
         </div>
 

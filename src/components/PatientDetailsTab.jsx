@@ -19,9 +19,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
-import { Loader2 } from "lucide-react"; 
+import { Loader2 } from "lucide-react";
 import Logo from "../assets/Group.png";
-
 
 // ✅ Custom ShadCN UI Input Field for RJSF
 const CustomInput = ({ id, value }) => (
@@ -36,13 +35,15 @@ const CustomInput = ({ id, value }) => (
   />
 );
 
-// ✅ Map API Data to Form Structure
 const mapFHIRDataToForm = (data) => {
   if (!data) return {};
 
+  const officialName = data.name?.find((n) => n.use === "official");
+
   return {
     // 🔹 Patient Information
-    patientName: data.name?.find((n) => n.use === "official")?.text || "",
+    lastName: officialName?.family || "",
+    firstName: officialName?.given?.join(" ") || "",
     gender:
       data.extension?.find((ext) => ext.url.includes("legal-sex"))?.valueCode ||
       "",
@@ -68,10 +69,13 @@ const mapFHIRDataToForm = (data) => {
       "",
     ssn:
       data.extension?.find((ext) => ext.url.includes("ssn"))?.valueString || "",
+
+    // 🔹 Address
     address1: data.address?.[0]?.line?.[0] || "",
-    address2: data.address?.[0]?.city || "",
-    address3:
-      `${data.address?.[0]?.state}, ${data.address?.[0]?.postalCode}` || "",
+    city: data.address?.[0]?.city || "",
+    state: data.address?.[0]?.state || "",
+    postalCode: data.address?.[0]?.postalCode || "",
+
     patientId: data.id || "",
     dateOfBirth: data.birthDate || "",
     phone: data.telecom?.find((t) => t.system === "phone")?.value || "",
@@ -87,18 +91,15 @@ const mapFHIRDataToForm = (data) => {
     rpAddress1:
       data.contained?.find((c) => c.resourceType === "RelatedPerson")
         ?.address?.[0]?.line?.[0] || "",
-    rpAddress2:
+    rpCity:
       data.contained?.find((c) => c.resourceType === "RelatedPerson")
         ?.address?.[0]?.city || "",
-    rpAddress3:
-      `${
-        data.contained?.find((c) => c.resourceType === "RelatedPerson")
-          ?.address?.[0]?.state
-      }, ` +
-        `${
-          data.contained?.find((c) => c.resourceType === "RelatedPerson")
-            ?.address?.[0]?.postalCode
-        }` || "",
+    rpState:
+      data.contained?.find((c) => c.resourceType === "RelatedPerson")
+        ?.address?.[0]?.state || "",
+    rpPostalCode:
+      data.contained?.find((c) => c.resourceType === "RelatedPerson")
+        ?.address?.[0]?.postalCode || "",
     rpPhone:
       data.contained?.find((c) => c.resourceType === "RelatedPerson")
         ?.telecom?.[0]?.value || "",
@@ -279,7 +280,7 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
     fetchVitalsData();
   }, [id]); // Only runs when a valid ID is available
 
-   if (!patientDetails) {
+  if (!patientDetails) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75">
         <div className="relative flex flex-col items-center">
@@ -306,19 +307,22 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
           <CardContent className="space-y-6">
             <Section
               schema={{
-                patientName: { type: "string", title: "Patient Name" },
+                lastName: { type: "string", title: "Last Name" },
+                firstName: { type: "string", title: "First Name" },
                 gender: { type: "string", title: "Gender" },
                 dateOfBirth: { type: "string", title: "Date of Birth" },
                 phone: { type: "string", title: "Phone Number" },
               }}
               formData={mapFHIRDataToForm(patientDetails)}
             />
+
             <Section
               title="Address Information"
               schema={{
                 address1: { type: "string", title: "Address Line 1" },
-                address2: { type: "string", title: "Address Line 2" },
-                address3: { type: "string", title: "Address Line 3" },
+                city: { type: "string", title: "City" },
+                state: { type: "string", title: "State" },
+                postalCode: { type: "string", title: "Postal Code" },
               }}
               formData={mapFHIRDataToForm(patientDetails)}
             />
@@ -596,23 +600,23 @@ export function RecentVitals({ vitals }) {
     <>
       <h2 className="text-lg font-semibold mt-2">PATIENT'S RECENT VITALS</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {loadingVitals
-          ? // ✅ Show Shimmer Effect while loading
-            [...Array(5)].map((_, index) => (
-              <ShimmerVitalCard key={index} />
-            ))
-          : vitals.length > 0
-          ? vitals.map((vital) => (
-              <VitalCard
-                key={vital.measurement}
-                icon={vitalIcons[vital.measurement] || Activity} // Default icon
-                label={vital.measurement}
-                value={vital.value}
-                color={vitalColors[vital.measurement] || "text-gray-500"} // Default color
-              />
-            ))
-          : // Show a message if no vitals available
-            <p className="text-gray-500 col-span-full">No vitals available</p>}
+        {loadingVitals ? (
+          // ✅ Show Shimmer Effect while loading
+          [...Array(5)].map((_, index) => <ShimmerVitalCard key={index} />)
+        ) : vitals.length > 0 ? (
+          vitals.map((vital) => (
+            <VitalCard
+              key={vital.measurement}
+              icon={vitalIcons[vital.measurement] || Activity} // Default icon
+              label={vital.measurement}
+              value={vital.value}
+              color={vitalColors[vital.measurement] || "text-gray-500"} // Default color
+            />
+          ))
+        ) : (
+          // Show a message if no vitals available
+          <p className="text-gray-500 col-span-full">No vitals available</p>
+        )}
       </div>
     </>
   );
