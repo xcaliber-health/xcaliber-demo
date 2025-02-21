@@ -1,9 +1,21 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { X, ChevronDown } from "lucide-react";
-import { Command, CommandGroup, CommandItem, CommandInput, CommandEmpty } from "./command";
+import {
+  Command,
+  CommandGroup,
+  CommandItem,
+  CommandInput,
+  CommandEmpty,
+} from "./command";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
-export function Combobox({ label, options, value, onChange, disabled = false }) {
+export function Combobox({
+  label,
+  options,
+  value,
+  onChange,
+  disabled = false,
+}) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState(""); // ✅ Controlled search input
   const triggerRef = useRef(null);
@@ -42,11 +54,15 @@ export function Combobox({ label, options, value, onChange, disabled = false }) 
 
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setActiveIndex((prev) => (prev < filteredOptions.length - 1 ? prev + 1 : 0));
+        setActiveIndex((prev) =>
+          prev < filteredOptions.length - 1 ? prev + 1 : 0
+        );
       }
       if (e.key === "ArrowUp") {
         e.preventDefault();
-        setActiveIndex((prev) => (prev > 0 ? prev - 1 : filteredOptions.length - 1));
+        setActiveIndex((prev) =>
+          prev > 0 ? prev - 1 : filteredOptions.length - 1
+        );
       }
       if (e.key === "Enter" && activeIndex !== -1) {
         e.preventDefault();
@@ -70,9 +86,17 @@ export function Combobox({ label, options, value, onChange, disabled = false }) 
         <div
           ref={triggerRef}
           className={`relative w-full h-[40px] px-3 flex items-center justify-between
-            border ${disabled ? "border-gray-300 bg-gray-100 cursor-not-allowed" : "border-gray-300 bg-white"}
+            border ${
+              disabled
+                ? "border-gray-300 bg-gray-100 cursor-not-allowed"
+                : "border-gray-300 bg-white"
+            }
             rounded-md transition-all cursor-text
-            ${disabled ? "" : "focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500"}`}
+            ${
+              disabled
+                ? ""
+                : "focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500"
+            }`}
           onClick={() => !disabled && setOpen(true)}
         >
           <span className={`text-sm ${value ? "text-black" : "text-gray-500"}`}>
@@ -89,7 +113,11 @@ export function Combobox({ label, options, value, onChange, disabled = false }) 
               }}
             />
           ) : (
-            <ChevronDown className={`h-4 w-4 ${disabled ? "text-gray-300" : "text-gray-500"}`} />
+            <ChevronDown
+              className={`h-4 w-4 ${
+                disabled ? "text-gray-300" : "text-gray-500"
+              }`}
+            />
           )}
         </div>
       </PopoverTrigger>
@@ -100,11 +128,13 @@ export function Combobox({ label, options, value, onChange, disabled = false }) 
           side="bottom"
           align="start"
           avoidCollisions={false}
-          className="p-0 mt-1 shadow-md border border-gray-300 rounded-md bg-white max-h-[250px] overflow-auto z-50 w-full"
+          className="p-0 mt-1 shadow-md border border-gray-300 rounded-md bg-white max-h-[250px] overflow-y-auto z-50 w-full"
           style={{
             width: triggerWidth || "100%",
+            overscrollBehavior: "contain",
+            WebkitOverflowScrolling: "touch",
           }}
-          onKeyDown={handleKeyDown} // ✅ Attach key handling
+          onKeyDown={handleKeyDown}
         >
           <Command shouldFilter={false}>
             <CommandInput
@@ -115,7 +145,9 @@ export function Combobox({ label, options, value, onChange, disabled = false }) 
               autoFocus
             />
             {filteredOptions.length === 0 ? (
-              <CommandEmpty className="p-2 text-sm text-gray-600">No options available</CommandEmpty>
+              <CommandEmpty className="p-2 text-sm text-gray-600">
+                No options available
+              </CommandEmpty>
             ) : (
               <CommandGroup>
                 {filteredOptions.map((opt, index) => (
@@ -125,8 +157,8 @@ export function Combobox({ label, options, value, onChange, disabled = false }) 
                     className={`px-3 py-2 text-sm cursor-pointer text-black ${
                       index === activeIndex ? "bg-blue-100" : ""
                     }`}
-                    onMouseEnter={() => setActiveIndex(index)} 
-                    onSelect={() => { 
+                    onMouseEnter={() => setActiveIndex(index)}
+                    onSelect={() => {
                       onChange(opt.value);
                       setQuery("");
                       setOpen(false);

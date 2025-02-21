@@ -204,7 +204,6 @@ const mapFHIRInsuranceDataToForm = (insuranceData) => {
   };
 };
 
-// ✅ UI Schema (Removes Form Titles)
 const uiSchema = {
   "ui:options": { submitButtonOptions: { norender: true } },
   ...Object.keys(mapFHIRDataToForm({})).reduce((acc, key) => {
@@ -237,6 +236,7 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
   const [patientDetails, setPatientDetails] = useState(null);
   const [vitalDetails, setVitalDetails] = useState([]);
   const [insuranceDetails, setInsuranceDetails] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   console.log(patientDetails);
   useEffect(() => {
@@ -261,11 +261,14 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
         setInsuranceDetails(response);
       } catch (error) {
         console.error("Error fetching Insurance data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     const fetchVitalsData = async () => {
       try {
+        setLoading(true);
         const response = await fetchVitals(id, sourceId, departmentId);
         setVitalDetails(response);
       } catch (error) {
@@ -333,7 +336,12 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
         <Card className="max-w-full bg-[#F8FAFC] rounded-lg border-none shadow-none">
           <CardContent className="space-y-8">
             <div className="space-y-6">
-              <Accordion type="multiple" collapsible className="space-y-4">
+              <Accordion
+                type="multiple"
+                defaultValue={[]}
+                collapsible
+                className="space-y-4"
+              >
                 {/* Responsible Party / Guarantor */}
                 <AccordionItem
                   value="RESPONSIBLE PARTY"
@@ -392,41 +400,54 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
                     </h2>
                   </AccordionTrigger>
                   <AccordionContent className="px-6 py-4 bg-white rounded-md">
-                    <SectionIns
-                      schema={{
-                        primaryInsurerName: {
-                          type: "string",
-                          title: "Primary Insurer Name",
-                        },
-                        primaryInsurerAddress: {
-                          type: "string",
-                          title: "Primary Insurer Address",
-                        },
-                        primaryGroupNumber: {
-                          type: "string",
-                          title: "Primary Group Number",
-                        },
-                        primaryPolicyNumber: {
-                          type: "string",
-                          title: "Primary Policy Number",
-                        },
-                        primaryInsuredName: {
-                          type: "string",
-                          title: "Primary Insured Name",
-                        },
-                        primaryInsuredRelation: {
-                          type: "string",
-                          title: "Insured Relation",
-                        },
-                      }}
-                      formData={mapFHIRInsuranceDataToForm(insuranceDetails)}
-                      uiSchema={uiSchema2} // ✅ FIXED
-                    />
+                    {loading ? (
+                      [...Array(3)].map((_, index) => (
+                        <div
+                          key={index}
+                          className="animate-pulse p-4 border border-gray-200 rounded-lg shadow-md bg-gray-100"
+                        >
+                          <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+                          <div className="h-3 bg-gray-300 rounded w-1/2"></div>
+                        </div>
+                      ))
+                    ) : (
+                      <SectionIns
+                        schema={{
+                          primaryInsurerName: {
+                            type: "string",
+                            title: "Primary Insurer Name",
+                          },
+                          primaryInsurerAddress: {
+                            type: "string",
+                            title: "Primary Insurer Address",
+                          },
+                          primaryGroupNumber: {
+                            type: "string",
+                            title: "Primary Group Number",
+                          },
+                          primaryPolicyNumber: {
+                            type: "string",
+                            title: "Primary Policy Number",
+                          },
+                          primaryInsuredName: {
+                            type: "string",
+                            title: "Primary Insured Name",
+                          },
+                          primaryInsuredRelation: {
+                            type: "string",
+                            title: "Insured Relation",
+                          },
+                        }}
+                        formData={mapFHIRInsuranceDataToForm(insuranceDetails)}
+                        uiSchema={uiSchema2} // ✅ FIXED
+                      />
+                    )}
                   </AccordionContent>
                 </AccordionItem>
 
                 {/* Secondary Insurance */}
                 {/* ✅ Secondary Insurance Accordion */}
+
                 <AccordionItem
                   value="SECONDARY INSURANCE"
                   className="border rounded-lg shadow-sm"
@@ -437,36 +458,48 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
                     </h2>
                   </AccordionTrigger>
                   <AccordionContent className="px-6 py-4 bg-white rounded-md">
-                    <SectionIns
-                      schema={{
-                        secondaryInsurerName: {
-                          type: "string",
-                          title: "Secondary Insurer Name",
-                        },
-                        secondaryInsurerAddress: {
-                          type: "string",
-                          title: "Secondary Insurer Address",
-                        },
-                        secondaryGroupNumber: {
-                          type: "string",
-                          title: "Secondary Group Number",
-                        },
-                        secondaryPolicyNumber: {
-                          type: "string",
-                          title: "Secondary Policy Number",
-                        },
-                        secondaryInsuredName: {
-                          type: "string",
-                          title: "Secondary Insured Name",
-                        },
-                        secondaryInsuredRelation: {
-                          type: "string",
-                          title: "Insured Relation",
-                        },
-                      }}
-                      formData={mapFHIRInsuranceDataToForm(insuranceDetails)}
-                      uiSchema={uiSchema2} // ✅ Fixed: Explicitly passing correct uiSchema2
-                    />
+                    {loading ? (
+                      [...Array(3)].map((_, index) => (
+                        <div
+                          key={index}
+                          className="animate-pulse p-4 border border-gray-200 rounded-lg shadow-md bg-gray-100"
+                        >
+                          <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+                          <div className="h-3 bg-gray-300 rounded w-1/2"></div>
+                        </div>
+                      ))
+                    ) : (
+                      <SectionIns
+                        schema={{
+                          secondaryInsurerName: {
+                            type: "string",
+                            title: "Secondary Insurer Name",
+                          },
+                          secondaryInsurerAddress: {
+                            type: "string",
+                            title: "Secondary Insurer Address",
+                          },
+                          secondaryGroupNumber: {
+                            type: "string",
+                            title: "Secondary Group Number",
+                          },
+                          secondaryPolicyNumber: {
+                            type: "string",
+                            title: "Secondary Policy Number",
+                          },
+                          secondaryInsuredName: {
+                            type: "string",
+                            title: "Secondary Insured Name",
+                          },
+                          secondaryInsuredRelation: {
+                            type: "string",
+                            title: "Insured Relation",
+                          },
+                        }}
+                        formData={mapFHIRInsuranceDataToForm(insuranceDetails)}
+                        uiSchema={uiSchema2} // ✅ Fixed: Explicitly passing correct uiSchema2
+                      />
+                    )}
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -483,7 +516,6 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
   );
 }
 
-// ✅ Reusable Form Section Component
 function Section({ title, schema, formData }) {
   return (
     <>
@@ -510,7 +542,7 @@ function SectionIns({ title, schema, formData }) {
       <Form
         schema={{ type: "object", properties: schema }}
         formData={formData}
-        uiSchema={uiSchema2} // ✅ FIXED
+        uiSchema={uiSchema2}
         validator={validator}
       />
     </>

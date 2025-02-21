@@ -100,7 +100,7 @@ export default function LabOrderForm({
             label: `Diagnosis: ${item.resource.code.coding[0].display}`,
           })) || [];
 
-        setDiagnosisOptions([...formattedProblems, ...formattedDiagnoses]);
+        setDiagnosisOptions([ ...formattedDiagnoses,...formattedProblems]);
       } catch (error) {
         console.error("Error fetching diagnosis data:", error);
         setDiagnosisOptions([]);
@@ -254,10 +254,9 @@ export default function LabOrderForm({
         <div className="flex justify-between mb-8">
           <h1 className="text-2xl font-bold">LAB ORDER DETAILS</h1>
         </div>
+
+        <Label className="text-base">Select Receiver</Label>
         {/* Zipcode Input */}
-        <p className="text-base">
-          <strong>Select Receiver</strong>
-        </p>
         <div className="mt-4">
           <Label>Enter Zip Code</Label>
           <input
@@ -297,7 +296,7 @@ export default function LabOrderForm({
           )}
         </div>
 
-        <div className="border-b border-gray-300 my-5"></div>
+        <div className="border-b border-gray-300 my-5" />
 
         {/* Reference Dropdown */}
         <div>
