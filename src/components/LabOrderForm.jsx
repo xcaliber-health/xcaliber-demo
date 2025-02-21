@@ -1,13 +1,14 @@
-import { Badge } from "lucide-react";
-import { useState, useEffect } from "react";
-import { Button } from "./ui/button";
-import { Card } from "./ui/card";
-import { Label } from "./ui/label";
-import { Combobox } from "./ui/combobox";
-import { ReferenceDataService } from "../services/referenceDataService";
-import { ProblemService } from "../services/problemService";
+import { useEffect, useState } from "react";
 import { LabOrderService } from "../services/labOrderService";
 import { PractitionerService } from "../services/practitionerService";
+import { ProblemService } from "../services/problemService";
+import { ReferenceDataService } from "../services/referenceDataService";
+import { Button } from "./ui/button";
+import { Combobox } from "./ui/combobox";
+import { Label } from "./ui/label";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 export default function LabOrderForm({
   patientId,
   departmentId,
@@ -65,7 +66,6 @@ export default function LabOrderForm({
     }
   };
 
-
   // ✅ Combine Problems & Encounter Diagnosis in a Single Dropdown
   const [diagnosisOptions, setDiagnosisOptions] = useState([]);
 
@@ -75,7 +75,6 @@ export default function LabOrderForm({
       try {
         const problems = await ProblemService.getProblems(
           patientId,
-          "problem-list-item",
           departmentId,
           sourceId
         );
@@ -145,10 +144,14 @@ export default function LabOrderForm({
     }
   }, [practiceId, sourceId]);
 
-
   // ✅ Handles form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const selectedOrderType = referenceOptions.find(
+      (option) =>
+        option.ordertypeid.toString() === formData.reference?.ordertypeid
+    );
 
     const payload = {
       context: { departmentId: departmentId },
@@ -168,12 +171,12 @@ export default function LabOrderForm({
             ],
           },
           {
-            text: "CMP, serum or plasma",
+            text: selectedOrderType?.name || "Unknown Order Type",
             coding: [
               {
                 system: "ATHENA",
-                code: 342223,
-                display: "Lab",
+                code: selectedOrderType?.ordertypeid || "Unknown Code",
+                display: selectedOrderType?.name || "Unknown Order Type",
               },
             ],
           },
@@ -183,22 +186,10 @@ export default function LabOrderForm({
             coding: [
               {
                 system: "http://snomed.info/sct",
-                code: parseInt(formData.problem), // ✅ Ensuring it's an integer.
+                code: parseInt(formData.problem),
                 display:
-                  problemOptions.find((p) => p.value === formData.problem)
+                  diagnosisOptions.find((p) => p.value === formData.problem)
                     ?.label || "Unknown",
-              },
-            ],
-          },
-          {
-            coding: [
-              {
-                system: "http://snomed.info/sct",
-                code: parseInt(formData.encounterDiagnosis), // ✅ Ensuring it's an integer.
-                display:
-                  encounterDiagnosisOptions.find(
-                    (d) => d.value === formData.encounterDiagnosis
-                  )?.label || "Unknown",
               },
             ],
           },
@@ -216,12 +207,32 @@ export default function LabOrderForm({
     try {
       const response = await LabOrderService.createLabOrder(payload, sourceId);
       console.log("Create Lab Order Response:", response);
-      alert("Form submitted successfully!");
+
+      if (response.data.status === "success") {
+        toast.success("Form submitted successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert("Error submitting form");
+      toast.error("Error submitting form", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
+
   // ✅ Handles form input changes
   const handleInputChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -232,8 +243,11 @@ export default function LabOrderForm({
         <div className="flex justify-between mb-8">
           <h1 className="text-2xl font-bold">LAB ORDER DETAILS</h1>
         </div>
-         {/* Zipcode Input */}
-         <div className="mt-4">
+        {/* Zipcode Input */}
+        <p className="text-base">
+          <strong>Select Receiver</strong>
+        </p>
+        <div className="mt-4">
           <Label>Enter Zip Code</Label>
           <input
             type="text"
@@ -269,24 +283,45 @@ export default function LabOrderForm({
             />
           )}
         </div>
+
+        <div className="border-b border-gray-300 my-5"></div>
+
         {/* Reference Dropdown */}
         <div>
-          <Label>Select Order Type</Label>
+          <Label className="text-base">Select Order Type</Label>
           <Combobox
             label="Select a reference"
             options={referenceOptions.map((option) => ({
-              value: option.ordertypeid.toString(),
-              label: option.name,
+              value: option.ordertypeid.toString(), // Ensure this is a string
+              label: option.name, // Display name correctly
             }))}
-            value={formData.reference}
-            onChange={(value) =>
-              setFormData((prev) => ({ ...prev, reference: value }))
-            }
+            value={
+              formData.reference?.ordertypeid
+                ? formData.reference.ordertypeid.toString()
+                : ""
+            } // Ensure value is set correctly
+            onChange={(value) => {
+              console.log("Selected Order Type ID:", value); // Debugging log
+              const selectedOption = referenceOptions.find(
+                (option) => option.ordertypeid.toString() === value
+              );
+              console.log("Selected Order Type Data:", selectedOption); // Debugging log
+
+              if (selectedOption) {
+                setFormData((prev) => ({
+                  ...prev,
+                  reference: {
+                    ordertypeid: selectedOption.ordertypeid.toString(),
+                    name: selectedOption.name,
+                  },
+                }));
+              }
+            }}
           />
         </div>
-        
+
         <div className="mt-4">
-          <Label>Select Problem or Diagnosis</Label>
+          <Label className="text-base">Select Problem or Diagnosis</Label>
           <Combobox
             label="Select a problem or diagnosis"
             options={diagnosisOptions}
@@ -296,11 +331,12 @@ export default function LabOrderForm({
             }
           />
         </div>
-       
+
         <div className="flex justify-end gap-4 mt-6">
           <Button variant="outline" type="submit">
             SUBMIT ORDER
           </Button>
+          <ToastContainer />
         </div>
       </form>
     </div>
