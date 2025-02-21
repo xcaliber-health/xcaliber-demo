@@ -6,6 +6,9 @@ import { ReferenceDataService } from "../services/referenceDataService";
 import { Button } from "./ui/button";
 import { Combobox } from "./ui/combobox";
 import { Label } from "./ui/label";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 export default function LabOrderForm({
   patientId,
   departmentId,
@@ -72,7 +75,6 @@ export default function LabOrderForm({
       try {
         const problems = await ProblemService.getProblems(
           patientId,
-          "problem-list-item",
           departmentId,
           sourceId
         );
@@ -212,10 +214,29 @@ export default function LabOrderForm({
     try {
       const response = await LabOrderService.createLabOrder(payload, sourceId);
       console.log("Create Lab Order Response:", response);
-      alert("Form submitted successfully!");
+
+      if (response.data.status === "success") {
+        toast.success("Form submitted successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert("Error submitting form");
+      toast.error("Error submitting form", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
   // ✅ Handles form input changes
@@ -303,6 +324,7 @@ export default function LabOrderForm({
           <Button variant="outline" type="submit">
             SUBMIT ORDER
           </Button>
+          <ToastContainer />
         </div>
       </form>
     </div>

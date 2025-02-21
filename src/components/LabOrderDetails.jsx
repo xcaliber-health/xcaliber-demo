@@ -10,8 +10,8 @@ import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { Tabs, TabsContent } from "./ui/tabs";
 
 const LabOrderDetails = ({
-  patientId = 4406,
-  encounterId = 46318,
+  patientId,
+  encounterId,
   sourceId,
   departmentId,
   practitionerId,
