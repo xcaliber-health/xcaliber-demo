@@ -65,7 +65,6 @@ export default function LabOrderForm({
     }
   };
 
-
   // ✅ Combine Problems & Encounter Diagnosis in a Single Dropdown
   const [diagnosisOptions, setDiagnosisOptions] = useState([]);
 
@@ -144,7 +143,6 @@ export default function LabOrderForm({
       fetchReferenceData();
     }
   }, [practiceId, sourceId]);
-
 
   // ✅ Handles form submission
   const handleSubmit = async (e) => {
@@ -232,8 +230,12 @@ export default function LabOrderForm({
         <div className="flex justify-between mb-8">
           <h1 className="text-2xl font-bold">LAB ORDER DETAILS</h1>
         </div>
-         {/* Zipcode Input */}
-         <div className="mt-4">
+
+        <p className="text-base">
+          <strong>Select Receiver</strong>
+        </p>
+        {/* Zipcode Input */}
+        <div className="mt-4">
           <Label>Enter Zip Code</Label>
           <input
             type="text"
@@ -269,9 +271,12 @@ export default function LabOrderForm({
             />
           )}
         </div>
+
+        <div className="border-b border-gray-300 my-5" />
+
         {/* Reference Dropdown */}
         <div>
-          <Label>Select Order Type</Label>
+          <Label className="text-base">Select Order Type</Label>
           <Combobox
             label="Select a reference"
             options={referenceOptions.map((option) => ({
@@ -284,9 +289,9 @@ export default function LabOrderForm({
             }
           />
         </div>
-        
+
         <div className="mt-4">
-          <Label>Select Problem or Diagnosis</Label>
+          <Label className="text-base"> Select Problem or Diagnosis</Label>
           <Combobox
             label="Select a problem or diagnosis"
             options={diagnosisOptions}
@@ -296,7 +301,7 @@ export default function LabOrderForm({
             }
           />
         </div>
-       
+
         <div className="flex justify-end gap-4 mt-6">
           <Button variant="outline" type="submit">
             SUBMIT ORDER
