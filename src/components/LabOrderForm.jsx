@@ -3,6 +3,7 @@ import { LabOrderService } from "../services/labOrderService";
 import { PractitionerService } from "../services/practitionerService";
 import { ProblemService } from "../services/problemService";
 import { ReferenceDataService } from "../services/referenceDataService";
+import { LabResultsService } from "../services/labResultsService";
 import { Button } from "./ui/button";
 import { Combobox } from "./ui/combobox";
 import { Label } from "./ui/label";
@@ -99,7 +100,7 @@ export default function LabOrderForm({
             label: `Diagnosis: ${item.resource.code.coding[0].display}`,
           })) || [];
 
-        setDiagnosisOptions([ ...formattedDiagnoses,...formattedProblems]);
+        setDiagnosisOptions([...formattedDiagnoses, ...formattedProblems]);
       } catch (error) {
         console.error("Error fetching diagnosis data:", error);
         setDiagnosisOptions([]);
@@ -204,9 +205,184 @@ export default function LabOrderForm({
       },
     };
 
+    let payloadLabResult = {
+      context: { departmentId: departmentId },
+      data: {
+        resourceType: "DiagnosticReport",
+
+        category: [
+          {
+            coding: [
+              {
+                system: "http://terminology.hl7.org/CodeSystem/v2-0074",
+                code: "Lab",
+              },
+            ],
+          },
+          {
+            coding: [
+              {
+                system: "athena",
+                code: "LABRESULT",
+                extension: [],
+              },
+            ],
+          },
+        ],
+        code: {
+          coding: [
+            {
+              system: "http://loinc.org",
+              code: "57021-8",
+              display: "CBC w/ auto diff",
+            },
+          ],
+          text: "CBC w/ auto diff",
+        },
+        subject: {
+          reference: `Patient/${patientId}`,
+        },
+        conclusion:
+          "The results of your recent lab tests are within normal limits. We look forward to seeing you at your next appointment.",
+        text: {
+          div: '{"performinglabcity":"New York","documentclass":"LABRESULT","priority":"2","labresultloinc":"57021-8","performinglabzip":"10021-0001","tietoorderid":143797,"lastmodifieddatetime":"2021-04-06T16:03:58-04:00","alarmdays":"14","departmentid":"150","observations":[],"providerid":67,"patientnote":"The results of your recent lab tests are within normal limits. We look forward to seeing you at your next appointment.","actionnote":"scrambled notes","createddatetime":"2020-06-23T08:01:59-04:00","createddate":"06/23/2020","performinglabaddress2":"suite 1","lastmodifieduser":"mheang","performinglabaddress1":"5 Hatley Road","pages":[],"documentsource":"UPLOAD","labresultid":143583,"status":"CLOSED","ordertype":"LAB","providerusername":"mblake1","resultcategory":"UNKNOWN","documenttypeid":342093,"portalpublisheddatetime":"2021-04-06T16:01:39-04:00","externalnoteonly":"The results of your recent lab tests are within normal limits. We look forward to seeing you at your next appointment.","documentroute":"RESULTSCALL","encounterdate":"06/23/2020","performinglabstate":"NY","description":"CBC w/ auto diff","facilityid":11309146,"lastmodifieddate":"04/06/2021","createduser":"sfeldman1","performinglabname":"7 Hills Department","isreviewedbyprovider":true}',
+        },
+        performer: [
+          {
+            reference: "Practitioner/67",
+          },
+        ],
+
+        result: [],
+        presentedForm: [
+          {
+            extension: [
+              {
+                url: "http://xcaliber-fhir/structureDefinition/created-date",
+                valueDateTime: new Date().toISOString(),
+              },
+              {
+                url: "http://xcaliber-fhir/structureDefinition/status",
+                valueString: "CLOSED",
+              },
+              {
+                url: "http://xcaliber-fhir/structureDefinition/document-source",
+                valueString: "UPLOAD",
+              },
+            ],
+          },
+        ],
+        issued: new Date().toISOString(),
+        extension: [
+          {
+            url: "http://xcaliber-fhir/structureDefinition/priority",
+            valueString: "2",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/facility-id",
+            valueInteger: 11309146,
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/is-reviewed-by-provider",
+            valueBoolean: true,
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/created-user",
+            valueString: "sfeldman1",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/department-id",
+            valueString: "150",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/document-source",
+            valueString: "UPLOAD",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/document-route",
+            valueString: "RESULTSCALL",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/document-type-id",
+            valueInteger: 342093,
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/encounter-date",
+            valueDate: "2020-06-23",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/external-note-only",
+            valueString:
+              "The results of your recent lab tests are within normal limits. We look forward to seeing you at your next appointment.",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/last-modified-datetime",
+            valueDateTime: "2021-04-06T16:03:58-04:00",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/last-modified-user",
+            valueString: "mheang",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/order-type",
+            valueString: "LAB",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/portal-published-datetime",
+            valueDateTime: "2021-04-06T16:01:39-04:00",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/status",
+            valueString: "CLOSED",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/alarm-days",
+            valueString: "14",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/action-note",
+            valueString: "scrambled notes",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/result-category",
+            valueString: "UNKNOWN",
+          },
+          {
+            url: "http://xcaliber-fhir/structureDefinition/provider-user-name",
+            valueString: "mblake1",
+          },
+        ],
+        contained: [
+          {
+            resourceType: "Organization",
+            id: "195903",
+            address: [
+              {
+                line: ["5 Hatley Road", "suite 1"],
+                city: "New York",
+                state: "NY",
+                postalCode: "10021-0001",
+              },
+            ],
+          },
+        ],
+      },
+    };
+
     try {
       const response = await LabOrderService.createLabOrder(payload, sourceId);
+      const basedOn = [
+        {
+          reference: `ServiceRequest/${response?.data.id || "UNKNOWN"}`,
+        },
+      ];
+      payloadLabResult = { ...payloadLabResult, basedOn: basedOn };
+      const responseLabResult = await LabResultsService.createLabResult(
+        payloadLabResult,
+        sourceId
+      );
       console.log("Create Lab Order Response:", response);
+      console.log("Create Lab Result Response:", responseLabResult);
 
       if (response.data.status === "success") {
         toast.success("Form submitted successfully!", {
