@@ -516,6 +516,15 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
 }
 
 function Section({ title, schema, formData }) {
+  // Filter out empty fields
+  const filteredSchema = Object.fromEntries(
+    Object.entries(schema).filter(([key]) => formData[key] !== "" && formData[key] !== null && formData[key] !== undefined)
+  );
+
+  if (Object.keys(filteredSchema).length === 0) {
+    return null; // Don't render if no data is available
+  }
+
   return (
     <>
       {title && (
@@ -525,7 +534,7 @@ function Section({ title, schema, formData }) {
         </>
       )}
       <Form
-        schema={{ type: "object", properties: schema }}
+        schema={{ type: "object", properties: filteredSchema }}
         formData={formData}
         uiSchema={uiSchema}
         validator={validator}
@@ -533,13 +542,27 @@ function Section({ title, schema, formData }) {
     </>
   );
 }
+
 function SectionIns({ title, schema, formData }) {
+  // Filter out empty fields
+  const filteredSchema = Object.fromEntries(
+    Object.entries(schema).filter(([key]) => formData[key] !== "" && formData[key] !== null && formData[key] !== undefined)
+  );
+
+  if (Object.keys(filteredSchema).length === 0) {
+    return null; // Don't render if no data is available
+  }
+
   return (
     <>
-      <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-      <Separator />
+      {title && (
+        <>
+          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+          <Separator />
+        </>
+      )}
       <Form
-        schema={{ type: "object", properties: schema }}
+        schema={{ type: "object", properties: filteredSchema }}
         formData={formData}
         uiSchema={uiSchema2}
         validator={validator}
@@ -547,6 +570,7 @@ function SectionIns({ title, schema, formData }) {
     </>
   );
 }
+
 
 function VitalCard({ icon: Icon, label, value, color }) {
   const formattedLabel = label
