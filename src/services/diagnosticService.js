@@ -5,8 +5,11 @@ export const DiagnosticService = {
   getDiagnosticReport: async (patientId, departmentId, sourceId) => {
     try {
       let sourceUrl = Helper.getSourceUrl();
-      const response = await axios.get(
-        `${sourceUrl}/DiagnosticReport?patient=${patientId}&category=lab-result&departmentId=${departmentId}`,
+      let batchSize = 50;
+      let totalRecords = 0;
+
+      const countResponse = await axios.get(
+        `${sourceUrl}/DiagnosticReport?patient=${patientId}&category=lab-result&departmentId=${departmentId}&_count=1`,
         {
           headers: {
             Authorization: Helper.getSourceToken(),
@@ -14,9 +17,26 @@ export const DiagnosticService = {
           },
         }
       );
-      return response.data;
+
+      totalRecords = countResponse.data?.data?.total || 0;
+
+      let offset = Math.max(0, totalRecords - batchSize);
+
+      const response = await axios.get(
+        `${sourceUrl}/DiagnosticReport?patient=${patientId}&category=lab-result&departmentId=${departmentId}&_count=${batchSize}&_offset=${offset}`,
+        {
+          headers: {
+            Authorization: Helper.getSourceToken(),
+            "x-source-id": sourceId,
+          },
+        }
+      );
+
+      const latestEntries = response.data?.data?.entry || [];
+
+      return latestEntries;
     } catch (error) {
-      console.log("Error fetching diagnostic report:", error);
+      console.log("Error fetching diagnostic reports:", error);
       throw error;
     }
   },

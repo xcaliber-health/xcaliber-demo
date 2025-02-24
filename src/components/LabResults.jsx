@@ -40,9 +40,7 @@ export default function LabResults({ patientId, departmentId, sourceId }) {
         );
         console.log("Diagnostic Report Response:", response);
 
-        if (!response.data || !response.data.entry) return;
-
-        const reports = response.data.entry.map((entry) => entry.resource);
+        const reports = response.map((entry) => entry.resource);
         if (reports.length === 0) return;
 
         const patientReference = reports[0].subject?.reference || "Unknown";
@@ -88,10 +86,10 @@ export default function LabResults({ patientId, departmentId, sourceId }) {
 
         const sortedPanels = [...latestReportsMap.values()].sort((a, b) => {
           const createdA = a.tests.find(
-            (test) => test.name === "Createddatetime"
+            (test) => test.name === "Lastmodifieddatetime"
           )?.value;
           const createdB = b.tests.find(
-            (test) => test.name === "Createddatetime"
+            (test) => test.name === "Lastmodifieddatetime"
           )?.value;
 
           return new Date(createdB) - new Date(createdA);
@@ -142,9 +140,9 @@ export default function LabResults({ patientId, departmentId, sourceId }) {
         </div>
       ) : (
         <Accordion type="multiple" className="space-y-4">
-          {labData.map((panel) => {
-            const createdDateTime = panel.tests.find(
-              (test) => test.name === "Createddatetime"
+          {labData.slice(0, 10).map((panel) => {
+            const lastmodifieddatetime = panel.tests.find(
+              (test) => test.name === "Lastmodifieddatetime"
             )?.value;
 
             return (
@@ -157,7 +155,7 @@ export default function LabResults({ patientId, departmentId, sourceId }) {
                   <div className="flex flex-col gap-2 justify-center w-full">
                     <h2 className="text-xl font-semibold">{panel.name}</h2>
                     <span className="text-sm text-gray-500">
-                      Created: {formatDateTime(createdDateTime)}
+                      Last modified: {formatDateTime(lastmodifieddatetime)}
                     </span>
                   </div>
                 </AccordionTrigger>
