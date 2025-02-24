@@ -8,7 +8,6 @@ export const DiagnosticService = {
       let batchSize = 50;
       let totalRecords = 0;
 
-      // 🔹 First API call to get the total count
       const countResponse = await axios.get(
         `${sourceUrl}/DiagnosticReport?patient=${patientId}&category=lab-result&departmentId=${departmentId}&_count=1`,
         {

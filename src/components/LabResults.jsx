@@ -96,7 +96,6 @@ export default function LabResults({ patientId, departmentId, sourceId }) {
         });
 
         latestReportsMap;
-        console.log(sortedPanels);
         setLabData(sortedPanels);
       } catch (error) {
         console.error("Error fetching diagnostic report:", error);
