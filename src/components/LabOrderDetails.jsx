@@ -48,7 +48,7 @@ const LabOrderDetails = ({
             <p><strong>Encounter ID:</strong> {encounterId || "N/A"}</p>
             <p><strong>Department ID:</strong> {departmentId || "N/A"}</p>
             <p><strong>Practice ID:</strong> {practiceId || "N/A"}</p>
-            <p><strong>Practitioner ID:</strong> {practitionerId || "N/A"}</p>
+            {/* <p><strong>Practitioner ID:</strong> {practitionerId || "N/A"}</p> */}
           </div>
         )}
       </div>
