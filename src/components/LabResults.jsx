@@ -142,7 +142,7 @@ export default function LabResults({ patientId, departmentId, sourceId }) {
         </div>
       ) : (
         <Accordion type="multiple" className="space-y-4">
-          {labData.map((panel) => {
+          {labData.slice(0, 10).map((panel) => {
             const createdDateTime = panel.tests.find(
               (test) => test.name === "Createddatetime"
             )?.value;
