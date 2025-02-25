@@ -44,7 +44,7 @@ export default function LabOrder({
         console.error("Error fetching lab orders:", error);
         setLabOrders([]);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
@@ -177,8 +177,8 @@ export default function LabOrder({
                     resource.extension?.find((ext) =>
                       ext.url.includes("ordering-provider")
                     )?.valueString || "Unknown Provider";
-                  const collectionDate = resource.occurrenceDateTime
-                    ? new Date(resource.occurrenceDateTime).toLocaleDateString()
+                  const authoredOn = resource.authoredOn
+                    ? new Date(resource.authoredOn).toLocaleDateString()
                     : "N/A";
 
                   return (
@@ -193,7 +193,7 @@ export default function LabOrder({
                             {provider}
                           </h2>
                           <p className="text-sm text-gray-600">
-                            <strong>Collection Date:</strong> {collectionDate}
+                            <strong>Authored On:</strong> {authoredOn}
                           </p>
                         </div>
 
