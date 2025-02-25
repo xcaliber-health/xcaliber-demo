@@ -417,7 +417,7 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
                           },
                           primaryInsurerAddress: {
                             type: "string",
-                            title: "Primary Insurer Address",
+                            title: "Policy Holder Address",
                           },
                           primaryGroupNumber: {
                             type: "string",
@@ -582,6 +582,13 @@ function VitalCard({ icon: Icon, label, value, color }) {
     .split(".")
     .join(" ");
 
+  const convertedValue =
+    formattedLabel.toLowerCase() === "body weight"
+      ? `${(parseFloat(value) / 453.592).toFixed(2)} lbs`
+      : formattedLabel.toLowerCase() === "body height"
+      ? `${(parseFloat(value) / 2.54).toFixed(2)} in`
+      : value || "N/A";
+
   return (
     <Card>
       <CardContent className="p-4 h-full bg-white rounded-lg">
@@ -591,7 +598,9 @@ function VitalCard({ icon: Icon, label, value, color }) {
             <p className="text-sm text-muted-foreground break-words">
               {formattedLabel}
             </p>
-            <p className="text-xl font-semibold truncate">{value || "N/A"}</p>
+            <p className="text-xl font-semibold truncate">
+              {convertedValue || "N/A"}
+            </p>
           </div>
         </div>
       </CardContent>
