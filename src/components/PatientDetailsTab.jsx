@@ -417,7 +417,7 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
                           },
                           primaryInsurerAddress: {
                             type: "string",
-                            title: "Primary Insurer Address",
+                            title: "Policy Holder Address",
                           },
                           primaryGroupNumber: {
                             type: "string",
