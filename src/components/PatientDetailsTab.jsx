@@ -367,13 +367,11 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
                           type: "string",
                           title: "RP Address Line 1",
                         },
-                        rpAddress2: {
+                        rpCity: { type: "string", title: "RP City" },
+                        rpState: { type: "string", title: "RP State" },
+                        rpPostalCode: {
                           type: "string",
-                          title: "RP Address Line 2",
-                        },
-                        rpAddress3: {
-                          type: "string",
-                          title: "RP Address Line 3",
+                          title: "RP Postal Code",
                         },
                       }}
                       formData={mapFHIRDataToForm(patientDetails)}
@@ -382,8 +380,9 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
                         rpPhone: { "ui:widget": CustomInput },
                         rpRelation: { "ui:widget": CustomInput },
                         rpAddress1: { "ui:widget": CustomInput },
-                        rpAddress2: { "ui:widget": CustomInput },
-                        rpAddress3: { "ui:widget": CustomInput },
+                        rpCity: { "ui:widget": CustomInput },
+                        rpState: { "ui:widget": CustomInput },
+                        rpPostalCode: { "ui:widget": CustomInput },
                       }}
                     />
                   </AccordionContent>
@@ -518,7 +517,12 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
 function Section({ title, schema, formData }) {
   // Filter out empty fields
   const filteredSchema = Object.fromEntries(
-    Object.entries(schema).filter(([key]) => formData[key] !== "" && formData[key] !== null && formData[key] !== undefined)
+    Object.entries(schema).filter(
+      ([key]) =>
+        formData[key] !== "" &&
+        formData[key] !== null &&
+        formData[key] !== undefined
+    )
   );
 
   if (Object.keys(filteredSchema).length === 0) {
@@ -546,7 +550,12 @@ function Section({ title, schema, formData }) {
 function SectionIns({ title, schema, formData }) {
   // Filter out empty fields
   const filteredSchema = Object.fromEntries(
-    Object.entries(schema).filter(([key]) => formData[key] !== "" && formData[key] !== null && formData[key] !== undefined)
+    Object.entries(schema).filter(
+      ([key]) =>
+        formData[key] !== "" &&
+        formData[key] !== null &&
+        formData[key] !== undefined
+    )
   );
 
   if (Object.keys(filteredSchema).length === 0) {
@@ -570,7 +579,6 @@ function SectionIns({ title, schema, formData }) {
     </>
   );
 }
-
 
 function VitalCard({ icon: Icon, label, value, color }) {
   const formattedLabel = label

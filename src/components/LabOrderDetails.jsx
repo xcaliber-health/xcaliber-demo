@@ -112,7 +112,7 @@ const LabOrderDetails = ({
               <X className="w-5 h-5 text-gray-700" />
             </Button>
           </div>
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto p-4 h-full">
             <LabOrder
               patientId={patientId}
               categoryCode="108252007"

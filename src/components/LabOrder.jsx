@@ -54,7 +54,7 @@ export default function LabOrder({
   return (
     <div>
       {isCreating ? (
-        <div>
+        <div className="h-full w-full">
           <div className="w-full h-full flex items-center mb-4">
             <button
               onClick={() => setIsCreating(false)}
