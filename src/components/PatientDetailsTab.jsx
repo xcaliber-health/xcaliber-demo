@@ -224,7 +224,7 @@ const uiSchema2 = {
 
   // 🔹 Secondary Insurance Fields
   secondaryInsurerName: { "ui:widget": CustomInput },
-  secondaryInsurerAddress: { "ui:widget": CustomInput },
+  // secondaryInsurerAddress: { "ui:widget": CustomInput },
   secondaryGroupNumber: { "ui:widget": CustomInput },
   secondaryPolicyNumber: { "ui:widget": CustomInput },
   secondaryInsuredName: { "ui:widget": CustomInput },
@@ -473,10 +473,6 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
                             type: "string",
                             title: "Secondary Insurer Name",
                           },
-                          secondaryInsurerAddress: {
-                            type: "string",
-                            title: "Secondary Insurer Address",
-                          },
                           secondaryGroupNumber: {
                             type: "string",
                             title: "Secondary Group Number",
@@ -495,7 +491,7 @@ export default function PatientDetails({ patientId, departmentId, sourceId }) {
                           },
                         }}
                         formData={mapFHIRInsuranceDataToForm(insuranceDetails)}
-                        uiSchema={uiSchema2} // ✅ Fixed: Explicitly passing correct uiSchema2
+                        uiSchema={uiSchema2}
                       />
                     )}
                   </AccordionContent>
