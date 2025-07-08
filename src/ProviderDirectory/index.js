@@ -8,7 +8,7 @@ import { GenerateToken } from './Token';
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
-    uri: 'https://blitz.xcaliberapis.com/xcaliber-dev2/bff/',
+    uri: process.env.REACT_BFF_INSTANCE_URL,
 });
 const authLink = setContext((_, { headers }) => {
     return {
