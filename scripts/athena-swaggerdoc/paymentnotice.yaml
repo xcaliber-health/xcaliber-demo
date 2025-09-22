@@ -1,0 +1,917 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as 
+    Fire) is a standard for exchanging healthcare information electronically. It
+    is designed to be a modern, flexible, and web-based alternative to older, 
+    more cumbersome standards like HL7 v2. FHIR uses a RESTful API specification
+    to define how to interact with Resources - this means it uses standard HTTP 
+    verbs (GET, POST, PUT, DELETE). Resources are the fundamental units of data 
+    in FHIR; they can represent anything from patient demographics to clinical 
+    observations to medications.
+servers:
+  - url: https://xchange-sandbox.xcaliberapis.com
+  - url: https://your.api.server
+tags:
+  - name: PaymentNotice
+    description: PaymentNotice resource operations in Athena
+paths:
+  /api/v1//PaymentNotice:
+    get:
+      tags:
+        - PaymentNotice
+      summary: Get Athena Payment Notices
+      operationId: getAthenaPaymentNotice
+      parameters:
+        - &id001
+          name: x-source-id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Source system identifier.
+        - &id002
+          name: x-interaction-mode
+          in: header
+          required: true
+          schema:
+            type: boolean
+          description: Interaction mode flag (true/false).
+        - name: created
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: created'
+        - name: identifier
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: identifier'
+        - name: payment-status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: payment-status'
+        - name: provider
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: provider'
+        - name: request
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: request'
+        - name: response
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: response'
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: status'
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+        - name: additional-payment-info
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: patient-id-list
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinPaymentNotice'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinPaymentNotice'
+              example:
+                statusCode: 400
+                message: Invalid parameters
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinPaymentNotice'
+              example:
+                statusCode: 404
+                message: Not Found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinPaymentNotice'
+              example:
+                statusCode: 500
+                message: Internal server error
+    post:
+      tags:
+        - PaymentNotice
+      summary: Create Payment in Athena
+      operationId: createPaymentInAthena
+      parameters:
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractedSchema1172'
+            example:
+              context:
+                requestId: abc123
+                source: ATHENA
+                quorum: true
+                notify: true
+                departmentId: '150'
+                patientId: '4406'
+              data:
+                amount:
+                  value: 50
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/payment-method
+                    valueString: CASH
+                  - url: http://xcaliber-fhir/structureDefinition/appointment-id
+                    valueInteger: 1234567
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/card-number-last4
+                    valueString: '9876'
+                  - url: http://xcaliber-fhir/structureDefinition/check-number
+                    valueString: CHK1022
+                  - url: http://xcaliber-fhir/structureDefinition/other-amount
+                    valueString: '15.75'
+                  - url: http://xcaliber-fhir/structureDefinition/claim-payment
+                    valueString: ''
+                  - url: http://xcaliber-fhir/structureDefinition/post-date
+                    valueDate: '2024-06-17'
+                  - url: http://xcaliber-fhir/structureDefinition/today-service
+                    valueDate: '2024-06-17'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofpostinPaymentNotice'
+              example:
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                  departmentId: '150'
+                  patientId: '4406'
+                data:
+                  amount:
+                    value: 50
+                  extension:
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/payment-method
+                      valueString: CASH
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/appointment-id
+                      valueInteger: 1234567
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/card-number-last4
+                      valueString: '9876'
+                    - url: http://xcaliber-fhir/structureDefinition/check-number
+                      valueString: CHK1022
+                    - url: http://xcaliber-fhir/structureDefinition/other-amount
+                      valueString: '15.75'
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/claim-payment
+                      valueString: ''
+                    - url: http://xcaliber-fhir/structureDefinition/post-date
+                      valueDate: '2024-06-17'
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/today-service
+                      valueDate: '2024-06-17'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinPaymentNotice'
+              example:
+                statusCode: 400
+                message: Invalid parameters
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofpostinPaymentNotice'
+              example:
+                statusCode: 404
+                message: Not Found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinPaymentNotice'
+              example:
+                statusCode: 500
+                message: Internal server error
+components:
+  schemas:
+    ExtractedSchema1172:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+                - requestId
+                - source
+                - quorum
+                - notify
+            data:
+              type: object
+              properties:
+                amount:
+                  type: object
+                  properties:
+                    value:
+                      type: number
+                      example: 50
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    oneOf:
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/payment-method
+                          valueString:
+                            type: string
+                            example: credit-card
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/appointment-id
+                          valueInteger:
+                            type: integer
+                            example: 1234567
+                        required:
+                          - url
+                          - valueInteger
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/card-number-last4
+                          valueString:
+                            type: string
+                            example: '9876'
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/check-number
+                          valueString:
+                            type: string
+                            example: CHK1022
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/other-amount
+                          valueString:
+                            type: string
+                            example: '15.75'
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/claim-payment
+                          valueString:
+                            type: string
+                            example: insurance
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/post-date
+                          valueDate:
+                            type: string
+                            format: date
+                            example: '2024-06-17'
+                        required:
+                          - url
+                          - valueDate
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/today-service
+                          valueDate:
+                            type: string
+                            format: date
+                            example: '2024-06-17'
+                        required:
+                          - url
+                          - valueDate
+              example:
+                amount:
+                  value: 50
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/payment-method
+                    valueString: credit-card
+                  - url: http://xcaliber-fhir/structureDefinition/appointment-id
+                    valueInteger: 1234567
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/card-number-last4
+                    valueString: '9876'
+                  - url: http://xcaliber-fhir/structureDefinition/check-number
+                    valueString: CHK1022
+                  - url: http://xcaliber-fhir/structureDefinition/other-amount
+                    valueString: '15.75'
+                  - url: http://xcaliber-fhir/structureDefinition/claim-payment
+                    valueString: insurance
+                  - url: http://xcaliber-fhir/structureDefinition/post-date
+                    valueDate: '2024-06-17'
+                  - url: http://xcaliber-fhir/structureDefinition/today-service
+                    valueDate: '2024-06-17'
+          description: '"Payment details to create a new payment in Athena. Contains
+            required payment information."'
+      required:
+        - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          amount:
+            value: 50
+          extension:
+            - url: http://xcaliber-fhir/structureDefinition/payment-method
+              valueString: credit-card
+            - url: http://xcaliber-fhir/structureDefinition/appointment-id
+              valueInteger: 1234567
+            - url: http://xcaliber-fhir/structureDefinition/card-number-last4
+              valueString: '9876'
+            - url: http://xcaliber-fhir/structureDefinition/check-number
+              valueString: CHK1022
+            - url: http://xcaliber-fhir/structureDefinition/other-amount
+              valueString: '15.75'
+            - url: http://xcaliber-fhir/structureDefinition/claim-payment
+              valueString: insurance
+            - url: http://xcaliber-fhir/structureDefinition/post-date
+              valueDate: '2024-06-17'
+            - url: http://xcaliber-fhir/structureDefinition/today-service
+              valueDate: '2024-06-17'
+    response200ofgetinPaymentNotice:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+                - requestId
+                - source
+                - quorum
+                - notify
+            data:
+              type: object
+              properties:
+                amount:
+                  type: object
+                  properties:
+                    value:
+                      type: number
+                      example: 50
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    oneOf:
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/payment-method
+                          valueString:
+                            type: string
+                            example: credit-card
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/appointment-id
+                          valueInteger:
+                            type: integer
+                            example: 1234567
+                        required:
+                          - url
+                          - valueInteger
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/card-number-last4
+                          valueString:
+                            type: string
+                            example: '9876'
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/check-number
+                          valueString:
+                            type: string
+                            example: CHK1022
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/other-amount
+                          valueString:
+                            type: string
+                            example: '15.75'
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/claim-payment
+                          valueString:
+                            type: string
+                            example: insurance
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/post-date
+                          valueDate:
+                            type: string
+                            format: date
+                            example: '2024-06-17'
+                        required:
+                          - url
+                          - valueDate
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/today-service
+                          valueDate:
+                            type: string
+                            format: date
+                            example: '2024-06-17'
+                        required:
+                          - url
+                          - valueDate
+              example:
+                amount:
+                  value: 50
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/payment-method
+                    valueString: credit-card
+                  - url: http://xcaliber-fhir/structureDefinition/appointment-id
+                    valueInteger: 1234567
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/card-number-last4
+                    valueString: '9876'
+                  - url: http://xcaliber-fhir/structureDefinition/check-number
+                    valueString: CHK1022
+                  - url: http://xcaliber-fhir/structureDefinition/other-amount
+                    valueString: '15.75'
+                  - url: http://xcaliber-fhir/structureDefinition/claim-payment
+                    valueString: insurance
+                  - url: http://xcaliber-fhir/structureDefinition/post-date
+                    valueDate: '2024-06-17'
+                  - url: http://xcaliber-fhir/structureDefinition/today-service
+                    valueDate: '2024-06-17'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                amount:
+                  value: 50
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/payment-method
+                    valueString: credit-card
+                  - url: http://xcaliber-fhir/structureDefinition/appointment-id
+                    valueInteger: 1234567
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/card-number-last4
+                    valueString: '9876'
+                  - url: http://xcaliber-fhir/structureDefinition/check-number
+                    valueString: CHK1022
+                  - url: http://xcaliber-fhir/structureDefinition/other-amount
+                    valueString: '15.75'
+                  - url: http://xcaliber-fhir/structureDefinition/claim-payment
+                    valueString: insurance
+                  - url: http://xcaliber-fhir/structureDefinition/post-date
+                    valueDate: '2024-06-17'
+                  - url: http://xcaliber-fhir/structureDefinition/today-service
+                    valueDate: '2024-06-17'
+    error400ofgetinPaymentNotice:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Invalid parameters
+        details:
+          type: string
+          nullable: true
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Invalid parameters
+        details:
+    error404ofgetinPaymentNotice:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Invalid parameters
+        details:
+          type: string
+          nullable: true
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Invalid parameters
+        details:
+    error500ofgetinPaymentNotice:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Invalid parameters
+        details:
+          type: string
+          nullable: true
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Invalid parameters
+        details:
+    response200ofpostinPaymentNotice:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+                - requestId
+                - source
+                - quorum
+                - notify
+            data:
+              type: object
+              properties:
+                amount:
+                  type: object
+                  properties:
+                    value:
+                      type: number
+                      example: 50
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    oneOf:
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/payment-method
+                          valueString:
+                            type: string
+                            example: credit-card
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/appointment-id
+                          valueInteger:
+                            type: integer
+                            example: 1234567
+                        required:
+                          - url
+                          - valueInteger
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/card-number-last4
+                          valueString:
+                            type: string
+                            example: '9876'
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/check-number
+                          valueString:
+                            type: string
+                            example: CHK1022
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/other-amount
+                          valueString:
+                            type: string
+                            example: '15.75'
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/claim-payment
+                          valueString:
+                            type: string
+                            example: insurance
+                        required:
+                          - url
+                          - valueString
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/post-date
+                          valueDate:
+                            type: string
+                            format: date
+                            example: '2024-06-17'
+                        required:
+                          - url
+                          - valueDate
+                      - properties:
+                          url:
+                            type: string
+                            example: 
+                              http://example.org/fhir/StructureDefinition/today-service
+                          valueDate:
+                            type: string
+                            format: date
+                            example: '2024-06-17'
+                        required:
+                          - url
+                          - valueDate
+              example:
+                amount:
+                  value: 50
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/payment-method
+                    valueString: credit-card
+                  - url: http://xcaliber-fhir/structureDefinition/appointment-id
+                    valueInteger: 1234567
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/card-number-last4
+                    valueString: '9876'
+                  - url: http://xcaliber-fhir/structureDefinition/check-number
+                    valueString: CHK1022
+                  - url: http://xcaliber-fhir/structureDefinition/other-amount
+                    valueString: '15.75'
+                  - url: http://xcaliber-fhir/structureDefinition/claim-payment
+                    valueString: insurance
+                  - url: http://xcaliber-fhir/structureDefinition/post-date
+                    valueDate: '2024-06-17'
+                  - url: http://xcaliber-fhir/structureDefinition/today-service
+                    valueDate: '2024-06-17'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                amount:
+                  value: 50
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/payment-method
+                    valueString: credit-card
+                  - url: http://xcaliber-fhir/structureDefinition/appointment-id
+                    valueInteger: 1234567
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/card-number-last4
+                    valueString: '9876'
+                  - url: http://xcaliber-fhir/structureDefinition/check-number
+                    valueString: CHK1022
+                  - url: http://xcaliber-fhir/structureDefinition/other-amount
+                    valueString: '15.75'
+                  - url: http://xcaliber-fhir/structureDefinition/claim-payment
+                    valueString: insurance
+                  - url: http://xcaliber-fhir/structureDefinition/post-date
+                    valueDate: '2024-06-17'
+                  - url: http://xcaliber-fhir/structureDefinition/today-service
+                    valueDate: '2024-06-17'
+    error400ofpostinPaymentNotice:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Invalid parameters
+        details:
+          type: string
+          nullable: true
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Invalid parameters
+        details:
+    error404ofpostinPaymentNotice:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Invalid parameters
+        details:
+          type: string
+          nullable: true
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Invalid parameters
+        details:
+    error500ofpostinPaymentNotice:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Invalid parameters
+        details:
+          type: string
+          nullable: true
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Invalid parameters
+        details:
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - Auth: []

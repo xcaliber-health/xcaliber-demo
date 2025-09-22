@@ -1,0 +1,581 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as 
+    Fire) is a standard for exchanging healthcare information electronically. It
+    is designed to be a modern, flexible, and web-based alternative to older, 
+    more cumbersome standards like HL7 v2. FHIR uses a RESTful API specification
+    to define how to interact with Resources - this means it uses standard HTTP 
+    verbs (GET, POST, PUT, DELETE). Resources are the fundamental units of data 
+    in FHIR; they can represent anything from patient demographics to clinical 
+    observations to medications.
+servers:
+  - url: https://xchange-sandbox.xcaliberapis.com
+  - url: https://your.api.server
+tags:
+  - name: Slot
+    description: Operations related to Slot resources in Athena
+paths:
+  /api/v2/Slot:
+    post:
+      tags:
+        - Slot
+      summary: Create Slot
+      operationId: createSlot
+      parameters:
+        - &id001
+          name: x-source-id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Source system identifier.
+        - &id002
+          name: x-interaction-mode
+          in: header
+          required: true
+          schema:
+            type: boolean
+          description: Interaction mode flag (true/false).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractedSchema710'
+            example:
+              context:
+                requestId: 338cf9d66a98583fed38fd98413edfb8
+                source: ATHENA
+                quorum: true
+                notify: true
+              data:
+                id: '123456'
+                status: success
+      responses:
+        '200':
+          description: Slot(s) created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofpostinSlot'
+              example:
+                context:
+                  requestId: 338cf9d66a98583fed38fd98413edfb8
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Bundle
+                  type: searchset
+                  total: 1
+                  entry:
+                    - resource:
+                        id: '123456'
+                        status: success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinSlot'
+              example:
+                statusCode: 400
+                message: 'Bad Request: Missing required fields'
+                details: practiceId is required
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinSlot'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofpostinSlot'
+              example:
+                statusCode: 404
+                message: Not Found
+                details: Resource does not exist
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinSlot'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: {}
+  /api/v2/Slot/{slot-id}:
+    put:
+      tags:
+        - Slot
+      summary: Update Slot
+      operationId: updateSlot
+      parameters:
+        - name: slot-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the slot to update.
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractedSchema718'
+            example:
+              context:
+                requestId: 338cf9d66a98583fed38fd98413edfb8
+                source: ATHENA
+                quorum: true
+                notify: true
+              data:
+                id: '123456'
+                status: success
+      responses:
+        '200':
+          description: Slot status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofputinSlotslotid'
+              example:
+                context:
+                  requestId: 338cf9d66a98583fed38fd98413edfb8
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Bundle
+                  type: searchset
+                  total: 1
+                  entry:
+                    - resource:
+                        id: '123456'
+                        status: success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofputinSlotslotid'
+              example:
+                statusCode: 400
+                message: 'Bad Request: Missing required fields'
+                details: practiceId is required
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofputinSlotslotid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofputinSlotslotid'
+              example:
+                statusCode: 404
+                message: Not Found
+                details: Resource does not exist
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofputinSlotslotid'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: {}
+components:
+  schemas:
+    ExtractedSchema710:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+          description: '"Context information for creating a slot. Contains relevant
+            details for the slot creation process."
+
+
+            Alternatively, if you''d like a slightly different phrasing:
+
+
+            "Slot creation context. Provides additional information required for successful
+            slot creation."'
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              example: '123456'
+            status:
+              type: string
+              example: success
+          required:
+            - id
+            - status
+          description: '"Slot creation data. Contains key information about the slot
+            to be created."
+
+
+            Alternatively, if you''d like a slightly different phrasing:
+
+
+            "Object containing slot details for creation."'
+      required:
+        - context
+        - data
+      example:
+        context:
+          requestId: 338cf9d66a98583fed38fd98413edfb8
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          id: '123456'
+          status: success
+    ExtractedSchema718:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+          description: '"Context for updating a slot. Contains relevant information
+            for the update operation."'
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              example: '123456'
+            status:
+              type: string
+              example: success
+          required:
+            - id
+            - status
+          description: '"Update slot data. Provide a JSON object with the updated
+            slot information."'
+      required:
+        - context
+        - data
+      example:
+        context:
+          requestId: 338cf9d66a98583fed38fd98413edfb8
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          id: '123456'
+          status: success
+    response200ofpostinSlot:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              example: '123456'
+            status:
+              type: string
+              example: success
+          required:
+            - id
+            - status
+      required:
+        - context
+        - data
+      example:
+        context:
+          requestId: 338cf9d66a98583fed38fd98413edfb8
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                id: '123456'
+                status: success
+    error400ofpostinSlot:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: extra details here
+    error401ofpostinSlot:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+        - success
+        - code
+        - message
+    error404ofpostinSlot:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: extra details here
+    error500ofpostinSlot:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: extra details here
+    response200ofputinSlotslotid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              example: '123456'
+            status:
+              type: string
+              example: success
+          required:
+            - id
+            - status
+      required:
+        - context
+        - data
+      example:
+        context:
+          requestId: 338cf9d66a98583fed38fd98413edfb8
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                id: '123456'
+                status: success
+    error400ofputinSlotslotid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: extra details here
+    error401ofputinSlotslotid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+        - success
+        - code
+        - message
+    error404ofputinSlotslotid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: extra details here
+    error500ofputinSlotslotid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: extra details here
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - Auth: []

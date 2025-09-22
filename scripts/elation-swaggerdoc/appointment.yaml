@@ -1,0 +1,4508 @@
+openapi: 3.0.3
+info:
+  title: Elation Appointments API
+  version: 1.0.0
+  description: 'Source Ids:
+
+    - Athena: 083fe714-e36e-4851-b2e7-a7166b439f67
+
+    - Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f
+
+
+    API for managing appointments in Elation'
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.com
+tags:
+- name: Appointments
+  description: Operations related to Elation Appointments
+paths:
+  /api/v2/Appointment:
+    get:
+      tags:
+      - Appointments
+      summary: Get Elation appointments
+      operationId: getElationAppointments
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+      - name: actor
+        in: query
+        required: false
+        description: Search parameter 'actor' for appointment.
+        schema:
+          type: string
+      - name: appointment-type
+        in: query
+        required: false
+        description: Search parameter 'appointment-type' for appointment.
+        schema:
+          type: string
+      - name: based-on
+        in: query
+        required: false
+        description: Search parameter 'based-on' for appointment.
+        schema:
+          type: string
+      - name: date
+        in: query
+        required: false
+        description: Search parameter 'date' for appointment.
+        schema:
+          type: string
+          format: date
+      - name: end
+        in: query
+        required: false
+        description: Search parameter 'end' for appointment.
+        schema:
+          type: string
+      - name: identifier
+        in: query
+        required: false
+        description: Search parameter 'identifier' for appointment.
+        schema:
+          type: string
+      - name: location
+        in: query
+        required: false
+        description: Search parameter 'location' for appointment.
+        schema:
+          type: string
+      - name: part-status
+        in: query
+        required: false
+        description: Search parameter 'part-status' for appointment.
+        schema:
+          type: string
+      - name: practitioner
+        in: query
+        required: false
+        description: Search parameter 'practitioner' for appointment.
+        schema:
+          type: string
+      - name: reason-code
+        in: query
+        required: false
+        description: Search parameter 'reason-code' for appointment.
+        schema:
+          type: string
+          format: token
+      - name: reason-reference
+        in: query
+        required: false
+        description: Search parameter 'reason-reference' for appointment.
+        schema:
+          type: string
+      - name: service-category
+        in: query
+        required: false
+        description: Search parameter 'service-category' for appointment.
+        schema:
+          type: string
+      - name: service-type
+        in: query
+        required: false
+        description: Search parameter 'service-type' for appointment.
+        schema:
+          type: string
+      - name: slot
+        in: query
+        required: false
+        description: Search parameter 'slot' for appointment.
+        schema:
+          type: string
+      - name: specialty
+        in: query
+        required: false
+        description: Search parameter 'specialty' for appointment.
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        description: Search parameter 'status' for appointment.
+        schema:
+          type: string
+      - name: supporting-info
+        in: query
+        required: false
+        description: Search parameter 'supporting-info' for appointment.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of appointments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resourceType:
+                    type: string
+                    example: Bundle
+                  type:
+                    type: string
+                    example: searchset
+                  total:
+                    type: integer
+                    example: 1
+                  entry:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        resource:
+                          type: object
+                          required:
+                          - resourceType
+                          - id
+                          - meta
+                          - status
+                          - intent
+                          - type
+                          - subject
+                          - participant
+                          - start
+                          - end
+                          properties:
+                            resourceType:
+                              type: string
+                              example: Appointment
+                            id:
+                              type: string
+                              example: example-appointment
+                            meta:
+                              type: object
+                              properties:
+                                versionId:
+                                  type: string
+                                  example: '1'
+                                lastUpdated:
+                                  type: string
+                                  example: '2022-03-01T12:00:00Z'
+                                extension:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      url:
+                                        type: string
+                                      valueDate:
+                                        type: string
+                                      valueDateTime:
+                                        type: string
+                            status:
+                              type: string
+                              example: scheduled
+                            intent:
+                              type: string
+                              example: proposed
+                            type:
+                              type: object
+                              properties:
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                      code:
+                                        type: string
+                            statusReason:
+                              type: string
+                            subject:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                            context:
+                              type: object
+                              properties:
+                                location:
+                                  type: object
+                                  properties:
+                                    reference:
+                                      type: string
+                                careTeam:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      role:
+                                        type: object
+                                        properties:
+                                          coding:
+                                            type: array
+                                            items:
+                                              type: object
+                                              properties:
+                                                system:
+                                                  type: string
+                                                code:
+                                                  type: string
+                                      member:
+                                        type: object
+                                        properties:
+                                          reference:
+                                            type: string
+                            participant:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  role:
+                                    type: object
+                                    properties:
+                                      coding:
+                                        type: array
+                                        items:
+                                          type: object
+                                          properties:
+                                            system:
+                                              type: string
+                                            code:
+                                              type: string
+                                  member:
+                                    type: object
+                                    properties:
+                                      reference:
+                                        type: string
+                            start:
+                              type: string
+                              example: '2022-03-01T14:00:00Z'
+                            end:
+                              type: string
+                              example: '2022-03-01T15:00:00Z'
+                            extension:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  url:
+                                    type: string
+                                  valueString:
+                                    type: string
+                                  valueReference:
+                                    type: object
+                                    properties:
+                                      reference:
+                                        type: string
+                                  extension:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        url:
+                                          type: string
+                                        valueString:
+                                          type: string
+                            contained:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  resourceType:
+                                    type: string
+                                    example: Slot
+                                  id:
+                                    type: string
+                                  start:
+                                    type: string
+                                  end:
+                                    type: string
+                                  extension:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        url:
+                                          type: string
+                                        valueDate:
+                                          type: string
+                                        valueString:
+                                          type: string
+                                        valueReference:
+                                          type: object
+                                          properties:
+                                            reference:
+                                              type: string
+                                        valueBoolean:
+                                          type: boolean
+                                        valueDateTime:
+                                          type: string
+                                example:
+                                  resourceType: Slot
+                                  id: slot-1
+                                  start: '2022-03-01T14:00:00Z'
+                                  end: '2022-03-01T15:00:00Z'
+                                  extension:
+                                  - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                                    valueDate: '2022-03-01'
+                                  - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                                    valueDate: '2022-03-30'
+                                  - url: http://xcaliber-fhir/structureDefinition/DESC
+                                    valueString: Weekly therapy session
+                                  - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                                    valueReference:
+                                      reference: Practitioner/example-doctor
+                                  - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                                    valueString: '4'
+                                  - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                                    valueBoolean: true
+                                  - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                                    valueBoolean: false
+                                  - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                                    valueBoolean: false
+                                  - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                                    valueBoolean: false
+                                  - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                                    valueBoolean: false
+                                  - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                                    valueBoolean: false
+                                  - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                                    valueBoolean: false
+                                  - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                                    valueDateTime: '2022-02-20T08:00:00Z'
+                          example:
+                            resourceType: Appointment
+                            id: example-appointment
+                            meta:
+                              versionId: '1'
+                              lastUpdated: '2022-03-01T12:00:00Z'
+                              extension:
+                              - url: http://xcaliber-fhir/structureDefinition/LAST_MODIFIED_DATE
+                                valueDate: '2022-03-01'
+                              - url: http://xcaliber-fhir/structureDefinition/DELETED_DATE
+                                valueDate: '2022-03-02'
+                            status: scheduled
+                            intent: proposed
+                            type:
+                              coding:
+                              - system: http://terminology.hl7.org/CodeSystem/appointment-type
+                                code: consult
+                            statusReason: Patient is ready for consultation
+                            subject:
+                              reference: Patient/example-patient
+                            context:
+                              location:
+                                reference: Location/example-clinic
+                              careTeam:
+                              - role:
+                                  coding:
+                                  - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                                    code: physician
+                                member:
+                                  reference: Practitioner/example-doctor
+                            participant:
+                            - role:
+                                coding:
+                                - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                                  code: patient
+                              member:
+                                reference: Patient/example-patient
+                            - role:
+                                coding:
+                                - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                                  code: practitioner
+                              member:
+                                reference: Practitioner/example-nurse
+                            start: '2022-03-01T14:00:00Z'
+                            end: '2022-03-01T15:00:00Z'
+                            extension:
+                            - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_STATUS
+                              valueString: confirmed
+                            - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_TYPE
+                              valueString: standard
+                            - url: http://xcaliber-fhir/structureDefinition/RECURRING_EVENT_SCHEDULE
+                              valueString: weekly
+                            - url: http://xcaliber-fhir/structureDefinition/TELEHEALTH_DETAILS
+                              valueString: Zoom meeting link
+                            - url: http://xcaliber-fhir/structureDefinition/INSTRUCTIONS
+                              valueString: Arrive 10 minutes early
+                            - url: http://xcaliber-fhir/structureDefinition/APPOINTMENT_MODE
+                              valueString: IN_PERSON
+                            - url: http://xcaliber-fhir/structureDefinition/STATUS
+                              extension:
+                              - url: http://xcaliber-fhir/structureDefinition/STATUS
+                                valueString: scheduled
+                              - url: http://xcaliber-fhir/structureDefinition/ROOM
+                                valueString: Room 101
+                              - url: http://xcaliber-fhir/structureDefinition/STATUS_DATE
+                                valueString: '2022-03-01T13:00:00Z'
+                            contained:
+                            - resourceType: Slot
+                              id: slot-1
+                              start: '2022-03-01T14:00:00Z'
+                              end: '2022-03-01T15:00:00Z'
+                              extension:
+                              - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                                valueDate: '2022-03-01'
+                              - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                                valueDate: '2022-03-30'
+                              - url: http://xcaliber-fhir/structureDefinition/DESC
+                                valueString: Weekly therapy session
+                              - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                                valueReference:
+                                  reference: Practitioner/example-doctor
+                              - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                                valueString: '4'
+                              - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                                valueBoolean: true
+                              - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                                valueBoolean: false
+                              - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                                valueBoolean: false
+                              - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                                valueBoolean: false
+                              - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                                valueBoolean: false
+                              - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                                valueBoolean: false
+                              - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                                valueBoolean: false
+                              - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                                valueDateTime: '2022-02-20T08:00:00Z'
+                example:
+                  resourceType: Bundle
+                  type: searchset
+                  total: 1
+                  entry:
+                  - resource:
+                      type: object
+                      required:
+                      - resourceType
+                      - id
+                      - meta
+                      - status
+                      - intent
+                      - type
+                      - subject
+                      - participant
+                      - start
+                      - end
+                      properties:
+                        resourceType:
+                          type: string
+                          example: Appointment
+                        id:
+                          type: string
+                          example: example-appointment
+                        meta:
+                          type: object
+                          properties:
+                            versionId:
+                              type: string
+                              example: '1'
+                            lastUpdated:
+                              type: string
+                              example: '2022-03-01T12:00:00Z'
+                            extension:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  url:
+                                    type: string
+                                  valueDate:
+                                    type: string
+                                  valueDateTime:
+                                    type: string
+                        status:
+                          type: string
+                          example: scheduled
+                        intent:
+                          type: string
+                          example: proposed
+                        type:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                        statusReason:
+                          type: string
+                        subject:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                        context:
+                          type: object
+                          properties:
+                            location:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                            careTeam:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  role:
+                                    type: object
+                                    properties:
+                                      coding:
+                                        type: array
+                                        items:
+                                          type: object
+                                          properties:
+                                            system:
+                                              type: string
+                                            code:
+                                              type: string
+                                  member:
+                                    type: object
+                                    properties:
+                                      reference:
+                                        type: string
+                        participant:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              role:
+                                type: object
+                                properties:
+                                  coding:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        system:
+                                          type: string
+                                        code:
+                                          type: string
+                              member:
+                                type: object
+                                properties:
+                                  reference:
+                                    type: string
+                        start:
+                          type: string
+                          example: '2022-03-01T14:00:00Z'
+                        end:
+                          type: string
+                          example: '2022-03-01T15:00:00Z'
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+                              valueReference:
+                                type: object
+                                properties:
+                                  reference:
+                                    type: string
+                              extension:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    url:
+                                      type: string
+                                    valueString:
+                                      type: string
+                        contained:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              resourceType:
+                                type: string
+                                example: Slot
+                              id:
+                                type: string
+                              start:
+                                type: string
+                              end:
+                                type: string
+                              extension:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    url:
+                                      type: string
+                                    valueDate:
+                                      type: string
+                                    valueString:
+                                      type: string
+                                    valueReference:
+                                      type: object
+                                      properties:
+                                        reference:
+                                          type: string
+                                    valueBoolean:
+                                      type: boolean
+                                    valueDateTime:
+                                      type: string
+                            example:
+                              resourceType: Slot
+                              id: slot-1
+                              start: '2022-03-01T14:00:00Z'
+                              end: '2022-03-01T15:00:00Z'
+                              extension:
+                              - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                                valueDate: '2022-03-01'
+                              - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                                valueDate: '2022-03-30'
+                              - url: http://xcaliber-fhir/structureDefinition/DESC
+                                valueString: Weekly therapy session
+                              - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                                valueReference:
+                                  reference: Practitioner/example-doctor
+                              - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                                valueString: '4'
+                              - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                                valueBoolean: true
+                              - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                                valueBoolean: false
+                              - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                                valueBoolean: false
+                              - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                                valueBoolean: false
+                              - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                                valueBoolean: false
+                              - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                                valueBoolean: false
+                              - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                                valueBoolean: false
+                              - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                                valueDateTime: '2022-02-20T08:00:00Z'
+                      example:
+                        resourceType: Appointment
+                        id: example-appointment
+                        meta:
+                          versionId: '1'
+                          lastUpdated: '2022-03-01T12:00:00Z'
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/LAST_MODIFIED_DATE
+                            valueDate: '2022-03-01'
+                          - url: http://xcaliber-fhir/structureDefinition/DELETED_DATE
+                            valueDate: '2022-03-02'
+                        status: scheduled
+                        intent: proposed
+                        type:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/appointment-type
+                            code: consult
+                        statusReason: Patient is ready for consultation
+                        subject:
+                          reference: Patient/example-patient
+                        context:
+                          location:
+                            reference: Location/example-clinic
+                          careTeam:
+                          - role:
+                              coding:
+                              - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                                code: physician
+                            member:
+                              reference: Practitioner/example-doctor
+                        participant:
+                        - role:
+                            coding:
+                            - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                              code: patient
+                          member:
+                            reference: Patient/example-patient
+                        - role:
+                            coding:
+                            - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                              code: practitioner
+                          member:
+                            reference: Practitioner/example-nurse
+                        start: '2022-03-01T14:00:00Z'
+                        end: '2022-03-01T15:00:00Z'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_STATUS
+                          valueString: confirmed
+                        - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_TYPE
+                          valueString: standard
+                        - url: http://xcaliber-fhir/structureDefinition/RECURRING_EVENT_SCHEDULE
+                          valueString: weekly
+                        - url: http://xcaliber-fhir/structureDefinition/TELEHEALTH_DETAILS
+                          valueString: Zoom meeting link
+                        - url: http://xcaliber-fhir/structureDefinition/INSTRUCTIONS
+                          valueString: Arrive 10 minutes early
+                        - url: http://xcaliber-fhir/structureDefinition/APPOINTMENT_MODE
+                          valueString: IN_PERSON
+                        - url: http://xcaliber-fhir/structureDefinition/STATUS
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/STATUS
+                            valueString: scheduled
+                          - url: http://xcaliber-fhir/structureDefinition/ROOM
+                            valueString: Room 101
+                          - url: http://xcaliber-fhir/structureDefinition/STATUS_DATE
+                            valueString: '2022-03-01T13:00:00Z'
+                        contained:
+                        - resourceType: Slot
+                          id: slot-1
+                          start: '2022-03-01T14:00:00Z'
+                          end: '2022-03-01T15:00:00Z'
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                            valueDate: '2022-03-01'
+                          - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                            valueDate: '2022-03-30'
+                          - url: http://xcaliber-fhir/structureDefinition/DESC
+                            valueString: Weekly therapy session
+                          - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                            valueReference:
+                              reference: Practitioner/example-doctor
+                          - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                            valueString: '4'
+                          - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                            valueBoolean: true
+                          - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                            valueDateTime: '2022-02-20T08:00:00Z'
+              example:
+                context:
+                  requestId: abc123
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Bundle
+                  type: searchset
+                  total: 1
+                  entry:
+                  - resource:
+                      resourceType: Appointment
+                      id: example-appointment
+                      meta:
+                        versionId: '1'
+                        lastUpdated: '2022-03-01T12:00:00Z'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/LAST_MODIFIED_DATE
+                          valueDate: '2022-03-01'
+                        - url: http://xcaliber-fhir/structureDefinition/DELETED_DATE
+                          valueDate: '2022-03-02'
+                      status: scheduled
+                      intent: proposed
+                      type:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/appointment-type
+                          code: consult
+                      statusReason: Patient is ready for consultation
+                      subject:
+                        reference: Patient/example-patient
+                      context:
+                        location:
+                          reference: Location/example-clinic
+                        careTeam:
+                        - role:
+                            coding:
+                            - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                              code: physician
+                          member:
+                            reference: Practitioner/example-doctor
+                      participant:
+                      - role:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                            code: patient
+                        member:
+                          reference: Patient/example-patient
+                      - role:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                            code: practitioner
+                        member:
+                          reference: Practitioner/example-nurse
+                      start: '2022-03-01T14:00:00Z'
+                      end: '2022-03-01T15:00:00Z'
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_STATUS
+                        valueString: confirmed
+                      - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_TYPE
+                        valueString: standard
+                      - url: http://xcaliber-fhir/structureDefinition/RECURRING_EVENT_SCHEDULE
+                        valueString: weekly
+                      - url: http://xcaliber-fhir/structureDefinition/TELEHEALTH_DETAILS
+                        valueString: Zoom meeting link
+                      - url: http://xcaliber-fhir/structureDefinition/INSTRUCTIONS
+                        valueString: Arrive 10 minutes early
+                      - url: http://xcaliber-fhir/structureDefinition/APPOINTMENT_MODE
+                        valueString: IN_PERSON
+                      - url: http://xcaliber-fhir/structureDefinition/STATUS
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/STATUS
+                          valueString: scheduled
+                        - url: http://xcaliber-fhir/structureDefinition/ROOM
+                          valueString: Room 101
+                        - url: http://xcaliber-fhir/structureDefinition/STATUS_DATE
+                          valueString: '2022-03-01T13:00:00Z'
+                      contained:
+                      - resourceType: Slot
+                        id: slot-1
+                        start: '2022-03-01T14:00:00Z'
+                        end: '2022-03-01T15:00:00Z'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                          valueDate: '2022-03-01'
+                        - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                          valueDate: '2022-03-30'
+                        - url: http://xcaliber-fhir/structureDefinition/DESC
+                          valueString: Weekly therapy session
+                        - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                          valueReference:
+                            reference: Practitioner/example-doctor
+                        - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                          valueString: '4'
+                        - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                          valueBoolean: true
+                        - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                          valueDateTime: '2022-02-20T08:00:00Z'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Missing patientId
+                  details:
+                    type: string
+                    example: Patient ID is required
+                example:
+                  statusCode: 400
+                  message: Missing patientId
+                  details: Patient ID is required
+              example:
+                statusCode: 400
+                message: Either patient id or practitioner id should be provided
+                status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                    example: {}
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Unexpected error
+    post:
+      tags:
+      - Appointments
+      summary: Create an appointment in Elation
+      operationId: createAppointmentInElation
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  type: object
+                  properties:
+                    requestId:
+                      type: string
+                    source:
+                      type: string
+                    quorum:
+                      type: boolean
+                    notify:
+                      type: boolean
+                data:
+                  type: object
+                  required:
+                  - resourceType
+                  - id
+                  - meta
+                  - status
+                  - intent
+                  - type
+                  - subject
+                  - participant
+                  - start
+                  - end
+                  properties:
+                    resourceType:
+                      type: string
+                      example: Appointment
+                    id:
+                      type: string
+                      example: example-appointment
+                    meta:
+                      type: object
+                      properties:
+                        versionId:
+                          type: string
+                          example: '1'
+                        lastUpdated:
+                          type: string
+                          example: '2022-03-01T12:00:00Z'
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueDate:
+                                type: string
+                              valueDateTime:
+                                type: string
+                    status:
+                      type: string
+                      example: scheduled
+                    intent:
+                      type: string
+                      example: proposed
+                    type:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                    statusReason:
+                      type: string
+                    subject:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                    context:
+                      type: object
+                      properties:
+                        location:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                        careTeam:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              role:
+                                type: object
+                                properties:
+                                  coding:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        system:
+                                          type: string
+                                        code:
+                                          type: string
+                              member:
+                                type: object
+                                properties:
+                                  reference:
+                                    type: string
+                    participant:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          role:
+                            type: object
+                            properties:
+                              coding:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    system:
+                                      type: string
+                                    code:
+                                      type: string
+                          member:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                    start:
+                      type: string
+                      example: '2022-03-01T14:00:00Z'
+                    end:
+                      type: string
+                      example: '2022-03-01T15:00:00Z'
+                    extension:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          valueString:
+                            type: string
+                          valueReference:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                          extension:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                valueString:
+                                  type: string
+                    contained:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          resourceType:
+                            type: string
+                            example: Slot
+                          id:
+                            type: string
+                          start:
+                            type: string
+                          end:
+                            type: string
+                          extension:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                valueDate:
+                                  type: string
+                                valueString:
+                                  type: string
+                                valueReference:
+                                  type: object
+                                  properties:
+                                    reference:
+                                      type: string
+                                valueBoolean:
+                                  type: boolean
+                                valueDateTime:
+                                  type: string
+                        example:
+                          resourceType: Slot
+                          id: slot-1
+                          start: '2022-03-01T14:00:00Z'
+                          end: '2022-03-01T15:00:00Z'
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                            valueDate: '2022-03-01'
+                          - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                            valueDate: '2022-03-30'
+                          - url: http://xcaliber-fhir/structureDefinition/DESC
+                            valueString: Weekly therapy session
+                          - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                            valueReference:
+                              reference: Practitioner/example-doctor
+                          - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                            valueString: '4'
+                          - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                            valueBoolean: true
+                          - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                            valueDateTime: '2022-02-20T08:00:00Z'
+                  example:
+                    resourceType: Appointment
+                    id: example-appointment
+                    meta:
+                      versionId: '1'
+                      lastUpdated: '2022-03-01T12:00:00Z'
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/LAST_MODIFIED_DATE
+                        valueDate: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/DELETED_DATE
+                        valueDate: '2022-03-02'
+                    status: scheduled
+                    intent: proposed
+                    type:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/appointment-type
+                        code: consult
+                    statusReason: Patient is ready for consultation
+                    subject:
+                      reference: Patient/example-patient
+                    context:
+                      location:
+                        reference: Location/example-clinic
+                      careTeam:
+                      - role:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                            code: physician
+                        member:
+                          reference: Practitioner/example-doctor
+                    participant:
+                    - role:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                          code: patient
+                      member:
+                        reference: Patient/example-patient
+                    - role:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                          code: practitioner
+                      member:
+                        reference: Practitioner/example-nurse
+                    start: '2022-03-01T14:00:00Z'
+                    end: '2022-03-01T15:00:00Z'
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_STATUS
+                      valueString: confirmed
+                    - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_TYPE
+                      valueString: standard
+                    - url: http://xcaliber-fhir/structureDefinition/RECURRING_EVENT_SCHEDULE
+                      valueString: weekly
+                    - url: http://xcaliber-fhir/structureDefinition/TELEHEALTH_DETAILS
+                      valueString: Zoom meeting link
+                    - url: http://xcaliber-fhir/structureDefinition/INSTRUCTIONS
+                      valueString: Arrive 10 minutes early
+                    - url: http://xcaliber-fhir/structureDefinition/APPOINTMENT_MODE
+                      valueString: IN_PERSON
+                    - url: http://xcaliber-fhir/structureDefinition/STATUS
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/STATUS
+                        valueString: scheduled
+                      - url: http://xcaliber-fhir/structureDefinition/ROOM
+                        valueString: Room 101
+                      - url: http://xcaliber-fhir/structureDefinition/STATUS_DATE
+                        valueString: '2022-03-01T13:00:00Z'
+                    contained:
+                    - resourceType: Slot
+                      id: slot-1
+                      start: '2022-03-01T14:00:00Z'
+                      end: '2022-03-01T15:00:00Z'
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                        valueDate: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                        valueDate: '2022-03-30'
+                      - url: http://xcaliber-fhir/structureDefinition/DESC
+                        valueString: Weekly therapy session
+                      - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                        valueReference:
+                          reference: Practitioner/example-doctor
+                      - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                        valueString: '4'
+                      - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                        valueBoolean: true
+                      - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                        valueDateTime: '2022-02-20T08:00:00Z'
+            example:
+              context:
+                requestId: abc123
+                source: ELATION
+                quorum: true
+                notify: true
+              data:
+                resourceType: Appointment
+                id: example-appointment
+                meta:
+                  versionId: '1'
+                  lastUpdated: '2022-03-01T12:00:00Z'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/LAST_MODIFIED_DATE
+                    valueDate: '2022-03-01'
+                  - url: http://xcaliber-fhir/structureDefinition/DELETED_DATE
+                    valueDate: '2022-03-02'
+                status: scheduled
+                intent: proposed
+                type:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/appointment-type
+                    code: consult
+                statusReason: Patient is ready for consultation
+                subject:
+                  reference: Patient/example-patient
+                context:
+                  location:
+                    reference: Location/example-clinic
+                  careTeam:
+                  - role:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                        code: physician
+                    member:
+                      reference: Practitioner/example-doctor
+                participant:
+                - role:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                      code: patient
+                  member:
+                    reference: Patient/example-patient
+                - role:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                      code: practitioner
+                  member:
+                    reference: Practitioner/example-nurse
+                start: '2022-03-01T14:00:00Z'
+                end: '2022-03-01T15:00:00Z'
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_STATUS
+                  valueString: confirmed
+                - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_TYPE
+                  valueString: standard
+                - url: http://xcaliber-fhir/structureDefinition/RECURRING_EVENT_SCHEDULE
+                  valueString: weekly
+                - url: http://xcaliber-fhir/structureDefinition/TELEHEALTH_DETAILS
+                  valueString: Zoom meeting link
+                - url: http://xcaliber-fhir/structureDefinition/INSTRUCTIONS
+                  valueString: Arrive 10 minutes early
+                - url: http://xcaliber-fhir/structureDefinition/APPOINTMENT_MODE
+                  valueString: IN_PERSON
+                - url: http://xcaliber-fhir/structureDefinition/STATUS
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/STATUS
+                    valueString: scheduled
+                  - url: http://xcaliber-fhir/structureDefinition/ROOM
+                    valueString: Room 101
+                  - url: http://xcaliber-fhir/structureDefinition/STATUS_DATE
+                    valueString: '2022-03-01T13:00:00Z'
+                contained:
+                - resourceType: Slot
+                  id: slot-1
+                  start: '2022-03-01T14:00:00Z'
+                  end: '2022-03-01T15:00:00Z'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                    valueDate: '2022-03-01'
+                  - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                    valueDate: '2022-03-30'
+                  - url: http://xcaliber-fhir/structureDefinition/DESC
+                    valueString: Weekly therapy session
+                  - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                    valueReference:
+                      reference: Practitioner/example-doctor
+                  - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                    valueString: '4'
+                  - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                    valueDateTime: '2022-02-20T08:00:00Z'
+      responses:
+        '201':
+          description: Appointment created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+              example:
+                id: example-appointment
+                status: success
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Missing patientId
+                  details:
+                    type: string
+                    example: Patient ID is required
+                example:
+                  statusCode: 400
+                  message: Missing patientId
+                  details: Patient ID is required
+              example:
+                statusCode: 400
+                message: Either patient id or practitioner id should be provided
+                status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                    example: {}
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Unexpected error
+    parameters: []
+  /api/v2/appointments/{id}:
+    get:
+      tags:
+      - Appointments
+      summary: Get Elation appointment by ID
+      operationId: getElationAppointmentById
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: .
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Appointment details
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - resourceType
+                - id
+                - meta
+                - status
+                - intent
+                - type
+                - subject
+                - participant
+                - start
+                - end
+                properties:
+                  resourceType:
+                    type: string
+                    example: Appointment
+                  id:
+                    type: string
+                    example: example-appointment
+                  meta:
+                    type: object
+                    properties:
+                      versionId:
+                        type: string
+                        example: '1'
+                      lastUpdated:
+                        type: string
+                        example: '2022-03-01T12:00:00Z'
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueDate:
+                              type: string
+                            valueDateTime:
+                              type: string
+                  status:
+                    type: string
+                    example: scheduled
+                  intent:
+                    type: string
+                    example: proposed
+                  type:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                  statusReason:
+                    type: string
+                  subject:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                  context:
+                    type: object
+                    properties:
+                      location:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      careTeam:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            role:
+                              type: object
+                              properties:
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                      code:
+                                        type: string
+                            member:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                  participant:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        role:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                        member:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                  start:
+                    type: string
+                    example: '2022-03-01T14:00:00Z'
+                  end:
+                    type: string
+                    example: '2022-03-01T15:00:00Z'
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+                        valueReference:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+                  contained:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        resourceType:
+                          type: string
+                          example: Slot
+                        id:
+                          type: string
+                        start:
+                          type: string
+                        end:
+                          type: string
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueDate:
+                                type: string
+                              valueString:
+                                type: string
+                              valueReference:
+                                type: object
+                                properties:
+                                  reference:
+                                    type: string
+                              valueBoolean:
+                                type: boolean
+                              valueDateTime:
+                                type: string
+                      example:
+                        resourceType: Slot
+                        id: slot-1
+                        start: '2022-03-01T14:00:00Z'
+                        end: '2022-03-01T15:00:00Z'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                          valueDate: '2022-03-01'
+                        - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                          valueDate: '2022-03-30'
+                        - url: http://xcaliber-fhir/structureDefinition/DESC
+                          valueString: Weekly therapy session
+                        - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                          valueReference:
+                            reference: Practitioner/example-doctor
+                        - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                          valueString: '4'
+                        - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                          valueBoolean: true
+                        - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                          valueDateTime: '2022-02-20T08:00:00Z'
+                example:
+                  resourceType: Appointment
+                  id: example-appointment
+                  meta:
+                    versionId: '1'
+                    lastUpdated: '2022-03-01T12:00:00Z'
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/LAST_MODIFIED_DATE
+                      valueDate: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/DELETED_DATE
+                      valueDate: '2022-03-02'
+                  status: scheduled
+                  intent: proposed
+                  type:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/appointment-type
+                      code: consult
+                  statusReason: Patient is ready for consultation
+                  subject:
+                    reference: Patient/example-patient
+                  context:
+                    location:
+                      reference: Location/example-clinic
+                    careTeam:
+                    - role:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                          code: physician
+                      member:
+                        reference: Practitioner/example-doctor
+                  participant:
+                  - role:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                        code: patient
+                    member:
+                      reference: Patient/example-patient
+                  - role:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                        code: practitioner
+                    member:
+                      reference: Practitioner/example-nurse
+                  start: '2022-03-01T14:00:00Z'
+                  end: '2022-03-01T15:00:00Z'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_STATUS
+                    valueString: confirmed
+                  - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_TYPE
+                    valueString: standard
+                  - url: http://xcaliber-fhir/structureDefinition/RECURRING_EVENT_SCHEDULE
+                    valueString: weekly
+                  - url: http://xcaliber-fhir/structureDefinition/TELEHEALTH_DETAILS
+                    valueString: Zoom meeting link
+                  - url: http://xcaliber-fhir/structureDefinition/INSTRUCTIONS
+                    valueString: Arrive 10 minutes early
+                  - url: http://xcaliber-fhir/structureDefinition/APPOINTMENT_MODE
+                    valueString: IN_PERSON
+                  - url: http://xcaliber-fhir/structureDefinition/STATUS
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/STATUS
+                      valueString: scheduled
+                    - url: http://xcaliber-fhir/structureDefinition/ROOM
+                      valueString: Room 101
+                    - url: http://xcaliber-fhir/structureDefinition/STATUS_DATE
+                      valueString: '2022-03-01T13:00:00Z'
+                  contained:
+                  - resourceType: Slot
+                    id: slot-1
+                    start: '2022-03-01T14:00:00Z'
+                    end: '2022-03-01T15:00:00Z'
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                      valueDate: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                      valueDate: '2022-03-30'
+                    - url: http://xcaliber-fhir/structureDefinition/DESC
+                      valueString: Weekly therapy session
+                    - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                      valueReference:
+                        reference: Practitioner/example-doctor
+                    - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                      valueString: '4'
+                    - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                      valueBoolean: true
+                    - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                      valueDateTime: '2022-02-20T08:00:00Z'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+                  details:
+                    type: string
+                  status:
+                    type: string
+                example:
+                  statusCode: 400
+                  message: Either patient id or practitioner id should be provided
+                  status: error
+        '404':
+          description: Appointment not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+                  details:
+                    type: string
+                  status:
+                    type: string
+                example:
+                  statusCode: 400
+                  message: Either patient id or practitioner id should be provided
+                  status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+                  details:
+                    type: string
+                  status:
+                    type: string
+                example:
+                  statusCode: 400
+                  message: Either patient id or practitioner id should be provided
+                  status: error
+    put:
+      tags:
+      - Appointments
+      summary: Update an appointment in Elation
+      operationId: updateAppointmentInElation
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: .
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  type: object
+                  properties:
+                    requestId:
+                      type: string
+                    source:
+                      type: string
+                    quorum:
+                      type: boolean
+                    notify:
+                      type: boolean
+                data:
+                  type: object
+                  required:
+                  - resourceType
+                  - id
+                  - meta
+                  - status
+                  - intent
+                  - type
+                  - subject
+                  - participant
+                  - start
+                  - end
+                  properties:
+                    resourceType:
+                      type: string
+                      example: Appointment
+                    id:
+                      type: string
+                      example: example-appointment
+                    meta:
+                      type: object
+                      properties:
+                        versionId:
+                          type: string
+                          example: '1'
+                        lastUpdated:
+                          type: string
+                          example: '2022-03-01T12:00:00Z'
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueDate:
+                                type: string
+                              valueDateTime:
+                                type: string
+                    status:
+                      type: string
+                      example: scheduled
+                    intent:
+                      type: string
+                      example: proposed
+                    type:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                    statusReason:
+                      type: string
+                    subject:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                    context:
+                      type: object
+                      properties:
+                        location:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                        careTeam:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              role:
+                                type: object
+                                properties:
+                                  coding:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        system:
+                                          type: string
+                                        code:
+                                          type: string
+                              member:
+                                type: object
+                                properties:
+                                  reference:
+                                    type: string
+                    participant:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          role:
+                            type: object
+                            properties:
+                              coding:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    system:
+                                      type: string
+                                    code:
+                                      type: string
+                          member:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                    start:
+                      type: string
+                      example: '2022-03-01T14:00:00Z'
+                    end:
+                      type: string
+                      example: '2022-03-01T15:00:00Z'
+                    extension:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          valueString:
+                            type: string
+                          valueReference:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                          extension:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                valueString:
+                                  type: string
+                    contained:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          resourceType:
+                            type: string
+                            example: Slot
+                          id:
+                            type: string
+                          start:
+                            type: string
+                          end:
+                            type: string
+                          extension:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                valueDate:
+                                  type: string
+                                valueString:
+                                  type: string
+                                valueReference:
+                                  type: object
+                                  properties:
+                                    reference:
+                                      type: string
+                                valueBoolean:
+                                  type: boolean
+                                valueDateTime:
+                                  type: string
+                        example:
+                          resourceType: Slot
+                          id: slot-1
+                          start: '2022-03-01T14:00:00Z'
+                          end: '2022-03-01T15:00:00Z'
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                            valueDate: '2022-03-01'
+                          - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                            valueDate: '2022-03-30'
+                          - url: http://xcaliber-fhir/structureDefinition/DESC
+                            valueString: Weekly therapy session
+                          - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                            valueReference:
+                              reference: Practitioner/example-doctor
+                          - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                            valueString: '4'
+                          - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                            valueBoolean: true
+                          - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                            valueDateTime: '2022-02-20T08:00:00Z'
+                  example:
+                    resourceType: Appointment
+                    id: example-appointment
+                    meta:
+                      versionId: '1'
+                      lastUpdated: '2022-03-01T12:00:00Z'
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/LAST_MODIFIED_DATE
+                        valueDate: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/DELETED_DATE
+                        valueDate: '2022-03-02'
+                    status: scheduled
+                    intent: proposed
+                    type:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/appointment-type
+                        code: consult
+                    statusReason: Patient is ready for consultation
+                    subject:
+                      reference: Patient/example-patient
+                    context:
+                      location:
+                        reference: Location/example-clinic
+                      careTeam:
+                      - role:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                            code: physician
+                        member:
+                          reference: Practitioner/example-doctor
+                    participant:
+                    - role:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                          code: patient
+                      member:
+                        reference: Patient/example-patient
+                    - role:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                          code: practitioner
+                      member:
+                        reference: Practitioner/example-nurse
+                    start: '2022-03-01T14:00:00Z'
+                    end: '2022-03-01T15:00:00Z'
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_STATUS
+                      valueString: confirmed
+                    - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_TYPE
+                      valueString: standard
+                    - url: http://xcaliber-fhir/structureDefinition/RECURRING_EVENT_SCHEDULE
+                      valueString: weekly
+                    - url: http://xcaliber-fhir/structureDefinition/TELEHEALTH_DETAILS
+                      valueString: Zoom meeting link
+                    - url: http://xcaliber-fhir/structureDefinition/INSTRUCTIONS
+                      valueString: Arrive 10 minutes early
+                    - url: http://xcaliber-fhir/structureDefinition/APPOINTMENT_MODE
+                      valueString: IN_PERSON
+                    - url: http://xcaliber-fhir/structureDefinition/STATUS
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/STATUS
+                        valueString: scheduled
+                      - url: http://xcaliber-fhir/structureDefinition/ROOM
+                        valueString: Room 101
+                      - url: http://xcaliber-fhir/structureDefinition/STATUS_DATE
+                        valueString: '2022-03-01T13:00:00Z'
+                    contained:
+                    - resourceType: Slot
+                      id: slot-1
+                      start: '2022-03-01T14:00:00Z'
+                      end: '2022-03-01T15:00:00Z'
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                        valueDate: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                        valueDate: '2022-03-30'
+                      - url: http://xcaliber-fhir/structureDefinition/DESC
+                        valueString: Weekly therapy session
+                      - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                        valueReference:
+                          reference: Practitioner/example-doctor
+                      - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                        valueString: '4'
+                      - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                        valueBoolean: true
+                      - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                        valueDateTime: '2022-02-20T08:00:00Z'
+              required:
+              - context
+              - data
+            example:
+              context:
+                requestId: abc123
+                source: ELATION
+                quorum: true
+                notify: true
+              ddata:
+                resourceType: Appointment
+                id: example-appointment
+                meta:
+                  versionId: '1'
+                  lastUpdated: '2022-03-01T12:00:00Z'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/LAST_MODIFIED_DATE
+                    valueDate: '2022-03-01'
+                  - url: http://xcaliber-fhir/structureDefinition/DELETED_DATE
+                    valueDate: '2022-03-02'
+                status: scheduled
+                intent: proposed
+                type:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/appointment-type
+                    code: consult
+                statusReason: Patient is ready for consultation
+                subject:
+                  reference: Patient/example-patient
+                context:
+                  location:
+                    reference: Location/example-clinic
+                  careTeam:
+                  - role:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                        code: physician
+                    member:
+                      reference: Practitioner/example-doctor
+                participant:
+                - role:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                      code: patient
+                  member:
+                    reference: Patient/example-patient
+                - role:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                      code: practitioner
+                  member:
+                    reference: Practitioner/example-nurse
+                start: '2022-03-01T14:00:00Z'
+                end: '2022-03-01T15:00:00Z'
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_STATUS
+                  valueString: confirmed
+                - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_TYPE
+                  valueString: standard
+                - url: http://xcaliber-fhir/structureDefinition/RECURRING_EVENT_SCHEDULE
+                  valueString: weekly
+                - url: http://xcaliber-fhir/structureDefinition/TELEHEALTH_DETAILS
+                  valueString: Zoom meeting link
+                - url: http://xcaliber-fhir/structureDefinition/INSTRUCTIONS
+                  valueString: Arrive 10 minutes early
+                - url: http://xcaliber-fhir/structureDefinition/APPOINTMENT_MODE
+                  valueString: IN_PERSON
+                - url: http://xcaliber-fhir/structureDefinition/STATUS
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/STATUS
+                    valueString: scheduled
+                  - url: http://xcaliber-fhir/structureDefinition/ROOM
+                    valueString: Room 101
+                  - url: http://xcaliber-fhir/structureDefinition/STATUS_DATE
+                    valueString: '2022-03-01T13:00:00Z'
+                contained:
+                - resourceType: Slot
+                  id: slot-1
+                  start: '2022-03-01T14:00:00Z'
+                  end: '2022-03-01T15:00:00Z'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                    valueDate: '2022-03-01'
+                  - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                    valueDate: '2022-03-30'
+                  - url: http://xcaliber-fhir/structureDefinition/DESC
+                    valueString: Weekly therapy session
+                  - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                    valueReference:
+                      reference: Practitioner/example-doctor
+                  - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                    valueString: '4'
+                  - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                    valueDateTime: '2022-02-20T08:00:00Z'
+      responses:
+        '200':
+          description: Appointment updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+              example:
+                id: example-appointment
+                status: success
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+                  details:
+                    type: string
+                  status:
+                    type: string
+                example:
+                  statusCode: 400
+                  message: Either patient id or practitioner id should be provided
+                  status: error
+        '404':
+          description: Appointment not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+                  details:
+                    type: string
+                  status:
+                    type: string
+                example:
+                  statusCode: 400
+                  message: Either patient id or practitioner id should be provided
+                  status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+                  details:
+                    type: string
+                  status:
+                    type: string
+                example:
+                  statusCode: 400
+                  message: Either patient id or practitioner id should be provided
+                  status: error
+    delete:
+      tags:
+      - Appointments
+      summary: Delete an appointment in Elation
+      operationId: deleteAppointmentInElation
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        description: .
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Appointment deleted
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+                  details:
+                    type: string
+                  status:
+                    type: string
+                example:
+                  statusCode: 400
+                  message: Either patient id or practitioner id should be provided
+                  status: error
+        '404':
+          description: Appointment not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+                  details:
+                    type: string
+                  status:
+                    type: string
+                example:
+                  statusCode: 400
+                  message: Either patient id or practitioner id should be provided
+                  status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+                  details:
+                    type: string
+                  status:
+                    type: string
+                example:
+                  statusCode: 400
+                  message: Either patient id or practitioner id should be provided
+                  status: error
+components:
+  schemas:
+    Appointment:
+      type: object
+      required:
+      - resourceType
+      - id
+      - meta
+      - status
+      - intent
+      - type
+      - subject
+      - participant
+      - start
+      - end
+      properties:
+        resourceType:
+          type: string
+          example: Appointment
+        id:
+          type: string
+          example: example-appointment
+        meta:
+          type: object
+          properties:
+            versionId:
+              type: string
+              example: '1'
+            lastUpdated:
+              type: string
+              example: '2022-03-01T12:00:00Z'
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueDate:
+                    type: string
+                  valueDateTime:
+                    type: string
+        status:
+          type: string
+          example: scheduled
+        intent:
+          type: string
+          example: proposed
+        type:
+          type: object
+          properties:
+            coding:
+              type: array
+              items:
+                type: object
+                properties:
+                  system:
+                    type: string
+                  code:
+                    type: string
+        statusReason:
+          type: string
+        subject:
+          type: object
+          properties:
+            reference:
+              type: string
+        context:
+          type: object
+          properties:
+            location:
+              type: object
+              properties:
+                reference:
+                  type: string
+            careTeam:
+              type: array
+              items:
+                type: object
+                properties:
+                  role:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                  member:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+        participant:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+              member:
+                type: object
+                properties:
+                  reference:
+                    type: string
+        start:
+          type: string
+          example: '2022-03-01T14:00:00Z'
+        end:
+          type: string
+          example: '2022-03-01T15:00:00Z'
+        extension:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+              valueString:
+                type: string
+              valueReference:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              extension:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                    valueString:
+                      type: string
+        contained:
+          type: array
+          items:
+            type: object
+            properties:
+              resourceType:
+                type: string
+                example: Slot
+              id:
+                type: string
+              start:
+                type: string
+              end:
+                type: string
+              extension:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                    valueDate:
+                      type: string
+                    valueString:
+                      type: string
+                    valueReference:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                    valueBoolean:
+                      type: boolean
+                    valueDateTime:
+                      type: string
+            example:
+              resourceType: Slot
+              id: slot-1
+              start: '2022-03-01T14:00:00Z'
+              end: '2022-03-01T15:00:00Z'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                valueDate: '2022-03-01'
+              - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                valueDate: '2022-03-30'
+              - url: http://xcaliber-fhir/structureDefinition/DESC
+                valueString: Weekly therapy session
+              - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                valueReference:
+                  reference: Practitioner/example-doctor
+              - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                valueString: '4'
+              - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                valueBoolean: true
+              - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                valueBoolean: false
+              - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                valueBoolean: false
+              - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                valueBoolean: false
+              - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                valueBoolean: false
+              - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                valueBoolean: false
+              - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                valueBoolean: false
+              - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                valueDateTime: '2022-02-20T08:00:00Z'
+      example:
+        resourceType: Appointment
+        id: example-appointment
+        meta:
+          versionId: '1'
+          lastUpdated: '2022-03-01T12:00:00Z'
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/LAST_MODIFIED_DATE
+            valueDate: '2022-03-01'
+          - url: http://xcaliber-fhir/structureDefinition/DELETED_DATE
+            valueDate: '2022-03-02'
+        status: scheduled
+        intent: proposed
+        type:
+          coding:
+          - system: http://terminology.hl7.org/CodeSystem/appointment-type
+            code: consult
+        statusReason: Patient is ready for consultation
+        subject:
+          reference: Patient/example-patient
+        context:
+          location:
+            reference: Location/example-clinic
+          careTeam:
+          - role:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                code: physician
+            member:
+              reference: Practitioner/example-doctor
+        participant:
+        - role:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+              code: patient
+          member:
+            reference: Patient/example-patient
+        - role:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+              code: practitioner
+          member:
+            reference: Practitioner/example-nurse
+        start: '2022-03-01T14:00:00Z'
+        end: '2022-03-01T15:00:00Z'
+        extension:
+        - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_STATUS
+          valueString: confirmed
+        - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_TYPE
+          valueString: standard
+        - url: http://xcaliber-fhir/structureDefinition/RECURRING_EVENT_SCHEDULE
+          valueString: weekly
+        - url: http://xcaliber-fhir/structureDefinition/TELEHEALTH_DETAILS
+          valueString: Zoom meeting link
+        - url: http://xcaliber-fhir/structureDefinition/INSTRUCTIONS
+          valueString: Arrive 10 minutes early
+        - url: http://xcaliber-fhir/structureDefinition/APPOINTMENT_MODE
+          valueString: IN_PERSON
+        - url: http://xcaliber-fhir/structureDefinition/STATUS
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/STATUS
+            valueString: scheduled
+          - url: http://xcaliber-fhir/structureDefinition/ROOM
+            valueString: Room 101
+          - url: http://xcaliber-fhir/structureDefinition/STATUS_DATE
+            valueString: '2022-03-01T13:00:00Z'
+        contained:
+        - resourceType: Slot
+          id: slot-1
+          start: '2022-03-01T14:00:00Z'
+          end: '2022-03-01T15:00:00Z'
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+            valueDate: '2022-03-01'
+          - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+            valueDate: '2022-03-30'
+          - url: http://xcaliber-fhir/structureDefinition/DESC
+            valueString: Weekly therapy session
+          - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+            valueReference:
+              reference: Practitioner/example-doctor
+          - url: http://xcaliber-fhir/structureDefinition/REPEATS
+            valueString: '4'
+          - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+            valueBoolean: true
+          - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+            valueBoolean: false
+          - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+            valueBoolean: false
+          - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+            valueBoolean: false
+          - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+            valueBoolean: false
+          - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+            valueBoolean: false
+          - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+            valueBoolean: false
+          - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+            valueDateTime: '2022-02-20T08:00:00Z'
+    Bundle:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          example: Bundle
+        type:
+          type: string
+          example: searchset
+        total:
+          type: integer
+          example: 1
+        entry:
+          type: array
+          items:
+            type: object
+            properties:
+              resource:
+                type: object
+                required:
+                - resourceType
+                - id
+                - meta
+                - status
+                - intent
+                - type
+                - subject
+                - participant
+                - start
+                - end
+                properties:
+                  resourceType:
+                    type: string
+                    example: Appointment
+                  id:
+                    type: string
+                    example: example-appointment
+                  meta:
+                    type: object
+                    properties:
+                      versionId:
+                        type: string
+                        example: '1'
+                      lastUpdated:
+                        type: string
+                        example: '2022-03-01T12:00:00Z'
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueDate:
+                              type: string
+                            valueDateTime:
+                              type: string
+                  status:
+                    type: string
+                    example: scheduled
+                  intent:
+                    type: string
+                    example: proposed
+                  type:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                  statusReason:
+                    type: string
+                  subject:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                  context:
+                    type: object
+                    properties:
+                      location:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      careTeam:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            role:
+                              type: object
+                              properties:
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                      code:
+                                        type: string
+                            member:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                  participant:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        role:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                        member:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                  start:
+                    type: string
+                    example: '2022-03-01T14:00:00Z'
+                  end:
+                    type: string
+                    example: '2022-03-01T15:00:00Z'
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+                        valueReference:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+                  contained:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        resourceType:
+                          type: string
+                          example: Slot
+                        id:
+                          type: string
+                        start:
+                          type: string
+                        end:
+                          type: string
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueDate:
+                                type: string
+                              valueString:
+                                type: string
+                              valueReference:
+                                type: object
+                                properties:
+                                  reference:
+                                    type: string
+                              valueBoolean:
+                                type: boolean
+                              valueDateTime:
+                                type: string
+                      example:
+                        resourceType: Slot
+                        id: slot-1
+                        start: '2022-03-01T14:00:00Z'
+                        end: '2022-03-01T15:00:00Z'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                          valueDate: '2022-03-01'
+                        - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                          valueDate: '2022-03-30'
+                        - url: http://xcaliber-fhir/structureDefinition/DESC
+                          valueString: Weekly therapy session
+                        - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                          valueReference:
+                            reference: Practitioner/example-doctor
+                        - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                          valueString: '4'
+                        - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                          valueBoolean: true
+                        - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                          valueDateTime: '2022-02-20T08:00:00Z'
+                example:
+                  resourceType: Appointment
+                  id: example-appointment
+                  meta:
+                    versionId: '1'
+                    lastUpdated: '2022-03-01T12:00:00Z'
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/LAST_MODIFIED_DATE
+                      valueDate: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/DELETED_DATE
+                      valueDate: '2022-03-02'
+                  status: scheduled
+                  intent: proposed
+                  type:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/appointment-type
+                      code: consult
+                  statusReason: Patient is ready for consultation
+                  subject:
+                    reference: Patient/example-patient
+                  context:
+                    location:
+                      reference: Location/example-clinic
+                    careTeam:
+                    - role:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                          code: physician
+                      member:
+                        reference: Practitioner/example-doctor
+                  participant:
+                  - role:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                        code: patient
+                    member:
+                      reference: Patient/example-patient
+                  - role:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                        code: practitioner
+                    member:
+                      reference: Practitioner/example-nurse
+                  start: '2022-03-01T14:00:00Z'
+                  end: '2022-03-01T15:00:00Z'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_STATUS
+                    valueString: confirmed
+                  - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_TYPE
+                    valueString: standard
+                  - url: http://xcaliber-fhir/structureDefinition/RECURRING_EVENT_SCHEDULE
+                    valueString: weekly
+                  - url: http://xcaliber-fhir/structureDefinition/TELEHEALTH_DETAILS
+                    valueString: Zoom meeting link
+                  - url: http://xcaliber-fhir/structureDefinition/INSTRUCTIONS
+                    valueString: Arrive 10 minutes early
+                  - url: http://xcaliber-fhir/structureDefinition/APPOINTMENT_MODE
+                    valueString: IN_PERSON
+                  - url: http://xcaliber-fhir/structureDefinition/STATUS
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/STATUS
+                      valueString: scheduled
+                    - url: http://xcaliber-fhir/structureDefinition/ROOM
+                      valueString: Room 101
+                    - url: http://xcaliber-fhir/structureDefinition/STATUS_DATE
+                      valueString: '2022-03-01T13:00:00Z'
+                  contained:
+                  - resourceType: Slot
+                    id: slot-1
+                    start: '2022-03-01T14:00:00Z'
+                    end: '2022-03-01T15:00:00Z'
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                      valueDate: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                      valueDate: '2022-03-30'
+                    - url: http://xcaliber-fhir/structureDefinition/DESC
+                      valueString: Weekly therapy session
+                    - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                      valueReference:
+                        reference: Practitioner/example-doctor
+                    - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                      valueString: '4'
+                    - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                      valueBoolean: true
+                    - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                      valueDateTime: '2022-02-20T08:00:00Z'
+      example:
+        resourceType: Bundle
+        type: searchset
+        total: 1
+        entry:
+        - resource:
+            type: object
+            required:
+            - resourceType
+            - id
+            - meta
+            - status
+            - intent
+            - type
+            - subject
+            - participant
+            - start
+            - end
+            properties:
+              resourceType:
+                type: string
+                example: Appointment
+              id:
+                type: string
+                example: example-appointment
+              meta:
+                type: object
+                properties:
+                  versionId:
+                    type: string
+                    example: '1'
+                  lastUpdated:
+                    type: string
+                    example: '2022-03-01T12:00:00Z'
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueDate:
+                          type: string
+                        valueDateTime:
+                          type: string
+              status:
+                type: string
+                example: scheduled
+              intent:
+                type: string
+                example: proposed
+              type:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+              statusReason:
+                type: string
+              subject:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              context:
+                type: object
+                properties:
+                  location:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                  careTeam:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        role:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                        member:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+              participant:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    role:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                    member:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+              start:
+                type: string
+                example: '2022-03-01T14:00:00Z'
+              end:
+                type: string
+                example: '2022-03-01T15:00:00Z'
+              extension:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                    valueString:
+                      type: string
+                    valueReference:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                    extension:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          valueString:
+                            type: string
+              contained:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    resourceType:
+                      type: string
+                      example: Slot
+                    id:
+                      type: string
+                    start:
+                      type: string
+                    end:
+                      type: string
+                    extension:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          valueDate:
+                            type: string
+                          valueString:
+                            type: string
+                          valueReference:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                          valueBoolean:
+                            type: boolean
+                          valueDateTime:
+                            type: string
+                  example:
+                    resourceType: Slot
+                    id: slot-1
+                    start: '2022-03-01T14:00:00Z'
+                    end: '2022-03-01T15:00:00Z'
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                      valueDate: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                      valueDate: '2022-03-30'
+                    - url: http://xcaliber-fhir/structureDefinition/DESC
+                      valueString: Weekly therapy session
+                    - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                      valueReference:
+                        reference: Practitioner/example-doctor
+                    - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                      valueString: '4'
+                    - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                      valueBoolean: true
+                    - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                      valueDateTime: '2022-02-20T08:00:00Z'
+            example:
+              resourceType: Appointment
+              id: example-appointment
+              meta:
+                versionId: '1'
+                lastUpdated: '2022-03-01T12:00:00Z'
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/LAST_MODIFIED_DATE
+                  valueDate: '2022-03-01'
+                - url: http://xcaliber-fhir/structureDefinition/DELETED_DATE
+                  valueDate: '2022-03-02'
+              status: scheduled
+              intent: proposed
+              type:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/appointment-type
+                  code: consult
+              statusReason: Patient is ready for consultation
+              subject:
+                reference: Patient/example-patient
+              context:
+                location:
+                  reference: Location/example-clinic
+                careTeam:
+                - role:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                      code: physician
+                  member:
+                    reference: Practitioner/example-doctor
+              participant:
+              - role:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                    code: patient
+                member:
+                  reference: Patient/example-patient
+              - role:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                    code: practitioner
+                member:
+                  reference: Practitioner/example-nurse
+              start: '2022-03-01T14:00:00Z'
+              end: '2022-03-01T15:00:00Z'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_STATUS
+                valueString: confirmed
+              - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_TYPE
+                valueString: standard
+              - url: http://xcaliber-fhir/structureDefinition/RECURRING_EVENT_SCHEDULE
+                valueString: weekly
+              - url: http://xcaliber-fhir/structureDefinition/TELEHEALTH_DETAILS
+                valueString: Zoom meeting link
+              - url: http://xcaliber-fhir/structureDefinition/INSTRUCTIONS
+                valueString: Arrive 10 minutes early
+              - url: http://xcaliber-fhir/structureDefinition/APPOINTMENT_MODE
+                valueString: IN_PERSON
+              - url: http://xcaliber-fhir/structureDefinition/STATUS
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/STATUS
+                  valueString: scheduled
+                - url: http://xcaliber-fhir/structureDefinition/ROOM
+                  valueString: Room 101
+                - url: http://xcaliber-fhir/structureDefinition/STATUS_DATE
+                  valueString: '2022-03-01T13:00:00Z'
+              contained:
+              - resourceType: Slot
+                id: slot-1
+                start: '2022-03-01T14:00:00Z'
+                end: '2022-03-01T15:00:00Z'
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                  valueDate: '2022-03-01'
+                - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                  valueDate: '2022-03-30'
+                - url: http://xcaliber-fhir/structureDefinition/DESC
+                  valueString: Weekly therapy session
+                - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                  valueReference:
+                    reference: Practitioner/example-doctor
+                - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                  valueString: '4'
+                - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                  valueBoolean: true
+                - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                  valueBoolean: false
+                - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                  valueBoolean: false
+                - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                  valueBoolean: false
+                - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                  valueBoolean: false
+                - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                  valueBoolean: false
+                - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                  valueBoolean: false
+                - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                  valueDateTime: '2022-02-20T08:00:00Z'
+    Error:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+        details:
+          type: string
+        status:
+          type: string
+      example:
+        statusCode: 400
+        message: Either patient id or practitioner id should be provided
+        status: error
+    Slot:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          example: Slot
+        id:
+          type: string
+        start:
+          type: string
+        end:
+          type: string
+        extension:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+              valueDate:
+                type: string
+              valueString:
+                type: string
+              valueReference:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              valueBoolean:
+                type: boolean
+              valueDateTime:
+                type: string
+      example:
+        resourceType: Slot
+        id: slot-1
+        start: '2022-03-01T14:00:00Z'
+        end: '2022-03-01T15:00:00Z'
+        extension:
+        - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+          valueDate: '2022-03-01'
+        - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+          valueDate: '2022-03-30'
+        - url: http://xcaliber-fhir/structureDefinition/DESC
+          valueString: Weekly therapy session
+        - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+          valueReference:
+            reference: Practitioner/example-doctor
+        - url: http://xcaliber-fhir/structureDefinition/REPEATS
+          valueString: '4'
+        - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+          valueBoolean: true
+        - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+          valueBoolean: false
+        - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+          valueBoolean: false
+        - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+          valueBoolean: false
+        - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+          valueBoolean: false
+        - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+          valueBoolean: false
+        - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+          valueBoolean: false
+        - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+          valueDateTime: '2022-02-20T08:00:00Z'
+    AppointmentListResponse:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+            source:
+              type: string
+            quorum:
+              type: boolean
+            notify:
+              type: boolean
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 1
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    required:
+                    - resourceType
+                    - id
+                    - meta
+                    - status
+                    - intent
+                    - type
+                    - subject
+                    - participant
+                    - start
+                    - end
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Appointment
+                      id:
+                        type: string
+                        example: example-appointment
+                      meta:
+                        type: object
+                        properties:
+                          versionId:
+                            type: string
+                            example: '1'
+                          lastUpdated:
+                            type: string
+                            example: '2022-03-01T12:00:00Z'
+                          extension:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                valueDate:
+                                  type: string
+                                valueDateTime:
+                                  type: string
+                      status:
+                        type: string
+                        example: scheduled
+                      intent:
+                        type: string
+                        example: proposed
+                      type:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                      statusReason:
+                        type: string
+                      subject:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      context:
+                        type: object
+                        properties:
+                          location:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                          careTeam:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                role:
+                                  type: object
+                                  properties:
+                                    coding:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          system:
+                                            type: string
+                                          code:
+                                            type: string
+                                member:
+                                  type: object
+                                  properties:
+                                    reference:
+                                      type: string
+                      participant:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            role:
+                              type: object
+                              properties:
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                      code:
+                                        type: string
+                            member:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                      start:
+                        type: string
+                        example: '2022-03-01T14:00:00Z'
+                      end:
+                        type: string
+                        example: '2022-03-01T15:00:00Z'
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+                            valueReference:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                            extension:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  url:
+                                    type: string
+                                  valueString:
+                                    type: string
+                      contained:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            resourceType:
+                              type: string
+                              example: Slot
+                            id:
+                              type: string
+                            start:
+                              type: string
+                            end:
+                              type: string
+                            extension:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  url:
+                                    type: string
+                                  valueDate:
+                                    type: string
+                                  valueString:
+                                    type: string
+                                  valueReference:
+                                    type: object
+                                    properties:
+                                      reference:
+                                        type: string
+                                  valueBoolean:
+                                    type: boolean
+                                  valueDateTime:
+                                    type: string
+                          example:
+                            resourceType: Slot
+                            id: slot-1
+                            start: '2022-03-01T14:00:00Z'
+                            end: '2022-03-01T15:00:00Z'
+                            extension:
+                            - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                              valueDate: '2022-03-01'
+                            - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                              valueDate: '2022-03-30'
+                            - url: http://xcaliber-fhir/structureDefinition/DESC
+                              valueString: Weekly therapy session
+                            - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                              valueReference:
+                                reference: Practitioner/example-doctor
+                            - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                              valueString: '4'
+                            - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                              valueBoolean: true
+                            - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                              valueBoolean: false
+                            - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                              valueBoolean: false
+                            - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                              valueBoolean: false
+                            - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                              valueBoolean: false
+                            - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                              valueBoolean: false
+                            - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                              valueBoolean: false
+                            - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                              valueDateTime: '2022-02-20T08:00:00Z'
+                    example:
+                      resourceType: Appointment
+                      id: example-appointment
+                      meta:
+                        versionId: '1'
+                        lastUpdated: '2022-03-01T12:00:00Z'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/LAST_MODIFIED_DATE
+                          valueDate: '2022-03-01'
+                        - url: http://xcaliber-fhir/structureDefinition/DELETED_DATE
+                          valueDate: '2022-03-02'
+                      status: scheduled
+                      intent: proposed
+                      type:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/appointment-type
+                          code: consult
+                      statusReason: Patient is ready for consultation
+                      subject:
+                        reference: Patient/example-patient
+                      context:
+                        location:
+                          reference: Location/example-clinic
+                        careTeam:
+                        - role:
+                            coding:
+                            - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                              code: physician
+                          member:
+                            reference: Practitioner/example-doctor
+                      participant:
+                      - role:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                            code: patient
+                        member:
+                          reference: Patient/example-patient
+                      - role:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                            code: practitioner
+                        member:
+                          reference: Practitioner/example-nurse
+                      start: '2022-03-01T14:00:00Z'
+                      end: '2022-03-01T15:00:00Z'
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_STATUS
+                        valueString: confirmed
+                      - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_TYPE
+                        valueString: standard
+                      - url: http://xcaliber-fhir/structureDefinition/RECURRING_EVENT_SCHEDULE
+                        valueString: weekly
+                      - url: http://xcaliber-fhir/structureDefinition/TELEHEALTH_DETAILS
+                        valueString: Zoom meeting link
+                      - url: http://xcaliber-fhir/structureDefinition/INSTRUCTIONS
+                        valueString: Arrive 10 minutes early
+                      - url: http://xcaliber-fhir/structureDefinition/APPOINTMENT_MODE
+                        valueString: IN_PERSON
+                      - url: http://xcaliber-fhir/structureDefinition/STATUS
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/STATUS
+                          valueString: scheduled
+                        - url: http://xcaliber-fhir/structureDefinition/ROOM
+                          valueString: Room 101
+                        - url: http://xcaliber-fhir/structureDefinition/STATUS_DATE
+                          valueString: '2022-03-01T13:00:00Z'
+                      contained:
+                      - resourceType: Slot
+                        id: slot-1
+                        start: '2022-03-01T14:00:00Z'
+                        end: '2022-03-01T15:00:00Z'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                          valueDate: '2022-03-01'
+                        - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                          valueDate: '2022-03-30'
+                        - url: http://xcaliber-fhir/structureDefinition/DESC
+                          valueString: Weekly therapy session
+                        - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                          valueReference:
+                            reference: Practitioner/example-doctor
+                        - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                          valueString: '4'
+                        - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                          valueBoolean: true
+                        - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                          valueDateTime: '2022-02-20T08:00:00Z'
+          example:
+            resourceType: Bundle
+            type: searchset
+            total: 1
+            entry:
+            - resource:
+                type: object
+                required:
+                - resourceType
+                - id
+                - meta
+                - status
+                - intent
+                - type
+                - subject
+                - participant
+                - start
+                - end
+                properties:
+                  resourceType:
+                    type: string
+                    example: Appointment
+                  id:
+                    type: string
+                    example: example-appointment
+                  meta:
+                    type: object
+                    properties:
+                      versionId:
+                        type: string
+                        example: '1'
+                      lastUpdated:
+                        type: string
+                        example: '2022-03-01T12:00:00Z'
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueDate:
+                              type: string
+                            valueDateTime:
+                              type: string
+                  status:
+                    type: string
+                    example: scheduled
+                  intent:
+                    type: string
+                    example: proposed
+                  type:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                  statusReason:
+                    type: string
+                  subject:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                  context:
+                    type: object
+                    properties:
+                      location:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      careTeam:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            role:
+                              type: object
+                              properties:
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                      code:
+                                        type: string
+                            member:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                  participant:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        role:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                        member:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                  start:
+                    type: string
+                    example: '2022-03-01T14:00:00Z'
+                  end:
+                    type: string
+                    example: '2022-03-01T15:00:00Z'
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+                        valueReference:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+                  contained:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        resourceType:
+                          type: string
+                          example: Slot
+                        id:
+                          type: string
+                        start:
+                          type: string
+                        end:
+                          type: string
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueDate:
+                                type: string
+                              valueString:
+                                type: string
+                              valueReference:
+                                type: object
+                                properties:
+                                  reference:
+                                    type: string
+                              valueBoolean:
+                                type: boolean
+                              valueDateTime:
+                                type: string
+                      example:
+                        resourceType: Slot
+                        id: slot-1
+                        start: '2022-03-01T14:00:00Z'
+                        end: '2022-03-01T15:00:00Z'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                          valueDate: '2022-03-01'
+                        - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                          valueDate: '2022-03-30'
+                        - url: http://xcaliber-fhir/structureDefinition/DESC
+                          valueString: Weekly therapy session
+                        - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                          valueReference:
+                            reference: Practitioner/example-doctor
+                        - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                          valueString: '4'
+                        - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                          valueBoolean: true
+                        - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                          valueDateTime: '2022-02-20T08:00:00Z'
+                example:
+                  resourceType: Appointment
+                  id: example-appointment
+                  meta:
+                    versionId: '1'
+                    lastUpdated: '2022-03-01T12:00:00Z'
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/LAST_MODIFIED_DATE
+                      valueDate: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/DELETED_DATE
+                      valueDate: '2022-03-02'
+                  status: scheduled
+                  intent: proposed
+                  type:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/appointment-type
+                      code: consult
+                  statusReason: Patient is ready for consultation
+                  subject:
+                    reference: Patient/example-patient
+                  context:
+                    location:
+                      reference: Location/example-clinic
+                    careTeam:
+                    - role:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                          code: physician
+                      member:
+                        reference: Practitioner/example-doctor
+                  participant:
+                  - role:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                        code: patient
+                    member:
+                      reference: Patient/example-patient
+                  - role:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                        code: practitioner
+                    member:
+                      reference: Practitioner/example-nurse
+                  start: '2022-03-01T14:00:00Z'
+                  end: '2022-03-01T15:00:00Z'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_STATUS
+                    valueString: confirmed
+                  - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_TYPE
+                    valueString: standard
+                  - url: http://xcaliber-fhir/structureDefinition/RECURRING_EVENT_SCHEDULE
+                    valueString: weekly
+                  - url: http://xcaliber-fhir/structureDefinition/TELEHEALTH_DETAILS
+                    valueString: Zoom meeting link
+                  - url: http://xcaliber-fhir/structureDefinition/INSTRUCTIONS
+                    valueString: Arrive 10 minutes early
+                  - url: http://xcaliber-fhir/structureDefinition/APPOINTMENT_MODE
+                    valueString: IN_PERSON
+                  - url: http://xcaliber-fhir/structureDefinition/STATUS
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/STATUS
+                      valueString: scheduled
+                    - url: http://xcaliber-fhir/structureDefinition/ROOM
+                      valueString: Room 101
+                    - url: http://xcaliber-fhir/structureDefinition/STATUS_DATE
+                      valueString: '2022-03-01T13:00:00Z'
+                  contained:
+                  - resourceType: Slot
+                    id: slot-1
+                    start: '2022-03-01T14:00:00Z'
+                    end: '2022-03-01T15:00:00Z'
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                      valueDate: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                      valueDate: '2022-03-30'
+                    - url: http://xcaliber-fhir/structureDefinition/DESC
+                      valueString: Weekly therapy session
+                    - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                      valueReference:
+                        reference: Practitioner/example-doctor
+                    - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                      valueString: '4'
+                    - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                      valueBoolean: true
+                    - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                      valueDateTime: '2022-02-20T08:00:00Z'
+      example:
+        context:
+          requestId: abc123
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              type: object
+              required:
+              - resourceType
+              - id
+              - meta
+              - status
+              - intent
+              - type
+              - subject
+              - participant
+              - start
+              - end
+              properties:
+                resourceType:
+                  type: string
+                  example: Appointment
+                id:
+                  type: string
+                  example: example-appointment
+                meta:
+                  type: object
+                  properties:
+                    versionId:
+                      type: string
+                      example: '1'
+                    lastUpdated:
+                      type: string
+                      example: '2022-03-01T12:00:00Z'
+                    extension:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          valueDate:
+                            type: string
+                          valueDateTime:
+                            type: string
+                status:
+                  type: string
+                  example: scheduled
+                intent:
+                  type: string
+                  example: proposed
+                type:
+                  type: object
+                  properties:
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+                statusReason:
+                  type: string
+                subject:
+                  type: object
+                  properties:
+                    reference:
+                      type: string
+                context:
+                  type: object
+                  properties:
+                    location:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                    careTeam:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          role:
+                            type: object
+                            properties:
+                              coding:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    system:
+                                      type: string
+                                    code:
+                                      type: string
+                          member:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                participant:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      role:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                      member:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                start:
+                  type: string
+                  example: '2022-03-01T14:00:00Z'
+                end:
+                  type: string
+                  example: '2022-03-01T15:00:00Z'
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueString:
+                        type: string
+                      valueReference:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+                contained:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Slot
+                      id:
+                        type: string
+                      start:
+                        type: string
+                      end:
+                        type: string
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueDate:
+                              type: string
+                            valueString:
+                              type: string
+                            valueReference:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                            valueBoolean:
+                              type: boolean
+                            valueDateTime:
+                              type: string
+                    example:
+                      resourceType: Slot
+                      id: slot-1
+                      start: '2022-03-01T14:00:00Z'
+                      end: '2022-03-01T15:00:00Z'
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                        valueDate: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                        valueDate: '2022-03-30'
+                      - url: http://xcaliber-fhir/structureDefinition/DESC
+                        valueString: Weekly therapy session
+                      - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                        valueReference:
+                          reference: Practitioner/example-doctor
+                      - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                        valueString: '4'
+                      - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                        valueBoolean: true
+                      - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                        valueDateTime: '2022-02-20T08:00:00Z'
+              example:
+                resourceType: Appointment
+                id: example-appointment
+                meta:
+                  versionId: '1'
+                  lastUpdated: '2022-03-01T12:00:00Z'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/LAST_MODIFIED_DATE
+                    valueDate: '2022-03-01'
+                  - url: http://xcaliber-fhir/structureDefinition/DELETED_DATE
+                    valueDate: '2022-03-02'
+                status: scheduled
+                intent: proposed
+                type:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/appointment-type
+                    code: consult
+                statusReason: Patient is ready for consultation
+                subject:
+                  reference: Patient/example-patient
+                context:
+                  location:
+                    reference: Location/example-clinic
+                  careTeam:
+                  - role:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                        code: physician
+                    member:
+                      reference: Practitioner/example-doctor
+                participant:
+                - role:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                      code: patient
+                  member:
+                    reference: Patient/example-patient
+                - role:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/appointment-participant-role
+                      code: practitioner
+                  member:
+                    reference: Practitioner/example-nurse
+                start: '2022-03-01T14:00:00Z'
+                end: '2022-03-01T15:00:00Z'
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_STATUS
+                  valueString: confirmed
+                - url: http://xcaliber-fhir/structureDefinition/TIME_SLOT_TYPE
+                  valueString: standard
+                - url: http://xcaliber-fhir/structureDefinition/RECURRING_EVENT_SCHEDULE
+                  valueString: weekly
+                - url: http://xcaliber-fhir/structureDefinition/TELEHEALTH_DETAILS
+                  valueString: Zoom meeting link
+                - url: http://xcaliber-fhir/structureDefinition/INSTRUCTIONS
+                  valueString: Arrive 10 minutes early
+                - url: http://xcaliber-fhir/structureDefinition/APPOINTMENT_MODE
+                  valueString: IN_PERSON
+                - url: http://xcaliber-fhir/structureDefinition/STATUS
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/STATUS
+                    valueString: scheduled
+                  - url: http://xcaliber-fhir/structureDefinition/ROOM
+                    valueString: Room 101
+                  - url: http://xcaliber-fhir/structureDefinition/STATUS_DATE
+                    valueString: '2022-03-01T13:00:00Z'
+                contained:
+                - resourceType: Slot
+                  id: slot-1
+                  start: '2022-03-01T14:00:00Z'
+                  end: '2022-03-01T15:00:00Z'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/SERIESSTART
+                    valueDate: '2022-03-01'
+                  - url: http://xcaliber-fhir/structureDefinition/SERIESSTOP
+                    valueDate: '2022-03-30'
+                  - url: http://xcaliber-fhir/structureDefinition/DESC
+                    valueString: Weekly therapy session
+                  - url: http://xcaliber-fhir/structureDefinition/PRACTITIONER
+                    valueReference:
+                      reference: Practitioner/example-doctor
+                  - url: http://xcaliber-fhir/structureDefinition/REPEATS
+                    valueString: '4'
+                  - url: http://xcaliber-fhir/structureDefinition/DOWMONDAY
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/DOWTUESDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWWEDNESDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWTHURSDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWFRIDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWSATURDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/DOWSUNDAY
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/CREATEDDATE
+                    valueDateTime: '2022-02-20T08:00:00Z'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    xSourceId:
+      name: x-source-id
+      in: header
+      required: true
+      schema:
+        type: string
+      description: "Source identifier header required for routing.\nAthena: 083fe714-e36e-4851-b2e7-a7166b439f67\n Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f — \U0001F534 On demand filter"
+externalDocs:
+  description: Run in Postman
+  url: https://app.postman.com/import/openapi
+security:
+- bearerAuth: []

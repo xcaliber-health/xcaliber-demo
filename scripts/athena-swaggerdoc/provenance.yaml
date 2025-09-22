@@ -1,0 +1,278 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: Provenance
+  description: Provenance resource
+paths:
+  /api/v2/Provenance:
+    get:
+      summary: Get document ID by task IDs
+      operationId: getProvenance
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: agent
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: agent'
+      - name: agent-role
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: agent-role'
+      - name: agent-type
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: agent-type'
+      - name: entity
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: entity'
+      - name: location
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: location'
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: recorded
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: recorded'
+      - name: signature-type
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: signature-type'
+      - name: target
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: target'
+      - name: when
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: when'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '200':
+          description: Provenance retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetingetProvenancecategoryactionnotehistory'
+              examples:
+                default:
+                  summary: Standard Provenance Example
+                  value:
+                    context:
+                      requestId: abc123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      documentId: doc-12345
+                      taskIds:
+                      - task-111
+                      - task-222
+                      timestamp: '2023-12-01T12:00:00Z'
+                action-note-history:
+                  summary: Action Note History Example
+                  value:
+                    context:
+                      requestId: minimal-001
+                      source: ATHENA
+                      quorum: true
+                      notify: false
+                    data:
+                      documentId: doc-100
+                      taskIds: []
+                      timestamp: '2024-01-01T08:00:00Z'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetingetProvenancecategoryactionnotehistory'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetingetProvenancecategoryactionnotehistory'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetingetProvenancecategoryactionnotehistory'
+      tags:
+      - Provenance
+      - Category-> ActionNoteHistory
+components:
+  schemas:
+    response200ofgetingetProvenancecategoryactionnotehistory:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          required:
+          - documentId
+          - taskIds
+          - timestamp
+          properties:
+            documentId:
+              type: string
+              example: doc-12345
+            taskIds:
+              type: array
+              items:
+                type: string
+              example:
+              - task-111
+              - task-222
+            timestamp:
+              type: string
+              format: date-time
+              example: '2023-12-01T12:00:00Z'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          documentId: doc-12345
+          taskIds:
+          - task-111
+          - task-222
+          timestamp: '2023-12-01T12:00:00Z'
+    error400ofgetingetProvenancecategoryactionnotehistory:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing or invalid parameter
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing or invalid parameter
+    error401ofgetingetProvenancecategoryactionnotehistory:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetingetProvenancecategoryactionnotehistory:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Category is required
+        details:
+          type: object
+          example: {}
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 500
+        message: Category is required
+        details: {}
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

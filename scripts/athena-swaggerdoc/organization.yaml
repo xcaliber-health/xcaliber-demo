@@ -1,0 +1,1525 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as 
+    Fire) is a standard for exchanging healthcare information electronically. It
+    is designed to be a modern, flexible, and web-based alternative to older, 
+    more cumbersome standards like HL7 v2. FHIR uses a RESTful API specification
+    to define how to interact with Resources - this means it uses standard HTTP 
+    verbs (GET, POST, PUT, DELETE). Resources are the fundamental units of data 
+    in FHIR; they can represent anything from patient demographics to clinical 
+    observations to medications.
+servers:
+  - url: https://xchange-sandbox.xcaliberapis.com
+  - url: https://your.api.server
+tags:
+  - name: Organization
+    description: Organization resource operations in Athena
+paths:
+  /api/v2/Organization:
+    get:
+      tags:
+        - Organization
+      summary: Get Organizations
+      operationId: getOrganizationFromAthenaV2
+      parameters:
+        - &id001
+          name: x-source-id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Source system identifier.
+        - &id002
+          name: x-interaction-mode
+          in: header
+          required: true
+          schema:
+            type: boolean
+          description: Interaction mode flag (true/false).
+        - &id005
+          name: active
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 'Filter: active'
+        - &id006
+          name: address
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: address'
+        - &id007
+          name: address-city
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: address-city'
+        - &id008
+          name: address-country
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: address-country'
+        - &id009
+          name: address-postalcode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: address-postalcode'
+        - &id010
+          name: address-state
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: address-state'
+        - &id011
+          name: address-use
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: address-use'
+        - &id012
+          name: endpoint
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: endpoint'
+        - &id013
+          name: identifier
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: identifier'
+        - &id014
+          name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: name'
+        - &id015
+          name: partof
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: 'Filter: partof'
+        - &id016
+          name: phonetic
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: phonetic'
+        - &id017
+          name: type
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: type'
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+        - name: category
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Organization
+                  id: ORG-1001
+                  name: Acme Health Group
+                  contact:
+                    - telecom:
+                        - system: fax
+                          value: 415-555-1212
+                        - system: phone
+                          value: 415-555-3434
+                      address:
+                        line:
+                          - 100 Main St
+                        city: San Francisco
+                        state: CA
+                        postalCode: '94105'
+                        country: USA
+                  extension:
+                    - url: http://xcaliber-fhir/structureDefinition/notes
+                      valueString: Preferred billing partner.
+                    - url: http://xcaliber-fhir/structureDefinition/ordering
+                      valueString: primary
+                    - url: http://xcaliber-fhir/structureDefinition/category
+                      valueString: employer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinOrganizationcategoryemployer'
+              example:
+                statusCode: 400
+                message: No practiceId provided
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinOrganizationcategoryemployer'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinOrganizationcategoryemployer'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: {}
+    post:
+      tags:
+        - Organization
+      summary: Create Organization
+      operationId: createOrganizationInAthena
+      parameters:
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractedSchema295'
+      responses:
+        '201':
+          description: Organization created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response201ofpostinOrganization'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinOrganization'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinOrganization'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinOrganization'
+  /api/v2/Organization/{organization-id}:
+    get:
+      tags:
+        - Organization
+      summary: Get Organization by ID
+      operationId: getOrganizationByIdFromAthenaV2
+      parameters:
+        - name: organization-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the organization to retrieve. Required
+            for retrieving a specific organization''s details."'
+        - *id001
+        - *id002
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinOrganizationcategoryemployerorganizationid'
+              examples:
+                response_body_200:
+                  summary: Response Body 200
+                  value: &id003
+                    context:
+                      requestId: 338cf9d66a98583fed38fd98413edfb8
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            organizations:
+                              - practiceId: PRACTICE1
+                                address: 123 Main St
+                                city: Metropolis
+                                countryid: US
+                                fax: 555-1234
+                                name: Org1
+                                phone: 555-9876
+                                state: NY
+                                zip: 12345
+                employer:
+                  summary: Employer Example
+                  value: &id004
+                    context:
+                      requestId: c2f3a7bd-3333-4db8-9217-emp-998a7
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            organizations:
+                              - practiceId: EMPLOYER_001
+                                address: 500 Corporate Blvd
+                                city: Gotham
+                                countryid: US
+                                fax: 555-4321
+                                name: Employer Inc.
+                                phone: 555-6789
+                                state: CA
+                                zip: 90210
+                                category: employer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinOrganizationcategoryemployerorganizationid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinOrganizationcategoryemployerorganizationid'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinOrganizationcategoryemployerorganizationid'
+    put:
+      tags:
+        - Organization
+      summary: Update Organization
+      operationId: updateOrganizationInAthena
+      parameters:
+        - name: organization-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the organization to update. Required
+            for updating organization details."'
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractedSchema317'
+      responses:
+        '200':
+          description: Organization updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofputinOrganizationorganizationid'
+              examples:
+                response_body_200:
+                  summary: Response Body 200
+                  value: *id003
+                employer:
+                  summary: Employer Example
+                  value: *id004
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofputinOrganizationorganizationid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofputinOrganizationorganizationid'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofputinOrganizationorganizationid'
+    delete:
+      tags:
+        - Organization
+      summary: Delete Organization
+      operationId: deleteOrganizationInAthena
+      parameters:
+        - name: organization-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the organization to delete. Required
+            for authentication and authorization."
+
+
+            Alternatively, a even more concise version:
+
+
+            "ID of the organization to delete."'
+        - *id001
+        - *id002
+      responses:
+        '200':
+          description: Organization deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofdeleteinOrganizationorganizationid'
+              examples:
+                response_body_200:
+                  summary: Response Body 200
+                  value: *id003
+                employer:
+                  summary: Employer Example
+                  value: *id004
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofdeleteinOrganizationorganizationid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinOrganizationorganizationid'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinOrganizationorganizationid'
+  /api/v2/Organization/category/employer:
+    get:
+      tags:
+        - Organization
+      summary: Get Organizations
+      operationId: getOrganizationFromAthenaV2_employer
+      parameters:
+        - *id001
+        - *id002
+        - *id005
+        - *id006
+        - *id007
+        - *id008
+        - *id009
+        - *id010
+        - *id011
+        - *id012
+        - *id013
+        - *id014
+        - *id015
+        - *id016
+        - *id017
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+        - name: category
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinOrganizationcategoryemployer'
+              examples:
+                response_body_200:
+                  summary: Response Body 200
+                  value:
+                    context:
+                      requestId: 338cf9d66a98583fed38fd98413edfb8
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            organizations:
+                              - practiceId: PRACTICE1
+                                address: 123 Main St
+                                city: Metropolis
+                                countryid: US
+                                fax: 555-1234
+                                name: Org1
+                                phone: 555-9876
+                                state: NY
+                                zip: 12345
+                employer:
+                  summary: Employer Example
+                  value:
+                    context:
+                      requestId: c2f3a7bd-3333-4db8-9217-emp-998a7
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            organizations:
+                              - practiceId: EMPLOYER_001
+                                address: 500 Corporate Blvd
+                                city: Gotham
+                                countryid: US
+                                fax: 555-4321
+                                name: Employer Inc.
+                                phone: 555-6789
+                                state: CA
+                                zip: 90210
+                                category: employer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinOrganizationcategoryemployer'
+              example:
+                statusCode: 400
+                message: No practiceId provided
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinOrganizationcategoryemployer'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinOrganizationcategoryemployer'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: {}
+  /api/v2/Organization/category/employer/{organization-id}:
+    get:
+      tags:
+        - Organization
+      summary: Get Organization by ID
+      operationId: getOrganizationByIdFromAthenaV2_employer
+      parameters:
+        - name: organization-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the organization to retrieve. Required
+            for retrieving a specific organization''s details."'
+        - *id001
+        - *id002
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinOrganizationcategoryemployerorganizationid'
+              examples:
+                response_body_200:
+                  summary: Response Body 200
+                  value:
+                    context:
+                      requestId: 338cf9d66a98583fed38fd98413edfb8
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            organizations:
+                              - practiceId: PRACTICE1
+                                address: 123 Main St
+                                city: Metropolis
+                                countryid: US
+                                fax: 555-1234
+                                name: Org1
+                                phone: 555-9876
+                                state: NY
+                                zip: 12345
+                employer:
+                  summary: Employer Example
+                  value:
+                    context:
+                      requestId: c2f3a7bd-3333-4db8-9217-emp-998a7
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            organizations:
+                              - practiceId: EMPLOYER_001
+                                address: 500 Corporate Blvd
+                                city: Gotham
+                                countryid: US
+                                fax: 555-4321
+                                name: Employer Inc.
+                                phone: 555-6789
+                                state: CA
+                                zip: 90210
+                                category: employer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinOrganizationcategoryemployerorganizationid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinOrganizationcategoryemployerorganizationid'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinOrganizationcategoryemployerorganizationid'
+components:
+  schemas:
+    ExtractedSchema295:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+          description: '"Organization creation context. Contains additional information
+            about the organization being created."'
+        data:
+          type: object
+          properties:
+            organizations:
+              type: array
+              items:
+                type: object
+                properties:
+                  practiceId:
+                    type: string
+                  address:
+                    type: string
+                  city:
+                    type: string
+                  countryid:
+                    type: string
+                  fax:
+                    type: string
+                  name:
+                    type: string
+                  phone:
+                    type: string
+                  state:
+                    type: string
+                  zip:
+                    type: string
+                example:
+                  practiceId: PRACTICE1
+                  address: 123 Main St
+                  city: Metropolis
+                  countryid: US
+                  fax: 555-1234
+                  name: Org1
+                  phone: 555-9876
+                  state: NY
+                  zip: 12345
+          example:
+            organizations:
+              - practiceId: PRACTICE1
+                address: 123 Main St
+                city: Metropolis
+                countryid: US
+                fax: 555-1234
+                name: Org1
+                phone: 555-9876
+                state: NY
+                zip: 12345
+          description: '"Organization data to be created. Provide a JSON object with
+            organization details."'
+      example:
+        context:
+          requestId: 338cf9d66a98583fed38fd98413edfb8
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          organizations:
+            - practiceId: PRACTICE1
+              address: 123 Main St
+              city: Metropolis
+              countryid: US
+              fax: 555-1234
+              name: Org1
+              phone: 555-9876
+              state: NY
+              zip: 12345
+    ExtractedSchema317:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+          description: '"Contextual information for updating an organization. Contains
+            additional metadata for the update operation."
+
+
+            Or, if you''d like a slightly shorter version:
+
+
+            "Additional metadata for updating an organization."'
+        data:
+          type: object
+          properties:
+            organizations:
+              type: array
+              items:
+                type: object
+                properties:
+                  practiceId:
+                    type: string
+                  address:
+                    type: string
+                  city:
+                    type: string
+                  countryid:
+                    type: string
+                  fax:
+                    type: string
+                  name:
+                    type: string
+                  phone:
+                    type: string
+                  state:
+                    type: string
+                  zip:
+                    type: string
+                example:
+                  practiceId: PRACTICE1
+                  address: 123 Main St
+                  city: Metropolis
+                  countryid: US
+                  fax: 555-1234
+                  name: Org1
+                  phone: 555-9876
+                  state: NY
+                  zip: 12345
+          example:
+            organizations:
+              - practiceId: PRACTICE1
+                address: 123 Main St
+                city: Metropolis
+                countryid: US
+                fax: 555-1234
+                name: Org1
+                phone: 555-9876
+                state: NY
+                zip: 12345
+          description: '**data**: The updated organization data. Pass the fields you
+            want to update, such as name, description, or address.'
+      example:
+        context:
+          requestId: 338cf9d66a98583fed38fd98413edfb8
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          organizations:
+            - practiceId: PRACTICE1
+              address: 123 Main St
+              city: Metropolis
+              countryid: US
+              fax: 555-1234
+              name: Org1
+              phone: 555-9876
+              state: NY
+              zip: 12345
+    response200ofgetinOrganizationcategoryemployer:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            organizations:
+              type: array
+              items:
+                type: object
+                properties:
+                  practiceId:
+                    type: string
+                  address:
+                    type: string
+                  city:
+                    type: string
+                  countryid:
+                    type: string
+                  fax:
+                    type: string
+                  name:
+                    type: string
+                  phone:
+                    type: string
+                  state:
+                    type: string
+                  zip:
+                    type: string
+                example:
+                  practiceId: PRACTICE1
+                  address: 123 Main St
+                  city: Metropolis
+                  countryid: US
+                  fax: 555-1234
+                  name: Org1
+                  phone: 555-9876
+                  state: NY
+                  zip: 12345
+          example:
+            organizations:
+              - practiceId: PRACTICE1
+                address: 123 Main St
+                city: Metropolis
+                countryid: US
+                fax: 555-1234
+                name: Org1
+                phone: 555-9876
+                state: NY
+                zip: 12345
+      example:
+        context:
+          requestId: 338cf9d66a98583fed38fd98413edfb8
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                organizations:
+                  - practiceId: PRACTICE1
+                    address: 123 Main St
+                    city: Metropolis
+                    countryid: US
+                    fax: 555-1234
+                    name: Org1
+                    phone: 555-9876
+                    state: NY
+                    zip: 12345
+    error400ofgetinOrganizationcategoryemployer:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing practiceId
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 400
+        message: No practiceId provided
+        details:
+    error401ofgetinOrganizationcategoryemployer:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinOrganizationcategoryemployer:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          nullable: true
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    response201ofpostinOrganization:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            organizations:
+              type: array
+              items:
+                type: object
+                properties:
+                  practiceId:
+                    type: string
+                  address:
+                    type: string
+                  city:
+                    type: string
+                  countryid:
+                    type: string
+                  fax:
+                    type: string
+                  name:
+                    type: string
+                  phone:
+                    type: string
+                  state:
+                    type: string
+                  zip:
+                    type: string
+                example:
+                  practiceId: PRACTICE1
+                  address: 123 Main St
+                  city: Metropolis
+                  countryid: US
+                  fax: 555-1234
+                  name: Org1
+                  phone: 555-9876
+                  state: NY
+                  zip: 12345
+          example:
+            organizations:
+              - practiceId: PRACTICE1
+                address: 123 Main St
+                city: Metropolis
+                countryid: US
+                fax: 555-1234
+                name: Org1
+                phone: 555-9876
+                state: NY
+                zip: 12345
+      example:
+        context:
+          requestId: 338cf9d66a98583fed38fd98413edfb8
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                organizations:
+                  - practiceId: PRACTICE1
+                    address: 123 Main St
+                    city: Metropolis
+                    countryid: US
+                    fax: 555-1234
+                    name: Org1
+                    phone: 555-9876
+                    state: NY
+                    zip: 12345
+    error400ofpostinOrganization:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing practiceId
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 400
+        message: No practiceId provided
+        details:
+    error401ofpostinOrganization:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofpostinOrganization:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          nullable: true
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    response200ofgetinOrganizationcategoryemployerorganizationid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            organizations:
+              type: array
+              items:
+                type: object
+                properties:
+                  practiceId:
+                    type: string
+                  address:
+                    type: string
+                  city:
+                    type: string
+                  countryid:
+                    type: string
+                  fax:
+                    type: string
+                  name:
+                    type: string
+                  phone:
+                    type: string
+                  state:
+                    type: string
+                  zip:
+                    type: string
+                example:
+                  practiceId: PRACTICE1
+                  address: 123 Main St
+                  city: Metropolis
+                  countryid: US
+                  fax: 555-1234
+                  name: Org1
+                  phone: 555-9876
+                  state: NY
+                  zip: 12345
+          example:
+            organizations:
+              - practiceId: PRACTICE1
+                address: 123 Main St
+                city: Metropolis
+                countryid: US
+                fax: 555-1234
+                name: Org1
+                phone: 555-9876
+                state: NY
+                zip: 12345
+      example:
+        context:
+          requestId: 338cf9d66a98583fed38fd98413edfb8
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                organizations:
+                  - practiceId: PRACTICE1
+                    address: 123 Main St
+                    city: Metropolis
+                    countryid: US
+                    fax: 555-1234
+                    name: Org1
+                    phone: 555-9876
+                    state: NY
+                    zip: 12345
+    error400ofgetinOrganizationcategoryemployerorganizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing practiceId
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 400
+        message: No practiceId provided
+        details:
+    error401ofgetinOrganizationcategoryemployerorganizationid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinOrganizationcategoryemployerorganizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          nullable: true
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    response200ofputinOrganizationorganizationid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            organizations:
+              type: array
+              items:
+                type: object
+                properties:
+                  practiceId:
+                    type: string
+                  address:
+                    type: string
+                  city:
+                    type: string
+                  countryid:
+                    type: string
+                  fax:
+                    type: string
+                  name:
+                    type: string
+                  phone:
+                    type: string
+                  state:
+                    type: string
+                  zip:
+                    type: string
+                example:
+                  practiceId: PRACTICE1
+                  address: 123 Main St
+                  city: Metropolis
+                  countryid: US
+                  fax: 555-1234
+                  name: Org1
+                  phone: 555-9876
+                  state: NY
+                  zip: 12345
+          example:
+            organizations:
+              - practiceId: PRACTICE1
+                address: 123 Main St
+                city: Metropolis
+                countryid: US
+                fax: 555-1234
+                name: Org1
+                phone: 555-9876
+                state: NY
+                zip: 12345
+      example:
+        context:
+          requestId: 338cf9d66a98583fed38fd98413edfb8
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                organizations:
+                  - practiceId: PRACTICE1
+                    address: 123 Main St
+                    city: Metropolis
+                    countryid: US
+                    fax: 555-1234
+                    name: Org1
+                    phone: 555-9876
+                    state: NY
+                    zip: 12345
+    error400ofputinOrganizationorganizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing practiceId
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 400
+        message: No practiceId provided
+        details:
+    error401ofputinOrganizationorganizationid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofputinOrganizationorganizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          nullable: true
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    response200ofdeleteinOrganizationorganizationid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            result:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: ORG123
+                status:
+                  type: string
+                  example: deleted
+      example:
+        context:
+          requestId: 338cf9d66a98583fed38fd98413edfb8
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                result:
+                  id: ORG123
+                  status: deleted
+    error400ofdeleteinOrganizationorganizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing practiceId
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 400
+        message: No practiceId provided
+        details:
+    error401ofdeleteinOrganizationorganizationid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofdeleteinOrganizationorganizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          nullable: true
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - Auth: []

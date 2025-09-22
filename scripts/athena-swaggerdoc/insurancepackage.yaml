@@ -1,0 +1,483 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: InsurancePackage
+  description: Operations related to Athena insurance packages.
+paths:
+  /api/v2/InsurancePlan:
+    get:
+      tags:
+      - InsurancePackage
+      summary: Get list of InsurancePlans
+      operationId: getListOfInsurancePlans
+      parameters:
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - &id003
+        name: address
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: address'
+      - &id004
+        name: address-city
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: address-city'
+      - &id005
+        name: address-country
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: address-country'
+      - &id006
+        name: address-postalcode
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: address-postalcode'
+      - &id007
+        name: address-state
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: address-state'
+      - &id008
+        name: address-use
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: address-use'
+      - &id009
+        name: administered-by
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: administered-by'
+      - &id010
+        name: endpoint
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: endpoint'
+      - &id011
+        name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - &id012
+        name: name
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: name'
+      - &id013
+        name: owned-by
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: owned-by'
+      - &id014
+        name: phonetic
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: phonetic'
+      - &id015
+        name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: status'
+      - &id016
+        name: type
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: type'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinInsurancePlancategorycasepolicies'
+              examples:
+                response_body_200:
+                  summary: Standard InsurancePlan Bundle
+                  value:
+                    context:
+                      requestId: abc123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 2
+                      entry:
+                      - resource:
+                          resourceType: InsurancePlan
+                          id: abc123
+                          extension: []
+                          name: Policy A
+                          contact:
+                          - address:
+                              line:
+                              - 12 Market St
+                      - resource:
+                          resourceType: InsurancePlan
+                          id: def456
+                          extension: []
+                          name: Policy B
+                          contact:
+                          - address:
+                              line:
+                              - Another Place
+                case-policies:
+                  summary: InsurancePlan Case-Policies Example
+                  value:
+                    context:
+                      requestId: casepolicies_123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                      - resource:
+                          resourceType: InsurancePlan
+                          id: CASEPKG_001
+                          extension: []
+                          name: Legal Case Policy
+                          contact:
+                          - address:
+                              line:
+                              - Lawyer Street 1
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinInsurancePlancategorycasepolicies'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinInsurancePlancategorycasepolicies'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinInsurancePlancategorycasepolicies'
+  /api/v2/InsurancePlan/category/case-policies:
+    get:
+      tags:
+      - InsurancePackage
+      summary: Get list of InsurancePlans
+      operationId: getListOfInsurancePlans_case-policies
+      parameters:
+      - *id001
+      - *id002
+      - *id003
+      - *id004
+      - *id005
+      - *id006
+      - *id007
+      - *id008
+      - *id009
+      - *id010
+      - *id011
+      - *id012
+      - *id013
+      - *id014
+      - *id015
+      - *id016
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinInsurancePlancategorycasepolicies'
+              examples:
+                response_body_200:
+                  summary: Standard InsurancePlan Bundle
+                  value:
+                    context:
+                      requestId: abc123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 2
+                      entry:
+                      - resource:
+                          resourceType: InsurancePlan
+                          id: abc123
+                          extension: []
+                          name: Policy A
+                          contact:
+                          - address:
+                              line:
+                              - 12 Market St
+                      - resource:
+                          resourceType: InsurancePlan
+                          id: def456
+                          extension: []
+                          name: Policy B
+                          contact:
+                          - address:
+                              line:
+                              - Another Place
+                case-policies:
+                  summary: InsurancePlan Case-Policies Example
+                  value:
+                    context:
+                      requestId: casepolicies_123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                      - resource:
+                          resourceType: InsurancePlan
+                          id: CASEPKG_001
+                          extension: []
+                          name: Legal Case Policy
+                          contact:
+                          - address:
+                              line:
+                              - Lawyer Street 1
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinInsurancePlancategorycasepolicies'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinInsurancePlancategorycasepolicies'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinInsurancePlancategorycasepolicies'
+components:
+  schemas:
+    response200ofgetinInsurancePlancategorycasepolicies:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 2
+          entry:
+          - resource:
+              resourceType: InsurancePlan
+              id: abc123
+              extension: []
+              name: Policy A
+              contact:
+              - address:
+                  line:
+                  - 12 Market St
+          - resource:
+              resourceType: InsurancePlan
+              id: def456
+              extension: []
+              name: Policy B
+              contact:
+              - address:
+                  line:
+                  - Another Place
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: InsurancePlan
+                      id:
+                        type: string
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+                      name:
+                        type: string
+                      contact:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            address:
+                              type: object
+                              properties:
+                                line:
+                                  type: array
+                                  items:
+                                    type: string
+    error400ofgetinInsurancePlancategorycasepolicies:
+      type: object
+      example:
+        statusCode: 400
+        message: Missing practiceId
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing practiceId
+        details:
+          type: string
+    error401ofgetinInsurancePlancategorycasepolicies:
+      type: object
+      example:
+        statusCode: 400
+        message: Missing practiceId
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing practiceId
+        details:
+          type: string
+    error500ofgetinInsurancePlancategorycasepolicies:
+      type: object
+      example:
+        statusCode: 400
+        message: Missing practiceId
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing practiceId
+        details:
+          type: string
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

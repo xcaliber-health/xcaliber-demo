@@ -1,0 +1,486 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: CarePlan
+  description: CarePlan FHIR resource operations for managing clinical care plans,
+    including retrieval by patient or ID.
+paths:
+  /api/v2/CarePlan:
+    get:
+      summary: Get a list of CarePlans
+      operationId: getCarePlanList
+      tags:
+      - CarePlan
+      parameters:
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: date'
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: activity-code
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: activity-code'
+      - name: activity-date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: activity-date'
+      - name: activity-reference
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: activity-reference'
+      - name: based-on
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: based-on'
+      - name: care-team
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: care-team'
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: category'
+      - name: condition
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: condition'
+      - name: encounter
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: encounter'
+      - name: goal
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: goal'
+      - name: instantiates-canonical
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: instantiates-canonical'
+      - name: instantiates-uri
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: instantiates-uri'
+      - name: intent
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: intent'
+      - name: part-of
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: part-of'
+      - name: performer
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: performer'
+      - name: replaces
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: replaces'
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: status'
+      - name: subject
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: subject'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinCarePlan'
+              example:
+                statusCode: 400
+                message: Missing patientId
+                details: null
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinCarePlan'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinCarePlan'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: null
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: CarePlan
+                        id: cp-001
+                        intent: plan
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/text-div
+                          valueString: '<div>Care plan summary: diet, exercise, follow-up
+                            in 2 weeks.</div>'
+                        - url: http://xcaliber-fhir/structureDefinition/text-status
+                          valueString: generated
+                        subject:
+                          reference: Patient/4406
+                        category:
+                        - coding:
+                          - system: http://loinc.org
+                            code: LP29684-5
+                            display: Care plan
+                        status: active
+                        contributor:
+                        - display: Dr. Alice Smith
+                          reference: Practitioner/27
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/role
+                            valueCodeableConcept:
+                              text: Primary physician
+                        - display: Care Coordinator
+                          reference: Practitioner/58
+                          extension: []
+                    - resource:
+                        resourceType: CarePlan
+                        id: cp-002
+                        intent: plan
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/text-div
+                          valueString: <div>PT sessions twice weekly; re-eval in 1
+                            month.</div>
+                        - url: http://xcaliber-fhir/structureDefinition/text-status
+                          valueString: additional
+                        subject:
+                          reference: Patient/5521
+                        category:
+                        - coding:
+                          - system: http://loinc.org
+                            code: LP29684-5
+                            display: Care plan
+                        status: draft
+                        contributor:
+                        - display: PT Jane Doe
+                          reference: Practitioner/91
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/role
+                            valueCodeableConcept:
+                              text: Physiotherapist
+  /api/v2/CarePlan/{care-plan-id}:
+    get:
+      summary: Get a list of CarePlans
+      operationId: getCarePlanList_get__api_v1_CarePlan_care-plan-id
+      tags:
+      - CarePlan
+      parameters:
+      - name: care-plan-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier of the CarePlan resource. Use to retrieve
+          a specific CarePlan."'
+      - *id001
+      - *id002
+      
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinCarePlancareplanid'
+              example:
+                statusCode: 400
+                message: Missing patientId
+                details: null
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinCarePlancareplanid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinCarePlancareplanid'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: null
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: CarePlan
+                    id: cp-001
+                    intent: plan
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/text-div
+                      valueString: '<div>Care plan summary: diet, exercise, follow-up
+                        in 2 weeks.</div>'
+                    - url: http://xcaliber-fhir/structureDefinition/text-status
+                      valueString: generated
+                    subject:
+                      reference: Patient/4406
+                    category:
+                    - coding:
+                      - system: http://loinc.org
+                        code: LP29684-5
+                        display: Care plan
+                    status: active
+                    contributor:
+                    - display: Dr. Alice Smith
+                      reference: Practitioner/27
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/role
+                        valueCodeableConcept:
+                          text: Primary physician
+                    - display: Care Coordinator
+                      reference: Practitioner/58
+                      extension: []
+components:
+  schemas:
+    response200ofgetinCarePlan:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: CarePlan
+              id: cp-001
+              intent: plan
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/text-div
+                valueString: <div>CarePlan Narrative</div>
+              subject: Patient/12345
+              category: medical
+              status: active
+              contributor:
+              - display: Dr. John Doe
+                reference: Practitioner/6789
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/role
+                  valueCodeableConcept:
+                    text: coordinator
+    error400ofgetinCarePlan:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: object
+          nullable: true
+    error401ofgetinCarePlan:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+    error500ofgetinCarePlan:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          nullable: true
+    response200ofgetinCarePlancareplanid:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: CarePlan
+              id: cp-001
+              intent: plan
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/text-div
+                valueString: <div>CarePlan Narrative</div>
+              subject: Patient/12345
+              category: medical
+              status: active
+              contributor:
+              - display: Dr. John Doe
+                reference: Practitioner/6789
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/role
+                  valueCodeableConcept:
+                    text: coordinator
+    error400ofgetinCarePlancareplanid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: object
+          nullable: true
+    error401ofgetinCarePlancareplanid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+    error500ofgetinCarePlancareplanid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          nullable: true
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

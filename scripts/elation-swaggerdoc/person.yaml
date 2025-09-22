@@ -1,0 +1,1182 @@
+openapi: 3.0.3
+info:
+  title: Elation Person API
+  version: 1.0.0
+  description: 'Source Ids:
+
+    - Athena: 083fe714-e36e-4851-b2e7-a7166b439f67
+
+    - Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f
+
+
+    Person Endpoints
+
+
+    "Person" resource serves as a central point for representing information about an individual, independent of their specific role in the healthcare context. It''s designed to link together different roles a person might have, like "Patient," "Practitioner," or "RelatedPerson."
+
+
+    Example: Dr. John Doe is a physician who is also a patient at the same hospital. In FHIR, Dr. Doe would have one "Person" resource representing him as an individual. This resource would link to his "Practitioner" resource, which describes his role as a physician, and his "Patient" resource, which contains his medical records. This allows the hospital to manage Dr. Doe''s information in a unified way, regardless of whether he is interacting with the system as a patient or a provider.
+
+    '
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.com
+paths:
+  /api/v2/Person:
+    get:
+      summary: Get Person
+      tags:
+      - Person
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                      source:
+                        type: string
+                      quorum:
+                        type: boolean
+                      notify:
+                        type: boolean
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                  data:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Person
+                      id:
+                        type: string
+                        example: example
+                      meta:
+                        type: object
+                        properties:
+                          profile:
+                            type: array
+                            items:
+                              type: string
+                            example:
+                            - http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              example: http://example.org/fhir/StructureDefinition/person-createdDate
+                            valueDateTime:
+                              type: string
+                              example: '2023-12-01T10:30:00Z'
+                      text:
+                        type: object
+                        properties:
+                          div:
+                            type: string
+                            example: <div xmlns="http://www.w3.org/1999/xhtml">Your text content here</div>
+                      name:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            use:
+                              type: string
+                              example: usual
+                            given:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - John
+                            family:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - Doe
+                      gender:
+                        type: string
+                        example: male
+                      birthDate:
+                        type: string
+                        example: '1980-01-01'
+                      address:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            use:
+                              type: string
+                              example: home
+                            line:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - 123 Main Street
+                            city:
+                              type: string
+                              example: Anytown
+                            state:
+                              type: string
+                              example: NY
+                            postalCode:
+                              type: string
+                              example: '12345'
+                            country:
+                              type: string
+                              example: US
+                      telecom:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                              example: phone
+                            value:
+                              type: string
+                              example: 555-123-4567
+                            use:
+                              type: string
+                              example: home
+                      managingOrganization:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                            example: Organization/example
+                    example:
+                      resourceType: Person
+                      id: example
+                      meta:
+                        profile:
+                        - http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient
+                      extension:
+                      - url: http://example.org/fhir/StructureDefinition/person-createdDate
+                        valueDateTime: '2023-12-01T10:30:00Z'
+                      text:
+                        div: <div xmlns="http://www.w3.org/1999/xhtml">Your text content here</div>
+                      name:
+                      - use: usual
+                        given:
+                        - John
+                        family:
+                        - Doe
+                      gender: male
+                      birthDate: '1980-01-01'
+                      address:
+                      - use: home
+                        line:
+                        - 123 Main Street
+                        city: Anytown
+                        state: NY
+                        postalCode: '12345'
+                        country: US
+                      telecom:
+                      - system: phone
+                        value: 555-123-4567
+                        use: home
+                      managingOrganization:
+                        reference: Organization/example
+                required:
+                - context
+                - data
+                example:
+                  context:
+                    requestId: abc123
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Person
+                    id: example
+                    meta:
+                      profile:
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient
+                    extension:
+                    - url: http://example.org/fhir/StructureDefinition/person-createdDate
+                      valueDateTime: '2023-12-01T10:30:00Z'
+                    text:
+                      div: <div xmlns="http://www.w3.org/1999/xhtml">Your text content here</div>
+                    name:
+                    - use: usual
+                      given:
+                      - John
+                      family:
+                      - Doe
+                    gender: male
+                    birthDate: '1980-01-01'
+                    address:
+                    - use: home
+                      line:
+                      - 123 Main Street
+                      city: Anytown
+                      state: NY
+                      postalCode: '12345'
+                      country: US
+                    telecom:
+                    - system: phone
+                      value: 555-123-4567
+                      use: home
+                    managingOrganization:
+                      reference: Organization/example
+              example:
+                context:
+                  requestId: abc123
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Person
+                  id: example
+                  meta:
+                    profile:
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient
+                  extension:
+                  - url: http://example.org/fhir/StructureDefinition/person-createdDate
+                    valueDateTime: '2023-12-01T10:30:00Z'
+                  text:
+                    div: <div xmlns="http://www.w3.org/1999/xhtml">Your text content here</div>
+                  name:
+                  - use: usual
+                    given:
+                    - John
+                    family:
+                    - Doe
+                  gender: male
+                  birthDate: '1980-01-01'
+                  address:
+                  - use: home
+                    line:
+                    - 123 Main Street
+                    city: Anytown
+                    state: NY
+                    postalCode: '12345'
+                    country: US
+                  telecom:
+                  - system: phone
+                    value: 555-123-4567
+                    use: home
+                  managingOrganization:
+                    reference: Organization/example
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Invalid request
+                  details:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                        example: Invalid query parameters
+                example:
+                  statusCode: 400
+                  message: Invalid request
+                  details:
+                    error: Invalid query parameters
+              example:
+                statusCode: 400
+                message: Invalid request
+                details:
+                  error: Invalid query parameters
+        '404':
+          description: Person not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Person not found
+                  details:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                        example: No person resource found
+                example:
+                  statusCode: 404
+                  message: Person not found
+                  details:
+                    error: No person resource found
+              example:
+                statusCode: 404
+                message: Person not found
+                details:
+                  error: No person resource found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                        example: Something went wrong on the server
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details:
+                    error: Something went wrong on the server
+              example:
+                statusCode: 500
+                message: Internal server error
+                details:
+                  error: Something went wrong on the server
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+      - name: identifier
+        in: query
+        required: false
+        description: Search parameter 'identifier' for person.
+        schema:
+          type: string
+      - name: link
+        in: query
+        required: false
+        description: Search parameter 'link' for person.
+        schema:
+          type: string
+      - name: name
+        in: query
+        required: false
+        description: Search parameter 'name' for person.
+        schema:
+          type: string
+      - name: organization
+        in: query
+        required: false
+        description: Search parameter 'organization' for person.
+        schema:
+          type: string
+      - name: practitioner
+        in: query
+        required: false
+        description: Search parameter 'practitioner' for person.
+        schema:
+          type: string
+      - name: relatedperson
+        in: query
+        required: false
+        description: Search parameter 'relatedperson' for person.
+        schema:
+          type: string
+    parameters: []
+  /api/v2/Person/{person-id}:
+    get:
+      summary: Get Person by ID
+      tags:
+      - Person
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: person-id
+        in: path
+        required: true
+        description: .
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                      source:
+                        type: string
+                      quorum:
+                        type: boolean
+                      notify:
+                        type: boolean
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                  data:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Person
+                      id:
+                        type: string
+                        example: example
+                      meta:
+                        type: object
+                        properties:
+                          profile:
+                            type: array
+                            items:
+                              type: string
+                            example:
+                            - http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              example: http://example.org/fhir/StructureDefinition/person-createdDate
+                            valueDateTime:
+                              type: string
+                              example: '2023-12-01T10:30:00Z'
+                      text:
+                        type: object
+                        properties:
+                          div:
+                            type: string
+                            example: <div xmlns="http://www.w3.org/1999/xhtml">Your text content here</div>
+                      name:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            use:
+                              type: string
+                              example: usual
+                            given:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - John
+                            family:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - Doe
+                      gender:
+                        type: string
+                        example: male
+                      birthDate:
+                        type: string
+                        example: '1980-01-01'
+                      address:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            use:
+                              type: string
+                              example: home
+                            line:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - 123 Main Street
+                            city:
+                              type: string
+                              example: Anytown
+                            state:
+                              type: string
+                              example: NY
+                            postalCode:
+                              type: string
+                              example: '12345'
+                            country:
+                              type: string
+                              example: US
+                      telecom:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                              example: phone
+                            value:
+                              type: string
+                              example: 555-123-4567
+                            use:
+                              type: string
+                              example: home
+                      managingOrganization:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                            example: Organization/example
+                    example:
+                      resourceType: Person
+                      id: example
+                      meta:
+                        profile:
+                        - http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient
+                      extension:
+                      - url: http://example.org/fhir/StructureDefinition/person-createdDate
+                        valueDateTime: '2023-12-01T10:30:00Z'
+                      text:
+                        div: <div xmlns="http://www.w3.org/1999/xhtml">Your text content here</div>
+                      name:
+                      - use: usual
+                        given:
+                        - John
+                        family:
+                        - Doe
+                      gender: male
+                      birthDate: '1980-01-01'
+                      address:
+                      - use: home
+                        line:
+                        - 123 Main Street
+                        city: Anytown
+                        state: NY
+                        postalCode: '12345'
+                        country: US
+                      telecom:
+                      - system: phone
+                        value: 555-123-4567
+                        use: home
+                      managingOrganization:
+                        reference: Organization/example
+                required:
+                - context
+                - data
+                example:
+                  context:
+                    requestId: abc123
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Person
+                    id: example
+                    meta:
+                      profile:
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient
+                    extension:
+                    - url: http://example.org/fhir/StructureDefinition/person-createdDate
+                      valueDateTime: '2023-12-01T10:30:00Z'
+                    text:
+                      div: <div xmlns="http://www.w3.org/1999/xhtml">Your text content here</div>
+                    name:
+                    - use: usual
+                      given:
+                      - John
+                      family:
+                      - Doe
+                    gender: male
+                    birthDate: '1980-01-01'
+                    address:
+                    - use: home
+                      line:
+                      - 123 Main Street
+                      city: Anytown
+                      state: NY
+                      postalCode: '12345'
+                      country: US
+                    telecom:
+                    - system: phone
+                      value: 555-123-4567
+                      use: home
+                    managingOrganization:
+                      reference: Organization/example
+              example:
+                context:
+                  requestId: abc123
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Person
+                  id: example
+                  meta:
+                    profile:
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient
+                  extension:
+                  - url: http://example.org/fhir/StructureDefinition/person-createdDate
+                    valueDateTime: '2023-12-01T10:30:00Z'
+                  text:
+                    div: <div xmlns="http://www.w3.org/1999/xhtml">Your text content here</div>
+                  name:
+                  - use: usual
+                    given:
+                    - John
+                    family:
+                    - Doe
+                  gender: male
+                  birthDate: '1980-01-01'
+                  address:
+                  - use: home
+                    line:
+                    - 123 Main Street
+                    city: Anytown
+                    state: NY
+                    postalCode: '12345'
+                    country: US
+                  telecom:
+                  - system: phone
+                    value: 555-123-4567
+                    use: home
+                  managingOrganization:
+                    reference: Organization/example
+        '400':
+          description: Invalid person-id supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Invalid request
+                  details:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                        example: Invalid query parameters
+                example:
+                  statusCode: 400
+                  message: Invalid request
+                  details:
+                    error: Invalid query parameters
+              example:
+                statusCode: 400
+                message: Invalid person-id supplied
+                details:
+                  error: The provided person-id is invalid
+        '404':
+          description: Person not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Person not found
+                  details:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                        example: No person resource found
+                example:
+                  statusCode: 404
+                  message: Person not found
+                  details:
+                    error: No person resource found
+              example:
+                statusCode: 404
+                message: Person not found
+                details:
+                  error: No person resource found for given ID
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                        example: Something went wrong on the server
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details:
+                    error: Something went wrong on the server
+              example:
+                statusCode: 500
+                message: Internal server error
+                details:
+                  error: Something went wrong on the server
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          example: Person
+        id:
+          type: string
+          example: example
+        meta:
+          type: object
+          properties:
+            profile:
+              type: array
+              items:
+                type: string
+              example:
+              - http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient
+        extension:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                example: http://example.org/fhir/StructureDefinition/person-createdDate
+              valueDateTime:
+                type: string
+                example: '2023-12-01T10:30:00Z'
+        text:
+          type: object
+          properties:
+            div:
+              type: string
+              example: <div xmlns="http://www.w3.org/1999/xhtml">Your text content here</div>
+        name:
+          type: array
+          items:
+            type: object
+            properties:
+              use:
+                type: string
+                example: usual
+              given:
+                type: array
+                items:
+                  type: string
+                example:
+                - John
+              family:
+                type: array
+                items:
+                  type: string
+                example:
+                - Doe
+        gender:
+          type: string
+          example: male
+        birthDate:
+          type: string
+          example: '1980-01-01'
+        address:
+          type: array
+          items:
+            type: object
+            properties:
+              use:
+                type: string
+                example: home
+              line:
+                type: array
+                items:
+                  type: string
+                example:
+                - 123 Main Street
+              city:
+                type: string
+                example: Anytown
+              state:
+                type: string
+                example: NY
+              postalCode:
+                type: string
+                example: '12345'
+              country:
+                type: string
+                example: US
+        telecom:
+          type: array
+          items:
+            type: object
+            properties:
+              system:
+                type: string
+                example: phone
+              value:
+                type: string
+                example: 555-123-4567
+              use:
+                type: string
+                example: home
+        managingOrganization:
+          type: object
+          properties:
+            reference:
+              type: string
+              example: Organization/example
+      example:
+        resourceType: Person
+        id: example
+        meta:
+          profile:
+          - http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient
+        extension:
+        - url: http://example.org/fhir/StructureDefinition/person-createdDate
+          valueDateTime: '2023-12-01T10:30:00Z'
+        text:
+          div: <div xmlns="http://www.w3.org/1999/xhtml">Your text content here</div>
+        name:
+        - use: usual
+          given:
+          - John
+          family:
+          - Doe
+        gender: male
+        birthDate: '1980-01-01'
+        address:
+        - use: home
+          line:
+          - 123 Main Street
+          city: Anytown
+          state: NY
+          postalCode: '12345'
+          country: US
+        telecom:
+        - system: phone
+          value: 555-123-4567
+          use: home
+        managingOrganization:
+          reference: Organization/example
+    Error400:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Invalid request
+        details:
+          type: object
+          properties:
+            error:
+              type: string
+              example: Invalid query parameters
+      example:
+        statusCode: 400
+        message: Invalid request
+        details:
+          error: Invalid query parameters
+    Error404:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Person not found
+        details:
+          type: object
+          properties:
+            error:
+              type: string
+              example: No person resource found
+      example:
+        statusCode: 404
+        message: Person not found
+        details:
+          error: No person resource found
+    Error500:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          properties:
+            error:
+              type: string
+              example: Something went wrong on the server
+      example:
+        statusCode: 500
+        message: Internal server error
+        details:
+          error: Something went wrong on the server
+    ContextDataWrapper:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+            source:
+              type: string
+            quorum:
+              type: boolean
+            notify:
+              type: boolean
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Person
+            id:
+              type: string
+              example: example
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                  - http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    example: http://example.org/fhir/StructureDefinition/person-createdDate
+                  valueDateTime:
+                    type: string
+                    example: '2023-12-01T10:30:00Z'
+            text:
+              type: object
+              properties:
+                div:
+                  type: string
+                  example: <div xmlns="http://www.w3.org/1999/xhtml">Your text content here</div>
+            name:
+              type: array
+              items:
+                type: object
+                properties:
+                  use:
+                    type: string
+                    example: usual
+                  given:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                    - John
+                  family:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                    - Doe
+            gender:
+              type: string
+              example: male
+            birthDate:
+              type: string
+              example: '1980-01-01'
+            address:
+              type: array
+              items:
+                type: object
+                properties:
+                  use:
+                    type: string
+                    example: home
+                  line:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                    - 123 Main Street
+                  city:
+                    type: string
+                    example: Anytown
+                  state:
+                    type: string
+                    example: NY
+                  postalCode:
+                    type: string
+                    example: '12345'
+                  country:
+                    type: string
+                    example: US
+            telecom:
+              type: array
+              items:
+                type: object
+                properties:
+                  system:
+                    type: string
+                    example: phone
+                  value:
+                    type: string
+                    example: 555-123-4567
+                  use:
+                    type: string
+                    example: home
+            managingOrganization:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Organization/example
+          example:
+            resourceType: Person
+            id: example
+            meta:
+              profile:
+              - http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient
+            extension:
+            - url: http://example.org/fhir/StructureDefinition/person-createdDate
+              valueDateTime: '2023-12-01T10:30:00Z'
+            text:
+              div: <div xmlns="http://www.w3.org/1999/xhtml">Your text content here</div>
+            name:
+            - use: usual
+              given:
+              - John
+              family:
+              - Doe
+            gender: male
+            birthDate: '1980-01-01'
+            address:
+            - use: home
+              line:
+              - 123 Main Street
+              city: Anytown
+              state: NY
+              postalCode: '12345'
+              country: US
+            telecom:
+            - system: phone
+              value: 555-123-4567
+              use: home
+            managingOrganization:
+              reference: Organization/example
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Person
+          id: example
+          meta:
+            profile:
+            - http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient
+          extension:
+          - url: http://example.org/fhir/StructureDefinition/person-createdDate
+            valueDateTime: '2023-12-01T10:30:00Z'
+          text:
+            div: <div xmlns="http://www.w3.org/1999/xhtml">Your text content here</div>
+          name:
+          - use: usual
+            given:
+            - John
+            family:
+            - Doe
+          gender: male
+          birthDate: '1980-01-01'
+          address:
+          - use: home
+            line:
+            - 123 Main Street
+            city: Anytown
+            state: NY
+            postalCode: '12345'
+            country: US
+          telecom:
+          - system: phone
+            value: 555-123-4567
+            use: home
+          managingOrganization:
+            reference: Organization/example
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    xSourceId:
+      name: x-source-id
+      in: header
+      required: true
+      schema:
+        type: string
+      description: "Source identifier header required for routing.\nAthena: 083fe714-e36e-4851-b2e7-a7166b439f67\n Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f — \U0001F534 On demand filter"
+externalDocs:
+  description: Run in Postman
+  url: https://app.postman.com/import/openapi
+security:
+- bearerAuth: []

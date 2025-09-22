@@ -1,0 +1,2145 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: ServiceRequest
+  description: ServiceRequest resource operations in Athena
+paths:
+  /api/v2/ServiceRequest:
+    get:
+      tags:
+      - ServiceRequest
+      summary: Get Athena Service Requests
+      operationId: getAthenaServiceRequestV2
+      parameters:
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: authored
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: authored'
+      - name: based-on
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: based-on'
+      - name: body-site
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: body-site'
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: category'
+      - name: instantiates-canonical
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: instantiates-canonical'
+      - name: instantiates-uri
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: instantiates-uri'
+      - name: intent
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: intent'
+      - name: occurrence
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: occurrence'
+      - name: order-details
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: order-details'
+      - name: performer
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: performer'
+      - name: performer-type
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: performer-type'
+      - name: priority
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: priority'
+      - name: replaces
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: replaces'
+      - name: requester
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: requester'
+      - name: requisition
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: requisition'
+      - name: specimen
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: specimen'
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: status'
+      - name: subject
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: subject'
+      - name: categorycode
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: encounter
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinServiceRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinServiceRequest'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinServiceRequest'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinServiceRequest'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: ServiceRequest
+                    id: '12345'
+                    intent: order
+                    encounter:
+                      reference: Encounter/67890
+                    subject:
+                      reference: Patient/123
+                    extension:
+                    - url: TINY_URLS.SERVICEREQUEST.DEPARTMENTID
+                      valueInteger: 100
+                    - url: TINY_URLS.SERVICEREQUEST.EARLIESTFILLDATE
+                      valueString: '2024-01-15'
+                    - url: TINY_URLS.SERVICEREQUEST.LASTMODIFIEDBY
+                      valueString: provider123
+                    - url: TINY_URLS.SERVICEREQUEST.MODIFIEDDATETIME
+                      valueString: '2024-01-15T10:30:00Z'
+                    - url: TINY_URLS.SERVICEREQUEST.NDC
+                      valueId: 12345-678-90
+                    - url: TINY_URLS.SERVICEREQUEST.ORDERINGPROVIDER
+                      valueString: Dr. Smith
+                    - url: TINY_URLS.SERVICEREQUEST.REFILLS
+                      valueString: '3'
+                    - url: TINY_URLS.SERVICEREQUEST.CONTRAINDICATIONREASON
+                      valueCodableConcept:
+                        coding:
+                        - system: ICD10
+                          code: Z87.891
+                          description: Personal history of nicotine dependence
+                    - url: TINY_URLS.SERVICEREQUEST.CREATEDUSER
+                      valueInteger: 456
+                    - url: TINY_URLS.SERVICEREQUEST.CLASS
+                      valueCodeableConcept:
+                        coding:
+                        - code: LAB
+                          display: Laboratory
+                    - url: TINY_URLS.SERVICEREQUEST.SPECIMENCOLLECTIONSITE
+                      valueString: left arm
+                    - url: TINY_URLS.SERVICEREQUEST.REQUESTEDVISITS
+                      valueString: '2'
+                    - url: TINY_URLS.SERVICEREQUEST.DATEOFSERVICE
+                      valueDateTime: '2024-01-15T10:30:00Z'
+                    - url: TINY_URLS.SERVICEREQUEST.SECTIONNAMEKEY
+                      valueString: lab-results
+                    - url: TINY_URLS.SERVICEREQUEST.FLOWSHEETID
+                      valueString: '12345'
+                    contained:
+                    - resourceType: DocumentReference
+                      category:
+                      - coding:
+                        - code: LAB
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/document-subclass
+                            valueString: BLOOD
+                      custodian:
+                        reference: Practitioner/12345
+                    - resourceType: Practitioner
+                      id: '12345'
+                      identifier: []
+                      name:
+                      - text: Dr. John Smith
+                        use: official
+                      - use: usual
+                        text: John Smith MD
+                      address: []
+                      telecom:
+                      - value: 555-123-4567
+                        system: fax
+                      extension: []
+                    - resourceType: Coverage
+                      id: '12345'
+                      identifier:
+                      - system: insurance-package-id
+                        value: PKG789
+                      extension:
+                      - url: TINY_URLS.COVERAGE.VISITSAPPROVED
+                        valueString: '10'
+                      - url: TINY_URLS.COVERAGE.MEMBERID
+                        valueString: MBR456
+                      period:
+                        start: '2024-01-01'
+                        end: '2024-12-31'
+                    - resourceType: DocumentReference
+                      id: doc123
+                      category:
+                        coding:
+                        - system: athena
+                          code: LAB
+                      extension:
+                      - url: TINY_URLS.SERVICEREQUEST.SECTIONNAMEKEY
+                        valueString: lab-results
+                      - url: TINY_URLS.SERVICEREQUEST.FLOWSHEETID
+                        valueString: '12345'
+                      description: Lab test results document
+                      context:
+                        encounter:
+                        - reference: Encounter/enc456
+                    - resourceType: DocumentReference
+                      id: doc789
+                      category:
+                        coding:
+                        - system: athena
+                          code: REPORT
+                    - resourceType: Practitioner
+                    - resourceType: QuestionnaireResponse
+                      item:
+                      - text: What is your primary concern?
+                        answer:
+                        - valueString: Chest pain
+                    - resourceType: Coverage
+                      extension:
+                      - url: TINY_URLS.COVERAGE.SEQUENCENUMBER
+                        valueInteger: 1
+                      - url: TINY_URLS.COVERAGE.ADDITIONALINFORMATION
+                        valueString: Additional coverage info
+                      - url: TINY_URLS.COVERAGE.AUTHORIZATIONNUMBER
+                        valueString: AUTH123456
+                      - url: TINY_URLS.COVERAGE.AUTHORIZATIONSTATUS
+                        valueString: approved
+                      - url: TINY_URLS.COVERAGE.VISITSAPPROVED
+                        valueString: '5'
+                    performerType:
+                      coding:
+                      - system: ATHENA
+                        code: '67890'
+                        display: Laboratory Order
+                    class:
+                    - name: Blue Cross Blue Shield
+    post:
+      tags:
+      - ServiceRequest
+      summary: Create a ServiceRequest in Athena
+      operationId: createServiceRequestInAthena
+      parameters:
+      - *id001
+      - *id002
+      - name: categorycode
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: encounter
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinServiceRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinServiceRequest'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofpostinServiceRequest'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinServiceRequest'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: ServiceRequest
+                  extension:
+                  - url: TINY_URLS.SERVICEREQUEST.START_DATE
+                    valueString: '2024-01-15'
+                  - url: TINY_URLS.SERVICEREQUEST.EXTERNAL_NOTE
+                    valueString: External note value
+                  - url: TINY_URLS.SERVICEREQUEST.DISPENSE_AS_WRITTEN
+                    valueString: Dispense as written value
+                  - url: TINY_URLS.SERVICEREQUEST.NUM_REFILLS_ALLOWED
+                    valueInteger: 3
+                  - url: TINY_URLS.SERVICEREQUEST.UNSTRUCTURED_SIG
+                    valueString: Unstructured sig value
+                  - url: facility-id
+                    valueInteger: null
+                  - url: reason-for-referral
+                    valueString: null
+                  - url: start-date
+                    valueString: null
+                  quantityQuantity:
+                    value: 100
+                  reasonCode:
+                  - coding:
+                    - system: http://snomed.info/sct
+                      code: Z87.891
+                      display: Personal history of nicotine dependence
+                  priority: routine
+                  occurrenceDateTime: null
+                  note:
+                  - authorString: facility
+                    text: null
+                  - authorString: practitioner
+                    text: null
+                  - authorString: patient
+                    text: null
+                  code:
+                    coding:
+                    - system: http://loinc.org
+                      code: null
+                    - system: ATHENA
+                      code: null
+                  category:
+                  - coding:
+                    - system: ATHENA
+                      code: '67890'
+                      display: Laboratory Order
+  /api/v2/ServiceRequest/{service-request-id}:
+    get:
+      tags:
+      - ServiceRequest
+      summary: Get Athena ServiceRequest by ID
+      operationId: getAthenaServiceRequestByIdV2
+      parameters:
+      - name: service-request-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier of the Athena service request to retrieve.
+          Required for fetching a specific service request."'
+      - *id001
+      - *id002
+      
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinServiceRequestservicerequestid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinServiceRequestservicerequestid'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinServiceRequestservicerequestid'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinServiceRequestservicerequestid'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: ServiceRequest
+                    id: '12345'
+                    intent: order
+                    encounter:
+                      reference: Encounter/67890
+                    subject:
+                      reference: Patient/123
+                    extension:
+                    - url: TINY_URLS.SERVICEREQUEST.DEPARTMENTID
+                      valueInteger: 100
+                    - url: TINY_URLS.SERVICEREQUEST.EARLIESTFILLDATE
+                      valueString: '2024-01-15'
+                    - url: TINY_URLS.SERVICEREQUEST.LASTMODIFIEDBY
+                      valueString: provider123
+                    - url: TINY_URLS.SERVICEREQUEST.MODIFIEDDATETIME
+                      valueString: '2024-01-15T10:30:00Z'
+                    - url: TINY_URLS.SERVICEREQUEST.NDC
+                      valueId: 12345-678-90
+                    - url: TINY_URLS.SERVICEREQUEST.ORDERINGPROVIDER
+                      valueString: Dr. Smith
+                    - url: TINY_URLS.SERVICEREQUEST.REFILLS
+                      valueString: '3'
+                    - url: TINY_URLS.SERVICEREQUEST.CONTRAINDICATIONREASON
+                      valueCodableConcept:
+                        coding:
+                        - system: ICD10
+                          code: Z87.891
+                          description: Personal history of nicotine dependence
+                    - url: TINY_URLS.SERVICEREQUEST.CREATEDUSER
+                      valueInteger: 456
+                    - url: TINY_URLS.SERVICEREQUEST.CLASS
+                      valueCodeableConcept:
+                        coding:
+                        - code: LAB
+                          display: Laboratory
+                    - url: TINY_URLS.SERVICEREQUEST.SPECIMENCOLLECTIONSITE
+                      valueString: left arm
+                    - url: TINY_URLS.SERVICEREQUEST.REQUESTEDVISITS
+                      valueString: '2'
+                    - url: TINY_URLS.SERVICEREQUEST.DATEOFSERVICE
+                      valueDateTime: '2024-01-15T10:30:00Z'
+                    - url: TINY_URLS.SERVICEREQUEST.SECTIONNAMEKEY
+                      valueString: lab-results
+                    - url: TINY_URLS.SERVICEREQUEST.FLOWSHEETID
+                      valueString: '12345'
+                    contained:
+                    - resourceType: DocumentReference
+                      category:
+                      - coding:
+                        - code: LAB
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/document-subclass
+                            valueString: BLOOD
+                      custodian:
+                        reference: Practitioner/12345
+                    - resourceType: Practitioner
+                      id: '12345'
+                      identifier: []
+                      name:
+                      - text: Dr. John Smith
+                        use: official
+                      - use: usual
+                        text: John Smith MD
+                      address: []
+                      telecom:
+                      - value: 555-123-4567
+                        system: fax
+                      extension: []
+                    - resourceType: Coverage
+                      id: '12345'
+                      identifier:
+                      - system: insurance-package-id
+                        value: PKG789
+                      extension:
+                      - url: TINY_URLS.COVERAGE.VISITSAPPROVED
+                        valueString: '10'
+                      - url: TINY_URLS.COVERAGE.MEMBERID
+                        valueString: MBR456
+                      period:
+                        start: '2024-01-01'
+                        end: '2024-12-31'
+                    - resourceType: DocumentReference
+                      id: doc123
+                      category:
+                        coding:
+                        - system: athena
+                          code: LAB
+                      extension:
+                      - url: TINY_URLS.SERVICEREQUEST.SECTIONNAMEKEY
+                        valueString: lab-results
+                      - url: TINY_URLS.SERVICEREQUEST.FLOWSHEETID
+                        valueString: '12345'
+                      description: Lab test results document
+                      context:
+                        encounter:
+                        - reference: Encounter/enc456
+                    - resourceType: DocumentReference
+                      id: doc789
+                      category:
+                        coding:
+                        - system: athena
+                          code: REPORT
+                    - resourceType: Practitioner
+                    - resourceType: QuestionnaireResponse
+                      item:
+                      - text: What is your primary concern?
+                        answer:
+                        - valueString: Chest pain
+                    - resourceType: Coverage
+                      extension:
+                      - url: TINY_URLS.COVERAGE.SEQUENCENUMBER
+                        valueInteger: 1
+                      - url: TINY_URLS.COVERAGE.ADDITIONALINFORMATION
+                        valueString: Additional coverage info
+                      - url: TINY_URLS.COVERAGE.AUTHORIZATIONNUMBER
+                        valueString: AUTH123456
+                      - url: TINY_URLS.COVERAGE.AUTHORIZATIONSTATUS
+                        valueString: approved
+                      - url: TINY_URLS.COVERAGE.VISITSAPPROVED
+                        valueString: '5'
+                    performerType:
+                      coding:
+                      - system: ATHENA
+                        code: '67890'
+                        display: Laboratory Order
+                    class:
+                    - name: Blue Cross Blue Shield
+components:
+  schemas:
+    ExtractedSchema1209:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+            source:
+              type: string
+            quorum:
+              type: boolean
+            notify:
+              type: boolean
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          description: '"Context information for creating a ServiceRequest in Athena.
+            Contains relevant details for processing the request."'
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: ServiceRequest
+            id:
+              type: string
+              example: 12345678-90AB-CDEF-1234-567890ABCDEF
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueInteger:
+                    type: integer
+                  valueString:
+                    type: string
+                  valueId:
+                    type: string
+                  valueCodableConcept:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            display:
+                              type: string
+                  valueCodeableConcept:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                            display:
+                              type: string
+            meta:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                lastUpdated:
+                  type: string
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                div:
+                  type: string
+            intent:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+            status:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                reason:
+                  type: string
+            priority:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+            encounter:
+              type: object
+              properties:
+                reference:
+                  type: string
+            requester:
+              type: object
+              properties:
+                reference:
+                  type: string
+            authoredOn:
+              type: string
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+            basedOn:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+            requisition:
+              type: object
+              properties:
+                reference:
+                  type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  author:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+            serviceRequested:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+            supportingInformation:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+          description: '"Service request details. Provide a JSON object containing
+            request information, such as description, priority, and other relevant
+            data."'
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: 3a32b8b0f453901ce844bcae3ce3358b
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: ServiceRequest
+          id: 12345678-90AB-CDEF-1234-567890ABCDEF
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.SERVICEREQUEST.DEPARTMENTID
+            valueInteger: 42
+          meta:
+            versionId: 3.0.0
+            lastUpdated: '2022-03-01T14:30:00+00:00'
+          text:
+            status: additional
+            div: <div>Physical exam requested...</div>
+          intent:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/requestintent
+              code: order
+          status:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/requeststatus
+              code: active
+            reason: Routine checkup
+          priority:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/v3-ActPriority
+              code: routine
+          subject:
+            reference: Patient/11111111-2222-3333-4444-555555555555
+          encounter:
+            reference: Encounter/22222222-3333-4444-5555-666666666666
+          requester:
+            reference: Practitioner/33333333-4444-5555-6666-777777777777
+          authoredOn: '2022-03-01T14:30:00+00:00'
+          performer:
+          - reference: Practitioner/44444444-5555-6666-7777-888888888888
+          basedOn:
+          - reference: Condition/66666666-7777-8888-9999-AABBCCDDEE
+          requisition:
+            reference: ObservationRequest/77777777-8888-9999-AABB-CCDDEE
+          note:
+          - text: Focus on respiratory system.
+            author:
+              reference: Practitioner/99999999-AABB-CCDDEE
+          serviceRequested:
+            coding:
+            - system: http://snomed.info/sct
+              code: 36363-7
+              display: Complete physical examination
+          supportingInformation:
+          - reference: Procedure/88888888-9999-AABB-CCDDEE-FF0000
+    ExtractedSchema1228:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+            source:
+              type: string
+            quorum:
+              type: boolean
+            notify:
+              type: boolean
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          description: '"Context information for updating a ServiceRequest in Athena.
+            Contains additional data required for the update operation."
+
+
+            Alternatively, if you''d like a even more concise version:
+
+
+            "Additional data required for updating a ServiceRequest in Athena."'
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: ServiceRequest
+            id:
+              type: string
+              example: 12345678-90AB-CDEF-1234-567890ABCDEF
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueInteger:
+                    type: integer
+                  valueString:
+                    type: string
+                  valueId:
+                    type: string
+                  valueCodableConcept:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            display:
+                              type: string
+                  valueCodeableConcept:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                            display:
+                              type: string
+            meta:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                lastUpdated:
+                  type: string
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                div:
+                  type: string
+            intent:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+            status:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                reason:
+                  type: string
+            priority:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+            encounter:
+              type: object
+              properties:
+                reference:
+                  type: string
+            requester:
+              type: object
+              properties:
+                reference:
+                  type: string
+            authoredOn:
+              type: string
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+            basedOn:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+            requisition:
+              type: object
+              properties:
+                reference:
+                  type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  author:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+            serviceRequested:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+            supportingInformation:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+          description: '"ServiceRequest update data. Provide updated attributes in
+            JSON format."'
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: 3a32b8b0f453901ce844bcae3ce3358b
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: ServiceRequest
+          id: 12345678-90AB-CDEF-1234-567890ABCDEF
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.SERVICEREQUEST.DEPARTMENTID
+            valueInteger: 42
+          meta:
+            versionId: 3.0.0
+            lastUpdated: '2022-03-01T14:30:00+00:00'
+          text:
+            status: additional
+            div: <div>Physical exam requested...</div>
+          intent:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/requestintent
+              code: order
+          status:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/requeststatus
+              code: active
+            reason: Routine checkup
+          priority:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/v3-ActPriority
+              code: routine
+          subject:
+            reference: Patient/11111111-2222-3333-4444-555555555555
+          encounter:
+            reference: Encounter/22222222-3333-4444-5555-666666666666
+          requester:
+            reference: Practitioner/33333333-4444-5555-6666-777777777777
+          authoredOn: '2022-03-01T14:30:00+00:00'
+          performer:
+          - reference: Practitioner/44444444-5555-6666-7777-888888888888
+          basedOn:
+          - reference: Condition/66666666-7777-8888-9999-AABBCCDDEE
+          requisition:
+            reference: ObservationRequest/77777777-8888-9999-AABB-CCDDEE
+          note:
+          - text: Focus on respiratory system.
+            author:
+              reference: Practitioner/99999999-AABB-CCDDEE
+          serviceRequested:
+            coding:
+            - system: http://snomed.info/sct
+              code: 36363-7
+              display: Complete physical examination
+          supportingInformation:
+          - reference: Procedure/88888888-9999-AABB-CCDDEE-FF0000
+    response200ofgetinServiceRequest:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+            source:
+              type: string
+            quorum:
+              type: boolean
+            notify:
+              type: boolean
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: ServiceRequest
+                      id:
+                        type: string
+                        example: 12345678-90AB-CDEF-1234-567890ABCDEF
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueInteger:
+                              type: integer
+                            valueString:
+                              type: string
+                            valueId:
+                              type: string
+                            valueCodableConcept:
+                              type: object
+                              properties:
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                      code:
+                                        type: string
+                                      display:
+                                        type: string
+                            valueCodeableConcept:
+                              type: object
+                              properties:
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      code:
+                                        type: string
+                                      display:
+                                        type: string
+                      meta:
+                        type: object
+                        properties:
+                          versionId:
+                            type: string
+                          lastUpdated:
+                            type: string
+                      text:
+                        type: object
+                        properties:
+                          status:
+                            type: string
+                          div:
+                            type: string
+                      intent:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                      status:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                          reason:
+                            type: string
+                      priority:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                      subject:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      encounter:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      requester:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      authoredOn:
+                        type: string
+                      performer:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                      basedOn:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                      requisition:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      note:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            text:
+                              type: string
+                            author:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                      serviceRequested:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                                display:
+                                  type: string
+                      supportingInformation:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+          required:
+          - resourceType
+          - type
+          - total
+          - entry
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: 3a32b8b0f453901ce844bcae3ce3358b
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: ServiceRequest
+              id: 12345678-90AB-CDEF-1234-567890ABCDEF
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.SERVICEREQUEST.DEPARTMENTID
+                valueInteger: 42
+              meta:
+                versionId: 3.0.0
+                lastUpdated: '2022-03-01T14:30:00+00:00'
+              text:
+                status: additional
+                div: <div>Physical exam requested...</div>
+              intent:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/requestintent
+                  code: order
+              status:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/requeststatus
+                  code: active
+                reason: Routine checkup
+              priority:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/v3-ActPriority
+                  code: routine
+              subject:
+                reference: Patient/11111111-2222-3333-4444-555555555555
+              encounter:
+                reference: Encounter/22222222-3333-4444-5555-666666666666
+              requester:
+                reference: Practitioner/33333333-4444-5555-6666-777777777777
+              authoredOn: '2022-03-01T14:30:00+00:00'
+              performer:
+              - reference: Practitioner/44444444-5555-6666-7777-888888888888
+              basedOn:
+              - reference: Condition/66666666-7777-8888-9999-AABBCCDDEE
+              requisition:
+                reference: ObservationRequest/77777777-8888-9999-AABB-CCDDEE
+              note:
+              - text: Focus on respiratory system.
+                author:
+                  reference: Practitioner/99999999-AABB-CCDDEE
+              serviceRequested:
+                coding:
+                - system: http://snomed.info/sct
+                  code: 36363-7
+                  display: Complete physical examination
+              supportingInformation:
+              - reference: Procedure/88888888-9999-AABB-CCDDEE-FF0000
+    error400ofgetinServiceRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Practice ID is required
+      example:
+        statusCode: 400
+        message: Practice ID is required
+    error401ofgetinServiceRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    error404ofgetinServiceRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    error500ofgetinServiceRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    response201ofpostinServiceRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+      example:
+        id: abcdef123456
+        status: success
+    error400ofpostinServiceRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Practice ID is required
+      example:
+        statusCode: 400
+        message: Practice ID is required
+    error401ofpostinServiceRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    error404ofpostinServiceRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    error500ofpostinServiceRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    response200ofgetinServiceRequestservicerequestid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+            source:
+              type: string
+            quorum:
+              type: boolean
+            notify:
+              type: boolean
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: ServiceRequest
+            id:
+              type: string
+              example: 12345678-90AB-CDEF-1234-567890ABCDEF
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueInteger:
+                    type: integer
+                  valueString:
+                    type: string
+                  valueId:
+                    type: string
+                  valueCodableConcept:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            display:
+                              type: string
+                  valueCodeableConcept:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                            display:
+                              type: string
+            meta:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                lastUpdated:
+                  type: string
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                div:
+                  type: string
+            intent:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+            status:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                reason:
+                  type: string
+            priority:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+            encounter:
+              type: object
+              properties:
+                reference:
+                  type: string
+            requester:
+              type: object
+              properties:
+                reference:
+                  type: string
+            authoredOn:
+              type: string
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+            basedOn:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+            requisition:
+              type: object
+              properties:
+                reference:
+                  type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  author:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+            serviceRequested:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+            supportingInformation:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: 3a32b8b0f453901ce844bcae3ce3358b
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: ServiceRequest
+              id: 12345678-90AB-CDEF-1234-567890ABCDEF
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.SERVICEREQUEST.DEPARTMENTID
+                valueInteger: 42
+              meta:
+                versionId: 3.0.0
+                lastUpdated: '2022-03-01T14:30:00+00:00'
+              text:
+                status: additional
+                div: <div>Physical exam requested...</div>
+              intent:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/requestintent
+                  code: order
+              status:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/requeststatus
+                  code: active
+                reason: Routine checkup
+              priority:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/v3-ActPriority
+                  code: routine
+              subject:
+                reference: Patient/11111111-2222-3333-4444-555555555555
+              encounter:
+                reference: Encounter/22222222-3333-4444-5555-666666666666
+              requester:
+                reference: Practitioner/33333333-4444-5555-6666-777777777777
+              authoredOn: '2022-03-01T14:30:00+00:00'
+              performer:
+              - reference: Practitioner/44444444-5555-6666-7777-888888888888
+              basedOn:
+              - reference: Condition/66666666-7777-8888-9999-AABBCCDDEE
+              requisition:
+                reference: ObservationRequest/77777777-8888-9999-AABB-CCDDEE
+              note:
+              - text: Focus on respiratory system.
+                author:
+                  reference: Practitioner/99999999-AABB-CCDDEE
+              serviceRequested:
+                coding:
+                - system: http://snomed.info/sct
+                  code: 36363-7
+                  display: Complete physical examination
+              supportingInformation:
+              - reference: Procedure/88888888-9999-AABB-CCDDEE-FF0000
+    error400ofgetinServiceRequestservicerequestid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Practice ID is required
+      example:
+        statusCode: 400
+        message: Practice ID is required
+    error401ofgetinServiceRequestservicerequestid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    error404ofgetinServiceRequestservicerequestid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    error500ofgetinServiceRequestservicerequestid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    response200ofputinServiceRequestservicerequestid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+            source:
+              type: string
+            quorum:
+              type: boolean
+            notify:
+              type: boolean
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: ServiceRequest
+            id:
+              type: string
+              example: 12345678-90AB-CDEF-1234-567890ABCDEF
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueInteger:
+                    type: integer
+                  valueString:
+                    type: string
+                  valueId:
+                    type: string
+                  valueCodableConcept:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            display:
+                              type: string
+                  valueCodeableConcept:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                            display:
+                              type: string
+            meta:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                lastUpdated:
+                  type: string
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                div:
+                  type: string
+            intent:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+            status:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                reason:
+                  type: string
+            priority:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+            encounter:
+              type: object
+              properties:
+                reference:
+                  type: string
+            requester:
+              type: object
+              properties:
+                reference:
+                  type: string
+            authoredOn:
+              type: string
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+            basedOn:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+            requisition:
+              type: object
+              properties:
+                reference:
+                  type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  author:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+            serviceRequested:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+            supportingInformation:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: 3a32b8b0f453901ce844bcae3ce3358b
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: ServiceRequest
+              id: 12345678-90AB-CDEF-1234-567890ABCDEF
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.SERVICEREQUEST.DEPARTMENTID
+                valueInteger: 42
+              meta:
+                versionId: 3.0.0
+                lastUpdated: '2022-03-01T14:30:00+00:00'
+              text:
+                status: additional
+                div: <div>Physical exam requested...</div>
+              intent:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/requestintent
+                  code: order
+              status:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/requeststatus
+                  code: active
+                reason: Routine checkup
+              priority:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/v3-ActPriority
+                  code: routine
+              subject:
+                reference: Patient/11111111-2222-3333-4444-555555555555
+              encounter:
+                reference: Encounter/22222222-3333-4444-5555-666666666666
+              requester:
+                reference: Practitioner/33333333-4444-5555-6666-777777777777
+              authoredOn: '2022-03-01T14:30:00+00:00'
+              performer:
+              - reference: Practitioner/44444444-5555-6666-7777-888888888888
+              basedOn:
+              - reference: Condition/66666666-7777-8888-9999-AABBCCDDEE
+              requisition:
+                reference: ObservationRequest/77777777-8888-9999-AABB-CCDDEE
+              note:
+              - text: Focus on respiratory system.
+                author:
+                  reference: Practitioner/99999999-AABB-CCDDEE
+              serviceRequested:
+                coding:
+                - system: http://snomed.info/sct
+                  code: 36363-7
+                  display: Complete physical examination
+              supportingInformation:
+              - reference: Procedure/88888888-9999-AABB-CCDDEE-FF0000
+    error400ofputinServiceRequestservicerequestid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Practice ID is required
+      example:
+        statusCode: 400
+        message: Practice ID is required
+    error401ofputinServiceRequestservicerequestid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    error404ofputinServiceRequestservicerequestid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    error500ofputinServiceRequestservicerequestid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

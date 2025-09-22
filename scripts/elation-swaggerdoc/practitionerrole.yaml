@@ -1,0 +1,583 @@
+openapi: 3.0.3
+info:
+  title: Elation PractitionerRole API
+  version: 1.0.0
+  description: 'Source Ids:
+
+    - Athena: 083fe714-e36e-4851-b2e7-a7166b439f67
+
+    - Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f
+
+
+    Practitioner Role Endpoints
+
+
+    "PractitionerRole" resource is used to describe the specific roles and functions that a healthcare practitioner fulfills within an organization or context. It provides details about the practitioner''s responsibilities, the types of services they provide, the locations where they work, and the time period during which they hold this role.
+
+
+    Example: Dr. Emily Davis, a registered nurse specializing in pediatrics, works at the Community Health Clinic. The "PractitionerRole" resource links to her "Practitioner" resource, and specifies her role as a "pediatric nurse." It also lists her work location as the Community Health Clinic, and specifies her working hours, and contact information.
+
+
+    Dependent Sources:
+
+
+    - Practitioner
+
+    '
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.com
+tags:
+- name: PractitionerRole
+  description: Operations related to FHIR PractitionerRole resources
+paths:
+  /api/v2/PractitionerRole:
+    get:
+      summary: Get Practitioner Role
+      tags:
+      - PractitionerRole
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+      - name: active
+        in: query
+        required: false
+        description: Search parameter 'active' for practitionerrole.
+        schema:
+          type: boolean
+      - name: date
+        in: query
+        required: false
+        description: Search parameter 'date' for practitionerrole.
+        schema:
+          type: string
+          format: date
+      - name: endpoint
+        in: query
+        required: false
+        description: Search parameter 'endpoint' for practitionerrole.
+        schema:
+          type: string
+      - name: identifier
+        in: query
+        required: false
+        description: Search parameter 'identifier' for practitionerrole.
+        schema:
+          type: string
+      - name: location
+        in: query
+        required: false
+        description: Search parameter 'location' for practitionerrole.
+        schema:
+          type: string
+      - name: organization
+        in: query
+        required: false
+        description: Search parameter 'organization' for practitionerrole.
+        schema:
+          type: string
+      - name: practitioner
+        in: query
+        required: false
+        description: Search parameter 'practitioner' for practitionerrole.
+        schema:
+          type: string
+      - name: role
+        in: query
+        required: false
+        description: Search parameter 'role' for practitionerrole.
+        schema:
+          type: string
+      - name: service
+        in: query
+        required: false
+        description: Search parameter 'service' for practitionerrole.
+        schema:
+          type: string
+      - name: specialty
+        in: query
+        required: false
+        description: Search parameter 'specialty' for practitionerrole.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: PractitionerRole bundle in context/data format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: abc123
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                  data:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Bundle
+                      entry:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            resource:
+                              type: object
+                              properties:
+                                resourceType:
+                                  type: string
+                                  example: PractitionerRole
+                                id:
+                                  type: string
+                                  example: '12345'
+                                practitioner:
+                                  type: object
+                                  properties:
+                                    reference:
+                                      type: string
+                                      example: Practitioner/12345
+                                organization:
+                                  type: object
+                                  properties:
+                                    reference:
+                                      type: string
+                                      example: Organization/org-67890
+                                location:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      reference:
+                                        type: string
+                                      display:
+                                        type: string
+                              example:
+                                resourceType: PractitionerRole
+                                id: '12345'
+                                practitioner:
+                                  reference: Practitioner/12345
+                                organization:
+                                  reference: Organization/org-67890
+                                location:
+                                - reference: Location/loc-001
+                                  display: Downtown Clinic
+                                - reference: Location/loc-002
+                                  display: Uptown Medical Center
+                    example:
+                      resourceType: Bundle
+                      entry:
+                      - resource:
+                          resourceType: PractitionerRole
+                          id: '12345'
+                          practitioner:
+                            reference: Practitioner/12345
+                          organization:
+                            reference: Organization/org-67890
+                          location:
+                          - reference: Location/loc-001
+                            display: Downtown Clinic
+                          - reference: Location/loc-002
+                            display: Uptown Medical Center
+                required:
+                - context
+                - data
+                example:
+                  context:
+                    requestId: abc123
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Bundle
+                    entry:
+                    - resource:
+                        resourceType: PractitionerRole
+                        id: '12345'
+                        practitioner:
+                          reference: Practitioner/12345
+                        organization:
+                          reference: Organization/org-67890
+                        location:
+                        - reference: Location/loc-001
+                          display: Downtown Clinic
+                        - reference: Location/loc-002
+                          display: Uptown Medical Center
+              example:
+                context:
+                  requestId: abc123
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Bundle
+                  entry:
+                  - resource:
+                      resourceType: PractitionerRole
+                      id: '12345'
+                      practitioner:
+                        reference: Practitioner/12345
+                      organization:
+                        reference: Organization/org-67890
+                      location:
+                      - reference: Location/loc-001
+                        display: Downtown Clinic
+                      - reference: Location/loc-002
+                        display: Uptown Medical Center
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 400 Error
+                  message:
+                    type: string
+                    example: Bad request.
+                example:
+                  error: 400 Error
+                  message: Bad request.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 404 Error
+                  message:
+                    type: string
+                    example: Not found.
+                example:
+                  error: 404 Error
+                  message: Not found.
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 500 Error
+                  message:
+                    type: string
+                    example: Internal server error.
+                example:
+                  error: 500 Error
+                  message: Internal server error.
+    parameters: []
+components:
+  schemas:
+    ContextDataPractitionerRoleBundle:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: PractitionerRole
+                      id:
+                        type: string
+                        example: '12345'
+                      practitioner:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                            example: Practitioner/12345
+                      organization:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                            example: Organization/org-67890
+                      location:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                            display:
+                              type: string
+                    example:
+                      resourceType: PractitionerRole
+                      id: '12345'
+                      practitioner:
+                        reference: Practitioner/12345
+                      organization:
+                        reference: Organization/org-67890
+                      location:
+                      - reference: Location/loc-001
+                        display: Downtown Clinic
+                      - reference: Location/loc-002
+                        display: Uptown Medical Center
+          example:
+            resourceType: Bundle
+            entry:
+            - resource:
+                resourceType: PractitionerRole
+                id: '12345'
+                practitioner:
+                  reference: Practitioner/12345
+                organization:
+                  reference: Organization/org-67890
+                location:
+                - reference: Location/loc-001
+                  display: Downtown Clinic
+                - reference: Location/loc-002
+                  display: Uptown Medical Center
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          entry:
+          - resource:
+              resourceType: PractitionerRole
+              id: '12345'
+              practitioner:
+                reference: Practitioner/12345
+              organization:
+                reference: Organization/org-67890
+              location:
+              - reference: Location/loc-001
+                display: Downtown Clinic
+              - reference: Location/loc-002
+                display: Uptown Medical Center
+    PractitionerRoleBundle:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          example: Bundle
+        entry:
+          type: array
+          items:
+            type: object
+            properties:
+              resource:
+                type: object
+                properties:
+                  resourceType:
+                    type: string
+                    example: PractitionerRole
+                  id:
+                    type: string
+                    example: '12345'
+                  practitioner:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                        example: Practitioner/12345
+                  organization:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                        example: Organization/org-67890
+                  location:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                        display:
+                          type: string
+                example:
+                  resourceType: PractitionerRole
+                  id: '12345'
+                  practitioner:
+                    reference: Practitioner/12345
+                  organization:
+                    reference: Organization/org-67890
+                  location:
+                  - reference: Location/loc-001
+                    display: Downtown Clinic
+                  - reference: Location/loc-002
+                    display: Uptown Medical Center
+      example:
+        resourceType: Bundle
+        entry:
+        - resource:
+            resourceType: PractitionerRole
+            id: '12345'
+            practitioner:
+              reference: Practitioner/12345
+            organization:
+              reference: Organization/org-67890
+            location:
+            - reference: Location/loc-001
+              display: Downtown Clinic
+            - reference: Location/loc-002
+              display: Uptown Medical Center
+    PractitionerRole:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          example: PractitionerRole
+        id:
+          type: string
+          example: '12345'
+        practitioner:
+          type: object
+          properties:
+            reference:
+              type: string
+              example: Practitioner/12345
+        organization:
+          type: object
+          properties:
+            reference:
+              type: string
+              example: Organization/org-67890
+        location:
+          type: array
+          items:
+            type: object
+            properties:
+              reference:
+                type: string
+              display:
+                type: string
+      example:
+        resourceType: PractitionerRole
+        id: '12345'
+        practitioner:
+          reference: Practitioner/12345
+        organization:
+          reference: Organization/org-67890
+        location:
+        - reference: Location/loc-001
+          display: Downtown Clinic
+        - reference: Location/loc-002
+          display: Uptown Medical Center
+    Error400:
+      type: object
+      properties:
+        error:
+          type: string
+          example: 400 Error
+        message:
+          type: string
+          example: Bad request.
+      example:
+        error: 400 Error
+        message: Bad request.
+    Error404:
+      type: object
+      properties:
+        error:
+          type: string
+          example: 404 Error
+        message:
+          type: string
+          example: Not found.
+      example:
+        error: 404 Error
+        message: Not found.
+    Error500:
+      type: object
+      properties:
+        error:
+          type: string
+          example: 500 Error
+        message:
+          type: string
+          example: Internal server error.
+      example:
+        error: 500 Error
+        message: Internal server error.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    xSourceId:
+      name: x-source-id
+      in: header
+      required: true
+      schema:
+        type: string
+      description: "Source identifier header required for routing.\nAthena: 083fe714-e36e-4851-b2e7-a7166b439f67\n Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f — \U0001F534 On demand filter"
+externalDocs:
+  description: Run in Postman
+  url: https://app.postman.com/import/openapi
+security:
+- bearerAuth: []

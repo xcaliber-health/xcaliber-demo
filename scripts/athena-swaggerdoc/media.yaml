@@ -1,0 +1,1786 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: Media
+  description: Operations related to media (images, documents, etc.) in Athena.
+paths:
+  /api/v2/Media:
+    get:
+      tags:
+      - Media
+      - diver-license
+      - prescription-card
+      summary: Get list of Media
+      operationId: getAthenaMedia
+      parameters:
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: based-on
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: based-on'
+      - name: created
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: created'
+      - name: device
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: device'
+      - name: encounter
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: encounter'
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - name: modality
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: modality'
+      - name: operator
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: 'Filter: operator'
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: site
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: site'
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: status'
+      - name: subject
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: subject'
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: type'
+      - name: view
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: view'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      - name: category
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinMediacategoryprescriptioncard'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinMediacategoryprescriptioncard'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinMediacategoryprescriptioncard'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example 1:
+                  value:
+                    resourceType: Media
+                    identifier: '12345'
+                    status: completed
+                    extension:
+                    - url: TINY_URLS.MEDIA.APPOINTMENTID
+                      valueInteger: 67890
+                    - url: TINY_URLS.MEDIA.SUBJECT
+                      valueString: Patient medical record
+                    - url: TINY_URLS.MEDIA.ASSIGNEDTO
+                      valueString: Dr. Smith
+                    - url: TINY_URLS.MEDIA.CLINICALPROVIDERID
+                      valueInteger: 54321
+                    - url: TINY_URLS.MEDIA.CREATEDDATE
+                      valueDate: '2023-10-15'
+                    - url: TINY_URLS.MEDIA.DELETEDDATETIME
+                      valueDateTime: '2023-10-20T14:30:00Z'
+                    - url: TINY_URLS.MEDIA.DOCUMENTCLASS
+                      valueString: Lab Report
+                    - url: TINY_URLS.MEDIA.DOCUMENTSOURCE
+                      valueString: External Lab
+                    - url: TINY_URLS.MEDIA.EXTERNALACCESSIONID
+                      valueString: EXT-98765
+                    - url: TINY_URLS.MEDIA.DOCUMENTSOURCE
+                      valueString: lab-report
+                    - url: TINY_URLS.MEDIA.EXTERNALACCESSIONID
+                      valueString: EXT123456
+                    - url: TINY_URLS.MEDIA.EXTERNALNOTE
+                      valueString: External note text
+                    - url: TINY_URLS.MEDIA.FILESIZE
+                      valueInteger: 2048
+                    - url: TINY_URLS.MEDIA.INTERNALACCESSIONID
+                      valueString: INT789012
+                    - url: TINY_URLS.MEDIA.INTERNALNOTE
+                      valueString: Internal note text
+                    - url: TINY_URLS.MEDIA.LASTMODIFIEDDATE
+                      valueDate: '2023-12-01'
+                    - url: TINY_URLS.MEDIA.LASTMODIFIEDDATETIME
+                      valueDateTime: '2023-12-01T10:30:00Z'
+                    - url: TINY_URLS.MEDIA.PRIORITY
+                      valueString: high
+                    - url: TINY_URLS.MEDIA.PROVIDERID
+                      valueInteger: 90210
+                    - url: TINY_URLS.MEDIA.PROVIDERUSERNAME
+                      valueString: drsmith
+                    - url: TINY_URLS.MEDIA.TIETOORDERID
+                      valueInteger: 12345
+                    - url: TINY_URLS.MEDIA.ACTIONNOTE
+                      valueInteger: 67890
+                    - url: TINY_URLS.MEDIA.TIETOPROCEDUREORSURGERY
+                      valueInteger: 54321
+                    issued: '2024-01-15T10:30:00Z'
+                    operator:
+                      id: user123
+                      type: practitioner
+                    note:
+                    - text: Medical imaging description
+                    createdDateTime: '2024-01-15'
+                    modality:
+                      coding:
+                      - code: digital
+                    type:
+                      coding:
+                      - code: xray
+                        display: X-Ray Image
+                      - code: '123'
+                        display: Lab Report
+                    encounter:
+                      identifier: '456'
+                    content:
+                      contentType: application/pdf
+                      url: https://example.com/document.pdf
+                      data: base64data
+                      contained:
+                      - resourceType: Media
+                        status: unknown
+                        content:
+                          contentType: image/jpeg
+                          url: https://example.com/page1.jpg
+                          id: page1
+                          extension:
+                          - url: http://tiny.url/media/pageordering
+                            valueInteger: 1
+                driver-license:
+                  value:
+                    resourceType: Media
+                    content:
+                      data: iVBORw0KGgoAAAANSUhEUgAAAZAAAABkCAYAAAB6v8vQAAA...
+                    subject:
+                      reference: Patient/4406
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/appointment-category
+                      valueString: driver-license
+                prescription-card:
+                  value:
+                    resourceType: Media
+                    content:
+                      data: iVBORw0KGgoAAAANSUhEUgAAAZAAAABkCAYAAAB6v8vQAAA...
+                    subject:
+                      reference: Patient/4406
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/appointment-category
+                      valueString: prescription-card
+    post:
+      tags:
+      - Media
+      - insurance-card
+      - prescription-card
+      summary: Create Media
+      operationId: createMediaInAthena
+      parameters:
+      - *id001
+      - *id002
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      - name: category
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      responses:
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinMedia'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinMedia'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinMedia'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              driver-license:
+                value:
+                  resourceType: Media
+                  image: base64data
+                  departmentid: 150
+                  content:
+                    data: base64data
+                    contentType: application/pdf
+                    title: null
+                  note:
+                  - text: Medical imaging description
+                  createdDateTime: '2024-01-15'
+                  type:
+                    coding:
+                    - display: X-Ray Image
+                      code: xray
+                  operator:
+                    id: user123
+                    type: practitioner
+                  extension:
+                  - url: TINY_URLS.MEDIA.PROVIDERID
+                    valueInteger: 90210
+                  - url: TINY_URLS.MEDIA.INTERNALNOTE
+                    valueString: Internal note text
+                  - url: TINY_URLS.MEDIA.PRIORITY
+                    valueString: high
+              insurance-card:
+                value:
+                  resourceType: Media
+                  image: base64data
+                  departmentid: 150
+                  content:
+                    data: base64data
+                    contentType: application/pdf
+                    title: null
+                  note:
+                  - text: Medical imaging description
+                  createdDateTime: '2024-01-15'
+                  type:
+                    coding:
+                    - display: X-Ray Image
+                      code: xray
+                  operator:
+                    id: user123
+                    type: practitioner
+                  extension:
+                  - url: TINY_URLS.MEDIA.PROVIDERID
+                    valueInteger: 90210
+                  - url: TINY_URLS.MEDIA.INTERNALNOTE
+                    valueString: Internal note text
+                  - url: TINY_URLS.MEDIA.PRIORITY
+                    valueString: high
+              Request Example 3:
+                value:
+                  resourceType: Media
+                  content:
+                    data: base64data
+                    contentType: application/pdf
+                    title: null
+                  note:
+                  - text: Medical imaging description
+                  createdDateTime: '2024-01-15'
+                  type:
+                    coding:
+                    - display: X-Ray Image
+                      code: xray
+                  operator:
+                    id: user123
+                    type: practitioner
+                  extension:
+                  - url: TINY_URLS.MEDIA.PROVIDERID
+                    valueInteger: 90210
+                  - url: TINY_URLS.MEDIA.INTERNALNOTE
+                    valueString: Internal note text
+                  - url: TINY_URLS.MEDIA.PRIORITY
+                    valueString: high
+    delete:
+      tags:
+      - Media
+      - diver-license
+      - prescription-card
+      - insurance-card
+      summary: Delete Media by ID
+      operationId: deleteMediaInAthena
+      parameters:
+      - *id001
+      - *id002
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      - name: category
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      responses:
+        '204':
+          description: Media deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response204ofdeleteinMediacategoryinsurancecard'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofdeleteinMediacategoryinsurancecard'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinMediacategoryinsurancecard'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinMediacategoryinsurancecard'
+    put:
+      tags:
+      - media
+      - driver-license
+      - insurance-card
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      - name: category
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example 1:
+                value:
+                  resourceType: Media
+                  identifier: '12345'
+                  content:
+                    data: base64data
+              driver-license:
+                value:
+                  resourceType: Media
+                  image: base64data
+                  departmentid: 150
+                  content:
+                    data: base64data
+                    contentType: application/pdf
+                    title: null
+                  note:
+                  - text: Medical imaging description
+                  createdDateTime: '2024-01-15'
+                  type:
+                    coding:
+                    - display: X-Ray Image
+                      code: xray
+                  operator:
+                    id: user123
+                    type: practitioner
+                  extension:
+                  - url: TINY_URLS.MEDIA.PROVIDERID
+                    valueInteger: 90210
+                  - url: TINY_URLS.MEDIA.INTERNALNOTE
+                    valueString: Internal note text
+                  - url: TINY_URLS.MEDIA.PRIORITY
+                    valueString: high
+              insurance-card:
+                value:
+                  resourceType: Media
+                  image: base64data
+                  departmentid: 150
+                  content:
+                    data: base64data
+                    contentType: application/pdf
+                    title: null
+                  note:
+                  - text: Medical imaging description
+                  createdDateTime: '2024-01-15'
+                  type:
+                    coding:
+                    - display: X-Ray Image
+                      code: xray
+                  operator:
+                    id: user123
+                    type: practitioner
+                  extension:
+                  - url: TINY_URLS.MEDIA.PROVIDERID
+                    valueInteger: 90210
+                  - url: TINY_URLS.MEDIA.INTERNALNOTE
+                    valueString: Internal note text
+                  - url: TINY_URLS.MEDIA.PRIORITY
+                    valueString: high
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    message: response is being getting generated.
+  /api/v2/Media/{media-id}:
+    get:
+      tags:
+      - Media
+      - admin
+      - insurance-card
+      - lab-results
+      summary: Get Media by ID
+      operationId: getAthenaMediaById
+      parameters:
+      - name: media-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier of the media resource to retrieve. Required
+          for fetching a specific media item."'
+      - *id001
+      - *id002
+      responses:
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinMediacategoryinsurancecardmediaid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinMediacategoryinsurancecardmediaid'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinMediacategoryinsurancecardmediaid'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinMediacategoryinsurancecardmediaid'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Media
+                    identifier: '12345'
+                    status: completed
+                    extension:
+                    - url: TINY_URLS.MEDIA.APPOINTMENTID
+                      valueInteger: 67890
+                    - url: TINY_URLS.MEDIA.SUBJECT
+                      valueString: Patient medical record
+                    - url: TINY_URLS.MEDIA.ASSIGNEDTO
+                      valueString: Dr. Smith
+                    - url: TINY_URLS.MEDIA.CLINICALPROVIDERID
+                      valueInteger: 54321
+                    - url: TINY_URLS.MEDIA.CREATEDDATE
+                      valueDate: '2023-10-15'
+                    - url: TINY_URLS.MEDIA.DELETEDDATETIME
+                      valueDateTime: '2023-10-20T14:30:00Z'
+                    - url: TINY_URLS.MEDIA.DOCUMENTCLASS
+                      valueString: Lab Report
+                    - url: TINY_URLS.MEDIA.DOCUMENTSOURCE
+                      valueString: External Lab
+                    - url: TINY_URLS.MEDIA.EXTERNALACCESSIONID
+                      valueString: EXT-98765
+                    - url: TINY_URLS.MEDIA.DOCUMENTSOURCE
+                      valueString: lab-report
+                    - url: TINY_URLS.MEDIA.EXTERNALACCESSIONID
+                      valueString: EXT123456
+                    - url: TINY_URLS.MEDIA.EXTERNALNOTE
+                      valueString: External note text
+                    - url: TINY_URLS.MEDIA.FILESIZE
+                      valueInteger: 2048
+                    - url: TINY_URLS.MEDIA.INTERNALACCESSIONID
+                      valueString: INT789012
+                    - url: TINY_URLS.MEDIA.INTERNALNOTE
+                      valueString: Internal note text
+                    - url: TINY_URLS.MEDIA.LASTMODIFIEDDATE
+                      valueDate: '2023-12-01'
+                    - url: TINY_URLS.MEDIA.LASTMODIFIEDDATETIME
+                      valueDateTime: '2023-12-01T10:30:00Z'
+                    - url: TINY_URLS.MEDIA.PRIORITY
+                      valueString: high
+                    - url: TINY_URLS.MEDIA.PROVIDERID
+                      valueInteger: 90210
+                    - url: TINY_URLS.MEDIA.PROVIDERUSERNAME
+                      valueString: drsmith
+                    - url: TINY_URLS.MEDIA.TIETOORDERID
+                      valueInteger: 12345
+                    - url: TINY_URLS.MEDIA.ACTIONNOTE
+                      valueInteger: 67890
+                    - url: TINY_URLS.MEDIA.TIETOPROCEDUREORSURGERY
+                      valueInteger: 54321
+                    issued: '2024-01-15T10:30:00Z'
+                    operator:
+                      id: user123
+                      type: practitioner
+                    note:
+                    - text: Medical imaging description
+                    createdDateTime: '2024-01-15'
+                    modality:
+                      coding:
+                      - code: digital
+                    type:
+                      coding:
+                      - code: xray
+                        display: X-Ray Image
+                      - code: '123'
+                        display: Lab Report
+                    encounter:
+                      identifier: '456'
+                    content:
+                      contentType: application/pdf
+                      url: https://example.com/document.pdf
+                      data: base64data
+                      contained:
+                      - resourceType: Media
+                        status: unknown
+                        content:
+                          contentType: image/jpeg
+                          url: https://example.com/page1.jpg
+                          id: page1
+                          extension:
+                          - url: http://tiny.url/media/pageordering
+                            valueInteger: 1
+components:
+  schemas:
+    ExtractedSchema683:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          description: '"Object containing additional metadata for creating media,
+            such as user information or request specifics."'
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Media
+            id:
+              type: string
+              example: example
+            meta:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                  example: 1.0.0
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: generated
+                div:
+                  type: string
+                  example: <div xmlns="http://www.w3.org/1999/xhtml">Your content
+                    here</div>
+            contentType:
+              type: string
+              example: image/jpeg
+            data:
+              type: string
+              example: base64 encoded image data
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueCode:
+                    type: string
+                  valueInteger:
+                    type: integer
+                  valueString:
+                    type: string
+                  valueDate:
+                    type: string
+                    format: date
+                  valueDateTime:
+                    type: string
+                    format: date-time
+          example:
+            resourceType: Media
+            id: example
+            meta:
+              versionId: 1.0.0
+            text:
+              status: generated
+              div: <div xmlns="http://www.w3.org/1999/xhtml">Your content here</div>
+            contentType: image/jpeg
+            data: base64 encoded image data
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/media-content-type
+              valueCode: image
+            - url: http://xcaliber-fhir/structureDefinition/media-content-type
+              valueCode: jpeg
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.APPOINTMENTID
+              valueInteger: 123
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.SUBJECT
+              valueString: subject-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ASSIGNEDTO
+              valueString: assigned-to-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CLINICALPROVIDERID
+              valueInteger: 456
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CREATEDDATE
+              valueDate: '2024-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DELETEDDATETIME
+              valueDateTime: '2024-01-01T12:00:00Z'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTCLASS
+              valueString: class-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTSOURCE
+              valueString: source-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALACCESSIONID
+              valueString: external-123
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALNOTE
+              valueString: External note text
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.FILESIZE
+              valueInteger: 2048
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALACCESSIONID
+              valueString: internal-abc
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALNOTE
+              valueString: Internal note text
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATE
+              valueDate: '2024-01-02'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATETIME
+              valueDateTime: '2024-01-02T14:00:00Z'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PRIORITY
+              valueString: high
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERID
+              valueInteger: 789
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERUSERNAME
+              valueString: provider_user
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOORDERID
+              valueInteger: 101112
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ACTIONNOTE
+              valueInteger: 131415
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOPROCEDUREORSURGERY
+              valueInteger: 161718
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PAGEORDERING
+              valueInteger: 1
+          description: '"Media data to be created. Contains key-value pairs of media
+            attributes, such as title, description, and file URL."'
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Media
+          id: example
+          meta:
+            versionId: 1.0.0
+          text:
+            status: generated
+            div: <div xmlns="http://www.w3.org/1999/xhtml">Your content here</div>
+          contentType: image/jpeg
+          data: base64 encoded image data
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/media-content-type
+            valueCode: image
+          - url: http://xcaliber-fhir/structureDefinition/media-content-type
+            valueCode: jpeg
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.APPOINTMENTID
+            valueInteger: 123
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.SUBJECT
+            valueString: subject-example
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ASSIGNEDTO
+            valueString: assigned-to-example
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CLINICALPROVIDERID
+            valueInteger: 456
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CREATEDDATE
+            valueDate: '2024-01-01'
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DELETEDDATETIME
+            valueDateTime: '2024-01-01T12:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTCLASS
+            valueString: class-example
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTSOURCE
+            valueString: source-example
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALACCESSIONID
+            valueString: external-123
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALNOTE
+            valueString: External note text
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.FILESIZE
+            valueInteger: 2048
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALACCESSIONID
+            valueString: internal-abc
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALNOTE
+            valueString: Internal note text
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATE
+            valueDate: '2024-01-02'
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATETIME
+            valueDateTime: '2024-01-02T14:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PRIORITY
+            valueString: high
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERID
+            valueInteger: 789
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERUSERNAME
+            valueString: provider_user
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOORDERID
+            valueInteger: 101112
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ACTIONNOTE
+            valueInteger: 131415
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOPROCEDUREORSURGERY
+            valueInteger: 161718
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PAGEORDERING
+            valueInteger: 1
+    response200ofgetinMediacategoryprescriptioncard:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Media
+            id:
+              type: string
+              example: example
+            meta:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                  example: 1.0.0
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: generated
+                div:
+                  type: string
+                  example: <div xmlns="http://www.w3.org/1999/xhtml">Your content
+                    here</div>
+            contentType:
+              type: string
+              example: image/jpeg
+            data:
+              type: string
+              example: base64 encoded image data
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueCode:
+                    type: string
+                  valueInteger:
+                    type: integer
+                  valueString:
+                    type: string
+                  valueDate:
+                    type: string
+                    format: date
+                  valueDateTime:
+                    type: string
+                    format: date-time
+          example:
+            resourceType: Media
+            id: example
+            meta:
+              versionId: 1.0.0
+            text:
+              status: generated
+              div: <div xmlns="http://www.w3.org/1999/xhtml">Your content here</div>
+            contentType: image/jpeg
+            data: base64 encoded image data
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/media-content-type
+              valueCode: image
+            - url: http://xcaliber-fhir/structureDefinition/media-content-type
+              valueCode: jpeg
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.APPOINTMENTID
+              valueInteger: 123
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.SUBJECT
+              valueString: subject-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ASSIGNEDTO
+              valueString: assigned-to-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CLINICALPROVIDERID
+              valueInteger: 456
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CREATEDDATE
+              valueDate: '2024-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DELETEDDATETIME
+              valueDateTime: '2024-01-01T12:00:00Z'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTCLASS
+              valueString: class-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTSOURCE
+              valueString: source-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALACCESSIONID
+              valueString: external-123
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALNOTE
+              valueString: External note text
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.FILESIZE
+              valueInteger: 2048
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALACCESSIONID
+              valueString: internal-abc
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALNOTE
+              valueString: Internal note text
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATE
+              valueDate: '2024-01-02'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATETIME
+              valueDateTime: '2024-01-02T14:00:00Z'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PRIORITY
+              valueString: high
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERID
+              valueInteger: 789
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERUSERNAME
+              valueString: provider_user
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOORDERID
+              valueInteger: 101112
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ACTIONNOTE
+              valueInteger: 131415
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOPROCEDUREORSURGERY
+              valueInteger: 161718
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PAGEORDERING
+              valueInteger: 1
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: Media
+              id: example
+              meta:
+                versionId: 1.0.0
+              text:
+                status: generated
+                div: <div xmlns="http://www.w3.org/1999/xhtml">Your content here</div>
+              contentType: image/jpeg
+              data: base64 encoded image data
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/media-content-type
+                valueCode: image
+              - url: http://xcaliber-fhir/structureDefinition/media-content-type
+                valueCode: jpeg
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.APPOINTMENTID
+                valueInteger: 123
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.SUBJECT
+                valueString: subject-example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ASSIGNEDTO
+                valueString: assigned-to-example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CLINICALPROVIDERID
+                valueInteger: 456
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CREATEDDATE
+                valueDate: '2024-01-01'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DELETEDDATETIME
+                valueDateTime: '2024-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTCLASS
+                valueString: class-example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTSOURCE
+                valueString: source-example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALACCESSIONID
+                valueString: external-123
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALNOTE
+                valueString: External note text
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.FILESIZE
+                valueInteger: 2048
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALACCESSIONID
+                valueString: internal-abc
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALNOTE
+                valueString: Internal note text
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATE
+                valueDate: '2024-01-02'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATETIME
+                valueDateTime: '2024-01-02T14:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PRIORITY
+                valueString: high
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERID
+                valueInteger: 789
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERUSERNAME
+                valueString: provider_user
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOORDERID
+                valueInteger: 101112
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ACTIONNOTE
+                valueInteger: 131415
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOPROCEDUREORSURGERY
+                valueInteger: 161718
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PAGEORDERING
+                valueInteger: 1
+    error400ofgetinMediacategoryprescriptioncard:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: Optional details
+          nullable: true
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: Optional details
+    error401ofgetinMediacategoryprescriptioncard:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinMediacategoryprescriptioncard:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Unexpected server failure.
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Unexpected server failure.
+    response201ofpostinMedia:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Media
+            id:
+              type: string
+              example: example
+            meta:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                  example: 1.0.0
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: generated
+                div:
+                  type: string
+                  example: <div xmlns="http://www.w3.org/1999/xhtml">Your content
+                    here</div>
+            contentType:
+              type: string
+              example: image/jpeg
+            data:
+              type: string
+              example: base64 encoded image data
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueCode:
+                    type: string
+                  valueInteger:
+                    type: integer
+                  valueString:
+                    type: string
+                  valueDate:
+                    type: string
+                    format: date
+                  valueDateTime:
+                    type: string
+                    format: date-time
+          example:
+            resourceType: Media
+            id: example
+            meta:
+              versionId: 1.0.0
+            text:
+              status: generated
+              div: <div xmlns="http://www.w3.org/1999/xhtml">Your content here</div>
+            contentType: image/jpeg
+            data: base64 encoded image data
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/media-content-type
+              valueCode: image
+            - url: http://xcaliber-fhir/structureDefinition/media-content-type
+              valueCode: jpeg
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.APPOINTMENTID
+              valueInteger: 123
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.SUBJECT
+              valueString: subject-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ASSIGNEDTO
+              valueString: assigned-to-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CLINICALPROVIDERID
+              valueInteger: 456
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CREATEDDATE
+              valueDate: '2024-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DELETEDDATETIME
+              valueDateTime: '2024-01-01T12:00:00Z'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTCLASS
+              valueString: class-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTSOURCE
+              valueString: source-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALACCESSIONID
+              valueString: external-123
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALNOTE
+              valueString: External note text
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.FILESIZE
+              valueInteger: 2048
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALACCESSIONID
+              valueString: internal-abc
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALNOTE
+              valueString: Internal note text
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATE
+              valueDate: '2024-01-02'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATETIME
+              valueDateTime: '2024-01-02T14:00:00Z'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PRIORITY
+              valueString: high
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERID
+              valueInteger: 789
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERUSERNAME
+              valueString: provider_user
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOORDERID
+              valueInteger: 101112
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ACTIONNOTE
+              valueInteger: 131415
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOPROCEDUREORSURGERY
+              valueInteger: 161718
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PAGEORDERING
+              valueInteger: 1
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: Media
+              id: example
+              meta:
+                versionId: 1.0.0
+              text:
+                status: generated
+                div: <div xmlns="http://www.w3.org/1999/xhtml">Your content here</div>
+              contentType: image/jpeg
+              data: base64 encoded image data
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/media-content-type
+                valueCode: image
+              - url: http://xcaliber-fhir/structureDefinition/media-content-type
+                valueCode: jpeg
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.APPOINTMENTID
+                valueInteger: 123
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.SUBJECT
+                valueString: subject-example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ASSIGNEDTO
+                valueString: assigned-to-example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CLINICALPROVIDERID
+                valueInteger: 456
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CREATEDDATE
+                valueDate: '2024-01-01'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DELETEDDATETIME
+                valueDateTime: '2024-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTCLASS
+                valueString: class-example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTSOURCE
+                valueString: source-example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALACCESSIONID
+                valueString: external-123
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALNOTE
+                valueString: External note text
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.FILESIZE
+                valueInteger: 2048
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALACCESSIONID
+                valueString: internal-abc
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALNOTE
+                valueString: Internal note text
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATE
+                valueDate: '2024-01-02'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATETIME
+                valueDateTime: '2024-01-02T14:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PRIORITY
+                valueString: high
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERID
+                valueInteger: 789
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERUSERNAME
+                valueString: provider_user
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOORDERID
+                valueInteger: 101112
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ACTIONNOTE
+                valueInteger: 131415
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOPROCEDUREORSURGERY
+                valueInteger: 161718
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PAGEORDERING
+                valueInteger: 1
+    error400ofpostinMedia:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: Optional details
+          nullable: true
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: Optional details
+    error401ofpostinMedia:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofpostinMedia:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Unexpected server failure.
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Unexpected server failure.
+    response204ofdeleteinMediacategoryinsurancecard:
+      type: object
+      properties:
+        id:
+          type: string
+          example: media-123
+        status:
+          type: string
+          example: deleted
+      required:
+      - id
+      - status
+      example:
+        id: media-123
+        status: deleted
+    error400ofdeleteinMediacategoryinsurancecard:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: Optional details
+          nullable: true
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: Optional details
+    error401ofdeleteinMediacategoryinsurancecard:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofdeleteinMediacategoryinsurancecard:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Unexpected server failure.
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Unexpected server failure.
+    response200ofgetinMediacategoryinsurancecardmediaid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Media
+            id:
+              type: string
+              example: example
+            meta:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                  example: 1.0.0
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: generated
+                div:
+                  type: string
+                  example: <div xmlns="http://www.w3.org/1999/xhtml">Your content
+                    here</div>
+            contentType:
+              type: string
+              example: image/jpeg
+            data:
+              type: string
+              example: base64 encoded image data
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueCode:
+                    type: string
+                  valueInteger:
+                    type: integer
+                  valueString:
+                    type: string
+                  valueDate:
+                    type: string
+                    format: date
+                  valueDateTime:
+                    type: string
+                    format: date-time
+          example:
+            resourceType: Media
+            id: example
+            meta:
+              versionId: 1.0.0
+            text:
+              status: generated
+              div: <div xmlns="http://www.w3.org/1999/xhtml">Your content here</div>
+            contentType: image/jpeg
+            data: base64 encoded image data
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/media-content-type
+              valueCode: image
+            - url: http://xcaliber-fhir/structureDefinition/media-content-type
+              valueCode: jpeg
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.APPOINTMENTID
+              valueInteger: 123
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.SUBJECT
+              valueString: subject-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ASSIGNEDTO
+              valueString: assigned-to-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CLINICALPROVIDERID
+              valueInteger: 456
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CREATEDDATE
+              valueDate: '2024-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DELETEDDATETIME
+              valueDateTime: '2024-01-01T12:00:00Z'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTCLASS
+              valueString: class-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTSOURCE
+              valueString: source-example
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALACCESSIONID
+              valueString: external-123
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALNOTE
+              valueString: External note text
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.FILESIZE
+              valueInteger: 2048
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALACCESSIONID
+              valueString: internal-abc
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALNOTE
+              valueString: Internal note text
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATE
+              valueDate: '2024-01-02'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATETIME
+              valueDateTime: '2024-01-02T14:00:00Z'
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PRIORITY
+              valueString: high
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERID
+              valueInteger: 789
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERUSERNAME
+              valueString: provider_user
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOORDERID
+              valueInteger: 101112
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ACTIONNOTE
+              valueInteger: 131415
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOPROCEDUREORSURGERY
+              valueInteger: 161718
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PAGEORDERING
+              valueInteger: 1
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: Media
+              id: example
+              meta:
+                versionId: 1.0.0
+              text:
+                status: generated
+                div: <div xmlns="http://www.w3.org/1999/xhtml">Your content here</div>
+              contentType: image/jpeg
+              data: base64 encoded image data
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/media-content-type
+                valueCode: image
+              - url: http://xcaliber-fhir/structureDefinition/media-content-type
+                valueCode: jpeg
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.APPOINTMENTID
+                valueInteger: 123
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.SUBJECT
+                valueString: subject-example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ASSIGNEDTO
+                valueString: assigned-to-example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CLINICALPROVIDERID
+                valueInteger: 456
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.CREATEDDATE
+                valueDate: '2024-01-01'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DELETEDDATETIME
+                valueDateTime: '2024-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTCLASS
+                valueString: class-example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.DOCUMENTSOURCE
+                valueString: source-example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALACCESSIONID
+                valueString: external-123
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.EXTERNALNOTE
+                valueString: External note text
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.FILESIZE
+                valueInteger: 2048
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALACCESSIONID
+                valueString: internal-abc
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.INTERNALNOTE
+                valueString: Internal note text
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATE
+                valueDate: '2024-01-02'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.LASTMODIFIEDDATETIME
+                valueDateTime: '2024-01-02T14:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PRIORITY
+                valueString: high
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERID
+                valueInteger: 789
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PROVIDERUSERNAME
+                valueString: provider_user
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOORDERID
+                valueInteger: 101112
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.ACTIONNOTE
+                valueInteger: 131415
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.TIETOPROCEDUREORSURGERY
+                valueInteger: 161718
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.MEDIA.PAGEORDERING
+                valueInteger: 1
+    error400ofgetinMediacategoryinsurancecardmediaid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: Optional details
+          nullable: true
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: Optional details
+    error401ofgetinMediacategoryinsurancecardmediaid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinMediacategoryinsurancecardmediaid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: Optional details
+          nullable: true
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: Optional details
+    error500ofgetinMediacategoryinsurancecardmediaid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Unexpected server failure.
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Unexpected server failure.
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

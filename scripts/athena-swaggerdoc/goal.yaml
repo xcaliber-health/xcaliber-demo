@@ -1,0 +1,390 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: Goal
+  description: Operations related to FHIR Goal resources in Athena.
+paths:
+  /api/v2/Goal:
+    get:
+      summary: List Goal resources
+      operationId: getAthenaGoals
+      tags:
+      - Goal
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: USCoreGoalDescription
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: USCoreGoalDescription'
+      - name: achievement-status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: achievement-status'
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: category'
+      - name: lifecycle-status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: lifecycle-status'
+      - name: start-date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: start-date'
+      - name: subject
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: subject'
+      - name: target-date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: target-date'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinGoal'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinGoal'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinGoal'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: Goal
+                        extension:
+                        - url: TINY_URLS.GOAL.ISPRIMARYGOAL
+                          valueString: 'true'
+                        - url: TINY_URLS.GOAL.NAME
+                          valueString: Weight Loss Goal
+                        category:
+                        - coding:
+                          - system: athena
+                            code: lifestyle
+                        achievementStatus: in-progress
+                        target:
+                        - dueDate: '2024-12-31'
+                          detailString: 180 lbs
+                          extension:
+                          - url: TINY_URLS.GOAL.COMPOUNDVALUES
+                            valueCodeableConcept:
+                              coding:
+                              - system: athena
+                                code: weight
+                                display: '180'
+components:
+  schemas:
+    response200ofgetinGoal:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 2
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: goal1
+                      resourceType:
+                        type: string
+                        example: Goal
+                      description:
+                        type: object
+                        properties:
+                          text:
+                            type: string
+                            example: Lower blood pressure
+                      status:
+                        type: string
+                        example: active
+                      subject:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                            example: Patient/example
+                      target:
+                        type: object
+                        properties:
+                          dueDate:
+                            type: string
+                            format: date
+                            example: '2024-12-31'
+                    required:
+                    - id
+                    - resourceType
+                    - description
+                    - status
+                    - subject
+                    - target
+            meta:
+              type: object
+              properties:
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        example: https://tiny.url/goal/discussionnoteslastmodifiedby
+                      valueString:
+                        type: string
+                        nullable: true
+                      valueDateTime:
+                        type: string
+                        format: date-time
+                        nullable: true
+                    required:
+                    - url
+              required:
+              - extension
+          required:
+          - resourceType
+          - type
+          - total
+          - entry
+          - meta
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 2
+          entry:
+          - resource:
+              id: goal1
+              resourceType: Goal
+              description:
+                text: Lower blood pressure
+              status: active
+              subject:
+                reference: Patient/example
+              target:
+                dueDate: '2024-12-31'
+          - resource:
+              id: goal2
+              resourceType: Goal
+              description:
+                text: Increase activity level
+              status: active
+              subject:
+                reference: Patient/example
+              target:
+                dueDate: '2025-06-30'
+          meta:
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/discussionnoteslastmodifiedby
+              valueString: Dr. Smith
+            - url: http://xcaliber-fhir/structureDefinition/discussionnoteslastmodifieddatetime
+              valueDateTime: '2023-10-11T10:20:30+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/freetextgoallastmodifiedby
+              valueString: Nurse Amy
+            - url: http://xcaliber-fhir/structureDefinition/freetextgoallastmodifieddatetime
+              valueDateTime: '2023-10-10T16:40:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/patientinstructionslastmodifiedby
+              valueString: Dr. John
+            - url: http://xcaliber-fhir/structureDefinition/patientinstructionslastmodifieddatetime
+              valueDateTime: '2023-09-29T08:23:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/discussionnotes
+              valueString: Patient was advised to reduce salt intake.
+            - url: http://xcaliber-fhir/structureDefinition/freetextgoal
+              valueString: Walk at least 30 minutes daily.
+            - url: http://xcaliber-fhir/structureDefinition/patientinstructions
+              valueString: Take medication as prescribed.
+            - url: http://xcaliber-fhir/structureDefinition/versiontokensdiscussionnotes
+              valueString: v1.2.3
+            - url: http://xcaliber-fhir/structureDefinition/versiontokenspatientinstructions
+              valueString: v2.1.0
+            - url: http://xcaliber-fhir/structureDefinition/versiontokensfreetextgoal
+              valueString: v1.0.5
+    error400ofgetinGoal:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+          example: extra details here
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: extra details here
+    error401ofgetinGoal:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinGoal:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          nullable: true
+          example: Internal server error
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Internal server error
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

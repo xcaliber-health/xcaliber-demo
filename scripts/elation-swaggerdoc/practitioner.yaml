@@ -1,0 +1,1817 @@
+openapi: 3.0.3
+info:
+  title: Elation Practitioner API
+  version: 1.0.0
+  description: 'Source Ids:
+
+    - Athena: 083fe714-e36e-4851-b2e7-a7166b439f67
+
+    - Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f
+
+
+    Practitioner Endpoints
+
+
+    "Practitioner" resource represents a person who is directly or indirectly involved in the provision of healthcare or related services. Doctors (Physicians), Nurses, Physician Assistants, Pharmacists, Therapists, Dentists, and other healthcare professionals are example practitioners.
+
+
+    Example: Dr. Kaladin Stormblessed is a cardiologist. A "Practitioner" resource would store his basic information like name, contact details, NPI, and qualifications. Separate "PractitionerRole" resources would then detail his specific roles at different organizations (e.g., cardiologist at City Hospital, cardiologist at Urithiru).
+
+    '
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.com
+tags:
+- name: Practitioner
+  description: Operations related to FHIR Practitioner resources
+paths:
+  /api/v2/Practitioner:
+    get:
+      tags:
+      - Practitioner
+      summary: Get Practitioner
+      operationId: getPractitioner
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+      - name: active
+        in: query
+        required: false
+        description: Search parameter 'active' for practitioner.
+        schema:
+          type: boolean
+      - name: communication
+        in: query
+        required: false
+        description: Search parameter 'communication' for practitioner.
+        schema:
+          type: string
+      - name: identifier
+        in: query
+        required: false
+        description: Search parameter 'identifier' for practitioner.
+        schema:
+          type: string
+      - name: name
+        in: query
+        required: false
+        description: Search parameter 'name' for practitioner.
+        schema:
+          type: string
+      - name: qualification-code
+        in: query
+        required: false
+        description: Search parameter 'qualification-code' for practitioner.
+        schema:
+          type: string
+          format: token
+      responses:
+        '200':
+          description: Practitioner Bundle with context wrapper
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Bundle
+                      type:
+                        type: string
+                        example: searchset
+                      total:
+                        type: integer
+                        example: 1
+                      entry:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            resource:
+                              type: object
+                              required:
+                              - resourceType
+                              - id
+                              - name
+                              - identifier
+                              - qualification
+                              - telecom
+                              - active
+                              - meta
+                              - extension
+                              properties:
+                                resourceType:
+                                  type: string
+                                  example: Practitioner
+                                id:
+                                  type: string
+                                  example: '12345'
+                                name:
+                                  type: array
+                                  items:
+                                    type: object
+                                    required:
+                                    - given
+                                    - family
+                                    properties:
+                                      given:
+                                        type: array
+                                        items:
+                                          type: string
+                                        example:
+                                        - John
+                                      family:
+                                        type: string
+                                        example: Doe
+                                identifier:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                      value:
+                                        type: string
+                                      id:
+                                        type: string
+                                qualification:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      code:
+                                        type: object
+                                        properties:
+                                          coding:
+                                            type: array
+                                            items:
+                                              type: object
+                                              properties:
+                                                system:
+                                                  type: string
+                                          text:
+                                            type: string
+                                telecom:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                      value:
+                                        type: string
+                                active:
+                                  type: boolean
+                                meta:
+                                  type: object
+                                  properties:
+                                    versionId:
+                                      type: string
+                                    lastUpdated:
+                                      type: string
+                                extension:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      url:
+                                        type: string
+                                      valueInteger:
+                                        type: integer
+                              example:
+                                resourceType: Practitioner
+                                id: '12345'
+                                name:
+                                - given:
+                                  - John
+                                  family: Doe
+                                identifier:
+                                - system: http://hl7.org/fhir/sid/us-npi
+                                  value: '1122334455'
+                                - id: user_id
+                                  value: user-789
+                                qualification:
+                                - code:
+                                    coding:
+                                    - system: license
+                                    text: MD
+                                - code:
+                                    coding:
+                                    - system: license_state
+                                    text: NY
+                                - code:
+                                    coding:
+                                    - system: credentials
+                                    text: Board Certified
+                                - code:
+                                    coding:
+                                    - system: specialty
+                                    text: Cardiology
+                                telecom:
+                                - system: email
+                                  value: john.doe@example.com
+                                active: true
+                                meta:
+                                  versionId: '1'
+                                  lastUpdated: '2024-06-18T12:34:56Z'
+                                extension:
+                                - url: https://example.com/practitioner/practice
+                                  valueInteger: 101
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 1
+                    entry:
+                    - resource:
+                        resourceType: Practitioner
+                        id: '12345'
+                        name:
+                        - given:
+                          - John
+                          family: Doe
+                        identifier:
+                        - system: http://hl7.org/fhir/sid/us-npi
+                          value: '1122334455'
+                        - id: user_id
+                          value: user-789
+                        qualification:
+                        - code:
+                            coding:
+                            - system: license
+                            text: MD
+                        - code:
+                            coding:
+                            - system: license_state
+                            text: NY
+                        - code:
+                            coding:
+                            - system: credentials
+                            text: Board Certified
+                        - code:
+                            coding:
+                            - system: specialty
+                            text: Cardiology
+                        telecom:
+                        - system: email
+                          value: john.doe@example.com
+                        active: true
+                        meta:
+                          versionId: '1'
+                          lastUpdated: '2024-06-18T12:34:56Z'
+                        extension:
+                        - url: https://example.com/practitioner/practice
+                          valueInteger: 101
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 400
+                message: Bad request
+                status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 401
+                message: Unauthorized
+                status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 500
+                message: Internal server error
+                status: error
+    parameters: []
+  /api/v2/Practitioner/{practitioner-id}:
+    get:
+      tags:
+      - Practitioner
+      summary: Get Practitioner by ID
+      operationId: getPractitionerById
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: practitioner-id
+        in: path
+        required: true
+        description: .
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Practitioner resource with context wrapper
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    type: object
+                    required:
+                    - resourceType
+                    - id
+                    - name
+                    - identifier
+                    - qualification
+                    - telecom
+                    - active
+                    - meta
+                    - extension
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Practitioner
+                      id:
+                        type: string
+                        example: '12345'
+                      name:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - given
+                          - family
+                          properties:
+                            given:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - John
+                            family:
+                              type: string
+                              example: Doe
+                      identifier:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            value:
+                              type: string
+                            id:
+                              type: string
+                      qualification:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: object
+                              properties:
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                text:
+                                  type: string
+                      telecom:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            value:
+                              type: string
+                      active:
+                        type: boolean
+                      meta:
+                        type: object
+                        properties:
+                          versionId:
+                            type: string
+                          lastUpdated:
+                            type: string
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueInteger:
+                              type: integer
+                    example:
+                      resourceType: Practitioner
+                      id: '12345'
+                      name:
+                      - given:
+                        - John
+                        family: Doe
+                      identifier:
+                      - system: http://hl7.org/fhir/sid/us-npi
+                        value: '1122334455'
+                      - id: user_id
+                        value: user-789
+                      qualification:
+                      - code:
+                          coding:
+                          - system: license
+                          text: MD
+                      - code:
+                          coding:
+                          - system: license_state
+                          text: NY
+                      - code:
+                          coding:
+                          - system: credentials
+                          text: Board Certified
+                      - code:
+                          coding:
+                          - system: specialty
+                          text: Cardiology
+                      telecom:
+                      - system: email
+                        value: john.doe@example.com
+                      active: true
+                      meta:
+                        versionId: '1'
+                        lastUpdated: '2024-06-18T12:34:56Z'
+                      extension:
+                      - url: https://example.com/practitioner/practice
+                        valueInteger: 101
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Practitioner
+                    id: '12345'
+                    name:
+                    - given:
+                      - John
+                      family: Doe
+                    identifier:
+                    - system: http://hl7.org/fhir/sid/us-npi
+                      value: '1122334455'
+                    - id: user_id
+                      value: user-789
+                    qualification:
+                    - code:
+                        coding:
+                        - system: license
+                        text: MD
+                    - code:
+                        coding:
+                        - system: license_state
+                        text: NY
+                    - code:
+                        coding:
+                        - system: credentials
+                        text: Board Certified
+                    - code:
+                        coding:
+                        - system: specialty
+                        text: Cardiology
+                    telecom:
+                    - system: email
+                      value: john.doe@example.com
+                    active: true
+                    meta:
+                      versionId: '1'
+                      lastUpdated: '2024-06-18T12:34:56Z'
+                    extension:
+                    - url: https://example.com/practitioner/practice
+                      valueInteger: 101
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 400
+                message: Bad request
+                status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 401
+                message: Unauthorized
+                status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 500
+                message: Internal server error
+                status: error
+    put:
+      tags:
+      - Practitioner
+      summary: Update Practitioner in Elation
+      operationId: updatePractitionerInElation
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: practitioner-id
+        in: path
+        required: true
+        description: .
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  type: object
+                  properties:
+                    requestId:
+                      type: string
+                      example: 387fab671795f9340a5bcff9e80808e5
+                    source:
+                      type: string
+                      example: ELATION
+                    quorum:
+                      type: boolean
+                      example: true
+                    notify:
+                      type: boolean
+                      example: true
+                data:
+                  type: object
+                  required:
+                  - resourceType
+                  - id
+                  - name
+                  - identifier
+                  - qualification
+                  - telecom
+                  - active
+                  - meta
+                  - extension
+                  properties:
+                    resourceType:
+                      type: string
+                      example: Practitioner
+                    id:
+                      type: string
+                      example: '12345'
+                    name:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - given
+                        - family
+                        properties:
+                          given:
+                            type: array
+                            items:
+                              type: string
+                            example:
+                            - John
+                          family:
+                            type: string
+                            example: Doe
+                    identifier:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          system:
+                            type: string
+                          value:
+                            type: string
+                          id:
+                            type: string
+                    qualification:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          code:
+                            type: object
+                            properties:
+                              coding:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    system:
+                                      type: string
+                              text:
+                                type: string
+                    telecom:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          system:
+                            type: string
+                          value:
+                            type: string
+                    active:
+                      type: boolean
+                    meta:
+                      type: object
+                      properties:
+                        versionId:
+                          type: string
+                        lastUpdated:
+                          type: string
+                    extension:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          valueInteger:
+                            type: integer
+                  example:
+                    resourceType: Practitioner
+                    id: '12345'
+                    name:
+                    - given:
+                      - John
+                      family: Doe
+                    identifier:
+                    - system: http://hl7.org/fhir/sid/us-npi
+                      value: '1122334455'
+                    - id: user_id
+                      value: user-789
+                    qualification:
+                    - code:
+                        coding:
+                        - system: license
+                        text: MD
+                    - code:
+                        coding:
+                        - system: license_state
+                        text: NY
+                    - code:
+                        coding:
+                        - system: credentials
+                        text: Board Certified
+                    - code:
+                        coding:
+                        - system: specialty
+                        text: Cardiology
+                    telecom:
+                    - system: email
+                      value: john.doe@example.com
+                    active: true
+                    meta:
+                      versionId: '1'
+                      lastUpdated: '2024-06-18T12:34:56Z'
+                    extension:
+                    - url: https://example.com/practitioner/practice
+                      valueInteger: 101
+              example:
+                context:
+                  requestId: 387fab671795f9340a5bcff9e80808e5
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Practitioner
+                  id: '12345'
+                  name:
+                  - given:
+                    - John
+                    family: Doe
+                  identifier:
+                  - system: http://hl7.org/fhir/sid/us-npi
+                    value: '1122334455'
+                  - id: user_id
+                    value: user-789
+                  qualification:
+                  - code:
+                      coding:
+                      - system: license
+                      text: MD
+                  - code:
+                      coding:
+                      - system: license_state
+                      text: NY
+                  - code:
+                      coding:
+                      - system: credentials
+                      text: Board Certified
+                  - code:
+                      coding:
+                      - system: specialty
+                      text: Cardiology
+                  telecom:
+                  - system: email
+                    value: john.doe@example.com
+                  active: true
+                  meta:
+                    versionId: '1'
+                    lastUpdated: '2024-06-18T12:34:56Z'
+                  extension:
+                  - url: https://example.com/practitioner/practice
+                    valueInteger: 101
+            example:
+              context:
+                requestId: 387fab671795f9340a5bcff9e80808e5
+                source: ELATION
+                quorum: true
+                notify: true
+              data:
+                resourceType: Practitioner
+                id: '12345'
+                name:
+                - given:
+                  - John
+                  family: Doe
+                identifier:
+                - system: http://hl7.org/fhir/sid/us-npi
+                  value: '1122334455'
+                - id: user_id
+                  value: user-789
+                qualification:
+                - code:
+                    coding:
+                    - system: license
+                    text: MD
+                - code:
+                    coding:
+                    - system: license_state
+                    text: NY
+                - code:
+                    coding:
+                    - system: credentials
+                    text: Board Certified
+                - code:
+                    coding:
+                    - system: specialty
+                    text: Cardiology
+                telecom:
+                - system: email
+                  value: john.doe@example.com
+                active: true
+                meta:
+                  versionId: '1'
+                  lastUpdated: '2024-06-18T12:34:56Z'
+                extension:
+                - url: https://example.com/practitioner/practice
+                  valueInteger: 101
+      responses:
+        '200':
+          description: Practitioner updated successfully with context wrapper
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    type: object
+                    required:
+                    - resourceType
+                    - id
+                    - name
+                    - identifier
+                    - qualification
+                    - telecom
+                    - active
+                    - meta
+                    - extension
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Practitioner
+                      id:
+                        type: string
+                        example: '12345'
+                      name:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - given
+                          - family
+                          properties:
+                            given:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - John
+                            family:
+                              type: string
+                              example: Doe
+                      identifier:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            value:
+                              type: string
+                            id:
+                              type: string
+                      qualification:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: object
+                              properties:
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                text:
+                                  type: string
+                      telecom:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            value:
+                              type: string
+                      active:
+                        type: boolean
+                      meta:
+                        type: object
+                        properties:
+                          versionId:
+                            type: string
+                          lastUpdated:
+                            type: string
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueInteger:
+                              type: integer
+                    example:
+                      resourceType: Practitioner
+                      id: '12345'
+                      name:
+                      - given:
+                        - John
+                        family: Doe
+                      identifier:
+                      - system: http://hl7.org/fhir/sid/us-npi
+                        value: '1122334455'
+                      - id: user_id
+                        value: user-789
+                      qualification:
+                      - code:
+                          coding:
+                          - system: license
+                          text: MD
+                      - code:
+                          coding:
+                          - system: license_state
+                          text: NY
+                      - code:
+                          coding:
+                          - system: credentials
+                          text: Board Certified
+                      - code:
+                          coding:
+                          - system: specialty
+                          text: Cardiology
+                      telecom:
+                      - system: email
+                        value: john.doe@example.com
+                      active: true
+                      meta:
+                        versionId: '1'
+                        lastUpdated: '2024-06-18T12:34:56Z'
+                      extension:
+                      - url: https://example.com/practitioner/practice
+                        valueInteger: 101
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Practitioner
+                    id: '12345'
+                    name:
+                    - given:
+                      - John
+                      family: Doe
+                    identifier:
+                    - system: http://hl7.org/fhir/sid/us-npi
+                      value: '1122334455'
+                    - id: user_id
+                      value: user-789
+                    qualification:
+                    - code:
+                        coding:
+                        - system: license
+                        text: MD
+                    - code:
+                        coding:
+                        - system: license_state
+                        text: NY
+                    - code:
+                        coding:
+                        - system: credentials
+                        text: Board Certified
+                    - code:
+                        coding:
+                        - system: specialty
+                        text: Cardiology
+                    telecom:
+                    - system: email
+                      value: john.doe@example.com
+                    active: true
+                    meta:
+                      versionId: '1'
+                      lastUpdated: '2024-06-18T12:34:56Z'
+                    extension:
+                    - url: https://example.com/practitioner/practice
+                      valueInteger: 101
+              example:
+                context:
+                  requestId: 387fab671795f9340a5bcff9e80808e5
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Practitioner
+                  id: '12345'
+                  name:
+                  - given:
+                    - John
+                    family: Doe
+                  identifier:
+                  - system: http://hl7.org/fhir/sid/us-npi
+                    value: '1122334455'
+                  - id: user_id
+                    value: user-789
+                  qualification:
+                  - code:
+                      coding:
+                      - system: license
+                      text: MD
+                  - code:
+                      coding:
+                      - system: license_state
+                      text: NY
+                  - code:
+                      coding:
+                      - system: credentials
+                      text: Board Certified
+                  - code:
+                      coding:
+                      - system: specialty
+                      text: Cardiology
+                  telecom:
+                  - system: email
+                    value: john.doe@example.com
+                  active: true
+                  meta:
+                    versionId: '1'
+                    lastUpdated: '2024-06-18T12:34:56Z'
+                  extension:
+                  - url: https://example.com/practitioner/practice
+                    valueInteger: 101
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 400
+                message: Bad request
+                status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 401
+                message: Unauthorized
+                status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 500
+                message: Internal server error
+                status: error
+components:
+  schemas:
+    Practitioner:
+      type: object
+      required:
+      - resourceType
+      - id
+      - name
+      - identifier
+      - qualification
+      - telecom
+      - active
+      - meta
+      - extension
+      properties:
+        resourceType:
+          type: string
+          example: Practitioner
+        id:
+          type: string
+          example: '12345'
+        name:
+          type: array
+          items:
+            type: object
+            required:
+            - given
+            - family
+            properties:
+              given:
+                type: array
+                items:
+                  type: string
+                example:
+                - John
+              family:
+                type: string
+                example: Doe
+        identifier:
+          type: array
+          items:
+            type: object
+            properties:
+              system:
+                type: string
+              value:
+                type: string
+              id:
+                type: string
+        qualification:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                  text:
+                    type: string
+        telecom:
+          type: array
+          items:
+            type: object
+            properties:
+              system:
+                type: string
+              value:
+                type: string
+        active:
+          type: boolean
+        meta:
+          type: object
+          properties:
+            versionId:
+              type: string
+            lastUpdated:
+              type: string
+        extension:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+              valueInteger:
+                type: integer
+      example:
+        resourceType: Practitioner
+        id: '12345'
+        name:
+        - given:
+          - John
+          family: Doe
+        identifier:
+        - system: http://hl7.org/fhir/sid/us-npi
+          value: '1122334455'
+        - id: user_id
+          value: user-789
+        qualification:
+        - code:
+            coding:
+            - system: license
+            text: MD
+        - code:
+            coding:
+            - system: license_state
+            text: NY
+        - code:
+            coding:
+            - system: credentials
+            text: Board Certified
+        - code:
+            coding:
+            - system: specialty
+            text: Cardiology
+        telecom:
+        - system: email
+          value: john.doe@example.com
+        active: true
+        meta:
+          versionId: '1'
+          lastUpdated: '2024-06-18T12:34:56Z'
+        extension:
+        - url: https://example.com/practitioner/practice
+          valueInteger: 101
+    PractitionerContextBundle:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 1
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    required:
+                    - resourceType
+                    - id
+                    - name
+                    - identifier
+                    - qualification
+                    - telecom
+                    - active
+                    - meta
+                    - extension
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Practitioner
+                      id:
+                        type: string
+                        example: '12345'
+                      name:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - given
+                          - family
+                          properties:
+                            given:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - John
+                            family:
+                              type: string
+                              example: Doe
+                      identifier:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            value:
+                              type: string
+                            id:
+                              type: string
+                      qualification:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: object
+                              properties:
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                text:
+                                  type: string
+                      telecom:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            value:
+                              type: string
+                      active:
+                        type: boolean
+                      meta:
+                        type: object
+                        properties:
+                          versionId:
+                            type: string
+                          lastUpdated:
+                            type: string
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueInteger:
+                              type: integer
+                    example:
+                      resourceType: Practitioner
+                      id: '12345'
+                      name:
+                      - given:
+                        - John
+                        family: Doe
+                      identifier:
+                      - system: http://hl7.org/fhir/sid/us-npi
+                        value: '1122334455'
+                      - id: user_id
+                        value: user-789
+                      qualification:
+                      - code:
+                          coding:
+                          - system: license
+                          text: MD
+                      - code:
+                          coding:
+                          - system: license_state
+                          text: NY
+                      - code:
+                          coding:
+                          - system: credentials
+                          text: Board Certified
+                      - code:
+                          coding:
+                          - system: specialty
+                          text: Cardiology
+                      telecom:
+                      - system: email
+                        value: john.doe@example.com
+                      active: true
+                      meta:
+                        versionId: '1'
+                        lastUpdated: '2024-06-18T12:34:56Z'
+                      extension:
+                      - url: https://example.com/practitioner/practice
+                        valueInteger: 101
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: Practitioner
+              id: '12345'
+              name:
+              - given:
+                - John
+                family: Doe
+              identifier:
+              - system: http://hl7.org/fhir/sid/us-npi
+                value: '1122334455'
+              - id: user_id
+                value: user-789
+              qualification:
+              - code:
+                  coding:
+                  - system: license
+                  text: MD
+              - code:
+                  coding:
+                  - system: license_state
+                  text: NY
+              - code:
+                  coding:
+                  - system: credentials
+                  text: Board Certified
+              - code:
+                  coding:
+                  - system: specialty
+                  text: Cardiology
+              telecom:
+              - system: email
+                value: john.doe@example.com
+              active: true
+              meta:
+                versionId: '1'
+                lastUpdated: '2024-06-18T12:34:56Z'
+              extension:
+              - url: https://example.com/practitioner/practice
+                valueInteger: 101
+    PractitionerContextSingle:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          required:
+          - resourceType
+          - id
+          - name
+          - identifier
+          - qualification
+          - telecom
+          - active
+          - meta
+          - extension
+          properties:
+            resourceType:
+              type: string
+              example: Practitioner
+            id:
+              type: string
+              example: '12345'
+            name:
+              type: array
+              items:
+                type: object
+                required:
+                - given
+                - family
+                properties:
+                  given:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                    - John
+                  family:
+                    type: string
+                    example: Doe
+            identifier:
+              type: array
+              items:
+                type: object
+                properties:
+                  system:
+                    type: string
+                  value:
+                    type: string
+                  id:
+                    type: string
+            qualification:
+              type: array
+              items:
+                type: object
+                properties:
+                  code:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                      text:
+                        type: string
+            telecom:
+              type: array
+              items:
+                type: object
+                properties:
+                  system:
+                    type: string
+                  value:
+                    type: string
+            active:
+              type: boolean
+            meta:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                lastUpdated:
+                  type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueInteger:
+                    type: integer
+          example:
+            resourceType: Practitioner
+            id: '12345'
+            name:
+            - given:
+              - John
+              family: Doe
+            identifier:
+            - system: http://hl7.org/fhir/sid/us-npi
+              value: '1122334455'
+            - id: user_id
+              value: user-789
+            qualification:
+            - code:
+                coding:
+                - system: license
+                text: MD
+            - code:
+                coding:
+                - system: license_state
+                text: NY
+            - code:
+                coding:
+                - system: credentials
+                text: Board Certified
+            - code:
+                coding:
+                - system: specialty
+                text: Cardiology
+            telecom:
+            - system: email
+              value: john.doe@example.com
+            active: true
+            meta:
+              versionId: '1'
+              lastUpdated: '2024-06-18T12:34:56Z'
+            extension:
+            - url: https://example.com/practitioner/practice
+              valueInteger: 101
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Practitioner
+          id: '12345'
+          name:
+          - given:
+            - John
+            family: Doe
+          identifier:
+          - system: http://hl7.org/fhir/sid/us-npi
+            value: '1122334455'
+          - id: user_id
+            value: user-789
+          qualification:
+          - code:
+              coding:
+              - system: license
+              text: MD
+          - code:
+              coding:
+              - system: license_state
+              text: NY
+          - code:
+              coding:
+              - system: credentials
+              text: Board Certified
+          - code:
+              coding:
+              - system: specialty
+              text: Cardiology
+          telecom:
+          - system: email
+            value: john.doe@example.com
+          active: true
+          meta:
+            versionId: '1'
+            lastUpdated: '2024-06-18T12:34:56Z'
+          extension:
+          - url: https://example.com/practitioner/practice
+            valueInteger: 101
+  responses:
+    Error400:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 400
+              message:
+                type: string
+                example: Bad request
+              status:
+                type: string
+                example: error
+          example:
+            statusCode: 400
+            message: Bad request
+            status: error
+    Error401:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 401
+              message:
+                type: string
+                example: Unauthorized
+              status:
+                type: string
+                example: error
+          example:
+            statusCode: 401
+            message: Unauthorized
+            status: error
+    Error500:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal server error
+              status:
+                type: string
+                example: error
+          example:
+            statusCode: 500
+            message: Internal server error
+            status: error
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    xSourceId:
+      name: x-source-id
+      in: header
+      required: true
+      schema:
+        type: string
+      description: "Source identifier header required for routing.\nAthena: 083fe714-e36e-4851-b2e7-a7166b439f67\n Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f — \U0001F534 On demand filter"
+externalDocs:
+  description: Run in Postman
+  url: https://app.postman.com/import/openapi
+security:
+- bearerAuth: []

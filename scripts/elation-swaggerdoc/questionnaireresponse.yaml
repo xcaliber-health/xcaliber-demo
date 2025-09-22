@@ -1,0 +1,1199 @@
+openapi: 3.0.3
+info:
+  title: Elation QuestionnaireResponse API
+  version: 1.0.0
+  description: 'Source Ids:
+
+    - Athena: 083fe714-e36e-4851-b2e7-a7166b439f67
+
+    - Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f
+
+
+    Questionnaire Response Endpoints
+
+    "QuestionnaireResponse" resource is used to capture and represent the answers provided by a patient or individual in response to a questionnaire. It''s a structured way to collect and exchange information obtained through questionnaires, assessments, surveys, or other forms of data gathering.
+
+
+    Example: A healthcare provider wants to assess a patient''s depression symptoms. They ask the patient to complete the PHQ-9 questionnaire, which is a standard tool for screening depression. The patient''s responses are recorded in a QuestionnaireResponse resource, which is then stored in the patient''s EHR. The healthcare provider can review the responses, calculate the PHQ-9 score, and use this information to inform their diagnosis and treatment plan.
+
+
+    Dependent Sources:
+
+
+    Patient'
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.com
+tags:
+- name: QuestionnaireResponse
+  description: Operations related to FHIR QuestionnaireResponse resources
+paths:
+  /api/v2/QuestionnaireResponse:
+    get:
+      tags:
+      - QuestionnaireResponse
+      summary: Get Elation QuestionnaireResponses
+      operationId: getElationQuestionnaireResponses
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+      - name: author
+        in: query
+        required: false
+        description: Search parameter 'author' for questionnaireresponse.
+        schema:
+          type: string
+      - name: authored
+        in: query
+        required: false
+        description: Search parameter 'authored' for questionnaireresponse.
+        schema:
+          type: string
+      - name: based-on
+        in: query
+        required: false
+        description: Search parameter 'based-on' for questionnaireresponse.
+        schema:
+          type: string
+      - name: encounter
+        in: query
+        required: false
+        description: Search parameter 'encounter' for questionnaireresponse.
+        schema:
+          type: integer
+      - name: identifier
+        in: query
+        required: false
+        description: Search parameter 'identifier' for questionnaireresponse.
+        schema:
+          type: string
+      - name: part-of
+        in: query
+        required: false
+        description: Search parameter 'part-of' for questionnaireresponse.
+        schema:
+          type: string
+      - name: questionnaire
+        in: query
+        required: false
+        description: Search parameter 'questionnaire' for questionnaireresponse.
+        schema:
+          type: string
+      - name: source
+        in: query
+        required: false
+        description: Search parameter 'source' for questionnaireresponse.
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        description: Search parameter 'status' for questionnaireresponse.
+        schema:
+          type: string
+      - name: subject
+        in: query
+        required: false
+        description: Search parameter 'subject' for questionnaireresponse.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Bundle of QuestionnaireResponse resources
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: abc123
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Bundle
+                      type:
+                        type: string
+                        example: searchset
+                      total:
+                        type: integer
+                      entry:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            resource:
+                              type: object
+                              example:
+                                resourceType: QuestionnaireResponse
+                                id: qres-1234
+                                text: Patient answered depression screening questionnaire.
+                                subject:
+                                  reference: Patient/abc567
+                                authored: '2024-06-21T14:30:00Z'
+                                extension:
+                                - url: http://tinyurl/questionnaire-response/deleted-date
+                                  valueString: '2024-07-01'
+                                - url: http://tinyurl/questionnaire-response/type
+                                  valueString: Social
+                                - url: http://tinyurl/questionnaire-response/rank
+                                  valueString: '1'
+                              properties:
+                                resourceType:
+                                  type: string
+                                  example: QuestionnaireResponse
+                                id:
+                                  type: string
+                                  example: qres-1234
+                                text:
+                                  type: string
+                                  example: Patient answered depression screening questionnaire.
+                                subject:
+                                  type: object
+                                  properties:
+                                    reference:
+                                      type: string
+                                      example: Patient/abc567
+                                authored:
+                                  type: string
+                                  format: date-time
+                                  example: '2024-06-21T14:30:00Z'
+                                extension:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      url:
+                                        type: string
+                                      valueString:
+                                        type: string
+                example:
+                  context:
+                    requestId: abc123
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 1
+                    entry:
+                    - resource:
+                        resourceType: QuestionnaireResponse
+                        id: qres-1234
+                        text: Patient answered depression screening questionnaire.
+                        subject:
+                          reference: Patient/abc567
+                        authored: '2024-06-21T14:30:00Z'
+                        extension:
+                        - url: http://tinyurl/questionnaire-response/deleted-date
+                          valueString: '2024-07-01'
+                        - url: http://tinyurl/questionnaire-response/type
+                          valueString: Social
+                        - url: http://tinyurl/questionnaire-response/rank
+                          valueString: '1'
+        '400':
+          description: Missing patient id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: patient id is missing
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 400
+                  message: patient id is missing
+                  status: error
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+                  status: error
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Resource not found
+                example:
+                  statusCode: 404
+                  message: Resource not found
+    post:
+      tags:
+      - QuestionnaireResponse
+      summary: Create QuestionnaireResponse in Elation
+      operationId: createQuestionnaireResponseInElation
+      requestBody:
+        description: FHIR QuestionnaireResponse resource to create
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  type: object
+                  properties:
+                    requestId:
+                      type: string
+                      example: abc123
+                    source:
+                      type: string
+                      example: ELATION
+                    quorum:
+                      type: boolean
+                      example: true
+                    notify:
+                      type: boolean
+                      example: true
+                data:
+                  type: object
+                  example:
+                    resourceType: QuestionnaireResponse
+                    id: qres-1234
+                    text: Patient answered depression screening questionnaire.
+                    subject:
+                      reference: Patient/abc567
+                    authored: '2024-06-21T14:30:00Z'
+                    extension:
+                    - url: http://tinyurl/questionnaire-response/deleted-date
+                      valueString: '2024-07-01'
+                    - url: http://tinyurl/questionnaire-response/type
+                      valueString: Social
+                    - url: http://tinyurl/questionnaire-response/rank
+                      valueString: '1'
+                  properties:
+                    resourceType:
+                      type: string
+                      example: QuestionnaireResponse
+                    id:
+                      type: string
+                      example: qres-1234
+                    text:
+                      type: string
+                      example: Patient answered depression screening questionnaire.
+                    subject:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                          example: Patient/abc567
+                    authored:
+                      type: string
+                      format: date-time
+                      example: '2024-06-21T14:30:00Z'
+                    extension:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          valueString:
+                            type: string
+              required:
+              - context
+              - data
+              example:
+                context:
+                  requestId: abc123
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: QuestionnaireResponse
+                  id: qres-1234
+                  text: Patient answered depression screening questionnaire.
+                  subject:
+                    reference: Patient/abc567
+                  authored: '2024-06-21T14:30:00Z'
+                  extension:
+                  - url: http://tinyurl/questionnaire-response/deleted-date
+                    valueString: '2024-07-01'
+                  - url: http://tinyurl/questionnaire-response/type
+                    valueString: Social
+                  - url: http://tinyurl/questionnaire-response/rank
+                    valueString: '1'
+      responses:
+        '201':
+          description: QuestionnaireResponse resource created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: abc123
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      status:
+                        type: string
+                example:
+                  context:
+                    requestId: abc123
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    id: qr-1234567890
+                    status: success
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: patient id is missing
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 400
+                  message: patient id is missing
+                  status: error
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+                  status: error
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Resource not found
+                example:
+                  statusCode: 404
+                  message: Resource not found
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+    parameters: []
+  /api/v2/QuestionnaireResponse/{questionnaire-response-id}:
+    get:
+      tags:
+      - QuestionnaireResponse
+      summary: Get Elation QuestionnaireResponse By ID
+      operationId: getElationQuestionnaireResponseById
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: questionnaire-response-id
+        in: path
+        required: true
+        description: .
+        schema:
+          type: string
+      responses:
+        '200':
+          description: FHIR QuestionnaireResponse resource by ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: abc123
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    type: object
+                    example:
+                      resourceType: QuestionnaireResponse
+                      id: qres-1234
+                      text: Patient answered depression screening questionnaire.
+                      subject:
+                        reference: Patient/abc567
+                      authored: '2024-06-21T14:30:00Z'
+                      extension:
+                      - url: http://tinyurl/questionnaire-response/deleted-date
+                        valueString: '2024-07-01'
+                      - url: http://tinyurl/questionnaire-response/type
+                        valueString: Social
+                      - url: http://tinyurl/questionnaire-response/rank
+                        valueString: '1'
+                    properties:
+                      resourceType:
+                        type: string
+                        example: QuestionnaireResponse
+                      id:
+                        type: string
+                        example: qres-1234
+                      text:
+                        type: string
+                        example: Patient answered depression screening questionnaire.
+                      subject:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                            example: Patient/abc567
+                      authored:
+                        type: string
+                        format: date-time
+                        example: '2024-06-21T14:30:00Z'
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+                example:
+                  context:
+                    requestId: abc123
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: QuestionnaireResponse
+                    id: qres-1234
+                    text: Patient answered depression screening questionnaire.
+                    subject:
+                      reference: Patient/abc567
+                    authored: '2024-06-21T14:30:00Z'
+                    extension:
+                    - url: http://tinyurl/questionnaire-response/deleted-date
+                      valueString: '2024-07-01'
+                    - url: http://tinyurl/questionnaire-response/type
+                      valueString: Social
+                    - url: http://tinyurl/questionnaire-response/rank
+                      valueString: '1'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+                  status: error
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Resource not found
+                example:
+                  statusCode: 404
+                  message: Resource not found
+    put:
+      tags:
+      - QuestionnaireResponse
+      summary: Update QuestionnaireResponse in Elation
+      operationId: updateQuestionnaireResponseInElation
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: questionnaire-response-id
+        in: path
+        required: true
+        description: .
+        schema:
+          type: string
+      requestBody:
+        description: FHIR QuestionnaireResponse resource to update
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  type: object
+                  properties:
+                    requestId:
+                      type: string
+                      example: abc123
+                    source:
+                      type: string
+                      example: ELATION
+                    quorum:
+                      type: boolean
+                      example: true
+                    notify:
+                      type: boolean
+                      example: true
+                data:
+                  type: object
+                  example:
+                    resourceType: QuestionnaireResponse
+                    id: qres-1234
+                    text: Patient answered depression screening questionnaire.
+                    subject:
+                      reference: Patient/abc567
+                    authored: '2024-06-21T14:30:00Z'
+                    extension:
+                    - url: http://tinyurl/questionnaire-response/deleted-date
+                      valueString: '2024-07-01'
+                    - url: http://tinyurl/questionnaire-response/type
+                      valueString: Social
+                    - url: http://tinyurl/questionnaire-response/rank
+                      valueString: '1'
+                  properties:
+                    resourceType:
+                      type: string
+                      example: QuestionnaireResponse
+                    id:
+                      type: string
+                      example: qres-1234
+                    text:
+                      type: string
+                      example: Patient answered depression screening questionnaire.
+                    subject:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                          example: Patient/abc567
+                    authored:
+                      type: string
+                      format: date-time
+                      example: '2024-06-21T14:30:00Z'
+                    extension:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          valueString:
+                            type: string
+              required:
+              - context
+              - data
+              example:
+                context:
+                  requestId: abc123
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: QuestionnaireResponse
+                  id: qres-1234
+                  text: Patient answered depression screening questionnaire.
+                  subject:
+                    reference: Patient/abc567
+                  authored: '2024-06-21T14:30:00Z'
+                  extension:
+                  - url: http://tinyurl/questionnaire-response/deleted-date
+                    valueString: '2024-07-01'
+                  - url: http://tinyurl/questionnaire-response/type
+                    valueString: Social
+                  - url: http://tinyurl/questionnaire-response/rank
+                    valueString: '1'
+      responses:
+        '200':
+          description: Updated FHIR QuestionnaireResponse resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: abc123
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    type: object
+                    example:
+                      resourceType: QuestionnaireResponse
+                      id: qres-1234
+                      text: Patient answered depression screening questionnaire.
+                      subject:
+                        reference: Patient/abc567
+                      authored: '2024-06-21T14:30:00Z'
+                      extension:
+                      - url: http://tinyurl/questionnaire-response/deleted-date
+                        valueString: '2024-07-01'
+                      - url: http://tinyurl/questionnaire-response/type
+                        valueString: Social
+                      - url: http://tinyurl/questionnaire-response/rank
+                        valueString: '1'
+                    properties:
+                      resourceType:
+                        type: string
+                        example: QuestionnaireResponse
+                      id:
+                        type: string
+                        example: qres-1234
+                      text:
+                        type: string
+                        example: Patient answered depression screening questionnaire.
+                      subject:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                            example: Patient/abc567
+                      authored:
+                        type: string
+                        format: date-time
+                        example: '2024-06-21T14:30:00Z'
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+                example:
+                  context:
+                    requestId: abc123
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: QuestionnaireResponse
+                    id: qres-1234
+                    text: Patient answered depression screening questionnaire.
+                    subject:
+                      reference: Patient/abc567
+                    authored: '2024-06-21T14:30:00Z'
+                    extension:
+                    - url: http://tinyurl/questionnaire-response/deleted-date
+                      valueString: '2024-07-01'
+                    - url: http://tinyurl/questionnaire-response/type
+                      valueString: Social
+                    - url: http://tinyurl/questionnaire-response/rank
+                      valueString: '1'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+                  status: error
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Resource not found
+                example:
+                  statusCode: 404
+                  message: Resource not found
+    delete:
+      tags:
+      - QuestionnaireResponse
+      summary: Delete QuestionnaireResponse in Elation
+      operationId: deleteQuestionnaireResponseInElation
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: questionnaire-response-id
+        in: path
+        required: true
+        description: .
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Delete success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    type: string
+                example:
+                  id: qr-1234567890
+                  status: success
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+                  status: error
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Resource not found
+                example:
+                  statusCode: 404
+                  message: Resource not found
+components:
+  schemas:
+    QuestionnaireResponse:
+      type: object
+      example:
+        resourceType: QuestionnaireResponse
+        id: qres-1234
+        text: Patient answered depression screening questionnaire.
+        subject:
+          reference: Patient/abc567
+        authored: '2024-06-21T14:30:00Z'
+        extension:
+        - url: http://tinyurl/questionnaire-response/deleted-date
+          valueString: '2024-07-01'
+        - url: http://tinyurl/questionnaire-response/type
+          valueString: Social
+        - url: http://tinyurl/questionnaire-response/rank
+          valueString: '1'
+      properties:
+        resourceType:
+          type: string
+          example: QuestionnaireResponse
+        id:
+          type: string
+          example: qres-1234
+        text:
+          type: string
+          example: Patient answered depression screening questionnaire.
+        subject:
+          type: object
+          properties:
+            reference:
+              type: string
+              example: Patient/abc567
+        authored:
+          type: string
+          format: date-time
+          example: '2024-06-21T14:30:00Z'
+        extension:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+              valueString:
+                type: string
+    Error400:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: patient id is missing
+        status:
+          type: string
+          example: error
+      example:
+        statusCode: 400
+        message: patient id is missing
+        status: error
+    Error404:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Resource not found
+      example:
+        statusCode: 404
+        message: Resource not found
+    Error500:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+        status:
+          type: string
+          example: error
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+        status: error
+    DeleteSuccess:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+      example:
+        id: qr-1234567890
+        status: success
+    CreateSuccess:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+            status:
+              type: string
+      example:
+        context:
+          requestId: abc123
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          id: qr-1234567890
+          status: success
+    BundleOfQuestionnaireResponse:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    example:
+                      resourceType: QuestionnaireResponse
+                      id: qres-1234
+                      text: Patient answered depression screening questionnaire.
+                      subject:
+                        reference: Patient/abc567
+                      authored: '2024-06-21T14:30:00Z'
+                      extension:
+                      - url: http://tinyurl/questionnaire-response/deleted-date
+                        valueString: '2024-07-01'
+                      - url: http://tinyurl/questionnaire-response/type
+                        valueString: Social
+                      - url: http://tinyurl/questionnaire-response/rank
+                        valueString: '1'
+                    properties:
+                      resourceType:
+                        type: string
+                        example: QuestionnaireResponse
+                      id:
+                        type: string
+                        example: qres-1234
+                      text:
+                        type: string
+                        example: Patient answered depression screening questionnaire.
+                      subject:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                            example: Patient/abc567
+                      authored:
+                        type: string
+                        format: date-time
+                        example: '2024-06-21T14:30:00Z'
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+      example:
+        context:
+          requestId: abc123
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: QuestionnaireResponse
+              id: qres-1234
+              text: Patient answered depression screening questionnaire.
+              subject:
+                reference: Patient/abc567
+              authored: '2024-06-21T14:30:00Z'
+              extension:
+              - url: http://tinyurl/questionnaire-response/deleted-date
+                valueString: '2024-07-01'
+              - url: http://tinyurl/questionnaire-response/type
+                valueString: Social
+              - url: http://tinyurl/questionnaire-response/rank
+                valueString: '1'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    xSourceId:
+      name: x-source-id
+      in: header
+      required: true
+      schema:
+        type: string
+      description: "Source identifier header required for routing.\nAthena: 083fe714-e36e-4851-b2e7-a7166b439f67\n Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f — \U0001F534 On demand filter"
+externalDocs:
+  description: Run in Postman
+  url: https://app.postman.com/import/openapi
+security:
+- bearerAuth: []

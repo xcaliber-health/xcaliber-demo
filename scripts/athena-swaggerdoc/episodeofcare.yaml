@@ -1,0 +1,551 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: EpisodeOfCare
+  description: FHIR EpisodeOfCare resource operations for managing patient care episodes.
+paths:
+  /api/v2/EpisodeOfCare:
+    get:
+      summary: List EpisodeOfCare resources
+      operationId: getAthenaOBEpisodes
+      tags:
+      - EpisodeOfCare
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: date'
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: type'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinEpisodeOfCare'
+              example:
+                statusCode: 400
+                message: No patientId provided
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinEpisodeOfCare'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinEpisodeOfCare'
+              example:
+                statusCode: 404
+                message: Resource not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinEpisodeOfCare'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: {}
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: EpisodeOfCare
+                        id: '12345'
+                        extension:
+                        - url: TINY_URLS.EPISODEOFCARE.INITIALEXAMDATE
+                          valueDate: '2023-01-20'
+                        - url: TINY_URLS.EPISODEOFCARE.LASTMODIFIEDBY
+                          valueString: Dr. Smith
+                        - url: TINY_URLS.EPISODEOFCARE.LASTMODIFIEDDATETIME
+                          valueDateTime: '2023-01-15T10:30:00Z'
+                        - url: TINY_URLS.EPISODEOFCARE.PASTPREGNANCY
+                          valueAnnotation:
+                            text: Previous pregnancy notes
+                            author:
+                              authorString: Dr. Johnson
+                            time: '2023-01-10T14:20:00Z'
+                        - url: TINY_URLS.EPISODEOFCARE.PRIMARYPROVIDERID
+                          valueReference:
+                            reference: Practitioner/12345
+                            display: Primary Provider Id
+                        - url: TINY_URLS.EPISODEOFCARE.CLOSEDATETIME
+                          valueDateTime: '2023-12-01T10:30:00Z'
+                        - url: TINY_URLS.EPISODEOFCARE.CLOSEREASON
+                          valueString: Treatment completed
+                        - url: TINY_URLS.EPISODEOFCARE.CREATEDBY
+                          valueString: Dr. Smith
+                        - url: TINY_URLS.EPISODEOFCARE.CREATEDDATETIME
+                          valueDateTime: '2023-01-15T09:00:00Z'
+                        - url: TINY_URLS.EPISODEOFCARE.DELIVERYDATE
+                          valueDate: '2023-09-15'
+                        - url: TINY_URLS.EPISODEOFCARE.ESTIMATEDDELIVERYDATE
+                          valueDate: '2023-09-10'
+                        type:
+                        - coding:
+                          - system: http://terminology.hl7.org/CodeSystem/episodeofcare-type
+                            code: ob
+                            display: Obstetrics
+                          text: Obstetrics Care
+components:
+  schemas:
+    response200ofgetinEpisodeOfCare:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 1
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: EpisodeOfCare
+                      id:
+                        type: string
+                        example: example
+                      meta:
+                        type: object
+                        properties:
+                          versionId:
+                            type: string
+                            example: '1'
+                          lastUpdated:
+                            type: string
+                            format: date-time
+                            example: '2022-01-01T12:00:00Z'
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueReference:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                                display:
+                                  type: string
+                            valueDateTime:
+                              type: string
+                              format: date-time
+                            valueString:
+                              type: string
+                            valueDate:
+                              type: string
+                              format: date
+                            valueAnnotation:
+                              type: object
+                              properties:
+                                text:
+                                  type: string
+                                author:
+                                  type: object
+                                  properties:
+                                    authorString:
+                                      type: string
+                                time:
+                                  type: string
+                                  format: date-time
+                      status:
+                        type: string
+                        example: active
+                      type:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                      subject:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      period:
+                        type: object
+                        properties:
+                          startDate:
+                            type: string
+                            format: date
+                          endDate:
+                            type: string
+                            format: date
+                      careTeam:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            role:
+                              type: object
+                              properties:
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                      code:
+                                        type: string
+                            member:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                      participant:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            role:
+                              type: object
+                              properties:
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                      code:
+                                        type: string
+                            member:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                      careManager:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      location:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      careActivity:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            sequence:
+                              type: integer
+                            detail:
+                              type: object
+                              properties:
+                                code:
+                                  type: object
+                                  properties:
+                                    coding:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          system:
+                                            type: string
+                                          code:
+                                            type: string
+                                          display:
+                                            type: string
+                                status:
+                                  type: string
+                                participant:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      player:
+                                        type: object
+                                        properties:
+                                          reference:
+                                            type: string
+                                      role:
+                                        type: object
+                                        properties:
+                                          coding:
+                                            type: array
+                                            items:
+                                              type: object
+                                              properties:
+                                                system:
+                                                  type: string
+                                                code:
+                                                  type: string
+          required:
+          - resourceType
+          - type
+          - total
+          - entry
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: EpisodeOfCare
+              id: example
+              meta:
+                versionId: '1'
+                lastUpdated: '2022-01-01T12:00:00Z'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/primaryproviderid
+                valueReference:
+                  reference: Practitioner/123
+                  display: Primary Provider Id
+              - url: http://xcaliber-fhir/structureDefinition/closeddatetime
+                valueDateTime: '2022-12-31T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/closedreason
+                valueString: Patient moved
+              - url: http://xcaliber-fhir/structureDefinition/createdby
+                valueString: Dr. Smith
+              - url: http://xcaliber-fhir/structureDefinition/createddatetime
+                valueDateTime: '2022-01-01T08:30:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/deliverydate
+                valueDate: '2022-06-30'
+              - url: http://xcaliber-fhir/structureDefinition/estimateddeliverydate
+                valueDate: '2022-07-15'
+              - url: http://xcaliber-fhir/structureDefinition/initialexamdate
+                valueDate: '2022-01-10'
+              - url: http://xcaliber-fhir/structureDefinition/lastmodifiedby
+                valueString: Nurse Joy
+              - url: http://xcaliber-fhir/structureDefinition/lastmodifieddatetime
+                valueDateTime: '2022-12-01T14:45:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/pastpregnancy
+                valueAnnotation:
+                  text: No significant issues in past pregnancies.
+                  author:
+                    authorString: Dr. Watson
+                  time: '2022-11-01T09:00:00Z'
+              status: active
+              type:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/care-episode-type
+                  code: chronic
+              subject:
+                reference: Patient/example
+              period:
+                startDate: '2022-01-01'
+                endDate: '2022-12-31'
+              careTeam:
+              - role:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                    code: provider
+                member:
+                  reference: Practitioner/example
+              participant:
+              - role:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                    code: patient
+                member:
+                  reference: Patient/example
+              careManager:
+                reference: Practitioner/example
+              location:
+                reference: Location/example
+              careActivity:
+              - sequence: 1
+                detail:
+                  code:
+                    coding:
+                    - system: http://snomed.info/sct
+                      code: '363636004'
+                      display: Example Procedure
+                  status: completed
+                  participant:
+                  - player:
+                      reference: Patient/example
+                    role:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/care-team-role
+                        code: patient
+    error400ofgetinEpisodeOfCare:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: No patientId provided
+        details:
+          type: string
+          example: ''
+      example:
+        statusCode: 400
+        message: No patientId provided
+    error401ofgetinEpisodeOfCare:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinEpisodeOfCare:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Resource not found
+      example:
+        statusCode: 404
+        message: Resource not found
+    error500ofgetinEpisodeOfCare:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

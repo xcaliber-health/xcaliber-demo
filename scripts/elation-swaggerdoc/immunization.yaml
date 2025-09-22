@@ -1,0 +1,1776 @@
+openapi: 3.0.3
+info:
+  title: Elation Immunization API
+  version: 1.0.0
+  description: 'Source Ids:
+
+    - Athena: 083fe714-e36e-4851-b2e7-a7166b439f67
+
+    - Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f
+
+
+    Immunization Endpoints
+
+
+    "Immunization" resource is used to record and share information about vaccinations or immunizations administered to patients. It captures details about the specific vaccine given, the date and time of administration, the healthcare provider who administered it, and any reactions or side effects experienced by the patient.
+
+
+    Example: On February 15, 2024, a patient received a flu vaccine at Albertson''s in Durango. The "Immunization" resource contains the vaccine code, lot number, expiration date, and person who administered.
+
+
+    Dependent Sources:
+
+
+    Patient
+
+    '
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.com
+tags:
+- name: Immunization
+  description: Operations related to immunizations in Elation
+paths:
+  /api/v1/Immunization:
+    get:
+      tags:
+      - Immunization
+      summary: Get Immunization
+      operationId: getImmunization
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+      - name: encounter
+        in: query
+        required: false
+        description: Search parameter 'encounter' for immunization.
+        schema:
+          type: integer
+      - name: location
+        in: query
+        required: false
+        description: Search parameter 'location' for immunization.
+        schema:
+          type: string
+      - name: lot-number
+        in: query
+        required: false
+        description: Search parameter 'lot-number' for immunization.
+        schema:
+          type: string
+      - name: manufacturer
+        in: query
+        required: false
+        description: Search parameter 'manufacturer' for immunization.
+        schema:
+          type: string
+      - name: performer
+        in: query
+        required: false
+        description: Search parameter 'performer' for immunization.
+        schema:
+          type: string
+      - name: reaction
+        in: query
+        required: false
+        description: Search parameter 'reaction' for immunization.
+        schema:
+          type: string
+      - name: reaction-date
+        in: query
+        required: false
+        description: Search parameter 'reaction-date' for immunization.
+        schema:
+          type: string
+          format: date
+      - name: reason-code
+        in: query
+        required: false
+        description: Search parameter 'reason-code' for immunization.
+        schema:
+          type: string
+          format: token
+      - name: reason-reference
+        in: query
+        required: false
+        description: Search parameter 'reason-reference' for immunization.
+        schema:
+          type: string
+      - name: series
+        in: query
+        required: false
+        description: Search parameter 'series' for immunization.
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        description: Search parameter 'status' for immunization.
+        schema:
+          type: string
+      - name: status-reason
+        in: query
+        required: false
+        description: Search parameter 'status-reason' for immunization.
+        schema:
+          type: string
+      - name: target-disease
+        in: query
+        required: false
+        description: Search parameter 'target-disease' for immunization.
+        schema:
+          type: string
+      - name: vaccine-code
+        in: query
+        required: false
+        description: Search parameter 'vaccine-code' for immunization.
+        schema:
+          type: string
+          format: token
+      responses:
+        '200':
+          description: Immunizations found (bundle in context)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Bundle
+                      type:
+                        type: string
+                        example: searchset
+                      total:
+                        type: integer
+                        example: 2
+                      entry:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            resource:
+                              $ref: '#/components/schemas/Immunization'
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: Immunization
+                        id: example
+                        meta:
+                          versionId: '1'
+                          lastUpdated: '2022-01-01T12:00:00Z'
+                        text:
+                          status: generated
+                          div: '<resource>
+
+                            <div xmlns="http://www.w3.org/1999/xhtml"><h1>Immunization</h1>
+
+                            </div>
+
+                            </resource>'
+                        identifier:
+                        - use: usual
+                          type:
+                            coding:
+                            - system: http://terminology.hl7.org/CodeSystem/v3-ImmunizationCode
+                              code: INMUN00001
+                              display: Immunization
+                          value: '1234567890'
+                        status: completed
+                        category:
+                        - coding:
+                          - system: http://terminology.hl7.org/CodeSystem/immunization-procedure
+                            code: 272443004
+                            display: Diphtheria, Tetanus, Pertussis
+                        vaccineCode:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+                            code: INN:DTaP
+                            display: DTaP
+                          text: DTaP
+                        doseSequence: 1
+                        occurrenceDateTime: '2022-01-01T12:00:00Z'
+                        performer:
+                        - reference: Practitioner/example
+                        note:
+                        - text: This is a note about the immunization.
+                        vaccinationProtocol:
+                          reference: ImmunizationProtocol/example
+                        immunizationReaction: []
+                        recipient:
+                          reference: Patient/example
+                        site:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/immunization-site
+                            code: 306033009
+                            display: Deltoid
+                          value: Deltoid
+                        manufacturedProduct:
+                          product:
+                            coding:
+                            - system: http://terminology.hl7.org/CodeSystem/vaccine-product
+                              code: INN:DTaP
+                              display: DTaP
+                            manufacturer:
+                              text: Example Vaccine Manufacturer
+                            lotNumber: '123456'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/allowed_sharing
+                          valueString: example-allowed-sharing
+                        - url: http://xcaliber-fhir/structureDefinition/description
+                          valueString: example description of immunization
+                        - url: http://xcaliber-fhir/structureDefinition/manufacturer_code
+                          valueString: EX12345
+                        - url: http://xcaliber-fhir/structureDefinition/vis
+                          valueString: example-vis-value
+                        - url: http://xcaliber-fhir/structureDefinition/publicity_code
+                          valueString: publicity-001
+                        - url: http://xcaliber-fhir/structureDefinition/patient_consent
+                          valueString: granted
+                        - url: http://xcaliber-fhir/structureDefinition/priority_population
+                          valueString: child
+                        - url: http://xcaliber-fhir/structureDefinition/ndc
+                          valueString: 12345-6789
+                        - url: http://xcaliber-fhir/structureDefinition/vaccine
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/cdc_name
+                            valueString: CDC DTaP
+                          - url: http://xcaliber-fhir/structureDefinition/cdc_type
+                            valueString: DTaP-type
+                        - url: http://xcaliber-fhir/structureDefinition/deleted_date
+                          valueDate: '2022-01-02'
+                        - url: http://xcaliber-fhir/structureDefinition/type
+                          valueString: example-type
+                        - url: http://xcaliber-fhir/structureDefinition/rank
+                          valueString: '1'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 400
+                message: Bad request
+                status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 401
+                message: Unauthorized
+                status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 500
+                message: Internal server error
+                status: error
+    post:
+      tags:
+      - Immunization
+      summary: Create Immunization
+      operationId: createImmunization
+      requestBody:
+        description: Immunization object in context
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  type: object
+                  properties:
+                    requestId:
+                      type: string
+                      example: 387fab671795f9340a5bcff9e80808e5
+                    source:
+                      type: string
+                      example: ELATION
+                    quorum:
+                      type: boolean
+                      example: true
+                    notify:
+                      type: boolean
+                      example: true
+                data:
+                  $ref: '#/components/schemas/Immunization'
+              example:
+                context:
+                  requestId: 387fab671795f9340a5bcff9e80808e5
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Immunization
+                  id: example
+                  meta:
+                    versionId: '1'
+                    lastUpdated: '2022-01-01T12:00:00Z'
+                  text:
+                    status: generated
+                    div: '<resource>
+
+                      <div xmlns="http://www.w3.org/1999/xhtml"><h1>Immunization</h1>
+
+                      </div>
+
+                      </resource>'
+                  identifier:
+                  - use: usual
+                    type:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/v3-ImmunizationCode
+                        code: INMUN00001
+                        display: Immunization
+                    value: '1234567890'
+                  status: completed
+                  category:
+                  - coding:
+                    - system: http://terminology.hl7.org/CodeSystem/immunization-procedure
+                      code: 272443004
+                      display: Diphtheria, Tetanus, Pertussis
+                  vaccineCode:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+                      code: INN:DTaP
+                      display: DTaP
+                    text: DTaP
+                  doseSequence: 1
+                  occurrenceDateTime: '2022-01-01T12:00:00Z'
+                  performer:
+                  - reference: Practitioner/example
+                  note:
+                  - text: This is a note about the immunization.
+                  vaccinationProtocol:
+                    reference: ImmunizationProtocol/example
+                  immunizationReaction: []
+                  recipient:
+                    reference: Patient/example
+                  site:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/immunization-site
+                      code: 306033009
+                      display: Deltoid
+                    value: Deltoid
+                  manufacturedProduct:
+                    product:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/vaccine-product
+                        code: INN:DTaP
+                        display: DTaP
+                      manufacturer:
+                        text: Example Vaccine Manufacturer
+                      lotNumber: '123456'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/allowed_sharing
+                    valueString: example-allowed-sharing
+                  - url: http://xcaliber-fhir/structureDefinition/description
+                    valueString: example description of immunization
+                  - url: http://xcaliber-fhir/structureDefinition/manufacturer_code
+                    valueString: EX12345
+                  - url: http://xcaliber-fhir/structureDefinition/vis
+                    valueString: example-vis-value
+                  - url: http://xcaliber-fhir/structureDefinition/publicity_code
+                    valueString: publicity-001
+                  - url: http://xcaliber-fhir/structureDefinition/patient_consent
+                    valueString: granted
+                  - url: http://xcaliber-fhir/structureDefinition/priority_population
+                    valueString: child
+                  - url: http://xcaliber-fhir/structureDefinition/ndc
+                    valueString: 12345-6789
+                  - url: http://xcaliber-fhir/structureDefinition/vaccine
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/cdc_name
+                      valueString: CDC DTaP
+                    - url: http://xcaliber-fhir/structureDefinition/cdc_type
+                      valueString: DTaP-type
+                  - url: http://xcaliber-fhir/structureDefinition/deleted_date
+                    valueDate: '2022-01-02'
+                  - url: http://xcaliber-fhir/structureDefinition/type
+                    valueString: example-type
+                  - url: http://xcaliber-fhir/structureDefinition/rank
+                    valueString: '1'
+            example:
+              context:
+                requestId: 387fab671795f9340a5bcff9e80808e5
+                source: ELATION
+                quorum: true
+                notify: true
+              data:
+                resourceType: Immunization
+                id: example
+                meta:
+                  versionId: '1'
+                  lastUpdated: '2022-01-01T12:00:00Z'
+                text:
+                  status: generated
+                  div: '<resource>
+
+                    <div xmlns="http://www.w3.org/1999/xhtml"><h1>Immunization</h1>
+
+                    </div>
+
+                    </resource>'
+                identifier:
+                - use: usual
+                  type:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/v3-ImmunizationCode
+                      code: INMUN00001
+                      display: Immunization
+                  value: '1234567890'
+                status: completed
+                category:
+                - coding:
+                  - system: http://terminology.hl7.org/CodeSystem/immunization-procedure
+                    code: 272443004
+                    display: Diphtheria, Tetanus, Pertussis
+                vaccineCode:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+                    code: INN:DTaP
+                    display: DTaP
+                  text: DTaP
+                doseSequence: 1
+                occurrenceDateTime: '2022-01-01T12:00:00Z'
+                performer:
+                - reference: Practitioner/example
+                note:
+                - text: This is a note about the immunization.
+                vaccinationProtocol:
+                  reference: ImmunizationProtocol/example
+                immunizationReaction: []
+                recipient:
+                  reference: Patient/example
+                site:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/immunization-site
+                    code: 306033009
+                    display: Deltoid
+                  value: Deltoid
+                manufacturedProduct:
+                  product:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/vaccine-product
+                      code: INN:DTaP
+                      display: DTaP
+                    manufacturer:
+                      text: Example Vaccine Manufacturer
+                    lotNumber: '123456'
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/allowed_sharing
+                  valueString: example-allowed-sharing
+                - url: http://xcaliber-fhir/structureDefinition/description
+                  valueString: example description of immunization
+                - url: http://xcaliber-fhir/structureDefinition/manufacturer_code
+                  valueString: EX12345
+                - url: http://xcaliber-fhir/structureDefinition/vis
+                  valueString: example-vis-value
+                - url: http://xcaliber-fhir/structureDefinition/publicity_code
+                  valueString: publicity-001
+                - url: http://xcaliber-fhir/structureDefinition/patient_consent
+                  valueString: granted
+                - url: http://xcaliber-fhir/structureDefinition/priority_population
+                  valueString: child
+                - url: http://xcaliber-fhir/structureDefinition/ndc
+                  valueString: 12345-6789
+                - url: http://xcaliber-fhir/structureDefinition/vaccine
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/cdc_name
+                    valueString: CDC DTaP
+                  - url: http://xcaliber-fhir/structureDefinition/cdc_type
+                    valueString: DTaP-type
+                - url: http://xcaliber-fhir/structureDefinition/deleted_date
+                  valueDate: '2022-01-02'
+                - url: http://xcaliber-fhir/structureDefinition/type
+                  valueString: example-type
+                - url: http://xcaliber-fhir/structureDefinition/rank
+                  valueString: '1'
+      responses:
+        '201':
+          description: Immunization created (IdStatus in context)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: abc123
+                      status:
+                        type: string
+                        example: success
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    id: abc123
+                    status: success
+              example:
+                context:
+                  requestId: 387fab671795f9340a5bcff9e80808e5
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  id: abc123
+                  status: success
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 400
+                message: Bad request
+                status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 401
+                message: Unauthorized
+                status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 500
+                message: Internal server error
+                status: error
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+    parameters: []
+  /api/v1/Immunization/{immunization-id}:
+    get:
+      tags:
+      - Immunization
+      summary: Get Immunization by ID
+      operationId: getImmunizationById
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: immunization-id
+        in: path
+        required: true
+        description: .
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Immunization found (context wrapper)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    $ref: '#/components/schemas/Immunization'
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Immunization
+                    id: example
+                    meta:
+                      versionId: '1'
+                      lastUpdated: '2022-01-01T12:00:00Z'
+                    text:
+                      status: generated
+                      div: '<resource>
+
+                        <div xmlns="http://www.w3.org/1999/xhtml"><h1>Immunization</h1>
+
+                        </div>
+
+                        </resource>'
+                    identifier:
+                    - use: usual
+                      type:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/v3-ImmunizationCode
+                          code: INMUN00001
+                          display: Immunization
+                      value: '1234567890'
+                    status: completed
+                    category:
+                    - coding:
+                      - system: http://terminology.hl7.org/CodeSystem/immunization-procedure
+                        code: 272443004
+                        display: Diphtheria, Tetanus, Pertussis
+                    vaccineCode:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+                        code: INN:DTaP
+                        display: DTaP
+                      text: DTaP
+                    doseSequence: 1
+                    occurrenceDateTime: '2022-01-01T12:00:00Z'
+                    performer:
+                    - reference: Practitioner/example
+                    note:
+                    - text: This is a note about the immunization.
+                    vaccinationProtocol:
+                      reference: ImmunizationProtocol/example
+                    immunizationReaction: []
+                    recipient:
+                      reference: Patient/example
+                    site:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/immunization-site
+                        code: 306033009
+                        display: Deltoid
+                      value: Deltoid
+                    manufacturedProduct:
+                      product:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/vaccine-product
+                          code: INN:DTaP
+                          display: DTaP
+                        manufacturer:
+                          text: Example Vaccine Manufacturer
+                        lotNumber: '123456'
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/allowed_sharing
+                      valueString: example-allowed-sharing
+                    - url: http://xcaliber-fhir/structureDefinition/description
+                      valueString: example description of immunization
+                    - url: http://xcaliber-fhir/structureDefinition/manufacturer_code
+                      valueString: EX12345
+                    - url: http://xcaliber-fhir/structureDefinition/vis
+                      valueString: example-vis-value
+                    - url: http://xcaliber-fhir/structureDefinition/publicity_code
+                      valueString: publicity-001
+                    - url: http://xcaliber-fhir/structureDefinition/patient_consent
+                      valueString: granted
+                    - url: http://xcaliber-fhir/structureDefinition/priority_population
+                      valueString: child
+                    - url: http://xcaliber-fhir/structureDefinition/ndc
+                      valueString: 12345-6789
+                    - url: http://xcaliber-fhir/structureDefinition/vaccine
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/cdc_name
+                        valueString: CDC DTaP
+                      - url: http://xcaliber-fhir/structureDefinition/cdc_type
+                        valueString: DTaP-type
+                    - url: http://xcaliber-fhir/structureDefinition/deleted_date
+                      valueDate: '2022-01-02'
+                    - url: http://xcaliber-fhir/structureDefinition/type
+                      valueString: example-type
+                    - url: http://xcaliber-fhir/structureDefinition/rank
+                      valueString: '1'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 400
+                message: Bad request
+                status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 401
+                message: Unauthorized
+                status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 500
+                message: Internal server error
+                status: error
+    put:
+      tags:
+      - Immunization
+      summary: Update Immunization
+      operationId: updateImmunization
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: immunization-id
+        in: path
+        required: true
+        description: .
+        schema:
+          type: string
+      requestBody:
+        description: Immunization update object in context
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  type: object
+                  properties:
+                    requestId:
+                      type: string
+                      example: 387fab671795f9340a5bcff9e80808e5
+                    source:
+                      type: string
+                      example: ELATION
+                    quorum:
+                      type: boolean
+                      example: true
+                    notify:
+                      type: boolean
+                      example: true
+                data:
+                  $ref: '#/components/schemas/Immunization'
+              example:
+                context:
+                  requestId: 387fab671795f9340a5bcff9e80808e5
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Immunization
+                  id: example
+                  meta:
+                    versionId: '1'
+                    lastUpdated: '2022-01-01T12:00:00Z'
+                  text:
+                    status: generated
+                    div: '<resource>
+
+                      <div xmlns="http://www.w3.org/1999/xhtml"><h1>Immunization</h1>
+
+                      </div>
+
+                      </resource>'
+                  identifier:
+                  - use: usual
+                    type:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/v3-ImmunizationCode
+                        code: INMUN00001
+                        display: Immunization
+                    value: '1234567890'
+                  status: completed
+                  category:
+                  - coding:
+                    - system: http://terminology.hl7.org/CodeSystem/immunization-procedure
+                      code: 272443004
+                      display: Diphtheria, Tetanus, Pertussis
+                  vaccineCode:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+                      code: INN:DTaP
+                      display: DTaP
+                    text: DTaP
+                  doseSequence: 1
+                  occurrenceDateTime: '2022-01-01T12:00:00Z'
+                  performer:
+                  - reference: Practitioner/example
+                  note:
+                  - text: This is a note about the immunization.
+                  vaccinationProtocol:
+                    reference: ImmunizationProtocol/example
+                  immunizationReaction: []
+                  recipient:
+                    reference: Patient/example
+                  site:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/immunization-site
+                      code: 306033009
+                      display: Deltoid
+                    value: Deltoid
+                  manufacturedProduct:
+                    product:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/vaccine-product
+                        code: INN:DTaP
+                        display: DTaP
+                      manufacturer:
+                        text: Example Vaccine Manufacturer
+                      lotNumber: '123456'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/allowed_sharing
+                    valueString: example-allowed-sharing
+                  - url: http://xcaliber-fhir/structureDefinition/description
+                    valueString: example description of immunization
+                  - url: http://xcaliber-fhir/structureDefinition/manufacturer_code
+                    valueString: EX12345
+                  - url: http://xcaliber-fhir/structureDefinition/vis
+                    valueString: example-vis-value
+                  - url: http://xcaliber-fhir/structureDefinition/publicity_code
+                    valueString: publicity-001
+                  - url: http://xcaliber-fhir/structureDefinition/patient_consent
+                    valueString: granted
+                  - url: http://xcaliber-fhir/structureDefinition/priority_population
+                    valueString: child
+                  - url: http://xcaliber-fhir/structureDefinition/ndc
+                    valueString: 12345-6789
+                  - url: http://xcaliber-fhir/structureDefinition/vaccine
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/cdc_name
+                      valueString: CDC DTaP
+                    - url: http://xcaliber-fhir/structureDefinition/cdc_type
+                      valueString: DTaP-type
+                  - url: http://xcaliber-fhir/structureDefinition/deleted_date
+                    valueDate: '2022-01-02'
+                  - url: http://xcaliber-fhir/structureDefinition/type
+                    valueString: example-type
+                  - url: http://xcaliber-fhir/structureDefinition/rank
+                    valueString: '1'
+      responses:
+        '200':
+          description: Immunization updated (bundle in context, same as GET 200)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Bundle
+                      type:
+                        type: string
+                        example: searchset
+                      total:
+                        type: integer
+                        example: 2
+                      entry:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            resource:
+                              $ref: '#/components/schemas/Immunization'
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: Immunization
+                        id: example
+                        meta:
+                          versionId: '1'
+                          lastUpdated: '2022-01-01T12:00:00Z'
+                        text:
+                          status: generated
+                          div: '<resource>
+
+                            <div xmlns="http://www.w3.org/1999/xhtml"><h1>Immunization</h1>
+
+                            </div>
+
+                            </resource>'
+                        identifier:
+                        - use: usual
+                          type:
+                            coding:
+                            - system: http://terminology.hl7.org/CodeSystem/v3-ImmunizationCode
+                              code: INMUN00001
+                              display: Immunization
+                          value: '1234567890'
+                        status: completed
+                        category:
+                        - coding:
+                          - system: http://terminology.hl7.org/CodeSystem/immunization-procedure
+                            code: 272443004
+                            display: Diphtheria, Tetanus, Pertussis
+                        vaccineCode:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+                            code: INN:DTaP
+                            display: DTaP
+                          text: DTaP
+                        doseSequence: 1
+                        occurrenceDateTime: '2022-01-01T12:00:00Z'
+                        performer:
+                        - reference: Practitioner/example
+                        note:
+                        - text: This is a note about the immunization.
+                        vaccinationProtocol:
+                          reference: ImmunizationProtocol/example
+                        immunizationReaction: []
+                        recipient:
+                          reference: Patient/example
+                        site:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/immunization-site
+                            code: 306033009
+                            display: Deltoid
+                          value: Deltoid
+                        manufacturedProduct:
+                          product:
+                            coding:
+                            - system: http://terminology.hl7.org/CodeSystem/vaccine-product
+                              code: INN:DTaP
+                              display: DTaP
+                            manufacturer:
+                              text: Example Vaccine Manufacturer
+                            lotNumber: '123456'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/allowed_sharing
+                          valueString: example-allowed-sharing
+                        - url: http://xcaliber-fhir/structureDefinition/description
+                          valueString: example description of immunization
+                        - url: http://xcaliber-fhir/structureDefinition/manufacturer_code
+                          valueString: EX12345
+                        - url: http://xcaliber-fhir/structureDefinition/vis
+                          valueString: example-vis-value
+                        - url: http://xcaliber-fhir/structureDefinition/publicity_code
+                          valueString: publicity-001
+                        - url: http://xcaliber-fhir/structureDefinition/patient_consent
+                          valueString: granted
+                        - url: http://xcaliber-fhir/structureDefinition/priority_population
+                          valueString: child
+                        - url: http://xcaliber-fhir/structureDefinition/ndc
+                          valueString: 12345-6789
+                        - url: http://xcaliber-fhir/structureDefinition/vaccine
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/cdc_name
+                            valueString: CDC DTaP
+                          - url: http://xcaliber-fhir/structureDefinition/cdc_type
+                            valueString: DTaP-type
+                        - url: http://xcaliber-fhir/structureDefinition/deleted_date
+                          valueDate: '2022-01-02'
+                        - url: http://xcaliber-fhir/structureDefinition/type
+                          valueString: example-type
+                        - url: http://xcaliber-fhir/structureDefinition/rank
+                          valueString: '1'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 400
+                message: Bad request
+                status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 401
+                message: Unauthorized
+                status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 500
+                message: Internal server error
+                status: error
+    delete:
+      tags:
+      - Immunization
+      summary: Delete Immunization
+      operationId: deleteImmunization
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: immunization-id
+        in: path
+        required: true
+        description: .
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Immunization deleted
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 400
+                message: Bad request
+                status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 401
+                message: Unauthorized
+                status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 500
+                message: Internal server error
+                status: error
+components:
+  schemas:
+    Immunization:
+      type: object
+      description: FHIR Immunization resource (permissive schema with vendor extensions allowed).
+      additionalProperties: true
+      example:
+        resourceType: Immunization
+        id: example
+        meta:
+          versionId: '1'
+          lastUpdated: '2022-01-01T12:00:00Z'
+        text:
+          status: generated
+          div: '<resource>
+
+            <div xmlns="http://www.w3.org/1999/xhtml"><h1>Immunization</h1>
+
+            </div>
+
+            </resource>'
+        identifier:
+        - use: usual
+          type:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/v3-ImmunizationCode
+              code: INMUN00001
+              display: Immunization
+          value: '1234567890'
+        status: completed
+        category:
+        - coding:
+          - system: http://terminology.hl7.org/CodeSystem/immunization-procedure
+            code: 272443004
+            display: Diphtheria, Tetanus, Pertussis
+        vaccineCode:
+          coding:
+          - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+            code: INN:DTaP
+            display: DTaP
+          text: DTaP
+        doseSequence: 1
+        occurrenceDateTime: '2022-01-01T12:00:00Z'
+        performer:
+        - reference: Practitioner/example
+        note:
+        - text: This is a note about the immunization.
+        vaccinationProtocol:
+          reference: ImmunizationProtocol/example
+        immunizationReaction: []
+        recipient:
+          reference: Patient/example
+        site:
+          coding:
+          - system: http://terminology.hl7.org/CodeSystem/immunization-site
+            code: 306033009
+            display: Deltoid
+          value: Deltoid
+        manufacturedProduct:
+          product:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/vaccine-product
+              code: INN:DTaP
+              display: DTaP
+            manufacturer:
+              text: Example Vaccine Manufacturer
+            lotNumber: '123456'
+        extension:
+        - url: http://xcaliber-fhir/structureDefinition/allowed_sharing
+          valueString: example-allowed-sharing
+        - url: http://xcaliber-fhir/structureDefinition/description
+          valueString: example description of immunization
+        - url: http://xcaliber-fhir/structureDefinition/manufacturer_code
+          valueString: EX12345
+        - url: http://xcaliber-fhir/structureDefinition/vis
+          valueString: example-vis-value
+        - url: http://xcaliber-fhir/structureDefinition/publicity_code
+          valueString: publicity-001
+        - url: http://xcaliber-fhir/structureDefinition/patient_consent
+          valueString: granted
+        - url: http://xcaliber-fhir/structureDefinition/priority_population
+          valueString: child
+        - url: http://xcaliber-fhir/structureDefinition/ndc
+          valueString: 12345-6789
+        - url: http://xcaliber-fhir/structureDefinition/vaccine
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/cdc_name
+            valueString: CDC DTaP
+          - url: http://xcaliber-fhir/structureDefinition/cdc_type
+            valueString: DTaP-type
+        - url: http://xcaliber-fhir/structureDefinition/deleted_date
+          valueDate: '2022-01-02'
+        - url: http://xcaliber-fhir/structureDefinition/type
+          valueString: example-type
+        - url: http://xcaliber-fhir/structureDefinition/rank
+          valueString: '1'
+    ImmunizationContextSingle:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          $ref: '#/components/schemas/Immunization'
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Immunization
+          id: example
+          meta:
+            versionId: '1'
+            lastUpdated: '2022-01-01T12:00:00Z'
+          text:
+            status: generated
+            div: '<resource>
+
+              <div xmlns="http://www.w3.org/1999/xhtml"><h1>Immunization</h1>
+
+              </div>
+
+              </resource>'
+          identifier:
+          - use: usual
+            type:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/v3-ImmunizationCode
+                code: INMUN00001
+                display: Immunization
+            value: '1234567890'
+          status: completed
+          category:
+          - coding:
+            - system: http://terminology.hl7.org/CodeSystem/immunization-procedure
+              code: 272443004
+              display: Diphtheria, Tetanus, Pertussis
+          vaccineCode:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+              code: INN:DTaP
+              display: DTaP
+            text: DTaP
+          doseSequence: 1
+          occurrenceDateTime: '2022-01-01T12:00:00Z'
+          performer:
+          - reference: Practitioner/example
+          note:
+          - text: This is a note about the immunization.
+          vaccinationProtocol:
+            reference: ImmunizationProtocol/example
+          immunizationReaction: []
+          recipient:
+            reference: Patient/example
+          site:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/immunization-site
+              code: 306033009
+              display: Deltoid
+            value: Deltoid
+          manufacturedProduct:
+            product:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/vaccine-product
+                code: INN:DTaP
+                display: DTaP
+              manufacturer:
+                text: Example Vaccine Manufacturer
+              lotNumber: '123456'
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/allowed_sharing
+            valueString: example-allowed-sharing
+          - url: http://xcaliber-fhir/structureDefinition/description
+            valueString: example description of immunization
+          - url: http://xcaliber-fhir/structureDefinition/manufacturer_code
+            valueString: EX12345
+          - url: http://xcaliber-fhir/structureDefinition/vis
+            valueString: example-vis-value
+          - url: http://xcaliber-fhir/structureDefinition/publicity_code
+            valueString: publicity-001
+          - url: http://xcaliber-fhir/structureDefinition/patient_consent
+            valueString: granted
+          - url: http://xcaliber-fhir/structureDefinition/priority_population
+            valueString: child
+          - url: http://xcaliber-fhir/structureDefinition/ndc
+            valueString: 12345-6789
+          - url: http://xcaliber-fhir/structureDefinition/vaccine
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/cdc_name
+              valueString: CDC DTaP
+            - url: http://xcaliber-fhir/structureDefinition/cdc_type
+              valueString: DTaP-type
+          - url: http://xcaliber-fhir/structureDefinition/deleted_date
+            valueDate: '2022-01-02'
+          - url: http://xcaliber-fhir/structureDefinition/type
+            valueString: example-type
+          - url: http://xcaliber-fhir/structureDefinition/rank
+            valueString: '1'
+    ImmunizationContextBundle:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 2
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    $ref: '#/components/schemas/Immunization'
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 2
+          entry:
+          - resource:
+              resourceType: Immunization
+              id: example
+              meta:
+                versionId: '1'
+                lastUpdated: '2022-01-01T12:00:00Z'
+              text:
+                status: generated
+                div: '<resource>
+
+                  <div xmlns="http://www.w3.org/1999/xhtml"><h1>Immunization</h1>
+
+                  </div>
+
+                  </resource>'
+              identifier:
+              - use: usual
+                type:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/v3-ImmunizationCode
+                    code: INMUN00001
+                    display: Immunization
+                value: '1234567890'
+              status: completed
+              category:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/immunization-procedure
+                  code: 272443004
+                  display: Diphtheria, Tetanus, Pertussis
+              vaccineCode:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+                  code: INN:DTaP
+                  display: DTaP
+                text: DTaP
+              doseSequence: 1
+              occurrenceDateTime: '2022-01-01T12:00:00Z'
+              performer:
+              - reference: Practitioner/example
+              note:
+              - text: This is a note about the immunization.
+              vaccinationProtocol:
+                reference: ImmunizationProtocol/example
+              immunizationReaction: []
+              recipient:
+                reference: Patient/example
+              site:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/immunization-site
+                  code: 306033009
+                  display: Deltoid
+                value: Deltoid
+              manufacturedProduct:
+                product:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/vaccine-product
+                    code: INN:DTaP
+                    display: DTaP
+                  manufacturer:
+                    text: Example Vaccine Manufacturer
+                  lotNumber: '123456'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/allowed_sharing
+                valueString: example-allowed-sharing
+              - url: http://xcaliber-fhir/structureDefinition/description
+                valueString: example description of immunization
+              - url: http://xcaliber-fhir/structureDefinition/manufacturer_code
+                valueString: EX12345
+              - url: http://xcaliber-fhir/structureDefinition/vis
+                valueString: example-vis-value
+              - url: http://xcaliber-fhir/structureDefinition/publicity_code
+                valueString: publicity-001
+              - url: http://xcaliber-fhir/structureDefinition/patient_consent
+                valueString: granted
+              - url: http://xcaliber-fhir/structureDefinition/priority_population
+                valueString: child
+              - url: http://xcaliber-fhir/structureDefinition/ndc
+                valueString: 12345-6789
+              - url: http://xcaliber-fhir/structureDefinition/vaccine
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/cdc_name
+                  valueString: CDC DTaP
+                - url: http://xcaliber-fhir/structureDefinition/cdc_type
+                  valueString: DTaP-type
+              - url: http://xcaliber-fhir/structureDefinition/deleted_date
+                valueDate: '2022-01-02'
+              - url: http://xcaliber-fhir/structureDefinition/type
+                valueString: example-type
+              - url: http://xcaliber-fhir/structureDefinition/rank
+                valueString: '1'
+    IdStatusContext:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              example: abc123
+            status:
+              type: string
+              example: success
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          id: abc123
+          status: success
+  responses:
+    Error400:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 400
+              message:
+                type: string
+                example: Bad request
+              status:
+                type: string
+                example: error
+          example:
+            statusCode: 400
+            message: Bad request
+            status: error
+    Error401:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 401
+              message:
+                type: string
+                example: Unauthorized
+              status:
+                type: string
+                example: error
+          example:
+            statusCode: 401
+            message: Unauthorized
+            status: error
+    Error500:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal server error
+              status:
+                type: string
+                example: error
+          example:
+            statusCode: 500
+            message: Internal server error
+            status: error
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    xSourceId:
+      name: x-source-id
+      in: header
+      required: true
+      schema:
+        type: string
+      description: "Source identifier header required for routing.\nAthena: 083fe714-e36e-4851-b2e7-a7166b439f67\n Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f — \U0001F534 On demand filter"
+externalDocs:
+  description: Run in Postman
+  url: https://app.postman.com/import/openapi
+security:
+- bearerAuth: []

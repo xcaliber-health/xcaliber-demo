@@ -1,58 +1,43 @@
 {
-  "name": "create-react-app",
-  "version": "5.0.0",
+  "name": "xcaliber-demo",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.15",
-    "@emotion/react": "latest",
-    "@emotion/styled": "latest",
-    "@material-ui/styles": "^4.11.5",
-    "@mui/icons-material": "^5.10.9",
-    "@mui/lab": "^5.0.0-alpha.104",
-    "@mui/material": "latest",
-    "@mui/x-date-pickers": "^5.0.5",
-    "@reduxjs/toolkit": "^1.8.6",
-    "ag-grid-community": "^28.2.1",
-    "ag-grid-enterprise": "^28.2.1",
-    "ag-grid-react": "^28.2.1",
-    "axios": "^1.1.3",
-    "date-fns": "^2.29.3",
-    "dayjs": "^1.11.6",
-    "dotenv": "^16.0.3",
-    "fs": "^0.0.1-security",
-    "graphql": "^16.6.0",
-    "lodash": "^4.17.21",
-    "moment": "^2.29.4",
-    "moment-timezone": "^0.5.39",
-    "os": "^0.1.2",
-    "path": "^0.12.7",
-    "react": "latest",
-    "react-bootstrap": "^2.5.0",
-    "react-dom": "latest",
-    "react-redux": "^8.0.4",
-    "react-router-dom": "^6.4.2",
-    "react-scripts": "latest",
-    "recharts": "^2.1.15",
-    "redux": "^4.2.0",
-    "socket.io-client": "^4.5.4",
-    "tinymce": "^6.2.0"
+    "@monaco-editor/react": "^4.7.0",
+    "axios": "^1.12.2",
+    "date-fns": "^4.1.0",
+    "file-saver": "^2.0.5",
+    "jspdf": "^3.0.3",
+    "lucide-react": "^0.543.0",
+    "moment": "^2.30.1",
+    "react": "^19.1.1",
+    "react-big-calendar": "^1.19.4",
+    "react-calendar": "^6.0.0",
+    "react-dom": "^19.1.1",
+    "react-hot-toast": "^2.6.0",
+    "react-json-pretty": "^2.2.0",
+    "react-router-dom": "^7.8.2",
+    "react18-json-view": "^0.2.9"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.33.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.3.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "vite": "^7.1.2"
   }
 }

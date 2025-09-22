@@ -1,0 +1,1832 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as 
+    Fire) is a standard for exchanging healthcare information electronically. It
+    is designed to be a modern, flexible, and web-based alternative to older, 
+    more cumbersome standards like HL7 v2. FHIR uses a RESTful API specification
+    to define how to interact with Resources - this means it uses standard HTTP 
+    verbs (GET, POST, PUT, DELETE). Resources are the fundamental units of data 
+    in FHIR; they can represent anything from patient demographics to clinical 
+    observations to medications.
+servers:
+  - url: https://xchange-sandbox.xcaliberapis.com
+  - url: https://your.api.server
+tags:
+  - name: QuestionnaireResponse
+    description: Operations related to QuestionnaireResponse resources
+paths:
+  /api/v2/QuestionnaireResponse:
+    post:
+      tags:
+        - QuestionnaireResponse
+        - Category-> medical-history
+        - Category-> gynHistory
+      summary: Create QuestionnaireResponse
+      operationId: createQuestionnaireResponse
+      parameters:
+        - &id001
+          name: x-source-id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Source system identifier.
+        - &id002
+          name: x-interaction-mode
+          in: header
+          required: true
+          schema:
+            type: boolean
+          description: Interaction mode flag (true/false).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractedSchema1014'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response201ofpostinQuestionnaireResponse'
+              examples:
+                main:
+                  summary: General QuestionnaireResponse
+                  value:
+                    context:
+                      requestId: abc123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                      departmentId: '150'
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            resourceType: QuestionnaireResponse
+                            id: QR_12345
+                            meta:
+                              profile:
+                                - http://hl7.org/fhir/us/core/StructureDefinition/us-core-questionnaire-response
+                              versionId: 4.0.1
+                            status: completed
+                            subject:
+                              reference: Patient/123
+                            authoredOn: '2022-01-01T12:00:00Z'
+                            questionnaire:
+                              reference: Questionnaire/ABC
+                            extension:
+                              - url: 
+                                  http://xcaliber-fhir/structureDefinition/category
+                                valueString: general
+                              - url: 
+                                  http://xcaliber-fhir/structureDefinition/section-note
+                                valueString: Patient notes go here.
+                              - url: 
+                                  http://xcaliber-fhir/structureDefinition/third-party-username
+                                valueString: external-user
+                              - url: 
+                                  http://xcaliber-fhir/structureDefinition/patient-facing-call
+                                valueBoolean: true
+                            item:
+                              - sequence: 1
+                                linkId: Q1
+                                question:
+                                  reference: Question/Q1
+                                text: What is your age?
+                                item:
+                                  type:
+                                    coding:
+                                      - system: 
+                                          http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                                        code: open
+                                  valueQuantity:
+                                    value: 30
+                                    unitCode: Y
+                                  extension:
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/last-updated-by
+                                      valueString: dr.jones
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/deprecated
+                                      valueString: 'false'
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/note
+                                      valueString: Age estimated by patient
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/note-last-updated-by
+                                      valueString: nurse.smith
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/note-last-updated-date
+                                      valueString: '2021-12-31'
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/ordering
+                                      valueInteger: 1
+                              - sequence: 2
+                                linkId: Q2
+                                question:
+                                  reference: Question/Q2
+                                text: What is your gender?
+                                item:
+                                  type:
+                                    coding:
+                                      - system: 
+                                          http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                                        code: single-selection
+                                  valueCodeableConcept:
+                                    coding:
+                                      - system: 
+                                          http://terminology.hl7.org/CodeSystem/administrative-gender
+                                        code: M
+                                      - system: 
+                                          http://terminology.hl7.org/CodeSystem/administrative-gender
+                                        code: F
+                                  extension:
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/questionnaire-response-other-gender
+                                      valueCodeableConcept:
+                                        text: Other
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/diagnosis
+                                      valueCodeableConcept:
+                                        coding:
+                                          - system: 
+                                              http://example.org/system/icd
+                                            code: Z99.1
+                                            display: Female-to-male transgender 
+                                              status
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/answer-last-modified-by
+                                      valueString: admin.user
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/answer-last-modified-datetime
+                                      valueString: '2022-01-01T10:00:00Z'
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/delete
+                                      valueBoolean: false
+                gyn-history:
+                  summary: Gynecological History
+                  value:
+                    context:
+                      requestId: gy-2
+                      source: ATHENA
+                      quorum: true
+                      notify: false
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            resourceType: QuestionnaireResponse
+                            id: QR_GYNHIST_2
+                            status: completed
+                            category: gyn-history
+                            item:
+                              - linkId: '1'
+                                text: Age at first menstruation?
+                                answer:
+                                  - valueInteger: 13
+                medical-history:
+                  summary: Medical History
+                  value:
+                    context:
+                      requestId: mh-1
+                      source: ATHENA
+                      quorum: true
+                      notify: false
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            resourceType: QuestionnaireResponse
+                            id: QR_MEDHIST_1
+                            status: completed
+                            category: medical-history
+                            item:
+                              - linkId: '1'
+                                text: Do you have allergies?
+                                answer:
+                                  - valueBoolean: false
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinQuestionnaireResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinQuestionnaireResponse'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinQuestionnaireResponse'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Server error details
+    get:
+      tags:
+        - QuestionnaireResponse
+      summary: Get list of QuestionnaireResponse
+      operationId: getListOfQuestionnaireResponse
+      parameters:
+        - *id001
+        - *id002
+        - &id003
+          name: author
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: author'
+        - &id004
+          name: authored
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: authored'
+        - &id005
+          name: based-on
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: based-on'
+        - &id006
+          name: encounter
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: encounter'
+        - &id007
+          name: identifier
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: identifier'
+        - &id008
+          name: part-of
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: part-of'
+        - &id009
+          name: patient
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 'Filter: patient'
+        - &id010
+          name: questionnaire
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: questionnaire'
+        - &id011
+          name: source
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: source'
+        - &id012
+          name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: status'
+        - &id013
+          name: subject
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: subject'
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+        - name: category
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinQuestionnaireResponse'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinQuestionnaireResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinQuestionnaireResponse'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinQuestionnaireResponse'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Server error details
+  /api/v2/QuestionnaireResponse/{questionnaire-response-id}:
+    get:
+      tags:
+        - QuestionnaireResponse
+      summary: Get QuestionnaireResponse by ID
+      operationId: getQuestionnaireResponseById
+      parameters:
+        - name: questionnaire-response-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the QuestionnaireResponse to retrieve.
+            Required for fetching a specific response."'
+        - *id001
+        - *id002
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinQuestionnaireResponsequestionnaireresponseid'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinQuestionnaireResponsequestionnaireresponseid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinQuestionnaireResponsequestionnaireresponseid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinQuestionnaireResponsequestionnaireresponseid'
+              example:
+                statusCode: 404
+                message: Resource not found
+                details: The requested resource does not exist
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinQuestionnaireResponsequestionnaireresponseid'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Server error details
+    delete:
+      tags:
+        - QuestionnaireResponse
+      summary: Delete QuestionnaireResponse
+      operationId: deleteQuestionnaireResponse
+      parameters:
+        - name: questionnaire-response-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the QuestionnaireResponse to delete.
+            Required for deletion operation."'
+        - *id001
+        - *id002
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofdeleteinQuestionnaireResponsequestionnaireresponseid'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofdeleteinQuestionnaireResponsequestionnaireresponseid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinQuestionnaireResponsequestionnaireresponseid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofdeleteinQuestionnaireResponsequestionnaireresponseid'
+              example:
+                statusCode: 404
+                message: Resource not found
+                details: The requested resource does not exist
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinQuestionnaireResponsequestionnaireresponseid'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Server error details
+  /QuestionnaireResponse/_history:
+    get:
+      tags:
+        - QuestionnaireResponse
+        - Category-> screening-questionnaire
+        - Category-> medical-history
+        - Category-> perinantal-history
+        - Category-> gynHistory
+      summary: Get QuestionnaireResponse version history
+      operationId: getAthenaQuestionnaireResponseHistoriesV2
+      parameters:
+        - *id001
+        - *id002
+        - *id003
+        - *id004
+        - *id005
+        - *id006
+        - *id007
+        - *id008
+        - *id009
+        - *id010
+        - *id011
+        - *id012
+        - *id013
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+        - name: category
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinQuestionnaireResponseidhistorycategorygynhistory'
+              examples:
+                main:
+                  summary: General QuestionnaireResponse
+                  value:
+                    context:
+                      requestId: abc123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            resourceType: QuestionnaireResponse
+                            id: QR_12345
+                            meta:
+                              profile:
+                                - http://hl7.org/fhir/us/core/StructureDefinition/us-core-questionnaire-response
+                              versionId: 4.0.1
+                            status: completed
+                            subject:
+                              reference: Patient/123
+                            authoredOn: '2022-01-01T12:00:00Z'
+                            questionnaire:
+                              reference: Questionnaire/ABC
+                            extension:
+                              - url: 
+                                  http://xcaliber-fhir/structureDefinition/category
+                                valueString: general
+                              - url: 
+                                  http://xcaliber-fhir/structureDefinition/section-note
+                                valueString: Patient notes go here.
+                              - url: 
+                                  http://xcaliber-fhir/structureDefinition/third-party-username
+                                valueString: external-user
+                              - url: 
+                                  http://xcaliber-fhir/structureDefinition/patient-facing-call
+                                valueBoolean: true
+                            item:
+                              - sequence: 1
+                                linkId: Q1
+                                question:
+                                  reference: Question/Q1
+                                text: What is your age?
+                                item:
+                                  type:
+                                    coding:
+                                      - system: 
+                                          http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                                        code: open
+                                  valueQuantity:
+                                    value: 30
+                                    unitCode: Y
+                                  extension:
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/last-updated-by
+                                      valueString: dr.jones
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/deprecated
+                                      valueString: 'false'
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/note
+                                      valueString: Age estimated by patient
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/note-last-updated-by
+                                      valueString: nurse.smith
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/note-last-updated-date
+                                      valueString: '2021-12-31'
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/ordering
+                                      valueInteger: 1
+                              - sequence: 2
+                                linkId: Q2
+                                question:
+                                  reference: Question/Q2
+                                text: What is your gender?
+                                item:
+                                  type:
+                                    coding:
+                                      - system: 
+                                          http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                                        code: single-selection
+                                  valueCodeableConcept:
+                                    coding:
+                                      - system: 
+                                          http://terminology.hl7.org/CodeSystem/administrative-gender
+                                        code: M
+                                      - system: 
+                                          http://terminology.hl7.org/CodeSystem/administrative-gender
+                                        code: F
+                                  extension:
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/questionnaire-response-other-gender
+                                      valueCodeableConcept:
+                                        text: Other
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/diagnosis
+                                      valueCodeableConcept:
+                                        coding:
+                                          - system: 
+                                              http://example.org/system/icd
+                                            code: Z99.1
+                                            display: Female-to-male transgender 
+                                              status
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/answer-last-modified-by
+                                      valueString: admin.user
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/answer-last-modified-datetime
+                                      valueString: '2022-01-01T10:00:00Z'
+                                    - url: 
+                                        http://xcaliber-fhir/structureDefinition/delete
+                                      valueBoolean: false
+                medical-history:
+                  summary: Medical History
+                  value:
+                    context:
+                      requestId: mh-1
+                      source: ATHENA
+                      quorum: true
+                      notify: false
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            resourceType: QuestionnaireResponse
+                            id: QR_MEDHIST_1
+                            status: completed
+                            category: medical-history
+                            item:
+                              - linkId: '1'
+                                text: Do you have allergies?
+                                answer:
+                                  - valueBoolean: false
+                gyn-history:
+                  summary: Gynecological History
+                  value:
+                    context:
+                      requestId: gy-2
+                      source: ATHENA
+                      quorum: true
+                      notify: false
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            resourceType: QuestionnaireResponse
+                            id: QR_GYNHIST_2
+                            status: completed
+                            category: gyn-history
+                            item:
+                              - linkId: '1'
+                                text: Age at first menstruation?
+                                answer:
+                                  - valueInteger: 13
+                screening-questionnaire:
+                  summary: Screening Questionnaire
+                  value:
+                    context:
+                      requestId: sc-3
+                      source: ATHENA
+                      quorum: true
+                      notify: false
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            resourceType: QuestionnaireResponse
+                            id: QR_SCREEN_3
+                            status: completed
+                            category: screening-questionnaire
+                            item:
+                              - linkId: '1'
+                                text: Have you had a flu shot?
+                                answer:
+                                  - valueBoolean: true
+                perinatal-history:
+                  summary: Perinatal History
+                  value:
+                    context:
+                      requestId: ph-4
+                      source: ATHENA
+                      quorum: true
+                      notify: false
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            resourceType: QuestionnaireResponse
+                            id: QR_PERINATAL_4
+                            status: completed
+                            category: perinatal-history
+                            item:
+                              - linkId: '1'
+                                text: Birth weight?
+                                answer:
+                                  - valueQuantity:
+                                      value: 3.2
+                                      unit: kg
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinQuestionnaireResponseidhistorycategorygynhistory'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinQuestionnaireResponseidhistorycategorygynhistory'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinQuestionnaireResponseidhistorycategorygynhistory'
+              example:
+                statusCode: 404
+                message: Resource not found
+                details: The requested resource does not exist
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinQuestionnaireResponseidhistorycategorygynhistory'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Server error details
+components:
+  schemas:
+    ExtractedSchema1014:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+          departmentId: '150'
+        data:
+          resourceType: QuestionnaireResponse
+          id: QR_12345
+          meta:
+            profile:
+              - http://hl7.org/fhir/us/core/StructureDefinition/us-core-questionnaire-response
+            versionId: 4.0.1
+          status: completed
+          subject:
+            reference: Patient/123
+          authoredOn: '2022-01-01T12:00:00Z'
+          questionnaire:
+            reference: Questionnaire/ABC
+          extension:
+            - url: http://xcaliber-fhir/structureDefinition/category
+              valueString: general
+            - url: http://xcaliber-fhir/structureDefinition/section-note
+              valueString: Patient notes go here.
+            - url: http://xcaliber-fhir/structureDefinition/third-party-username
+              valueString: external-user
+            - url: http://xcaliber-fhir/structureDefinition/patient-facing-call
+              valueBoolean: true
+          item:
+            - sequence: 1
+              linkId: Q1
+              question:
+                reference: Question/Q1
+              text: What is your age?
+              item:
+                type:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                      code: open
+                valueQuantity:
+                  value: 30
+                  unitCode: Y
+                extension:
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/last-updated-by
+                    valueString: dr.jones
+                  - url: http://xcaliber-fhir/structureDefinition/deprecated
+                    valueString: 'false'
+                  - url: http://xcaliber-fhir/structureDefinition/note
+                    valueString: Age estimated by patient
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/note-last-updated-by
+                    valueString: nurse.smith
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/note-last-updated-date
+                    valueString: '2021-12-31'
+                  - url: http://xcaliber-fhir/structureDefinition/ordering
+                    valueInteger: 1
+            - sequence: 2
+              linkId: Q2
+              question:
+                reference: Question/Q2
+              text: What is your gender?
+              item:
+                type:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                      code: single-selection
+                valueCodeableConcept:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/administrative-gender
+                      code: M
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/administrative-gender
+                      code: F
+                extension:
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/questionnaire-response-other-gender
+                    valueCodeableConcept:
+                      text: Other
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosis
+                    valueCodeableConcept:
+                      coding:
+                        - system: http://example.org/system/icd
+                          code: Z99.1
+                          display: Female-to-male transgender status
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/answer-last-modified-by
+                    valueString: admin.user
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/answer-last-modified-datetime
+                    valueString: '2022-01-01T10:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/delete
+                    valueBoolean: false
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+          description: '"Questionnaire response data. Contains answers to the questionnaire
+            questions."
+
+
+            Let me know if this meets your requirements or if you''d like me to make
+            any adjustments!'
+    response201ofpostinQuestionnaireResponse:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+          departmentId: '150'
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: QuestionnaireResponse
+                id: QR_12345
+                meta:
+                  profile:
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-questionnaire-response
+                  versionId: 4.0.1
+                status: completed
+                subject:
+                  reference: Patient/123
+                authoredOn: '2022-01-01T12:00:00Z'
+                questionnaire:
+                  reference: Questionnaire/ABC
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/category
+                    valueString: general
+                  - url: http://xcaliber-fhir/structureDefinition/section-note
+                    valueString: Patient notes go here.
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/third-party-username
+                    valueString: external-user
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/patient-facing-call
+                    valueBoolean: true
+                item:
+                  - sequence: 1
+                    linkId: Q1
+                    question:
+                      reference: Question/Q1
+                    text: What is your age?
+                    item:
+                      type:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                            code: open
+                      valueQuantity:
+                        value: 30
+                        unitCode: Y
+                      extension:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/last-updated-by
+                          valueString: dr.jones
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/deprecated
+                          valueString: 'false'
+                        - url: http://xcaliber-fhir/structureDefinition/note
+                          valueString: Age estimated by patient
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/note-last-updated-by
+                          valueString: nurse.smith
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/note-last-updated-date
+                          valueString: '2021-12-31'
+                        - url: http://xcaliber-fhir/structureDefinition/ordering
+                          valueInteger: 1
+                  - sequence: 2
+                    linkId: Q2
+                    question:
+                      reference: Question/Q2
+                    text: What is your gender?
+                    item:
+                      type:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                            code: single-selection
+                      valueCodeableConcept:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/administrative-gender
+                            code: M
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/administrative-gender
+                            code: F
+                      extension:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-response-other-gender
+                          valueCodeableConcept:
+                            text: Other
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/diagnosis
+                          valueCodeableConcept:
+                            coding:
+                              - system: http://example.org/system/icd
+                                code: Z99.1
+                                display: Female-to-male transgender status
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/answer-last-modified-by
+                          valueString: admin.user
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/answer-last-modified-datetime
+                          valueString: '2022-01-01T10:00:00Z'
+                        - url: http://xcaliber-fhir/structureDefinition/delete
+                          valueBoolean: false
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+    error400ofpostinQuestionnaireResponse:
+      type: object
+      example:
+        statusCode: 400
+        message: Practice ID is required
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Practice ID is required
+        details:
+          type: string
+    error401ofpostinQuestionnaireResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofpostinQuestionnaireResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Server error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+    response200ofgetinQuestionnaireResponse:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: QuestionnaireResponse
+                id: QR_12345
+                meta:
+                  profile:
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-questionnaire-response
+                  versionId: 4.0.1
+                status: completed
+                subject:
+                  reference: Patient/123
+                authoredOn: '2022-01-01T12:00:00Z'
+                questionnaire:
+                  reference: Questionnaire/ABC
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/category
+                    valueString: general
+                  - url: http://xcaliber-fhir/structureDefinition/section-note
+                    valueString: Patient notes go here.
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/third-party-username
+                    valueString: external-user
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/patient-facing-call
+                    valueBoolean: true
+                item:
+                  - sequence: 1
+                    linkId: Q1
+                    question:
+                      reference: Question/Q1
+                    text: What is your age?
+                    item:
+                      type:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                            code: open
+                      valueQuantity:
+                        value: 30
+                        unitCode: Y
+                      extension:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/last-updated-by
+                          valueString: dr.jones
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/deprecated
+                          valueString: 'false'
+                        - url: http://xcaliber-fhir/structureDefinition/note
+                          valueString: Age estimated by patient
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/note-last-updated-by
+                          valueString: nurse.smith
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/note-last-updated-date
+                          valueString: '2021-12-31'
+                        - url: http://xcaliber-fhir/structureDefinition/ordering
+                          valueInteger: 1
+                  - sequence: 2
+                    linkId: Q2
+                    question:
+                      reference: Question/Q2
+                    text: What is your gender?
+                    item:
+                      type:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                            code: single-selection
+                      valueCodeableConcept:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/administrative-gender
+                            code: M
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/administrative-gender
+                            code: F
+                      extension:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-response-other-gender
+                          valueCodeableConcept:
+                            text: Other
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/diagnosis
+                          valueCodeableConcept:
+                            coding:
+                              - system: http://example.org/system/icd
+                                code: Z99.1
+                                display: Female-to-male transgender status
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/answer-last-modified-by
+                          valueString: admin.user
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/answer-last-modified-datetime
+                          valueString: '2022-01-01T10:00:00Z'
+                        - url: http://xcaliber-fhir/structureDefinition/delete
+                          valueBoolean: false
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+    error400ofgetinQuestionnaireResponse:
+      type: object
+      example:
+        statusCode: 400
+        message: Practice ID is required
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Practice ID is required
+        details:
+          type: string
+    error401ofgetinQuestionnaireResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinQuestionnaireResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Server error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+    response200ofgetinQuestionnaireResponsequestionnaireresponseid:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: QuestionnaireResponse
+                id: QR_12345
+                meta:
+                  profile:
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-questionnaire-response
+                  versionId: 4.0.1
+                status: completed
+                subject:
+                  reference: Patient/123
+                authoredOn: '2022-01-01T12:00:00Z'
+                questionnaire:
+                  reference: Questionnaire/ABC
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/category
+                    valueString: general
+                  - url: http://xcaliber-fhir/structureDefinition/section-note
+                    valueString: Patient notes go here.
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/third-party-username
+                    valueString: external-user
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/patient-facing-call
+                    valueBoolean: true
+                item:
+                  - sequence: 1
+                    linkId: Q1
+                    question:
+                      reference: Question/Q1
+                    text: What is your age?
+                    item:
+                      type:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                            code: open
+                      valueQuantity:
+                        value: 30
+                        unitCode: Y
+                      extension:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/last-updated-by
+                          valueString: dr.jones
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/deprecated
+                          valueString: 'false'
+                        - url: http://xcaliber-fhir/structureDefinition/note
+                          valueString: Age estimated by patient
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/note-last-updated-by
+                          valueString: nurse.smith
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/note-last-updated-date
+                          valueString: '2021-12-31'
+                        - url: http://xcaliber-fhir/structureDefinition/ordering
+                          valueInteger: 1
+                  - sequence: 2
+                    linkId: Q2
+                    question:
+                      reference: Question/Q2
+                    text: What is your gender?
+                    item:
+                      type:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                            code: single-selection
+                      valueCodeableConcept:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/administrative-gender
+                            code: M
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/administrative-gender
+                            code: F
+                      extension:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-response-other-gender
+                          valueCodeableConcept:
+                            text: Other
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/diagnosis
+                          valueCodeableConcept:
+                            coding:
+                              - system: http://example.org/system/icd
+                                code: Z99.1
+                                display: Female-to-male transgender status
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/answer-last-modified-by
+                          valueString: admin.user
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/answer-last-modified-datetime
+                          valueString: '2022-01-01T10:00:00Z'
+                        - url: http://xcaliber-fhir/structureDefinition/delete
+                          valueBoolean: false
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+    error400ofgetinQuestionnaireResponsequestionnaireresponseid:
+      type: object
+      example:
+        statusCode: 400
+        message: Practice ID is required
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Practice ID is required
+        details:
+          type: string
+    error401ofgetinQuestionnaireResponsequestionnaireresponseid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinQuestionnaireResponsequestionnaireresponseid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Resource not found
+        details:
+          type: string
+          example: The requested resource does not exist
+      example:
+        statusCode: 404
+        message: Resource not found
+        details: The requested resource does not exist
+    error500ofgetinQuestionnaireResponsequestionnaireresponseid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Server error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+    response200ofdeleteinQuestionnaireResponsequestionnaireresponseid:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: QuestionnaireResponse
+                id: QR_12345
+                meta:
+                  profile:
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-questionnaire-response
+                  versionId: 4.0.1
+                status: completed
+                subject:
+                  reference: Patient/123
+                authoredOn: '2022-01-01T12:00:00Z'
+                questionnaire:
+                  reference: Questionnaire/ABC
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/category
+                    valueString: general
+                  - url: http://xcaliber-fhir/structureDefinition/section-note
+                    valueString: Patient notes go here.
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/third-party-username
+                    valueString: external-user
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/patient-facing-call
+                    valueBoolean: true
+                item:
+                  - sequence: 1
+                    linkId: Q1
+                    question:
+                      reference: Question/Q1
+                    text: What is your age?
+                    item:
+                      type:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                            code: open
+                      valueQuantity:
+                        value: 30
+                        unitCode: Y
+                      extension:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/last-updated-by
+                          valueString: dr.jones
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/deprecated
+                          valueString: 'false'
+                        - url: http://xcaliber-fhir/structureDefinition/note
+                          valueString: Age estimated by patient
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/note-last-updated-by
+                          valueString: nurse.smith
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/note-last-updated-date
+                          valueString: '2021-12-31'
+                        - url: http://xcaliber-fhir/structureDefinition/ordering
+                          valueInteger: 1
+                  - sequence: 2
+                    linkId: Q2
+                    question:
+                      reference: Question/Q2
+                    text: What is your gender?
+                    item:
+                      type:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                            code: single-selection
+                      valueCodeableConcept:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/administrative-gender
+                            code: M
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/administrative-gender
+                            code: F
+                      extension:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-response-other-gender
+                          valueCodeableConcept:
+                            text: Other
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/diagnosis
+                          valueCodeableConcept:
+                            coding:
+                              - system: http://example.org/system/icd
+                                code: Z99.1
+                                display: Female-to-male transgender status
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/answer-last-modified-by
+                          valueString: admin.user
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/answer-last-modified-datetime
+                          valueString: '2022-01-01T10:00:00Z'
+                        - url: http://xcaliber-fhir/structureDefinition/delete
+                          valueBoolean: false
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+    error400ofdeleteinQuestionnaireResponsequestionnaireresponseid:
+      type: object
+      example:
+        statusCode: 400
+        message: Practice ID is required
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Practice ID is required
+        details:
+          type: string
+    error401ofdeleteinQuestionnaireResponsequestionnaireresponseid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofdeleteinQuestionnaireResponsequestionnaireresponseid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Resource not found
+        details:
+          type: string
+          example: The requested resource does not exist
+      example:
+        statusCode: 404
+        message: Resource not found
+        details: The requested resource does not exist
+    error500ofdeleteinQuestionnaireResponsequestionnaireresponseid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Server error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+    response200ofgetinQuestionnaireResponseidhistorycategorygynhistory:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: QuestionnaireResponse
+                id: QR_12345
+                meta:
+                  profile:
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-questionnaire-response
+                  versionId: 4.0.1
+                status: completed
+                subject:
+                  reference: Patient/123
+                authoredOn: '2022-01-01T12:00:00Z'
+                questionnaire:
+                  reference: Questionnaire/ABC
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/category
+                    valueString: general
+                  - url: http://xcaliber-fhir/structureDefinition/section-note
+                    valueString: Patient notes go here.
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/third-party-username
+                    valueString: external-user
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/patient-facing-call
+                    valueBoolean: true
+                item:
+                  - sequence: 1
+                    linkId: Q1
+                    question:
+                      reference: Question/Q1
+                    text: What is your age?
+                    item:
+                      type:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                            code: open
+                      valueQuantity:
+                        value: 30
+                        unitCode: Y
+                      extension:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/last-updated-by
+                          valueString: dr.jones
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/deprecated
+                          valueString: 'false'
+                        - url: http://xcaliber-fhir/structureDefinition/note
+                          valueString: Age estimated by patient
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/note-last-updated-by
+                          valueString: nurse.smith
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/note-last-updated-date
+                          valueString: '2021-12-31'
+                        - url: http://xcaliber-fhir/structureDefinition/ordering
+                          valueInteger: 1
+                  - sequence: 2
+                    linkId: Q2
+                    question:
+                      reference: Question/Q2
+                    text: What is your gender?
+                    item:
+                      type:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/questionnaire-item-type
+                            code: single-selection
+                      valueCodeableConcept:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/administrative-gender
+                            code: M
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/administrative-gender
+                            code: F
+                      extension:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-response-other-gender
+                          valueCodeableConcept:
+                            text: Other
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/diagnosis
+                          valueCodeableConcept:
+                            coding:
+                              - system: http://example.org/system/icd
+                                code: Z99.1
+                                display: Female-to-male transgender status
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/answer-last-modified-by
+                          valueString: admin.user
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/answer-last-modified-datetime
+                          valueString: '2022-01-01T10:00:00Z'
+                        - url: http://xcaliber-fhir/structureDefinition/delete
+                          valueBoolean: false
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+    error400ofgetinQuestionnaireResponseidhistorycategorygynhistory:
+      type: object
+      example:
+        statusCode: 400
+        message: Practice ID is required
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Practice ID is required
+        details:
+          type: string
+    error401ofgetinQuestionnaireResponseidhistorycategorygynhistory:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinQuestionnaireResponseidhistorycategorygynhistory:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Resource not found
+        details:
+          type: string
+          example: The requested resource does not exist
+      example:
+        statusCode: 404
+        message: Resource not found
+        details: The requested resource does not exist
+    error500ofgetinQuestionnaireResponseidhistorycategorygynhistory:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Server error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - Auth: []

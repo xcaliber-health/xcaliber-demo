@@ -1,0 +1,897 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as 
+    Fire) is a standard for exchanging healthcare information electronically. It
+    is designed to be a modern, flexible, and web-based alternative to older, 
+    more cumbersome standards like HL7 v2. FHIR uses a RESTful API specification
+    to define how to interact with Resources - this means it uses standard HTTP 
+    verbs (GET, POST, PUT, DELETE). Resources are the fundamental units of data 
+    in FHIR; they can represent anything from patient demographics to clinical 
+    observations to medications.
+servers:
+  - url: https://xchange-sandbox.xcaliberapis.com
+  - url: https://your.api.server
+tags:
+  - name: Person
+    description: Operations related to Person resources in Athena
+paths:
+  /api/v2/Person:
+    get:
+      tags:
+        - Person
+      summary: Get Person
+      operationId: getAthenaPersons
+      parameters:
+        - &id001
+          name: x-source-id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Source system identifier.
+        - &id002
+          name: x-interaction-mode
+          in: header
+          required: true
+          schema:
+            type: boolean
+          description: Interaction mode flag (true/false).
+        - name: identifier
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: identifier'
+        - name: link
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: link'
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: name'
+        - name: organization
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: organization'
+        - name: patient
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 'Filter: patient'
+        - name: practitioner
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: practitioner'
+        - name: relatedperson
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: relatedperson'
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinPerson'
+              example: &id003
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Bundle
+                  type: searchset
+                  total: 1
+                  entry:
+                    - resourceType: Person
+                      id: '12345'
+                      name:
+                        - family: Doe
+                          given:
+                            - John
+                          text: John Doe
+                      identifier:
+                        - system: http://hl7.org/fhir/sid/us-npi
+                          value: '1234567890'
+                        - system: http://example.org/fhir/identifier/federalid
+                          value: '987654321'
+                      telecom:
+                        - system: email
+                          value: john.doe@example.com
+                      gender: male
+                      contained:
+                        - resourceType: PractitionerRole
+                          specialty:
+                            - coding:
+                                - display: Cardiology
+                                  code: '1234'
+                      extension:
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/accepting-New-Patients
+                          valueString: 'yes'
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/billable
+                          valueString: 'true'
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/create-Encounter-On-Check-In
+                          valueString: 'yes'
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/create-Encounter-Provider-Id-List
+                          valueString: provider123
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/entity-Type
+                          valueString: individual
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/hide-In-Portal
+                          valueString: 'no'
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/home-Department
+                          valueString: Cardiology
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/other-Provider-Id-List
+                          valueString: otherProvider456
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/personal-Pronouns
+                          valueString: they/them
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/provider-Group-List
+                          valueString: group789
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/provider-Type
+                          valueString: specialist
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/provider-Type-Id
+                          valueString: typeId101
+                        - url: 
+                            http://example.org/fhir/extension/providerusername
+                          valueString: jdoe
+                        - url: 
+                            http://example.org/fhir/extension/scheduleresourcetype
+                          valueString: resourceTypeExample
+                        - url: http://example.org/fhir/extension/schedulingname
+                          valueString: Scheduling Name
+                        - url: http://example.org/fhir/extension/specialty
+                          valueString: Cardiology
+                        - url: http://example.org/fhir/extension/specialtyid
+                          valueInteger: 123
+                        - url: 
+                            http://example.org/fhir/extension/supervisingproviderid
+                          valueInteger: 456
+                        - url: 
+                            http://example.org/fhir/extension/supervisingproviderusername
+                          valueString: supervisor123
+                        - url: 
+                            http://example.org/fhir/extension/usualdepartmentid
+                          valueInteger: 789
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinPerson'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinPerson'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinPerson'
+  /api/v2/Person/{person-id}:
+    get:
+      tags:
+        - Person
+      summary: Get Person by ID
+      operationId: getAthenaPersonById
+      parameters:
+        - name: person-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the Person resource to retrieve. Example:
+            ''12345''"
+
+
+            This description is concise, clear, and provides an example to help API
+            users understand the expected format of the `person-id` parameter.'
+        - *id001
+        - *id002
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinPersonpersonid'
+              example: *id003
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinPersonpersonid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinPersonpersonid'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinPersonpersonid'
+components:
+  schemas:
+    response200ofgetinPerson:
+      type: object
+      required:
+        - context
+        - data
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          required:
+            - bundle
+          properties:
+            bundle:
+              type: object
+              required:
+                - resourceType
+                - type
+                - total
+                - entry
+              properties:
+                resourceType:
+                  type: string
+                  enum:
+                    - Bundle
+                type:
+                  type: string
+                  enum:
+                    - searchset
+                total:
+                  type: integer
+                entry:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - resource
+                    properties:
+                      resource:
+                        type: object
+                        required:
+                          - resourceType
+                          - id
+                          - name
+                        properties:
+                          resourceType:
+                            type: string
+                            enum:
+                              - Person
+                          id:
+                            type: string
+                          extension:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                valueString:
+                                  type: string
+                                valueInteger:
+                                  type: integer
+                          name:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                use:
+                                  type: string
+                                family:
+                                  type: string
+                                given:
+                                  type: array
+                                  items:
+                                    type: string
+                          telecom:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                value:
+                                  type: string
+                          gender:
+                            type: object
+                            properties:
+                              value:
+                                type: string
+                              coding:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    system:
+                                      type: string
+                                    code:
+                                      type: string
+                          birthDate:
+                            type: string
+                          address:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                use:
+                                  type: string
+                                line:
+                                  type: array
+                                  items:
+                                    type: string
+                                city:
+                                  type: string
+                                state:
+                                  type: string
+                                postalCode:
+                                  type: string
+                                country:
+                                  type: string
+                          managingOrganization:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                          maritalStatus:
+                            type: object
+                            properties:
+                              coding:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    system:
+                                      type: string
+                                    code:
+                                      type: string
+                          photo:
+                            type: object
+                            properties:
+                              contentType:
+                                type: string
+                              url:
+                                type: string
+                          multipleBirth:
+                            type: boolean
+                          deceasedBoolean:
+                            type: boolean
+                          deceasedDate:
+                            nullable: true
+                          deceasedCircumstance:
+                            nullable: true
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                bundle:
+                  resourceType: Bundle
+                  type: searchset
+                  total: 1
+                  entry:
+                    - resource:
+                        resourceType: Person
+                        id: example
+                        extension:
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.ACCEPTINGNEWPATIENTSYN
+                            valueString: true
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.BILLABLE
+                            valueString: 'true'
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.CREATEENCOUNTERONCHECKINYN
+                            valueString: true
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.CREATEENCOUNTERPROVIDERIDLIST
+                            valueString: 123,456
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.ENTITYTYPE
+                            valueString: Person
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.HIDEINPORTALYN
+                            valueString: false
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.HOMEDEPARTMENT
+                            valueString: DeptA
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.OTHERPROVIDERIDLIST
+                            valueString: 789,101
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.PERSONALPRONOUNS
+                            valueString: he/him
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.PROVIDERGROUPLIST
+                            valueString: grp1,grp2
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.PROVIDERTYPE
+                            valueString: physician
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.PROVIDERTYPEID
+                            valueString: '42'
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.PROVIDERUSERNAME
+                            valueString: johndoe
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.SCHEDULERESOURCETYPE
+                            valueString: resourceType1
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.SCHEDULINGNAME
+                            valueString: Dr John
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.SPECIALTY
+                            valueString: Cardiology
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.SPECIALTYID
+                            valueInteger: 301
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.SUPERVISINGPROVIDERID
+                            valueInteger: 998
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.SUPERVISINGPROVIDERUSERNAME
+                            valueString: janesmith
+                          - url: 
+                              http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.USUALDEPARTMENTID
+                            valueInteger: 555
+                        name:
+                          - use: official
+                            family: Doe
+                            given:
+                              - John
+                        telecom:
+                          - system: email
+                            value: john.doe@example.com
+                        gender:
+                          value: male
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/administrative-gender
+                              code: MALE
+                        birthDate: '1990-01-01'
+                        address:
+                          - use: home
+                            line:
+                              - 123 Main St
+                            city: Anytown
+                            state: NY
+                            postalCode: '12345'
+                            country: US
+                        managingOrganization:
+                          reference: Organization/example
+                        maritalStatus:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/marital-status
+                              code: single
+                        photo:
+                          contentType: image/jpeg
+                          url: base64-encoded-image-url
+                        multipleBirth: false
+                        deceasedBoolean: false
+                        deceasedDate:
+                        deceasedCircumstance:
+    error400ofgetinPerson:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Practice ID is required
+      example:
+        statusCode: 400
+        message: Practice ID is required
+    error401ofgetinPerson:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinPerson:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    response200ofgetinPersonpersonid:
+      type: object
+      required:
+        - context
+        - data
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          required:
+            - resource
+          properties:
+            resource:
+              type: object
+              required:
+                - resourceType
+                - id
+                - name
+              properties:
+                resourceType:
+                  type: string
+                  enum:
+                    - Person
+                id:
+                  type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueString:
+                        type: string
+                      valueInteger:
+                        type: integer
+                name:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      use:
+                        type: string
+                      family:
+                        type: string
+                      given:
+                        type: array
+                        items:
+                          type: string
+                telecom:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      value:
+                        type: string
+                gender:
+                  type: object
+                  properties:
+                    value:
+                      type: string
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+                birthDate:
+                  type: string
+                address:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      use:
+                        type: string
+                      line:
+                        type: array
+                        items:
+                          type: string
+                      city:
+                        type: string
+                      state:
+                        type: string
+                      postalCode:
+                        type: string
+                      country:
+                        type: string
+                managingOrganization:
+                  type: object
+                  properties:
+                    reference:
+                      type: string
+                maritalStatus:
+                  type: object
+                  properties:
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+                photo:
+                  type: object
+                  properties:
+                    contentType:
+                      type: string
+                    url:
+                      type: string
+                multipleBirth:
+                  type: boolean
+                deceasedBoolean:
+                  type: boolean
+                deceasedDate:
+                  nullable: true
+                deceasedCircumstance:
+                  nullable: true
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resource:
+                  resourceType: Person
+                  id: example
+                  extension:
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.ACCEPTINGNEWPATIENTSYN
+                      valueString: true
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.BILLABLE
+                      valueString: 'true'
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.CREATEENCOUNTERONCHECKINYN
+                      valueString: true
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.CREATEENCOUNTERPROVIDERIDLIST
+                      valueString: 123,456
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.ENTITYTYPE
+                      valueString: Person
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.HIDEINPORTALYN
+                      valueString: false
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.HOMEDEPARTMENT
+                      valueString: DeptA
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.OTHERPROVIDERIDLIST
+                      valueString: 789,101
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.PERSONALPRONOUNS
+                      valueString: he/him
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.PROVIDERGROUPLIST
+                      valueString: grp1,grp2
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.PROVIDERTYPE
+                      valueString: physician
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.PROVIDERTYPEID
+                      valueString: '42'
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.PROVIDERUSERNAME
+                      valueString: johndoe
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.SCHEDULERESOURCETYPE
+                      valueString: resourceType1
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.SCHEDULINGNAME
+                      valueString: Dr John
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.SPECIALTY
+                      valueString: Cardiology
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.SPECIALTYID
+                      valueInteger: 301
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.SUPERVISINGPROVIDERID
+                      valueInteger: 998
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.SUPERVISINGPROVIDERUSERNAME
+                      valueString: janesmith
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/TINY_URLS.PERSON.USUALDEPARTMENTID
+                      valueInteger: 555
+                  name:
+                    - use: official
+                      family: Doe
+                      given:
+                        - John
+                  telecom:
+                    - system: email
+                      value: john.doe@example.com
+                  gender:
+                    value: male
+                    coding:
+                      - system: 
+                          http://terminology.hl7.org/CodeSystem/administrative-gender
+                        code: MALE
+                  birthDate: '1990-01-01'
+                  address:
+                    - use: home
+                      line:
+                        - 123 Main St
+                      city: Anytown
+                      state: NY
+                      postalCode: '12345'
+                      country: US
+                  managingOrganization:
+                    reference: Organization/example
+                  maritalStatus:
+                    coding:
+                      - system: 
+                          http://terminology.hl7.org/CodeSystem/marital-status
+                        code: single
+                  photo:
+                    contentType: image/jpeg
+                    url: base64-encoded-image-url
+                  multipleBirth: false
+                  deceasedBoolean: false
+                  deceasedDate:
+                  deceasedCircumstance:
+    error400ofgetinPersonpersonid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Practice ID is required
+      example:
+        statusCode: 400
+        message: Practice ID is required
+    error401ofgetinPersonpersonid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinPersonpersonid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - Auth: []

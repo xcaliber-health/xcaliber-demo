@@ -1,0 +1,959 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as 
+    Fire) is a standard for exchanging healthcare information electronically. It
+    is designed to be a modern, flexible, and web-based alternative to older, 
+    more cumbersome standards like HL7 v2. FHIR uses a RESTful API specification
+    to define how to interact with Resources - this means it uses standard HTTP 
+    verbs (GET, POST, PUT, DELETE). Resources are the fundamental units of data 
+    in FHIR; they can represent anything from patient demographics to clinical 
+    observations to medications.
+servers:
+  - url: https://xchange-sandbox.xcaliberapis.com
+  - url: https://your.api.server
+tags: []
+paths:
+  /api/v2/Questionnaire:
+    get:
+      summary: List Questionnaire resources
+      operationId: getAthenaQuestionnaires
+      tags:
+        - Questionnaire
+        - Screening-questionnaire
+        - medical-history-questionnaire
+      parameters:
+        - &id001
+          name: x-source-id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Source system identifier.
+        - &id002
+          name: x-interaction-mode
+          in: header
+          required: true
+          schema:
+            type: boolean
+          description: Interaction mode flag (true/false).
+        - name: code
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: code'
+        - name: context
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: context'
+        - name: context-quantity
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: context-quantity'
+        - name: context-type
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: context-type'
+        - name: context-type-quantity
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: context-type-quantity'
+        - name: context-type-value
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: context-type-value'
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: 'Filter: date'
+        - name: definition
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: definition'
+        - name: description
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: description'
+        - name: effective
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: effective'
+        - name: identifier
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: identifier'
+        - name: jurisdiction
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: jurisdiction'
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: name'
+        - name: publisher
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: publisher'
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: status'
+        - name: subject-type
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: subject-type'
+        - name: title
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: title'
+        - name: url
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: url'
+        - name: version
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: version'
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: List of Questionnaire resources (FHIR Bundle)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtractedSchema864'
+              examples:
+                response_body_200:
+                  summary: Default Questionnaire Response
+                  value: &id003
+                    context:
+                      requestId: abc123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Questionnaire
+                      status: unknown
+                      name: Initial Assessment Form
+                      id: tmpl-2024-001
+                      item:
+                        - text: What is your age?
+                          type: integer
+                          linkId: age
+                          id: q1
+                          extensions:
+                            - url: 
+                                http://xcaliber-fhir/structureDefinition/questionnaire-deprecated
+                              valueString: 'false'
+                            - url: 
+                                http://xcaliber-fhir/structureDefinition/questionnaire-ordering
+                              valueInteger: 1
+                            - url: 
+                                http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                              valueId: q1
+                        - text: Do you have allergies?
+                          type: choice
+                          linkId: allergies
+                          id: q2
+                          extensions:
+                            - url: 
+                                http://xcaliber-fhir/structureDefinition/questionnaire-ordering
+                              valueInteger: 2
+                            - url: 
+                                http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                              valueId: q2
+                          answerOption:
+                            - valueCoding:
+                                code: true
+                                display: true
+                            - valueCoding:
+                                code: false
+                                display: false
+                        - text: What type of allergy?
+                          type: string
+                          linkId: allergyType
+                          id: q3
+                          extensions:
+                            - url: 
+                                http://xcaliber-fhir/structureDefinition/questionnaire-deprecated
+                              valueString: 'true'
+                            - url: 
+                                http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                              valueId: q3
+                          answerOption:
+                            - valueCoding:
+                                code: FOOD
+                                display: Food
+                            - valueCoding:
+                                code: DRUG
+                                display: Drug
+                            - valueCoding:
+                                code: OTHER
+                                display: Other
+                screening-questionnaire:
+                  summary: Screening Questionnaire Example
+                  value: &id004
+                    context:
+                      requestId: screening123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Questionnaire
+                      status: active
+                      name: Screening Screener
+                      id: scrn-2024-001
+                      item:
+                        - text: Have you traveled internationally in the last 30
+                            days?
+                          type: choice
+                          linkId: travel
+                          id: q1
+                          answerOption:
+                            - valueCoding:
+                                code: 'YES'
+                                display: 'Yes'
+                            - valueCoding:
+                                code: 'NO'
+                                display: 'No'
+                        - text: Do you have a fever?
+                          type: boolean
+                          linkId: fever
+                          id: q2
+                medical-history-questionnaire:
+                  summary: Medical History Questionnaire Example
+                  value: &id005
+                    context:
+                      requestId: medhist123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Questionnaire
+                      status: active
+                      name: Medical History
+                      id: medhist-2024-001
+                      extension:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-category
+                          valueString: medical-history-questionnaire
+                      item:
+                        - text: Have you had surgery before?
+                          type: choice
+                          linkId: surgery
+                          id: q1
+                          answerOption:
+                            - valueCoding:
+                                code: 'YES'
+                                display: 'Yes'
+                            - valueCoding:
+                                code: 'NO'
+                                display: 'No'
+                        - text: List any chronic diseases.
+                          type: string
+                          linkId: chronicDiseases
+                          id: q2
+        '400':
+          $ref: '#/components/responses/Error400'
+        '401':
+          $ref: '#/components/responses/Error401'
+        '500':
+          $ref: '#/components/responses/Error500'
+    post:
+      summary: Create Questionnaire (Screening Questionnaire only)
+      operationId: createQuestionnaireInAthena
+      tags:
+        - Questionnaire
+      parameters:
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractedSchema876'
+            example:
+              context:
+                requestId: abc123
+                source: ATHENA
+                quorum: true
+                notify: true
+                departmentId: '150'
+              data:
+                resourceType: Questionnaire
+                status: unknown
+                name: Initial Assessment Form
+                id: tmpl-2024-001
+                item:
+                  - text: What is your age?
+                    type: integer
+                    linkId: age
+                    id: q1
+                    extensions:
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-deprecated
+                        valueString: 'false'
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-ordering
+                        valueInteger: 1
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                        valueId: q1
+                  - text: Do you have allergies?
+                    type: choice
+                    linkId: allergies
+                    id: q2
+                    extensions:
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-ordering
+                        valueInteger: 2
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                        valueId: q2
+                    answerOption:
+                      - valueCoding:
+                          code: true
+                          display: true
+                      - valueCoding:
+                          code: false
+                          display: false
+                  - text: What type of allergy?
+                    type: string
+                    linkId: allergyType
+                    id: q3
+                    extensions:
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-deprecated
+                        valueString: 'true'
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                        valueId: q3
+                    answerOption:
+                      - valueCoding:
+                          code: FOOD
+                          display: Food
+                      - valueCoding:
+                          code: DRUG
+                          display: Drug
+                      - valueCoding:
+                          code: OTHER
+                          display: Other
+      responses:
+        '200':
+          description: Questionnaire created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtractedSchema875'
+              examples:
+                response_body_200:
+                  summary: Default Questionnaire Response
+                  value: *id003
+                screening-questionnaire:
+                  summary: Screening Questionnaire Example
+                  value: *id004
+                medical-history-questionnaire:
+                  summary: Medical History Questionnaire Example
+                  value: *id005
+        '400':
+          $ref: '#/components/responses/Error400'
+        '500':
+          $ref: '#/components/responses/Error500'
+  /api/v2/Questionnaire/{id}:
+    get:
+      summary: Get Questionnaire resource by ID
+      operationId: getAthenaQuestionnaireById
+      tags:
+        - Questionnaire
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the Questionnaire resource to retrieve.
+            Required."'
+        - *id001
+        - *id002
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: FHIR Questionnaire resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtractedSchema879'
+              example:
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Questionnaire
+                  status: unknown
+                  name: Initial Assessment Form
+                  id: tmpl-2024-001
+                  item:
+                    - text: What is your age?
+                      type: integer
+                      linkId: age
+                      id: q1
+                      extensions:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-deprecated
+                          valueString: 'false'
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-ordering
+                          valueInteger: 1
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                          valueId: q1
+                    - text: Do you have allergies?
+                      type: choice
+                      linkId: allergies
+                      id: q2
+                      extensions:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-ordering
+                          valueInteger: 2
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                          valueId: q2
+                      answerOption:
+                        - valueCoding:
+                            code: true
+                            display: true
+                        - valueCoding:
+                            code: false
+                            display: false
+                    - text: What type of allergy?
+                      type: string
+                      linkId: allergyType
+                      id: q3
+                      extensions:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-deprecated
+                          valueString: 'true'
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                          valueId: q3
+                      answerOption:
+                        - valueCoding:
+                            code: FOOD
+                            display: Food
+                        - valueCoding:
+                            code: DRUG
+                            display: Drug
+                        - valueCoding:
+                            code: OTHER
+                            display: Other
+        '400':
+          $ref: '#/components/responses/Error400'
+        '401':
+          $ref: '#/components/responses/Error401'
+        '500':
+          $ref: '#/components/responses/Error500'
+    put:
+      summary: Update Questionnaire (Screening Questionnaire only)
+      operationId: updateQuestionnaireInAthena
+      tags:
+        - Questionnaire
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the Screening Questionnaire to update.
+            Required for updating an existing questionnaire."'
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractedSchema885'
+            example:
+              context:
+                requestId: abc123
+                source: ATHENA
+                quorum: true
+                notify: true
+                departmentId: '150'
+              data:
+                resourceType: Questionnaire
+                status: unknown
+                name: Initial Assessment Form
+                id: tmpl-2024-001
+                item:
+                  - text: What is your age?
+                    type: integer
+                    linkId: age
+                    id: q1
+                    extensions:
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-deprecated
+                        valueString: 'false'
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-ordering
+                        valueInteger: 1
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                        valueId: q1
+                  - text: Do you have allergies?
+                    type: choice
+                    linkId: allergies
+                    id: q2
+                    extensions:
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-ordering
+                        valueInteger: 2
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                        valueId: q2
+                    answerOption:
+                      - valueCoding:
+                          code: true
+                          display: true
+                      - valueCoding:
+                          code: false
+                          display: false
+                  - text: What type of allergy?
+                    type: string
+                    linkId: allergyType
+                    id: q3
+                    extensions:
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-deprecated
+                        valueString: 'true'
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                        valueId: q3
+                    answerOption:
+                      - valueCoding:
+                          code: FOOD
+                          display: Food
+                      - valueCoding:
+                          code: DRUG
+                          display: Drug
+                      - valueCoding:
+                          code: OTHER
+                          display: Other
+      responses:
+        '200':
+          description: Questionnaire updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtractedSchema884'
+              example:
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Questionnaire
+                  status: unknown
+                  name: Initial Assessment Form
+                  id: tmpl-2024-001
+                  item:
+                    - text: What is your age?
+                      type: integer
+                      linkId: age
+                      id: q1
+                      extensions:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-deprecated
+                          valueString: 'false'
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-ordering
+                          valueInteger: 1
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                          valueId: q1
+                    - text: Do you have allergies?
+                      type: choice
+                      linkId: allergies
+                      id: q2
+                      extensions:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-ordering
+                          valueInteger: 2
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                          valueId: q2
+                      answerOption:
+                        - valueCoding:
+                            code: true
+                            display: true
+                        - valueCoding:
+                            code: false
+                            display: false
+                    - text: What type of allergy?
+                      type: string
+                      linkId: allergyType
+                      id: q3
+                      extensions:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-deprecated
+                          valueString: 'true'
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                          valueId: q3
+                      answerOption:
+                        - valueCoding:
+                            code: FOOD
+                            display: Food
+                        - valueCoding:
+                            code: DRUG
+                            display: Drug
+                        - valueCoding:
+                            code: OTHER
+                            display: Other
+        '400':
+          $ref: '#/components/responses/Error400'
+        '500':
+          $ref: '#/components/responses/Error500'
+    patch:
+      summary: Patch Questionnaire (Screening Questionnaire only)
+      operationId: patchQuestionnaireInAthena
+      tags:
+        - Questionnaire
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the Screening Questionnaire to patch.
+            Required for updating an existing questionnaire."'
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractedSchema890'
+            example:
+              context:
+                requestId: abc123
+                source: ATHENA
+                quorum: true
+                notify: true
+              data:
+                resourceType: Questionnaire
+                status: unknown
+                name: Initial Assessment Form
+                id: tmpl-2024-001
+                item:
+                  - text: What is your age?
+                    type: integer
+                    linkId: age
+                    id: q1
+                    extensions:
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-deprecated
+                        valueString: 'false'
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-ordering
+                        valueInteger: 1
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                        valueId: q1
+                  - text: Do you have allergies?
+                    type: choice
+                    linkId: allergies
+                    id: q2
+                    extensions:
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-ordering
+                        valueInteger: 2
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                        valueId: q2
+                    answerOption:
+                      - valueCoding:
+                          code: true
+                          display: true
+                      - valueCoding:
+                          code: false
+                          display: false
+                  - text: What type of allergy?
+                    type: string
+                    linkId: allergyType
+                    id: q3
+                    extensions:
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-deprecated
+                        valueString: 'true'
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                        valueId: q3
+                    answerOption:
+                      - valueCoding:
+                          code: FOOD
+                          display: Food
+                      - valueCoding:
+                          code: DRUG
+                          display: Drug
+                      - valueCoding:
+                          code: OTHER
+                          display: Other
+      responses:
+        '200':
+          description: Questionnaire patched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtractedSchema889'
+              example:
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Questionnaire
+                  status: unknown
+                  name: Initial Assessment Form
+                  id: tmpl-2024-001
+                  item:
+                    - text: What is your age?
+                      type: integer
+                      linkId: age
+                      id: q1
+                      extensions:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-deprecated
+                          valueString: 'false'
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-ordering
+                          valueInteger: 1
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                          valueId: q1
+                    - text: Do you have allergies?
+                      type: choice
+                      linkId: allergies
+                      id: q2
+                      extensions:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-ordering
+                          valueInteger: 2
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                          valueId: q2
+                      answerOption:
+                        - valueCoding:
+                            code: true
+                            display: true
+                        - valueCoding:
+                            code: false
+                            display: false
+                    - text: What type of allergy?
+                      type: string
+                      linkId: allergyType
+                      id: q3
+                      extensions:
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-deprecated
+                          valueString: 'true'
+                        - url: 
+                            http://xcaliber-fhir/structureDefinition/questionnaire-questionid
+                          valueId: q3
+                      answerOption:
+                        - valueCoding:
+                            code: FOOD
+                            display: Food
+                        - valueCoding:
+                            code: DRUG
+                            display: Drug
+                        - valueCoding:
+                            code: OTHER
+                            display: Other
+        '400':
+          $ref: '#/components/responses/Error400'
+        '500':
+          $ref: '#/components/responses/Error500'
+components:
+  schemas:
+    ExtractedSchema864:
+      type: object
+      properties:
+        context:
+          type: object
+        data:
+          type: object
+    ExtractedSchema875:
+      type: object
+      properties:
+        context:
+          type: object
+        data:
+          type: object
+    ExtractedSchema876:
+      type: object
+      properties:
+        context:
+          type: object
+          description: '"Context for the Screening Questionnaire, providing additional
+            metadata. Required properties will vary depending on the specific use
+            case."'
+        data:
+          type: object
+          description: '"Screening questionnaire data to be created. Provide the questionnaire
+            details in JSON format."'
+    ExtractedSchema879:
+      type: object
+      properties:
+        context:
+          type: object
+        data:
+          type: object
+    ExtractedSchema884:
+      type: object
+      properties:
+        context:
+          type: object
+        data:
+          type: object
+    ExtractedSchema885:
+      type: object
+      properties:
+        context:
+          type: object
+          description: '"Context for updating a Screening Questionnaire. Contains
+            relevant metadata for the update operation."
+
+
+            Or, if you''d like a slightly different version:
+
+
+            "Metadata for updating a Screening Questionnaire, such as user information
+            or request details."'
+        data:
+          type: object
+          description: '"Screening questionnaire data to update. Provide the updated
+            questionnaire details in JSON format."'
+    ExtractedSchema889:
+      type: object
+      properties:
+        context:
+          type: object
+        data:
+          type: object
+    ExtractedSchema890:
+      type: object
+      properties:
+        context:
+          type: object
+          description: '"Context for the screening questionnaire patch operation.
+            Contains additional metadata about the request."
+
+
+            Alternatively, you could make it even more concise:
+
+
+            "Metadata for the screening questionnaire patch operation."'
+        data:
+          type: object
+          description: '"Screening questionnaire data to be updated. Provide the updated
+            values in JSON format."'
+  responses:
+    Error400:
+      description: Bad Request
+      content:
+        application/json:
+          examples:
+            MissingPracticeId:
+              value:
+                statusCode: 400
+                message: Practice ID is required.
+            MissingDepartmentId:
+              value:
+                statusCode: 400
+                message: Department ID is required.
+            MissingPatient:
+              value:
+                statusCode: 400
+                message: Patient ID is required.
+            MissingMedicationId:
+              value:
+                statusCode: 400
+                message: Medication ID is required.
+    Error500:
+      description: Internal Server Error
+      content:
+        application/json:
+          example:
+            statusCode: 500
+            message: Internal server error
+    Error401:
+      description: Unauthorized
+      content:
+        application/json:
+          example:
+            success: false
+            code: 401
+            message: Http Exception
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - Auth: []

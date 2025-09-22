@@ -1,0 +1,362 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: CoverageEligibilityResponse
+paths:
+  /api/v2/CoverageEligibilityResponse:
+    get:
+      summary: Get coverage eligibility data for a patient and insurance
+      description: Fetch coverage eligibility data for a given patient and insurance
+      tags:
+      - CoverageEligibilityResponse
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: created
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: created'
+      - name: disposition
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: disposition'
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - name: insurer
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: insurer'
+      - name: outcome
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: outcome'
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: request
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: request'
+      - name: requestor
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: 'Filter: requestor'
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: status'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinEligibilityResponse'
+              example:
+                statusCode: 400
+                message: Missing or invalid parameter
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinEligibilityResponse'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinEligibilityResponse'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: {}
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: CoverageEligibilityResponse
+                        event:
+                        - type:
+                            coding:
+                            - code: last-checked
+                              system: athena
+                          whenDateTime: '2023-10-15T10:30:00Z'
+                        extension:
+                        - url: http://tiny.url/coverageeligibilityresponse/ansi271
+                          valueString: 271*00*1*0*1234567890*12345*20231015*1030*1*005010X279A1*000000001*0*P*:~
+                        servicedDate: '2023-10-15'
+                        patient:
+                          reference: Patient/123
+                        insurance:
+                        - coverage:
+                            reference: Coverage/456
+components:
+  schemas:
+    response200ofgetinEligibilityResponse:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: 3a32b8b0f453901ce844bcae3ce3358b
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          example:
+            requestId: 3a32b8b0f453901ce844bcae3ce3358b
+            source: ATHENA
+            quorum: true
+            notify: true
+        data:
+          type: object
+          required:
+          - resourceType
+          - event
+          - extension
+          - servicedDate
+          - patient
+          - insurance
+          properties:
+            resourceType:
+              type: string
+              enum:
+              - CoverageEligibilityResponse
+            event:
+              type: array
+              items:
+                type: object
+                required:
+                - type
+                - whenDateTime
+                properties:
+                  type:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                            system:
+                              type: string
+                  whenDateTime:
+                    type: string
+                    format: date
+            extension:
+              type: array
+              items:
+                type: object
+                required:
+                - url
+                - valueString
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+            servicedDate:
+              type: string
+              format: date
+            patient:
+              type: object
+              required:
+              - reference
+              properties:
+                reference:
+                  type: string
+            insurance:
+              type: array
+              items:
+                type: object
+                required:
+                - coverage
+                properties:
+                  coverage:
+                    type: object
+                    required:
+                    - reference
+                    properties:
+                      reference:
+                        type: string
+          example:
+            resourceType: CoverageEligibilityResponse
+            event:
+            - type:
+                coding:
+                - code: last-checked
+                  system: athena
+              whenDateTime: '2024-06-01'
+            extension:
+            - url: https://tiny.athena/coverageeligibilityresponse/ansi271
+              valueString: Sample ANSI 271 payload or reference
+            servicedDate: '2024-06-01'
+            patient:
+              reference: Patient/12345
+            insurance:
+            - coverage:
+                reference: Coverage/abcde
+      example:
+        context:
+          requestId: 3a32b8b0f453901ce844bcae3ce3358b
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: CoverageEligibilityResponse
+          event:
+          - type:
+              coding:
+              - code: last-checked
+                system: athena
+            whenDateTime: '2024-06-01'
+          extension:
+          - url: https://tiny.athena/coverageeligibilityresponse/ansi271
+            valueString: Sample ANSI 271 payload or reference
+          servicedDate: '2024-06-01'
+          patient:
+            reference: Patient/12345
+          insurance:
+          - coverage:
+              reference: Coverage/abcde
+    error400ofgetinEligibilityResponse:
+      type: object
+      required:
+      - statusCode
+      - message
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing or invalid parameter
+      example:
+        statusCode: 400
+        message: Missing or invalid parameter
+    error401ofgetinEligibilityResponse:
+      type: object
+      required:
+      - success
+      - code
+      - message
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinEligibilityResponse:
+      type: object
+      required:
+      - statusCode
+      - message
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

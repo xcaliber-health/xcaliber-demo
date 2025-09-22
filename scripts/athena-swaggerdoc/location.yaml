@@ -1,0 +1,1507 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: Location
+  description: Operations related to locations and clinical providers in Athena.
+paths:
+  /api/v2/Location:
+    get:
+      tags:
+      - Location
+      summary: Get Athena Locations
+      operationId: getAthenaLocationsV2
+      parameters:
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: address
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: address'
+      - name: address-city
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: address-city'
+      - name: address-country
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: address-country'
+      - name: address-postalcode
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: address-postalcode'
+      - name: address-state
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: address-state'
+      - name: address-use
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: address-use'
+      - name: endpoint
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: endpoint'
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: name'
+      - name: near
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: near'
+      - name: operational-status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: operational-status'
+      - name: organization
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: organization'
+      - name: partof
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: 'Filter: partof'
+      - name: physical-type
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: physical-type'
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: status'
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: type'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: ""
+      responses:
+        '400':
+          description: Bad Request (missing parameters or validation)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinLocation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinLocation'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinLocation'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Location
+                    id: '12345'
+                    extension:
+                    - url: TINY_URLS.LOCATION.CHARTSHARINGGROUPID
+                      valueString: group123
+                    - url: TINY_URLS.LOCATION.CLINICALS
+                      valueString: clinical456
+                    - url: TINY_URLS.LOCATION.COMMUNICATORBRANDID
+                      valueString: brand789
+                    - url: TINY_URLS.LOCATION.CREDITCARDTYPES
+                      valueString: '["visa","mastercard"]'
+                    - url: TINY_URLS.LOCATION.DOESNOTOBSERVEDST
+                      valueString: 'false'
+                    - url: TINY_URLS.LOCATION.ECOMMERCECREDITCARDTYPES
+                      valueString: '["amex","discover"]'
+                    - url: TINY_URLS.LOCATION.ISHOSPITALDEPARTMENT
+                      valueString: 'true'
+                    - url: TINY_URLS.LOCATION.MEDICATIONHISTORYCONSENT
+                      valueString: consent123
+                    - url: TINY_URLS.LOCATION.SERVICEDEPARTMENT
+                      valueBoolean: true
+                    - url: TINY_URLS.LOCATION.SINGLEAPPOINTMENTCONTRACTMAX
+                      valueString: '100'
+                    - url: TINY_URLS.LOCATION.TIMEZONE
+                      valueInteger: -6
+                    - url: TINY_URLS.LOCATION.TIMEZONENAME
+                      valueString: America/Chicago
+                    - url: TINY_URLS.LOCATION.TIMEZONEOFFSET
+                      valueInteger: -360
+                    - url: TINY_URLS.LOCATION.TYPEOFBILL
+                      valueString: '131'
+                    - url: TINY_URLS.LOCATION.FEDERAL_TAX_ID
+                      valueString: 12-3456789
+                    - url: TINY_URLS.LOCATION.MEDICATIONHISTORYCONSENT
+                      valueString: 'true'
+                    - url: TINY_URLS.LOCATION.ONEYEARCONTRACTMAX
+                      valueString: '100'
+                    - url: TINY_URLS.LOCATION.PATIENTDEPARTMENTNAME
+                      valueString: Cardiology Department
+                    - url: TINY_URLS.LOCATION.PLACEOFSERVICEFACILITY
+                      valueString: '11'
+                    - url: TINY_URLS.LOCATION.PORTALURL
+                      valueString: https://portal.example.com
+                    - url: TINY_URLS.LOCATION.PROVIDERGROUPID
+                      valueString: PG123
+                    - url: TINY_URLS.LOCATION.PROVIDERGROUPNAME
+                      valueString: Main Provider Group
+                    - url: TINY_URLS.LOCATION.PROVIDERLIST
+                      valueString: Dr. Smith, Dr. Jones
+                    name: Main Clinic
+                    address:
+                      line:
+                      - 123 Main St
+                      - Suite 100
+                      - Suite 200
+                      city: Springfield
+                      state: IL
+                      postalCode: '62701'
+                    telecom:
+                    - system: phone
+                      value: 555-123-4567
+                    - system: fax
+                      value: 555-123-4568
+                      extension:
+                      - url: http://example.com/location/clinicalproviderfax
+                        valueString: CLINICALPROVIDERFAX
+                    - system: fax
+                      value: 555-123-4569
+                    position:
+                      latitude: 39.7817
+                      longitude: -89.6501
+                    type:
+                    - coding:
+                      - system: http://example.com/location/placeofservicetype
+                        code: '11'
+                        display: Office
+                    - coding:
+                      - system: https://www.athenahealth.com/PLACEOFSERVICETYPE
+                        code: '11'
+                        display: Office
+    post:
+      tags:
+      - Location
+      summary: Create a Location in Athena
+      operationId: createLocationInAthena
+      parameters:
+      - *id001
+      - *id002
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: ""
+      responses:
+        '400':
+          description: Bad Request (missing required fields)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinLocation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinLocation'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinLocation'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: Location
+                  id: '12345'
+                  extension:
+                  - url: TINY_URLS.LOCATION.CLINICALS
+                    valueString: clinical456
+                  - url: TINY_URLS.LOCATION.COMMUNICATORBRANDID
+                    valueString: brand789
+    delete:
+      tags:
+      - Location
+      summary: Delete a Location in Athena
+      operationId: deleteLocationInAthena
+      parameters:
+      - *id001
+      - *id002
+      responses:
+        '204':
+          description: Location deleted successfully (no content)
+        '400':
+          description: Bad Request (invalid/missing parameters)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofdeleteinLocation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinLocation'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinLocation'
+  /api/v2/Location/{location-id}:
+    get:
+      tags:
+      - Location
+      summary: Get Athena Location by ID
+      operationId: getAthenaLocationByIdV2
+      parameters:
+      - name: location-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 
+          This description is concise, clear, and provides an example to help API
+          users understand the expected format of the location ID.'
+      - *id001
+      - *id002
+      
+      responses:
+        '400':
+          description: Bad Request (missing parameters)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinLocationlocationid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinLocationlocationid'
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinLocationlocationid'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Location
+                    id: '12345'
+                    extension:
+                    - url: TINY_URLS.LOCATION.CHARTSHARINGGROUPID
+                      valueString: group123
+                    - url: TINY_URLS.LOCATION.CLINICALS
+                      valueString: clinical456
+                    - url: TINY_URLS.LOCATION.COMMUNICATORBRANDID
+                      valueString: brand789
+                    - url: TINY_URLS.LOCATION.CREDITCARDTYPES
+                      valueString: '["visa","mastercard"]'
+                    - url: TINY_URLS.LOCATION.DOESNOTOBSERVEDST
+                      valueString: 'false'
+                    - url: TINY_URLS.LOCATION.ECOMMERCECREDITCARDTYPES
+                      valueString: '["amex","discover"]'
+                    - url: TINY_URLS.LOCATION.ISHOSPITALDEPARTMENT
+                      valueString: 'true'
+                    - url: TINY_URLS.LOCATION.MEDICATIONHISTORYCONSENT
+                      valueString: consent123
+                    - url: TINY_URLS.LOCATION.SERVICEDEPARTMENT
+                      valueBoolean: true
+                    - url: TINY_URLS.LOCATION.SINGLEAPPOINTMENTCONTRACTMAX
+                      valueString: '100'
+                    - url: TINY_URLS.LOCATION.TIMEZONE
+                      valueInteger: -6
+                    - url: TINY_URLS.LOCATION.TIMEZONENAME
+                      valueString: America/Chicago
+                    - url: TINY_URLS.LOCATION.TIMEZONEOFFSET
+                      valueInteger: -360
+                    - url: TINY_URLS.LOCATION.TYPEOFBILL
+                      valueString: '131'
+                    - url: TINY_URLS.LOCATION.FEDERAL_TAX_ID
+                      valueString: 12-3456789
+                    - url: TINY_URLS.LOCATION.MEDICATIONHISTORYCONSENT
+                      valueString: 'true'
+                    - url: TINY_URLS.LOCATION.ONEYEARCONTRACTMAX
+                      valueString: '100'
+                    - url: TINY_URLS.LOCATION.PATIENTDEPARTMENTNAME
+                      valueString: Cardiology Department
+                    - url: TINY_URLS.LOCATION.PLACEOFSERVICEFACILITY
+                      valueString: '11'
+                    - url: TINY_URLS.LOCATION.PORTALURL
+                      valueString: https://portal.example.com
+                    - url: TINY_URLS.LOCATION.PROVIDERGROUPID
+                      valueString: PG123
+                    - url: TINY_URLS.LOCATION.PROVIDERGROUPNAME
+                      valueString: Main Provider Group
+                    - url: TINY_URLS.LOCATION.PROVIDERLIST
+                      valueString: Dr. Smith, Dr. Jones
+                    name: Main Clinic
+                    address:
+                      line:
+                      - 123 Main St
+                      - Suite 100
+                      - Suite 200
+                      city: Springfield
+                      state: IL
+                      postalCode: '62701'
+                    telecom:
+                    - system: phone
+                      value: 555-123-4567
+                    - system: fax
+                      value: 555-123-4568
+                      extension:
+                      - url: http://example.com/location/clinicalproviderfax
+                        valueString: CLINICALPROVIDERFAX
+                    - system: fax
+                      value: 555-123-4569
+                    position:
+                      latitude: 39.7817
+                      longitude: -89.6501
+                    type:
+                    - coding:
+                      - system: http://example.com/location/placeofservicetype
+                        code: '11'
+                        display: Office
+                    - coding:
+                      - system: https://www.athenahealth.com/PLACEOFSERVICETYPE
+                        code: '11'
+                        display: Office
+components:
+  schemas:
+    ExtractedSchema382:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          description: '"Additional metadata for creating a Location in Athena. Contains
+            key-value pairs that provide context for the Location."'
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Location
+            id:
+              type: string
+              example: '123456'
+            name:
+              type: string
+              example: Athena Health Main Campus
+            address:
+              type: object
+              properties:
+                line:
+                  type: array
+                  items:
+                    type: string
+                city:
+                  type: string
+                state:
+                  type: string
+                postalCode:
+                  type: string
+            telecom:
+              type: array
+              items:
+                type: object
+                properties:
+                  system:
+                    type: string
+                  value:
+                    type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            position:
+              type: object
+              properties:
+                latitude:
+                  type: number
+                longitude:
+                  type: number
+            type:
+              type: array
+              items:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+          example:
+            resourceType: Location
+            id: '123456'
+            name: Athena Health Main Campus
+            address:
+              line:
+              - 123 Main St
+              - Suite 400
+              city: Boston
+              state: MA
+              postalCode: '02110'
+            telecom:
+            - system: phone
+              value: +1-555-123-4567
+            - system: fax
+              value: +1-555-765-4321
+            - system: fax
+              value: +1-555-999-8888
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/clinicalproviderfax
+                valueString: CLINICALPROVIDERFAX
+            position:
+              latitude: 42.3601
+              longitude: -71.0589
+            type:
+            - coding:
+              - system: http://tiny.url/location/placeofservicetype
+                code: POS001
+                display: Outpatient Hospital
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/chartsharinggroupid
+              valueString: CSG-101
+            - url: http://xcaliber-fhir/structureDefinition/clinicals
+              valueString: Enable
+            - url: http://xcaliber-fhir/structureDefinition/clinicals
+              valueString: Enabled
+            - url: http://xcaliber-fhir/structureDefinition/communicatorbrandid
+              valueString: Brand-22
+            - url: http://xcaliber-fhir/structureDefinition/creditcardtypes
+              valueString: '["Visa","Mastercard"]'
+            - url: http://xcaliber-fhir/structureDefinition/doesnotobservedst
+              valueString: 'false'
+            - url: http://xcaliber-fhir/structureDefinition/ecommercecreditcardtypes
+              valueString: '["Discover","Amex"]'
+            - url: http://xcaliber-fhir/structureDefinition/ishospitaldepartment
+              valueString: 'true'
+            - url: http://xcaliber-fhir/structureDefinition/medicationhistoryconsent
+              valueString: true
+            - url: http://xcaliber-fhir/structureDefinition/oneyearcontractmax
+              valueString: '120'
+            - url: http://xcaliber-fhir/structureDefinition/patientdepartmentname
+              valueString: Oncology
+            - url: http://xcaliber-fhir/structureDefinition/placeofservicefacility
+              valueString: Facility-A
+            - url: http://xcaliber-fhir/structureDefinition/portalurl
+              valueString: https://portal.athenahealth.com
+            - url: http://xcaliber-fhir/structureDefinition/providergroupid
+              valueString: PG-7788
+            - url: http://xcaliber-fhir/structureDefinition/providergroupname
+              valueString: Athena Health Providers
+            - url: http://xcaliber-fhir/structureDefinition/providerlist
+              valueString: Dr. Jane, Dr. John
+            - url: http://xcaliber-fhir/structureDefinition/servicedepartment
+              valueString: Cardiology
+            - url: http://xcaliber-fhir/structureDefinition/singleappointmentcontractmax
+              valueString: '60'
+            - url: http://xcaliber-fhir/structureDefinition/timezone
+              valueString: America/New_York
+            - url: http://xcaliber-fhir/structureDefinition/timezonename
+              valueString: Eastern Standard Time
+            - url: http://xcaliber-fhir/structureDefinition/timezoneoffset
+              valueString: '-0500'
+            - url: http://xcaliber-fhir/structureDefinition/typeofbill
+              valueString: Outpatient
+            - url: http://xcaliber-fhir/structureDefinition/federaltaxid
+              valueString: 98-7654321
+          description: '"Location data to be created. Provide a JSON object containing
+            location details."'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Location
+          id: '123456'
+          name: Athena Health Main Campus
+          address:
+            line:
+            - 123 Main St
+            - Suite 400
+            city: Boston
+            state: MA
+            postalCode: '02110'
+          telecom:
+          - system: phone
+            value: +1-555-123-4567
+          - system: fax
+            value: +1-555-765-4321
+          - system: fax
+            value: +1-555-999-8888
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/clinicalproviderfax
+              valueString: CLINICALPROVIDERFAX
+          position:
+            latitude: 42.3601
+            longitude: -71.0589
+          type:
+          - coding:
+            - system: http://tiny.url/location/placeofservicetype
+              code: POS001
+              display: Outpatient Hospital
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/chartsharinggroupid
+            valueString: CSG-101
+          - url: http://xcaliber-fhir/structureDefinition/clinicals
+            valueString: Enabled
+          - url: http://xcaliber-fhir/structureDefinition/communicatorbrandid
+            valueString: Brand-22
+          - url: http://xcaliber-fhir/structureDefinition/creditcardtypes
+            valueString: '["Visa","Mastercard"]'
+          - url: http://xcaliber-fhir/structureDefinition/doesnotobservedst
+            valueString: 'false'
+          - url: http://xcaliber-fhir/structureDefinition/ecommercecreditcardtypes
+            valueString: '["Discover","Amex"]'
+          - url: http://xcaliber-fhir/structureDefinition/ishospitaldepartment
+            valueString: 'true'
+          - url: http://xcaliber-fhir/structureDefinition/medicationhistoryconsent
+            valueString: true
+          - url: http://xcaliber-fhir/structureDefinition/oneyearcontractmax
+            valueString: '120'
+          - url: http://xcaliber-fhir/structureDefinition/patientdepartmentname
+            valueString: Oncology
+          - url: http://xcaliber-fhir/structureDefinition/placeofservicefacility
+            valueString: Facility-A
+          - url: http://xcaliber-fhir/structureDefinition/portalurl
+            valueString: https://portal.athenahealth.com
+          - url: http://xcaliber-fhir/structureDefinition/providergroupid
+            valueString: PG-7788
+          - url: http://xcaliber-fhir/structureDefinition/providergroupname
+            valueString: Athena Health Providers
+          - url: http://xcaliber-fhir/structureDefinition/providerlist
+            valueString: Dr. Jane, Dr. John
+          - url: http://xcaliber-fhir/structureDefinition/servicedepartment
+            valueString: Cardiology
+          - url: http://xcaliber-fhir/structureDefinition/singleappointmentcontractmax
+            valueString: '60'
+          - url: http://xcaliber-fhir/structureDefinition/timezone
+            valueString: America/New_York
+          - url: http://xcaliber-fhir/structureDefinition/timezonename
+            valueString: Eastern Standard Time
+          - url: http://xcaliber-fhir/structureDefinition/timezoneoffset
+            valueString: '-0500'
+          - url: http://xcaliber-fhir/structureDefinition/typeofbill
+            valueString: Outpatient
+          - url: http://xcaliber-fhir/structureDefinition/federaltaxid
+            valueString: 98-7654321
+    response200ofgetinLocation:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            bundle:
+              type: array
+              items:
+                type: object
+                properties:
+                  resourceType:
+                    type: string
+                    example: Location
+                  id:
+                    type: string
+                    example: '123456'
+                  name:
+                    type: string
+                    example: Athena Health Main Campus
+                  address:
+                    type: object
+                    properties:
+                      line:
+                        type: array
+                        items:
+                          type: string
+                      city:
+                        type: string
+                      state:
+                        type: string
+                      postalCode:
+                        type: string
+                  telecom:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        value:
+                          type: string
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+                  position:
+                    type: object
+                    properties:
+                      latitude:
+                        type: number
+                      longitude:
+                        type: number
+                  type:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                              display:
+                                type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+                example:
+                  resourceType: Location
+                  id: '123456'
+                  name: Athena Health Main Campus
+                  address:
+                    line:
+                    - 123 Main St
+                    - Suite 400
+                    city: Boston
+                    state: MA
+                    postalCode: '02110'
+                  telecom:
+                  - system: phone
+                    value: +1-555-123-4567
+                  - system: fax
+                    value: +1-555-765-4321
+                  - system: fax
+                    value: +1-555-999-8888
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/clinicalproviderfax
+                      valueString: CLINICALPROVIDERFAX
+                  position:
+                    latitude: 42.3601
+                    longitude: -71.0589
+                  type:
+                  - coding:
+                    - system: http://tiny.url/location/placeofservicetype
+                      code: POS001
+                      display: Outpatient Hospital
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/chartsharinggroupid
+                    valueString: CSG-101
+                  - url: http://xcaliber-fhir/structureDefinition/clinicals
+                    valueString: Enable
+                  - url: http://xcaliber-fhir/structureDefinition/clinicals
+                    valueString: Enabled
+                  - url: http://xcaliber-fhir/structureDefinition/communicatorbrandid
+                    valueString: Brand-22
+                  - url: http://xcaliber-fhir/structureDefinition/creditcardtypes
+                    valueString: '["Visa","Mastercard"]'
+                  - url: http://xcaliber-fhir/structureDefinition/doesnotobservedst
+                    valueString: 'false'
+                  - url: http://xcaliber-fhir/structureDefinition/ecommercecreditcardtypes
+                    valueString: '["Discover","Amex"]'
+                  - url: http://xcaliber-fhir/structureDefinition/ishospitaldepartment
+                    valueString: 'true'
+                  - url: http://xcaliber-fhir/structureDefinition/medicationhistoryconsent
+                    valueString: true
+                  - url: http://xcaliber-fhir/structureDefinition/oneyearcontractmax
+                    valueString: '120'
+                  - url: http://xcaliber-fhir/structureDefinition/patientdepartmentname
+                    valueString: Oncology
+                  - url: http://xcaliber-fhir/structureDefinition/placeofservicefacility
+                    valueString: Facility-A
+                  - url: http://xcaliber-fhir/structureDefinition/portalurl
+                    valueString: https://portal.athenahealth.com
+                  - url: http://xcaliber-fhir/structureDefinition/providergroupid
+                    valueString: PG-7788
+                  - url: http://xcaliber-fhir/structureDefinition/providergroupname
+                    valueString: Athena Health Providers
+                  - url: http://xcaliber-fhir/structureDefinition/providerlist
+                    valueString: Dr. Jane, Dr. John
+                  - url: http://xcaliber-fhir/structureDefinition/servicedepartment
+                    valueString: Cardiology
+                  - url: http://xcaliber-fhir/structureDefinition/singleappointmentcontractmax
+                    valueString: '60'
+                  - url: http://xcaliber-fhir/structureDefinition/timezone
+                    valueString: America/New_York
+                  - url: http://xcaliber-fhir/structureDefinition/timezonename
+                    valueString: Eastern Standard Time
+                  - url: http://xcaliber-fhir/structureDefinition/timezoneoffset
+                    valueString: '-0500'
+                  - url: http://xcaliber-fhir/structureDefinition/typeofbill
+                    valueString: Outpatient
+                  - url: http://xcaliber-fhir/structureDefinition/federaltaxid
+                    valueString: 98-7654321
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              bundle:
+              - resourceType: Location
+                id: '123456'
+                name: Athena Health Main Campus
+              address:
+                line:
+                - 123 Main St
+                - Suite 400
+                city: Boston
+                state: MA
+                postalCode: '02110'
+              telecom:
+              - system: phone
+                value: +1-555-123-4567
+              - system: fax
+                value: +1-555-765-4321
+              - system: fax
+                value: +1-555-999-8888
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/clinicalproviderfax
+                  valueString: CLINICALPROVIDERFAX
+              position:
+                latitude: 42.3601
+                longitude: -71.0589
+              type:
+              - coding:
+                - system: http://tiny.url/location/placeofservicetype
+                  code: POS001
+                  display: Outpatient Hospital
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/chartsharinggroupid
+                valueString: CSG-101
+              - url: http://xcaliber-fhir/structureDefinition/clinicals
+                valueString: Enabled
+              - url: http://xcaliber-fhir/structureDefinition/communicatorbrandid
+                valueString: Brand-22
+              - url: http://xcaliber-fhir/structureDefinition/creditcardtypes
+                valueString: '["Visa","Mastercard"]'
+              - url: http://xcaliber-fhir/structureDefinition/doesnotobservedst
+                valueString: 'false'
+              - url: http://xcaliber-fhir/structureDefinition/ecommercecreditcardtypes
+                valueString: '["Discover","Amex"]'
+              - url: http://xcaliber-fhir/structureDefinition/ishospitaldepartment
+                valueString: 'true'
+              - url: http://xcaliber-fhir/structureDefinition/medicationhistoryconsent
+                valueString: true
+              - url: http://xcaliber-fhir/structureDefinition/oneyearcontractmax
+                valueString: '120'
+              - url: http://xcaliber-fhir/structureDefinition/patientdepartmentname
+                valueString: Oncology
+              - url: http://xcaliber-fhir/structureDefinition/placeofservicefacility
+                valueString: Facility-A
+              - url: http://xcaliber-fhir/structureDefinition/portalurl
+                valueString: https://portal.athenahealth.com
+              - url: http://xcaliber-fhir/structureDefinition/providergroupid
+                valueString: PG-7788
+              - url: http://xcaliber-fhir/structureDefinition/providergroupname
+                valueString: Athena Health Providers
+              - url: http://xcaliber-fhir/structureDefinition/providerlist
+                valueString: Dr. Jane, Dr. John
+              - url: http://xcaliber-fhir/structureDefinition/servicedepartment
+                valueString: Cardiology
+              - url: http://xcaliber-fhir/structureDefinition/singleappointmentcontractmax
+                valueString: '60'
+              - url: http://xcaliber-fhir/structureDefinition/timezone
+                valueString: America/New_York
+              - url: http://xcaliber-fhir/structureDefinition/timezonename
+                valueString: Eastern Standard Time
+              - url: http://xcaliber-fhir/structureDefinition/timezoneoffset
+                valueString: '-0500'
+              - url: http://xcaliber-fhir/structureDefinition/typeofbill
+                valueString: Outpatient
+              - url: http://xcaliber-fhir/structureDefinition/federaltaxid
+                valueString: 98-7654321
+    error400ofgetinLocation:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      example:
+        statusCode: 400
+        message: Practice ID required
+        details: Missing Practice ID in request
+    error401ofgetinLocation:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinLocation:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: error details here
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: error details here
+    response201ofpostinLocation:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            status:
+              type: string
+              example: success
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              status: success
+    error400ofpostinLocation:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      example:
+        statusCode: 400
+        message: Practice ID required
+        details: Missing Practice ID in request
+    error401ofpostinLocation:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofpostinLocation:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: error details here
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: error details here
+    response200ofdeleteinLocation:
+      type: object
+      properties:
+        id:
+          type: string
+          example: loc-123
+        status:
+          type: string
+          example: deleted
+      example:
+        id: loc-123
+        status: deleted
+    error400ofdeleteinLocation:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      example:
+        statusCode: 400
+        message: Practice ID required
+        details: Missing Practice ID in request
+    error401ofdeleteinLocation:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofdeleteinLocation:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: error details here
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: error details here
+    response200ofgetinLocationlocationid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Location
+            id:
+              type: string
+              example: '123456'
+            name:
+              type: string
+              example: Athena Health Main Campus
+            address:
+              type: object
+              properties:
+                line:
+                  type: array
+                  items:
+                    type: string
+                city:
+                  type: string
+                state:
+                  type: string
+                postalCode:
+                  type: string
+            telecom:
+              type: array
+              items:
+                type: object
+                properties:
+                  system:
+                    type: string
+                  value:
+                    type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            position:
+              type: object
+              properties:
+                latitude:
+                  type: number
+                longitude:
+                  type: number
+            type:
+              type: array
+              items:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+          example:
+            resourceType: Location
+            id: '123456'
+            name: Athena Health Main Campus
+            address:
+              line:
+              - 123 Main St
+              - Suite 400
+              city: Boston
+              state: MA
+              postalCode: '02110'
+            telecom:
+            - system: phone
+              value: +1-555-123-4567
+            - system: fax
+              value: +1-555-765-4321
+            - system: fax
+              value: +1-555-999-8888
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/clinicalproviderfax
+                valueString: CLINICALPROVIDERFAX
+            position:
+              latitude: 42.3601
+              longitude: -71.0589
+            type:
+            - coding:
+              - system: http://tiny.url/location/placeofservicetype
+                code: POS001
+                display: Outpatient Hospital
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/chartsharinggroupid
+              valueString: CSG-101
+            - url: http://xcaliber-fhir/structureDefinition/clinicals
+              valueString: Enable
+            - url: http://xcaliber-fhir/structureDefinition/clinicals
+              valueString: Enabled
+            - url: http://xcaliber-fhir/structureDefinition/communicatorbrandid
+              valueString: Brand-22
+            - url: http://xcaliber-fhir/structureDefinition/creditcardtypes
+              valueString: '["Visa","Mastercard"]'
+            - url: http://xcaliber-fhir/structureDefinition/doesnotobservedst
+              valueString: 'false'
+            - url: http://xcaliber-fhir/structureDefinition/ecommercecreditcardtypes
+              valueString: '["Discover","Amex"]'
+            - url: http://xcaliber-fhir/structureDefinition/ishospitaldepartment
+              valueString: 'true'
+            - url: http://xcaliber-fhir/structureDefinition/medicationhistoryconsent
+              valueString: true
+            - url: http://xcaliber-fhir/structureDefinition/oneyearcontractmax
+              valueString: '120'
+            - url: http://xcaliber-fhir/structureDefinition/patientdepartmentname
+              valueString: Oncology
+            - url: http://xcaliber-fhir/structureDefinition/placeofservicefacility
+              valueString: Facility-A
+            - url: http://xcaliber-fhir/structureDefinition/portalurl
+              valueString: https://portal.athenahealth.com
+            - url: http://xcaliber-fhir/structureDefinition/providergroupid
+              valueString: PG-7788
+            - url: http://xcaliber-fhir/structureDefinition/providergroupname
+              valueString: Athena Health Providers
+            - url: http://xcaliber-fhir/structureDefinition/providerlist
+              valueString: Dr. Jane, Dr. John
+            - url: http://xcaliber-fhir/structureDefinition/servicedepartment
+              valueString: Cardiology
+            - url: http://xcaliber-fhir/structureDefinition/singleappointmentcontractmax
+              valueString: '60'
+            - url: http://xcaliber-fhir/structureDefinition/timezone
+              valueString: America/New_York
+            - url: http://xcaliber-fhir/structureDefinition/timezonename
+              valueString: Eastern Standard Time
+            - url: http://xcaliber-fhir/structureDefinition/timezoneoffset
+              valueString: '-0500'
+            - url: http://xcaliber-fhir/structureDefinition/typeofbill
+              valueString: Outpatient
+            - url: http://xcaliber-fhir/structureDefinition/federaltaxid
+              valueString: 98-7654321
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: Location
+              id: '123456'
+              name: Athena Health Main Campus
+              address:
+                line:
+                - 123 Main St
+                - Suite 400
+                city: Boston
+                state: MA
+                postalCode: '02110'
+              telecom:
+              - system: phone
+                value: +1-555-123-4567
+              - system: fax
+                value: +1-555-765-4321
+              - system: fax
+                value: +1-555-999-8888
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/clinicalproviderfax
+                  valueString: CLINICALPROVIDERFAX
+              position:
+                latitude: 42.3601
+                longitude: -71.0589
+              type:
+              - coding:
+                - system: http://tiny.url/location/placeofservicetype
+                  code: POS001
+                  display: Outpatient Hospital
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/chartsharinggroupid
+                valueString: CSG-101
+              - url: http://xcaliber-fhir/structureDefinition/clinicals
+                valueString: Enabled
+              - url: http://xcaliber-fhir/structureDefinition/communicatorbrandid
+                valueString: Brand-22
+              - url: http://xcaliber-fhir/structureDefinition/creditcardtypes
+                valueString: '["Visa","Mastercard"]'
+              - url: http://xcaliber-fhir/structureDefinition/doesnotobservedst
+                valueString: 'false'
+              - url: http://xcaliber-fhir/structureDefinition/ecommercecreditcardtypes
+                valueString: '["Discover","Amex"]'
+              - url: http://xcaliber-fhir/structureDefinition/ishospitaldepartment
+                valueString: 'true'
+              - url: http://xcaliber-fhir/structureDefinition/medicationhistoryconsent
+                valueString: true
+              - url: http://xcaliber-fhir/structureDefinition/oneyearcontractmax
+                valueString: '120'
+              - url: http://xcaliber-fhir/structureDefinition/patientdepartmentname
+                valueString: Oncology
+              - url: http://xcaliber-fhir/structureDefinition/placeofservicefacility
+                valueString: Facility-A
+              - url: http://xcaliber-fhir/structureDefinition/portalurl
+                valueString: https://portal.athenahealth.com
+              - url: http://xcaliber-fhir/structureDefinition/providergroupid
+                valueString: PG-7788
+              - url: http://xcaliber-fhir/structureDefinition/providergroupname
+                valueString: Athena Health Providers
+              - url: http://xcaliber-fhir/structureDefinition/providerlist
+                valueString: Dr. Jane, Dr. John
+              - url: http://xcaliber-fhir/structureDefinition/servicedepartment
+                valueString: Cardiology
+              - url: http://xcaliber-fhir/structureDefinition/singleappointmentcontractmax
+                valueString: '60'
+              - url: http://xcaliber-fhir/structureDefinition/timezone
+                valueString: America/New_York
+              - url: http://xcaliber-fhir/structureDefinition/timezonename
+                valueString: Eastern Standard Time
+              - url: http://xcaliber-fhir/structureDefinition/timezoneoffset
+                valueString: '-0500'
+              - url: http://xcaliber-fhir/structureDefinition/typeofbill
+                valueString: Outpatient
+              - url: http://xcaliber-fhir/structureDefinition/federaltaxid
+                valueString: 98-7654321
+    error400ofgetinLocationlocationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      example:
+        statusCode: 400
+        message: Practice ID required
+        details: Missing Practice ID in request
+    error401ofgetinLocationlocationid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinLocationlocationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: error details here
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: error details here
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

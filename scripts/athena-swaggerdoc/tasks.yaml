@@ -1,0 +1,398 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: AthenaTasks
+  description: Task management operations in Athena
+paths:
+  /api/v2/Task:
+    get:
+      tags:
+      - AthenaTasks
+      summary: Get a list of Tasks
+      operationId: getAthenaTasksV2
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: authored-on
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: authored-on'
+      - name: based-on
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: based-on'
+      - name: business-status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: business-status'
+      - name: code
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: code'
+      - name: due-date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: due-date'
+      - name: encounter
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: encounter'
+      - name: focus
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: focus'
+      - name: group-identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: group-identifier'
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - name: intent
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: intent'
+      - name: modified
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: modified'
+      - name: owner
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: owner'
+      - name: part-of
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: part-of'
+      - name: performer
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: performer'
+      - name: period
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: period'
+      - name: priority
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: priority'
+      - name: requester
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: requester'
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: status'
+      - name: subject
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: subject'
+      - name: priority-order
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: priority-order'
+      - name: practitioner
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinTask'
+              example:
+                statusCode: 400
+                message: Missing required parameter
+                details: null
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinTask'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinTask'
+              example:
+                statusCode: 404
+                message: Not found
+                details: null
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinTask'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: null
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: Task
+                        id: '123'
+                        authoredOn: '2024-01-15T10:30:00Z'
+                        status: requested
+                        priority: routine
+                        description: Patient follow-up required
+                        owner:
+                          reference: Patient/456
+                        intent: unknown
+                        code:
+                          coding:
+                          - system: http://xcaliber-fhir/structureDefinition/sub-type
+                            code: '789'
+                            display: Follow-up
+                          - system: http://xcaliber-fhir/structureDefinition/inbox-category
+                            display: Clinical
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/department-id
+                          valueString: CARDIO
+                        - url: http://xcaliber-fhir/structureDefinition/document-class
+                          valueString: Clinical Note
+                        - url: http://xcaliber-fhir/structureDefinition/document-subclass
+                          valueString: Progress Note
+                        - url: http://xcaliber-fhir/structureDefinition/result-category
+                          valueString: Lab Results
+components:
+  schemas:
+    response200ofgetinTask:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resourceType:
+                    type: string
+                    example: Task
+                  id:
+                    type: string
+                  status:
+                    type: string
+            meta:
+              type: object
+              properties:
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueString:
+                        type: string
+          required:
+          - resourceType
+          - type
+          - total
+          - entry
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resourceType: Task
+            id: task-001
+            status: active
+          meta:
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/meta-example-url
+              valueString: example-value
+    error400ofgetinTask:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing required parameter
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing required parameter
+        details: null
+    error401ofgetinTask:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+    error404ofgetinTask:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing required parameter
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing required parameter
+        details: null
+    error500ofgetinTask:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing required parameter
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing required parameter
+        details: null
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

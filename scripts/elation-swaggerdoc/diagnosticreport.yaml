@@ -1,0 +1,2636 @@
+openapi: 3.0.3
+info:
+  title: Elation Diagnostic Report API
+  version: 1.0.0
+  description: "Source Ids:\n- Athena: 083fe714-e36e-4851-b2e7-a7166b439f67\n- Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f\n\nDiagnostic Report Endpoints\n\n\"DiagnosticReport\" resource is used to represent the findings and interpretations\nof diagnostic tests performed on patients, groups of patients, or specimens. Laboratory\ntests, imaging studies, pathology reports, and product quality tests (such as\npH, Assay) are common diagnostic procedures.\n\nExample: After undergoing a blood test to assess their cholesterol levels, a patient's\nresults are documented in a \"DiagnosticReport\" resource. This report, marked as\n'final' and categorized as 'laboratory', includes the specific LOINC code for\nthe cholesterol test, the date and time of the blood draw, and references to the\n\"Observation\" resources containing the actual cholesterol values (e.g., LDL, HDL,\ntriglycerides). Additionally, the report may contain interpretations by the pathologist\nand any relevant clinical conclusions.\n\n Dependent Sources:\nPatient\n"
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.com
+tags:
+- name: DiagnosticReport
+  description: Operations related to Diagnostic Reports
+paths:
+  /api/v1/DiagnosticReport:
+    get:
+      tags:
+      - DiagnosticReport
+      summary: Get Diagnostic Reports
+      operationId: getDiagnosticReportFromElation
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+      - name: based-on
+        in: query
+        required: false
+        description: Search parameter 'based-on' for diagnosticreport.
+        schema:
+          type: string
+      - name: category
+        in: query
+        required: false
+        description: Search parameter 'category' for diagnosticreport.
+        schema:
+          type: string
+      - name: conclusion
+        in: query
+        required: false
+        description: Search parameter 'conclusion' for diagnosticreport.
+        schema:
+          type: string
+      - name: issued
+        in: query
+        required: false
+        description: Search parameter 'issued' for diagnosticreport.
+        schema:
+          type: string
+      - name: media
+        in: query
+        required: false
+        description: Search parameter 'media' for diagnosticreport.
+        schema:
+          type: string
+      - name: performer
+        in: query
+        required: false
+        description: Search parameter 'performer' for diagnosticreport.
+        schema:
+          type: string
+      - name: result
+        in: query
+        required: false
+        description: Search parameter 'result' for diagnosticreport.
+        schema:
+          type: string
+      - name: results-interpreter
+        in: query
+        required: false
+        description: Search parameter 'results-interpreter' for diagnosticreport.
+        schema:
+          type: string
+      - name: specimen
+        in: query
+        required: false
+        description: Search parameter 'specimen' for diagnosticreport.
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        description: Search parameter 'status' for diagnosticreport.
+        schema:
+          type: string
+      - name: study
+        in: query
+        required: false
+        description: Search parameter 'study' for diagnosticreport.
+        schema:
+          type: string
+      - name: subject
+        in: query
+        required: false
+        description: Search parameter 'subject' for diagnosticreport.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                  data:
+                    type: object
+                    example:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                      - resource:
+                          type: object
+                          description: Full DiagnosticReport resource structure (FHIR)
+                          example:
+                            resourceType: DiagnosticReport
+                            id: 12345678-90AB-CDEF-1234-567890ABCDEF
+                            meta:
+                              versionId: 4.0.1
+                              lastUpdated: '2022-01-01T12:00:00Z'
+                            status: final
+                            extension:
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+                              valueString: http://elationhealth.com/view/print/123456
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+                              valueString: This is a summary note.
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+                              valueString: '2022-01-01'
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+                              valueString: '2022-01-01'
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+                              valueString: '2022-01-02'
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+                              valueInteger: 314
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+                              valueString: '2022-01-01'
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+                              valueString: '2022-01-05'
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+                              valueInteger: 2023
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+                              valueInteger: 101
+                            code:
+                              coding:
+                              - system: http://snomed.info/sct
+                                code: '364123007'
+                                display: Blood Glucose
+                              extension:
+                              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                                valueString: 2345-7
+                            subject:
+                              reference: Patient/example
+                              display: John Doe
+                            issued: '2022-01-01T12:00:00Z'
+                            performer:
+                            - reference: Practitioner/example
+                              display: Dr. Jane Smith
+                            result:
+                            - interpretation: Normal
+                              referenceRange:
+                                low:
+                                  value: 70
+                                  unitCode: mg/dL
+                                  lowNormal: true
+                                  highNormal: false
+                                high:
+                                  value: 110
+                                  unitCode: mg/dL
+                                  lowNormal: false
+                                  highNormal: true
+                              valueQuantity:
+                                value: 95
+                                unitCode: mg/dL
+                              extension:
+                              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                                valueString: final
+                              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                                valueString: quantity
+                              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                                valueString: Value within normal range.
+                              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                                valueBoolean: false
+                              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                                valueString: N
+                              interpretationNote:
+                                coding:
+                                - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                                  code: NORM
+                                text: Within normal range.
+                              category:
+                              - extension:
+                                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                                  valueString: Chemistry
+                                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                                  valueString: LAB
+                            method:
+                              coding:
+                              - system: http://loinc.org
+                                code: '100039001'
+                                display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+                            bodySite:
+                              coding:
+                              - system: http://terminology.hl7.org/CodeSystem/body-site
+                                code: 10620-7
+                                display: Blood, capillary
+                            imagingStudy:
+                              reference: ImagingStudy/example
+                required:
+                - context
+                - data
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 1
+                    entry:
+                    - resource:
+                        type: object
+                        description: Full DiagnosticReport resource structure (FHIR)
+                        example:
+                          resourceType: DiagnosticReport
+                          id: 12345678-90AB-CDEF-1234-567890ABCDEF
+                          meta:
+                            versionId: 4.0.1
+                            lastUpdated: '2022-01-01T12:00:00Z'
+                          status: final
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+                            valueString: http://elationhealth.com/view/print/123456
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+                            valueString: This is a summary note.
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+                            valueString: '2022-01-01'
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+                            valueString: '2022-01-01'
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+                            valueString: '2022-01-02'
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+                            valueInteger: 314
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+                            valueString: '2022-01-01'
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+                            valueString: '2022-01-05'
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+                            valueInteger: 2023
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+                            valueInteger: 101
+                          code:
+                            coding:
+                            - system: http://snomed.info/sct
+                              code: '364123007'
+                              display: Blood Glucose
+                            extension:
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                              valueString: 2345-7
+                          subject:
+                            reference: Patient/example
+                            display: John Doe
+                          issued: '2022-01-01T12:00:00Z'
+                          performer:
+                          - reference: Practitioner/example
+                            display: Dr. Jane Smith
+                          result:
+                          - interpretation: Normal
+                            referenceRange:
+                              low:
+                                value: 70
+                                unitCode: mg/dL
+                                lowNormal: true
+                                highNormal: false
+                              high:
+                                value: 110
+                                unitCode: mg/dL
+                                lowNormal: false
+                                highNormal: true
+                            valueQuantity:
+                              value: 95
+                              unitCode: mg/dL
+                            extension:
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                              valueString: final
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                              valueString: quantity
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                              valueString: Value within normal range.
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                              valueBoolean: false
+                            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                              valueString: N
+                            interpretationNote:
+                              coding:
+                              - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                                code: NORM
+                              text: Within normal range.
+                            category:
+                            - extension:
+                              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                                valueString: Chemistry
+                              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                                valueString: LAB
+                          method:
+                            coding:
+                            - system: http://loinc.org
+                              code: '100039001'
+                              display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+                          bodySite:
+                            coding:
+                            - system: http://terminology.hl7.org/CodeSystem/body-site
+                              code: 10620-7
+                              display: Blood, capillary
+                          imagingStudy:
+                            reference: ImagingStudy/example
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+                required:
+                - statusCode
+                - message
+                - status
+                example:
+                  statusCode: 400
+                  message: Bad request
+                  status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                    example: {}
+                  status:
+                    type: string
+                    example: error
+                required:
+                - statusCode
+                - message
+                - details
+                - status
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+                  status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+                required:
+                - statusCode
+                - message
+                - status
+                example:
+                  statusCode: 401
+                  message: Unauthorized
+                  status: error
+    post:
+      tags:
+      - DiagnosticReport
+      summary: Create Diagnostic Report
+      operationId: createDiagnosticReportInElation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  type: object
+                  properties:
+                    requestId:
+                      type: string
+                      example: 387fab671795f9340a5bcff9e80808e5
+                    source:
+                      type: string
+                      example: ELATION
+                    quorum:
+                      type: boolean
+                      example: true
+                    notify:
+                      type: boolean
+                      example: true
+                  required:
+                  - requestId
+                  - source
+                  - quorum
+                  - notify
+                data:
+                  type: object
+                  description: Full DiagnosticReport resource structure (FHIR)
+                  example:
+                    resourceType: DiagnosticReport
+                    id: 12345678-90AB-CDEF-1234-567890ABCDEF
+                    meta:
+                      versionId: 4.0.1
+                      lastUpdated: '2022-01-01T12:00:00Z'
+                    status: final
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+                      valueString: http://elationhealth.com/view/print/123456
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+                      valueString: This is a summary note.
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+                      valueString: '2022-01-01'
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+                      valueString: '2022-01-01'
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+                      valueString: '2022-01-02'
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+                      valueInteger: 314
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+                      valueString: '2022-01-01'
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+                      valueString: '2022-01-05'
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+                      valueInteger: 2023
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+                      valueInteger: 101
+                    code:
+                      coding:
+                      - system: http://snomed.info/sct
+                        code: '364123007'
+                        display: Blood Glucose
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                        valueString: 2345-7
+                    subject:
+                      reference: Patient/example
+                      display: John Doe
+                    issued: '2022-01-01T12:00:00Z'
+                    performer:
+                    - reference: Practitioner/example
+                      display: Dr. Jane Smith
+                    result:
+                    - interpretation: Normal
+                      referenceRange:
+                        low:
+                          value: 70
+                          unitCode: mg/dL
+                          lowNormal: true
+                          highNormal: false
+                        high:
+                          value: 110
+                          unitCode: mg/dL
+                          lowNormal: false
+                          highNormal: true
+                      valueQuantity:
+                        value: 95
+                        unitCode: mg/dL
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                        valueString: final
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                        valueString: quantity
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                        valueString: Value within normal range.
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                        valueString: N
+                      interpretationNote:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                          code: NORM
+                        text: Within normal range.
+                      category:
+                      - extension:
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                          valueString: Chemistry
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                          valueString: LAB
+                    method:
+                      coding:
+                      - system: http://loinc.org
+                        code: '100039001'
+                        display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+                    bodySite:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/body-site
+                        code: 10620-7
+                        display: Blood, capillary
+                    imagingStudy:
+                      reference: ImagingStudy/example
+              required:
+              - context
+              - data
+              example:
+                context:
+                  requestId: 387fab671795f9340a5bcff9e80808e5
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  type: object
+                  description: Full DiagnosticReport resource structure (FHIR)
+                  example:
+                    resourceType: DiagnosticReport
+                    id: 12345678-90AB-CDEF-1234-567890ABCDEF
+                    meta:
+                      versionId: 4.0.1
+                      lastUpdated: '2022-01-01T12:00:00Z'
+                    status: final
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+                      valueString: http://elationhealth.com/view/print/123456
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+                      valueString: This is a summary note.
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+                      valueString: '2022-01-01'
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+                      valueString: '2022-01-01'
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+                      valueString: '2022-01-02'
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+                      valueInteger: 314
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+                      valueString: '2022-01-01'
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+                      valueString: '2022-01-05'
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+                      valueInteger: 2023
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+                      valueInteger: 101
+                    code:
+                      coding:
+                      - system: http://snomed.info/sct
+                        code: '364123007'
+                        display: Blood Glucose
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                        valueString: 2345-7
+                    subject:
+                      reference: Patient/example
+                      display: John Doe
+                    issued: '2022-01-01T12:00:00Z'
+                    performer:
+                    - reference: Practitioner/example
+                      display: Dr. Jane Smith
+                    result:
+                    - interpretation: Normal
+                      referenceRange:
+                        low:
+                          value: 70
+                          unitCode: mg/dL
+                          lowNormal: true
+                          highNormal: false
+                        high:
+                          value: 110
+                          unitCode: mg/dL
+                          lowNormal: false
+                          highNormal: true
+                      valueQuantity:
+                        value: 95
+                        unitCode: mg/dL
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                        valueString: final
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                        valueString: quantity
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                        valueString: Value within normal range.
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                        valueString: N
+                      interpretationNote:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                          code: NORM
+                        text: Within normal range.
+                      category:
+                      - extension:
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                          valueString: Chemistry
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                          valueString: LAB
+                    method:
+                      coding:
+                      - system: http://loinc.org
+                        code: '100039001'
+                        display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+                    bodySite:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/body-site
+                        code: 10620-7
+                        display: Blood, capillary
+                    imagingStudy:
+                      reference: ImagingStudy/example
+      responses:
+        '201':
+          description: Diagnostic report created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                  data:
+                    type: object
+                    example:
+                      id: generated-diagnostic-report-id
+                      status: success
+                required:
+                - context
+                - data
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    id: generated-diagnostic-report-id
+                    status: success
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+                required:
+                - statusCode
+                - message
+                - status
+                example:
+                  statusCode: 400
+                  message: Bad request
+                  status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                    example: {}
+                  status:
+                    type: string
+                    example: error
+                required:
+                - statusCode
+                - message
+                - details
+                - status
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+                  status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+                required:
+                - statusCode
+                - message
+                - status
+                example:
+                  statusCode: 401
+                  message: Unauthorized
+                  status: error
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+    parameters: []
+  /api/v1/DiagnosticReport/{diagnostic-report-id}:
+    get:
+      tags:
+      - DiagnosticReport
+      summary: Get Diagnostic Report by ID
+      operationId: getDiagnosticReportFromElationById
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                  data:
+                    type: object
+                    description: Full DiagnosticReport resource structure (FHIR)
+                    example:
+                      resourceType: DiagnosticReport
+                      id: 12345678-90AB-CDEF-1234-567890ABCDEF
+                      meta:
+                        versionId: 4.0.1
+                        lastUpdated: '2022-01-01T12:00:00Z'
+                      status: final
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+                        valueString: http://elationhealth.com/view/print/123456
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+                        valueString: This is a summary note.
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+                        valueString: '2022-01-01'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+                        valueString: '2022-01-01'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+                        valueString: '2022-01-02'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+                        valueInteger: 314
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+                        valueString: '2022-01-01'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+                        valueString: '2022-01-05'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+                        valueInteger: 2023
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+                        valueInteger: 101
+                      code:
+                        coding:
+                        - system: http://snomed.info/sct
+                          code: '364123007'
+                          display: Blood Glucose
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                          valueString: 2345-7
+                      subject:
+                        reference: Patient/example
+                        display: John Doe
+                      issued: '2022-01-01T12:00:00Z'
+                      performer:
+                      - reference: Practitioner/example
+                        display: Dr. Jane Smith
+                      result:
+                      - interpretation: Normal
+                        referenceRange:
+                          low:
+                            value: 70
+                            unitCode: mg/dL
+                            lowNormal: true
+                            highNormal: false
+                          high:
+                            value: 110
+                            unitCode: mg/dL
+                            lowNormal: false
+                            highNormal: true
+                        valueQuantity:
+                          value: 95
+                          unitCode: mg/dL
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                          valueString: final
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                          valueString: quantity
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                          valueString: Value within normal range.
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                          valueString: N
+                        interpretationNote:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                            code: NORM
+                          text: Within normal range.
+                        category:
+                        - extension:
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                            valueString: Chemistry
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                            valueString: LAB
+                      method:
+                        coding:
+                        - system: http://loinc.org
+                          code: '100039001'
+                          display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+                      bodySite:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/body-site
+                          code: 10620-7
+                          display: Blood, capillary
+                      imagingStudy:
+                        reference: ImagingStudy/example
+                required:
+                - context
+                - data
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    type: object
+                    description: Full DiagnosticReport resource structure (FHIR)
+                    example:
+                      resourceType: DiagnosticReport
+                      id: 12345678-90AB-CDEF-1234-567890ABCDEF
+                      meta:
+                        versionId: 4.0.1
+                        lastUpdated: '2022-01-01T12:00:00Z'
+                      status: final
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+                        valueString: http://elationhealth.com/view/print/123456
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+                        valueString: This is a summary note.
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+                        valueString: '2022-01-01'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+                        valueString: '2022-01-01'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+                        valueString: '2022-01-02'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+                        valueInteger: 314
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+                        valueString: '2022-01-01'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+                        valueString: '2022-01-05'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+                        valueInteger: 2023
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+                        valueInteger: 101
+                      code:
+                        coding:
+                        - system: http://snomed.info/sct
+                          code: '364123007'
+                          display: Blood Glucose
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                          valueString: 2345-7
+                      subject:
+                        reference: Patient/example
+                        display: John Doe
+                      issued: '2022-01-01T12:00:00Z'
+                      performer:
+                      - reference: Practitioner/example
+                        display: Dr. Jane Smith
+                      result:
+                      - interpretation: Normal
+                        referenceRange:
+                          low:
+                            value: 70
+                            unitCode: mg/dL
+                            lowNormal: true
+                            highNormal: false
+                          high:
+                            value: 110
+                            unitCode: mg/dL
+                            lowNormal: false
+                            highNormal: true
+                        valueQuantity:
+                          value: 95
+                          unitCode: mg/dL
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                          valueString: final
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                          valueString: quantity
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                          valueString: Value within normal range.
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                          valueString: N
+                        interpretationNote:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                            code: NORM
+                          text: Within normal range.
+                        category:
+                        - extension:
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                            valueString: Chemistry
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                            valueString: LAB
+                      method:
+                        coding:
+                        - system: http://loinc.org
+                          code: '100039001'
+                          display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+                      bodySite:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/body-site
+                          code: 10620-7
+                          display: Blood, capillary
+                      imagingStudy:
+                        reference: ImagingStudy/example
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+                required:
+                - statusCode
+                - message
+                - status
+                example:
+                  statusCode: 400
+                  message: Bad request
+                  status: error
+        '404':
+          description: Diagnostic report not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Diagnostic report not found
+                  status:
+                    type: string
+                    example: error
+                required:
+                - statusCode
+                - message
+                - status
+                example:
+                  statusCode: 404
+                  message: Diagnostic report not found
+                  status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                    example: {}
+                  status:
+                    type: string
+                    example: error
+                required:
+                - statusCode
+                - message
+                - details
+                - status
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+                  status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+                required:
+                - statusCode
+                - message
+                - status
+                example:
+                  statusCode: 401
+                  message: Unauthorized
+                  status: error
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: diagnostic-report-id
+        in: path
+        required: true
+        description: Source system identifier.
+        schema:
+          type: string
+    delete:
+      tags:
+      - DiagnosticReport
+      summary: Delete Diagnostic Report
+      operationId: deleteDiagnosticReportInElation
+      responses:
+        '204':
+          description: Diagnostic report deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                  data:
+                    type: object
+                    description: Full DiagnosticReport resource structure (FHIR)
+                    example:
+                      resourceType: DiagnosticReport
+                      id: 12345678-90AB-CDEF-1234-567890ABCDEF
+                      meta:
+                        versionId: 4.0.1
+                        lastUpdated: '2022-01-01T12:00:00Z'
+                      status: final
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+                        valueString: http://elationhealth.com/view/print/123456
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+                        valueString: This is a summary note.
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+                        valueString: '2022-01-01'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+                        valueString: '2022-01-01'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+                        valueString: '2022-01-02'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+                        valueInteger: 314
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+                        valueString: '2022-01-01'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+                        valueString: '2022-01-05'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+                        valueInteger: 2023
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+                        valueInteger: 101
+                      code:
+                        coding:
+                        - system: http://snomed.info/sct
+                          code: '364123007'
+                          display: Blood Glucose
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                          valueString: 2345-7
+                      subject:
+                        reference: Patient/example
+                        display: John Doe
+                      issued: '2022-01-01T12:00:00Z'
+                      performer:
+                      - reference: Practitioner/example
+                        display: Dr. Jane Smith
+                      result:
+                      - interpretation: Normal
+                        referenceRange:
+                          low:
+                            value: 70
+                            unitCode: mg/dL
+                            lowNormal: true
+                            highNormal: false
+                          high:
+                            value: 110
+                            unitCode: mg/dL
+                            lowNormal: false
+                            highNormal: true
+                        valueQuantity:
+                          value: 95
+                          unitCode: mg/dL
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                          valueString: final
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                          valueString: quantity
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                          valueString: Value within normal range.
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                          valueString: N
+                        interpretationNote:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                            code: NORM
+                          text: Within normal range.
+                        category:
+                        - extension:
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                            valueString: Chemistry
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                            valueString: LAB
+                      method:
+                        coding:
+                        - system: http://loinc.org
+                          code: '100039001'
+                          display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+                      bodySite:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/body-site
+                          code: 10620-7
+                          display: Blood, capillary
+                      imagingStudy:
+                        reference: ImagingStudy/example
+                required:
+                - context
+                - data
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    type: object
+                    description: Full DiagnosticReport resource structure (FHIR)
+                    example:
+                      resourceType: DiagnosticReport
+                      id: 12345678-90AB-CDEF-1234-567890ABCDEF
+                      meta:
+                        versionId: 4.0.1
+                        lastUpdated: '2022-01-01T12:00:00Z'
+                      status: final
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+                        valueString: http://elationhealth.com/view/print/123456
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+                        valueString: This is a summary note.
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+                        valueString: '2022-01-01'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+                        valueString: '2022-01-01'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+                        valueString: '2022-01-02'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+                        valueInteger: 314
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+                        valueString: '2022-01-01'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+                        valueString: '2022-01-05'
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+                        valueInteger: 2023
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+                        valueInteger: 101
+                      code:
+                        coding:
+                        - system: http://snomed.info/sct
+                          code: '364123007'
+                          display: Blood Glucose
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                          valueString: 2345-7
+                      subject:
+                        reference: Patient/example
+                        display: John Doe
+                      issued: '2022-01-01T12:00:00Z'
+                      performer:
+                      - reference: Practitioner/example
+                        display: Dr. Jane Smith
+                      result:
+                      - interpretation: Normal
+                        referenceRange:
+                          low:
+                            value: 70
+                            unitCode: mg/dL
+                            lowNormal: true
+                            highNormal: false
+                          high:
+                            value: 110
+                            unitCode: mg/dL
+                            lowNormal: false
+                            highNormal: true
+                        valueQuantity:
+                          value: 95
+                          unitCode: mg/dL
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                          valueString: final
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                          valueString: quantity
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                          valueString: Value within normal range.
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                          valueBoolean: false
+                        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                          valueString: N
+                        interpretationNote:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                            code: NORM
+                          text: Within normal range.
+                        category:
+                        - extension:
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                            valueString: Chemistry
+                          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                            valueString: LAB
+                      method:
+                        coding:
+                        - system: http://loinc.org
+                          code: '100039001'
+                          display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+                      bodySite:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/body-site
+                          code: 10620-7
+                          display: Blood, capillary
+                      imagingStudy:
+                        reference: ImagingStudy/example
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+                required:
+                - statusCode
+                - message
+                - status
+                example:
+                  statusCode: 400
+                  message: Bad request
+                  status: error
+        '404':
+          description: Diagnostic report not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Diagnostic report not found
+                  status:
+                    type: string
+                    example: error
+                required:
+                - statusCode
+                - message
+                - status
+                example:
+                  statusCode: 404
+                  message: Diagnostic report not found
+                  status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                    example: {}
+                  status:
+                    type: string
+                    example: error
+                required:
+                - statusCode
+                - message
+                - details
+                - status
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+                  status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+                required:
+                - statusCode
+                - message
+                - status
+                example:
+                  statusCode: 401
+                  message: Unauthorized
+                  status: error
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: diagnostic-report-id
+        in: path
+        required: true
+        description: Source system identifier.
+        schema:
+          type: string
+components:
+  schemas:
+    DiagnosticReportBundle:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          example:
+            resourceType: Bundle
+            type: searchset
+            total: 1
+            entry:
+            - resource:
+                type: object
+                description: Full DiagnosticReport resource structure (FHIR)
+                example:
+                  resourceType: DiagnosticReport
+                  id: 12345678-90AB-CDEF-1234-567890ABCDEF
+                  meta:
+                    versionId: 4.0.1
+                    lastUpdated: '2022-01-01T12:00:00Z'
+                  status: final
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+                    valueString: http://elationhealth.com/view/print/123456
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+                    valueString: This is a summary note.
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+                    valueString: '2022-01-01'
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+                    valueString: '2022-01-01'
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+                    valueString: '2022-01-02'
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+                    valueInteger: 314
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+                    valueString: '2022-01-01'
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+                    valueString: '2022-01-05'
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+                    valueInteger: 2023
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+                    valueInteger: 101
+                  code:
+                    coding:
+                    - system: http://snomed.info/sct
+                      code: '364123007'
+                      display: Blood Glucose
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                      valueString: 2345-7
+                  subject:
+                    reference: Patient/example
+                    display: John Doe
+                  issued: '2022-01-01T12:00:00Z'
+                  performer:
+                  - reference: Practitioner/example
+                    display: Dr. Jane Smith
+                  result:
+                  - interpretation: Normal
+                    referenceRange:
+                      low:
+                        value: 70
+                        unitCode: mg/dL
+                        lowNormal: true
+                        highNormal: false
+                      high:
+                        value: 110
+                        unitCode: mg/dL
+                        lowNormal: false
+                        highNormal: true
+                    valueQuantity:
+                      value: 95
+                      unitCode: mg/dL
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                      valueString: final
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                      valueString: quantity
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                      valueString: Value within normal range.
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                      valueString: N
+                    interpretationNote:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                        code: NORM
+                      text: Within normal range.
+                    category:
+                    - extension:
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                        valueString: Chemistry
+                      - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                        valueString: LAB
+                  method:
+                    coding:
+                    - system: http://loinc.org
+                      code: '100039001'
+                      display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+                  bodySite:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/body-site
+                      code: 10620-7
+                      display: Blood, capillary
+                  imagingStudy:
+                    reference: ImagingStudy/example
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              type: object
+              description: Full DiagnosticReport resource structure (FHIR)
+              example:
+                resourceType: DiagnosticReport
+                id: 12345678-90AB-CDEF-1234-567890ABCDEF
+                meta:
+                  versionId: 4.0.1
+                  lastUpdated: '2022-01-01T12:00:00Z'
+                status: final
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+                  valueString: http://elationhealth.com/view/print/123456
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+                  valueString: This is a summary note.
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+                  valueString: '2022-01-01'
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+                  valueString: '2022-01-01'
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+                  valueString: '2022-01-02'
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+                  valueInteger: 314
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+                  valueString: '2022-01-01'
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+                  valueString: '2022-01-05'
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+                  valueInteger: 2023
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+                  valueInteger: 101
+                code:
+                  coding:
+                  - system: http://snomed.info/sct
+                    code: '364123007'
+                    display: Blood Glucose
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                    valueString: 2345-7
+                subject:
+                  reference: Patient/example
+                  display: John Doe
+                issued: '2022-01-01T12:00:00Z'
+                performer:
+                - reference: Practitioner/example
+                  display: Dr. Jane Smith
+                result:
+                - interpretation: Normal
+                  referenceRange:
+                    low:
+                      value: 70
+                      unitCode: mg/dL
+                      lowNormal: true
+                      highNormal: false
+                    high:
+                      value: 110
+                      unitCode: mg/dL
+                      lowNormal: false
+                      highNormal: true
+                  valueQuantity:
+                    value: 95
+                    unitCode: mg/dL
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                    valueString: final
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                    valueString: quantity
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                    valueString: Value within normal range.
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                    valueString: N
+                  interpretationNote:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                      code: NORM
+                    text: Within normal range.
+                  category:
+                  - extension:
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                      valueString: Chemistry
+                    - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                      valueString: LAB
+                method:
+                  coding:
+                  - system: http://loinc.org
+                    code: '100039001'
+                    display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+                bodySite:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/body-site
+                    code: 10620-7
+                    display: Blood, capillary
+                imagingStudy:
+                  reference: ImagingStudy/example
+    DiagnosticReportResource:
+      type: object
+      description: Full DiagnosticReport resource structure (FHIR)
+      example:
+        resourceType: DiagnosticReport
+        id: 12345678-90AB-CDEF-1234-567890ABCDEF
+        meta:
+          versionId: 4.0.1
+          lastUpdated: '2022-01-01T12:00:00Z'
+        status: final
+        extension:
+        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+          valueString: http://elationhealth.com/view/print/123456
+        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+          valueString: This is a summary note.
+        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+          valueString: '2022-01-01'
+        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+          valueString: '2022-01-01'
+        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+          valueString: '2022-01-02'
+        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+          valueInteger: 314
+        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+          valueString: '2022-01-01'
+        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+          valueString: '2022-01-05'
+        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+          valueInteger: 2023
+        - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+          valueInteger: 101
+        code:
+          coding:
+          - system: http://snomed.info/sct
+            code: '364123007'
+            display: Blood Glucose
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+            valueString: 2345-7
+        subject:
+          reference: Patient/example
+          display: John Doe
+        issued: '2022-01-01T12:00:00Z'
+        performer:
+        - reference: Practitioner/example
+          display: Dr. Jane Smith
+        result:
+        - interpretation: Normal
+          referenceRange:
+            low:
+              value: 70
+              unitCode: mg/dL
+              lowNormal: true
+              highNormal: false
+            high:
+              value: 110
+              unitCode: mg/dL
+              lowNormal: false
+              highNormal: true
+          valueQuantity:
+            value: 95
+            unitCode: mg/dL
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+            valueString: final
+          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+            valueString: quantity
+          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+            valueString: Value within normal range.
+          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+            valueBoolean: false
+          - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+            valueString: N
+          interpretationNote:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+              code: NORM
+            text: Within normal range.
+          category:
+          - extension:
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+              valueString: Chemistry
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+              valueString: LAB
+        method:
+          coding:
+          - system: http://loinc.org
+            code: '100039001'
+            display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+        bodySite:
+          coding:
+          - system: http://terminology.hl7.org/CodeSystem/body-site
+            code: 10620-7
+            display: Blood, capillary
+        imagingStudy:
+          reference: ImagingStudy/example
+    DiagnosticReportCreateRequest:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          description: Full DiagnosticReport resource structure (FHIR)
+          example:
+            resourceType: DiagnosticReport
+            id: 12345678-90AB-CDEF-1234-567890ABCDEF
+            meta:
+              versionId: 4.0.1
+              lastUpdated: '2022-01-01T12:00:00Z'
+            status: final
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+              valueString: http://elationhealth.com/view/print/123456
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+              valueString: This is a summary note.
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+              valueString: '2022-01-02'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+              valueInteger: 314
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+              valueString: '2022-01-05'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+              valueInteger: 2023
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+              valueInteger: 101
+            code:
+              coding:
+              - system: http://snomed.info/sct
+                code: '364123007'
+                display: Blood Glucose
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                valueString: 2345-7
+            subject:
+              reference: Patient/example
+              display: John Doe
+            issued: '2022-01-01T12:00:00Z'
+            performer:
+            - reference: Practitioner/example
+              display: Dr. Jane Smith
+            result:
+            - interpretation: Normal
+              referenceRange:
+                low:
+                  value: 70
+                  unitCode: mg/dL
+                  lowNormal: true
+                  highNormal: false
+                high:
+                  value: 110
+                  unitCode: mg/dL
+                  lowNormal: false
+                  highNormal: true
+              valueQuantity:
+                value: 95
+                unitCode: mg/dL
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                valueString: final
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                valueString: quantity
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                valueString: Value within normal range.
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                valueBoolean: false
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                valueString: N
+              interpretationNote:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                  code: NORM
+                text: Within normal range.
+              category:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                  valueString: Chemistry
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                  valueString: LAB
+            method:
+              coding:
+              - system: http://loinc.org
+                code: '100039001'
+                display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+            bodySite:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/body-site
+                code: 10620-7
+                display: Blood, capillary
+            imagingStudy:
+              reference: ImagingStudy/example
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          type: object
+          description: Full DiagnosticReport resource structure (FHIR)
+          example:
+            resourceType: DiagnosticReport
+            id: 12345678-90AB-CDEF-1234-567890ABCDEF
+            meta:
+              versionId: 4.0.1
+              lastUpdated: '2022-01-01T12:00:00Z'
+            status: final
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+              valueString: http://elationhealth.com/view/print/123456
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+              valueString: This is a summary note.
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+              valueString: '2022-01-02'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+              valueInteger: 314
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+              valueString: '2022-01-05'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+              valueInteger: 2023
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+              valueInteger: 101
+            code:
+              coding:
+              - system: http://snomed.info/sct
+                code: '364123007'
+                display: Blood Glucose
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                valueString: 2345-7
+            subject:
+              reference: Patient/example
+              display: John Doe
+            issued: '2022-01-01T12:00:00Z'
+            performer:
+            - reference: Practitioner/example
+              display: Dr. Jane Smith
+            result:
+            - interpretation: Normal
+              referenceRange:
+                low:
+                  value: 70
+                  unitCode: mg/dL
+                  lowNormal: true
+                  highNormal: false
+                high:
+                  value: 110
+                  unitCode: mg/dL
+                  lowNormal: false
+                  highNormal: true
+              valueQuantity:
+                value: 95
+                unitCode: mg/dL
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                valueString: final
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                valueString: quantity
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                valueString: Value within normal range.
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                valueBoolean: false
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                valueString: N
+              interpretationNote:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                  code: NORM
+                text: Within normal range.
+              category:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                  valueString: Chemistry
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                  valueString: LAB
+            method:
+              coding:
+              - system: http://loinc.org
+                code: '100039001'
+                display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+            bodySite:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/body-site
+                code: 10620-7
+                display: Blood, capillary
+            imagingStudy:
+              reference: ImagingStudy/example
+    DiagnosticReportCreateResponse:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          example:
+            id: generated-diagnostic-report-id
+            status: success
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          id: generated-diagnostic-report-id
+          status: success
+    DiagnosticReportByIdResponse:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          description: Full DiagnosticReport resource structure (FHIR)
+          example:
+            resourceType: DiagnosticReport
+            id: 12345678-90AB-CDEF-1234-567890ABCDEF
+            meta:
+              versionId: 4.0.1
+              lastUpdated: '2022-01-01T12:00:00Z'
+            status: final
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+              valueString: http://elationhealth.com/view/print/123456
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+              valueString: This is a summary note.
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+              valueString: '2022-01-02'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+              valueInteger: 314
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+              valueString: '2022-01-05'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+              valueInteger: 2023
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+              valueInteger: 101
+            code:
+              coding:
+              - system: http://snomed.info/sct
+                code: '364123007'
+                display: Blood Glucose
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                valueString: 2345-7
+            subject:
+              reference: Patient/example
+              display: John Doe
+            issued: '2022-01-01T12:00:00Z'
+            performer:
+            - reference: Practitioner/example
+              display: Dr. Jane Smith
+            result:
+            - interpretation: Normal
+              referenceRange:
+                low:
+                  value: 70
+                  unitCode: mg/dL
+                  lowNormal: true
+                  highNormal: false
+                high:
+                  value: 110
+                  unitCode: mg/dL
+                  lowNormal: false
+                  highNormal: true
+              valueQuantity:
+                value: 95
+                unitCode: mg/dL
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                valueString: final
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                valueString: quantity
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                valueString: Value within normal range.
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                valueBoolean: false
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                valueString: N
+              interpretationNote:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                  code: NORM
+                text: Within normal range.
+              category:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                  valueString: Chemistry
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                  valueString: LAB
+            method:
+              coding:
+              - system: http://loinc.org
+                code: '100039001'
+                display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+            bodySite:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/body-site
+                code: 10620-7
+                display: Blood, capillary
+            imagingStudy:
+              reference: ImagingStudy/example
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          type: object
+          description: Full DiagnosticReport resource structure (FHIR)
+          example:
+            resourceType: DiagnosticReport
+            id: 12345678-90AB-CDEF-1234-567890ABCDEF
+            meta:
+              versionId: 4.0.1
+              lastUpdated: '2022-01-01T12:00:00Z'
+            status: final
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+              valueString: http://elationhealth.com/view/print/123456
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+              valueString: This is a summary note.
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+              valueString: '2022-01-02'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+              valueInteger: 314
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+              valueString: '2022-01-05'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+              valueInteger: 2023
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+              valueInteger: 101
+            code:
+              coding:
+              - system: http://snomed.info/sct
+                code: '364123007'
+                display: Blood Glucose
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                valueString: 2345-7
+            subject:
+              reference: Patient/example
+              display: John Doe
+            issued: '2022-01-01T12:00:00Z'
+            performer:
+            - reference: Practitioner/example
+              display: Dr. Jane Smith
+            result:
+            - interpretation: Normal
+              referenceRange:
+                low:
+                  value: 70
+                  unitCode: mg/dL
+                  lowNormal: true
+                  highNormal: false
+                high:
+                  value: 110
+                  unitCode: mg/dL
+                  lowNormal: false
+                  highNormal: true
+              valueQuantity:
+                value: 95
+                unitCode: mg/dL
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                valueString: final
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                valueString: quantity
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                valueString: Value within normal range.
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                valueBoolean: false
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                valueString: N
+              interpretationNote:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                  code: NORM
+                text: Within normal range.
+              category:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                  valueString: Chemistry
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                  valueString: LAB
+            method:
+              coding:
+              - system: http://loinc.org
+                code: '100039001'
+                display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+            bodySite:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/body-site
+                code: 10620-7
+                display: Blood, capillary
+            imagingStudy:
+              reference: ImagingStudy/example
+    DiagnosticReportDeleteResponse:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          description: Full DiagnosticReport resource structure (FHIR)
+          example:
+            resourceType: DiagnosticReport
+            id: 12345678-90AB-CDEF-1234-567890ABCDEF
+            meta:
+              versionId: 4.0.1
+              lastUpdated: '2022-01-01T12:00:00Z'
+            status: final
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+              valueString: http://elationhealth.com/view/print/123456
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+              valueString: This is a summary note.
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+              valueString: '2022-01-02'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+              valueInteger: 314
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+              valueString: '2022-01-05'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+              valueInteger: 2023
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+              valueInteger: 101
+            code:
+              coding:
+              - system: http://snomed.info/sct
+                code: '364123007'
+                display: Blood Glucose
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                valueString: 2345-7
+            subject:
+              reference: Patient/example
+              display: John Doe
+            issued: '2022-01-01T12:00:00Z'
+            performer:
+            - reference: Practitioner/example
+              display: Dr. Jane Smith
+            result:
+            - interpretation: Normal
+              referenceRange:
+                low:
+                  value: 70
+                  unitCode: mg/dL
+                  lowNormal: true
+                  highNormal: false
+                high:
+                  value: 110
+                  unitCode: mg/dL
+                  lowNormal: false
+                  highNormal: true
+              valueQuantity:
+                value: 95
+                unitCode: mg/dL
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                valueString: final
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                valueString: quantity
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                valueString: Value within normal range.
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                valueBoolean: false
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                valueString: N
+              interpretationNote:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                  code: NORM
+                text: Within normal range.
+              category:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                  valueString: Chemistry
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                  valueString: LAB
+            method:
+              coding:
+              - system: http://loinc.org
+                code: '100039001'
+                display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+            bodySite:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/body-site
+                code: 10620-7
+                display: Blood, capillary
+            imagingStudy:
+              reference: ImagingStudy/example
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          type: object
+          description: Full DiagnosticReport resource structure (FHIR)
+          example:
+            resourceType: DiagnosticReport
+            id: 12345678-90AB-CDEF-1234-567890ABCDEF
+            meta:
+              versionId: 4.0.1
+              lastUpdated: '2022-01-01T12:00:00Z'
+            status: final
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-printable-view
+              valueString: http://elationhealth.com/view/print/123456
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-note
+              valueString: This is a summary note.
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-document-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-chart-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-date
+              valueString: '2022-01-02'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-signed-by
+              valueInteger: 314
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-created-date
+              valueString: '2022-01-01'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-deleted-date
+              valueString: '2022-01-05'
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-practice
+              valueInteger: 2023
+            - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-physician
+              valueInteger: 101
+            code:
+              coding:
+              - system: http://snomed.info/sct
+                code: '364123007'
+                display: Blood Glucose
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-loinc
+                valueString: 2345-7
+            subject:
+              reference: Patient/example
+              display: John Doe
+            issued: '2022-01-01T12:00:00Z'
+            performer:
+            - reference: Practitioner/example
+              display: Dr. Jane Smith
+            result:
+            - interpretation: Normal
+              referenceRange:
+                low:
+                  value: 70
+                  unitCode: mg/dL
+                  lowNormal: true
+                  highNormal: false
+                high:
+                  value: 110
+                  unitCode: mg/dL
+                  lowNormal: false
+                  highNormal: true
+              valueQuantity:
+                value: 95
+                unitCode: mg/dL
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-status
+                valueString: final
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-value-type
+                valueString: quantity
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-text
+                valueString: Value within normal range.
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal
+                valueBoolean: false
+              - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-abnormal-flag
+                valueString: N
+              interpretationNote:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/diagnostic-interpretation
+                  code: NORM
+                text: Within normal range.
+              category:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-description
+                  valueString: Chemistry
+                - url: http://xcaliber-fhir/structureDefinition/diagnosticreport-test-category-value
+                  valueString: LAB
+            method:
+              coding:
+              - system: http://loinc.org
+                code: '100039001'
+                display: Blood glucose by enzymatic method (3-enzyme glucose oxidase)
+            bodySite:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/body-site
+                code: 10620-7
+                display: Blood, capillary
+            imagingStudy:
+              reference: ImagingStudy/example
+    Error400:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Bad request
+        status:
+          type: string
+          example: error
+      required:
+      - statusCode
+      - message
+      - status
+      example:
+        statusCode: 400
+        message: Bad request
+        status: error
+    Error401:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Unauthorized
+        status:
+          type: string
+          example: error
+      required:
+      - statusCode
+      - message
+      - status
+      example:
+        statusCode: 401
+        message: Unauthorized
+        status: error
+    Error404:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Diagnostic report not found
+        status:
+          type: string
+          example: error
+      required:
+      - statusCode
+      - message
+      - status
+      example:
+        statusCode: 404
+        message: Diagnostic report not found
+        status: error
+    Error500:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+        status:
+          type: string
+          example: error
+      required:
+      - statusCode
+      - message
+      - details
+      - status
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+        status: error
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    xSourceId:
+      name: x-source-id
+      in: header
+      required: true
+      schema:
+        type: string
+      description: "Source identifier header required for routing.\nAthena: 083fe714-e36e-4851-b2e7-a7166b439f67\n Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f — \U0001F534 On demand filter"
+externalDocs:
+  description: Run in Postman
+  url: https://app.postman.com/import/openapi
+security:
+- bearerAuth: []
