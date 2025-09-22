@@ -1,0 +1,1261 @@
+openapi: 3.0.3
+info:
+  title: Elation Coverage API
+  version: 1.0.0
+  description: 'Source Ids:
+
+    - Athena: 083fe714-e36e-4851-b2e7-a7166b439f67
+
+    - Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f
+
+
+    "Coverage" resource is used to represent information about the insurance or payer source for healthcare services rendered to a patient. It captures essential details about the coverage plan, and the individual covered under the plan.
+
+
+    Example: Dalinar Kholin''s health insurance coverage through the Alethi Health Plan is represented in FHIR as a "Coverage" resource. It details that Dalinar is the policyholder of a family plan with policy number AQ12345, active from January 1, 2025, to December 31, 2025. This resource would also include information about the plan type (e.g., PPO), coverage details, and any cost-sharing requirements (deductibles, copayments).
+
+
+    Dependent Sources:
+
+    Patient
+
+    '
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.com
+tags:
+- name: Coverage
+  description: Coverage resource operations in Elation
+paths:
+  /api/v2/Coverage:
+    get:
+      tags:
+      - Coverage
+      summary: Get Coverage in Elation
+      operationId: getCoverageInElation
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+      - name: beneficiary
+        in: query
+        required: false
+        description: Search parameter 'beneficiary' for coverage.
+        schema:
+          type: string
+      - name: class-type
+        in: query
+        required: false
+        description: Search parameter 'class-type' for coverage.
+        schema:
+          type: string
+      - name: class-value
+        in: query
+        required: false
+        description: Search parameter 'class-value' for coverage.
+        schema:
+          type: string
+      - name: dependent
+        in: query
+        required: false
+        description: Search parameter 'dependent' for coverage.
+        schema:
+          type: string
+      - name: identifier
+        in: query
+        required: false
+        description: Search parameter 'identifier' for coverage.
+        schema:
+          type: string
+      - name: payor
+        in: query
+        required: false
+        description: Search parameter 'payor' for coverage.
+        schema:
+          type: string
+      - name: policy-holder
+        in: query
+        required: false
+        description: Search parameter 'policy-holder' for coverage.
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        description: Search parameter 'status' for coverage.
+        schema:
+          type: string
+      - name: subscriber
+        in: query
+        required: false
+        description: Search parameter 'subscriber' for coverage.
+        schema:
+          type: string
+      - name: type
+        in: query
+        required: false
+        description: Search parameter 'type' for coverage.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - context
+                - data
+                properties:
+                  context:
+                    type: object
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    type: object
+                    required:
+                    - resourceType
+                    - type
+                    - total
+                    - entry
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Bundle
+                      type:
+                        type: string
+                        example: searchset
+                      total:
+                        type: integer
+                        example: 1
+                      entry:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            resource:
+                              type: object
+                              required:
+                              - resourceType
+                              - id
+                              - status
+                              properties:
+                                resourceType:
+                                  type: string
+                                  example: Coverage
+                                id:
+                                  type: string
+                                status:
+                                  type: string
+                              example:
+                                resourceType: Coverage
+                                id: example
+                                meta:
+                                  versionId: 1.0.0
+                                status: active
+                                type:
+                                  coding:
+                                  - system: http://terminology.hl7.org/CodeSystem/coverage-type
+                                    code: IND
+                                    display: Individual
+                                subType:
+                                  coding:
+                                  - system: http://terminology.hl7.org/CodeSystem/coverage-subtype
+                                    code: PPO
+                                    display: Preferred Provider Organization
+                                category:
+                                  coding:
+                                  - system: http://terminology.hl7.org/CodeSystem/coverage-category
+                                    code: HEALTH
+                                    display: Health
+                                coverageArea:
+                                  period:
+                                    startDate: '2022-01-01'
+                                    endDate: '2023-12-31'
+                                  service:
+                                    code:
+                                      coding:
+                                      - system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                                        code: 93718-5
+                                        display: Office visit
+                                    location:
+                                      reference: Location/example
+                                      display: Example Location
+                                issuer:
+                                  reference: Practitioner/example
+                                  display: Example Practitioner
+                                costSharing:
+                                - type:
+                                    coding:
+                                    - system: http://terminology.hl7.org/CodeSystem/cost-sharing-type
+                                      code: COPAY
+                                      display: Copayment
+                                  amount:
+                                    value: 25
+                                    currency: USD
+                                  network:
+                                    reference: Organization/ExampleNetwork
+                                extension:
+                                - url: http://xcaliber-fhir/structureDefinition/coverage-deleted-date
+                                  valueString: '2022-04-01'
+                                - url: http://xcaliber-fhir/structureDefinition/coverage-created-date
+                                  valueString: '2021-10-15'
+                                contained:
+                                - resourceType: Organization
+                                  id: example-org
+                                  name: Example Insurance Org
+                                  extension:
+                                  - url: http://xcaliber-fhir/structureDefinition/coverage-organization-extension
+                                    valueString: Some extension value
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 1
+                    entry:
+                    - resource:
+                        resourceType: Coverage
+                        id: example
+                        meta:
+                          versionId: 1.0.0
+                        status: active
+                        type:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/coverage-type
+                            code: IND
+                            display: Individual
+                        subType:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/coverage-subtype
+                            code: PPO
+                            display: Preferred Provider Organization
+                        category:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/coverage-category
+                            code: HEALTH
+                            display: Health
+                        coverageArea:
+                          period:
+                            startDate: '2022-01-01'
+                            endDate: '2023-12-31'
+                          service:
+                            code:
+                              coding:
+                              - system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                                code: 93718-5
+                                display: Office visit
+                            location:
+                              reference: Location/example
+                              display: Example Location
+                        issuer:
+                          reference: Practitioner/example
+                          display: Example Practitioner
+                        costSharing:
+                        - type:
+                            coding:
+                            - system: http://terminology.hl7.org/CodeSystem/cost-sharing-type
+                              code: COPAY
+                              display: Copayment
+                          amount:
+                            value: 25
+                            currency: USD
+                          network:
+                            reference: Organization/ExampleNetwork
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/coverage-deleted-date
+                          valueString: '2022-04-01'
+                        - url: http://xcaliber-fhir/structureDefinition/coverage-created-date
+                          valueString: '2021-10-15'
+                        contained:
+                        - resourceType: Organization
+                          id: example-org
+                          name: Example Insurance Org
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/coverage-organization-extension
+                            valueString: Some extension value
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - statusCode
+                - message
+                - status
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Invalid patient id
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 400
+                  message: Invalid patient id
+                  status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - statusCode
+                - message
+                - status
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 401
+                  message: Unauthorized
+                  status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - statusCode
+                - message
+                - details
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                    example: {}
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+    post:
+      tags:
+      - Coverage
+      summary: Create Coverage in Elation
+      operationId: createCoverageInElation
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - context
+              - data
+              properties:
+                context:
+                  type: object
+                  required:
+                  - requestId
+                  - source
+                  - quorum
+                  - notify
+                  properties:
+                    requestId:
+                      type: string
+                      example: 387fab671795f9340a5bcff9e80808e5
+                    source:
+                      type: string
+                      example: ELATION
+                    quorum:
+                      type: boolean
+                      example: true
+                    notify:
+                      type: boolean
+                      example: true
+                data:
+                  type: object
+                  required:
+                  - resourceType
+                  - id
+                  - status
+                  properties:
+                    resourceType:
+                      type: string
+                      example: Coverage
+                    id:
+                      type: string
+                    status:
+                      type: string
+                  example:
+                    resourceType: Coverage
+                    id: example
+                    meta:
+                      versionId: 1.0.0
+                    status: active
+                    type:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/coverage-type
+                        code: IND
+                        display: Individual
+                    subType:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/coverage-subtype
+                        code: PPO
+                        display: Preferred Provider Organization
+                    category:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/coverage-category
+                        code: HEALTH
+                        display: Health
+                    coverageArea:
+                      period:
+                        startDate: '2022-01-01'
+                        endDate: '2023-12-31'
+                      service:
+                        code:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                            code: 93718-5
+                            display: Office visit
+                        location:
+                          reference: Location/example
+                          display: Example Location
+                    issuer:
+                      reference: Practitioner/example
+                      display: Example Practitioner
+                    costSharing:
+                    - type:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/cost-sharing-type
+                          code: COPAY
+                          display: Copayment
+                      amount:
+                        value: 25
+                        currency: USD
+                      network:
+                        reference: Organization/ExampleNetwork
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/coverage-deleted-date
+                      valueString: '2022-04-01'
+                    - url: http://xcaliber-fhir/structureDefinition/coverage-created-date
+                      valueString: '2021-10-15'
+                    contained:
+                    - resourceType: Organization
+                      id: example-org
+                      name: Example Insurance Org
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/coverage-organization-extension
+                        valueString: Some extension value
+              example:
+                context:
+                  requestId: 387fab671795f9340a5bcff9e80808e5
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Coverage
+                  id: example
+                  meta:
+                    versionId: 1.0.0
+                  status: active
+                  type:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/coverage-type
+                      code: IND
+                      display: Individual
+                  subType:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/coverage-subtype
+                      code: PPO
+                      display: Preferred Provider Organization
+                  category:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/coverage-category
+                      code: HEALTH
+                      display: Health
+                  coverageArea:
+                    period:
+                      startDate: '2022-01-01'
+                      endDate: '2023-12-31'
+                    service:
+                      code:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                          code: 93718-5
+                          display: Office visit
+                      location:
+                        reference: Location/example
+                        display: Example Location
+                  issuer:
+                    reference: Practitioner/example
+                    display: Example Practitioner
+                  costSharing:
+                  - type:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/cost-sharing-type
+                        code: COPAY
+                        display: Copayment
+                    amount:
+                      value: 25
+                      currency: USD
+                    network:
+                      reference: Organization/ExampleNetwork
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/coverage-deleted-date
+                    valueString: '2022-04-01'
+                  - url: http://xcaliber-fhir/structureDefinition/coverage-created-date
+                    valueString: '2021-10-15'
+                  contained:
+                  - resourceType: Organization
+                    id: example-org
+                    name: Example Insurance Org
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/coverage-organization-extension
+                      valueString: Some extension value
+      responses:
+        '200':
+          description: Coverage created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - context
+                - data
+                properties:
+                  context:
+                    type: object
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    type: object
+                    required:
+                    - id
+                    - status
+                    properties:
+                      id:
+                        type: string
+                        example: newly-created-insurance-id
+                      status:
+                        type: string
+                        example: success
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    id: newly-created-insurance-id
+                    status: success
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - statusCode
+                - message
+                - status
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Invalid patient id
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 400
+                  message: Invalid patient id
+                  status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - statusCode
+                - message
+                - status
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 401
+                  message: Unauthorized
+                  status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - statusCode
+                - message
+                - details
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                    example: {}
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+    parameters: []
+components:
+  schemas:
+    Coverage:
+      type: object
+      required:
+      - resourceType
+      - id
+      - status
+      properties:
+        resourceType:
+          type: string
+          example: Coverage
+        id:
+          type: string
+        status:
+          type: string
+      example:
+        resourceType: Coverage
+        id: example
+        meta:
+          versionId: 1.0.0
+        status: active
+        type:
+          coding:
+          - system: http://terminology.hl7.org/CodeSystem/coverage-type
+            code: IND
+            display: Individual
+        subType:
+          coding:
+          - system: http://terminology.hl7.org/CodeSystem/coverage-subtype
+            code: PPO
+            display: Preferred Provider Organization
+        category:
+          coding:
+          - system: http://terminology.hl7.org/CodeSystem/coverage-category
+            code: HEALTH
+            display: Health
+        coverageArea:
+          period:
+            startDate: '2022-01-01'
+            endDate: '2023-12-31'
+          service:
+            code:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                code: 93718-5
+                display: Office visit
+            location:
+              reference: Location/example
+              display: Example Location
+        issuer:
+          reference: Practitioner/example
+          display: Example Practitioner
+        costSharing:
+        - type:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/cost-sharing-type
+              code: COPAY
+              display: Copayment
+          amount:
+            value: 25
+            currency: USD
+          network:
+            reference: Organization/ExampleNetwork
+        extension:
+        - url: http://xcaliber-fhir/structureDefinition/coverage-deleted-date
+          valueString: '2022-04-01'
+        - url: http://xcaliber-fhir/structureDefinition/coverage-created-date
+          valueString: '2021-10-15'
+        contained:
+        - resourceType: Organization
+          id: example-org
+          name: Example Insurance Org
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/coverage-organization-extension
+            valueString: Some extension value
+    Insurance:
+      type: object
+      required:
+      - insuranceId
+      - provider
+      properties:
+        insuranceId:
+          type: string
+        provider:
+          type: string
+    CoverageRequest:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          required:
+          - resourceType
+          - id
+          - status
+          properties:
+            resourceType:
+              type: string
+              example: Coverage
+            id:
+              type: string
+            status:
+              type: string
+          example:
+            resourceType: Coverage
+            id: example
+            meta:
+              versionId: 1.0.0
+            status: active
+            type:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/coverage-type
+                code: IND
+                display: Individual
+            subType:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/coverage-subtype
+                code: PPO
+                display: Preferred Provider Organization
+            category:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/coverage-category
+                code: HEALTH
+                display: Health
+            coverageArea:
+              period:
+                startDate: '2022-01-01'
+                endDate: '2023-12-31'
+              service:
+                code:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                    code: 93718-5
+                    display: Office visit
+                location:
+                  reference: Location/example
+                  display: Example Location
+            issuer:
+              reference: Practitioner/example
+              display: Example Practitioner
+            costSharing:
+            - type:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/cost-sharing-type
+                  code: COPAY
+                  display: Copayment
+              amount:
+                value: 25
+                currency: USD
+              network:
+                reference: Organization/ExampleNetwork
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/coverage-deleted-date
+              valueString: '2022-04-01'
+            - url: http://xcaliber-fhir/structureDefinition/coverage-created-date
+              valueString: '2021-10-15'
+            contained:
+            - resourceType: Organization
+              id: example-org
+              name: Example Insurance Org
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/coverage-organization-extension
+                valueString: Some extension value
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Coverage
+          id: example
+          meta:
+            versionId: 1.0.0
+          status: active
+          type:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/coverage-type
+              code: IND
+              display: Individual
+          subType:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/coverage-subtype
+              code: PPO
+              display: Preferred Provider Organization
+          category:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/coverage-category
+              code: HEALTH
+              display: Health
+          coverageArea:
+            period:
+              startDate: '2022-01-01'
+              endDate: '2023-12-31'
+            service:
+              code:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                  code: 93718-5
+                  display: Office visit
+              location:
+                reference: Location/example
+                display: Example Location
+          issuer:
+            reference: Practitioner/example
+            display: Example Practitioner
+          costSharing:
+          - type:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/cost-sharing-type
+                code: COPAY
+                display: Copayment
+            amount:
+              value: 25
+              currency: USD
+            network:
+              reference: Organization/ExampleNetwork
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/coverage-deleted-date
+            valueString: '2022-04-01'
+          - url: http://xcaliber-fhir/structureDefinition/coverage-created-date
+            valueString: '2021-10-15'
+          contained:
+          - resourceType: Organization
+            id: example-org
+            name: Example Insurance Org
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/coverage-organization-extension
+              valueString: Some extension value
+    CoverageListResponse:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          required:
+          - resourceType
+          - type
+          - total
+          - entry
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 1
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    required:
+                    - resourceType
+                    - id
+                    - status
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Coverage
+                      id:
+                        type: string
+                      status:
+                        type: string
+                    example:
+                      resourceType: Coverage
+                      id: example
+                      meta:
+                        versionId: 1.0.0
+                      status: active
+                      type:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/coverage-type
+                          code: IND
+                          display: Individual
+                      subType:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/coverage-subtype
+                          code: PPO
+                          display: Preferred Provider Organization
+                      category:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/coverage-category
+                          code: HEALTH
+                          display: Health
+                      coverageArea:
+                        period:
+                          startDate: '2022-01-01'
+                          endDate: '2023-12-31'
+                        service:
+                          code:
+                            coding:
+                            - system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                              code: 93718-5
+                              display: Office visit
+                          location:
+                            reference: Location/example
+                            display: Example Location
+                      issuer:
+                        reference: Practitioner/example
+                        display: Example Practitioner
+                      costSharing:
+                      - type:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/cost-sharing-type
+                            code: COPAY
+                            display: Copayment
+                        amount:
+                          value: 25
+                          currency: USD
+                        network:
+                          reference: Organization/ExampleNetwork
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/coverage-deleted-date
+                        valueString: '2022-04-01'
+                      - url: http://xcaliber-fhir/structureDefinition/coverage-created-date
+                        valueString: '2021-10-15'
+                      contained:
+                      - resourceType: Organization
+                        id: example-org
+                        name: Example Insurance Org
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/coverage-organization-extension
+                          valueString: Some extension value
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: Coverage
+              id: example
+              meta:
+                versionId: 1.0.0
+              status: active
+              type:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/coverage-type
+                  code: IND
+                  display: Individual
+              subType:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/coverage-subtype
+                  code: PPO
+                  display: Preferred Provider Organization
+              category:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/coverage-category
+                  code: HEALTH
+                  display: Health
+              coverageArea:
+                period:
+                  startDate: '2022-01-01'
+                  endDate: '2023-12-31'
+                service:
+                  code:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                      code: 93718-5
+                      display: Office visit
+                  location:
+                    reference: Location/example
+                    display: Example Location
+              issuer:
+                reference: Practitioner/example
+                display: Example Practitioner
+              costSharing:
+              - type:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/cost-sharing-type
+                    code: COPAY
+                    display: Copayment
+                amount:
+                  value: 25
+                  currency: USD
+                network:
+                  reference: Organization/ExampleNetwork
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/coverage-deleted-date
+                valueString: '2022-04-01'
+              - url: http://xcaliber-fhir/structureDefinition/coverage-created-date
+                valueString: '2021-10-15'
+              contained:
+              - resourceType: Organization
+                id: example-org
+                name: Example Insurance Org
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/coverage-organization-extension
+                  valueString: Some extension value
+    CoverageCreateResponse:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          required:
+          - id
+          - status
+          properties:
+            id:
+              type: string
+              example: newly-created-insurance-id
+            status:
+              type: string
+              example: success
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          id: newly-created-insurance-id
+          status: success
+    Error400:
+      type: object
+      required:
+      - statusCode
+      - message
+      - status
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Invalid patient id
+        status:
+          type: string
+          example: error
+      example:
+        statusCode: 400
+        message: Invalid patient id
+        status: error
+    Error401:
+      type: object
+      required:
+      - statusCode
+      - message
+      - status
+      properties:
+        statusCode:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Unauthorized
+        status:
+          type: string
+          example: error
+      example:
+        statusCode: 401
+        message: Unauthorized
+        status: error
+    Error500:
+      type: object
+      required:
+      - statusCode
+      - message
+      - details
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    xSourceId:
+      name: x-source-id
+      in: header
+      required: true
+      schema:
+        type: string
+      description: "Source identifier header required for routing.\nAthena: 083fe714-e36e-4851-b2e7-a7166b439f67\n Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f — \U0001F534 On demand filter"
+externalDocs:
+  description: Run in Postman
+  url: https://app.postman.com/import/openapi
+security:
+- bearerAuth: []

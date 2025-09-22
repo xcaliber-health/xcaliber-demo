@@ -1,0 +1,3995 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags: []
+paths:
+  /api/v2/DiagnosticReport:
+    get:
+      summary: Get Diagnostic Reports
+      tags:
+      - DiagnosticReport
+      - Category-> Imaging Results
+      - Category-> Lab-results
+      parameters:
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: based-on
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: based-on'
+      - name: category
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: category'
+      - name: conclusion
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: conclusion'
+      - name: issued
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: issued'
+      - name: media
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: media'
+      - name: performer
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: performer'
+      - name: result
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: result'
+      - name: results-interpreter
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: results-interpreter'
+      - name: specimen
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: specimen'
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: status'
+      - name: study
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: study'
+      - name: subject
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: subject'
+      - name: code
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: code'
+      - name: date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: date'
+      - name: encounter
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: encounter'
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinDiagnosticReportcategorylabresults'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinDiagnosticReportcategorylabresults'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinDiagnosticReportcategorylabresults'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example 1:
+                  value:
+                    resourceType: DiagnosticReport
+                    extension:
+                    - url: TINY_URLS.DIAGNOSTICREPORT.PRIORITY
+                      valueString: routine
+                    - url: TINY_URLS.DIAGNOSTICREPORT.ATTACHMENTEXISTS
+                      valueBoolean: true
+                    - url: TINY_URLS.DIAGNOSTICREPORT.EXACTDUPLICATEDOCUMENTID
+                      valueInteger: 12345
+                    - url: TINY_URLS.DIAGNOSTICREPORT.FACILITYID
+                      valueInteger: 67890
+                    - url: TINY_URLS.DIAGNOSTICREPORT.INTERNALNOTE
+                      valueString: Internal note text
+                    - url: TINY_URLS.DIAGNOSTICREPORT.INTERPRETATIONTEMPLATE
+                      valueString: Template text
+                    - url: TINY_URLS.DIAGNOSTICREPORT.ISREVIEWEDBYPROVIDER
+                      valueBoolean: true
+                    - url: TINY_URLS.DIAGNOSTICREPORT.CREATED_DATE
+                      valueDateTime: '2023-10-15T10:00:00Z'
+                    - url: TINY_URLS.DIAGNOSTICREPORT.STATUS
+                      valueString: final
+                    - url: TINY_URLS.DIAGNOSTICREPORT.DOCUMENT
+                      valueString: external
+                    - url: TINY_URLS.DIAGNOSTICREPORT.LABRESULTDATE
+                      valueDate: '2023-10-15'
+                    - url: TINY_URLS.DIAGNOSTICREPORT.SUPERSEDEDDOCUMENTID
+                      valueString: DOC123456
+                    - url: http://xcaliber-fhir/structureDefinition/appointment-id
+                      valueInteger: 789
+                    - url: http://xcaliber-fhir/structureDefinition/assigned-to
+                      valueString: Dr. Smith
+                    - url: http://xcaliber-fhir/structureDefinition/created-user
+                      valueString: admin123
+                    - url: http://xcaliber-fhir/structureDefinition/deleted-datetime
+                      valueDateTime: '2023-10-16T10:30:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/department-id
+                      valueString: DEPT001
+                    - url: http://xcaliber-fhir/structureDefinition/status
+                      valueString: final
+                    - url: http://xcaliber-fhir/structureDefinition/subject
+                      valueString: patient-123
+                    - url: http://xcaliber-fhir/structureDefinition/alarm-days
+                      valueString: '7'
+                    - url: http://xcaliber-fhir/structureDefinition/action-note
+                      valueString: Follow up required
+                    - url: http://xcaliber-fhir/structureDefinition/result-category
+                      valueString: laboratory
+                    - url: http://xcaliber-fhir/structureDefinition/result-notes
+                      valueString: Results within normal limits
+                    - url: http://xcaliber-fhir/structureDefinition/provider-user-name
+                      valueString: dr.smith
+                    - url: http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery
+                      valueString: 'false'
+                    presentedForm:
+                    - extension:
+                      - url: TINY_URLS.DIAGNOSTICREPORT.STATUS
+                        valueString: final
+                      - url: TINY_URLS.DIAGNOSTICREPORT.DOCUMENT_SOURCE
+                        valueString: lab
+                    issued: '2023-10-15T14:30:00Z'
+                    contained:
+                    - resourceType: Organization
+                      id: '12345'
+                      address:
+                      - line:
+                        - 123 Lab Street
+                        - Suite 100
+                        city: Boston
+                        state: MA
+                        postalCode: '02101'
+                      name: Quest Diagnostics
+                    category:
+                    - coding:
+                      - system: athena
+                        code: LAB
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/document-subclass
+                          valueString: CHEMISTRY
+                    - coding:
+                      - system: http://terminology.hl7.org/CodeSystem/v2-0074
+                        code: Lab
+                    effectiveDateTime: '2023-10-15T14:30:00Z'
+                    basedOn:
+                    - reference: ServiceRequest/12345
+                    encounter:
+                      reference: Encounter/67890
+                    result:
+                    - reference: Observation/analyte123
+                    id: '12345'
+                    identifier:
+                    - system: http://acme.com/lab/reports
+                      value: '12345'
+                    status: final
+                    code:
+                      coding:
+                      - system: http://loinc.org
+                        code: 33747-0
+                        display: Complete Blood Count
+                      text: Complete Blood Count
+                    subject:
+                      reference: Patient/123
+                    performer:
+                    - reference: Practitioner/90210
+                    conclusion: Results within normal limits
+                    text:
+                      status: generated
+                      div: '{"labresultid":"12345","resultstatus":"final"}'
+                Response Example 2:
+                  value:
+                    resourceType: DiagnosticReport
+                    id: IMR-12345
+                    performer:
+                    - reference: Location/150
+                    - reference: Practitioner/9876
+                    issued: '2025-09-12T05:10:00Z'
+                    status: final
+                    conclusion: No acute cardiopulmonary process.
+                    category:
+                    - coding:
+                      - system: athena
+                        code: IMAGING
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/document-subclass
+                          valueString: XRAY
+                    code:
+                      coding:
+                      - system: http://loinc.org
+                        code: 30746-0
+                    presentedForm: []
+                    subject:
+                      reference: Patient/4406
+                    encounter:
+                      reference: Encounter/7890
+                    context:
+                      related:
+                      - reference: Appointment/555
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/assigned-to
+                      valueString: tech-user
+                    - url: http://xcaliber-fhir/structureDefinition/created-user
+                      valueString: jane.doe
+                    - url: http://xcaliber-fhir/structureDefinition/deleted-date-time
+                      valueDateTime: '2025-09-10T08:00:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/department-id
+                      valueString: '150'
+                    - url: http://xcaliber-fhir/structureDefinition/document-route
+                      valueString: inbound
+                    - url: http://xcaliber-fhir/structureDefinition/document-source
+                      valueString: PACS
+                    - url: http://xcaliber-fhir/structureDefinition/document-type-id
+                      valueInteger: 42
+                    - url: http://xcaliber-fhir/structureDefinition/entity-type
+                      valueString: imaging
+                    - url: http://xcaliber-fhir/structureDefinition/external-accession-id
+                      valueString: ACC-EXT-001
+                    - url: http://xcaliber-fhir/structureDefinition/external-note
+                      valueString: External note text
+                    - url: http://xcaliber-fhir/structureDefinition/internal-accession-id
+                      valueString: ACC-INT-123
+                    - url: http://xcaliber-fhir/structureDefinition/internal-note
+                      valueString: Internal note text
+                    - url: http://xcaliber-fhir/structureDefinition/last-modified-datetime
+                      valueDateTime: '2025-09-12T05:05:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/last-modified-user
+                      valueString: john.smith
+                    - url: http://xcaliber-fhir/structureDefinition/observation-datetime
+                      valueDateTime: '2025-09-12T04:30:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/order-genus-name
+                      valueString: Radiology
+                    - url: http://xcaliber-fhir/structureDefinition/order-type
+                      valueString: X-Ray
+                    - url: http://xcaliber-fhir/structureDefinition/patient-note
+                      valueString: Patient arrived fasting.
+                    - url: http://xcaliber-fhir/structureDefinition/portal-published-datetime
+                      valueDateTime: '2025-09-12T05:15:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/priority
+                      valueString: routine
+                    - url: http://xcaliber-fhir/structureDefinition/received-facility-order-code
+                      valueCodeableConcept:
+                        coding:
+                        - code: XR123
+                          display: Chest X-ray
+                        - code: PA
+                          display: Posteroanterior
+                    - url: http://xcaliber-fhir/structureDefinition/subject
+                      valueString: Chest
+                    - url: http://xcaliber-fhir/structureDefinition/alarm-days
+                      valueString: '0'
+                    - url: http://xcaliber-fhir/structureDefinition/is-confidential
+                      valueString: 'false'
+                    - url: http://xcaliber-fhir/structureDefinition/result-status
+                      valueString: final
+                    - url: http://xcaliber-fhir/structureDefinition/action-note
+                      valueString: Actionable note here.
+                    - url: http://xcaliber-fhir/structureDefinition/file-size
+                      valueString: 2.4 MB
+                    - url: http://xcaliber-fhir/structureDefinition/original-file-name
+                      valueString: chest-xray.pdf
+                    - url: http://xcaliber-fhir/structureDefinition/document-data
+                      valueString: <base64>
+                    - url: http://xcaliber-fhir/structureDefinition/file-extension
+                      valueString: pdf
+                    - url: http://xcaliber-fhir/structureDefinition/tietoorder-id
+                      valueInteger: 9001
+                    - url: http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery
+                      valueString: procedure-123
+                    - url: http://xcaliber-fhir/structureDefinition/document-description
+                      valueString: Imaging result document
+                    - url: http://xcaliber-fhir/structureDefinition/description
+                      valueString: Chest X-ray report
+                    - url: http://xcaliber-fhir/structureDefinition/pcas
+                      valueString: https://pcas.example.org/access/IMR-12345
+  /api/v2/DiagnosticReport/{diagnostic-report-id}:
+    get:
+      summary: Get Diagnostic Report by ID
+      tags:
+      - DiagnosticReport
+      - Category-> Imaging Results
+      - Category-> Lab-results
+      parameters:
+      - in: path
+        name: diagnostic-report-id
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier of the diagnostic report to retrieve. Required
+          to fetch a specific report."'
+      - *id001
+      - *id002
+      
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinDiagnosticReportcategorylabresultsdiagnosticreportid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinDiagnosticReportcategorylabresultsdiagnosticreportid'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinDiagnosticReportcategorylabresultsdiagnosticreportid'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example 1:
+                  value:
+                    resourceType: DiagnosticReport
+                    extension:
+                    - url: TINY_URLS.DIAGNOSTICREPORT.PRIORITY
+                      valueString: routine
+                    - url: TINY_URLS.DIAGNOSTICREPORT.ATTACHMENTEXISTS
+                      valueBoolean: true
+                    - url: TINY_URLS.DIAGNOSTICREPORT.EXACTDUPLICATEDOCUMENTID
+                      valueInteger: 12345
+                    - url: TINY_URLS.DIAGNOSTICREPORT.FACILITYID
+                      valueInteger: 67890
+                    - url: TINY_URLS.DIAGNOSTICREPORT.INTERNALNOTE
+                      valueString: Internal note text
+                    - url: TINY_URLS.DIAGNOSTICREPORT.INTERPRETATIONTEMPLATE
+                      valueString: Template text
+                    - url: TINY_URLS.DIAGNOSTICREPORT.ISREVIEWEDBYPROVIDER
+                      valueBoolean: true
+                    - url: TINY_URLS.DIAGNOSTICREPORT.CREATED_DATE
+                      valueDateTime: '2023-10-15T10:00:00Z'
+                    - url: TINY_URLS.DIAGNOSTICREPORT.STATUS
+                      valueString: final
+                    - url: TINY_URLS.DIAGNOSTICREPORT.DOCUMENT
+                      valueString: external
+                    - url: TINY_URLS.DIAGNOSTICREPORT.LABRESULTDATE
+                      valueDate: '2023-10-15'
+                    - url: TINY_URLS.DIAGNOSTICREPORT.SUPERSEDEDDOCUMENTID
+                      valueString: DOC123456
+                    - url: http://xcaliber-fhir/structureDefinition/appointment-id
+                      valueInteger: 789
+                    - url: http://xcaliber-fhir/structureDefinition/assigned-to
+                      valueString: Dr. Smith
+                    - url: http://xcaliber-fhir/structureDefinition/created-user
+                      valueString: admin123
+                    - url: http://xcaliber-fhir/structureDefinition/deleted-datetime
+                      valueDateTime: '2023-10-16T10:30:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/department-id
+                      valueString: DEPT001
+                    - url: http://xcaliber-fhir/structureDefinition/status
+                      valueString: final
+                    - url: http://xcaliber-fhir/structureDefinition/subject
+                      valueString: patient-123
+                    - url: http://xcaliber-fhir/structureDefinition/alarm-days
+                      valueString: '7'
+                    - url: http://xcaliber-fhir/structureDefinition/action-note
+                      valueString: Follow up required
+                    - url: http://xcaliber-fhir/structureDefinition/result-category
+                      valueString: laboratory
+                    - url: http://xcaliber-fhir/structureDefinition/result-notes
+                      valueString: Results within normal limits
+                    - url: http://xcaliber-fhir/structureDefinition/provider-user-name
+                      valueString: dr.smith
+                    - url: http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery
+                      valueString: 'false'
+                    presentedForm:
+                    - extension:
+                      - url: TINY_URLS.DIAGNOSTICREPORT.STATUS
+                        valueString: final
+                      - url: TINY_URLS.DIAGNOSTICREPORT.DOCUMENT_SOURCE
+                        valueString: lab
+                    issued: '2023-10-15T14:30:00Z'
+                    contained:
+                    - resourceType: Organization
+                      id: '12345'
+                      address:
+                      - line:
+                        - 123 Lab Street
+                        - Suite 100
+                        city: Boston
+                        state: MA
+                        postalCode: '02101'
+                      name: Quest Diagnostics
+                    category:
+                    - coding:
+                      - system: athena
+                        code: LAB
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/document-subclass
+                          valueString: CHEMISTRY
+                    - coding:
+                      - system: http://terminology.hl7.org/CodeSystem/v2-0074
+                        code: Lab
+                    effectiveDateTime: '2023-10-15T14:30:00Z'
+                    basedOn:
+                    - reference: ServiceRequest/12345
+                    encounter:
+                      reference: Encounter/67890
+                    result:
+                    - reference: Observation/analyte123
+                    id: '12345'
+                    identifier:
+                    - system: http://acme.com/lab/reports
+                      value: '12345'
+                    status: final
+                    code:
+                      coding:
+                      - system: http://loinc.org
+                        code: 33747-0
+                        display: Complete Blood Count
+                      text: Complete Blood Count
+                    subject:
+                      reference: Patient/123
+                    performer:
+                    - reference: Practitioner/90210
+                    conclusion: Results within normal limits
+                    text:
+                      status: generated
+                      div: '{"labresultid":"12345","resultstatus":"final"}'
+                Response Example 2:
+                  value:
+                    resourceType: DiagnosticReport
+                    id: IMR-12345
+                    performer:
+                    - reference: Location/150
+                    - reference: Practitioner/9876
+                    issued: '2025-09-12T05:10:00Z'
+                    status: final
+                    conclusion: No acute cardiopulmonary process.
+                    category:
+                    - coding:
+                      - system: athena
+                        code: IMAGING
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/document-subclass
+                          valueString: XRAY
+                    code:
+                      coding:
+                      - system: http://loinc.org
+                        code: 30746-0
+                    presentedForm: []
+                    subject:
+                      reference: Patient/4406
+                    encounter:
+                      reference: Encounter/7890
+                    context:
+                      related:
+                      - reference: Appointment/555
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/assigned-to
+                      valueString: tech-user
+                    - url: http://xcaliber-fhir/structureDefinition/created-user
+                      valueString: jane.doe
+                    - url: http://xcaliber-fhir/structureDefinition/deleted-date-time
+                      valueDateTime: '2025-09-10T08:00:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/department-id
+                      valueString: '150'
+                    - url: http://xcaliber-fhir/structureDefinition/document-route
+                      valueString: inbound
+                    - url: http://xcaliber-fhir/structureDefinition/document-source
+                      valueString: PACS
+                    - url: http://xcaliber-fhir/structureDefinition/document-type-id
+                      valueInteger: 42
+                    - url: http://xcaliber-fhir/structureDefinition/entity-type
+                      valueString: imaging
+                    - url: http://xcaliber-fhir/structureDefinition/external-accession-id
+                      valueString: ACC-EXT-001
+                    - url: http://xcaliber-fhir/structureDefinition/external-note
+                      valueString: External note text
+                    - url: http://xcaliber-fhir/structureDefinition/internal-accession-id
+                      valueString: ACC-INT-123
+                    - url: http://xcaliber-fhir/structureDefinition/internal-note
+                      valueString: Internal note text
+                    - url: http://xcaliber-fhir/structureDefinition/last-modified-datetime
+                      valueDateTime: '2025-09-12T05:05:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/last-modified-user
+                      valueString: john.smith
+                    - url: http://xcaliber-fhir/structureDefinition/observation-datetime
+                      valueDateTime: '2025-09-12T04:30:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/order-genus-name
+                      valueString: Radiology
+                    - url: http://xcaliber-fhir/structureDefinition/order-type
+                      valueString: X-Ray
+                    - url: http://xcaliber-fhir/structureDefinition/patient-note
+                      valueString: Patient arrived fasting.
+                    - url: http://xcaliber-fhir/structureDefinition/portal-published-datetime
+                      valueDateTime: '2025-09-12T05:15:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/priority
+                      valueString: routine
+                    - url: http://xcaliber-fhir/structureDefinition/received-facility-order-code
+                      valueCodeableConcept:
+                        coding:
+                        - code: XR123
+                          display: Chest X-ray
+                        - code: PA
+                          display: Posteroanterior
+                    - url: http://xcaliber-fhir/structureDefinition/subject
+                      valueString: Chest
+                    - url: http://xcaliber-fhir/structureDefinition/alarm-days
+                      valueString: '0'
+                    - url: http://xcaliber-fhir/structureDefinition/is-confidential
+                      valueString: 'false'
+                    - url: http://xcaliber-fhir/structureDefinition/result-status
+                      valueString: final
+                    - url: http://xcaliber-fhir/structureDefinition/action-note
+                      valueString: Actionable note here.
+                    - url: http://xcaliber-fhir/structureDefinition/file-size
+                      valueString: 2.4 MB
+                    - url: http://xcaliber-fhir/structureDefinition/original-file-name
+                      valueString: chest-xray.pdf
+                    - url: http://xcaliber-fhir/structureDefinition/document-data
+                      valueString: <base64>
+                    - url: http://xcaliber-fhir/structureDefinition/file-extension
+                      valueString: pdf
+                    - url: http://xcaliber-fhir/structureDefinition/tietoorder-id
+                      valueInteger: 9001
+                    - url: http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery
+                      valueString: procedure-123
+                    - url: http://xcaliber-fhir/structureDefinition/document-description
+                      valueString: Imaging result document
+                    - url: http://xcaliber-fhir/structureDefinition/description
+                      valueString: Chest X-ray report
+                    - url: http://xcaliber-fhir/structureDefinition/pcas
+                      valueString: https://pcas.example.org/access/IMR-12345
+    delete:
+      summary: Delete Diagnostic Report
+      tags:
+      - DiagnosticReport
+      parameters:
+      - in: path
+        name: diagnostic-report-id
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier of the diagnostic report to delete. Required
+          for deletion."'
+      - *id001
+      - *id002
+      responses:
+        '200':
+          description: Successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofdeleteinDiagnosticReportdiagnosticreportid'
+              examples:
+                response_body_200:
+                  summary: DiagnosticReport Example
+                  value:
+                    context:
+                      requestId: d4cfa5d1-2121-43ea-9bbf-11e54cfdedb9
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                      - resource:
+                          reports: null
+                          resourceType: DiagnosticReport
+                    id: '987654'
+                    identifier:
+                    - system: http://acme.com/lab/reports
+                      value: '987654'
+                    status: final
+                    category:
+                    - coding:
+                      - system: http://terminology.hl7.org/CodeSystem/v2-0074
+                        code: Lab
+                    - coding:
+                      - system: athena
+                        code: LAB-SUB
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/document-subclass
+                          valueString: subclass-A
+                    code:
+                      coding:
+                      - system: http://loinc.org
+                        code: 57771-6
+                        display: Hemoglobin A1c
+                      text: Hemoglobin A1c
+                    subject:
+                      reference: Patient/12345
+                    conclusion: All results are within normal limits.
+                    effectiveDateTime: '2023-10-01T09:00:00Z'
+                    issued: '2023-10-01T10:00:00Z'
+                    performer:
+                    - reference: Practitioner/67890
+                    basedOn:
+                    - reference: ServiceRequest/54321
+                    encounter:
+                      reference: Encounter/321
+                    result:
+                    - reference: Observation/1
+                    - reference: Observation/2
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/priority
+                      valueString: Routine
+                    - url: http://xcaliber-fhir/structureDefinition/attachmentexists
+                      valueBoolean: true
+                    - url: http://xcaliber-fhir/structureDefinition/exactduplicatedocumentid
+                      valueInteger: 11111
+                    - url: http://xcaliber-fhir/structureDefinition/facilityid
+                      valueInteger: 222
+                    - url: http://xcaliber-fhir/structureDefinition/internalnote
+                      valueString: Internal lab note
+                    - url: http://xcaliber-fhir/structureDefinition/interpretationtemplate
+                      valueString: Interpretation A
+                    - url: http://xcaliber-fhir/structureDefinition/isreviewedbyprovider
+                      valueBoolean: true
+                    - url: http://xcaliber-fhir/structureDefinition/labresultdate
+                      valueDate: '2023-09-30'
+                    - url: http://xcaliber-fhir/structureDefinition/patientnote
+                      valueString: Patient-specific note
+                    - url: http://xcaliber-fhir/structureDefinition/supersededdocumentid
+                      valueString: superseded-001
+                    - url: http://xcaliber-fhir/structureDefinition/appointment-id
+                      valueInteger: 8888
+                    - url: http://xcaliber-fhir/structureDefinition/assigned-to
+                      valueString: Dr. X
+                    - url: http://xcaliber-fhir/structureDefinition/created-user
+                      valueString: LabAdmin
+                    - url: http://xcaliber-fhir/structureDefinition/deleted-datetime
+                      valueDateTime: '2023-10-03T14:00:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/department-id
+                      valueString: Dept-55
+                    - url: http://xcaliber-fhir/structureDefinition/document-source
+                      valueString: Imported
+                    - url: http://xcaliber-fhir/structureDefinition/document-route
+                      valueString: Fax
+                    - url: http://xcaliber-fhir/structureDefinition/document-type-id
+                      valueInteger: 987
+                    - url: http://xcaliber-fhir/structureDefinition/encounter-date
+                      valueDate: '2023-10-01'
+                    - url: http://xcaliber-fhir/structureDefinition/entity-type
+                      valueString: Lab
+                    - url: http://xcaliber-fhir/structureDefinition/external-accession-id
+                      valueString: EX-ACC-234
+                    - url: http://xcaliber-fhir/structureDefinition/external-note-only
+                      valueString: External note
+                    - url: http://xcaliber-fhir/structureDefinition/file-extension
+                      valueString: pdf
+                    - url: http://xcaliber-fhir/structureDefinition/file-size
+                      valueInteger: 204800
+                    - url: http://xcaliber-fhir/structureDefinition/internal-accession-id
+                      valueString: INT-ACC-987
+                    - url: http://xcaliber-fhir/structureDefinition/interpretation
+                      valueString: Normal
+                    - url: http://xcaliber-fhir/structureDefinition/is-confidential
+                      valueString: 'false'
+                    - url: http://xcaliber-fhir/structureDefinition/last-modified-datetime
+                      valueDateTime: '2023-10-01T11:00:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/last-modified-user
+                      valueString: Dr. Y
+                    - url: http://xcaliber-fhir/structureDefinition/note-from-lab
+                      valueString: Lab's note here
+                    - url: http://xcaliber-fhir/structureDefinition/order-type
+                      valueString: STAT
+                    - url: http://xcaliber-fhir/structureDefinition/original-file-name
+                      valueString: result.pdf
+                    - url: http://xcaliber-fhir/structureDefinition/portal-published-datetime
+                      valueDateTime: '2023-10-02T08:00:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/received-facility-order-code
+                      valueCodeableConcept:
+                        coding:
+                        - code: F1234
+                          display: Facility Code
+                    - url: http://xcaliber-fhir/structureDefinition/report-status
+                      valueString: Preliminary
+                    - url: http://xcaliber-fhir/structureDefinition/status
+                      valueString: final
+                    - url: http://xcaliber-fhir/structureDefinition/subject
+                      valueString: Patient/12345
+                    - url: http://xcaliber-fhir/structureDefinition/alarm-days
+                      valueString: '5'
+                    - url: http://xcaliber-fhir/structureDefinition/action-note
+                      valueString: Immediate follow-up required
+                    - url: http://xcaliber-fhir/structureDefinition/result-category
+                      valueString: hematology
+                    - url: http://xcaliber-fhir/structureDefinition/result-notes
+                      valueString: See note
+                    - url: http://xcaliber-fhir/structureDefinition/provider-user-name
+                      valueString: labtech
+                    - url: http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery
+                      valueString: 'No'
+                    presentedForm:
+                    - extension:
+                      - url: http://xcaliber-fhir/structureDefinition/created-date
+                        valueDateTime: '2023-09-30T08:00:00Z'
+                      - url: http://xcaliber-fhir/structureDefinition/status
+                        valueString: final
+                      - url: http://xcaliber-fhir/structureDefinition/document-source
+                        valueString: LIS
+                    contained:
+                    - resourceType: Organization
+                      id: ORG001
+                      address:
+                      - line:
+                        - 123 Health St
+                        - Suite 100
+                        city: Boston
+                        state: MA
+                        postalCode: 2118
+                      name: Health Lab
+                    - resourceType: Observation
+                      id: '1'
+                      status: final
+                      code:
+                        coding:
+                        - display: Hemoglobin A1c
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/observationidentifier
+                            valueString: OBSID-1
+                        - system: http://loinc.org
+                          code: 57771-6
+                          display: Hemoglobin A1c
+                      category:
+                      - coding:
+                        - code: laboratory
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/abnormalhl7code
+                        valueString: N
+                      - url: http://xcaliber-fhir/structureDefinition/abnormalhl7name
+                        valueString: Normal
+                      - url: http://xcaliber-fhir/structureDefinition/description
+                        valueString: Glucose
+                      - url: http://xcaliber-fhir/structureDefinition/lab_result_status
+                        valueString: final
+                      - url: http://xcaliber-fhir/structureDefinition/abnormal_flag
+                        valueString: N
+                      valueQuantity:
+                        value: 5.4
+                        unit: '%'
+                        system: http://unitsofmeasure.org
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/value
+                          valueString: '5.4'
+                      referenceRange:
+                      - low:
+                          value: 4
+                          unit: '%'
+                          system: http://unitsofmeasure.org
+                          code: '%'
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/inclusive
+                            valueBoolean: true
+                        high:
+                          value: 6
+                          unit: '%'
+                          system: http://unitsofmeasure.org
+                          code: '%'
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/inclusive
+                            valueBoolean: true
+                        text: 4.0 - 6.0%
+                      note:
+                      - text: All values are within normal range.
+                      subject:
+                        reference: Patient/12345
+                      effectiveDateTime: '2023-09-30T09:00:00Z'
+                imaging-result:
+                  summary: Imaging Result Example
+                  value:
+                    context:
+                      requestId: img-123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                      - resource:
+                          resourceType: DiagnosticReport
+                          id: imgrep-001
+                          status: final
+                          category:
+                          - coding:
+                            - system: http://terminology.hl7.org/CodeSystem/v2-0074
+                              code: RAD
+                          code:
+                            coding:
+                            - system: http://loinc.org
+                              code: 36626-4
+                              display: CT head W contrast IV
+                            text: CT Scan Head
+                          subject:
+                            reference: Patient/54321
+                          conclusion: No acute findings.
+                          effectiveDateTime: '2023-09-28T09:00:00Z'
+                          issued: '2023-09-28T10:00:00Z'
+                          result:
+                          - reference: Observation/12
+                Lab-Results:
+                  summary: Lab Result Update Example
+                  value:
+                    context:
+                      requestId: lab-789
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    status: success
+                    id: labresult-999
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofdeleteinDiagnosticReportdiagnosticreportid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinDiagnosticReportdiagnosticreportid'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinDiagnosticReportdiagnosticreportid'
+    patch:
+      summary: Update Diagnostic Report
+      tags:
+      - DiagnosticReport
+      parameters:
+      - in: path
+        name: diagnostic-report-id
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier of the diagnostic report to update. Required
+          for updating an existing report."'
+      - *id001
+      - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractedSchema1269'
+      responses:
+        '200':
+          description: DiagnosticReport updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofpatchinDiagnosticReportdiagnosticreportid'
+              examples:
+                response_body_200:
+                  summary: DiagnosticReport Example
+                  value:
+                    context:
+                      requestId: d4cfa5d1-2121-43ea-9bbf-11e54cfdedb9
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                      - resource:
+                          reports: null
+                          resourceType: DiagnosticReport
+                    id: '987654'
+                    identifier:
+                    - system: http://acme.com/lab/reports
+                      value: '987654'
+                    status: final
+                    category:
+                    - coding:
+                      - system: http://terminology.hl7.org/CodeSystem/v2-0074
+                        code: Lab
+                    - coding:
+                      - system: athena
+                        code: LAB-SUB
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/document-subclass
+                          valueString: subclass-A
+                    code:
+                      coding:
+                      - system: http://loinc.org
+                        code: 57771-6
+                        display: Hemoglobin A1c
+                      text: Hemoglobin A1c
+                    subject:
+                      reference: Patient/12345
+                    conclusion: All results are within normal limits.
+                    effectiveDateTime: '2023-10-01T09:00:00Z'
+                    issued: '2023-10-01T10:00:00Z'
+                    performer:
+                    - reference: Practitioner/67890
+                    basedOn:
+                    - reference: ServiceRequest/54321
+                    encounter:
+                      reference: Encounter/321
+                    result:
+                    - reference: Observation/1
+                    - reference: Observation/2
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/priority
+                      valueString: Routine
+                    - url: http://xcaliber-fhir/structureDefinition/attachmentexists
+                      valueBoolean: true
+                    - url: http://xcaliber-fhir/structureDefinition/exactduplicatedocumentid
+                      valueInteger: 11111
+                    - url: http://xcaliber-fhir/structureDefinition/facilityid
+                      valueInteger: 222
+                    - url: http://xcaliber-fhir/structureDefinition/internalnote
+                      valueString: Internal lab note
+                    - url: http://xcaliber-fhir/structureDefinition/interpretationtemplate
+                      valueString: Interpretation A
+                    - url: http://xcaliber-fhir/structureDefinition/isreviewedbyprovider
+                      valueBoolean: true
+                    - url: http://xcaliber-fhir/structureDefinition/labresultdate
+                      valueDate: '2023-09-30'
+                    - url: http://xcaliber-fhir/structureDefinition/patientnote
+                      valueString: Patient-specific note
+                    - url: http://xcaliber-fhir/structureDefinition/supersededdocumentid
+                      valueString: superseded-001
+                    - url: http://xcaliber-fhir/structureDefinition/appointment-id
+                      valueInteger: 8888
+                    - url: http://xcaliber-fhir/structureDefinition/assigned-to
+                      valueString: Dr. X
+                    - url: http://xcaliber-fhir/structureDefinition/created-user
+                      valueString: LabAdmin
+                    - url: http://xcaliber-fhir/structureDefinition/deleted-datetime
+                      valueDateTime: '2023-10-03T14:00:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/department-id
+                      valueString: Dept-55
+                    - url: http://xcaliber-fhir/structureDefinition/document-source
+                      valueString: Imported
+                    - url: http://xcaliber-fhir/structureDefinition/document-route
+                      valueString: Fax
+                    - url: http://xcaliber-fhir/structureDefinition/document-type-id
+                      valueInteger: 987
+                    - url: http://xcaliber-fhir/structureDefinition/encounter-date
+                      valueDate: '2023-10-01'
+                    - url: http://xcaliber-fhir/structureDefinition/entity-type
+                      valueString: Lab
+                    - url: http://xcaliber-fhir/structureDefinition/external-accession-id
+                      valueString: EX-ACC-234
+                    - url: http://xcaliber-fhir/structureDefinition/external-note-only
+                      valueString: External note
+                    - url: http://xcaliber-fhir/structureDefinition/file-extension
+                      valueString: pdf
+                    - url: http://xcaliber-fhir/structureDefinition/file-size
+                      valueInteger: 204800
+                    - url: http://xcaliber-fhir/structureDefinition/internal-accession-id
+                      valueString: INT-ACC-987
+                    - url: http://xcaliber-fhir/structureDefinition/interpretation
+                      valueString: Normal
+                    - url: http://xcaliber-fhir/structureDefinition/is-confidential
+                      valueString: 'false'
+                    - url: http://xcaliber-fhir/structureDefinition/last-modified-datetime
+                      valueDateTime: '2023-10-01T11:00:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/last-modified-user
+                      valueString: Dr. Y
+                    - url: http://xcaliber-fhir/structureDefinition/note-from-lab
+                      valueString: Lab's note here
+                    - url: http://xcaliber-fhir/structureDefinition/order-type
+                      valueString: STAT
+                    - url: http://xcaliber-fhir/structureDefinition/original-file-name
+                      valueString: result.pdf
+                    - url: http://xcaliber-fhir/structureDefinition/portal-published-datetime
+                      valueDateTime: '2023-10-02T08:00:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/received-facility-order-code
+                      valueCodeableConcept:
+                        coding:
+                        - code: F1234
+                          display: Facility Code
+                    - url: http://xcaliber-fhir/structureDefinition/report-status
+                      valueString: Preliminary
+                    - url: http://xcaliber-fhir/structureDefinition/status
+                      valueString: final
+                    - url: http://xcaliber-fhir/structureDefinition/subject
+                      valueString: Patient/12345
+                    - url: http://xcaliber-fhir/structureDefinition/alarm-days
+                      valueString: '5'
+                    - url: http://xcaliber-fhir/structureDefinition/action-note
+                      valueString: Immediate follow-up required
+                    - url: http://xcaliber-fhir/structureDefinition/result-category
+                      valueString: hematology
+                    - url: http://xcaliber-fhir/structureDefinition/result-notes
+                      valueString: See note
+                    - url: http://xcaliber-fhir/structureDefinition/provider-user-name
+                      valueString: labtech
+                    - url: http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery
+                      valueString: 'No'
+                    presentedForm:
+                    - extension:
+                      - url: http://xcaliber-fhir/structureDefinition/created-date
+                        valueDateTime: '2023-09-30T08:00:00Z'
+                      - url: http://xcaliber-fhir/structureDefinition/status
+                        valueString: final
+                      - url: http://xcaliber-fhir/structureDefinition/document-source
+                        valueString: LIS
+                    contained:
+                    - resourceType: Organization
+                      id: ORG001
+                      address:
+                      - line:
+                        - 123 Health St
+                        - Suite 100
+                        city: Boston
+                        state: MA
+                        postalCode: 2118
+                      name: Health Lab
+                    - resourceType: Observation
+                      id: '1'
+                      status: final
+                      code:
+                        coding:
+                        - display: Hemoglobin A1c
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/observationidentifier
+                            valueString: OBSID-1
+                        - system: http://loinc.org
+                          code: 57771-6
+                          display: Hemoglobin A1c
+                      category:
+                      - coding:
+                        - code: laboratory
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/abnormalhl7code
+                        valueString: N
+                      - url: http://xcaliber-fhir/structureDefinition/abnormalhl7name
+                        valueString: Normal
+                      - url: http://xcaliber-fhir/structureDefinition/description
+                        valueString: Glucose
+                      - url: http://xcaliber-fhir/structureDefinition/lab_result_status
+                        valueString: final
+                      - url: http://xcaliber-fhir/structureDefinition/abnormal_flag
+                        valueString: N
+                      valueQuantity:
+                        value: 5.4
+                        unit: '%'
+                        system: http://unitsofmeasure.org
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/value
+                          valueString: '5.4'
+                      referenceRange:
+                      - low:
+                          value: 4
+                          unit: '%'
+                          system: http://unitsofmeasure.org
+                          code: '%'
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/inclusive
+                            valueBoolean: true
+                        high:
+                          value: 6
+                          unit: '%'
+                          system: http://unitsofmeasure.org
+                          code: '%'
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/inclusive
+                            valueBoolean: true
+                        text: 4.0 - 6.0%
+                      note:
+                      - text: All values are within normal range.
+                      subject:
+                        reference: Patient/12345
+                      effectiveDateTime: '2023-09-30T09:00:00Z'
+                imaging-result:
+                  summary: Imaging Result Example
+                  value:
+                    context:
+                      requestId: img-123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                      - resource:
+                          resourceType: DiagnosticReport
+                          id: imgrep-001
+                          status: final
+                          category:
+                          - coding:
+                            - system: http://terminology.hl7.org/CodeSystem/v2-0074
+                              code: RAD
+                          code:
+                            coding:
+                            - system: http://loinc.org
+                              code: 36626-4
+                              display: CT head W contrast IV
+                            text: CT Scan Head
+                          subject:
+                            reference: Patient/54321
+                          conclusion: No acute findings.
+                          effectiveDateTime: '2023-09-28T09:00:00Z'
+                          issued: '2023-09-28T10:00:00Z'
+                          result:
+                          - reference: Observation/12
+                Lab-Results:
+                  summary: Lab Result Update Example
+                  value:
+                    context:
+                      requestId: lab-789
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    status: success
+                    id: labresult-999
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpatchinDiagnosticReportdiagnosticreportid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpatchinDiagnosticReportdiagnosticreportid'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpatchinDiagnosticReportdiagnosticreportid'
+components:
+  schemas:
+    ExtractedSchema1269:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: d4cfa5d1-2121-43ea-9bbf-11e54cfdedb9
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          description: '"Diagnostic report context details. Contains relevant information
+            about the report update."
+
+
+            Alternatively, if you''d like a slightly different phrasing:
+
+
+            "Contextual data for the diagnostic report update, including relevant
+            details."'
+        data:
+          type: object
+          properties:
+            report:
+              type: object
+              required:
+              - resourceType
+              - id
+              - identifier
+              - status
+              - category
+              - code
+              - subject
+              - conclusion
+              - effectiveDateTime
+              - issued
+              - performer
+              - basedOn
+              - encounter
+              - result
+              - extension
+              - presentedForm
+              - contained
+              properties:
+                resourceType:
+                  type: string
+                  enum:
+                  - DiagnosticReport
+                id:
+                  type: string
+                  example: '987654'
+                identifier:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                        example: http://acme.com/lab/reports
+                      value:
+                        type: string
+                        example: '987654'
+                status:
+                  type: string
+                  example: final
+                category:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            extension:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  url:
+                                    type: string
+                                  valueString:
+                                    type: string
+                code:
+                  type: object
+                  properties:
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+                          display:
+                            type: string
+                    text:
+                      type: string
+                subject:
+                  type: object
+                  properties:
+                    reference:
+                      type: string
+                conclusion:
+                  type: string
+                effectiveDateTime:
+                  type: string
+                  format: date-time
+                issued:
+                  type: string
+                  format: date-time
+                performer:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                basedOn:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                encounter:
+                  type: object
+                  properties:
+                    reference:
+                      type: string
+                result:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueString:
+                        type: string
+                      valueBoolean:
+                        type: boolean
+                      valueInteger:
+                        type: integer
+                      valueDate:
+                        type: string
+                        format: date
+                      valueDateTime:
+                        type: string
+                        format: date-time
+                      valueCodeableConcept:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                code:
+                                  type: string
+                                display:
+                                  type: string
+                presentedForm:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueDateTime:
+                              type: string
+                              format: date-time
+                            valueString:
+                              type: string
+                contained:
+                  type: array
+                  items:
+                    type: object
+              example:
+                resourceType: DiagnosticReport
+                id: '987654'
+                identifier:
+                - system: http://acme.com/lab/reports
+                  value: '987654'
+                status: final
+                category:
+                - coding:
+                  - system: http://terminology.hl7.org/CodeSystem/v2-0074
+                    code: Lab
+                - coding:
+                  - system: athena
+                    code: LAB-SUB
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/document-subclass
+                      valueString: subclass-A
+                code:
+                  coding:
+                  - system: http://loinc.org
+                    code: 57771-6
+                    display: Hemoglobin A1c
+                  text: Hemoglobin A1c
+                subject:
+                  reference: Patient/12345
+                conclusion: All results are within normal limits.
+                effectiveDateTime: '2023-10-01T09:00:00Z'
+                issued: '2023-10-01T10:00:00Z'
+                performer:
+                - reference: Practitioner/67890
+                basedOn:
+                - reference: ServiceRequest/54321
+                encounter:
+                  reference: Encounter/321
+                result:
+                - reference: Observation/1
+                - reference: Observation/2
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/priority
+                  valueString: Routine
+                - url: http://xcaliber-fhir/structureDefinition/attachmentexists
+                  valueBoolean: true
+                - url: http://xcaliber-fhir/structureDefinition/exactduplicatedocumentid
+                  valueInteger: 11111
+                - url: http://xcaliber-fhir/structureDefinition/facilityid
+                  valueInteger: 222
+                - url: http://xcaliber-fhir/structureDefinition/internalnote
+                  valueString: Internal lab note
+                - url: http://xcaliber-fhir/structureDefinition/interpretationtemplate
+                  valueString: Interpretation A
+                - url: http://xcaliber-fhir/structureDefinition/isreviewedbyprovider
+                  valueBoolean: true
+                - url: http://xcaliber-fhir/structureDefinition/labresultdate
+                  valueDate: '2023-09-30'
+                - url: http://xcaliber-fhir/structureDefinition/patientnote
+                  valueString: Patient-specific note
+                - url: http://xcaliber-fhir/structureDefinition/supersededdocumentid
+                  valueString: superseded-001
+                - url: http://xcaliber-fhir/structureDefinition/appointment-id
+                  valueInteger: 8888
+                - url: http://xcaliber-fhir/structureDefinition/assigned-to
+                  valueString: Dr. X
+                - url: http://xcaliber-fhir/structureDefinition/created-user
+                  valueString: LabAdmin
+                - url: http://xcaliber-fhir/structureDefinition/deleted-datetime
+                  valueDateTime: '2023-10-03T14:00:00Z'
+                - url: http://xcaliber-fhir/structureDefinition/department-id
+                  valueString: Dept-55
+                - url: http://xcaliber-fhir/structureDefinition/document-source
+                  valueString: Imported
+                - url: http://xcaliber-fhir/structureDefinition/document-route
+                  valueString: Fax
+                - url: http://xcaliber-fhir/structureDefinition/document-type-id
+                  valueInteger: 987
+                - url: http://xcaliber-fhir/structureDefinition/encounter-date
+                  valueDate: '2023-10-01'
+                - url: http://xcaliber-fhir/structureDefinition/entity-type
+                  valueString: Lab
+                - url: http://xcaliber-fhir/structureDefinition/external-accession-id
+                  valueString: EX-ACC-234
+                - url: http://xcaliber-fhir/structureDefinition/external-note-only
+                  valueString: External note
+                - url: http://xcaliber-fhir/structureDefinition/file-extension
+                  valueString: pdf
+                - url: http://xcaliber-fhir/structureDefinition/file-size
+                  valueInteger: 204800
+                - url: http://xcaliber-fhir/structureDefinition/internal-accession-id
+                  valueString: INT-ACC-987
+                - url: http://xcaliber-fhir/structureDefinition/interpretation
+                  valueString: Normal
+                - url: http://xcaliber-fhir/structureDefinition/is-confidential
+                  valueString: 'false'
+                - url: http://xcaliber-fhir/structureDefinition/last-modified-datetime
+                  valueDateTime: '2023-10-01T11:00:00Z'
+                - url: http://xcaliber-fhir/structureDefinition/last-modified-user
+                  valueString: Dr. Y
+                - url: http://xcaliber-fhir/structureDefinition/note-from-lab
+                  valueString: Lab's note here
+                - url: http://xcaliber-fhir/structureDefinition/order-type
+                  valueString: STAT
+                - url: http://xcaliber-fhir/structureDefinition/original-file-name
+                  valueString: result.pdf
+                - url: http://xcaliber-fhir/structureDefinition/portal-published-datetime
+                  valueDateTime: '2023-10-02T08:00:00Z'
+                - url: http://xcaliber-fhir/structureDefinition/received-facility-order-code
+                  valueCodeableConcept:
+                    coding:
+                    - code: F1234
+                      display: Facility Code
+                - url: http://xcaliber-fhir/structureDefinition/report-status
+                  valueString: Preliminary
+                - url: http://xcaliber-fhir/structureDefinition/status
+                  valueString: final
+                - url: http://xcaliber-fhir/structureDefinition/subject
+                  valueString: Patient/12345
+                - url: http://xcaliber-fhir/structureDefinition/alarm-days
+                  valueString: '5'
+                - url: http://xcaliber-fhir/structureDefinition/action-note
+                  valueString: Immediate follow-up required
+                - url: http://xcaliber-fhir/structureDefinition/result-category
+                  valueString: hematology
+                - url: http://xcaliber-fhir/structureDefinition/result-notes
+                  valueString: See note
+                - url: http://xcaliber-fhir/structureDefinition/provider-user-name
+                  valueString: labtech
+                - url: http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery
+                  valueString: 'No'
+                presentedForm:
+                - extension:
+                  - url: http://xcaliber-fhir/structureDefinition/created-date
+                    valueDateTime: '2023-09-30T08:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/status
+                    valueString: final
+                  - url: http://xcaliber-fhir/structureDefinition/document-source
+                    valueString: LIS
+                contained:
+                - resourceType: Organization
+                  id: ORG001
+                  address:
+                  - line:
+                    - 123 Health St
+                    - Suite 100
+                    city: Boston
+                    state: MA
+                    postalCode: 02118
+                  name: Health Lab
+                - resourceType: Observation
+                  id: '1'
+                  status: final
+                  code:
+                    coding:
+                    - display: Hemoglobin A1c
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/observationidentifier
+                        valueString: OBSID-1
+                    - system: http://loinc.org
+                      code: 57771-6
+                      display: Hemoglobin A1c
+                  category:
+                  - coding:
+                    - code: laboratory
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/abnormalhl7code
+                    valueString: N
+                  - url: http://xcaliber-fhir/structureDefinition/abnormalhl7name
+                    valueString: Normal
+                  - url: http://xcaliber-fhir/structureDefinition/description
+                    valueString: Glucose
+                  - url: http://xcaliber-fhir/structureDefinition/lab_result_status
+                    valueString: final
+                  - url: http://xcaliber-fhir/structureDefinition/abnormal_flag
+                    valueString: N
+                  valueQuantity:
+                    value: 5.4
+                    unit: '%'
+                    system: http://unitsofmeasure.org
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/value
+                      valueString: '5.4'
+                  referenceRange:
+                  - low:
+                      value: 4
+                      unit: '%'
+                      system: http://unitsofmeasure.org
+                      code: '%'
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/inclusive
+                        valueBoolean: true
+                    high:
+                      value: 6
+                      unit: '%'
+                      system: http://unitsofmeasure.org
+                      code: '%'
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/inclusive
+                        valueBoolean: true
+                    text: 4.0 - 6.0%
+                  note:
+                  - text: All values are within normal range.
+                  subject:
+                    reference: Patient/12345
+                  effectiveDateTime: '2023-09-30T09:00:00Z'
+          description: '"Diagnostic report data to update. Provide a JSON object with
+            the updated report details."'
+      example:
+        context:
+          requestId: d4cfa5d1-2121-43ea-9bbf-11e54cfdedb9
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          report: null
+          resourceType: DiagnosticReport
+        id: '987654'
+        identifier:
+        - system: http://acme.com/lab/reports
+          value: '987654'
+        status: final
+        category:
+        - coding:
+          - system: http://terminology.hl7.org/CodeSystem/v2-0074
+            code: Lab
+        - coding:
+          - system: athena
+            code: LAB-SUB
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/document-subclass
+              valueString: subclass-A
+        code:
+          coding:
+          - system: http://loinc.org
+            code: 57771-6
+            display: Hemoglobin A1c
+          text: Hemoglobin A1c
+        subject:
+          reference: Patient/12345
+        conclusion: All results are within normal limits.
+        effectiveDateTime: '2023-10-01T09:00:00Z'
+        issued: '2023-10-01T10:00:00Z'
+        performer:
+        - reference: Practitioner/67890
+        basedOn:
+        - reference: ServiceRequest/54321
+        encounter:
+          reference: Encounter/321
+        result:
+        - reference: Observation/1
+        - reference: Observation/2
+        extension:
+        - url: http://xcaliber-fhir/structureDefinition/priority
+          valueString: Routine
+        - url: http://xcaliber-fhir/structureDefinition/attachmentexists
+          valueBoolean: true
+        - url: http://xcaliber-fhir/structureDefinition/exactduplicatedocumentid
+          valueInteger: 11111
+        - url: http://xcaliber-fhir/structureDefinition/facilityid
+          valueInteger: 222
+        - url: http://xcaliber-fhir/structureDefinition/internalnote
+          valueString: Internal lab note
+        - url: http://xcaliber-fhir/structureDefinition/interpretationtemplate
+          valueString: Interpretation A
+        - url: http://xcaliber-fhir/structureDefinition/isreviewedbyprovider
+          valueBoolean: true
+        - url: http://xcaliber-fhir/structureDefinition/labresultdate
+          valueDate: '2023-09-30'
+        - url: http://xcaliber-fhir/structureDefinition/patientnote
+          valueString: Patient-specific note
+        - url: http://xcaliber-fhir/structureDefinition/supersededdocumentid
+          valueString: superseded-001
+        - url: http://xcaliber-fhir/structureDefinition/appointment-id
+          valueInteger: 8888
+        - url: http://xcaliber-fhir/structureDefinition/assigned-to
+          valueString: Dr. X
+        - url: http://xcaliber-fhir/structureDefinition/created-user
+          valueString: LabAdmin
+        - url: http://xcaliber-fhir/structureDefinition/deleted-datetime
+          valueDateTime: '2023-10-03T14:00:00Z'
+        - url: http://xcaliber-fhir/structureDefinition/department-id
+          valueString: Dept-55
+        - url: http://xcaliber-fhir/structureDefinition/document-source
+          valueString: Imported
+        - url: http://xcaliber-fhir/structureDefinition/document-route
+          valueString: Fax
+        - url: http://xcaliber-fhir/structureDefinition/document-type-id
+          valueInteger: 987
+        - url: http://xcaliber-fhir/structureDefinition/encounter-date
+          valueDate: '2023-10-01'
+        - url: http://xcaliber-fhir/structureDefinition/entity-type
+          valueString: Lab
+        - url: http://xcaliber-fhir/structureDefinition/external-accession-id
+          valueString: EX-ACC-234
+        - url: http://xcaliber-fhir/structureDefinition/external-note-only
+          valueString: External note
+        - url: http://xcaliber-fhir/structureDefinition/file-extension
+          valueString: pdf
+        - url: http://xcaliber-fhir/structureDefinition/file-size
+          valueInteger: 204800
+        - url: http://xcaliber-fhir/structureDefinition/internal-accession-id
+          valueString: INT-ACC-987
+        - url: http://xcaliber-fhir/structureDefinition/interpretation
+          valueString: Normal
+        - url: http://xcaliber-fhir/structureDefinition/is-confidential
+          valueString: 'false'
+        - url: http://xcaliber-fhir/structureDefinition/last-modified-datetime
+          valueDateTime: '2023-10-01T11:00:00Z'
+        - url: http://xcaliber-fhir/structureDefinition/last-modified-user
+          valueString: Dr. Y
+        - url: http://xcaliber-fhir/structureDefinition/note-from-lab
+          valueString: Lab's note here
+        - url: http://xcaliber-fhir/structureDefinition/order-type
+          valueString: STAT
+        - url: http://xcaliber-fhir/structureDefinition/original-file-name
+          valueString: result.pdf
+        - url: http://xcaliber-fhir/structureDefinition/portal-published-datetime
+          valueDateTime: '2023-10-02T08:00:00Z'
+        - url: http://xcaliber-fhir/structureDefinition/received-facility-order-code
+          valueCodeableConcept:
+            coding:
+            - code: F1234
+              display: Facility Code
+        - url: http://xcaliber-fhir/structureDefinition/report-status
+          valueString: Preliminary
+        - url: http://xcaliber-fhir/structureDefinition/status
+          valueString: final
+        - url: http://xcaliber-fhir/structureDefinition/subject
+          valueString: Patient/12345
+        - url: http://xcaliber-fhir/structureDefinition/alarm-days
+          valueString: '5'
+        - url: http://xcaliber-fhir/structureDefinition/action-note
+          valueString: Immediate follow-up required
+        - url: http://xcaliber-fhir/structureDefinition/result-category
+          valueString: hematology
+        - url: http://xcaliber-fhir/structureDefinition/result-notes
+          valueString: See note
+        - url: http://xcaliber-fhir/structureDefinition/provider-user-name
+          valueString: labtech
+        - url: http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery
+          valueString: 'No'
+        presentedForm:
+        - extension:
+          - url: http://xcaliber-fhir/structureDefinition/created-date
+            valueDateTime: '2023-09-30T08:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/status
+            valueString: final
+          - url: http://xcaliber-fhir/structureDefinition/document-source
+            valueString: LIS
+        contained:
+        - resourceType: Organization
+          id: ORG001
+          address:
+          - line:
+            - 123 Health St
+            - Suite 100
+            city: Boston
+            state: MA
+            postalCode: 02118
+          name: Health Lab
+        - resourceType: Observation
+          id: '1'
+          status: final
+          code:
+            coding:
+            - display: Hemoglobin A1c
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/observationidentifier
+                valueString: OBSID-1
+            - system: http://loinc.org
+              code: 57771-6
+              display: Hemoglobin A1c
+          category:
+          - coding:
+            - code: laboratory
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/abnormalhl7code
+            valueString: N
+          - url: http://xcaliber-fhir/structureDefinition/abnormalhl7name
+            valueString: Normal
+          - url: http://xcaliber-fhir/structureDefinition/description
+            valueString: Glucose
+          - url: http://xcaliber-fhir/structureDefinition/lab_result_status
+            valueString: final
+          - url: http://xcaliber-fhir/structureDefinition/abnormal_flag
+            valueString: N
+          valueQuantity:
+            value: 5.4
+            unit: '%'
+            system: http://unitsofmeasure.org
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/value
+              valueString: '5.4'
+          referenceRange:
+          - low:
+              value: 4
+              unit: '%'
+              system: http://unitsofmeasure.org
+              code: '%'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/inclusive
+                valueBoolean: true
+            high:
+              value: 6
+              unit: '%'
+              system: http://unitsofmeasure.org
+              code: '%'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/inclusive
+                valueBoolean: true
+            text: 4.0 - 6.0%
+          note:
+          - text: All values are within normal range.
+          subject:
+            reference: Patient/12345
+          effectiveDateTime: '2023-09-30T09:00:00Z'
+    response200ofgetinDiagnosticReportcategorylabresults:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: d4cfa5d1-2121-43ea-9bbf-11e54cfdedb9
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            reports:
+              type: array
+              items:
+                type: object
+                required:
+                - resourceType
+                - id
+                - identifier
+                - status
+                - category
+                - code
+                - subject
+                - conclusion
+                - effectiveDateTime
+                - issued
+                - performer
+                - basedOn
+                - encounter
+                - result
+                - extension
+                - presentedForm
+                - contained
+                properties:
+                  resourceType:
+                    type: string
+                    enum:
+                    - DiagnosticReport
+                  id:
+                    type: string
+                    example: '987654'
+                  identifier:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                          example: http://acme.com/lab/reports
+                        value:
+                          type: string
+                          example: '987654'
+                  status:
+                    type: string
+                    example: final
+                  category:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                              extension:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    url:
+                                      type: string
+                                    valueString:
+                                      type: string
+                  code:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            display:
+                              type: string
+                      text:
+                        type: string
+                  subject:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                  conclusion:
+                    type: string
+                  effectiveDateTime:
+                    type: string
+                    format: date-time
+                  issued:
+                    type: string
+                    format: date-time
+                  performer:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                  basedOn:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                  encounter:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+                        valueBoolean:
+                          type: boolean
+                        valueInteger:
+                          type: integer
+                        valueDate:
+                          type: string
+                          format: date
+                        valueDateTime:
+                          type: string
+                          format: date-time
+                        valueCodeableConcept:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                  presentedForm:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueDateTime:
+                                type: string
+                                format: date-time
+                              valueString:
+                                type: string
+                  contained:
+                    type: array
+                    items:
+                      type: object
+                example:
+                  resourceType: DiagnosticReport
+                  id: '987654'
+                  identifier:
+                  - system: http://acme.com/lab/reports
+                    value: '987654'
+                  status: final
+                  category:
+                  - coding:
+                    - system: http://terminology.hl7.org/CodeSystem/v2-0074
+                      code: Lab
+                  - coding:
+                    - system: athena
+                      code: LAB-SUB
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/document-subclass
+                        valueString: subclass-A
+                  code:
+                    coding:
+                    - system: http://loinc.org
+                      code: 57771-6
+                      display: Hemoglobin A1c
+                    text: Hemoglobin A1c
+                  subject:
+                    reference: Patient/12345
+                  conclusion: All results are within normal limits.
+                  effectiveDateTime: '2023-10-01T09:00:00Z'
+                  issued: '2023-10-01T10:00:00Z'
+                  performer:
+                  - reference: Practitioner/67890
+                  basedOn:
+                  - reference: ServiceRequest/54321
+                  encounter:
+                    reference: Encounter/321
+                  result:
+                  - reference: Observation/1
+                  - reference: Observation/2
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/priority
+                    valueString: Routine
+                  - url: http://xcaliber-fhir/structureDefinition/attachmentexists
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/exactduplicatedocumentid
+                    valueInteger: 11111
+                  - url: http://xcaliber-fhir/structureDefinition/facilityid
+                    valueInteger: 222
+                  - url: http://xcaliber-fhir/structureDefinition/internalnote
+                    valueString: Internal lab note
+                  - url: http://xcaliber-fhir/structureDefinition/interpretationtemplate
+                    valueString: Interpretation A
+                  - url: http://xcaliber-fhir/structureDefinition/isreviewedbyprovider
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/labresultdate
+                    valueDate: '2023-09-30'
+                  - url: http://xcaliber-fhir/structureDefinition/patientnote
+                    valueString: Patient-specific note
+                  - url: http://xcaliber-fhir/structureDefinition/supersededdocumentid
+                    valueString: superseded-001
+                  - url: http://xcaliber-fhir/structureDefinition/appointment-id
+                    valueInteger: 8888
+                  - url: http://xcaliber-fhir/structureDefinition/assigned-to
+                    valueString: Dr. X
+                  - url: http://xcaliber-fhir/structureDefinition/created-user
+                    valueString: LabAdmin
+                  - url: http://xcaliber-fhir/structureDefinition/deleted-datetime
+                    valueDateTime: '2023-10-03T14:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/department-id
+                    valueString: Dept-55
+                  - url: http://xcaliber-fhir/structureDefinition/document-source
+                    valueString: Imported
+                  - url: http://xcaliber-fhir/structureDefinition/document-route
+                    valueString: Fax
+                  - url: http://xcaliber-fhir/structureDefinition/document-type-id
+                    valueInteger: 987
+                  - url: http://xcaliber-fhir/structureDefinition/encounter-date
+                    valueDate: '2023-10-01'
+                  - url: http://xcaliber-fhir/structureDefinition/entity-type
+                    valueString: Lab
+                  - url: http://xcaliber-fhir/structureDefinition/external-accession-id
+                    valueString: EX-ACC-234
+                  - url: http://xcaliber-fhir/structureDefinition/external-note-only
+                    valueString: External note
+                  - url: http://xcaliber-fhir/structureDefinition/file-extension
+                    valueString: pdf
+                  - url: http://xcaliber-fhir/structureDefinition/file-size
+                    valueInteger: 204800
+                  - url: http://xcaliber-fhir/structureDefinition/internal-accession-id
+                    valueString: INT-ACC-987
+                  - url: http://xcaliber-fhir/structureDefinition/interpretation
+                    valueString: Normal
+                  - url: http://xcaliber-fhir/structureDefinition/is-confidential
+                    valueString: 'false'
+                  - url: http://xcaliber-fhir/structureDefinition/last-modified-datetime
+                    valueDateTime: '2023-10-01T11:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/last-modified-user
+                    valueString: Dr. Y
+                  - url: http://xcaliber-fhir/structureDefinition/note-from-lab
+                    valueString: Lab's note here
+                  - url: http://xcaliber-fhir/structureDefinition/order-type
+                    valueString: STAT
+                  - url: http://xcaliber-fhir/structureDefinition/original-file-name
+                    valueString: result.pdf
+                  - url: http://xcaliber-fhir/structureDefinition/portal-published-datetime
+                    valueDateTime: '2023-10-02T08:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/received-facility-order-code
+                    valueCodeableConcept:
+                      coding:
+                      - code: F1234
+                        display: Facility Code
+                  - url: http://xcaliber-fhir/structureDefinition/report-status
+                    valueString: Preliminary
+                  - url: http://xcaliber-fhir/structureDefinition/status
+                    valueString: final
+                  - url: http://xcaliber-fhir/structureDefinition/subject
+                    valueString: Patient/12345
+                  - url: http://xcaliber-fhir/structureDefinition/alarm-days
+                    valueString: '5'
+                  - url: http://xcaliber-fhir/structureDefinition/action-note
+                    valueString: Immediate follow-up required
+                  - url: http://xcaliber-fhir/structureDefinition/result-category
+                    valueString: hematology
+                  - url: http://xcaliber-fhir/structureDefinition/result-notes
+                    valueString: See note
+                  - url: http://xcaliber-fhir/structureDefinition/provider-user-name
+                    valueString: labtech
+                  - url: http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery
+                    valueString: 'No'
+                  presentedForm:
+                  - extension:
+                    - url: http://xcaliber-fhir/structureDefinition/created-date
+                      valueDateTime: '2023-09-30T08:00:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/status
+                      valueString: final
+                    - url: http://xcaliber-fhir/structureDefinition/document-source
+                      valueString: LIS
+                  contained:
+                  - resourceType: Organization
+                    id: ORG001
+                    address:
+                    - line:
+                      - 123 Health St
+                      - Suite 100
+                      city: Boston
+                      state: MA
+                      postalCode: 02118
+                    name: Health Lab
+                  - resourceType: Observation
+                    id: '1'
+                    status: final
+                    code:
+                      coding:
+                      - display: Hemoglobin A1c
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/observationidentifier
+                          valueString: OBSID-1
+                      - system: http://loinc.org
+                        code: 57771-6
+                        display: Hemoglobin A1c
+                    category:
+                    - coding:
+                      - code: laboratory
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/abnormalhl7code
+                      valueString: N
+                    - url: http://xcaliber-fhir/structureDefinition/abnormalhl7name
+                      valueString: Normal
+                    - url: http://xcaliber-fhir/structureDefinition/description
+                      valueString: Glucose
+                    - url: http://xcaliber-fhir/structureDefinition/lab_result_status
+                      valueString: final
+                    - url: http://xcaliber-fhir/structureDefinition/abnormal_flag
+                      valueString: N
+                    valueQuantity:
+                      value: 5.4
+                      unit: '%'
+                      system: http://unitsofmeasure.org
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/value
+                        valueString: '5.4'
+                    referenceRange:
+                    - low:
+                        value: 4
+                        unit: '%'
+                        system: http://unitsofmeasure.org
+                        code: '%'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/inclusive
+                          valueBoolean: true
+                      high:
+                        value: 6
+                        unit: '%'
+                        system: http://unitsofmeasure.org
+                        code: '%'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/inclusive
+                          valueBoolean: true
+                      text: 4.0 - 6.0%
+                    note:
+                    - text: All values are within normal range.
+                    subject:
+                      reference: Patient/12345
+                    effectiveDateTime: '2023-09-30T09:00:00Z'
+      example:
+        context:
+          requestId: d4cfa5d1-2121-43ea-9bbf-11e54cfdedb9
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              reports: null
+              resourceType: DiagnosticReport
+        id: '987654'
+        identifier:
+        - system: http://acme.com/lab/reports
+          value: '987654'
+        status: final
+        category:
+        - coding:
+          - system: http://terminology.hl7.org/CodeSystem/v2-0074
+            code: Lab
+        - coding:
+          - system: athena
+            code: LAB-SUB
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/document-subclass
+              valueString: subclass-A
+        code:
+          coding:
+          - system: http://loinc.org
+            code: 57771-6
+            display: Hemoglobin A1c
+          text: Hemoglobin A1c
+        subject:
+          reference: Patient/12345
+        conclusion: All results are within normal limits.
+        effectiveDateTime: '2023-10-01T09:00:00Z'
+        issued: '2023-10-01T10:00:00Z'
+        performer:
+        - reference: Practitioner/67890
+        basedOn:
+        - reference: ServiceRequest/54321
+        encounter:
+          reference: Encounter/321
+        result:
+        - reference: Observation/1
+        - reference: Observation/2
+        extension:
+        - url: http://xcaliber-fhir/structureDefinition/priority
+          valueString: Routine
+        - url: http://xcaliber-fhir/structureDefinition/attachmentexists
+          valueBoolean: true
+        - url: http://xcaliber-fhir/structureDefinition/exactduplicatedocumentid
+          valueInteger: 11111
+        - url: http://xcaliber-fhir/structureDefinition/facilityid
+          valueInteger: 222
+        - url: http://xcaliber-fhir/structureDefinition/internalnote
+          valueString: Internal lab note
+        - url: http://xcaliber-fhir/structureDefinition/interpretationtemplate
+          valueString: Interpretation A
+        - url: http://xcaliber-fhir/structureDefinition/isreviewedbyprovider
+          valueBoolean: true
+        - url: http://xcaliber-fhir/structureDefinition/labresultdate
+          valueDate: '2023-09-30'
+        - url: http://xcaliber-fhir/structureDefinition/patientnote
+          valueString: Patient-specific note
+        - url: http://xcaliber-fhir/structureDefinition/supersededdocumentid
+          valueString: superseded-001
+        - url: http://xcaliber-fhir/structureDefinition/appointment-id
+          valueInteger: 8888
+        - url: http://xcaliber-fhir/structureDefinition/assigned-to
+          valueString: Dr. X
+        - url: http://xcaliber-fhir/structureDefinition/created-user
+          valueString: LabAdmin
+        - url: http://xcaliber-fhir/structureDefinition/deleted-datetime
+          valueDateTime: '2023-10-03T14:00:00Z'
+        - url: http://xcaliber-fhir/structureDefinition/department-id
+          valueString: Dept-55
+        - url: http://xcaliber-fhir/structureDefinition/document-source
+          valueString: Imported
+        - url: http://xcaliber-fhir/structureDefinition/document-route
+          valueString: Fax
+        - url: http://xcaliber-fhir/structureDefinition/document-type-id
+          valueInteger: 987
+        - url: http://xcaliber-fhir/structureDefinition/encounter-date
+          valueDate: '2023-10-01'
+        - url: http://xcaliber-fhir/structureDefinition/entity-type
+          valueString: Lab
+        - url: http://xcaliber-fhir/structureDefinition/external-accession-id
+          valueString: EX-ACC-234
+        - url: http://xcaliber-fhir/structureDefinition/external-note-only
+          valueString: External note
+        - url: http://xcaliber-fhir/structureDefinition/file-extension
+          valueString: pdf
+        - url: http://xcaliber-fhir/structureDefinition/file-size
+          valueInteger: 204800
+        - url: http://xcaliber-fhir/structureDefinition/internal-accession-id
+          valueString: INT-ACC-987
+        - url: http://xcaliber-fhir/structureDefinition/interpretation
+          valueString: Normal
+        - url: http://xcaliber-fhir/structureDefinition/is-confidential
+          valueString: 'false'
+        - url: http://xcaliber-fhir/structureDefinition/last-modified-datetime
+          valueDateTime: '2023-10-01T11:00:00Z'
+        - url: http://xcaliber-fhir/structureDefinition/last-modified-user
+          valueString: Dr. Y
+        - url: http://xcaliber-fhir/structureDefinition/note-from-lab
+          valueString: Lab's note here
+        - url: http://xcaliber-fhir/structureDefinition/order-type
+          valueString: STAT
+        - url: http://xcaliber-fhir/structureDefinition/original-file-name
+          valueString: result.pdf
+        - url: http://xcaliber-fhir/structureDefinition/portal-published-datetime
+          valueDateTime: '2023-10-02T08:00:00Z'
+        - url: http://xcaliber-fhir/structureDefinition/received-facility-order-code
+          valueCodeableConcept:
+            coding:
+            - code: F1234
+              display: Facility Code
+        - url: http://xcaliber-fhir/structureDefinition/report-status
+          valueString: Preliminary
+        - url: http://xcaliber-fhir/structureDefinition/status
+          valueString: final
+        - url: http://xcaliber-fhir/structureDefinition/subject
+          valueString: Patient/12345
+        - url: http://xcaliber-fhir/structureDefinition/alarm-days
+          valueString: '5'
+        - url: http://xcaliber-fhir/structureDefinition/action-note
+          valueString: Immediate follow-up required
+        - url: http://xcaliber-fhir/structureDefinition/result-category
+          valueString: hematology
+        - url: http://xcaliber-fhir/structureDefinition/result-notes
+          valueString: See note
+        - url: http://xcaliber-fhir/structureDefinition/provider-user-name
+          valueString: labtech
+        - url: http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery
+          valueString: 'No'
+        presentedForm:
+        - extension:
+          - url: http://xcaliber-fhir/structureDefinition/created-date
+            valueDateTime: '2023-09-30T08:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/status
+            valueString: final
+          - url: http://xcaliber-fhir/structureDefinition/document-source
+            valueString: LIS
+        contained:
+        - resourceType: Organization
+          id: ORG001
+          address:
+          - line:
+            - 123 Health St
+            - Suite 100
+            city: Boston
+            state: MA
+            postalCode: 02118
+          name: Health Lab
+        - resourceType: Observation
+          id: '1'
+          status: final
+          code:
+            coding:
+            - display: Hemoglobin A1c
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/observationidentifier
+                valueString: OBSID-1
+            - system: http://loinc.org
+              code: 57771-6
+              display: Hemoglobin A1c
+          category:
+          - coding:
+            - code: laboratory
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/abnormalhl7code
+            valueString: N
+          - url: http://xcaliber-fhir/structureDefinition/abnormalhl7name
+            valueString: Normal
+          - url: http://xcaliber-fhir/structureDefinition/description
+            valueString: Glucose
+          - url: http://xcaliber-fhir/structureDefinition/lab_result_status
+            valueString: final
+          - url: http://xcaliber-fhir/structureDefinition/abnormal_flag
+            valueString: N
+          valueQuantity:
+            value: 5.4
+            unit: '%'
+            system: http://unitsofmeasure.org
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/value
+              valueString: '5.4'
+          referenceRange:
+          - low:
+              value: 4
+              unit: '%'
+              system: http://unitsofmeasure.org
+              code: '%'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/inclusive
+                valueBoolean: true
+            high:
+              value: 6
+              unit: '%'
+              system: http://unitsofmeasure.org
+              code: '%'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/inclusive
+                valueBoolean: true
+            text: 4.0 - 6.0%
+          note:
+          - text: All values are within normal range.
+          subject:
+            reference: Patient/12345
+          effectiveDateTime: '2023-09-30T09:00:00Z'
+    error400ofgetinDiagnosticReportcategorylabresults:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing or invalid parameter
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing or invalid parameter
+    error401ofgetinDiagnosticReportcategorylabresults:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinDiagnosticReportcategorylabresults:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    response200ofgetinDiagnosticReportcategorylabresultsdiagnosticreportid:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: d4cfa5d1-2121-43ea-9bbf-11e54cfdedb9
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            report:
+              type: object
+              required:
+              - resourceType
+              - id
+              - identifier
+              - status
+              - category
+              - code
+              - subject
+              - conclusion
+              - effectiveDateTime
+              - issued
+              - performer
+              - basedOn
+              - encounter
+              - result
+              - extension
+              - presentedForm
+              - contained
+              properties:
+                resourceType:
+                  type: string
+                  enum:
+                  - DiagnosticReport
+                id:
+                  type: string
+                  example: '987654'
+                identifier:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                        example: http://acme.com/lab/reports
+                      value:
+                        type: string
+                        example: '987654'
+                status:
+                  type: string
+                  example: final
+                category:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            extension:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  url:
+                                    type: string
+                                  valueString:
+                                    type: string
+                code:
+                  type: object
+                  properties:
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+                          display:
+                            type: string
+                    text:
+                      type: string
+                subject:
+                  type: object
+                  properties:
+                    reference:
+                      type: string
+                conclusion:
+                  type: string
+                effectiveDateTime:
+                  type: string
+                  format: date-time
+                issued:
+                  type: string
+                  format: date-time
+                performer:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                basedOn:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                encounter:
+                  type: object
+                  properties:
+                    reference:
+                      type: string
+                result:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueString:
+                        type: string
+                      valueBoolean:
+                        type: boolean
+                      valueInteger:
+                        type: integer
+                      valueDate:
+                        type: string
+                        format: date
+                      valueDateTime:
+                        type: string
+                        format: date-time
+                      valueCodeableConcept:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                code:
+                                  type: string
+                                display:
+                                  type: string
+                presentedForm:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueDateTime:
+                              type: string
+                              format: date-time
+                            valueString:
+                              type: string
+                contained:
+                  type: array
+                  items:
+                    type: object
+              example:
+                resourceType: DiagnosticReport
+                id: '987654'
+                identifier:
+                - system: http://acme.com/lab/reports
+                  value: '987654'
+                status: final
+                category:
+                - coding:
+                  - system: http://terminology.hl7.org/CodeSystem/v2-0074
+                    code: Lab
+                - coding:
+                  - system: athena
+                    code: LAB-SUB
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/document-subclass
+                      valueString: subclass-A
+                code:
+                  coding:
+                  - system: http://loinc.org
+                    code: 57771-6
+                    display: Hemoglobin A1c
+                  text: Hemoglobin A1c
+                subject:
+                  reference: Patient/12345
+                conclusion: All results are within normal limits.
+                effectiveDateTime: '2023-10-01T09:00:00Z'
+                issued: '2023-10-01T10:00:00Z'
+                performer:
+                - reference: Practitioner/67890
+                basedOn:
+                - reference: ServiceRequest/54321
+                encounter:
+                  reference: Encounter/321
+                result:
+                - reference: Observation/1
+                - reference: Observation/2
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/priority
+                  valueString: Routine
+                - url: http://xcaliber-fhir/structureDefinition/attachmentexists
+                  valueBoolean: true
+                - url: http://xcaliber-fhir/structureDefinition/exactduplicatedocumentid
+                  valueInteger: 11111
+                - url: http://xcaliber-fhir/structureDefinition/facilityid
+                  valueInteger: 222
+                - url: http://xcaliber-fhir/structureDefinition/internalnote
+                  valueString: Internal lab note
+                - url: http://xcaliber-fhir/structureDefinition/interpretationtemplate
+                  valueString: Interpretation A
+                - url: http://xcaliber-fhir/structureDefinition/isreviewedbyprovider
+                  valueBoolean: true
+                - url: http://xcaliber-fhir/structureDefinition/labresultdate
+                  valueDate: '2023-09-30'
+                - url: http://xcaliber-fhir/structureDefinition/patientnote
+                  valueString: Patient-specific note
+                - url: http://xcaliber-fhir/structureDefinition/supersededdocumentid
+                  valueString: superseded-001
+                - url: http://xcaliber-fhir/structureDefinition/appointment-id
+                  valueInteger: 8888
+                - url: http://xcaliber-fhir/structureDefinition/assigned-to
+                  valueString: Dr. X
+                - url: http://xcaliber-fhir/structureDefinition/created-user
+                  valueString: LabAdmin
+                - url: http://xcaliber-fhir/structureDefinition/deleted-datetime
+                  valueDateTime: '2023-10-03T14:00:00Z'
+                - url: http://xcaliber-fhir/structureDefinition/department-id
+                  valueString: Dept-55
+                - url: http://xcaliber-fhir/structureDefinition/document-source
+                  valueString: Imported
+                - url: http://xcaliber-fhir/structureDefinition/document-route
+                  valueString: Fax
+                - url: http://xcaliber-fhir/structureDefinition/document-type-id
+                  valueInteger: 987
+                - url: http://xcaliber-fhir/structureDefinition/encounter-date
+                  valueDate: '2023-10-01'
+                - url: http://xcaliber-fhir/structureDefinition/entity-type
+                  valueString: Lab
+                - url: http://xcaliber-fhir/structureDefinition/external-accession-id
+                  valueString: EX-ACC-234
+                - url: http://xcaliber-fhir/structureDefinition/external-note-only
+                  valueString: External note
+                - url: http://xcaliber-fhir/structureDefinition/file-extension
+                  valueString: pdf
+                - url: http://xcaliber-fhir/structureDefinition/file-size
+                  valueInteger: 204800
+                - url: http://xcaliber-fhir/structureDefinition/internal-accession-id
+                  valueString: INT-ACC-987
+                - url: http://xcaliber-fhir/structureDefinition/interpretation
+                  valueString: Normal
+                - url: http://xcaliber-fhir/structureDefinition/is-confidential
+                  valueString: 'false'
+                - url: http://xcaliber-fhir/structureDefinition/last-modified-datetime
+                  valueDateTime: '2023-10-01T11:00:00Z'
+                - url: http://xcaliber-fhir/structureDefinition/last-modified-user
+                  valueString: Dr. Y
+                - url: http://xcaliber-fhir/structureDefinition/note-from-lab
+                  valueString: Lab's note here
+                - url: http://xcaliber-fhir/structureDefinition/order-type
+                  valueString: STAT
+                - url: http://xcaliber-fhir/structureDefinition/original-file-name
+                  valueString: result.pdf
+                - url: http://xcaliber-fhir/structureDefinition/portal-published-datetime
+                  valueDateTime: '2023-10-02T08:00:00Z'
+                - url: http://xcaliber-fhir/structureDefinition/received-facility-order-code
+                  valueCodeableConcept:
+                    coding:
+                    - code: F1234
+                      display: Facility Code
+                - url: http://xcaliber-fhir/structureDefinition/report-status
+                  valueString: Preliminary
+                - url: http://xcaliber-fhir/structureDefinition/status
+                  valueString: final
+                - url: http://xcaliber-fhir/structureDefinition/subject
+                  valueString: Patient/12345
+                - url: http://xcaliber-fhir/structureDefinition/alarm-days
+                  valueString: '5'
+                - url: http://xcaliber-fhir/structureDefinition/action-note
+                  valueString: Immediate follow-up required
+                - url: http://xcaliber-fhir/structureDefinition/result-category
+                  valueString: hematology
+                - url: http://xcaliber-fhir/structureDefinition/result-notes
+                  valueString: See note
+                - url: http://xcaliber-fhir/structureDefinition/provider-user-name
+                  valueString: labtech
+                - url: http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery
+                  valueString: 'No'
+                presentedForm:
+                - extension:
+                  - url: http://xcaliber-fhir/structureDefinition/created-date
+                    valueDateTime: '2023-09-30T08:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/status
+                    valueString: final
+                  - url: http://xcaliber-fhir/structureDefinition/document-source
+                    valueString: LIS
+                contained:
+                - resourceType: Organization
+                  id: ORG001
+                  address:
+                  - line:
+                    - 123 Health St
+                    - Suite 100
+                    city: Boston
+                    state: MA
+                    postalCode: 02118
+                  name: Health Lab
+                - resourceType: Observation
+                  id: '1'
+                  status: final
+                  code:
+                    coding:
+                    - display: Hemoglobin A1c
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/observationidentifier
+                        valueString: OBSID-1
+                    - system: http://loinc.org
+                      code: 57771-6
+                      display: Hemoglobin A1c
+                  category:
+                  - coding:
+                    - code: laboratory
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/abnormalhl7code
+                    valueString: N
+                  - url: http://xcaliber-fhir/structureDefinition/abnormalhl7name
+                    valueString: Normal
+                  - url: http://xcaliber-fhir/structureDefinition/description
+                    valueString: Glucose
+                  - url: http://xcaliber-fhir/structureDefinition/lab_result_status
+                    valueString: final
+                  - url: http://xcaliber-fhir/structureDefinition/abnormal_flag
+                    valueString: N
+                  valueQuantity:
+                    value: 5.4
+                    unit: '%'
+                    system: http://unitsofmeasure.org
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/value
+                      valueString: '5.4'
+                  referenceRange:
+                  - low:
+                      value: 4
+                      unit: '%'
+                      system: http://unitsofmeasure.org
+                      code: '%'
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/inclusive
+                        valueBoolean: true
+                    high:
+                      value: 6
+                      unit: '%'
+                      system: http://unitsofmeasure.org
+                      code: '%'
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/inclusive
+                        valueBoolean: true
+                    text: 4.0 - 6.0%
+                  note:
+                  - text: All values are within normal range.
+                  subject:
+                    reference: Patient/12345
+                  effectiveDateTime: '2023-09-30T09:00:00Z'
+      example:
+        context:
+          requestId: d4cfa5d1-2121-43ea-9bbf-11e54cfdedb9
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              report: null
+              resourceType: DiagnosticReport
+        id: '987654'
+        identifier:
+        - system: http://acme.com/lab/reports
+          value: '987654'
+        status: final
+        category:
+        - coding:
+          - system: http://terminology.hl7.org/CodeSystem/v2-0074
+            code: Lab
+        - coding:
+          - system: athena
+            code: LAB-SUB
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/document-subclass
+              valueString: subclass-A
+        code:
+          coding:
+          - system: http://loinc.org
+            code: 57771-6
+            display: Hemoglobin A1c
+          text: Hemoglobin A1c
+        subject:
+          reference: Patient/12345
+        conclusion: All results are within normal limits.
+        effectiveDateTime: '2023-10-01T09:00:00Z'
+        issued: '2023-10-01T10:00:00Z'
+        performer:
+        - reference: Practitioner/67890
+        basedOn:
+        - reference: ServiceRequest/54321
+        encounter:
+          reference: Encounter/321
+        result:
+        - reference: Observation/1
+        - reference: Observation/2
+        extension:
+        - url: http://xcaliber-fhir/structureDefinition/priority
+          valueString: Routine
+        - url: http://xcaliber-fhir/structureDefinition/attachmentexists
+          valueBoolean: true
+        - url: http://xcaliber-fhir/structureDefinition/exactduplicatedocumentid
+          valueInteger: 11111
+        - url: http://xcaliber-fhir/structureDefinition/facilityid
+          valueInteger: 222
+        - url: http://xcaliber-fhir/structureDefinition/internalnote
+          valueString: Internal lab note
+        - url: http://xcaliber-fhir/structureDefinition/interpretationtemplate
+          valueString: Interpretation A
+        - url: http://xcaliber-fhir/structureDefinition/isreviewedbyprovider
+          valueBoolean: true
+        - url: http://xcaliber-fhir/structureDefinition/labresultdate
+          valueDate: '2023-09-30'
+        - url: http://xcaliber-fhir/structureDefinition/patientnote
+          valueString: Patient-specific note
+        - url: http://xcaliber-fhir/structureDefinition/supersededdocumentid
+          valueString: superseded-001
+        - url: http://xcaliber-fhir/structureDefinition/appointment-id
+          valueInteger: 8888
+        - url: http://xcaliber-fhir/structureDefinition/assigned-to
+          valueString: Dr. X
+        - url: http://xcaliber-fhir/structureDefinition/created-user
+          valueString: LabAdmin
+        - url: http://xcaliber-fhir/structureDefinition/deleted-datetime
+          valueDateTime: '2023-10-03T14:00:00Z'
+        - url: http://xcaliber-fhir/structureDefinition/department-id
+          valueString: Dept-55
+        - url: http://xcaliber-fhir/structureDefinition/document-source
+          valueString: Imported
+        - url: http://xcaliber-fhir/structureDefinition/document-route
+          valueString: Fax
+        - url: http://xcaliber-fhir/structureDefinition/document-type-id
+          valueInteger: 987
+        - url: http://xcaliber-fhir/structureDefinition/encounter-date
+          valueDate: '2023-10-01'
+        - url: http://xcaliber-fhir/structureDefinition/entity-type
+          valueString: Lab
+        - url: http://xcaliber-fhir/structureDefinition/external-accession-id
+          valueString: EX-ACC-234
+        - url: http://xcaliber-fhir/structureDefinition/external-note-only
+          valueString: External note
+        - url: http://xcaliber-fhir/structureDefinition/file-extension
+          valueString: pdf
+        - url: http://xcaliber-fhir/structureDefinition/file-size
+          valueInteger: 204800
+        - url: http://xcaliber-fhir/structureDefinition/internal-accession-id
+          valueString: INT-ACC-987
+        - url: http://xcaliber-fhir/structureDefinition/interpretation
+          valueString: Normal
+        - url: http://xcaliber-fhir/structureDefinition/is-confidential
+          valueString: 'false'
+        - url: http://xcaliber-fhir/structureDefinition/last-modified-datetime
+          valueDateTime: '2023-10-01T11:00:00Z'
+        - url: http://xcaliber-fhir/structureDefinition/last-modified-user
+          valueString: Dr. Y
+        - url: http://xcaliber-fhir/structureDefinition/note-from-lab
+          valueString: Lab's note here
+        - url: http://xcaliber-fhir/structureDefinition/order-type
+          valueString: STAT
+        - url: http://xcaliber-fhir/structureDefinition/original-file-name
+          valueString: result.pdf
+        - url: http://xcaliber-fhir/structureDefinition/portal-published-datetime
+          valueDateTime: '2023-10-02T08:00:00Z'
+        - url: http://xcaliber-fhir/structureDefinition/received-facility-order-code
+          valueCodeableConcept:
+            coding:
+            - code: F1234
+              display: Facility Code
+        - url: http://xcaliber-fhir/structureDefinition/report-status
+          valueString: Preliminary
+        - url: http://xcaliber-fhir/structureDefinition/status
+          valueString: final
+        - url: http://xcaliber-fhir/structureDefinition/subject
+          valueString: Patient/12345
+        - url: http://xcaliber-fhir/structureDefinition/alarm-days
+          valueString: '5'
+        - url: http://xcaliber-fhir/structureDefinition/action-note
+          valueString: Immediate follow-up required
+        - url: http://xcaliber-fhir/structureDefinition/result-category
+          valueString: hematology
+        - url: http://xcaliber-fhir/structureDefinition/result-notes
+          valueString: See note
+        - url: http://xcaliber-fhir/structureDefinition/provider-user-name
+          valueString: labtech
+        - url: http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery
+          valueString: 'No'
+        presentedForm:
+        - extension:
+          - url: http://xcaliber-fhir/structureDefinition/created-date
+            valueDateTime: '2023-09-30T08:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/status
+            valueString: final
+          - url: http://xcaliber-fhir/structureDefinition/document-source
+            valueString: LIS
+        contained:
+        - resourceType: Organization
+          id: ORG001
+          address:
+          - line:
+            - 123 Health St
+            - Suite 100
+            city: Boston
+            state: MA
+            postalCode: 02118
+          name: Health Lab
+        - resourceType: Observation
+          id: '1'
+          status: final
+          code:
+            coding:
+            - display: Hemoglobin A1c
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/observationidentifier
+                valueString: OBSID-1
+            - system: http://loinc.org
+              code: 57771-6
+              display: Hemoglobin A1c
+          category:
+          - coding:
+            - code: laboratory
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/abnormalhl7code
+            valueString: N
+          - url: http://xcaliber-fhir/structureDefinition/abnormalhl7name
+            valueString: Normal
+          - url: http://xcaliber-fhir/structureDefinition/description
+            valueString: Glucose
+          - url: http://xcaliber-fhir/structureDefinition/lab_result_status
+            valueString: final
+          - url: http://xcaliber-fhir/structureDefinition/abnormal_flag
+            valueString: N
+          valueQuantity:
+            value: 5.4
+            unit: '%'
+            system: http://unitsofmeasure.org
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/value
+              valueString: '5.4'
+          referenceRange:
+          - low:
+              value: 4
+              unit: '%'
+              system: http://unitsofmeasure.org
+              code: '%'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/inclusive
+                valueBoolean: true
+            high:
+              value: 6
+              unit: '%'
+              system: http://unitsofmeasure.org
+              code: '%'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/inclusive
+                valueBoolean: true
+            text: 4.0 - 6.0%
+          note:
+          - text: All values are within normal range.
+          subject:
+            reference: Patient/12345
+          effectiveDateTime: '2023-09-30T09:00:00Z'
+    error400ofgetinDiagnosticReportcategorylabresultsdiagnosticreportid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing or invalid parameter
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing or invalid parameter
+    error401ofgetinDiagnosticReportcategorylabresultsdiagnosticreportid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinDiagnosticReportcategorylabresultsdiagnosticreportid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    response200ofdeleteinDiagnosticReportdiagnosticreportid:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: d4cfa5d1-2121-43ea-9bbf-11e54cfdedb9
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            deleted:
+              type: boolean
+              example: true
+            id:
+              type: string
+              example: '987654'
+      example:
+        context:
+          requestId: d4cfa5d1-2121-43ea-9bbf-11e54cfdedb9
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              deleted: true
+              id: '987654'
+    error400ofdeleteinDiagnosticReportdiagnosticreportid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing or invalid parameter
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing or invalid parameter
+    error401ofdeleteinDiagnosticReportdiagnosticreportid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofdeleteinDiagnosticReportdiagnosticreportid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    response200ofpatchinDiagnosticReportdiagnosticreportid:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: d4cfa5d1-2121-43ea-9bbf-11e54cfdedb9
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            report:
+              type: object
+              required:
+              - resourceType
+              - id
+              - identifier
+              - status
+              - category
+              - code
+              - subject
+              - conclusion
+              - effectiveDateTime
+              - issued
+              - performer
+              - basedOn
+              - encounter
+              - result
+              - extension
+              - presentedForm
+              - contained
+              properties:
+                resourceType:
+                  type: string
+                  enum:
+                  - DiagnosticReport
+                id:
+                  type: string
+                  example: '987654'
+                identifier:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                        example: http://acme.com/lab/reports
+                      value:
+                        type: string
+                        example: '987654'
+                status:
+                  type: string
+                  example: final
+                category:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            extension:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  url:
+                                    type: string
+                                  valueString:
+                                    type: string
+                code:
+                  type: object
+                  properties:
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+                          display:
+                            type: string
+                    text:
+                      type: string
+                subject:
+                  type: object
+                  properties:
+                    reference:
+                      type: string
+                conclusion:
+                  type: string
+                effectiveDateTime:
+                  type: string
+                  format: date-time
+                issued:
+                  type: string
+                  format: date-time
+                performer:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                basedOn:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                encounter:
+                  type: object
+                  properties:
+                    reference:
+                      type: string
+                result:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueString:
+                        type: string
+                      valueBoolean:
+                        type: boolean
+                      valueInteger:
+                        type: integer
+                      valueDate:
+                        type: string
+                        format: date
+                      valueDateTime:
+                        type: string
+                        format: date-time
+                      valueCodeableConcept:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                code:
+                                  type: string
+                                display:
+                                  type: string
+                presentedForm:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueDateTime:
+                              type: string
+                              format: date-time
+                            valueString:
+                              type: string
+                contained:
+                  type: array
+                  items:
+                    type: object
+              example:
+                resourceType: DiagnosticReport
+                id: '987654'
+                identifier:
+                - system: http://acme.com/lab/reports
+                  value: '987654'
+                status: final
+                category:
+                - coding:
+                  - system: http://terminology.hl7.org/CodeSystem/v2-0074
+                    code: Lab
+                - coding:
+                  - system: athena
+                    code: LAB-SUB
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/document-subclass
+                      valueString: subclass-A
+                code:
+                  coding:
+                  - system: http://loinc.org
+                    code: 57771-6
+                    display: Hemoglobin A1c
+                  text: Hemoglobin A1c
+                subject:
+                  reference: Patient/12345
+                conclusion: All results are within normal limits.
+                effectiveDateTime: '2023-10-01T09:00:00Z'
+                issued: '2023-10-01T10:00:00Z'
+                performer:
+                - reference: Practitioner/67890
+                basedOn:
+                - reference: ServiceRequest/54321
+                encounter:
+                  reference: Encounter/321
+                result:
+                - reference: Observation/1
+                - reference: Observation/2
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/priority
+                  valueString: Routine
+                - url: http://xcaliber-fhir/structureDefinition/attachmentexists
+                  valueBoolean: true
+                - url: http://xcaliber-fhir/structureDefinition/exactduplicatedocumentid
+                  valueInteger: 11111
+                - url: http://xcaliber-fhir/structureDefinition/facilityid
+                  valueInteger: 222
+                - url: http://xcaliber-fhir/structureDefinition/internalnote
+                  valueString: Internal lab note
+                - url: http://xcaliber-fhir/structureDefinition/interpretationtemplate
+                  valueString: Interpretation A
+                - url: http://xcaliber-fhir/structureDefinition/isreviewedbyprovider
+                  valueBoolean: true
+                - url: http://xcaliber-fhir/structureDefinition/labresultdate
+                  valueDate: '2023-09-30'
+                - url: http://xcaliber-fhir/structureDefinition/patientnote
+                  valueString: Patient-specific note
+                - url: http://xcaliber-fhir/structureDefinition/supersededdocumentid
+                  valueString: superseded-001
+                - url: http://xcaliber-fhir/structureDefinition/appointment-id
+                  valueInteger: 8888
+                - url: http://xcaliber-fhir/structureDefinition/assigned-to
+                  valueString: Dr. X
+                - url: http://xcaliber-fhir/structureDefinition/created-user
+                  valueString: LabAdmin
+                - url: http://xcaliber-fhir/structureDefinition/deleted-datetime
+                  valueDateTime: '2023-10-03T14:00:00Z'
+                - url: http://xcaliber-fhir/structureDefinition/department-id
+                  valueString: Dept-55
+                - url: http://xcaliber-fhir/structureDefinition/document-source
+                  valueString: Imported
+                - url: http://xcaliber-fhir/structureDefinition/document-route
+                  valueString: Fax
+                - url: http://xcaliber-fhir/structureDefinition/document-type-id
+                  valueInteger: 987
+                - url: http://xcaliber-fhir/structureDefinition/encounter-date
+                  valueDate: '2023-10-01'
+                - url: http://xcaliber-fhir/structureDefinition/entity-type
+                  valueString: Lab
+                - url: http://xcaliber-fhir/structureDefinition/external-accession-id
+                  valueString: EX-ACC-234
+                - url: http://xcaliber-fhir/structureDefinition/external-note-only
+                  valueString: External note
+                - url: http://xcaliber-fhir/structureDefinition/file-extension
+                  valueString: pdf
+                - url: http://xcaliber-fhir/structureDefinition/file-size
+                  valueInteger: 204800
+                - url: http://xcaliber-fhir/structureDefinition/internal-accession-id
+                  valueString: INT-ACC-987
+                - url: http://xcaliber-fhir/structureDefinition/interpretation
+                  valueString: Normal
+                - url: http://xcaliber-fhir/structureDefinition/is-confidential
+                  valueString: 'false'
+                - url: http://xcaliber-fhir/structureDefinition/last-modified-datetime
+                  valueDateTime: '2023-10-01T11:00:00Z'
+                - url: http://xcaliber-fhir/structureDefinition/last-modified-user
+                  valueString: Dr. Y
+                - url: http://xcaliber-fhir/structureDefinition/note-from-lab
+                  valueString: Lab's note here
+                - url: http://xcaliber-fhir/structureDefinition/order-type
+                  valueString: STAT
+                - url: http://xcaliber-fhir/structureDefinition/original-file-name
+                  valueString: result.pdf
+                - url: http://xcaliber-fhir/structureDefinition/portal-published-datetime
+                  valueDateTime: '2023-10-02T08:00:00Z'
+                - url: http://xcaliber-fhir/structureDefinition/received-facility-order-code
+                  valueCodeableConcept:
+                    coding:
+                    - code: F1234
+                      display: Facility Code
+                - url: http://xcaliber-fhir/structureDefinition/report-status
+                  valueString: Preliminary
+                - url: http://xcaliber-fhir/structureDefinition/status
+                  valueString: final
+                - url: http://xcaliber-fhir/structureDefinition/subject
+                  valueString: Patient/12345
+                - url: http://xcaliber-fhir/structureDefinition/alarm-days
+                  valueString: '5'
+                - url: http://xcaliber-fhir/structureDefinition/action-note
+                  valueString: Immediate follow-up required
+                - url: http://xcaliber-fhir/structureDefinition/result-category
+                  valueString: hematology
+                - url: http://xcaliber-fhir/structureDefinition/result-notes
+                  valueString: See note
+                - url: http://xcaliber-fhir/structureDefinition/provider-user-name
+                  valueString: labtech
+                - url: http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery
+                  valueString: 'No'
+                presentedForm:
+                - extension:
+                  - url: http://xcaliber-fhir/structureDefinition/created-date
+                    valueDateTime: '2023-09-30T08:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/status
+                    valueString: final
+                  - url: http://xcaliber-fhir/structureDefinition/document-source
+                    valueString: LIS
+                contained:
+                - resourceType: Organization
+                  id: ORG001
+                  address:
+                  - line:
+                    - 123 Health St
+                    - Suite 100
+                    city: Boston
+                    state: MA
+                    postalCode: 02118
+                  name: Health Lab
+                - resourceType: Observation
+                  id: '1'
+                  status: final
+                  code:
+                    coding:
+                    - display: Hemoglobin A1c
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/observationidentifier
+                        valueString: OBSID-1
+                    - system: http://loinc.org
+                      code: 57771-6
+                      display: Hemoglobin A1c
+                  category:
+                  - coding:
+                    - code: laboratory
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/abnormalhl7code
+                    valueString: N
+                  - url: http://xcaliber-fhir/structureDefinition/abnormalhl7name
+                    valueString: Normal
+                  - url: http://xcaliber-fhir/structureDefinition/description
+                    valueString: Glucose
+                  - url: http://xcaliber-fhir/structureDefinition/lab_result_status
+                    valueString: final
+                  - url: http://xcaliber-fhir/structureDefinition/abnormal_flag
+                    valueString: N
+                  valueQuantity:
+                    value: 5.4
+                    unit: '%'
+                    system: http://unitsofmeasure.org
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/value
+                      valueString: '5.4'
+                  referenceRange:
+                  - low:
+                      value: 4
+                      unit: '%'
+                      system: http://unitsofmeasure.org
+                      code: '%'
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/inclusive
+                        valueBoolean: true
+                    high:
+                      value: 6
+                      unit: '%'
+                      system: http://unitsofmeasure.org
+                      code: '%'
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/inclusive
+                        valueBoolean: true
+                    text: 4.0 - 6.0%
+                  note:
+                  - text: All values are within normal range.
+                  subject:
+                    reference: Patient/12345
+                  effectiveDateTime: '2023-09-30T09:00:00Z'
+      example:
+        context:
+          requestId: d4cfa5d1-2121-43ea-9bbf-11e54cfdedb9
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              report: null
+              resourceType: DiagnosticReport
+        id: '987654'
+        identifier:
+        - system: http://acme.com/lab/reports
+          value: '987654'
+        status: final
+        category:
+        - coding:
+          - system: http://terminology.hl7.org/CodeSystem/v2-0074
+            code: Lab
+        - coding:
+          - system: athena
+            code: LAB-SUB
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/document-subclass
+              valueString: subclass-A
+        code:
+          coding:
+          - system: http://loinc.org
+            code: 57771-6
+            display: Hemoglobin A1c
+          text: Hemoglobin A1c
+        subject:
+          reference: Patient/12345
+        conclusion: All results are within normal limits.
+        effectiveDateTime: '2023-10-01T09:00:00Z'
+        issued: '2023-10-01T10:00:00Z'
+        performer:
+        - reference: Practitioner/67890
+        basedOn:
+        - reference: ServiceRequest/54321
+        encounter:
+          reference: Encounter/321
+        result:
+        - reference: Observation/1
+        - reference: Observation/2
+        extension:
+        - url: http://xcaliber-fhir/structureDefinition/priority
+          valueString: Routine
+        - url: http://xcaliber-fhir/structureDefinition/attachmentexists
+          valueBoolean: true
+        - url: http://xcaliber-fhir/structureDefinition/exactduplicatedocumentid
+          valueInteger: 11111
+        - url: http://xcaliber-fhir/structureDefinition/facilityid
+          valueInteger: 222
+        - url: http://xcaliber-fhir/structureDefinition/internalnote
+          valueString: Internal lab note
+        - url: http://xcaliber-fhir/structureDefinition/interpretationtemplate
+          valueString: Interpretation A
+        - url: http://xcaliber-fhir/structureDefinition/isreviewedbyprovider
+          valueBoolean: true
+        - url: http://xcaliber-fhir/structureDefinition/labresultdate
+          valueDate: '2023-09-30'
+        - url: http://xcaliber-fhir/structureDefinition/patientnote
+          valueString: Patient-specific note
+        - url: http://xcaliber-fhir/structureDefinition/supersededdocumentid
+          valueString: superseded-001
+        - url: http://xcaliber-fhir/structureDefinition/appointment-id
+          valueInteger: 8888
+        - url: http://xcaliber-fhir/structureDefinition/assigned-to
+          valueString: Dr. X
+        - url: http://xcaliber-fhir/structureDefinition/created-user
+          valueString: LabAdmin
+        - url: http://xcaliber-fhir/structureDefinition/deleted-datetime
+          valueDateTime: '2023-10-03T14:00:00Z'
+        - url: http://xcaliber-fhir/structureDefinition/department-id
+          valueString: Dept-55
+        - url: http://xcaliber-fhir/structureDefinition/document-source
+          valueString: Imported
+        - url: http://xcaliber-fhir/structureDefinition/document-route
+          valueString: Fax
+        - url: http://xcaliber-fhir/structureDefinition/document-type-id
+          valueInteger: 987
+        - url: http://xcaliber-fhir/structureDefinition/encounter-date
+          valueDate: '2023-10-01'
+        - url: http://xcaliber-fhir/structureDefinition/entity-type
+          valueString: Lab
+        - url: http://xcaliber-fhir/structureDefinition/external-accession-id
+          valueString: EX-ACC-234
+        - url: http://xcaliber-fhir/structureDefinition/external-note-only
+          valueString: External note
+        - url: http://xcaliber-fhir/structureDefinition/file-extension
+          valueString: pdf
+        - url: http://xcaliber-fhir/structureDefinition/file-size
+          valueInteger: 204800
+        - url: http://xcaliber-fhir/structureDefinition/internal-accession-id
+          valueString: INT-ACC-987
+        - url: http://xcaliber-fhir/structureDefinition/interpretation
+          valueString: Normal
+        - url: http://xcaliber-fhir/structureDefinition/is-confidential
+          valueString: 'false'
+        - url: http://xcaliber-fhir/structureDefinition/last-modified-datetime
+          valueDateTime: '2023-10-01T11:00:00Z'
+        - url: http://xcaliber-fhir/structureDefinition/last-modified-user
+          valueString: Dr. Y
+        - url: http://xcaliber-fhir/structureDefinition/note-from-lab
+          valueString: Lab's note here
+        - url: http://xcaliber-fhir/structureDefinition/order-type
+          valueString: STAT
+        - url: http://xcaliber-fhir/structureDefinition/original-file-name
+          valueString: result.pdf
+        - url: http://xcaliber-fhir/structureDefinition/portal-published-datetime
+          valueDateTime: '2023-10-02T08:00:00Z'
+        - url: http://xcaliber-fhir/structureDefinition/received-facility-order-code
+          valueCodeableConcept:
+            coding:
+            - code: F1234
+              display: Facility Code
+        - url: http://xcaliber-fhir/structureDefinition/report-status
+          valueString: Preliminary
+        - url: http://xcaliber-fhir/structureDefinition/status
+          valueString: final
+        - url: http://xcaliber-fhir/structureDefinition/subject
+          valueString: Patient/12345
+        - url: http://xcaliber-fhir/structureDefinition/alarm-days
+          valueString: '5'
+        - url: http://xcaliber-fhir/structureDefinition/action-note
+          valueString: Immediate follow-up required
+        - url: http://xcaliber-fhir/structureDefinition/result-category
+          valueString: hematology
+        - url: http://xcaliber-fhir/structureDefinition/result-notes
+          valueString: See note
+        - url: http://xcaliber-fhir/structureDefinition/provider-user-name
+          valueString: labtech
+        - url: http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery
+          valueString: 'No'
+        presentedForm:
+        - extension:
+          - url: http://xcaliber-fhir/structureDefinition/created-date
+            valueDateTime: '2023-09-30T08:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/status
+            valueString: final
+          - url: http://xcaliber-fhir/structureDefinition/document-source
+            valueString: LIS
+        contained:
+        - resourceType: Organization
+          id: ORG001
+          address:
+          - line:
+            - 123 Health St
+            - Suite 100
+            city: Boston
+            state: MA
+            postalCode: 02118
+          name: Health Lab
+        - resourceType: Observation
+          id: '1'
+          status: final
+          code:
+            coding:
+            - display: Hemoglobin A1c
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/observationidentifier
+                valueString: OBSID-1
+            - system: http://loinc.org
+              code: 57771-6
+              display: Hemoglobin A1c
+          category:
+          - coding:
+            - code: laboratory
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/abnormalhl7code
+            valueString: N
+          - url: http://xcaliber-fhir/structureDefinition/abnormalhl7name
+            valueString: Normal
+          - url: http://xcaliber-fhir/structureDefinition/description
+            valueString: Glucose
+          - url: http://xcaliber-fhir/structureDefinition/lab_result_status
+            valueString: final
+          - url: http://xcaliber-fhir/structureDefinition/abnormal_flag
+            valueString: N
+          valueQuantity:
+            value: 5.4
+            unit: '%'
+            system: http://unitsofmeasure.org
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/value
+              valueString: '5.4'
+          referenceRange:
+          - low:
+              value: 4
+              unit: '%'
+              system: http://unitsofmeasure.org
+              code: '%'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/inclusive
+                valueBoolean: true
+            high:
+              value: 6
+              unit: '%'
+              system: http://unitsofmeasure.org
+              code: '%'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/inclusive
+                valueBoolean: true
+            text: 4.0 - 6.0%
+          note:
+          - text: All values are within normal range.
+          subject:
+            reference: Patient/12345
+          effectiveDateTime: '2023-09-30T09:00:00Z'
+    error400ofpatchinDiagnosticReportdiagnosticreportid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing or invalid parameter
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing or invalid parameter
+    error401ofpatchinDiagnosticReportdiagnosticreportid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofpatchinDiagnosticReportdiagnosticreportid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

@@ -1,0 +1,1880 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as 
+    Fire) is a standard for exchanging healthcare information electronically. It
+    is designed to be a modern, flexible, and web-based alternative to older, 
+    more cumbersome standards like HL7 v2. FHIR uses a RESTful API specification
+    to define how to interact with Resources - this means it uses standard HTTP 
+    verbs (GET, POST, PUT, DELETE). Resources are the fundamental units of data 
+    in FHIR; they can represent anything from patient demographics to clinical 
+    observations to medications.
+servers:
+  - url: https://xchange-sandbox.xcaliberapis.com
+  - url: https://your.api.server
+tags:
+  - name: Practitioner
+    description: Operations related to Practitioner resources in Athena
+paths:
+  /api/v2/Practitioner:
+    get:
+      tags:
+        - Practitioner
+        - Category-> Clinical Provider
+      summary: Get Athena Practitioners
+      operationId: getAthenaPractitioners
+      parameters:
+        - &id001
+          name: x-source-id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Source system identifier.
+        - &id002
+          name: x-interaction-mode
+          in: header
+          required: true
+          schema:
+            type: boolean
+          description: Interaction mode flag (true/false).
+        - name: active
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 'Filter: active'
+        - name: communication
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: communication'
+        - name: identifier
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: identifier'
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: name'
+        - name: qualification-code
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: qualification-code'
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinPractitionercategoryclinicalprovider'
+              examples:
+                response_body_200:
+                  summary: Response Body 200
+                  value:
+                    context:
+                      requestId: abc123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resourceType: Practitioner
+                          id: '12345'
+                          name:
+                            - family: Doe
+                              given:
+                                - John
+                              text: Dr. John Doe
+                          identifier:
+                            - system: http://hl7.org/fhir/sid/us-npi
+                              value: '1234567890'
+                            - system: http://example.org/fhir/federal-id
+                              value: '987654321'
+                            - id: '67890'
+                              system: http://hl7.org/fhir/sid/us-npi
+                          telecom:
+                            - system: email
+                              value: johndoe@example.com
+                            - system: fax
+                              value: 555-555-5555
+                            - system: phone
+                              value: 555-555-1234
+                          gender: male
+                          qualification:
+                            - code:
+                                coding:
+                                  - system: http://example.org/fhir/specialty
+                                    display: Cardiology
+                                    code: '123'
+                          contained:
+                            - resourceType: PractitionerRole
+                              specialty:
+                                - coding:
+                                    - system: http://example.org/fhir/specialty
+                                      display: Cardiology
+                                      code: '123'
+                          extension:
+                            - url: 
+                                http://example.org/fhir/accepting-new-patients
+                              valueString: 'yes'
+                            - url: http://example.org/fhir/billable
+                              valueString: 'yes'
+                            - url: 
+                                http://example.org/fhir/create-encounter-on-checkin
+                              valueString: 'yes'
+                            - url: 
+                                http://example.org/fhir/create-encounter-provider-id-list
+                              valueString: provider123
+                            - url: http://example.org/fhir/entity-type
+                              valueString: individual
+                            - url: http://example.org/fhir/hide-in-portal
+                              valueString: 'no'
+                            - url: http://example.org/fhir/home-department
+                              valueString: Cardiology
+                            - url: 
+                                http://example.org/fhir/other-provider-id-list
+                              valueString: provider456
+                            - url: http://example.org/fhir/personal-pronouns
+                              valueString: he/him
+                            - url: http://example.org/fhir/provider-group-list
+                              valueString: group1
+                            - url: http://example.org/fhir/provider-type
+                              valueString: specialist
+                            - url: http://example.org/fhir/provider-type-id
+                              valueString: type123
+                            - url: http://example.org/fhir/provider-username
+                              valueString: jdoe
+                            - url: 
+                                http://example.org/fhir/schedule-resource-type
+                              valueString: resource1
+                            - url: http://example.org/fhir/scheduling-name
+                              valueString: Dr. John Doe
+                            - url: 
+                                http://example.org/fhir/supervising-provider-id
+                              valueInteger: 789
+                            - url: 
+                                http://example.org/fhir/supervising-provider-username
+                              valueString: supervisor1
+                            - url: http://example.org/fhir/usual-department-id
+                              valueInteger: 456
+                            - url: 
+                                http://example.org/fhir/StructureDefinition/practitioner-distance
+                              valueString: 10 miles
+                            - url: 
+                                http://example.org/fhir/StructureDefinition/practitioner-ncpdpid
+                              valueString: '1234567'
+                            - url: 
+                                http://example.org/fhir/StructureDefinition/practitioner-pharmacytype
+                              valueString: Retail
+                            - url: 
+                                http://example.org/fhir/StructureDefinition/practitioner-category
+                              valueString: Primary Care
+                            - url: 
+                                http://example.org/fhir/StructureDefinition/entity-type-id
+                              valueInteger: 1
+                            - url: 
+                                http://example.org/fhir/StructureDefinition/entity-type
+                              valueString: Person
+                          address:
+                            - city: Springfield
+                              state: IL
+                              postalCode: '62704'
+                              line:
+                                - 123 Main St
+                clinical-provider:
+                  summary: Clinical Provider Example
+                  value: &id003
+                    context:
+                      requestId: c2f3a7bd-3333-4db8-9217-9fe01af998a7
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Bundle
+                      type: searchset
+                      total: 1
+                      entry:
+                        - resource:
+                            resourceType: Practitioner
+                            id: '87654321'
+                            meta:
+                              tag:
+                                - code: HIS
+                                  display: Historical
+                            active: true
+                            extension:
+                              - url: 
+                                  http://xcaliber-fhir/structureDefinition/accepting-new-patients-yn
+                                valueString: Y
+                              - url: 
+                                  http://xcaliber-fhir/structureDefinition/provider-type
+                                valueString: DO
+                              - url: 
+                                  http://xcaliber-fhir/structureDefinition/entity-type
+                                valueString: Person
+                              - url: 
+                                  http://xcaliber-fhir/structureDefinition/entity-type-id
+                                valueInteger: 2
+                              - url: 
+                                  http://xcaliber-fhir/structureDefinition/billable
+                                valueString: Y
+                            name:
+                              - family: Doe
+                                given:
+                                  - Emily
+                                  - L
+                            telecom:
+                              - system: phone
+                                value: 800-321-7654
+                                use: work
+                              - system: email
+                                value: emily.doe@hospital.org
+                                use: work
+                            address:
+                              - use: work
+                                line:
+                                  - 1234 Health Blvd
+                                city: Los Angeles
+                                state: CA
+                                postalCode: '90017'
+                                country: US
+                            qualification:
+                              - category:
+                                  coding:
+                                    - system: 
+                                        http://terminology.hl7.org/CodeSystem/practitioner-specialty
+                                      code: DO
+                                  text: Doctor of Osteopathic Medicine
+                                issuer: California Medical Board
+                                period:
+                                  startDate: '2015-05-01'
+                                  endDate: '2030-04-30'
+                category_get:
+                  summary: Category (get)
+                  value: &id004
+                    context:
+                      requestId: abc123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Practitioner
+                      id: '12345'
+                      name:
+                        - family: Doe
+                          given:
+                            - John
+                          text: Dr. John Doe
+                      address:
+                        - city: Springfield
+                          state: IL
+                          postalCode: '62704'
+                          line:
+                            - 123 Main St
+                      identifier:
+                        - id: '1234567890'
+                          system: http://hl7.org/fhir/sid/us-npi
+                      telecom:
+                        - system: fax
+                          value: 555-555-5555
+                        - system: phone
+                          value: 555-555-1234
+                      extension:
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/practitioner-distance
+                          valueString: 10 miles
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/practitioner-ncpdpid
+                          valueString: '1234567'
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/practitioner-pharmacytype
+                          valueString: Retail
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/practitioner-category
+                          valueString: Primary Care
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinPractitionercategoryclinicalprovider'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinPractitionercategoryclinicalprovider'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinPractitionercategoryclinicalprovider'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinPractitionercategoryclinicalprovider'
+    post:
+      tags:
+        - Practitioner
+      summary: Create Athena Practitioner
+      operationId: createPractitionerInAthena
+      parameters:
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  type: object
+                data:
+                  type: object
+              required:
+                - context
+                - data
+            example:
+              context:
+                requestId: abc123
+                source: ATHENA
+                quorum: true
+                notify: true
+                departmentId: '150'
+              data:
+                resourceType: Practitioner
+                id: '12345'
+                name:
+                  - family: Doe
+                    given:
+                      - John
+                    text: Dr. John Doe
+                identifier:
+                  - system: http://hl7.org/fhir/sid/us-npi
+                    value: '1234567890'
+                telecom:
+                  - system: email
+                    value: johndoe@example.com
+                  - system: phone
+                    value: 555-1234
+                gender: male
+                qualification:
+                  - code:
+                      coding:
+                        - system: http://example.org/specialty
+                          display: Cardiology
+                          code: '123'
+                extension:
+                  - url: http://example.org/accepting-new-patients-yn
+                    valueString: 'yes'
+                  - url: http://example.org/ansi-code
+                    valueString: ANSI123
+                  - url: http://example.org/billable
+                    valueString: 'yes'
+                  - url: http://example.org/create-encounter-on-checkin-yn
+                    valueString: 'yes'
+                  - url: http://example.org/create-encounter-provider-id-list
+                    valueString: 123,456
+                  - url: http://example.org/entity-type
+                    valueString: Person
+                  - url: http://example.org/entity-type-id
+                    valueInteger: 1
+                  - url: http://example.org/federal-id-number
+                    valueString: FED123456
+                  - url: http://example.org/hide-in-portal-yn
+                    valueString: 'no'
+                  - url: http://example.org/home-department
+                    valueString: Cardiology
+                  - url: http://example.org/other-provider-id-list
+                    valueString: 789,012
+                  - url: http://example.org/personal-pronouns-id
+                    valueInteger: 2
+                  - url: http://example.org/provider-group-list
+                    valueString: Group1,Group2
+                  - url: http://example.org/provider-type
+                    valueString: Specialist
+                  - url: http://example.org/provider-profile-id
+                    valueString: Profile123
+                  - url: http://example.org/provider-user-name
+                    valueString: jdoe
+                  - url: http://example.org/schedule-resource-type-id
+                    valueString: 123
+                  - url: http://example.org/scheduling-name
+                    valueString: Dr. John Doe
+                  - url: http://example.org/supervising-provider-id
+                    valueInteger: 3
+                  - url: http://example.org/supervising-provider-type
+                    valueString: Supervisor
+                  - url: http://example.org/usual-department-id
+                    valueInteger: 4
+                  - url: http://example.org/signature-on-file-flag
+                    valueBoolean: true
+                  - url: http://example.org/medical-group-id
+                    valueInteger: 5
+                  - url: http://example.org/provider-group-id
+                    valueInteger: 6
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofdeleteinPractitionerpractitionerid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinPractitionerpractitionerid'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofdeleteinPractitionerpractitionerid'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinPractitionerpractitionerid'
+        '201':
+          description: Practitioner created successfully
+          content:
+            application/json:
+              example:
+                resourceType: Practitioner
+                id: '12345'
+                name:
+                  - family: Doe
+                    given:
+                      - John
+                    text: Dr. John Doe
+                identifier:
+                  - system: http://hl7.org/fhir/sid/us-npi
+                    value: '1234567890'
+                telecom:
+                  - system: email
+                    value: johndoe@example.com
+                  - system: phone
+                    value: 555-1234
+                gender: male
+                qualification:
+                  - code:
+                      coding:
+                        - system: http://example.org/specialty
+                          display: Cardiology
+                          code: '123'
+                extension:
+                  - url: http://example.org/accepting-new-patients-yn
+                    valueString: 'yes'
+                  - url: http://example.org/ansi-code
+                    valueString: ANSI123
+                  - url: http://example.org/billable
+                    valueString: 'yes'
+                  - url: http://example.org/create-encounter-on-checkin-yn
+                    valueString: 'yes'
+                  - url: http://example.org/create-encounter-provider-id-list
+                    valueString: 123,456
+                  - url: http://example.org/entity-type
+                    valueString: Person
+                  - url: http://example.org/entity-type-id
+                    valueInteger: 1
+                  - url: http://example.org/federal-id-number
+                    valueString: FED123456
+                  - url: http://example.org/hide-in-portal-yn
+                    valueString: 'no'
+                  - url: http://example.org/home-department
+                    valueString: Cardiology
+                  - url: http://example.org/other-provider-id-list
+                    valueString: 789,012
+                  - url: http://example.org/personal-pronouns-id
+                    valueInteger: 2
+                  - url: http://example.org/provider-group-list
+                    valueString: Group1,Group2
+                  - url: http://example.org/provider-type
+                    valueString: Specialist
+                  - url: http://example.org/provider-profile-id
+                    valueString: Profile123
+                  - url: http://example.org/provider-user-name
+                    valueString: jdoe
+                  - url: http://example.org/schedule-resource-type-id
+                    valueString: Resource123
+                  - url: http://example.org/scheduling-name
+                    valueString: Dr. John Doe
+                  - url: http://example.org/supervising-provider-id
+                    valueInteger: 3
+                  - url: http://example.org/supervising-provider-type
+                    valueString: Supervisor
+                  - url: http://example.org/usual-department-id
+                    valueInteger: 4
+                  - url: http://example.org/signature-on-file-flag
+                    valueBoolean: true
+                  - url: http://example.org/medical-group-id
+                    valueInteger: 5
+                  - url: http://example.org/provider-group-id
+                    valueInteger: 6
+  /api/v2/Practitioner/{practitioner-id}:
+    get:
+      tags:
+        - Practitioner
+        - Category-> Clinical Provider
+      summary: Get Athena Practitioner by ID
+      operationId: getAthenaPractitionerById
+      parameters:
+        - name: practitioner-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the practitioner to retrieve. Required
+            for fetching a specific practitioner''s details."'
+        - *id001
+        - *id002
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinPractitionercategoryclinicalproviderpractitionerid'
+              examples:
+                response_body_200:
+                  summary: Response Body 200
+                  value:
+                    context:
+                      requestId: abc123
+                      source: ATHENA
+                      quorum: true
+                      notify: true
+                    data:
+                      resourceType: Practitioner
+                      id: '12345'
+                      name:
+                        - family: Doe
+                          given:
+                            - John
+                          text: Dr. John Doe
+                      identifier:
+                        - system: http://hl7.org/fhir/sid/us-npi
+                          value: '1234567890'
+                        - system: http://example.org/fhir/federal-id
+                          value: '987654321'
+                        - id: '67890'
+                          system: http://hl7.org/fhir/sid/us-npi
+                      telecom:
+                        - system: email
+                          value: johndoe@example.com
+                        - system: fax
+                          value: 555-555-5555
+                        - system: phone
+                          value: 555-555-1234
+                      gender: male
+                      qualification:
+                        - code:
+                            coding:
+                              - system: http://example.org/fhir/specialty
+                                display: Cardiology
+                                code: '123'
+                      contained:
+                        - resourceType: PractitionerRole
+                          specialty:
+                            - coding:
+                                - system: http://example.org/fhir/specialty
+                                  display: Cardiology
+                                  code: '123'
+                      extension:
+                        - url: http://example.org/fhir/accepting-new-patients
+                          valueString: 'yes'
+                        - url: http://example.org/fhir/billable
+                          valueString: 'yes'
+                        - url: 
+                            http://example.org/fhir/create-encounter-on-checkin
+                          valueString: 'yes'
+                        - url: 
+                            http://example.org/fhir/create-encounter-provider-id-list
+                          valueString: provider123
+                        - url: http://example.org/fhir/entity-type
+                          valueString: individual
+                        - url: http://example.org/fhir/hide-in-portal
+                          valueString: 'no'
+                        - url: http://example.org/fhir/home-department
+                          valueString: Cardiology
+                        - url: http://example.org/fhir/other-provider-id-list
+                          valueString: provider456
+                        - url: http://example.org/fhir/personal-pronouns
+                          valueString: he/him
+                        - url: http://example.org/fhir/provider-group-list
+                          valueString: group1
+                        - url: http://example.org/fhir/provider-type
+                          valueString: specialist
+                        - url: http://example.org/fhir/provider-type-id
+                          valueString: type123
+                        - url: http://example.org/fhir/provider-username
+                          valueString: jdoe
+                        - url: http://example.org/fhir/schedule-resource-type
+                          valueString: resource1
+                        - url: http://example.org/fhir/scheduling-name
+                          valueString: Dr. John Doe
+                        - url: http://example.org/fhir/supervising-provider-id
+                          valueInteger: 789
+                        - url: 
+                            http://example.org/fhir/supervising-provider-username
+                          valueString: supervisor1
+                        - url: http://example.org/fhir/usual-department-id
+                          valueInteger: 456
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/practitioner-distance
+                          valueString: 10 miles
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/practitioner-ncpdpid
+                          valueString: '1234567'
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/practitioner-pharmacytype
+                          valueString: Retail
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/practitioner-category
+                          valueString: Primary Care
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/entity-type-id
+                          valueInteger: 1
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/entity-type
+                          valueString: Person
+                      address:
+                        - city: Springfield
+                          state: IL
+                          postalCode: '62704'
+                          line:
+                            - 123 Main St
+                clinical-provider:
+                  summary: Clinical Provider Example
+                  value: *id003
+                category_get:
+                  summary: Category (get)
+                  value: *id004
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinPractitionercategoryclinicalproviderpractitionerid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinPractitionercategoryclinicalproviderpractitionerid'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinPractitionercategoryclinicalproviderpractitionerid'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinPractitionercategoryclinicalproviderpractitionerid'
+    delete:
+      tags:
+        - Practitioner
+      summary: Delete Athena Practitioner
+      operationId: deletePractitionerInAthena
+      parameters:
+        - name: practitioner-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique ID of the Practitioner resource to delete. Required
+            for deletion operation."'
+        - *id001
+        - *id002
+      responses:
+        '204':
+          description: Practitioner deleted
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofdeleteinPractitionerpractitionerid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinPractitionerpractitionerid'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofdeleteinPractitionerpractitionerid'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinPractitionerpractitionerid'
+    put:
+      tags:
+        - Practitioner
+      summary: Update Athena Practitioner
+      operationId: updatePractitionerInAthena
+      parameters:
+        - name: practitioner-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the practitioner to update.
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  type: object
+                data:
+                  type: object
+              required:
+                - context
+                - data
+            example:
+              context:
+                requestId: abc123
+                source: ATHENA
+                quorum: true
+                notify: true
+                departmentId: '150'
+              data:
+                resourceType: Practitioner
+                id: '12345'
+                name:
+                  - family: Doe
+                    given:
+                      - John
+                    text: Dr. John Doe
+                identifier:
+                  - system: http://hl7.org/fhir/sid/us-npi
+                    value: '1234567890'
+                telecom:
+                  - system: email
+                    value: johndoe@example.com
+                  - system: phone
+                    value: 555-1234
+                gender: male
+                qualification:
+                  - code:
+                      coding:
+                        - system: http://example.org/specialty
+                          display: Cardiology
+                          code: '123'
+                extension:
+                  - url: http://example.org/accepting-new-patients-yn
+                    valueString: 'yes'
+                  - url: http://example.org/ansi-code
+                    valueString: ANSI123
+                  - url: http://example.org/billable
+                    valueString: 'yes'
+                  - url: http://example.org/create-encounter-on-checkin-yn
+                    valueString: 'yes'
+                  - url: http://example.org/create-encounter-provider-id-list
+                    valueString: 123,456
+                  - url: http://example.org/entity-type
+                    valueString: Person
+                  - url: http://example.org/entity-type-id
+                    valueInteger: 1
+                  - url: http://example.org/federal-id-number
+                    valueString: FED123456
+                  - url: http://example.org/hide-in-portal-yn
+                    valueString: 'no'
+                  - url: http://example.org/home-department
+                    valueString: Cardiology
+                  - url: http://example.org/other-provider-id-list
+                    valueString: 789,012
+                  - url: http://example.org/personal-pronouns-id
+                    valueInteger: 2
+                  - url: http://example.org/provider-group-list
+                    valueString: Group1,Group2
+                  - url: http://example.org/provider-type
+                    valueString: Specialist
+                  - url: http://example.org/provider-profile-id
+                    valueString: Profile123
+                  - url: http://example.org/provider-user-name
+                    valueString: jdoe
+                  - url: http://example.org/schedule-resource-type-id
+                    valueString: 123
+                  - url: http://example.org/scheduling-name
+                    valueString: Dr. John Doe
+                  - url: http://example.org/supervising-provider-id
+                    valueInteger: 3
+                  - url: http://example.org/supervising-provider-type
+                    valueString: Supervisor
+                  - url: http://example.org/usual-department-id
+                    valueInteger: 4
+                  - url: http://example.org/signature-on-file-flag
+                    valueBoolean: true
+                  - url: http://example.org/medical-group-id
+                    valueInteger: 5
+                  - url: http://example.org/provider-group-id
+                    valueInteger: 6
+      responses:
+        '200':
+          description: Practitioner updated successfully
+          content:
+            application/json:
+              example:
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                  departmentId: '150'
+                data:
+                  resourceType: Practitioner
+                  id: '12345'
+                  name:
+                    - family: Doe
+                      given:
+                        - John
+                      text: Dr. John Doe
+                  identifier:
+                    - system: http://hl7.org/fhir/sid/us-npi
+                      value: '1234567890'
+                  telecom:
+                    - system: email
+                      value: johndoe@example.com
+                    - system: phone
+                      value: 555-1234
+                  gender: male
+                  qualification:
+                    - code:
+                        coding:
+                          - system: http://example.org/specialty
+                            display: Cardiology
+                            code: '123'
+                  extension:
+                    - url: http://example.org/accepting-new-patients-yn
+                      valueString: 'yes'
+                    - url: http://example.org/ansi-code
+                      valueString: ANSI123
+                    - url: http://example.org/billable
+                      valueString: 'yes'
+                    - url: http://example.org/create-encounter-on-checkin-yn
+                      valueString: 'yes'
+                    - url: http://example.org/create-encounter-provider-id-list
+                      valueString: 123,456
+                    - url: http://example.org/entity-type
+                      valueString: Person
+                    - url: http://example.org/entity-type-id
+                      valueInteger: 1
+                    - url: http://example.org/federal-id-number
+                      valueString: FED123456
+                    - url: http://example.org/hide-in-portal-yn
+                      valueString: 'no'
+                    - url: http://example.org/home-department
+                      valueString: Cardiology
+                    - url: http://example.org/other-provider-id-list
+                      valueString: 789,012
+                    - url: http://example.org/personal-pronouns-id
+                      valueInteger: 2
+                    - url: http://example.org/provider-group-list
+                      valueString: Group1,Group2
+                    - url: http://example.org/provider-type
+                      valueString: Specialist
+                    - url: http://example.org/provider-profile-id
+                      valueString: Profile123
+                    - url: http://example.org/provider-user-name
+                      valueString: jdoe
+                    - url: http://example.org/schedule-resource-type-id
+                      valueString: Resource123
+                    - url: http://example.org/scheduling-name
+                      valueString: Dr. John Doe
+                    - url: http://example.org/supervising-provider-id
+                      valueInteger: 3
+                    - url: http://example.org/supervising-provider-type
+                      valueString: Supervisor
+                    - url: http://example.org/usual-department-id
+                      valueInteger: 4
+                    - url: http://example.org/signature-on-file-flag
+                      valueBoolean: true
+                    - url: http://example.org/medical-group-id
+                      valueInteger: 5
+                    - url: http://example.org/provider-group-id
+                      valueInteger: 6
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofdeleteinPractitionerpractitionerid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinPractitionerpractitionerid'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofdeleteinPractitionerpractitionerid'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinPractitionerpractitionerid'
+components:
+  schemas:
+    response200ofgetinPractitionercategoryclinicalprovider:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 1
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Practitioner
+                      id:
+                        type: string
+                        example: 1234567890
+                      meta:
+                        type: object
+                        properties:
+                          tag:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                code:
+                                  type: string
+                                  example: HIS
+                                display:
+                                  type: string
+                                  example: Historical
+                      active:
+                        type: boolean
+                        example: true
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+                            valueInteger:
+                              type: integer
+                            valueBoolean:
+                              type: boolean
+                      name:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            family:
+                              type: string
+                              example: Smith
+                            given:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                                - John
+                                - A
+                      telecom:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                              example: phone
+                            value:
+                              type: string
+                              example: 555-123-4567
+                            use:
+                              type: string
+                              example: work
+                      address:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            use:
+                              type: string
+                              example: work
+                            line:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                                - 456 Park Ave
+                            city:
+                              type: string
+                              example: New York
+                            state:
+                              type: string
+                              example: NY
+                            postalCode:
+                              type: string
+                              example: 10010
+                            country:
+                              type: string
+                              example: US
+                      qualification:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            category:
+                              type: object
+                              properties:
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                        example: 
+                                          http://terminology.hl7.org/CodeSystem/practitioner-specialty
+                                      code:
+                                        type: string
+                                        example: MED
+                                text:
+                                  type: string
+                                  example: Medicine
+                            issuer:
+                              type: string
+                              example: ABC Medical Board
+                            period:
+                              type: object
+                              properties:
+                                startDate:
+                                  type: string
+                                  format: date
+                                  example: '2010-01-01'
+                                endDate:
+                                  type: string
+                                  format: date
+                                  example: '2030-12-31'
+      required:
+        - context
+        - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: Practitioner
+                id: 1234567890
+                meta:
+                  tag:
+                    - code: HIS
+                      display: Historical
+                active: true
+                extension:
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/accepting-new-patients-yn
+                    valueString: Y
+                  - url: http://xcaliber-fhir/structureDefinition/billable
+                    valueString: Y
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/create-encounter-on-checkin-yn
+                    valueString: N
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/create-encounter-provider-id-list
+                    valueString: 123,456
+                  - url: http://xcaliber-fhir/structureDefinition/entity-type
+                    valueString: Person
+                  - url: http://xcaliber-fhir/structureDefinition/entity-type-id
+                    valueInteger: 1
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/federal-id-number
+                    valueString: A123456789
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/hide-in-portal-yn
+                    valueString: N
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/home-department
+                    valueString: Dept001
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/other-provider-id-list
+                    valueString: 789,654
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/personal-pronouns-id
+                    valueString: he/him
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/provider-group-list
+                    valueString: GroupA,GroupB
+                  - url: http://xcaliber-fhir/structureDefinition/provider-type
+                    valueString: MD
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/provider-profile-id
+                    valueString: Profile123
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/provider-user-name
+                    valueString: jsmith
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/schedule-resource-type-id
+                    valueString: Type01
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/scheduling-name
+                    valueString: Dr. John Smith
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/supervising-provider-id
+                    valueInteger: 222
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/supervising-provider-type
+                    valueString: Attending
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/usual-department-id
+                    valueInteger: 123
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/signature-on-file-flag
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/medical-group-id
+                    valueInteger: 333
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/provider-group-id
+                    valueInteger: 444
+                  - url: http://xcaliber-fhir/structureDefinition/crd-referring
+                    valueBoolean: false
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/create-encounter-on-check-in-yn
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/communicator-display-name
+                    valueString: J. Smith
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/communicator-home-department
+                    valueInteger: 555
+                  - url: http://xcaliber-fhir/structureDefinition/middle-initial
+                    valueString: A
+                  - url: http://xcaliber-fhir/structureDefinition/ndc-tat-number
+                    valueInteger: 999
+                  - url: http://xcaliber-fhir/structureDefinition/name-suffix
+                    valueString: Jr.
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/practice-role-id
+                    valueInteger: 888
+                  - url: http://xcaliber-fhir/structureDefinition/username
+                    valueString: john.smith
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/track-missings-lips
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/ssn
+                    valueInteger: 123456789
+                  - url: http://xcaliber-fhir/structureDefinition/staff-bucket
+                    valueString: bucket01
+                  - url: http://xcaliber-fhir/structureDefinition/distance
+                    valueString: 5km
+                  - url: http://xcaliber-fhir/structureDefinition/ncpdpid
+                    valueString: '987654321'
+                  - url: http://xcaliber-fhir/structureDefinition/pharmacytype
+                    valueString: Retail
+                  - url: http://xcaliber-fhir/structureDefinition/category
+                    valueString: clinical-provider
+                name:
+                  - family: Smith
+                    given:
+                      - John
+                      - A
+                  - family: Doe
+                    given:
+                      - Jane
+                      - M
+                telecom:
+                  - system: phone
+                    value: 555-123-4567
+                    use: work
+                  - system: email
+                    value: john.smith@example.com
+                    use: work
+                  - system: email
+                    value: jane.doe@example.com
+                    use: work
+                address:
+                  - use: work
+                    line:
+                      - 456 Park Ave
+                    city: New York
+                    state: NY
+                    postalCode: 10010
+                    country: US
+                qualification:
+                  - category:
+                      coding:
+                        - system: 
+                            http://terminology.hl7.org/CodeSystem/practitioner-specialty
+                          code: MED
+                      text: Medicine
+                    issuer: ABC Medical Board
+                    period:
+                      startDate: '2010-01-01'
+                      endDate: '2030-12-31'
+                  - category:
+                      coding:
+                        - system: 
+                            http://terminology.hl7.org/CodeSystem/practitioner-specialty
+                          code: SUR
+                      text: Surgery
+                    issuer: XYZ Medical Board
+                    period:
+                      startDate: '2015-01-01'
+                      endDate: '2025-12-31'
+    error400ofgetinPractitionercategoryclinicalprovider:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing or invalid parameter
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing or invalid parameter
+        details: {}
+    error401ofgetinPractitionercategoryclinicalprovider:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinPractitionercategoryclinicalprovider:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Practitioner not found
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 404
+        message: Practitioner not found
+        details: {}
+    error500ofgetinPractitionercategoryclinicalprovider:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    response200ofgetinPractitionercategoryclinicalproviderpractitionerid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Practitioner
+            id:
+              type: string
+              example: 1234567890
+            meta:
+              type: object
+              properties:
+                tag:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: HIS
+                      display:
+                        type: string
+                        example: Historical
+            active:
+              type: boolean
+              example: true
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+                  valueInteger:
+                    type: integer
+                  valueBoolean:
+                    type: boolean
+            name:
+              type: array
+              items:
+                type: object
+                properties:
+                  family:
+                    type: string
+                    example: Smith
+                  given:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - John
+                      - A
+            telecom:
+              type: array
+              items:
+                type: object
+                properties:
+                  system:
+                    type: string
+                    example: phone
+                  value:
+                    type: string
+                    example: 555-123-4567
+                  use:
+                    type: string
+                    example: work
+            address:
+              type: array
+              items:
+                type: object
+                properties:
+                  use:
+                    type: string
+                    example: work
+                  line:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - 456 Park Ave
+                  city:
+                    type: string
+                    example: New York
+                  state:
+                    type: string
+                    example: NY
+                  postalCode:
+                    type: string
+                    example: 10010
+                  country:
+                    type: string
+                    example: US
+            qualification:
+              type: array
+              items:
+                type: object
+                properties:
+                  category:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                              example: 
+                                http://terminology.hl7.org/CodeSystem/practitioner-specialty
+                            code:
+                              type: string
+                              example: MED
+                      text:
+                        type: string
+                        example: Medicine
+                  issuer:
+                    type: string
+                    example: ABC Medical Board
+                  period:
+                    type: object
+                    properties:
+                      startDate:
+                        type: string
+                        format: date
+                        example: '2010-01-01'
+                      endDate:
+                        type: string
+                        format: date
+                        example: '2030-12-31'
+          required:
+            - resourceType
+            - id
+            - active
+            - extension
+            - name
+            - telecom
+            - address
+            - qualification
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: Practitioner
+                id: 1234567890
+                meta:
+                  tag:
+                    - code: HIS
+                      display: Historical
+                active: true
+                extension:
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/accepting-new-patients-yn
+                    valueString: Y
+                  - url: http://xcaliber-fhir/structureDefinition/billable
+                    valueString: Y
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/create-encounter-on-checkin-yn
+                    valueString: N
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/create-encounter-provider-id-list
+                    valueString: 123,456
+                  - url: http://xcaliber-fhir/structureDefinition/entity-type
+                    valueString: Person
+                  - url: http://xcaliber-fhir/structureDefinition/entity-type-id
+                    valueInteger: 1
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/federal-id-number
+                    valueString: A123456789
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/hide-in-portal-yn
+                    valueString: N
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/home-department
+                    valueString: Dept001
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/other-provider-id-list
+                    valueString: 789,654
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/personal-pronouns-id
+                    valueString: he/him
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/provider-group-list
+                    valueString: GroupA,GroupB
+                  - url: http://xcaliber-fhir/structureDefinition/provider-type
+                    valueString: MD
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/provider-profile-id
+                    valueString: Profile123
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/provider-user-name
+                    valueString: jsmith
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/schedule-resource-type-id
+                    valueString: Type01
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/scheduling-name
+                    valueString: Dr. John Smith
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/supervising-provider-id
+                    valueInteger: 222
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/supervising-provider-type
+                    valueString: Attending
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/usual-department-id
+                    valueInteger: 123
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/signature-on-file-flag
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/medical-group-id
+                    valueInteger: 333
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/provider-group-id
+                    valueInteger: 444
+                  - url: http://xcaliber-fhir/structureDefinition/crd-referring
+                    valueBoolean: false
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/create-encounter-on-check-in-yn
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/communicator-display-name
+                    valueString: J. Smith
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/communicator-home-department
+                    valueInteger: 555
+                  - url: http://xcaliber-fhir/structureDefinition/middle-initial
+                    valueString: A
+                  - url: http://xcaliber-fhir/structureDefinition/ndc-tat-number
+                    valueInteger: 999
+                  - url: http://xcaliber-fhir/structureDefinition/name-suffix
+                    valueString: Jr.
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/practice-role-id
+                    valueInteger: 888
+                  - url: http://xcaliber-fhir/structureDefinition/username
+                    valueString: john.smith
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/track-missings-lips
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/ssn
+                    valueInteger: 123456789
+                  - url: http://xcaliber-fhir/structureDefinition/staff-bucket
+                    valueString: bucket01
+                  - url: http://xcaliber-fhir/structureDefinition/distance
+                    valueString: 5km
+                  - url: http://xcaliber-fhir/structureDefinition/ncpdpid
+                    valueString: '987654321'
+                  - url: http://xcaliber-fhir/structureDefinition/pharmacytype
+                    valueString: Retail
+                  - url: http://xcaliber-fhir/structureDefinition/category
+                    valueString: clinical-provider
+                name:
+                  - family: Smith
+                    given:
+                      - John
+                      - A
+                  - family: Doe
+                    given:
+                      - Jane
+                      - M
+                telecom:
+                  - system: phone
+                    value: 555-123-4567
+                    use: work
+                  - system: email
+                    value: john.smith@example.com
+                    use: work
+                  - system: email
+                    value: jane.doe@example.com
+                    use: work
+                address:
+                  - use: work
+                    line:
+                      - 456 Park Ave
+                    city: New York
+                    state: NY
+                    postalCode: 10010
+                    country: US
+                qualification:
+                  - category:
+                      coding:
+                        - system: 
+                            http://terminology.hl7.org/CodeSystem/practitioner-specialty
+                          code: MED
+                      text: Medicine
+                    issuer: ABC Medical Board
+                    period:
+                      startDate: '2010-01-01'
+                      endDate: '2030-12-31'
+                  - category:
+                      coding:
+                        - system: 
+                            http://terminology.hl7.org/CodeSystem/practitioner-specialty
+                          code: SUR
+                      text: Surgery
+                    issuer: XYZ Medical Board
+                    period:
+                      startDate: '2015-01-01'
+                      endDate: '2025-12-31'
+    error400ofgetinPractitionercategoryclinicalproviderpractitionerid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing or invalid parameter
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing or invalid parameter
+        details: {}
+    error401ofgetinPractitionercategoryclinicalproviderpractitionerid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinPractitionercategoryclinicalproviderpractitionerid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Practitioner not found
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 404
+        message: Practitioner not found
+        details: {}
+    error500ofgetinPractitionercategoryclinicalproviderpractitionerid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    response200ofdeleteinPractitionerpractitionerid:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1234567890
+        status:
+          type: string
+          enum:
+            - deleted
+          example: deleted
+      example:
+        id: 1234567890
+        status: deleted
+    error400ofdeleteinPractitionerpractitionerid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing or invalid parameter
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing or invalid parameter
+        details: {}
+    error401ofdeleteinPractitionerpractitionerid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofdeleteinPractitionerpractitionerid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Practitioner not found
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 404
+        message: Practitioner not found
+        details: {}
+    error500ofdeleteinPractitionerpractitionerid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          nullable: true
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    Context:
+      type: object
+      properties:
+        requestId:
+          type: string
+          example: abc123
+        source:
+          type: string
+          example: ATHENA
+        quorum:
+          type: boolean
+          example: true
+        notify:
+          type: boolean
+          example: true
+        departmentId:
+          type: string
+          example: '150'
+      required:
+        - requestId
+        - source
+        - quorum
+        - notify
+      additionalProperties: true
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - Auth: []

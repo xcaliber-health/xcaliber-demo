@@ -1,0 +1,4263 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: AllergyIntolerance
+  description: Represents a record of a clinical allergy, intolerance, or adverse
+    reaction for a patient, including information about the allergen, severity, clinical
+    status, onset, and relevant clinical notes.
+paths:
+  /api/v2/AllergyIntolerance:
+    get:
+      summary: Get a list of Allergies
+      operationId: getAllergyList
+      tags:
+      - AllergyIntolerance
+      parameters:
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: asserter
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: asserter'
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: category'
+      - name: clinical-status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: clinical-status'
+      - name: criticality
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: criticality'
+      - name: encounter
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: encounter'
+      - name: last-date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: last-date'
+      - name: manifestation
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: manifestation'
+      - name: onset
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: onset'
+      - name: recorder
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: recorder'
+      - name: route
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: route'
+      - name: severity
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: severity'
+      - name: verification-status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: verification-status'
+      - name: code
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: code'
+      - name: date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: date'
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: type'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Missing required information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinAllergyIntolerance'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinAllergyIntolerance'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinAllergyIntolerance'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: AllergyIntolerance
+                        id: '12345'
+                        patient:
+                          reference: Patient/67890
+                        code:
+                          coding:
+                          - system: athena
+                            code: '12345'
+                            display: Penicillin
+                          - system: rxnorm
+                            code: '7980'
+                            display: Penicillin G
+                          - system: rxnorm
+                            code: '123456'
+                            display: Penicillin
+                        clinicalStatus:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical
+                            code: active
+                            display: Active
+                        verificationStatus:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintolerance-verification
+                            code: confirmed
+                            display: Confirmed
+                        category:
+                        - medication
+                        criticality: high
+                        onsetDateTime: '2023-01-15T10:30:00Z'
+                        note:
+                        - text: Patient reports severe reaction
+                        reaction: []
+                        extension:
+                        - url: TINY_URLS.ALLERGYINTOLERANCE.DEPARTMENTID
+                          valueString: '101'
+                        - url: TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                          valueDate: '2023-01-15'
+                        - url: TINY_URLS.ALLERGYINTOLERANCE.DEACTIVATEDDATE
+                          valueString: '2023-12-01T14:20:00Z'
+                        - url: TINY_URLS.ALLERGYINTOLERANCE.LASTMODIFIEDDATETIME
+                          valueString: '2023-11-30T09:15:00Z'
+    post:
+      summary: Create Allergy
+      operationId: createAllergy
+      tags:
+      - AllergyIntolerance
+      parameters:
+      - *id001
+      - *id002
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      responses:
+        '400':
+          description: Missing required information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinAllergyIntolerance'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinAllergyIntolerance'
+        '500':
+          description: Athena API or server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinAllergyIntolerance'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Accepted:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: AllergyIntolerance
+                  code:
+                    coding:
+                    - system: athena
+                      code: '12345'
+                      display: Penicillin
+                  category:
+                  - medication
+                  criticality: high
+                  note:
+                  - text: Patient reports severe reaction
+                  onsetDateTime: '2023-01-15T10:30:00Z'
+                  reaction: []
+                  extension:
+                  - url: TINY_URLS.ALLERGYINTOLERANCE.DEACTIVATEDDATE
+                    valueString: '2023-12-01T14:20:00Z'
+                  - url: TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                    valueDate: '2023-01-15'
+    put:
+      summary: Update Allergy
+      operationId: updateAllergy
+      tags:
+      - AllergyIntolerance
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Missing required information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofputinAllergyIntoleranceallergyintoleranceid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofputinAllergyIntoleranceallergyintoleranceid'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofputinAllergyIntoleranceallergyintoleranceid'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Accepted:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: AllergyIntolerance
+                  id: '12345'
+                  category:
+                  - medication
+                  criticality: high
+                  onsetDateTime: '2023-01-15T10:30:00Z'
+                  note:
+                  - text: Patient reports severe reaction
+                  reaction: []
+                  extension:
+                  - url: TINY_URLS.ALLERGYINTOLERANCE.DEPARTMENTID
+                    valueString: '101'
+                  - url: TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                    valueDate: '2023-01-15'
+                  - url: TINY_URLS.ALLERGYINTOLERANCE.DEACTIVATEDDATE
+                    valueString: '2023-12-01T14:20:00Z'
+  /api/v2/AllergyIntolerance/{allergy-intolerance-id}:
+    get:
+      summary: Get Allergy by ID
+      operationId: getAllergyById
+      tags:
+      - AllergyIntolerance
+      parameters:
+      - name: allergy-intolerance-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier of the AllergyIntolerance resource to retrieve.
+          Required for fetching a specific allergy by ID."'
+      - *id001
+      - *id002
+      
+      responses:
+        '400':
+          description: Missing patient id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinAllergyIntoleranceallergyintoleranceid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinAllergyIntoleranceallergyintoleranceid'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinAllergyIntoleranceallergyintoleranceid'
+        '500':
+          description: Server error or not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinAllergyIntoleranceallergyintoleranceid'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: AllergyIntolerance
+                    id: '12345'
+                    patient:
+                      reference: Patient/67890
+                    code:
+                      coding:
+                      - system: athena
+                        code: '12345'
+                        display: Penicillin
+                      - system: rxnorm
+                        code: '7980'
+                        display: Penicillin G
+                      - system: rxnorm
+                        code: '123456'
+                        display: Penicillin
+                    clinicalStatus:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical
+                        code: active
+                        display: Active
+                    verificationStatus:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/allergyintolerance-verification
+                        code: confirmed
+                        display: Confirmed
+                    category:
+                    - medication
+                    criticality: high
+                    onsetDateTime: '2023-01-15T10:30:00Z'
+                    note:
+                    - text: Patient reports severe reaction
+                    reaction: []
+                    extension:
+                    - url: TINY_URLS.ALLERGYINTOLERANCE.DEPARTMENTID
+                      valueString: '101'
+                    - url: TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                      valueDate: '2023-01-15'
+                    - url: TINY_URLS.ALLERGYINTOLERANCE.DEACTIVATEDDATE
+                      valueString: '2023-12-01T14:20:00Z'
+                    - url: TINY_URLS.ALLERGYINTOLERANCE.LASTMODIFIEDDATETIME
+                      valueString: '2023-11-30T09:15:00Z'
+    delete:
+      summary: Delete Allergy
+      operationId: deleteAllergy
+      tags:
+      - AllergyIntolerance
+      parameters:
+      - name: allergy-intolerance-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: '"Unique ID of the AllergyIntolerance resource to delete. Required
+          for deletion."'
+      - *id001
+      - *id002
+      responses:
+        '200':
+          description: Successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofdeleteinAllergyIntoleranceallergyintoleranceid'
+              example:
+                id: allergy-1
+                status: deleted
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinAllergyIntoleranceallergyintoleranceid'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinAllergyIntoleranceallergyintoleranceid'
+components:
+  schemas:
+    AllergyIntoleranceRequest:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - departmentId
+          - practiceId
+          properties:
+            departmentId:
+              type: string
+              example: '150'
+            practiceId:
+              type: integer
+              example: 195903
+        data:
+          type: object
+          required:
+          - clinicalStatus
+          - code
+          - onsetDateTime
+          - patient
+          - resourceType
+          properties:
+            clinicalStatus:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: Active
+                      display:
+                        type: string
+                        example: Active
+                      system:
+                        type: string
+                        example: http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical
+            code:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: '15896'
+                      display:
+                        type: string
+                        example: penicillin G
+                      system:
+                        type: string
+                        example: athena
+                text:
+                  type: string
+                  example: penicillin G
+            onsetDateTime:
+              type: string
+              format: date-time
+              example: '2025-06-27'
+            patient:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/29197
+    ExtractedSchema1286:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          description: '"Context information for creating an allergy, including relevant
+            details about the patient and request."'
+        data:
+          oneOf:
+          - type: object
+            properties:
+              resourceType:
+                type: string
+                example: AllergyIntolerance
+              id:
+                type: string
+                example: allergy-1
+              meta:
+                type: object
+                properties:
+                  versionId:
+                    type: string
+                    example: '1'
+              extension:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                    valueString:
+                      type: string
+              text:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  div:
+                    type: string
+              identifier:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    use:
+                      type: string
+                    system:
+                      type: string
+                    value:
+                      type: string
+              code:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              subject:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              onsetDateTime:
+                type: string
+                format: date-time
+              category:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+                          display:
+                            type: string
+              severity:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              clinicalStatus:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              note:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+              reaction:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    extension:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          valueString:
+                            type: string
+                    type:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                              display:
+                                type: string
+                    manifestation:
+                      type: string
+            example:
+              resourceType: AllergyIntolerance
+              id: allergy-1
+              meta:
+                versionId: '1'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                valueString: Some string
+              text:
+                status: generated
+                div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+              identifier:
+              - use: usual
+                system: urn:oid:2.16.840.1.113883.4.19.12
+                value: '123456789012'
+              code:
+                coding:
+                - system: http://snomed.info/sct
+                  code: '300000003'
+                  display: Cow's milk allergy
+              subject:
+                reference: Patient/123
+              onsetDateTime: '2021-01-01T00:00:00+00:00'
+              category:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                  code: adverse
+                  display: Adverse
+              severity:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                  code: critical
+                  display: Critical
+              clinicalStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                  code: active
+                  display: Active
+              note:
+              - text: Patient experiences severe reactions to cow's milk products.
+              reaction:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                  valueString: Some string
+                type:
+                  coding:
+                  - system: http://snomed.info/sct
+                    code: '3000000'
+                    display: Hypersensitivity
+                manifestation: Anaphylaxis
+          - type: object
+            properties:
+              resourceType:
+                type: string
+                example: Bundle
+              type:
+                type: string
+                example: searchset
+              total:
+                type: integer
+                example: 1
+              entry:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    resource:
+                      type: object
+                      properties:
+                        resourceType:
+                          type: string
+                          example: AllergyIntolerance
+                        id:
+                          type: string
+                          example: allergy-1
+                        meta:
+                          type: object
+                          properties:
+                            versionId:
+                              type: string
+                              example: '1'
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+                        text:
+                          type: object
+                          properties:
+                            status:
+                              type: string
+                            div:
+                              type: string
+                        identifier:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              use:
+                                type: string
+                              system:
+                                type: string
+                              value:
+                                type: string
+                        code:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        subject:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                        onsetDateTime:
+                          type: string
+                          format: date-time
+                        category:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              coding:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    system:
+                                      type: string
+                                    code:
+                                      type: string
+                                    display:
+                                      type: string
+                        severity:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        clinicalStatus:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        note:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              text:
+                                type: string
+                        reaction:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              extension:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    url:
+                                      type: string
+                                    valueString:
+                                      type: string
+                              type:
+                                type: object
+                                properties:
+                                  coding:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        system:
+                                          type: string
+                                        code:
+                                          type: string
+                                        display:
+                                          type: string
+                              manifestation:
+                                type: string
+                      example:
+                        resourceType: AllergyIntolerance
+                        id: allergy-1
+                        meta:
+                          versionId: '1'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                          valueString: Some string
+                        text:
+                          status: generated
+                          div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+                        identifier:
+                        - use: usual
+                          system: urn:oid:2.16.840.1.113883.4.19.12
+                          value: '123456789012'
+                        code:
+                          coding:
+                          - system: http://snomed.info/sct
+                            code: '300000003'
+                            display: Cow's milk allergy
+                        subject:
+                          reference: Patient/123
+                        onsetDateTime: '2021-01-01T00:00:00+00:00'
+                        category:
+                        - coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                            code: adverse
+                            display: Adverse
+                        severity:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                            code: critical
+                            display: Critical
+                        clinicalStatus:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                            code: active
+                            display: Active
+                        note:
+                        - text: Patient experiences severe reactions to cow's milk
+                            products.
+                        reaction:
+                        - extension:
+                          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                            valueString: Some string
+                          type:
+                            coding:
+                            - system: http://snomed.info/sct
+                              code: '3000000'
+                              display: Hypersensitivity
+                          manifestation: Anaphylaxis
+              meta:
+                type: object
+                properties:
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            example:
+              resourceType: Bundle
+              type: searchset
+              total: 1
+              entry:
+              - resource:
+                  resourceType: AllergyIntolerance
+                  id: allergy-1
+                  meta:
+                    versionId: '1'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                    valueString: Some string
+                  text:
+                    status: generated
+                    div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+                  identifier:
+                  - use: usual
+                    system: urn:oid:2.16.840.1.113883.4.19.12
+                    value: '123456789012'
+                  code:
+                    coding:
+                    - system: http://snomed.info/sct
+                      code: '300000003'
+                      display: Cow's milk allergy
+                  subject:
+                    reference: Patient/123
+                  onsetDateTime: '2021-01-01T00:00:00+00:00'
+                  category:
+                  - coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                      code: adverse
+                      display: Adverse
+                  severity:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                      code: critical
+                      display: Critical
+                  clinicalStatus:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                      code: active
+                      display: Active
+                  note:
+                  - text: Patient experiences severe reactions to cow's milk products.
+                  reaction:
+                  - extension:
+                    - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                      valueString: Some string
+                    type:
+                      coding:
+                      - system: http://snomed.info/sct
+                        code: '3000000'
+                        display: Hypersensitivity
+                    manifestation: Anaphylaxis
+              meta:
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                  valueString: Some string
+          description: '"Allergy details in JSON format. Required fields: name, description,
+            and severity."'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: AllergyIntolerance
+          id: allergy-1
+          meta:
+            versionId: '1'
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+            valueString: Some string
+          text:
+            status: generated
+            div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+          identifier:
+          - use: usual
+            system: urn:oid:2.16.840.1.113883.4.19.12
+            value: '123456789012'
+          code:
+            coding:
+            - system: http://snomed.info/sct
+              code: '300000003'
+              display: Cow's milk allergy
+          subject:
+            reference: Patient/123
+          onsetDateTime: '2021-01-01T00:00:00+00:00'
+          category:
+          - coding:
+            - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+              code: adverse
+              display: Adverse
+          severity:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+              code: critical
+              display: Critical
+          clinicalStatus:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+              code: active
+              display: Active
+          note:
+          - text: Patient experiences severe reactions to cow's milk products.
+          reaction:
+          - extension:
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+              valueString: Some string
+            type:
+              coding:
+              - system: http://snomed.info/sct
+                code: '3000000'
+                display: Hypersensitivity
+            manifestation: Anaphylaxis
+    ExtractedSchema1302:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          description: '"Context information for updating an allergy. Contains relevant
+            details for the update operation."
+
+
+            Alternatively, if you''d like a slightly shorter version:
+
+
+            "Context details for updating an allergy."'
+        data:
+          oneOf:
+          - type: object
+            properties:
+              resourceType:
+                type: string
+                example: AllergyIntolerance
+              id:
+                type: string
+                example: allergy-1
+              meta:
+                type: object
+                properties:
+                  versionId:
+                    type: string
+                    example: '1'
+              extension:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                    valueString:
+                      type: string
+              text:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  div:
+                    type: string
+              identifier:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    use:
+                      type: string
+                    system:
+                      type: string
+                    value:
+                      type: string
+              code:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              subject:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              onsetDateTime:
+                type: string
+                format: date-time
+              category:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+                          display:
+                            type: string
+              severity:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              clinicalStatus:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              note:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+              reaction:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    extension:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          valueString:
+                            type: string
+                    type:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                              display:
+                                type: string
+                    manifestation:
+                      type: string
+            example:
+              resourceType: AllergyIntolerance
+              id: allergy-1
+              meta:
+                versionId: '1'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                valueString: Some string
+              text:
+                status: generated
+                div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+              identifier:
+              - use: usual
+                system: urn:oid:2.16.840.1.113883.4.19.12
+                value: '123456789012'
+              code:
+                coding:
+                - system: http://snomed.info/sct
+                  code: '300000003'
+                  display: Cow's milk allergy
+              subject:
+                reference: Patient/123
+              onsetDateTime: '2021-01-01T00:00:00+00:00'
+              category:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                  code: adverse
+                  display: Adverse
+              severity:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                  code: critical
+                  display: Critical
+              clinicalStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                  code: active
+                  display: Active
+              note:
+              - text: Patient experiences severe reactions to cow's milk products.
+              reaction:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                  valueString: Some string
+                type:
+                  coding:
+                  - system: http://snomed.info/sct
+                    code: '3000000'
+                    display: Hypersensitivity
+                manifestation: Anaphylaxis
+          - type: object
+            properties:
+              resourceType:
+                type: string
+                example: Bundle
+              type:
+                type: string
+                example: searchset
+              total:
+                type: integer
+                example: 1
+              entry:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    resource:
+                      type: object
+                      properties:
+                        resourceType:
+                          type: string
+                          example: AllergyIntolerance
+                        id:
+                          type: string
+                          example: allergy-1
+                        meta:
+                          type: object
+                          properties:
+                            versionId:
+                              type: string
+                              example: '1'
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+                        text:
+                          type: object
+                          properties:
+                            status:
+                              type: string
+                            div:
+                              type: string
+                        identifier:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              use:
+                                type: string
+                              system:
+                                type: string
+                              value:
+                                type: string
+                        code:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        subject:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                        onsetDateTime:
+                          type: string
+                          format: date-time
+                        category:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              coding:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    system:
+                                      type: string
+                                    code:
+                                      type: string
+                                    display:
+                                      type: string
+                        severity:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        clinicalStatus:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        note:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              text:
+                                type: string
+                        reaction:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              extension:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    url:
+                                      type: string
+                                    valueString:
+                                      type: string
+                              type:
+                                type: object
+                                properties:
+                                  coding:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        system:
+                                          type: string
+                                        code:
+                                          type: string
+                                        display:
+                                          type: string
+                              manifestation:
+                                type: string
+                      example:
+                        resourceType: AllergyIntolerance
+                        id: allergy-1
+                        meta:
+                          versionId: '1'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                          valueString: Some string
+                        text:
+                          status: generated
+                          div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+                        identifier:
+                        - use: usual
+                          system: urn:oid:2.16.840.1.113883.4.19.12
+                          value: '123456789012'
+                        code:
+                          coding:
+                          - system: http://snomed.info/sct
+                            code: '300000003'
+                            display: Cow's milk allergy
+                        subject:
+                          reference: Patient/123
+                        onsetDateTime: '2021-01-01T00:00:00+00:00'
+                        category:
+                        - coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                            code: adverse
+                            display: Adverse
+                        severity:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                            code: critical
+                            display: Critical
+                        clinicalStatus:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                            code: active
+                            display: Active
+                        note:
+                        - text: Patient experiences severe reactions to cow's milk
+                            products.
+                        reaction:
+                        - extension:
+                          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                            valueString: Some string
+                          type:
+                            coding:
+                            - system: http://snomed.info/sct
+                              code: '3000000'
+                              display: Hypersensitivity
+                          manifestation: Anaphylaxis
+              meta:
+                type: object
+                properties:
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            example:
+              resourceType: Bundle
+              type: searchset
+              total: 1
+              entry:
+              - resource:
+                  resourceType: AllergyIntolerance
+                  id: allergy-1
+                  meta:
+                    versionId: '1'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                    valueString: Some string
+                  text:
+                    status: generated
+                    div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+                  identifier:
+                  - use: usual
+                    system: urn:oid:2.16.840.1.113883.4.19.12
+                    value: '123456789012'
+                  code:
+                    coding:
+                    - system: http://snomed.info/sct
+                      code: '300000003'
+                      display: Cow's milk allergy
+                  subject:
+                    reference: Patient/123
+                  onsetDateTime: '2021-01-01T00:00:00+00:00'
+                  category:
+                  - coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                      code: adverse
+                      display: Adverse
+                  severity:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                      code: critical
+                      display: Critical
+                  clinicalStatus:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                      code: active
+                      display: Active
+                  note:
+                  - text: Patient experiences severe reactions to cow's milk products.
+                  reaction:
+                  - extension:
+                    - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                      valueString: Some string
+                    type:
+                      coding:
+                      - system: http://snomed.info/sct
+                        code: '3000000'
+                        display: Hypersensitivity
+                    manifestation: Anaphylaxis
+              meta:
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                  valueString: Some string
+          description: '"JSON payload containing updated allergy information. See
+            schema for required fields and format."'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: AllergyIntolerance
+          id: allergy-1
+          meta:
+            versionId: '1'
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+            valueString: Some string
+          text:
+            status: generated
+            div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+          identifier:
+          - use: usual
+            system: urn:oid:2.16.840.1.113883.4.19.12
+            value: '123456789012'
+          code:
+            coding:
+            - system: http://snomed.info/sct
+              code: '300000003'
+              display: Cow's milk allergy
+          subject:
+            reference: Patient/123
+          onsetDateTime: '2021-01-01T00:00:00+00:00'
+          category:
+          - coding:
+            - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+              code: adverse
+              display: Adverse
+          severity:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+              code: critical
+              display: Critical
+          clinicalStatus:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+              code: active
+              display: Active
+          note:
+          - text: Patient experiences severe reactions to cow's milk products.
+          reaction:
+          - extension:
+            - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+              valueString: Some string
+            type:
+              coding:
+              - system: http://snomed.info/sct
+                code: '3000000'
+                display: Hypersensitivity
+            manifestation: Anaphylaxis
+    response200ofgetinAllergyIntolerance:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          oneOf:
+          - type: object
+            properties:
+              resourceType:
+                type: string
+                example: AllergyIntolerance
+              id:
+                type: string
+                example: allergy-1
+              meta:
+                type: object
+                properties:
+                  versionId:
+                    type: string
+                    example: '1'
+              extension:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                    valueString:
+                      type: string
+              text:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  div:
+                    type: string
+              identifier:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    use:
+                      type: string
+                    system:
+                      type: string
+                    value:
+                      type: string
+              code:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              subject:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              onsetDateTime:
+                type: string
+                format: date-time
+              category:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+                          display:
+                            type: string
+              severity:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              clinicalStatus:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              note:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+              reaction:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    extension:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          valueString:
+                            type: string
+                    type:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                              display:
+                                type: string
+                    manifestation:
+                      type: string
+            example:
+              resourceType: AllergyIntolerance
+              id: allergy-1
+              meta:
+                versionId: '1'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                valueString: Some string
+              text:
+                status: generated
+                div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+              identifier:
+              - use: usual
+                system: urn:oid:2.16.840.1.113883.4.19.12
+                value: '123456789012'
+              code:
+                coding:
+                - system: http://snomed.info/sct
+                  code: '300000003'
+                  display: Cow's milk allergy
+              subject:
+                reference: Patient/123
+              onsetDateTime: '2021-01-01T00:00:00+00:00'
+              category:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                  code: adverse
+                  display: Adverse
+              severity:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                  code: critical
+                  display: Critical
+              clinicalStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                  code: active
+                  display: Active
+              note:
+              - text: Patient experiences severe reactions to cow's milk products.
+              reaction:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                  valueString: Some string
+                type:
+                  coding:
+                  - system: http://snomed.info/sct
+                    code: '3000000'
+                    display: Hypersensitivity
+                manifestation: Anaphylaxis
+          - type: object
+            properties:
+              resourceType:
+                type: string
+                example: Bundle
+              type:
+                type: string
+                example: searchset
+              total:
+                type: integer
+                example: 1
+              entry:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    resource:
+                      type: object
+                      properties:
+                        resourceType:
+                          type: string
+                          example: AllergyIntolerance
+                        id:
+                          type: string
+                          example: allergy-1
+                        meta:
+                          type: object
+                          properties:
+                            versionId:
+                              type: string
+                              example: '1'
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+                        text:
+                          type: object
+                          properties:
+                            status:
+                              type: string
+                            div:
+                              type: string
+                        identifier:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              use:
+                                type: string
+                              system:
+                                type: string
+                              value:
+                                type: string
+                        code:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        subject:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                        onsetDateTime:
+                          type: string
+                          format: date-time
+                        category:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              coding:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    system:
+                                      type: string
+                                    code:
+                                      type: string
+                                    display:
+                                      type: string
+                        severity:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        clinicalStatus:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        note:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              text:
+                                type: string
+                        reaction:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              extension:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    url:
+                                      type: string
+                                    valueString:
+                                      type: string
+                              type:
+                                type: object
+                                properties:
+                                  coding:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        system:
+                                          type: string
+                                        code:
+                                          type: string
+                                        display:
+                                          type: string
+                              manifestation:
+                                type: string
+                      example:
+                        resourceType: AllergyIntolerance
+                        id: allergy-1
+                        meta:
+                          versionId: '1'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                          valueString: Some string
+                        text:
+                          status: generated
+                          div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+                        identifier:
+                        - use: usual
+                          system: urn:oid:2.16.840.1.113883.4.19.12
+                          value: '123456789012'
+                        code:
+                          coding:
+                          - system: http://snomed.info/sct
+                            code: '300000003'
+                            display: Cow's milk allergy
+                        subject:
+                          reference: Patient/123
+                        onsetDateTime: '2021-01-01T00:00:00+00:00'
+                        category:
+                        - coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                            code: adverse
+                            display: Adverse
+                        severity:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                            code: critical
+                            display: Critical
+                        clinicalStatus:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                            code: active
+                            display: Active
+                        note:
+                        - text: Patient experiences severe reactions to cow's milk
+                            products.
+                        reaction:
+                        - extension:
+                          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                            valueString: Some string
+                          type:
+                            coding:
+                            - system: http://snomed.info/sct
+                              code: '3000000'
+                              display: Hypersensitivity
+                          manifestation: Anaphylaxis
+              meta:
+                type: object
+                properties:
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            example:
+              resourceType: Bundle
+              type: searchset
+              total: 1
+              entry:
+              - resource:
+                  resourceType: AllergyIntolerance
+                  id: allergy-1
+                  meta:
+                    versionId: '1'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                    valueString: Some string
+                  text:
+                    status: generated
+                    div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+                  identifier:
+                  - use: usual
+                    system: urn:oid:2.16.840.1.113883.4.19.12
+                    value: '123456789012'
+                  code:
+                    coding:
+                    - system: http://snomed.info/sct
+                      code: '300000003'
+                      display: Cow's milk allergy
+                  subject:
+                    reference: Patient/123
+                  onsetDateTime: '2021-01-01T00:00:00+00:00'
+                  category:
+                  - coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                      code: adverse
+                      display: Adverse
+                  severity:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                      code: critical
+                      display: Critical
+                  clinicalStatus:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                      code: active
+                      display: Active
+                  note:
+                  - text: Patient experiences severe reactions to cow's milk products.
+                  reaction:
+                  - extension:
+                    - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                      valueString: Some string
+                    type:
+                      coding:
+                      - system: http://snomed.info/sct
+                        code: '3000000'
+                        display: Hypersensitivity
+                    manifestation: Anaphylaxis
+              meta:
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                  valueString: Some string
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: AllergyIntolerance
+              id: allergy-1
+              meta:
+                versionId: '1'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                valueString: Some string
+              text:
+                status: generated
+                div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+              identifier:
+              - use: usual
+                system: urn:oid:2.16.840.1.113883.4.19.12
+                value: '123456789012'
+              code:
+                coding:
+                - system: http://snomed.info/sct
+                  code: '300000003'
+                  display: Cow's milk allergy
+              subject:
+                reference: Patient/123
+              onsetDateTime: '2021-01-01T00:00:00+00:00'
+              category:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                  code: adverse
+                  display: Adverse
+              severity:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                  code: critical
+                  display: Critical
+              clinicalStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                  code: active
+                  display: Active
+              note:
+              - text: Patient experiences severe reactions to cow's milk products.
+              reaction:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                  valueString: Some string
+                type:
+                  coding:
+                  - system: http://snomed.info/sct
+                    code: '3000000'
+                    display: Hypersensitivity
+                manifestation: Anaphylaxis
+    error400ofgetinAllergyIntolerance:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          oneOf:
+          - type: string
+          - type: object
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofgetinAllergyIntolerance:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinAllergyIntolerance:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Server error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+    response200ofpostinAllergyIntolerance:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          oneOf:
+          - type: object
+            properties:
+              resourceType:
+                type: string
+                example: AllergyIntolerance
+              id:
+                type: string
+                example: allergy-1
+              meta:
+                type: object
+                properties:
+                  versionId:
+                    type: string
+                    example: '1'
+              extension:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                    valueString:
+                      type: string
+              text:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  div:
+                    type: string
+              identifier:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    use:
+                      type: string
+                    system:
+                      type: string
+                    value:
+                      type: string
+              code:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              subject:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              onsetDateTime:
+                type: string
+                format: date-time
+              category:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+                          display:
+                            type: string
+              severity:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              clinicalStatus:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              note:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+              reaction:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    extension:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          valueString:
+                            type: string
+                    type:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                              display:
+                                type: string
+                    manifestation:
+                      type: string
+            example:
+              resourceType: AllergyIntolerance
+              id: allergy-1
+              meta:
+                versionId: '1'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                valueString: Some string
+              text:
+                status: generated
+                div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+              identifier:
+              - use: usual
+                system: urn:oid:2.16.840.1.113883.4.19.12
+                value: '123456789012'
+              code:
+                coding:
+                - system: http://snomed.info/sct
+                  code: '300000003'
+                  display: Cow's milk allergy
+              subject:
+                reference: Patient/123
+              onsetDateTime: '2021-01-01T00:00:00+00:00'
+              category:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                  code: adverse
+                  display: Adverse
+              severity:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                  code: critical
+                  display: Critical
+              clinicalStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                  code: active
+                  display: Active
+              note:
+              - text: Patient experiences severe reactions to cow's milk products.
+              reaction:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                  valueString: Some string
+                type:
+                  coding:
+                  - system: http://snomed.info/sct
+                    code: '3000000'
+                    display: Hypersensitivity
+                manifestation: Anaphylaxis
+          - type: object
+            properties:
+              resourceType:
+                type: string
+                example: Bundle
+              type:
+                type: string
+                example: searchset
+              total:
+                type: integer
+                example: 1
+              entry:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    resource:
+                      type: object
+                      properties:
+                        resourceType:
+                          type: string
+                          example: AllergyIntolerance
+                        id:
+                          type: string
+                          example: allergy-1
+                        meta:
+                          type: object
+                          properties:
+                            versionId:
+                              type: string
+                              example: '1'
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+                        text:
+                          type: object
+                          properties:
+                            status:
+                              type: string
+                            div:
+                              type: string
+                        identifier:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              use:
+                                type: string
+                              system:
+                                type: string
+                              value:
+                                type: string
+                        code:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        subject:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                        onsetDateTime:
+                          type: string
+                          format: date-time
+                        category:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              coding:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    system:
+                                      type: string
+                                    code:
+                                      type: string
+                                    display:
+                                      type: string
+                        severity:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        clinicalStatus:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        note:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              text:
+                                type: string
+                        reaction:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              extension:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    url:
+                                      type: string
+                                    valueString:
+                                      type: string
+                              type:
+                                type: object
+                                properties:
+                                  coding:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        system:
+                                          type: string
+                                        code:
+                                          type: string
+                                        display:
+                                          type: string
+                              manifestation:
+                                type: string
+                      example:
+                        resourceType: AllergyIntolerance
+                        id: allergy-1
+                        meta:
+                          versionId: '1'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                          valueString: Some string
+                        text:
+                          status: generated
+                          div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+                        identifier:
+                        - use: usual
+                          system: urn:oid:2.16.840.1.113883.4.19.12
+                          value: '123456789012'
+                        code:
+                          coding:
+                          - system: http://snomed.info/sct
+                            code: '300000003'
+                            display: Cow's milk allergy
+                        subject:
+                          reference: Patient/123
+                        onsetDateTime: '2021-01-01T00:00:00+00:00'
+                        category:
+                        - coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                            code: adverse
+                            display: Adverse
+                        severity:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                            code: critical
+                            display: Critical
+                        clinicalStatus:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                            code: active
+                            display: Active
+                        note:
+                        - text: Patient experiences severe reactions to cow's milk
+                            products.
+                        reaction:
+                        - extension:
+                          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                            valueString: Some string
+                          type:
+                            coding:
+                            - system: http://snomed.info/sct
+                              code: '3000000'
+                              display: Hypersensitivity
+                          manifestation: Anaphylaxis
+              meta:
+                type: object
+                properties:
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            example:
+              resourceType: Bundle
+              type: searchset
+              total: 1
+              entry:
+              - resource:
+                  resourceType: AllergyIntolerance
+                  id: allergy-1
+                  meta:
+                    versionId: '1'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                    valueString: Some string
+                  text:
+                    status: generated
+                    div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+                  identifier:
+                  - use: usual
+                    system: urn:oid:2.16.840.1.113883.4.19.12
+                    value: '123456789012'
+                  code:
+                    coding:
+                    - system: http://snomed.info/sct
+                      code: '300000003'
+                      display: Cow's milk allergy
+                  subject:
+                    reference: Patient/123
+                  onsetDateTime: '2021-01-01T00:00:00+00:00'
+                  category:
+                  - coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                      code: adverse
+                      display: Adverse
+                  severity:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                      code: critical
+                      display: Critical
+                  clinicalStatus:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                      code: active
+                      display: Active
+                  note:
+                  - text: Patient experiences severe reactions to cow's milk products.
+                  reaction:
+                  - extension:
+                    - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                      valueString: Some string
+                    type:
+                      coding:
+                      - system: http://snomed.info/sct
+                        code: '3000000'
+                        display: Hypersensitivity
+                    manifestation: Anaphylaxis
+              meta:
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                  valueString: Some string
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: AllergyIntolerance
+              id: allergy-1
+              meta:
+                versionId: '1'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                valueString: Some string
+              text:
+                status: generated
+                div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+              identifier:
+              - use: usual
+                system: urn:oid:2.16.840.1.113883.4.19.12
+                value: '123456789012'
+              code:
+                coding:
+                - system: http://snomed.info/sct
+                  code: '300000003'
+                  display: Cow's milk allergy
+              subject:
+                reference: Patient/123
+              onsetDateTime: '2021-01-01T00:00:00+00:00'
+              category:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                  code: adverse
+                  display: Adverse
+              severity:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                  code: critical
+                  display: Critical
+              clinicalStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                  code: active
+                  display: Active
+              note:
+              - text: Patient experiences severe reactions to cow's milk products.
+              reaction:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                  valueString: Some string
+                type:
+                  coding:
+                  - system: http://snomed.info/sct
+                    code: '3000000'
+                    display: Hypersensitivity
+                manifestation: Anaphylaxis
+    error400ofpostinAllergyIntolerance:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          oneOf:
+          - type: string
+          - type: object
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofpostinAllergyIntolerance:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofpostinAllergyIntolerance:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Server error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+    response200ofgetinAllergyIntoleranceallergyintoleranceid:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          oneOf:
+          - type: object
+            properties:
+              resourceType:
+                type: string
+                example: AllergyIntolerance
+              id:
+                type: string
+                example: allergy-1
+              meta:
+                type: object
+                properties:
+                  versionId:
+                    type: string
+                    example: '1'
+              extension:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                    valueString:
+                      type: string
+              text:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  div:
+                    type: string
+              identifier:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    use:
+                      type: string
+                    system:
+                      type: string
+                    value:
+                      type: string
+              code:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              subject:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              onsetDateTime:
+                type: string
+                format: date-time
+              category:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+                          display:
+                            type: string
+              severity:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              clinicalStatus:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              note:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+              reaction:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    extension:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          valueString:
+                            type: string
+                    type:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                              display:
+                                type: string
+                    manifestation:
+                      type: string
+            example:
+              resourceType: AllergyIntolerance
+              id: allergy-1
+              meta:
+                versionId: '1'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                valueString: Some string
+              text:
+                status: generated
+                div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+              identifier:
+              - use: usual
+                system: urn:oid:2.16.840.1.113883.4.19.12
+                value: '123456789012'
+              code:
+                coding:
+                - system: http://snomed.info/sct
+                  code: '300000003'
+                  display: Cow's milk allergy
+              subject:
+                reference: Patient/123
+              onsetDateTime: '2021-01-01T00:00:00+00:00'
+              category:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                  code: adverse
+                  display: Adverse
+              severity:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                  code: critical
+                  display: Critical
+              clinicalStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                  code: active
+                  display: Active
+              note:
+              - text: Patient experiences severe reactions to cow's milk products.
+              reaction:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                  valueString: Some string
+                type:
+                  coding:
+                  - system: http://snomed.info/sct
+                    code: '3000000'
+                    display: Hypersensitivity
+                manifestation: Anaphylaxis
+          - type: object
+            properties:
+              resourceType:
+                type: string
+                example: Bundle
+              type:
+                type: string
+                example: searchset
+              total:
+                type: integer
+                example: 1
+              entry:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    resource:
+                      type: object
+                      properties:
+                        resourceType:
+                          type: string
+                          example: AllergyIntolerance
+                        id:
+                          type: string
+                          example: allergy-1
+                        meta:
+                          type: object
+                          properties:
+                            versionId:
+                              type: string
+                              example: '1'
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+                        text:
+                          type: object
+                          properties:
+                            status:
+                              type: string
+                            div:
+                              type: string
+                        identifier:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              use:
+                                type: string
+                              system:
+                                type: string
+                              value:
+                                type: string
+                        code:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        subject:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                        onsetDateTime:
+                          type: string
+                          format: date-time
+                        category:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              coding:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    system:
+                                      type: string
+                                    code:
+                                      type: string
+                                    display:
+                                      type: string
+                        severity:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        clinicalStatus:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        note:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              text:
+                                type: string
+                        reaction:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              extension:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    url:
+                                      type: string
+                                    valueString:
+                                      type: string
+                              type:
+                                type: object
+                                properties:
+                                  coding:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        system:
+                                          type: string
+                                        code:
+                                          type: string
+                                        display:
+                                          type: string
+                              manifestation:
+                                type: string
+                      example:
+                        resourceType: AllergyIntolerance
+                        id: allergy-1
+                        meta:
+                          versionId: '1'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                          valueString: Some string
+                        text:
+                          status: generated
+                          div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+                        identifier:
+                        - use: usual
+                          system: urn:oid:2.16.840.1.113883.4.19.12
+                          value: '123456789012'
+                        code:
+                          coding:
+                          - system: http://snomed.info/sct
+                            code: '300000003'
+                            display: Cow's milk allergy
+                        subject:
+                          reference: Patient/123
+                        onsetDateTime: '2021-01-01T00:00:00+00:00'
+                        category:
+                        - coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                            code: adverse
+                            display: Adverse
+                        severity:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                            code: critical
+                            display: Critical
+                        clinicalStatus:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                            code: active
+                            display: Active
+                        note:
+                        - text: Patient experiences severe reactions to cow's milk
+                            products.
+                        reaction:
+                        - extension:
+                          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                            valueString: Some string
+                          type:
+                            coding:
+                            - system: http://snomed.info/sct
+                              code: '3000000'
+                              display: Hypersensitivity
+                          manifestation: Anaphylaxis
+              meta:
+                type: object
+                properties:
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            example:
+              resourceType: Bundle
+              type: searchset
+              total: 1
+              entry:
+              - resource:
+                  resourceType: AllergyIntolerance
+                  id: allergy-1
+                  meta:
+                    versionId: '1'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                    valueString: Some string
+                  text:
+                    status: generated
+                    div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+                  identifier:
+                  - use: usual
+                    system: urn:oid:2.16.840.1.113883.4.19.12
+                    value: '123456789012'
+                  code:
+                    coding:
+                    - system: http://snomed.info/sct
+                      code: '300000003'
+                      display: Cow's milk allergy
+                  subject:
+                    reference: Patient/123
+                  onsetDateTime: '2021-01-01T00:00:00+00:00'
+                  category:
+                  - coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                      code: adverse
+                      display: Adverse
+                  severity:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                      code: critical
+                      display: Critical
+                  clinicalStatus:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                      code: active
+                      display: Active
+                  note:
+                  - text: Patient experiences severe reactions to cow's milk products.
+                  reaction:
+                  - extension:
+                    - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                      valueString: Some string
+                    type:
+                      coding:
+                      - system: http://snomed.info/sct
+                        code: '3000000'
+                        display: Hypersensitivity
+                    manifestation: Anaphylaxis
+              meta:
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                  valueString: Some string
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: AllergyIntolerance
+              id: allergy-1
+              meta:
+                versionId: '1'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                valueString: Some string
+              text:
+                status: generated
+                div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+              identifier:
+              - use: usual
+                system: urn:oid:2.16.840.1.113883.4.19.12
+                value: '123456789012'
+              code:
+                coding:
+                - system: http://snomed.info/sct
+                  code: '300000003'
+                  display: Cow's milk allergy
+              subject:
+                reference: Patient/123
+              onsetDateTime: '2021-01-01T00:00:00+00:00'
+              category:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                  code: adverse
+                  display: Adverse
+              severity:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                  code: critical
+                  display: Critical
+              clinicalStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                  code: active
+                  display: Active
+              note:
+              - text: Patient experiences severe reactions to cow's milk products.
+              reaction:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                  valueString: Some string
+                type:
+                  coding:
+                  - system: http://snomed.info/sct
+                    code: '3000000'
+                    display: Hypersensitivity
+                manifestation: Anaphylaxis
+    error400ofgetinAllergyIntoleranceallergyintoleranceid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          oneOf:
+          - type: string
+          - type: object
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofgetinAllergyIntoleranceallergyintoleranceid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinAllergyIntoleranceallergyintoleranceid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: AllergyIntolerance not found
+        details:
+          type: string
+          example: No AllergyIntolerance exists with the given ID
+      example:
+        statusCode: 404
+        message: AllergyIntolerance not found
+        details: No AllergyIntolerance exists with the given ID
+    error500ofgetinAllergyIntoleranceallergyintoleranceid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Server error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+    response200ofputinAllergyIntoleranceallergyintoleranceid:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          oneOf:
+          - type: object
+            properties:
+              resourceType:
+                type: string
+                example: AllergyIntolerance
+              id:
+                type: string
+                example: allergy-1
+              meta:
+                type: object
+                properties:
+                  versionId:
+                    type: string
+                    example: '1'
+              extension:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                    valueString:
+                      type: string
+              text:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  div:
+                    type: string
+              identifier:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    use:
+                      type: string
+                    system:
+                      type: string
+                    value:
+                      type: string
+              code:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              subject:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              onsetDateTime:
+                type: string
+                format: date-time
+              category:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+                          display:
+                            type: string
+              severity:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              clinicalStatus:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+              note:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+              reaction:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    extension:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          valueString:
+                            type: string
+                    type:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                              display:
+                                type: string
+                    manifestation:
+                      type: string
+            example:
+              resourceType: AllergyIntolerance
+              id: allergy-1
+              meta:
+                versionId: '1'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                valueString: Some string
+              text:
+                status: generated
+                div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+              identifier:
+              - use: usual
+                system: urn:oid:2.16.840.1.113883.4.19.12
+                value: '123456789012'
+              code:
+                coding:
+                - system: http://snomed.info/sct
+                  code: '300000003'
+                  display: Cow's milk allergy
+              subject:
+                reference: Patient/123
+              onsetDateTime: '2021-01-01T00:00:00+00:00'
+              category:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                  code: adverse
+                  display: Adverse
+              severity:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                  code: critical
+                  display: Critical
+              clinicalStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                  code: active
+                  display: Active
+              note:
+              - text: Patient experiences severe reactions to cow's milk products.
+              reaction:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                  valueString: Some string
+                type:
+                  coding:
+                  - system: http://snomed.info/sct
+                    code: '3000000'
+                    display: Hypersensitivity
+                manifestation: Anaphylaxis
+          - type: object
+            properties:
+              resourceType:
+                type: string
+                example: Bundle
+              type:
+                type: string
+                example: searchset
+              total:
+                type: integer
+                example: 1
+              entry:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    resource:
+                      type: object
+                      properties:
+                        resourceType:
+                          type: string
+                          example: AllergyIntolerance
+                        id:
+                          type: string
+                          example: allergy-1
+                        meta:
+                          type: object
+                          properties:
+                            versionId:
+                              type: string
+                              example: '1'
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+                        text:
+                          type: object
+                          properties:
+                            status:
+                              type: string
+                            div:
+                              type: string
+                        identifier:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              use:
+                                type: string
+                              system:
+                                type: string
+                              value:
+                                type: string
+                        code:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        subject:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                        onsetDateTime:
+                          type: string
+                          format: date-time
+                        category:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              coding:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    system:
+                                      type: string
+                                    code:
+                                      type: string
+                                    display:
+                                      type: string
+                        severity:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        clinicalStatus:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                        note:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              text:
+                                type: string
+                        reaction:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              extension:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    url:
+                                      type: string
+                                    valueString:
+                                      type: string
+                              type:
+                                type: object
+                                properties:
+                                  coding:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        system:
+                                          type: string
+                                        code:
+                                          type: string
+                                        display:
+                                          type: string
+                              manifestation:
+                                type: string
+                      example:
+                        resourceType: AllergyIntolerance
+                        id: allergy-1
+                        meta:
+                          versionId: '1'
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                          valueString: Some string
+                        text:
+                          status: generated
+                          div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+                        identifier:
+                        - use: usual
+                          system: urn:oid:2.16.840.1.113883.4.19.12
+                          value: '123456789012'
+                        code:
+                          coding:
+                          - system: http://snomed.info/sct
+                            code: '300000003'
+                            display: Cow's milk allergy
+                        subject:
+                          reference: Patient/123
+                        onsetDateTime: '2021-01-01T00:00:00+00:00'
+                        category:
+                        - coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                            code: adverse
+                            display: Adverse
+                        severity:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                            code: critical
+                            display: Critical
+                        clinicalStatus:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                            code: active
+                            display: Active
+                        note:
+                        - text: Patient experiences severe reactions to cow's milk
+                            products.
+                        reaction:
+                        - extension:
+                          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                            valueString: Some string
+                          type:
+                            coding:
+                            - system: http://snomed.info/sct
+                              code: '3000000'
+                              display: Hypersensitivity
+                          manifestation: Anaphylaxis
+              meta:
+                type: object
+                properties:
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            example:
+              resourceType: Bundle
+              type: searchset
+              total: 1
+              entry:
+              - resource:
+                  resourceType: AllergyIntolerance
+                  id: allergy-1
+                  meta:
+                    versionId: '1'
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                    valueString: Some string
+                  text:
+                    status: generated
+                    div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+                  identifier:
+                  - use: usual
+                    system: urn:oid:2.16.840.1.113883.4.19.12
+                    value: '123456789012'
+                  code:
+                    coding:
+                    - system: http://snomed.info/sct
+                      code: '300000003'
+                      display: Cow's milk allergy
+                  subject:
+                    reference: Patient/123
+                  onsetDateTime: '2021-01-01T00:00:00+00:00'
+                  category:
+                  - coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                      code: adverse
+                      display: Adverse
+                  severity:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                      code: critical
+                      display: Critical
+                  clinicalStatus:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                      code: active
+                      display: Active
+                  note:
+                  - text: Patient experiences severe reactions to cow's milk products.
+                  reaction:
+                  - extension:
+                    - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                      valueString: Some string
+                    type:
+                      coding:
+                      - system: http://snomed.info/sct
+                        code: '3000000'
+                        display: Hypersensitivity
+                    manifestation: Anaphylaxis
+              meta:
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                  valueString: Some string
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: AllergyIntolerance
+              id: allergy-1
+              meta:
+                versionId: '1'
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.REACTIVATEDATE
+                valueString: Some string
+              text:
+                status: generated
+                div: <div xmlns="http://www.w3.org/1999/xhtml">Allergy Intolerance</div>
+              identifier:
+              - use: usual
+                system: urn:oid:2.16.840.1.113883.4.19.12
+                value: '123456789012'
+              code:
+                coding:
+                - system: http://snomed.info/sct
+                  code: '300000003'
+                  display: Cow's milk allergy
+              subject:
+                reference: Patient/123
+              onsetDateTime: '2021-01-01T00:00:00+00:00'
+              category:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintolerancecategory
+                  code: adverse
+                  display: Adverse
+              severity:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceseverity
+                  code: critical
+                  display: Critical
+              clinicalStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/allergyintoleranceclinicalstatus
+                  code: active
+                  display: Active
+              note:
+              - text: Patient experiences severe reactions to cow's milk products.
+              reaction:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.ALLERGYINTOLERANCE.SEVERITYSNOMEDCODE
+                  valueString: Some string
+                type:
+                  coding:
+                  - system: http://snomed.info/sct
+                    code: '3000000'
+                    display: Hypersensitivity
+                manifestation: Anaphylaxis
+    error400ofputinAllergyIntoleranceallergyintoleranceid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          oneOf:
+          - type: string
+          - type: object
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofputinAllergyIntoleranceallergyintoleranceid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofputinAllergyIntoleranceallergyintoleranceid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Server error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+    response200ofdeleteinAllergyIntoleranceallergyintoleranceid:
+      type: object
+      properties:
+        id:
+          type: string
+          example: allergy-1
+        status:
+          type: string
+          enum:
+          - deleted
+          example: deleted
+      example:
+        id: allergy-1
+        status: deleted
+    error401ofdeleteinAllergyIntoleranceallergyintoleranceid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofdeleteinAllergyIntoleranceallergyintoleranceid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Server error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+    Context:
+      type: object
+      properties:
+        requestId:
+          type: string
+          example: abc123
+        source:
+          type: string
+          example: ATHENA
+        quorum:
+          type: boolean
+          example: true
+        notify:
+          type: boolean
+          example: true
+        departmentId:
+          type: string
+          example: '150'
+      required:
+      - requestId
+      - source
+      - quorum
+      - notify
+      additionalProperties: true
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

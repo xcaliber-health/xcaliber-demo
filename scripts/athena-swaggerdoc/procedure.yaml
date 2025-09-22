@@ -1,0 +1,2361 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as 
+    Fire) is a standard for exchanging healthcare information electronically. It
+    is designed to be a modern, flexible, and web-based alternative to older, 
+    more cumbersome standards like HL7 v2. FHIR uses a RESTful API specification
+    to define how to interact with Resources - this means it uses standard HTTP 
+    verbs (GET, POST, PUT, DELETE). Resources are the fundamental units of data 
+    in FHIR; they can represent anything from patient demographics to clinical 
+    observations to medications.
+servers:
+  - url: https://xchange-sandbox.xcaliberapis.com
+  - url: https://your.api.server
+tags:
+  - name: Procedure
+    description: FHIR Procedure resource operations
+paths:
+  /api/v2/Procedure:
+    get:
+      tags:
+        - Procedure
+      summary: Get list of Procedures
+      operationId: getAthenaProcedureV2
+      parameters:
+        - &id001
+          name: x-source-id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Source system identifier.
+        - &id002
+          name: x-interaction-mode
+          in: header
+          required: true
+          schema:
+            type: boolean
+          description: Interaction mode flag (true/false).
+        - name: based-on
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: based-on'
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: category'
+        - name: instantiates-canonical
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: instantiates-canonical'
+        - name: instantiates-uri
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: instantiates-uri'
+        - name: location
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: location'
+        - name: part-of
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: part-of'
+        - name: performer
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: performer'
+        - name: reason-code
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: reason-code'
+        - name: reason-reference
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: reason-reference'
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: status'
+        - name: subject
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: subject'
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+        - name: patient
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinProcedure'
+              example: &id003
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Bundle
+                  type: searchset
+                  total: 1
+                  entry:
+                    - resourceType: Procedure
+                      id: '12345'
+                      subject:
+                        reference: Patient/67890
+                      status: unknown
+                      performedDateTime: '2023-10-01T12:00:00Z'
+                      code:
+                        coding:
+                          - system: CPT
+                            code: '00100'
+                            display: Anesthesia for procedure
+                      note:
+                        - text: Procedure note example text
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinProcedure'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinProcedure'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinProcedure'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinProcedure'
+    post:
+      tags:
+        - Procedure
+      summary: Create a Procedure
+      operationId: createProcedureInAthena
+      parameters:
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              context:
+                requestId: abc123
+                source: ATHENA
+                quorum: true
+                notify: true
+                departmentId: '150'
+              data:
+                resourceType: Procedure
+                subject:
+                  reference: Patient/4406
+                status: unknown
+                performedDateTime: '2024-07-25T04:00:00Z'
+                code:
+                  coding:
+                    - system: CPT
+                      code: '78725'
+                      display: Kidney function study
+                note:
+                  - text: Surgery for Kidney Transplant for Patient - 4406
+      responses:
+        '201':
+          description: Procedure created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response201ofpostinProcedure'
+              example:
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  id: prodecureId example
+                  data:
+                    resourceType: Procedure
+                    subject:
+                      reference: Patient/4406
+                    status: unknown
+                    performedDateTime: '2024-07-25T04:00:00Z'
+                    code:
+                      coding:
+                        - system: CPT
+                          code: '78725'
+                          display: Kidney function study
+                    note:
+                      - text: Surgery for Kidney Transplant for Patient - 4406
+                  status: success
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinProcedure'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinProcedure'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofpostinProcedure'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinProcedure'
+  /api/v2/Procedure/{procedure-id}:
+    get:
+      tags:
+        - Procedure
+      summary: Get Procedure by ID
+      operationId: getAthenaProcedureByIdV2
+      parameters:
+        - name: procedure-id
+          in: path
+          schema:
+            type: string
+          description: '"Unique identifier of the Procedure to retrieve. Required
+            for fetching a specific Procedure by ID."'
+          required: true
+        - *id001
+        - *id002
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinProcedureprocedureid'
+              example: *id003
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinProcedureprocedureid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinProcedureprocedureid'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinProcedureprocedureid'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinProcedureprocedureid'
+    put:
+      tags:
+        - Procedure
+      summary: Update Procedure by ID
+      operationId: updateProcedureInAthena
+      parameters:
+        - name: procedure-id
+          in: path
+          schema:
+            type: string
+          description: '"Unique identifier of the Procedure to update. Required for
+            updating an existing Procedure."'
+          required: true
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              context:
+                requestId: b81a8341d586a1a9dbfd85e15a7bc57b
+                source: ATHENA
+                quorum: true
+                notify: true
+              data:
+                resourceType: Procedure
+                id: '7523'
+                subject:
+                  reference: Patient/4406
+                status: unknown
+                performedDateTime: '2024-07-25T04:00:00Z'
+                code:
+                  coding:
+                    - system: CPT
+                      code: '78725'
+                      display: Kidney function study
+                note:
+                  - text: Surgery for Kidney Transplant for Patient - 4406
+      responses:
+        '200':
+          description: Procedure updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofputinProcedureprocedureid'
+              example:
+                context:
+                  requestId: 1424cbbaa5dad12780ee340fd9dd1442
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  status: updated
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofputinProcedureprocedureid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofputinProcedureprocedureid'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofputinProcedureprocedureid'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofputinProcedureprocedureid'
+components:
+  schemas:
+    ExtractedSchema627:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          description: '"Context for creating a procedure. Contains additional metadata
+            or settings for the procedure."'
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Procedure
+            id:
+              type: string
+              example: example
+            meta:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                  example: '1'
+                lastUpdated:
+                  type: string
+                  example: '2022-01-01T12:00:00Z'
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: additional
+                div:
+                  type: string
+                  example: <div xmlns='http://www.w3.org/1999/xhtml'>This is the
+                    procedure's description.</div>
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+                  valueDateTime:
+                    type: string
+            modifierExtension:
+              type: array
+              items:
+                type: object
+            identifier:
+              type: array
+              items:
+                type: object
+                properties:
+                  use:
+                    type: string
+                  type:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                  value:
+                    type: string
+            status:
+              type: string
+              example: completed
+            category:
+              type: array
+              items:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                  text:
+                    type: string
+            code:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                text:
+                  type: string
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+                    example: Practitioner/example
+            location:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Location/example
+            bodySite:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                text:
+                  type: string
+            procedureType:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                text:
+                  type: string
+            statusHistory:
+              type: array
+              items:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  period:
+                    type: object
+                    properties:
+                      start:
+                        type: string
+                      end:
+                        type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+          description: '"Procedure details to be created. Provide a JSON object containing
+            the procedure''s attributes."'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Procedure
+          id: example
+          meta:
+            versionId: '1'
+            lastUpdated: '2022-01-01T12:00:00Z'
+          text:
+            status: additional
+            div: <div xmlns='http://www.w3.org/1999/xhtml'>This is the 
+              procedure's description.</div>
+          extension:
+            - url: http://xcaliber-fhir/structureDefinition/sectionnote
+              valueString: Section notes about the procedure.
+            - url: http://xcaliber-fhir/structureDefinition/notelastmodifiedby
+              valueString: Dr. Smith
+            - url: 
+                http://xcaliber-fhir/structureDefinition/notelastmodifieddatetime
+              valueDateTime: '2022-01-01T17:30:00+00:00'
+          modifierExtension: []
+          identifier:
+            - use: usual
+              type:
+                coding:
+                  - system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                    code: 8867-9
+              value: '2022-01-01'
+          status: completed
+          category:
+            - coding:
+                - system: 
+                    http://terminology.hl7.org/CodeSystem/procedure-category
+                  code: 320000000000010
+              text: Surgical
+          code:
+            coding:
+              - system: http://snomed.info/sct
+                code: 383123007
+                display: Laparotomy
+            text: Laparotomy
+          subject:
+            reference: Patient/example
+          performer:
+            - reference: Practitioner/example
+          location:
+            reference: Location/example
+          bodySite:
+            coding:
+              - system: http://terminology.hl7.org/CodeSystem/body-site
+                code: S-12.4-01.0
+            text: Abdomen
+          procedureType:
+            coding:
+              - system: http://terminology.hl7.org/CodeSystem/procedure-type
+                code: '12345'
+            text: Surgical
+          statusHistory:
+            - status: planned
+              period:
+                start: '2022-01-01T12:00:00+00:00'
+                end: '2022-01-01T14:00:00+00:00'
+            - status: in-progress
+              period:
+                start: '2022-01-01T14:00:00+00:00'
+                end: '2022-01-01T16:00:00+00:00'
+            - status: completed
+              period:
+                start: '2022-01-01T16:00:00+00:00'
+                end: '2022-01-01T17:00:00+00:00'
+          note:
+            - text: This is a sample note for the procedure.
+    ExtractedSchema644:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          description: '"Additional information about the update procedure. Contains
+            metadata and other relevant details."
+
+
+            Alternatively, if you''d like a more concise version:
+
+
+            "Metadata and additional details for the update procedure."'
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Procedure
+            id:
+              type: string
+              example: example
+            meta:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                  example: '1'
+                lastUpdated:
+                  type: string
+                  example: '2022-01-01T12:00:00Z'
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: additional
+                div:
+                  type: string
+                  example: <div xmlns='http://www.w3.org/1999/xhtml'>This is the
+                    procedure's description.</div>
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+                  valueDateTime:
+                    type: string
+            modifierExtension:
+              type: array
+              items:
+                type: object
+            identifier:
+              type: array
+              items:
+                type: object
+                properties:
+                  use:
+                    type: string
+                  type:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                  value:
+                    type: string
+            status:
+              type: string
+              example: completed
+            category:
+              type: array
+              items:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                  text:
+                    type: string
+            code:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                text:
+                  type: string
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+                    example: Practitioner/example
+            location:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Location/example
+            bodySite:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                text:
+                  type: string
+            procedureType:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                text:
+                  type: string
+            statusHistory:
+              type: array
+              items:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  period:
+                    type: object
+                    properties:
+                      start:
+                        type: string
+                      end:
+                        type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+          description: '"Updated procedure data. Provide the fields to be updated
+            in JSON format."'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Procedure
+          id: example
+          meta:
+            versionId: '1'
+            lastUpdated: '2022-01-01T12:00:00Z'
+          text:
+            status: additional
+            div: <div xmlns='http://www.w3.org/1999/xhtml'>This is the 
+              procedure's description.</div>
+          extension:
+            - url: http://xcaliber-fhir/structureDefinition/sectionnote
+              valueString: Section notes about the procedure.
+            - url: http://xcaliber-fhir/structureDefinition/notelastmodifiedby
+              valueString: Dr. Smith
+            - url: 
+                http://xcaliber-fhir/structureDefinition/notelastmodifieddatetime
+              valueDateTime: '2022-01-01T17:30:00+00:00'
+          modifierExtension: []
+          identifier:
+            - use: usual
+              type:
+                coding:
+                  - system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                    code: 8867-9
+              value: '2022-01-01'
+          status: completed
+          category:
+            - coding:
+                - system: 
+                    http://terminology.hl7.org/CodeSystem/procedure-category
+                  code: 320000000000010
+              text: Surgical
+          code:
+            coding:
+              - system: http://snomed.info/sct
+                code: 383123007
+                display: Laparotomy
+            text: Laparotomy
+          subject:
+            reference: Patient/example
+          performer:
+            - reference: Practitioner/example
+          location:
+            reference: Location/example
+          bodySite:
+            coding:
+              - system: http://terminology.hl7.org/CodeSystem/body-site
+                code: S-12.4-01.0
+            text: Abdomen
+          procedureType:
+            coding:
+              - system: http://terminology.hl7.org/CodeSystem/procedure-type
+                code: '12345'
+            text: Surgical
+          statusHistory:
+            - status: planned
+              period:
+                start: '2022-01-01T12:00:00+00:00'
+                end: '2022-01-01T14:00:00+00:00'
+            - status: in-progress
+              period:
+                start: '2022-01-01T14:00:00+00:00'
+                end: '2022-01-01T16:00:00+00:00'
+            - status: completed
+              period:
+                start: '2022-01-01T16:00:00+00:00'
+                end: '2022-01-01T17:00:00+00:00'
+          note:
+            - text: This is a sample note for the procedure.
+    response200ofgetinProcedure:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 1
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Procedure
+                      id:
+                        type: string
+                        example: example
+                      meta:
+                        type: object
+                        properties:
+                          versionId:
+                            type: string
+                            example: '1'
+                          lastUpdated:
+                            type: string
+                            example: '2022-01-01T12:00:00Z'
+                      text:
+                        type: object
+                        properties:
+                          status:
+                            type: string
+                            example: additional
+                          div:
+                            type: string
+                            example: <div 
+                              xmlns='http://www.w3.org/1999/xhtml'>This is the 
+                              procedure's description.</div>
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+                            valueDateTime:
+                              type: string
+                      modifierExtension:
+                        type: array
+                        items:
+                          type: object
+                      identifier:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            use:
+                              type: string
+                            type:
+                              type: object
+                              properties:
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                      code:
+                                        type: string
+                            value:
+                              type: string
+                      status:
+                        type: string
+                        example: completed
+                      category:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                            text:
+                              type: string
+                      code:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                                display:
+                                  type: string
+                          text:
+                            type: string
+                      subject:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                            example: Patient/example
+                      performer:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                              example: Practitioner/example
+                      location:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                            example: Location/example
+                      bodySite:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                          text:
+                            type: string
+                      procedureType:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                          text:
+                            type: string
+                      statusHistory:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            status:
+                              type: string
+                            period:
+                              type: object
+                              properties:
+                                start:
+                                  type: string
+                                end:
+                                  type: string
+                      note:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            text:
+                              type: string
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: Procedure
+                id: example
+                meta:
+                  versionId: '1'
+                  lastUpdated: '2022-01-01T12:00:00Z'
+                text:
+                  status: additional
+                  div: <div xmlns='http://www.w3.org/1999/xhtml'>This is the 
+                    procedure's description.</div>
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/sectionnote
+                    valueString: Section notes about the procedure.
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/notelastmodifiedby
+                    valueString: Dr. Smith
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/notelastmodifieddatetime
+                    valueDateTime: '2022-01-01T17:30:00+00:00'
+                modifierExtension: []
+                identifier:
+                  - use: usual
+                    type:
+                      coding:
+                        - system: 
+                            http://terminology.hl7.org/CodeSystem/v3-ActCode
+                          code: 8867-9
+                    value: '2022-01-01'
+                status: completed
+                category:
+                  - coding:
+                      - system: 
+                          http://terminology.hl7.org/CodeSystem/procedure-category
+                        code: 320000000000010
+                    text: Surgical
+                code:
+                  coding:
+                    - system: http://snomed.info/sct
+                      code: 383123007
+                      display: Laparotomy
+                  text: Laparotomy
+                subject:
+                  reference: Patient/example
+                performer:
+                  - reference: Practitioner/example
+                location:
+                  reference: Location/example
+                bodySite:
+                  coding:
+                    - system: http://terminology.hl7.org/CodeSystem/body-site
+                      code: S-12.4-01.0
+                  text: Abdomen
+                procedureType:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/procedure-type
+                      code: '12345'
+                  text: Surgical
+                statusHistory:
+                  - status: planned
+                    period:
+                      start: '2022-01-01T12:00:00+00:00'
+                      end: '2022-01-01T14:00:00+00:00'
+                  - status: in-progress
+                    period:
+                      start: '2022-01-01T14:00:00+00:00'
+                      end: '2022-01-01T16:00:00+00:00'
+                  - status: completed
+                    period:
+                      start: '2022-01-01T16:00:00+00:00'
+                      end: '2022-01-01T17:00:00+00:00'
+                note:
+                  - text: This is a sample note for the procedure.
+    error400ofgetinProcedure:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofgetinProcedure:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinProcedure:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Procedure not found
+        details:
+          type: string
+          example: No Procedure resource with given id
+      example:
+        statusCode: 404
+        message: Procedure not found
+        details: No Procedure resource with given id
+    error500ofgetinProcedure:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: An unexpected error occurred
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: An unexpected error occurred
+    response201ofpostinProcedure:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Procedure
+            id:
+              type: string
+              example: example
+            meta:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                  example: '1'
+                lastUpdated:
+                  type: string
+                  example: '2022-01-01T12:00:00Z'
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: additional
+                div:
+                  type: string
+                  example: <div xmlns='http://www.w3.org/1999/xhtml'>This is the
+                    procedure's description.</div>
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+                  valueDateTime:
+                    type: string
+            modifierExtension:
+              type: array
+              items:
+                type: object
+            identifier:
+              type: array
+              items:
+                type: object
+                properties:
+                  use:
+                    type: string
+                  type:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                  value:
+                    type: string
+            status:
+              type: string
+              example: completed
+            category:
+              type: array
+              items:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                  text:
+                    type: string
+            code:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                text:
+                  type: string
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+                    example: Practitioner/example
+            location:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Location/example
+            bodySite:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                text:
+                  type: string
+            procedureType:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                text:
+                  type: string
+            statusHistory:
+              type: array
+              items:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  period:
+                    type: object
+                    properties:
+                      start:
+                        type: string
+                      end:
+                        type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: Procedure
+                id: example
+                meta:
+                  versionId: '1'
+                  lastUpdated: '2022-01-01T12:00:00Z'
+                text:
+                  status: additional
+                  div: <div xmlns='http://www.w3.org/1999/xhtml'>This is the 
+                    procedure's description.</div>
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/sectionnote
+                    valueString: Section notes about the procedure.
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/notelastmodifiedby
+                    valueString: Dr. Smith
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/notelastmodifieddatetime
+                    valueDateTime: '2022-01-01T17:30:00+00:00'
+                modifierExtension: []
+                identifier:
+                  - use: usual
+                    type:
+                      coding:
+                        - system: 
+                            http://terminology.hl7.org/CodeSystem/v3-ActCode
+                          code: 8867-9
+                    value: '2022-01-01'
+                status: completed
+                category:
+                  - coding:
+                      - system: 
+                          http://terminology.hl7.org/CodeSystem/procedure-category
+                        code: 320000000000010
+                    text: Surgical
+                code:
+                  coding:
+                    - system: http://snomed.info/sct
+                      code: 383123007
+                      display: Laparotomy
+                  text: Laparotomy
+                subject:
+                  reference: Patient/example
+                performer:
+                  - reference: Practitioner/example
+                location:
+                  reference: Location/example
+                bodySite:
+                  coding:
+                    - system: http://terminology.hl7.org/CodeSystem/body-site
+                      code: S-12.4-01.0
+                  text: Abdomen
+                procedureType:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/procedure-type
+                      code: '12345'
+                  text: Surgical
+                statusHistory:
+                  - status: planned
+                    period:
+                      start: '2022-01-01T12:00:00+00:00'
+                      end: '2022-01-01T14:00:00+00:00'
+                  - status: in-progress
+                    period:
+                      start: '2022-01-01T14:00:00+00:00'
+                      end: '2022-01-01T16:00:00+00:00'
+                  - status: completed
+                    period:
+                      start: '2022-01-01T16:00:00+00:00'
+                      end: '2022-01-01T17:00:00+00:00'
+                note:
+                  - text: This is a sample note for the procedure.
+    error400ofpostinProcedure:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofpostinProcedure:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofpostinProcedure:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Procedure not found
+        details:
+          type: string
+          example: No Procedure resource with given id
+      example:
+        statusCode: 404
+        message: Procedure not found
+        details: No Procedure resource with given id
+    error500ofpostinProcedure:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: An unexpected error occurred
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: An unexpected error occurred
+    response200ofgetinProcedureprocedureid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Procedure
+            id:
+              type: string
+              example: example
+            meta:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                  example: '1'
+                lastUpdated:
+                  type: string
+                  example: '2022-01-01T12:00:00Z'
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: additional
+                div:
+                  type: string
+                  example: <div xmlns='http://www.w3.org/1999/xhtml'>This is the
+                    procedure's description.</div>
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+                  valueDateTime:
+                    type: string
+            modifierExtension:
+              type: array
+              items:
+                type: object
+            identifier:
+              type: array
+              items:
+                type: object
+                properties:
+                  use:
+                    type: string
+                  type:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                  value:
+                    type: string
+            status:
+              type: string
+              example: completed
+            category:
+              type: array
+              items:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                  text:
+                    type: string
+            code:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                text:
+                  type: string
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+                    example: Practitioner/example
+            location:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Location/example
+            bodySite:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                text:
+                  type: string
+            procedureType:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                text:
+                  type: string
+            statusHistory:
+              type: array
+              items:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  period:
+                    type: object
+                    properties:
+                      start:
+                        type: string
+                      end:
+                        type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: Procedure
+                id: example
+                meta:
+                  versionId: '1'
+                  lastUpdated: '2022-01-01T12:00:00Z'
+                text:
+                  status: additional
+                  div: <div xmlns='http://www.w3.org/1999/xhtml'>This is the 
+                    procedure's description.</div>
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/sectionnote
+                    valueString: Section notes about the procedure.
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/notelastmodifiedby
+                    valueString: Dr. Smith
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/notelastmodifieddatetime
+                    valueDateTime: '2022-01-01T17:30:00+00:00'
+                modifierExtension: []
+                identifier:
+                  - use: usual
+                    type:
+                      coding:
+                        - system: 
+                            http://terminology.hl7.org/CodeSystem/v3-ActCode
+                          code: 8867-9
+                    value: '2022-01-01'
+                status: completed
+                category:
+                  - coding:
+                      - system: 
+                          http://terminology.hl7.org/CodeSystem/procedure-category
+                        code: 320000000000010
+                    text: Surgical
+                code:
+                  coding:
+                    - system: http://snomed.info/sct
+                      code: 383123007
+                      display: Laparotomy
+                  text: Laparotomy
+                subject:
+                  reference: Patient/example
+                performer:
+                  - reference: Practitioner/example
+                location:
+                  reference: Location/example
+                bodySite:
+                  coding:
+                    - system: http://terminology.hl7.org/CodeSystem/body-site
+                      code: S-12.4-01.0
+                  text: Abdomen
+                procedureType:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/procedure-type
+                      code: '12345'
+                  text: Surgical
+                statusHistory:
+                  - status: planned
+                    period:
+                      start: '2022-01-01T12:00:00+00:00'
+                      end: '2022-01-01T14:00:00+00:00'
+                  - status: in-progress
+                    period:
+                      start: '2022-01-01T14:00:00+00:00'
+                      end: '2022-01-01T16:00:00+00:00'
+                  - status: completed
+                    period:
+                      start: '2022-01-01T16:00:00+00:00'
+                      end: '2022-01-01T17:00:00+00:00'
+                note:
+                  - text: This is a sample note for the procedure.
+    error400ofgetinProcedureprocedureid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofgetinProcedureprocedureid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinProcedureprocedureid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Procedure not found
+        details:
+          type: string
+          example: No Procedure resource with given id
+      example:
+        statusCode: 404
+        message: Procedure not found
+        details: No Procedure resource with given id
+    error500ofgetinProcedureprocedureid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: An unexpected error occurred
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: An unexpected error occurred
+    response200ofputinProcedureprocedureid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Procedure
+            id:
+              type: string
+              example: example
+            meta:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                  example: '1'
+                lastUpdated:
+                  type: string
+                  example: '2022-01-01T12:00:00Z'
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: additional
+                div:
+                  type: string
+                  example: <div xmlns='http://www.w3.org/1999/xhtml'>This is the
+                    procedure's description.</div>
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+                  valueDateTime:
+                    type: string
+            modifierExtension:
+              type: array
+              items:
+                type: object
+            identifier:
+              type: array
+              items:
+                type: object
+                properties:
+                  use:
+                    type: string
+                  type:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                  value:
+                    type: string
+            status:
+              type: string
+              example: completed
+            category:
+              type: array
+              items:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                  text:
+                    type: string
+            code:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                text:
+                  type: string
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+                    example: Practitioner/example
+            location:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Location/example
+            bodySite:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                text:
+                  type: string
+            procedureType:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                text:
+                  type: string
+            statusHistory:
+              type: array
+              items:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  period:
+                    type: object
+                    properties:
+                      start:
+                        type: string
+                      end:
+                        type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: Procedure
+                id: example
+                meta:
+                  versionId: '1'
+                  lastUpdated: '2022-01-01T12:00:00Z'
+                text:
+                  status: additional
+                  div: <div xmlns='http://www.w3.org/1999/xhtml'>This is the 
+                    procedure's description.</div>
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/sectionnote
+                    valueString: Section notes about the procedure.
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/notelastmodifiedby
+                    valueString: Dr. Smith
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/notelastmodifieddatetime
+                    valueDateTime: '2022-01-01T17:30:00+00:00'
+                modifierExtension: []
+                identifier:
+                  - use: usual
+                    type:
+                      coding:
+                        - system: 
+                            http://terminology.hl7.org/CodeSystem/v3-ActCode
+                          code: 8867-9
+                    value: '2022-01-01'
+                status: completed
+                category:
+                  - coding:
+                      - system: 
+                          http://terminology.hl7.org/CodeSystem/procedure-category
+                        code: 320000000000010
+                    text: Surgical
+                code:
+                  coding:
+                    - system: http://snomed.info/sct
+                      code: 383123007
+                      display: Laparotomy
+                  text: Laparotomy
+                subject:
+                  reference: Patient/example
+                performer:
+                  - reference: Practitioner/example
+                location:
+                  reference: Location/example
+                bodySite:
+                  coding:
+                    - system: http://terminology.hl7.org/CodeSystem/body-site
+                      code: S-12.4-01.0
+                  text: Abdomen
+                procedureType:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/procedure-type
+                      code: '12345'
+                  text: Surgical
+                statusHistory:
+                  - status: planned
+                    period:
+                      start: '2022-01-01T12:00:00+00:00'
+                      end: '2022-01-01T14:00:00+00:00'
+                  - status: in-progress
+                    period:
+                      start: '2022-01-01T14:00:00+00:00'
+                      end: '2022-01-01T16:00:00+00:00'
+                  - status: completed
+                    period:
+                      start: '2022-01-01T16:00:00+00:00'
+                      end: '2022-01-01T17:00:00+00:00'
+                note:
+                  - text: This is a sample note for the procedure.
+    error400ofputinProcedureprocedureid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofputinProcedureprocedureid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofputinProcedureprocedureid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Procedure not found
+        details:
+          type: string
+          example: No Procedure resource with given id
+      example:
+        statusCode: 404
+        message: Procedure not found
+        details: No Procedure resource with given id
+    error500ofputinProcedureprocedureid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: An unexpected error occurred
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: An unexpected error occurred
+    response204ofdeleteinProcedureprocedureid:
+      type: object
+      properties:
+        id:
+          type: string
+          example: example
+        status:
+          type: string
+          example: deleted
+      example:
+        id: example
+        status: deleted
+    error400ofdeleteinProcedureprocedureid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofdeleteinProcedureprocedureid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofdeleteinProcedureprocedureid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Procedure not found
+        details:
+          type: string
+          example: No Procedure resource with given id
+      example:
+        statusCode: 404
+        message: Procedure not found
+        details: No Procedure resource with given id
+    error500ofdeleteinProcedureprocedureid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: An unexpected error occurred
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: An unexpected error occurred
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - Auth: []

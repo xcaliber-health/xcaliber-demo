@@ -1,0 +1,530 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as 
+    Fire) is a standard for exchanging healthcare information electronically. It
+    is designed to be a modern, flexible, and web-based alternative to older, 
+    more cumbersome standards like HL7 v2. FHIR uses a RESTful API specification
+    to define how to interact with Resources - this means it uses standard HTTP 
+    verbs (GET, POST, PUT, DELETE). Resources are the fundamental units of data 
+    in FHIR; they can represent anything from patient demographics to clinical 
+    observations to medications.
+servers:
+  - url: https://xchange-sandbox.xcaliberapis.com
+  - url: https://your.api.server
+tags:
+  - name: PractitionerRole
+    description: FHIR PractitionerRole resource operations
+paths:
+  /api/v2/PractitionerRole:
+    get:
+      tags:
+        - PractitionerRole
+      summary: Get Practitioner Role
+      operationId: getAthenaPractitionerRoles
+      parameters:
+        - name: x-source-id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Source system identifier.
+        - name: x-interaction-mode
+          in: header
+          required: true
+          schema:
+            type: boolean
+          description: Interaction mode flag (true/false).
+        - name: active
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 'Filter: active'
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: 'Filter: date'
+        - name: endpoint
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: endpoint'
+        - name: identifier
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: identifier'
+        - name: location
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: location'
+        - name: organization
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: organization'
+        - name: practitioner
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: practitioner'
+        - name: role
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: role'
+        - name: service
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: service'
+        - name: specialty
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: specialty'
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: Successful response - list of PractitionerRole resources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinPractitionerRole'
+              example:
+                resourceType: PractitionerRole
+                id: '12345'
+                practitioner:
+                  reference: Practitioner/67890
+                location:
+                  - reference: Location/111
+                    display: Main Campus
+                  - reference: Location/222
+                    display: Downtown Clinic
+                organization:
+                  reference: Organization/54321
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinPractitionerRole'
+              example:
+                statusCode: 400
+                message: Invalid parameters
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinPractitionerRole'
+              example:
+                statusCode: 404
+                message: Not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinPractitionerRole'
+              example:
+                statusCode: 500
+                message: Internal server error
+components:
+  schemas:
+    response200ofgetinPractitionerRole:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 7d26da0bea8facc448eb680ac9e1aa7f
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          description: Main response payload
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: PractitionerRole
+                      id:
+                        type: string
+                      active:
+                        type: boolean
+                      period:
+                        type: object
+                        properties:
+                          startDate:
+                            type: string
+                            format: date
+                          endDate:
+                            type: string
+                            format: date
+                            nullable: true
+                      qualification:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            degree:
+                              type: object
+                              properties:
+                                text:
+                                  type: string
+                            awardingOrganization:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                            awardingOrganizationName:
+                              type: object
+                              properties:
+                                text:
+                                  type: string
+                            date:
+                              type: string
+                              format: date
+                      specialty:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            text:
+                              type: string
+                      specialtyCodeableConcept:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                      specialtyReference:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                      practitioner:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      practitionerRoleType:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                      managingOrganization:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                      department:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            text:
+                              type: string
+                      departmentReference:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                      communication:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            use:
+                              type: string
+                            telecom:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  value:
+                                    type: string
+                                  use:
+                                    type: string
+                      address:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            use:
+                              type: string
+                            line:
+                              type: array
+                              items:
+                                type: string
+                            city:
+                              type: string
+                            state:
+                              type: string
+                            postalCode:
+                              type: string
+                            country:
+                              type: string
+                      contained:
+                        type: array
+                        items:
+                          type: object
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+                            valueQuantity:
+                              type: object
+                              properties:
+                                value:
+                                  type: number
+                                unitCode:
+                                  type: string
+          required:
+            - resourceType
+            - type
+            - total
+            - entry
+      required:
+        - context
+        - data
+      example:
+        context:
+          requestId: 7d26da0bea8facc448eb680ac9e1aa7f
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: PractitionerRole
+                id: PR-123456
+                active: true
+                period:
+                  startDate: '2010-01-01'
+                  endDate:
+                qualification:
+                  - degree:
+                      text: MD
+                    awardingOrganization:
+                      reference: Organization/123
+                    awardingOrganizationName:
+                      text: University of Medical Sciences
+                    date: '2005-06-01'
+                specialty:
+                  - text: Internal Medicine
+                specialtyCodeableConcept:
+                  - coding:
+                      - system: http://snomed.info/sct
+                        code: 272015004
+                        display: Internal Medicine
+                specialtyReference:
+                  - reference: Specialty/123
+                practitioner:
+                  reference: Practitioner/456
+                practitionerRoleType:
+                  - coding:
+                      - system: 
+                          http://terminology.hl7.org/CodeSystem/practitioner-role
+                        code: Physician
+                        display: Physician
+                managingOrganization:
+                  - reference: Organization/789
+                department:
+                  - text: Department of Internal Medicine
+                departmentReference:
+                  - reference: Department/345
+                communication:
+                  - use: work
+                    telecom:
+                      - system: phone
+                        value: +1-123-456-7890
+                        use: work
+                      - system: email
+                        value: doctor.john@example.com
+                        use: work
+                address:
+                  - use: work
+                    line:
+                      - 123 Main Street
+                    city: New York
+                    state: NY
+                    postalCode: '10001'
+                    country: US
+                contained:
+                  - resourceType: PractitionerRole
+                    specialty:
+                      - coding:
+                          - system: http://snomed.info/sct
+                            code: 272015004
+                            display: Internal Medicine
+                extension:
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/practitioner-role-extension
+                    valueString: This practitioner is a consultant.
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/practitioner-role-extension-2
+                    valueString: Dr. John Doe
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/practitioner-role-extension-3
+                    valueString: John Doe
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/practitioner-role-extension-4
+                    valueQuantity:
+                      value: 1
+                      unitCode: city
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/practitioner-role-extension-5
+                    valueQuantity:
+                      value: 1
+                      unitCode: state
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/practitioner-role-extension-6
+                    valueQuantity:
+                      value: 10001
+                      unitCode: postalCode
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/practitioner-role-extension-7
+                    valueQuantity:
+                      value: 1
+                      unitCode: country
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/practitioner-role-extension-8
+                    valueString: Dr. John Doe
+    error400ofgetinPractitionerRole:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Invalid parameters
+      example:
+        statusCode: 400
+        message: Invalid parameters
+    error404ofgetinPractitionerRole:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Invalid parameters
+      example:
+        statusCode: 400
+        message: Invalid parameters
+    error500ofgetinPractitionerRole:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+      example:
+        statusCode: 500
+        message: Internal server error
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - Auth: []

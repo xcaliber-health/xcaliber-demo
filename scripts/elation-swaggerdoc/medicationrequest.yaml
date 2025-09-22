@@ -1,0 +1,1460 @@
+openapi: 3.0.3
+info:
+  title: Elation Medication Request API
+  version: 1.0.0
+  description: 'Source Ids:
+
+    - Athena: 083fe714-e36e-4851-b2e7-a7166b439f67
+
+    - Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f
+
+
+    Medication Request Endpoints
+
+
+    "MedicationRequest" resource is used to represent a request or order for a medication, along with instructions for its administration to a patient. It covers a wide range of scenarios, including prescriptions for outpatient use, medication orders for inpatient settings, and even requests for over-the-counter medications or supplements.
+
+
+    Example: Patient with bacterial infection was prescribed amoxicillin 500mg capsules, with the instruction to take 1 capsule by mouth per day for 7 days.
+
+
+    Dependent Sources:
+
+    Patient
+
+    Encounter
+
+    '
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.com
+tags:
+- name: MedicationOrder
+  description: Operations related to medication orders in Elation
+paths:
+  /api/v1/MedicationRequest:
+    get:
+      tags:
+      - MedicationOrder
+      summary: Get a list of Medication Requests
+      operationId: getMedicationRequest
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+      - name: authoredon
+        in: query
+        required: false
+        description: Search parameter 'authoredon' for medicationrequest.
+        schema:
+          type: string
+      - name: category
+        in: query
+        required: false
+        description: Search parameter 'category' for medicationrequest.
+        schema:
+          type: string
+      - name: date
+        in: query
+        required: false
+        description: Search parameter 'date' for medicationrequest.
+        schema:
+          type: string
+          format: date
+      - name: encounter
+        in: query
+        required: false
+        description: Search parameter 'encounter' for medicationrequest.
+        schema:
+          type: integer
+      - name: intended-dispenser
+        in: query
+        required: false
+        description: Search parameter 'intended-dispenser' for medicationrequest.
+        schema:
+          type: string
+      - name: intended-performer
+        in: query
+        required: false
+        description: Search parameter 'intended-performer' for medicationrequest.
+        schema:
+          type: string
+      - name: intended-performertype
+        in: query
+        required: false
+        description: Search parameter 'intended-performertype' for medicationrequest.
+        schema:
+          type: string
+      - name: intent
+        in: query
+        required: false
+        description: Search parameter 'intent' for medicationrequest.
+        schema:
+          type: string
+      - name: priority
+        in: query
+        required: false
+        description: Search parameter 'priority' for medicationrequest.
+        schema:
+          type: string
+      - name: requester
+        in: query
+        required: false
+        description: Search parameter 'requester' for medicationrequest.
+        schema:
+          type: string
+      - name: subject
+        in: query
+        required: false
+        description: Search parameter 'subject' for medicationrequest.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Medication Requests found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Bundle
+                      type:
+                        type: string
+                        example: searchset
+                      total:
+                        type: integer
+                        example: 2
+                      entry:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            resource:
+                              $ref: '#/components/schemas/MedicationRequest'
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: MedicationRequest
+                        id: example-medication-request-1
+                        status: active
+                        intent: order
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/doc-med
+                          valueString: 'true'
+                        - url: http://xcaliber-fhir/structureDefinition/medication-type
+                          valueString: chronic
+                        - url: http://xcaliber-fhir/structureDefinition/order-type
+                          valueString: new
+                        - url: http://xcaliber-fhir/structureDefinition/chart-date
+                          valueString: '2022-01-01'
+                        - url: http://xcaliber-fhir/structureDefinition/document-date
+                          valueString: '2022-01-01'
+                        - url: http://xcaliber-fhir/structureDefinition/practice
+                          valueString: '123'
+                        - url: http://xcaliber-fhir/structureDefinition/permanent
+                          valueString: 'false'
+                        - url: http://xcaliber-fhir/structureDefinition/id
+                          valueString: '77'
+                        - url: http://xcaliber-fhir/structureDefinition/dc-date
+                          valueString: '2022-01-15'
+                        - url: http://xcaliber-fhir/structureDefinition/created
+                          valueString: '2021-12-31T10:00:00Z'
+                        - url: http://xcaliber-fhir/structureDefinition/modified
+                          valueString: '2022-01-01T13:00:00Z'
+                        - url: http://xcaliber-fhir/structureDefinition/deleted
+                          valueString: ''
+                        - url: http://xcaliber-fhir/structureDefinition/instructions
+                          valueString: Take with meals
+                        - url: http://xcaliber-fhir/structureDefinition/chart-feed
+                          valueBoolean: true
+                        - url: http://xcaliber-fhir/structureDefinition/signed-by
+                          valueString: Dr. Alice Example
+                        medicationCodeableConcept:
+                          coding:
+                          - system: http://snomed.info/sct
+                            code: 36218007
+                            display: Metformin
+                          text: Metformin
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/generic-name
+                            valueString: Metformin
+                          - url: http://xcaliber-fhir/structureDefinition/brand-name
+                            valueString: Glucophage
+                          - url: http://xcaliber-fhir/structureDefinition/controlled
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/strength
+                            valueString: 500 mg
+                          - url: http://xcaliber-fhir/structureDefinition/type
+                            valueString: oral-tablet
+                        subject:
+                          reference: Patient/example-patient-1
+                        dosageInstruction:
+                        - sequence: 1
+                          text: Take 500 mg orally twice daily with meals.
+                          timing:
+                            repeat: twice-daily
+                            period:
+                              startTime: '2022-01-01T12:00:00Z'
+                              duration:
+                                value: '14'
+                                unitCode: days
+                        dispenseRequest:
+                          numberOfRepeatsAllowed: 1
+                          validityPeriod:
+                            start: '2022-01-01T12:00:00Z'
+                            end: '2022-01-15T12:00:00Z'
+                          quantity:
+                            value: '28'
+                            unit: tablet
+                            system: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm
+                            extension:
+                            - url: http://xcaliber-fhir/structureDefinition/sample-count
+                              valueString: '2'
+                        medicationRequestStatus: pending
+                        note:
+                        - text: Please ensure patient is not allergic to Metformin.
+                        created: '2021-12-31T10:00:00Z'
+                        author:
+                          reference: Practitioner/example-doctor-1
+                        requester:
+                          reference: Practitioner/example-doctor-1
+                    - resource:
+                        resourceType: MedicationRequest
+                        id: example-medication-request-1
+                        status: active
+                        intent: order
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/doc-med
+                          valueString: 'true'
+                        - url: http://xcaliber-fhir/structureDefinition/medication-type
+                          valueString: chronic
+                        - url: http://xcaliber-fhir/structureDefinition/order-type
+                          valueString: new
+                        - url: http://xcaliber-fhir/structureDefinition/chart-date
+                          valueString: '2022-01-01'
+                        - url: http://xcaliber-fhir/structureDefinition/document-date
+                          valueString: '2022-01-01'
+                        - url: http://xcaliber-fhir/structureDefinition/practice
+                          valueString: '123'
+                        - url: http://xcaliber-fhir/structureDefinition/permanent
+                          valueString: 'false'
+                        - url: http://xcaliber-fhir/structureDefinition/id
+                          valueString: '77'
+                        - url: http://xcaliber-fhir/structureDefinition/dc-date
+                          valueString: '2022-01-15'
+                        - url: http://xcaliber-fhir/structureDefinition/created
+                          valueString: '2021-12-31T10:00:00Z'
+                        - url: http://xcaliber-fhir/structureDefinition/modified
+                          valueString: '2022-01-01T13:00:00Z'
+                        - url: http://xcaliber-fhir/structureDefinition/deleted
+                          valueString: ''
+                        - url: http://xcaliber-fhir/structureDefinition/instructions
+                          valueString: Take with meals
+                        - url: http://xcaliber-fhir/structureDefinition/chart-feed
+                          valueBoolean: true
+                        - url: http://xcaliber-fhir/structureDefinition/signed-by
+                          valueString: Dr. Alice Example
+                        medicationCodeableConcept:
+                          coding:
+                          - system: http://snomed.info/sct
+                            code: 36218007
+                            display: Metformin
+                          text: Metformin
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/generic-name
+                            valueString: Metformin
+                          - url: http://xcaliber-fhir/structureDefinition/brand-name
+                            valueString: Glucophage
+                          - url: http://xcaliber-fhir/structureDefinition/controlled
+                            valueBoolean: false
+                          - url: http://xcaliber-fhir/structureDefinition/strength
+                            valueString: 500 mg
+                          - url: http://xcaliber-fhir/structureDefinition/type
+                            valueString: oral-tablet
+                        subject:
+                          reference: Patient/example-patient-1
+                        dosageInstruction:
+                        - sequence: 1
+                          text: Take 500 mg orally twice daily with meals.
+                          timing:
+                            repeat: twice-daily
+                            period:
+                              startTime: '2022-01-01T12:00:00Z'
+                              duration:
+                                value: '14'
+                                unitCode: days
+                        dispenseRequest:
+                          numberOfRepeatsAllowed: 1
+                          validityPeriod:
+                            start: '2022-01-01T12:00:00Z'
+                            end: '2022-01-15T12:00:00Z'
+                          quantity:
+                            value: '28'
+                            unit: tablet
+                            system: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm
+                            extension:
+                            - url: http://xcaliber-fhir/structureDefinition/sample-count
+                              valueString: '2'
+                        medicationRequestStatus: pending
+                        note:
+                        - text: Please ensure patient is not allergic to Metformin.
+                        created: '2021-12-31T10:00:00Z'
+                        author:
+                          reference: Practitioner/example-doctor-1
+                        requester:
+                          reference: Practitioner/example-doctor-1
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 400
+                message: Bad request
+                status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 401
+                message: Unauthorized
+                status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 500
+                message: Internal server error
+                status: error
+    post:
+      tags:
+      - MedicationOrder
+      summary: Create Medication Request
+      operationId: createMedicationRequest
+      requestBody:
+        description: Medication request to create (context/data format)
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  type: object
+                  properties:
+                    requestId:
+                      type: string
+                      example: 387fab671795f9340a5bcff9e80808e5
+                    source:
+                      type: string
+                      example: ELATION
+                    quorum:
+                      type: boolean
+                      example: true
+                    notify:
+                      type: boolean
+                      example: true
+                data:
+                  $ref: '#/components/schemas/MedicationRequest'
+              example:
+                context:
+                  requestId: 387fab671795f9340a5bcff9e80808e5
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: MedicationRequest
+                  id: example-medication-request-1
+                  status: active
+                  intent: order
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/doc-med
+                    valueString: 'true'
+                  - url: http://xcaliber-fhir/structureDefinition/medication-type
+                    valueString: chronic
+                  - url: http://xcaliber-fhir/structureDefinition/order-type
+                    valueString: new
+                  - url: http://xcaliber-fhir/structureDefinition/chart-date
+                    valueString: '2022-01-01'
+                  - url: http://xcaliber-fhir/structureDefinition/document-date
+                    valueString: '2022-01-01'
+                  - url: http://xcaliber-fhir/structureDefinition/practice
+                    valueString: '123'
+                  - url: http://xcaliber-fhir/structureDefinition/permanent
+                    valueString: 'false'
+                  - url: http://xcaliber-fhir/structureDefinition/id
+                    valueString: '77'
+                  - url: http://xcaliber-fhir/structureDefinition/dc-date
+                    valueString: '2022-01-15'
+                  - url: http://xcaliber-fhir/structureDefinition/created
+                    valueString: '2021-12-31T10:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/modified
+                    valueString: '2022-01-01T13:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/deleted
+                    valueString: ''
+                  - url: http://xcaliber-fhir/structureDefinition/instructions
+                    valueString: Take with meals
+                  - url: http://xcaliber-fhir/structureDefinition/chart-feed
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/signed-by
+                    valueString: Dr. Alice Example
+                  medicationCodeableConcept:
+                    coding:
+                    - system: http://snomed.info/sct
+                      code: 36218007
+                      display: Metformin
+                    text: Metformin
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/generic-name
+                      valueString: Metformin
+                    - url: http://xcaliber-fhir/structureDefinition/brand-name
+                      valueString: Glucophage
+                    - url: http://xcaliber-fhir/structureDefinition/controlled
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/strength
+                      valueString: 500 mg
+                    - url: http://xcaliber-fhir/structureDefinition/type
+                      valueString: oral-tablet
+                  subject:
+                    reference: Patient/example-patient-1
+                  dosageInstruction:
+                  - sequence: 1
+                    text: Take 500 mg orally twice daily with meals.
+                    timing:
+                      repeat: twice-daily
+                      period:
+                        startTime: '2022-01-01T12:00:00Z'
+                        duration:
+                          value: '14'
+                          unitCode: days
+                  dispenseRequest:
+                    numberOfRepeatsAllowed: 1
+                    validityPeriod:
+                      start: '2022-01-01T12:00:00Z'
+                      end: '2022-01-15T12:00:00Z'
+                    quantity:
+                      value: '28'
+                      unit: tablet
+                      system: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/sample-count
+                        valueString: '2'
+                  medicationRequestStatus: pending
+                  note:
+                  - text: Please ensure patient is not allergic to Metformin.
+                  created: '2021-12-31T10:00:00Z'
+                  author:
+                    reference: Practitioner/example-doctor-1
+                  requester:
+                    reference: Practitioner/example-doctor-1
+            example:
+              context:
+                requestId: 387fab671795f9340a5bcff9e80808e5
+                source: ELATION
+                quorum: true
+                notify: true
+              data:
+                resourceType: MedicationRequest
+                id: example-medication-request-1
+                status: active
+                intent: order
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/doc-med
+                  valueString: 'true'
+                - url: http://xcaliber-fhir/structureDefinition/medication-type
+                  valueString: chronic
+                - url: http://xcaliber-fhir/structureDefinition/order-type
+                  valueString: new
+                - url: http://xcaliber-fhir/structureDefinition/chart-date
+                  valueString: '2022-01-01'
+                - url: http://xcaliber-fhir/structureDefinition/document-date
+                  valueString: '2022-01-01'
+                - url: http://xcaliber-fhir/structureDefinition/practice
+                  valueString: '123'
+                - url: http://xcaliber-fhir/structureDefinition/permanent
+                  valueString: 'false'
+                - url: http://xcaliber-fhir/structureDefinition/id
+                  valueString: '77'
+                - url: http://xcaliber-fhir/structureDefinition/dc-date
+                  valueString: '2022-01-15'
+                - url: http://xcaliber-fhir/structureDefinition/created
+                  valueString: '2021-12-31T10:00:00Z'
+                - url: http://xcaliber-fhir/structureDefinition/modified
+                  valueString: '2022-01-01T13:00:00Z'
+                - url: http://xcaliber-fhir/structureDefinition/deleted
+                  valueString: ''
+                - url: http://xcaliber-fhir/structureDefinition/instructions
+                  valueString: Take with meals
+                - url: http://xcaliber-fhir/structureDefinition/chart-feed
+                  valueBoolean: true
+                - url: http://xcaliber-fhir/structureDefinition/signed-by
+                  valueString: Dr. Alice Example
+                medicationCodeableConcept:
+                  coding:
+                  - system: http://snomed.info/sct
+                    code: 36218007
+                    display: Metformin
+                  text: Metformin
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/generic-name
+                    valueString: Metformin
+                  - url: http://xcaliber-fhir/structureDefinition/brand-name
+                    valueString: Glucophage
+                  - url: http://xcaliber-fhir/structureDefinition/controlled
+                    valueBoolean: false
+                  - url: http://xcaliber-fhir/structureDefinition/strength
+                    valueString: 500 mg
+                  - url: http://xcaliber-fhir/structureDefinition/type
+                    valueString: oral-tablet
+                subject:
+                  reference: Patient/example-patient-1
+                dosageInstruction:
+                - sequence: 1
+                  text: Take 500 mg orally twice daily with meals.
+                  timing:
+                    repeat: twice-daily
+                    period:
+                      startTime: '2022-01-01T12:00:00Z'
+                      duration:
+                        value: '14'
+                        unitCode: days
+                dispenseRequest:
+                  numberOfRepeatsAllowed: 1
+                  validityPeriod:
+                    start: '2022-01-01T12:00:00Z'
+                    end: '2022-01-15T12:00:00Z'
+                  quantity:
+                    value: '28'
+                    unit: tablet
+                    system: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/sample-count
+                      valueString: '2'
+                medicationRequestStatus: pending
+                note:
+                - text: Please ensure patient is not allergic to Metformin.
+                created: '2021-12-31T10:00:00Z'
+                author:
+                  reference: Practitioner/example-doctor-1
+                requester:
+                  reference: Practitioner/example-doctor-1
+      responses:
+        '201':
+          description: Medication Request created (IdStatus in context)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: generated-id
+                      status:
+                        type: string
+                        example: success
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    id: generated-id
+                    status: success
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 400
+                message: Bad request
+                status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 401
+                message: Unauthorized
+                status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 500
+                message: Internal server error
+                status: error
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+    parameters: []
+  /api/v1/MedicationRequest/{medication-request-id}:
+    get:
+      tags:
+      - MedicationOrder
+      summary: Get Medication Request by ID
+      operationId: getMedicationRequestById
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: medication-request-id
+        in: path
+        required: true
+        description: Filter by Patient reference/id (FHIR patient).
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Medication Request found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: 387fab671795f9340a5bcff9e80808e5
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                  data:
+                    $ref: '#/components/schemas/MedicationRequest'
+                example:
+                  context:
+                    requestId: 387fab671795f9340a5bcff9e80808e5
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: MedicationRequest
+                    id: example-medication-request-1
+                    status: active
+                    intent: order
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/doc-med
+                      valueString: 'true'
+                    - url: http://xcaliber-fhir/structureDefinition/medication-type
+                      valueString: chronic
+                    - url: http://xcaliber-fhir/structureDefinition/order-type
+                      valueString: new
+                    - url: http://xcaliber-fhir/structureDefinition/chart-date
+                      valueString: '2022-01-01'
+                    - url: http://xcaliber-fhir/structureDefinition/document-date
+                      valueString: '2022-01-01'
+                    - url: http://xcaliber-fhir/structureDefinition/practice
+                      valueString: '123'
+                    - url: http://xcaliber-fhir/structureDefinition/permanent
+                      valueString: 'false'
+                    - url: http://xcaliber-fhir/structureDefinition/id
+                      valueString: '77'
+                    - url: http://xcaliber-fhir/structureDefinition/dc-date
+                      valueString: '2022-01-15'
+                    - url: http://xcaliber-fhir/structureDefinition/created
+                      valueString: '2021-12-31T10:00:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/modified
+                      valueString: '2022-01-01T13:00:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/deleted
+                      valueString: ''
+                    - url: http://xcaliber-fhir/structureDefinition/instructions
+                      valueString: Take with meals
+                    - url: http://xcaliber-fhir/structureDefinition/chart-feed
+                      valueBoolean: true
+                    - url: http://xcaliber-fhir/structureDefinition/signed-by
+                      valueString: Dr. Alice Example
+                    medicationCodeableConcept:
+                      coding:
+                      - system: http://snomed.info/sct
+                        code: 36218007
+                        display: Metformin
+                      text: Metformin
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/generic-name
+                        valueString: Metformin
+                      - url: http://xcaliber-fhir/structureDefinition/brand-name
+                        valueString: Glucophage
+                      - url: http://xcaliber-fhir/structureDefinition/controlled
+                        valueBoolean: false
+                      - url: http://xcaliber-fhir/structureDefinition/strength
+                        valueString: 500 mg
+                      - url: http://xcaliber-fhir/structureDefinition/type
+                        valueString: oral-tablet
+                    subject:
+                      reference: Patient/example-patient-1
+                    dosageInstruction:
+                    - sequence: 1
+                      text: Take 500 mg orally twice daily with meals.
+                      timing:
+                        repeat: twice-daily
+                        period:
+                          startTime: '2022-01-01T12:00:00Z'
+                          duration:
+                            value: '14'
+                            unitCode: days
+                    dispenseRequest:
+                      numberOfRepeatsAllowed: 1
+                      validityPeriod:
+                        start: '2022-01-01T12:00:00Z'
+                        end: '2022-01-15T12:00:00Z'
+                      quantity:
+                        value: '28'
+                        unit: tablet
+                        system: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/sample-count
+                          valueString: '2'
+                    medicationRequestStatus: pending
+                    note:
+                    - text: Please ensure patient is not allergic to Metformin.
+                    created: '2021-12-31T10:00:00Z'
+                    author:
+                      reference: Practitioner/example-doctor-1
+                    requester:
+                      reference: Practitioner/example-doctor-1
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 400
+                message: Bad request
+                status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 401
+                message: Unauthorized
+                status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  status:
+                    type: string
+                    example: error
+              example:
+                statusCode: 500
+                message: Internal server error
+                status: error
+components:
+  schemas:
+    MedicationRequest:
+      type: object
+      description: FHIR MedicationRequest resource (permissive; allows vendor extensions).
+      additionalProperties: true
+      example:
+        resourceType: MedicationRequest
+        id: example-medication-request-1
+        status: active
+        intent: order
+        extension:
+        - url: http://xcaliber-fhir/structureDefinition/doc-med
+          valueString: 'true'
+        - url: http://xcaliber-fhir/structureDefinition/medication-type
+          valueString: chronic
+        - url: http://xcaliber-fhir/structureDefinition/order-type
+          valueString: new
+        - url: http://xcaliber-fhir/structureDefinition/chart-date
+          valueString: '2022-01-01'
+        - url: http://xcaliber-fhir/structureDefinition/document-date
+          valueString: '2022-01-01'
+        - url: http://xcaliber-fhir/structureDefinition/practice
+          valueString: '123'
+        - url: http://xcaliber-fhir/structureDefinition/permanent
+          valueString: 'false'
+        - url: http://xcaliber-fhir/structureDefinition/id
+          valueString: '77'
+        - url: http://xcaliber-fhir/structureDefinition/dc-date
+          valueString: '2022-01-15'
+        - url: http://xcaliber-fhir/structureDefinition/created
+          valueString: '2021-12-31T10:00:00Z'
+        - url: http://xcaliber-fhir/structureDefinition/modified
+          valueString: '2022-01-01T13:00:00Z'
+        - url: http://xcaliber-fhir/structureDefinition/deleted
+          valueString: ''
+        - url: http://xcaliber-fhir/structureDefinition/instructions
+          valueString: Take with meals
+        - url: http://xcaliber-fhir/structureDefinition/chart-feed
+          valueBoolean: true
+        - url: http://xcaliber-fhir/structureDefinition/signed-by
+          valueString: Dr. Alice Example
+        medicationCodeableConcept:
+          coding:
+          - system: http://snomed.info/sct
+            code: 36218007
+            display: Metformin
+          text: Metformin
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/generic-name
+            valueString: Metformin
+          - url: http://xcaliber-fhir/structureDefinition/brand-name
+            valueString: Glucophage
+          - url: http://xcaliber-fhir/structureDefinition/controlled
+            valueBoolean: false
+          - url: http://xcaliber-fhir/structureDefinition/strength
+            valueString: 500 mg
+          - url: http://xcaliber-fhir/structureDefinition/type
+            valueString: oral-tablet
+        subject:
+          reference: Patient/example-patient-1
+        dosageInstruction:
+        - sequence: 1
+          text: Take 500 mg orally twice daily with meals.
+          timing:
+            repeat: twice-daily
+            period:
+              startTime: '2022-01-01T12:00:00Z'
+              duration:
+                value: '14'
+                unitCode: days
+        dispenseRequest:
+          numberOfRepeatsAllowed: 1
+          validityPeriod:
+            start: '2022-01-01T12:00:00Z'
+            end: '2022-01-15T12:00:00Z'
+          quantity:
+            value: '28'
+            unit: tablet
+            system: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/sample-count
+              valueString: '2'
+        medicationRequestStatus: pending
+        note:
+        - text: Please ensure patient is not allergic to Metformin.
+        created: '2021-12-31T10:00:00Z'
+        author:
+          reference: Practitioner/example-doctor-1
+        requester:
+          reference: Practitioner/example-doctor-1
+    MedicationRequestContextSingle:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          $ref: '#/components/schemas/MedicationRequest'
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: MedicationRequest
+          id: example-medication-request-1
+          status: active
+          intent: order
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/doc-med
+            valueString: 'true'
+          - url: http://xcaliber-fhir/structureDefinition/medication-type
+            valueString: chronic
+          - url: http://xcaliber-fhir/structureDefinition/order-type
+            valueString: new
+          - url: http://xcaliber-fhir/structureDefinition/chart-date
+            valueString: '2022-01-01'
+          - url: http://xcaliber-fhir/structureDefinition/document-date
+            valueString: '2022-01-01'
+          - url: http://xcaliber-fhir/structureDefinition/practice
+            valueString: '123'
+          - url: http://xcaliber-fhir/structureDefinition/permanent
+            valueString: 'false'
+          - url: http://xcaliber-fhir/structureDefinition/id
+            valueString: '77'
+          - url: http://xcaliber-fhir/structureDefinition/dc-date
+            valueString: '2022-01-15'
+          - url: http://xcaliber-fhir/structureDefinition/created
+            valueString: '2021-12-31T10:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/modified
+            valueString: '2022-01-01T13:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/deleted
+            valueString: ''
+          - url: http://xcaliber-fhir/structureDefinition/instructions
+            valueString: Take with meals
+          - url: http://xcaliber-fhir/structureDefinition/chart-feed
+            valueBoolean: true
+          - url: http://xcaliber-fhir/structureDefinition/signed-by
+            valueString: Dr. Alice Example
+          medicationCodeableConcept:
+            coding:
+            - system: http://snomed.info/sct
+              code: 36218007
+              display: Metformin
+            text: Metformin
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/generic-name
+              valueString: Metformin
+            - url: http://xcaliber-fhir/structureDefinition/brand-name
+              valueString: Glucophage
+            - url: http://xcaliber-fhir/structureDefinition/controlled
+              valueBoolean: false
+            - url: http://xcaliber-fhir/structureDefinition/strength
+              valueString: 500 mg
+            - url: http://xcaliber-fhir/structureDefinition/type
+              valueString: oral-tablet
+          subject:
+            reference: Patient/example-patient-1
+          dosageInstruction:
+          - sequence: 1
+            text: Take 500 mg orally twice daily with meals.
+            timing:
+              repeat: twice-daily
+              period:
+                startTime: '2022-01-01T12:00:00Z'
+                duration:
+                  value: '14'
+                  unitCode: days
+          dispenseRequest:
+            numberOfRepeatsAllowed: 1
+            validityPeriod:
+              start: '2022-01-01T12:00:00Z'
+              end: '2022-01-15T12:00:00Z'
+            quantity:
+              value: '28'
+              unit: tablet
+              system: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/sample-count
+                valueString: '2'
+          medicationRequestStatus: pending
+          note:
+          - text: Please ensure patient is not allergic to Metformin.
+          created: '2021-12-31T10:00:00Z'
+          author:
+            reference: Practitioner/example-doctor-1
+          requester:
+            reference: Practitioner/example-doctor-1
+    MedicationRequestContextBundle:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 2
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    $ref: '#/components/schemas/MedicationRequest'
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 2
+          entry:
+          - resource:
+              resourceType: MedicationRequest
+              id: example-medication-request-1
+              status: active
+              intent: order
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/doc-med
+                valueString: 'true'
+              - url: http://xcaliber-fhir/structureDefinition/medication-type
+                valueString: chronic
+              - url: http://xcaliber-fhir/structureDefinition/order-type
+                valueString: new
+              - url: http://xcaliber-fhir/structureDefinition/chart-date
+                valueString: '2022-01-01'
+              - url: http://xcaliber-fhir/structureDefinition/document-date
+                valueString: '2022-01-01'
+              - url: http://xcaliber-fhir/structureDefinition/practice
+                valueString: '123'
+              - url: http://xcaliber-fhir/structureDefinition/permanent
+                valueString: 'false'
+              - url: http://xcaliber-fhir/structureDefinition/id
+                valueString: '77'
+              - url: http://xcaliber-fhir/structureDefinition/dc-date
+                valueString: '2022-01-15'
+              - url: http://xcaliber-fhir/structureDefinition/created
+                valueString: '2021-12-31T10:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/modified
+                valueString: '2022-01-01T13:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/deleted
+                valueString: ''
+              - url: http://xcaliber-fhir/structureDefinition/instructions
+                valueString: Take with meals
+              - url: http://xcaliber-fhir/structureDefinition/chart-feed
+                valueBoolean: true
+              - url: http://xcaliber-fhir/structureDefinition/signed-by
+                valueString: Dr. Alice Example
+              medicationCodeableConcept:
+                coding:
+                - system: http://snomed.info/sct
+                  code: 36218007
+                  display: Metformin
+                text: Metformin
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/generic-name
+                  valueString: Metformin
+                - url: http://xcaliber-fhir/structureDefinition/brand-name
+                  valueString: Glucophage
+                - url: http://xcaliber-fhir/structureDefinition/controlled
+                  valueBoolean: false
+                - url: http://xcaliber-fhir/structureDefinition/strength
+                  valueString: 500 mg
+                - url: http://xcaliber-fhir/structureDefinition/type
+                  valueString: oral-tablet
+              subject:
+                reference: Patient/example-patient-1
+              dosageInstruction:
+              - sequence: 1
+                text: Take 500 mg orally twice daily with meals.
+                timing:
+                  repeat: twice-daily
+                  period:
+                    startTime: '2022-01-01T12:00:00Z'
+                    duration:
+                      value: '14'
+                      unitCode: days
+              dispenseRequest:
+                numberOfRepeatsAllowed: 1
+                validityPeriod:
+                  start: '2022-01-01T12:00:00Z'
+                  end: '2022-01-15T12:00:00Z'
+                quantity:
+                  value: '28'
+                  unit: tablet
+                  system: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/sample-count
+                    valueString: '2'
+              medicationRequestStatus: pending
+              note:
+              - text: Please ensure patient is not allergic to Metformin.
+              created: '2021-12-31T10:00:00Z'
+              author:
+                reference: Practitioner/example-doctor-1
+              requester:
+                reference: Practitioner/example-doctor-1
+          - resource:
+              resourceType: MedicationRequest
+              id: example-medication-request-1
+              status: active
+              intent: order
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/doc-med
+                valueString: 'true'
+              - url: http://xcaliber-fhir/structureDefinition/medication-type
+                valueString: chronic
+              - url: http://xcaliber-fhir/structureDefinition/order-type
+                valueString: new
+              - url: http://xcaliber-fhir/structureDefinition/chart-date
+                valueString: '2022-01-01'
+              - url: http://xcaliber-fhir/structureDefinition/document-date
+                valueString: '2022-01-01'
+              - url: http://xcaliber-fhir/structureDefinition/practice
+                valueString: '123'
+              - url: http://xcaliber-fhir/structureDefinition/permanent
+                valueString: 'false'
+              - url: http://xcaliber-fhir/structureDefinition/id
+                valueString: '77'
+              - url: http://xcaliber-fhir/structureDefinition/dc-date
+                valueString: '2022-01-15'
+              - url: http://xcaliber-fhir/structureDefinition/created
+                valueString: '2021-12-31T10:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/modified
+                valueString: '2022-01-01T13:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/deleted
+                valueString: ''
+              - url: http://xcaliber-fhir/structureDefinition/instructions
+                valueString: Take with meals
+              - url: http://xcaliber-fhir/structureDefinition/chart-feed
+                valueBoolean: true
+              - url: http://xcaliber-fhir/structureDefinition/signed-by
+                valueString: Dr. Alice Example
+              medicationCodeableConcept:
+                coding:
+                - system: http://snomed.info/sct
+                  code: 36218007
+                  display: Metformin
+                text: Metformin
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/generic-name
+                  valueString: Metformin
+                - url: http://xcaliber-fhir/structureDefinition/brand-name
+                  valueString: Glucophage
+                - url: http://xcaliber-fhir/structureDefinition/controlled
+                  valueBoolean: false
+                - url: http://xcaliber-fhir/structureDefinition/strength
+                  valueString: 500 mg
+                - url: http://xcaliber-fhir/structureDefinition/type
+                  valueString: oral-tablet
+              subject:
+                reference: Patient/example-patient-1
+              dosageInstruction:
+              - sequence: 1
+                text: Take 500 mg orally twice daily with meals.
+                timing:
+                  repeat: twice-daily
+                  period:
+                    startTime: '2022-01-01T12:00:00Z'
+                    duration:
+                      value: '14'
+                      unitCode: days
+              dispenseRequest:
+                numberOfRepeatsAllowed: 1
+                validityPeriod:
+                  start: '2022-01-01T12:00:00Z'
+                  end: '2022-01-15T12:00:00Z'
+                quantity:
+                  value: '28'
+                  unit: tablet
+                  system: http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/sample-count
+                    valueString: '2'
+              medicationRequestStatus: pending
+              note:
+              - text: Please ensure patient is not allergic to Metformin.
+              created: '2021-12-31T10:00:00Z'
+              author:
+                reference: Practitioner/example-doctor-1
+              requester:
+                reference: Practitioner/example-doctor-1
+    IdStatusContext:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: 387fab671795f9340a5bcff9e80808e5
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              example: generated-id
+            status:
+              type: string
+              example: success
+      example:
+        context:
+          requestId: 387fab671795f9340a5bcff9e80808e5
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          id: generated-id
+          status: success
+  responses:
+    Error400:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 400
+              message:
+                type: string
+                example: Bad request
+              status:
+                type: string
+                example: error
+          example:
+            statusCode: 400
+            message: Bad request
+            status: error
+    Error401:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 401
+              message:
+                type: string
+                example: Unauthorized
+              status:
+                type: string
+                example: error
+          example:
+            statusCode: 401
+            message: Unauthorized
+            status: error
+    Error500:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal server error
+              status:
+                type: string
+                example: error
+          example:
+            statusCode: 500
+            message: Internal server error
+            status: error
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    xSourceId:
+      name: x-source-id
+      in: header
+      required: true
+      schema:
+        type: string
+      description: "Source identifier header required for routing.\nAthena: 083fe714-e36e-4851-b2e7-a7166b439f67\n Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f — \U0001F534 On demand filter"
+externalDocs:
+  description: Run in Postman
+  url: https://app.postman.com/import/openapi
+security:
+- bearerAuth: []

@@ -1,0 +1,3597 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: Immunization
+  description: FHIR Immunization resource operations in Athena.
+paths:
+  /api/v2/Immunization:
+    get:
+      summary: List Immunizations
+      operationId: getAthenaImmunizationsV2
+      tags:
+      - Immunization
+      parameters:
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: encounter
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: encounter'
+      - name: location
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: location'
+      - name: lot-number
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: lot-number'
+      - name: manufacturer
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: manufacturer'
+      - name: performer
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: performer'
+      - name: reaction
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: reaction'
+      - name: reaction-date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: reaction-date'
+      - name: reason-code
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: reason-code'
+      - name: reason-reference
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: reason-reference'
+      - name: series
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: series'
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: status'
+      - name: status-reason
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: status-reason'
+      - name: target-disease
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: target-disease'
+      - name: vaccine-code
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: vaccine-code'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '400':
+          description: Invalid request (missing required parameters)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinImmunization'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+              schema:
+                $ref: '#/components/schemas/error401ofgetinImmunization'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              example:
+                statusCode: 404
+                message: Immunization not found
+                details: No Immunization resource with given id
+              schema:
+                $ref: '#/components/schemas/error404ofgetinImmunization'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinImmunization'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Immunization
+                    extension:
+                    - url: TINY_URLS.IMMUNIZATION.VISGIVENDATE
+                      valueDateTime: '2023-10-15T14:30:00Z'
+                    - url: TINY_URLS.IMMUNIZATION.DEPARTMENTID
+                      valueString: DEPT123
+                    - url: TINY_URLS.IMMUNIZATION.VACCINESECTIONNOTE
+                      valueString: Patient tolerated vaccine well
+                    - url: TINY_URLS.IMMUNIZATION.CLINICALORDERCLASSID
+                      valueInteger: 456
+                    - url: TINY_URLS.IMMUNIZATION.CLINICALORDERCLASSNAME
+                      valueString: Routine Immunization
+                    - url: TINY_URLS.IMMUNIZATION.ORDEREDDATE
+                      valueDateTime: '2023-10-15T10:30:00Z'
+                    - url: TINY_URLS.IMMUNIZATION.PARTIALLYADMINISTERED
+                      valueString: 'true'
+                    - url: TINY_URLS.IMMUNIZATION.PRESCRIBEDDATE
+                      valueDateTime: '2023-10-14'
+                    - url: TINY_URLS.IMMUNIZATION.VISGIVENDATE
+                      valueDateTime: '2023-10-15T10:30:00Z'
+                    - url: TINY_URLS.IMMUNIZATION.APPROVEDDATE
+                      valueDateTime: '2024-01-15T10:30:00Z'
+                    - url: TINY_URLS.IMMUNIZATION.SUBMITDATE
+                      valueDateTime: '2024-01-14T14:20:00Z'
+                    - url: TINY_URLS.IMMUNIZATION.DELETED_DATE
+                      valueDateTime: '2023-12-15T10:30:00Z'
+                    - url: TINY_URLS.IMMUNIZATION.NDC
+                      valueString: 49281-0400-20
+                    statusReason:
+                      coding:
+                      - code: CONTRA123
+                        system: http://example.com/contraindication
+                        display: Medical contraindication
+                      - code: DECLINE456
+                        system: http://example.com/declined
+                        display: Patient declined
+                      - system: http://xcaliber-fhir/structureDefinition/refused-reason
+                        display: Patient declined
+                      extension:
+                      - url: TINY_URLS.IMMUNIZATION.REFUSEDDATE
+                        valueDateTime: '2023-10-13'
+                      - url: TINY_URLS.IMMUNIZATION.REFUSEDNOTE
+                        valueString: Patient declined vaccination
+                    performer:
+                    - actor:
+                        display: Dr. Smith
+                        type: Practitioner
+                      function:
+                        coding:
+                        - code: OP
+                    - actor:
+                        display: Dr. Smith
+                      function:
+                        extension:
+                        - url: TINY_URLS.IMMUNIZATION.APPROVEDBY
+                          valueString: APPROVEDBY
+                    - actor:
+                        display: Dr. Smith
+                      function:
+                        extension:
+                        - url: TINY_URLS.IMMUNIZATION.ENTEREDBY
+                          valueString: ENTEREDBY
+                    - actor:
+                        display: Dr. Johnson
+                        type: Practitioner
+                      function:
+                        coding:
+                        - code: OP
+                    - actor:
+                        reference: Practitioner/12345
+                    id: '12345'
+                    vaccineCode:
+                      coding:
+                      - system: http://hl7.org/fhir/sid/cvx
+                        display: COVID-19 vaccine
+                      - system: http://hl7.org/fhir/sid/cvx
+                        display: Influenza
+                        code: '141'
+                      - system: http://hl7.org/fhir/sid/ndc
+                        code: 49281-0400-20
+                      text: COVID-19 vaccine
+                    patient:
+                      reference: Patient/67890
+                    manufacturer:
+                      identifier:
+                        value: SKB
+                    education: []
+                    occurrenceDateTime: '2023-10-15T10:30:00Z'
+                    route:
+                      coding:
+                      - display: Intramuscular
+                      extension:
+                      - url: TINY_URLS.IMMUNIZATION.ADMINISTERROUTEDESCRIPTION
+                        valueString: Left deltoid muscle
+                    note:
+                    - text: Patient tolerated well
+                      extension:
+                      - url: TINY_URLS.IMMUNIZATION.ADMINISTERNOTE
+                        valueString: ADMINISTERNOTE
+                    site:
+                      coding:
+                      - display: Left arm
+                    doseQuantity:
+                      value: 0.5
+                      unit: mL
+                    status: completed
+                    primarySource: true
+    post:
+      summary: Create Immunization
+      operationId: createImmunizationInAthena
+      tags:
+      - Immunization
+      parameters:
+      - *id001
+      - *id002
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '400':
+          description: Invalid request (missing required fields)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinImmunization'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+              schema:
+                $ref: '#/components/schemas/error401ofpostinImmunization'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              example:
+                statusCode: 404
+                message: Immunization not found
+                details: No Immunization resource with given id
+              schema:
+                $ref: '#/components/schemas/error404ofpostinImmunization'
+        '500':
+          description: Server error from Athena
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinImmunization'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: Immunization
+                  vaccineCode:
+                    coding:
+                    - system: http://hl7.org/fhir/sid/cvx
+                      code: '141'
+                    - system: http://hl7.org/fhir/sid/ndc
+                      code: 49281-0400-20
+                  occurrenceDateTime: '2023-10-15T10:30:00Z'
+                  route:
+                    extension:
+                    - url: TINY_URLS.IMMUNIZATION.ADMINISTERROUTEDESCRIPTION
+                      valueString: Left deltoid muscle
+                  note:
+                  - text: Patient tolerated well
+                  extension:
+                  - url: TINY_URLS.IMMUNIZATION.APPROVEDDATE
+                    valueDateTime: '2024-01-15T10:30:00Z'
+                  - url: TINY_URLS.IMMUNIZATION.SUBMITDATE
+                    valueDateTime: '2024-01-14T14:20:00Z'
+                  - url: TINY_URLS.IMMUNIZATION.DELETED_DATE
+                    valueDateTime: '2023-12-15T10:30:00Z'
+                  - url: TINY_URLS.IMMUNIZATION.ORDEREDDATE
+                    valueString: '2023-10-15T10:30:00Z'
+                  - url: TINY_URLS.IMMUNIZATION.PRESCRIBEDDATE
+                    valueString: '2023-10-14'
+                  - url: TINY_URLS.IMMUNIZATION.VISGIVENDATE
+                    valueString: '2023-10-15T14:30:00Z'
+                  statusReason:
+                    extension:
+                    - url: TINY_URLS.IMMUNIZATION.REFUSEDDATE
+                      valueString: '2023-10-13'
+                    - url: TINY_URLS.IMMUNIZATION.REFUSEDNOTE
+                      valueString: Patient declined vaccination
+                  performer:
+                  - function:
+                      extension:
+                      - url: TINY_URLS.IMMUNIZATION.ENTEREDBY
+                        valueString: ENTEREDBY
+  /api/v2/Immunization/{immunization-id}:
+    get:
+      summary: Get Immunization by ID
+      operationId: getAthenaImmunizationV2
+      tags:
+      - Immunization
+      parameters:
+      - name: immunization-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier for the immunization record to retrieve.
+          Required for fetching a specific immunization by ID."'
+      - *id001
+      - *id002
+      
+      responses:
+        '400':
+          description: Invalid request (missing required parameters)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinImmunizationimmunizationid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+              schema:
+                $ref: '#/components/schemas/error401ofgetinImmunizationimmunizationid'
+        '404':
+          description: Department ID for patient not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinImmunizationimmunizationid'
+        '500':
+          description: Server error or Immunization not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinImmunizationimmunizationid'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Immunization
+                    extension:
+                    - url: TINY_URLS.IMMUNIZATION.VISGIVENDATE
+                      valueDateTime: '2023-10-15T14:30:00Z'
+                    - url: TINY_URLS.IMMUNIZATION.DEPARTMENTID
+                      valueString: DEPT123
+                    - url: TINY_URLS.IMMUNIZATION.VACCINESECTIONNOTE
+                      valueString: Patient tolerated vaccine well
+                    - url: TINY_URLS.IMMUNIZATION.CLINICALORDERCLASSID
+                      valueInteger: 456
+                    - url: TINY_URLS.IMMUNIZATION.CLINICALORDERCLASSNAME
+                      valueString: Routine Immunization
+                    - url: TINY_URLS.IMMUNIZATION.ORDEREDDATE
+                      valueDateTime: '2023-10-15T10:30:00Z'
+                    - url: TINY_URLS.IMMUNIZATION.PARTIALLYADMINISTERED
+                      valueString: 'true'
+                    - url: TINY_URLS.IMMUNIZATION.PRESCRIBEDDATE
+                      valueDateTime: '2023-10-14'
+                    - url: TINY_URLS.IMMUNIZATION.VISGIVENDATE
+                      valueDateTime: '2023-10-15T10:30:00Z'
+                    - url: TINY_URLS.IMMUNIZATION.APPROVEDDATE
+                      valueDateTime: '2024-01-15T10:30:00Z'
+                    - url: TINY_URLS.IMMUNIZATION.SUBMITDATE
+                      valueDateTime: '2024-01-14T14:20:00Z'
+                    - url: TINY_URLS.IMMUNIZATION.DELETED_DATE
+                      valueDateTime: '2023-12-15T10:30:00Z'
+                    - url: TINY_URLS.IMMUNIZATION.NDC
+                      valueString: 49281-0400-20
+                    statusReason:
+                      coding:
+                      - code: CONTRA123
+                        system: http://example.com/contraindication
+                        display: Medical contraindication
+                      - code: DECLINE456
+                        system: http://example.com/declined
+                        display: Patient declined
+                      - system: http://xcaliber-fhir/structureDefinition/refused-reason
+                        display: Patient declined
+                      extension:
+                      - url: TINY_URLS.IMMUNIZATION.REFUSEDDATE
+                        valueDateTime: '2023-10-13'
+                      - url: TINY_URLS.IMMUNIZATION.REFUSEDNOTE
+                        valueString: Patient declined vaccination
+                    performer:
+                    - actor:
+                        display: Dr. Smith
+                        type: Practitioner
+                      function:
+                        coding:
+                        - code: OP
+                    - actor:
+                        display: Dr. Smith
+                      function:
+                        extension:
+                        - url: TINY_URLS.IMMUNIZATION.APPROVEDBY
+                          valueString: APPROVEDBY
+                    - actor:
+                        display: Dr. Smith
+                      function:
+                        extension:
+                        - url: TINY_URLS.IMMUNIZATION.ENTEREDBY
+                          valueString: ENTEREDBY
+                    - actor:
+                        display: Dr. Johnson
+                        type: Practitioner
+                      function:
+                        coding:
+                        - code: OP
+                    - actor:
+                        reference: Practitioner/12345
+                    id: '12345'
+                    vaccineCode:
+                      coding:
+                      - system: http://hl7.org/fhir/sid/cvx
+                        display: COVID-19 vaccine
+                      - system: http://hl7.org/fhir/sid/cvx
+                        display: Influenza
+                        code: '141'
+                      - system: http://hl7.org/fhir/sid/ndc
+                        code: 49281-0400-20
+                      text: COVID-19 vaccine
+                    patient:
+                      reference: Patient/67890
+                    manufacturer:
+                      identifier:
+                        value: SKB
+                    education: []
+                    occurrenceDateTime: '2023-10-15T10:30:00Z'
+                    route:
+                      coding:
+                      - display: Intramuscular
+                      extension:
+                      - url: TINY_URLS.IMMUNIZATION.ADMINISTERROUTEDESCRIPTION
+                        valueString: Left deltoid muscle
+                    note:
+                    - text: Patient tolerated well
+                      extension:
+                      - url: TINY_URLS.IMMUNIZATION.ADMINISTERNOTE
+                        valueString: ADMINISTERNOTE
+                    site:
+                      coding:
+                      - display: Left arm
+                    doseQuantity:
+                      value: 0.5
+                      unit: mL
+                    status: completed
+                    primarySource: true
+    put:
+      summary: Update Immunization
+      operationId: updateImmunizationInAthena
+      tags:
+      - Immunization
+      parameters:
+      - name: immunization-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: '"Identifier of the immunization record to update. Required for
+          updating an existing immunization."'
+      - *id001
+      - *id002
+      responses:
+        '400':
+          description: Invalid request (missing required fields)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofputinImmunizationimmunizationid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+              schema:
+                $ref: '#/components/schemas/error401ofputinImmunizationimmunizationid'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              example:
+                statusCode: 404
+                message: Immunization not found
+                details: No Immunization resource with given id
+              schema:
+                $ref: '#/components/schemas/error404ofputinImmunizationimmunizationid'
+        '500':
+          description: Server error from Athena
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofputinImmunizationimmunizationid'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: Immunization
+                  id: '12345'
+                  extension:
+                  - url: approvedby
+                    valueString: APPROVEDBY
+                  - url: approveddate
+                    valueString: '2024-01-15T10:30:00Z'
+                  - url: submitdate
+                    valueString: '2024-01-14T14:20:00Z'
+                  - url: deleted-date
+                    valueString: '2023-12-15T10:30:00Z'
+                  - url: enteredby
+                    valueString: ENTEREDBY
+                  - url: mvx
+                    valueString: SKB
+                  - url: TINY_URLS.IMMUNIZATION.ENTEREDBY
+                    valueString: ENTEREDBY
+                  - url: TINY_URLS.IMMUNIZATION.ORDEREDDATE
+                    valueDateTime: '2023-10-15T10:30:00Z'
+                  - url: TINY_URLS.IMMUNIZATION.PRESCRIBEDDATE
+                    valueDateTime: '2023-10-14'
+                  - url: TINY_URLS.IMMUNIZATION.VISGIVENDATE
+                    valueDateTime: '2023-10-15T14:30:00Z'
+                  vaccineCode:
+                    coding:
+                    - system: http://hl7.org/fhir/sid/cvx
+                      code: '141'
+                    - system: http://hl7.org/fhir/sid/ndc
+                      code: 49281-0400-20
+                  occurrenceDateTime: '2023-10-15T10:30:00Z'
+                  route:
+                    extension:
+                    - url: patient-facing-call
+                      valueBoolean: true
+                    - url: third-party-user-name
+                      valueString: user123
+                    - url: administerroutedescription
+                      valueString: Left deltoid muscle
+                  note:
+                  - text: Patient tolerated well
+                  statusReason:
+                    extension:
+                    - url: TINY_URLS.IMMUNIZATION.REFUSEDDATE
+                      valueDateTime: '2023-10-13'
+                    - url: TINY_URLS.IMMUNIZATION.REFUSEDNOTE
+                      valueString: Patient declined vaccination
+    delete:
+      summary: Delete Immunization
+      operationId: deleteImmunizationInAthena
+      tags:
+      - Immunization
+      parameters:
+      - name: immunization-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier of the immunization record to delete. Required
+          for deletion."
+
+
+          This description is concise, clear, and helpful for API users, conveying
+          the essential information about the parameter''s purpose and requirement.'
+      - *id001
+      - *id002
+      responses:
+        '204':
+          description: Immunization deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response204ofdeleteinImmunizationimmunizationid'
+        '400':
+          description: Invalid request (missing required parameters)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofdeleteinImmunizationimmunizationid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinImmunizationimmunizationid'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              example:
+                statusCode: 404
+                message: Immunization not found
+                details: No Immunization resource with given id
+              schema:
+                $ref: '#/components/schemas/error404ofdeleteinImmunizationimmunizationid'
+        '500':
+          description: Server error from Athena
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinImmunizationimmunizationid'
+components:
+  schemas:
+    ExtractedSchema490:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          description: '"Context for creating an immunization, including relevant
+            details such as patient information and vaccination details."
+
+
+            (or, if you''d like a 2-line version)
+
+
+            "Context for creating an immunization. Includes patient information, vaccination
+            details, and other relevant data."'
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+            id:
+              type: string
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                versionId:
+                  type: string
+            text:
+              type: object
+              properties:
+                div:
+                  type: string
+            status:
+              type: string
+            statusReason:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      display:
+                        type: string
+                      code:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueDateTime:
+                        type: string
+                      valueString:
+                        type: string
+                text:
+                  type: string
+            vaccineCode:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                text:
+                  type: string
+            vaccineDate:
+              type: string
+            site:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  actor:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                      display:
+                        type: string
+                      type:
+                        type: string
+                  function:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+            route:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      display:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueString:
+                        type: string
+            doseQuantity:
+              type: object
+              properties:
+                value:
+                  type: number
+                unit:
+                  type: string
+            education:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  presentationDate:
+                    type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  author:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueDateTime:
+                    type: string
+                  valueString:
+                    type: string
+                  valueInteger:
+                    type: integer
+          example:
+            resourceType: Immunization
+            id: immunization-123
+            meta:
+              profile:
+              - http://hl7.org/fhir/Profile/immunization-vaccination
+              - http://hl7.org/fhir/StructureDefinition/immunization
+              versionId: 4.0.1
+            text:
+              div: <div xmlns="http://www.w3.org/1999/xhtml">John Doe's immunization
+                record</div>
+            status: completed
+            statusReason:
+              coding:
+              - system: http://xcaliber-fhir/structureDefinition/refused-reason
+                display: Patient refused due to allergy
+              - system: http://custom.codeset/declinedreason
+                code: DECLINED
+                display: Patient declined
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/refuseddate
+                valueDateTime: '2022-01-01T09:30:00+00:00'
+              - url: http://xcaliber-fhir/structureDefinition/refusednote
+                valueString: Patient stated fear of needles
+              text: Vaccine administered
+            vaccineCode:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+                code: INN-272
+                display: Inactivated Poliovirus Vaccine
+              - system: http://hl7.org/fhir/sid/cvx
+                code: '10'
+                display: Poliovirus, inactivated
+              - system: http://hl7.org/fhir/sid/ndc
+                code: 49281-860-10
+              text: Poliovirus Vaccine
+            vaccineDate: '2022-01-01T12:30:00+00:00'
+            site:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/immunization-site
+                code: deltoid
+                display: Deltoid
+            performer:
+            - actor:
+                reference: Practitioner/1234567890
+                display: Dr. Jane Smith
+              function:
+                coding:
+                - code: OP
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/approvedby
+                  valueString: APPROVEDBY
+                - url: http://xcaliber-fhir/structureDefinition/enteredby
+                  valueString: ENTEREDBY
+            - actor:
+                reference: Practitioner/2345678901
+                display: Dr. Mark Jones
+                type: Practitioner
+              function:
+                coding:
+                - code: OP
+            route:
+              coding:
+              - display: Intramuscular
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/administerroutedescription
+                valueString: IM injection into deltoid muscle
+            doseQuantity:
+              value: 0.5
+              unit: ml
+            education:
+            - id: '12345'
+              presentationDate: '2022-01-01'
+            note:
+            - text: Patient was informed about potential side effects and benefits
+                of the vaccine.
+              author:
+                reference: Practitioner/1234567890
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/administernote
+                valueString: ADMINISTERNOTE
+            - text: Vaccine administered as part of routine childhood immunization
+                schedule.
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/approveddate
+              valueDateTime: '2022-01-01T08:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/submitdate
+              valueDateTime: '2022-01-02T10:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/deleted-date
+              valueDateTime: '2023-01-01T08:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/ndc
+              valueString: 49281-860-10
+            - url: http://xcaliber-fhir/structureDefinition/ordereddate
+              valueDateTime: '2022-01-02T12:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/partiallyadministered
+              valueString: false
+            - url: http://xcaliber-fhir/structureDefinition/prescribeddate
+              valueDateTime: '2022-01-01T11:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/visgivendate
+              valueDateTime: '2022-01-03T14:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/vaccinesectionnote
+              valueString: Section note sample
+            - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassid
+              valueInteger: 1001
+            - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassname
+              valueString: Routine Immunization
+          description: '"Immunization details to be created. Required properties include
+            patient, vaccine, and administration date."'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Immunization
+          id: immunization-123
+          meta:
+            profile:
+            - http://hl7.org/fhir/Profile/immunization-vaccination
+            - http://hl7.org/fhir/StructureDefinition/immunization
+            versionId: 4.0.1
+          text:
+            div: <div xmlns="http://www.w3.org/1999/xhtml">John Doe's immunization
+              record</div>
+          status: completed
+          statusReason:
+            coding:
+            - system: http://xcaliber-fhir/structureDefinition/refused-reason
+              display: Patient refused due to allergy
+            - system: http://custom.codeset/declinedreason
+              code: DECLINED
+              display: Patient declined
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/refuseddate
+              valueDateTime: '2022-01-01T09:30:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/refusednote
+              valueString: Patient stated fear of needles
+            text: Vaccine administered
+          vaccineCode:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+              code: INN-272
+              display: Inactivated Poliovirus Vaccine
+            - system: http://hl7.org/fhir/sid/cvx
+              code: '10'
+              display: Poliovirus, inactivated
+            - system: http://hl7.org/fhir/sid/ndc
+              code: 49281-860-10
+            text: Poliovirus Vaccine
+          vaccineDate: '2022-01-01T12:30:00+00:00'
+          site:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/immunization-site
+              code: deltoid
+              display: Deltoid
+          performer:
+          - actor:
+              reference: Practitioner/1234567890
+              display: Dr. Jane Smith
+            function:
+              coding:
+              - code: OP
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/approvedby
+                valueString: APPROVEDBY
+              - url: http://xcaliber-fhir/structureDefinition/enteredby
+                valueString: ENTEREDBY
+          - actor:
+              reference: Practitioner/2345678901
+              display: Dr. Mark Jones
+              type: Practitioner
+            function:
+              coding:
+              - code: OP
+          route:
+            coding:
+            - display: Intramuscular
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/administerroutedescription
+              valueString: IM injection into deltoid muscle
+          doseQuantity:
+            value: 0.5
+            unit: ml
+          education:
+          - id: '12345'
+            presentationDate: '2022-01-01'
+          note:
+          - text: Patient was informed about potential side effects and benefits of
+              the vaccine.
+            author:
+              reference: Practitioner/1234567890
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/administernote
+              valueString: ADMINISTERNOTE
+          - text: Vaccine administered as part of routine childhood immunization schedule.
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/approveddate
+            valueDateTime: '2022-01-01T08:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/submitdate
+            valueDateTime: '2022-01-02T10:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/deleted-date
+            valueDateTime: '2023-01-01T08:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/ndc
+            valueString: 49281-860-10
+          - url: http://xcaliber-fhir/structureDefinition/ordereddate
+            valueDateTime: '2022-01-02T12:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/partiallyadministered
+            valueString: false
+          - url: http://xcaliber-fhir/structureDefinition/prescribeddate
+            valueDateTime: '2022-01-01T11:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/visgivendate
+            valueDateTime: '2022-01-03T14:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/vaccinesectionnote
+            valueString: Section note sample
+          - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassid
+            valueInteger: 1001
+          - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassname
+            valueString: Routine Immunization
+    ExtractedSchema507:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          description: '"Additional metadata for the immunization update, such as
+            user information or request ID. Format is a JSON object."'
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+            id:
+              type: string
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                versionId:
+                  type: string
+            text:
+              type: object
+              properties:
+                div:
+                  type: string
+            status:
+              type: string
+            statusReason:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      display:
+                        type: string
+                      code:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueDateTime:
+                        type: string
+                      valueString:
+                        type: string
+                text:
+                  type: string
+            vaccineCode:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                text:
+                  type: string
+            vaccineDate:
+              type: string
+            site:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  actor:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                      display:
+                        type: string
+                      type:
+                        type: string
+                  function:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+            route:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      display:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueString:
+                        type: string
+            doseQuantity:
+              type: object
+              properties:
+                value:
+                  type: number
+                unit:
+                  type: string
+            education:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  presentationDate:
+                    type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  author:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueDateTime:
+                    type: string
+                  valueString:
+                    type: string
+                  valueInteger:
+                    type: integer
+          example:
+            resourceType: Immunization
+            id: immunization-123
+            meta:
+              profile:
+              - http://hl7.org/fhir/Profile/immunization-vaccination
+              - http://hl7.org/fhir/StructureDefinition/immunization
+              versionId: 4.0.1
+            text:
+              div: <div xmlns="http://www.w3.org/1999/xhtml">John Doe's immunization
+                record</div>
+            status: completed
+            statusReason:
+              coding:
+              - system: http://xcaliber-fhir/structureDefinition/refused-reason
+                display: Patient refused due to allergy
+              - system: http://custom.codeset/declinedreason
+                code: DECLINED
+                display: Patient declined
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/refuseddate
+                valueDateTime: '2022-01-01T09:30:00+00:00'
+              - url: http://xcaliber-fhir/structureDefinition/refusednote
+                valueString: Patient stated fear of needles
+              text: Vaccine administered
+            vaccineCode:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+                code: INN-272
+                display: Inactivated Poliovirus Vaccine
+              - system: http://hl7.org/fhir/sid/cvx
+                code: '10'
+                display: Poliovirus, inactivated
+              - system: http://hl7.org/fhir/sid/ndc
+                code: 49281-860-10
+              text: Poliovirus Vaccine
+            vaccineDate: '2022-01-01T12:30:00+00:00'
+            site:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/immunization-site
+                code: deltoid
+                display: Deltoid
+            performer:
+            - actor:
+                reference: Practitioner/1234567890
+                display: Dr. Jane Smith
+              function:
+                coding:
+                - code: OP
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/approvedby
+                  valueString: APPROVEDBY
+                - url: http://xcaliber-fhir/structureDefinition/enteredby
+                  valueString: ENTEREDBY
+            - actor:
+                reference: Practitioner/2345678901
+                display: Dr. Mark Jones
+                type: Practitioner
+              function:
+                coding:
+                - code: OP
+            route:
+              coding:
+              - display: Intramuscular
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/administerroutedescription
+                valueString: IM injection into deltoid muscle
+            doseQuantity:
+              value: 0.5
+              unit: ml
+            education:
+            - id: '12345'
+              presentationDate: '2022-01-01'
+            note:
+            - text: Patient was informed about potential side effects and benefits
+                of the vaccine.
+              author:
+                reference: Practitioner/1234567890
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/administernote
+                valueString: ADMINISTERNOTE
+            - text: Vaccine administered as part of routine childhood immunization
+                schedule.
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/approveddate
+              valueDateTime: '2022-01-01T08:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/submitdate
+              valueDateTime: '2022-01-02T10:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/deleted-date
+              valueDateTime: '2023-01-01T08:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/ndc
+              valueString: 49281-860-10
+            - url: http://xcaliber-fhir/structureDefinition/ordereddate
+              valueDateTime: '2022-01-02T12:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/partiallyadministered
+              valueString: false
+            - url: http://xcaliber-fhir/structureDefinition/prescribeddate
+              valueDateTime: '2022-01-01T11:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/visgivendate
+              valueDateTime: '2022-01-03T14:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/vaccinesectionnote
+              valueString: Section note sample
+            - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassid
+              valueInteger: 1001
+            - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassname
+              valueString: Routine Immunization
+          description: '"Immunization data to update. Provide the updated immunization
+            details in JSON format."'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Immunization
+          id: immunization-123
+          meta:
+            profile:
+            - http://hl7.org/fhir/Profile/immunization-vaccination
+            - http://hl7.org/fhir/StructureDefinition/immunization
+            versionId: 4.0.1
+          text:
+            div: <div xmlns="http://www.w3.org/1999/xhtml">John Doe's immunization
+              record</div>
+          status: completed
+          statusReason:
+            coding:
+            - system: http://xcaliber-fhir/structureDefinition/refused-reason
+              display: Patient refused due to allergy
+            - system: http://custom.codeset/declinedreason
+              code: DECLINED
+              display: Patient declined
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/refuseddate
+              valueDateTime: '2022-01-01T09:30:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/refusednote
+              valueString: Patient stated fear of needles
+            text: Vaccine administered
+          vaccineCode:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+              code: INN-272
+              display: Inactivated Poliovirus Vaccine
+            - system: http://hl7.org/fhir/sid/cvx
+              code: '10'
+              display: Poliovirus, inactivated
+            - system: http://hl7.org/fhir/sid/ndc
+              code: 49281-860-10
+            text: Poliovirus Vaccine
+          vaccineDate: '2022-01-01T12:30:00+00:00'
+          site:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/immunization-site
+              code: deltoid
+              display: Deltoid
+          performer:
+          - actor:
+              reference: Practitioner/1234567890
+              display: Dr. Jane Smith
+            function:
+              coding:
+              - code: OP
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/approvedby
+                valueString: APPROVEDBY
+              - url: http://xcaliber-fhir/structureDefinition/enteredby
+                valueString: ENTEREDBY
+          - actor:
+              reference: Practitioner/2345678901
+              display: Dr. Mark Jones
+              type: Practitioner
+            function:
+              coding:
+              - code: OP
+          route:
+            coding:
+            - display: Intramuscular
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/administerroutedescription
+              valueString: IM injection into deltoid muscle
+          doseQuantity:
+            value: 0.5
+            unit: ml
+          education:
+          - id: '12345'
+            presentationDate: '2022-01-01'
+          note:
+          - text: Patient was informed about potential side effects and benefits of
+              the vaccine.
+            author:
+              reference: Practitioner/1234567890
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/administernote
+              valueString: ADMINISTERNOTE
+          - text: Vaccine administered as part of routine childhood immunization schedule.
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/approveddate
+            valueDateTime: '2022-01-01T08:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/submitdate
+            valueDateTime: '2022-01-02T10:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/deleted-date
+            valueDateTime: '2023-01-01T08:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/ndc
+            valueString: 49281-860-10
+          - url: http://xcaliber-fhir/structureDefinition/ordereddate
+            valueDateTime: '2022-01-02T12:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/partiallyadministered
+            valueString: false
+          - url: http://xcaliber-fhir/structureDefinition/prescribeddate
+            valueDateTime: '2022-01-01T11:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/visgivendate
+            valueDateTime: '2022-01-03T14:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/vaccinesectionnote
+            valueString: Section note sample
+          - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassid
+            valueInteger: 1001
+          - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassname
+            valueString: Routine Immunization
+    response200ofgetinImmunization:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+            id:
+              type: string
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                versionId:
+                  type: string
+            text:
+              type: object
+              properties:
+                div:
+                  type: string
+            status:
+              type: string
+            statusReason:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      display:
+                        type: string
+                      code:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueDateTime:
+                        type: string
+                      valueString:
+                        type: string
+                text:
+                  type: string
+            vaccineCode:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                text:
+                  type: string
+            vaccineDate:
+              type: string
+            site:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  actor:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                      display:
+                        type: string
+                      type:
+                        type: string
+                  function:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+            route:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      display:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueString:
+                        type: string
+            doseQuantity:
+              type: object
+              properties:
+                value:
+                  type: number
+                unit:
+                  type: string
+            education:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  presentationDate:
+                    type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  author:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueDateTime:
+                    type: string
+                  valueString:
+                    type: string
+                  valueInteger:
+                    type: integer
+          example:
+            resourceType: Immunization
+            id: immunization-123
+            meta:
+              profile:
+              - http://hl7.org/fhir/Profile/immunization-vaccination
+              - http://hl7.org/fhir/StructureDefinition/immunization
+              versionId: 4.0.1
+            text:
+              div: <div xmlns="http://www.w3.org/1999/xhtml">John Doe's immunization
+                record</div>
+            status: completed
+            statusReason:
+              coding:
+              - system: http://xcaliber-fhir/structureDefinition/refused-reason
+                display: Patient refused due to allergy
+              - system: http://custom.codeset/declinedreason
+                code: DECLINED
+                display: Patient declined
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/refuseddate
+                valueDateTime: '2022-01-01T09:30:00+00:00'
+              - url: http://xcaliber-fhir/structureDefinition/refusednote
+                valueString: Patient stated fear of needles
+              text: Vaccine administered
+            vaccineCode:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+                code: INN-272
+                display: Inactivated Poliovirus Vaccine
+              - system: http://hl7.org/fhir/sid/cvx
+                code: '10'
+                display: Poliovirus, inactivated
+              - system: http://hl7.org/fhir/sid/ndc
+                code: 49281-860-10
+              text: Poliovirus Vaccine
+            vaccineDate: '2022-01-01T12:30:00+00:00'
+            site:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/immunization-site
+                code: deltoid
+                display: Deltoid
+            performer:
+            - actor:
+                reference: Practitioner/1234567890
+                display: Dr. Jane Smith
+              function:
+                coding:
+                - code: OP
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/approvedby
+                  valueString: APPROVEDBY
+                - url: http://xcaliber-fhir/structureDefinition/enteredby
+                  valueString: ENTEREDBY
+            - actor:
+                reference: Practitioner/2345678901
+                display: Dr. Mark Jones
+                type: Practitioner
+              function:
+                coding:
+                - code: OP
+            route:
+              coding:
+              - display: Intramuscular
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/administerroutedescription
+                valueString: IM injection into deltoid muscle
+            doseQuantity:
+              value: 0.5
+              unit: ml
+            education:
+            - id: '12345'
+              presentationDate: '2022-01-01'
+            note:
+            - text: Patient was informed about potential side effects and benefits
+                of the vaccine.
+              author:
+                reference: Practitioner/1234567890
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/administernote
+                valueString: ADMINISTERNOTE
+            - text: Vaccine administered as part of routine childhood immunization
+                schedule.
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/approveddate
+              valueDateTime: '2022-01-01T08:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/submitdate
+              valueDateTime: '2022-01-02T10:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/deleted-date
+              valueDateTime: '2023-01-01T08:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/ndc
+              valueString: 49281-860-10
+            - url: http://xcaliber-fhir/structureDefinition/ordereddate
+              valueDateTime: '2022-01-02T12:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/partiallyadministered
+              valueString: false
+            - url: http://xcaliber-fhir/structureDefinition/prescribeddate
+              valueDateTime: '2022-01-01T11:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/visgivendate
+              valueDateTime: '2022-01-03T14:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/vaccinesectionnote
+              valueString: Section note sample
+            - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassid
+              valueInteger: 1001
+            - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassname
+              valueString: Routine Immunization
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Immunization
+          id: immunization-123
+          meta:
+            profile:
+            - http://hl7.org/fhir/Profile/immunization-vaccination
+            - http://hl7.org/fhir/StructureDefinition/immunization
+            versionId: 4.0.1
+          text:
+            div: <div xmlns="http://www.w3.org/1999/xhtml">John Doe's immunization
+              record</div>
+          status: completed
+          statusReason:
+            coding:
+            - system: http://xcaliber-fhir/structureDefinition/refused-reason
+              display: Patient refused due to allergy
+            - system: http://custom.codeset/declinedreason
+              code: DECLINED
+              display: Patient declined
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/refuseddate
+              valueDateTime: '2022-01-01T09:30:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/refusednote
+              valueString: Patient stated fear of needles
+            text: Vaccine administered
+          vaccineCode:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+              code: INN-272
+              display: Inactivated Poliovirus Vaccine
+            - system: http://hl7.org/fhir/sid/cvx
+              code: '10'
+              display: Poliovirus, inactivated
+            - system: http://hl7.org/fhir/sid/ndc
+              code: 49281-860-10
+            text: Poliovirus Vaccine
+          vaccineDate: '2022-01-01T12:30:00+00:00'
+          site:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/immunization-site
+              code: deltoid
+              display: Deltoid
+          performer:
+          - actor:
+              reference: Practitioner/1234567890
+              display: Dr. Jane Smith
+            function:
+              coding:
+              - code: OP
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/approvedby
+                valueString: APPROVEDBY
+              - url: http://xcaliber-fhir/structureDefinition/enteredby
+                valueString: ENTEREDBY
+          - actor:
+              reference: Practitioner/2345678901
+              display: Dr. Mark Jones
+              type: Practitioner
+            function:
+              coding:
+              - code: OP
+          route:
+            coding:
+            - display: Intramuscular
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/administerroutedescription
+              valueString: IM injection into deltoid muscle
+          doseQuantity:
+            value: 0.5
+            unit: ml
+          education:
+          - id: '12345'
+            presentationDate: '2022-01-01'
+          note:
+          - text: Patient was informed about potential side effects and benefits of
+              the vaccine.
+            author:
+              reference: Practitioner/1234567890
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/administernote
+              valueString: ADMINISTERNOTE
+          - text: Vaccine administered as part of routine childhood immunization schedule.
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/approveddate
+            valueDateTime: '2022-01-01T08:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/submitdate
+            valueDateTime: '2022-01-02T10:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/deleted-date
+            valueDateTime: '2023-01-01T08:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/ndc
+            valueString: 49281-860-10
+          - url: http://xcaliber-fhir/structureDefinition/ordereddate
+            valueDateTime: '2022-01-02T12:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/partiallyadministered
+            valueString: false
+          - url: http://xcaliber-fhir/structureDefinition/prescribeddate
+            valueDateTime: '2022-01-01T11:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/visgivendate
+            valueDateTime: '2022-01-03T14:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/vaccinesectionnote
+            valueString: Section note sample
+          - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassid
+            valueInteger: 1001
+          - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassname
+            valueString: Routine Immunization
+    error400ofgetinImmunization:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofgetinImmunization:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinImmunization:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Immunization not found
+        details:
+          type: string
+          example: No Immunization resource with given id
+      example:
+        statusCode: 404
+        message: Immunization not found
+        details: No Immunization resource with given id
+    error500ofgetinImmunization:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    response201ofpostinImmunization:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+            id:
+              type: string
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                versionId:
+                  type: string
+            text:
+              type: object
+              properties:
+                div:
+                  type: string
+            status:
+              type: string
+            statusReason:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      display:
+                        type: string
+                      code:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueDateTime:
+                        type: string
+                      valueString:
+                        type: string
+                text:
+                  type: string
+            vaccineCode:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                text:
+                  type: string
+            vaccineDate:
+              type: string
+            site:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  actor:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                      display:
+                        type: string
+                      type:
+                        type: string
+                  function:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+            route:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      display:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueString:
+                        type: string
+            doseQuantity:
+              type: object
+              properties:
+                value:
+                  type: number
+                unit:
+                  type: string
+            education:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  presentationDate:
+                    type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  author:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueDateTime:
+                    type: string
+                  valueString:
+                    type: string
+                  valueInteger:
+                    type: integer
+          example:
+            resourceType: Immunization
+            id: immunization-123
+            meta:
+              profile:
+              - http://hl7.org/fhir/Profile/immunization-vaccination
+              - http://hl7.org/fhir/StructureDefinition/immunization
+              versionId: 4.0.1
+            text:
+              div: <div xmlns="http://www.w3.org/1999/xhtml">John Doe's immunization
+                record</div>
+            status: completed
+            statusReason:
+              coding:
+              - system: http://xcaliber-fhir/structureDefinition/refused-reason
+                display: Patient refused due to allergy
+              - system: http://custom.codeset/declinedreason
+                code: DECLINED
+                display: Patient declined
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/refuseddate
+                valueDateTime: '2022-01-01T09:30:00+00:00'
+              - url: http://xcaliber-fhir/structureDefinition/refusednote
+                valueString: Patient stated fear of needles
+              text: Vaccine administered
+            vaccineCode:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+                code: INN-272
+                display: Inactivated Poliovirus Vaccine
+              - system: http://hl7.org/fhir/sid/cvx
+                code: '10'
+                display: Poliovirus, inactivated
+              - system: http://hl7.org/fhir/sid/ndc
+                code: 49281-860-10
+              text: Poliovirus Vaccine
+            vaccineDate: '2022-01-01T12:30:00+00:00'
+            site:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/immunization-site
+                code: deltoid
+                display: Deltoid
+            performer:
+            - actor:
+                reference: Practitioner/1234567890
+                display: Dr. Jane Smith
+              function:
+                coding:
+                - code: OP
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/approvedby
+                  valueString: APPROVEDBY
+                - url: http://xcaliber-fhir/structureDefinition/enteredby
+                  valueString: ENTEREDBY
+            - actor:
+                reference: Practitioner/2345678901
+                display: Dr. Mark Jones
+                type: Practitioner
+              function:
+                coding:
+                - code: OP
+            route:
+              coding:
+              - display: Intramuscular
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/administerroutedescription
+                valueString: IM injection into deltoid muscle
+            doseQuantity:
+              value: 0.5
+              unit: ml
+            education:
+            - id: '12345'
+              presentationDate: '2022-01-01'
+            note:
+            - text: Patient was informed about potential side effects and benefits
+                of the vaccine.
+              author:
+                reference: Practitioner/1234567890
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/administernote
+                valueString: ADMINISTERNOTE
+            - text: Vaccine administered as part of routine childhood immunization
+                schedule.
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/approveddate
+              valueDateTime: '2022-01-01T08:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/submitdate
+              valueDateTime: '2022-01-02T10:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/deleted-date
+              valueDateTime: '2023-01-01T08:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/ndc
+              valueString: 49281-860-10
+            - url: http://xcaliber-fhir/structureDefinition/ordereddate
+              valueDateTime: '2022-01-02T12:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/partiallyadministered
+              valueString: false
+            - url: http://xcaliber-fhir/structureDefinition/prescribeddate
+              valueDateTime: '2022-01-01T11:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/visgivendate
+              valueDateTime: '2022-01-03T14:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/vaccinesectionnote
+              valueString: Section note sample
+            - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassid
+              valueInteger: 1001
+            - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassname
+              valueString: Routine Immunization
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Immunization
+          id: immunization-123
+          meta:
+            profile:
+            - http://hl7.org/fhir/Profile/immunization-vaccination
+            - http://hl7.org/fhir/StructureDefinition/immunization
+            versionId: 4.0.1
+          text:
+            div: <div xmlns="http://www.w3.org/1999/xhtml">John Doe's immunization
+              record</div>
+          status: completed
+          statusReason:
+            coding:
+            - system: http://xcaliber-fhir/structureDefinition/refused-reason
+              display: Patient refused due to allergy
+            - system: http://custom.codeset/declinedreason
+              code: DECLINED
+              display: Patient declined
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/refuseddate
+              valueDateTime: '2022-01-01T09:30:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/refusednote
+              valueString: Patient stated fear of needles
+            text: Vaccine administered
+          vaccineCode:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+              code: INN-272
+              display: Inactivated Poliovirus Vaccine
+            - system: http://hl7.org/fhir/sid/cvx
+              code: '10'
+              display: Poliovirus, inactivated
+            - system: http://hl7.org/fhir/sid/ndc
+              code: 49281-860-10
+            text: Poliovirus Vaccine
+          vaccineDate: '2022-01-01T12:30:00+00:00'
+          site:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/immunization-site
+              code: deltoid
+              display: Deltoid
+          performer:
+          - actor:
+              reference: Practitioner/1234567890
+              display: Dr. Jane Smith
+            function:
+              coding:
+              - code: OP
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/approvedby
+                valueString: APPROVEDBY
+              - url: http://xcaliber-fhir/structureDefinition/enteredby
+                valueString: ENTEREDBY
+          - actor:
+              reference: Practitioner/2345678901
+              display: Dr. Mark Jones
+              type: Practitioner
+            function:
+              coding:
+              - code: OP
+          route:
+            coding:
+            - display: Intramuscular
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/administerroutedescription
+              valueString: IM injection into deltoid muscle
+          doseQuantity:
+            value: 0.5
+            unit: ml
+          education:
+          - id: '12345'
+            presentationDate: '2022-01-01'
+          note:
+          - text: Patient was informed about potential side effects and benefits of
+              the vaccine.
+            author:
+              reference: Practitioner/1234567890
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/administernote
+              valueString: ADMINISTERNOTE
+          - text: Vaccine administered as part of routine childhood immunization schedule.
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/approveddate
+            valueDateTime: '2022-01-01T08:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/submitdate
+            valueDateTime: '2022-01-02T10:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/deleted-date
+            valueDateTime: '2023-01-01T08:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/ndc
+            valueString: 49281-860-10
+          - url: http://xcaliber-fhir/structureDefinition/ordereddate
+            valueDateTime: '2022-01-02T12:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/partiallyadministered
+            valueString: false
+          - url: http://xcaliber-fhir/structureDefinition/prescribeddate
+            valueDateTime: '2022-01-01T11:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/visgivendate
+            valueDateTime: '2022-01-03T14:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/vaccinesectionnote
+            valueString: Section note sample
+          - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassid
+            valueInteger: 1001
+          - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassname
+            valueString: Routine Immunization
+    error400ofpostinImmunization:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofpostinImmunization:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofpostinImmunization:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Immunization not found
+        details:
+          type: string
+          example: No Immunization resource with given id
+      example:
+        statusCode: 404
+        message: Immunization not found
+        details: No Immunization resource with given id
+    error500ofpostinImmunization:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    response200ofgetinImmunizationimmunizationid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+            id:
+              type: string
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                versionId:
+                  type: string
+            text:
+              type: object
+              properties:
+                div:
+                  type: string
+            status:
+              type: string
+            statusReason:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      display:
+                        type: string
+                      code:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueDateTime:
+                        type: string
+                      valueString:
+                        type: string
+                text:
+                  type: string
+            vaccineCode:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                text:
+                  type: string
+            vaccineDate:
+              type: string
+            site:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  actor:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                      display:
+                        type: string
+                      type:
+                        type: string
+                  function:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+            route:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      display:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueString:
+                        type: string
+            doseQuantity:
+              type: object
+              properties:
+                value:
+                  type: number
+                unit:
+                  type: string
+            education:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  presentationDate:
+                    type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  author:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueDateTime:
+                    type: string
+                  valueString:
+                    type: string
+                  valueInteger:
+                    type: integer
+          example:
+            resourceType: Immunization
+            id: immunization-123
+            meta:
+              profile:
+              - http://hl7.org/fhir/Profile/immunization-vaccination
+              - http://hl7.org/fhir/StructureDefinition/immunization
+              versionId: 4.0.1
+            text:
+              div: <div xmlns="http://www.w3.org/1999/xhtml">John Doe's immunization
+                record</div>
+            status: completed
+            statusReason:
+              coding:
+              - system: http://xcaliber-fhir/structureDefinition/refused-reason
+                display: Patient refused due to allergy
+              - system: http://custom.codeset/declinedreason
+                code: DECLINED
+                display: Patient declined
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/refuseddate
+                valueDateTime: '2022-01-01T09:30:00+00:00'
+              - url: http://xcaliber-fhir/structureDefinition/refusednote
+                valueString: Patient stated fear of needles
+              text: Vaccine administered
+            vaccineCode:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+                code: INN-272
+                display: Inactivated Poliovirus Vaccine
+              - system: http://hl7.org/fhir/sid/cvx
+                code: '10'
+                display: Poliovirus, inactivated
+              - system: http://hl7.org/fhir/sid/ndc
+                code: 49281-860-10
+              text: Poliovirus Vaccine
+            vaccineDate: '2022-01-01T12:30:00+00:00'
+            site:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/immunization-site
+                code: deltoid
+                display: Deltoid
+            performer:
+            - actor:
+                reference: Practitioner/1234567890
+                display: Dr. Jane Smith
+              function:
+                coding:
+                - code: OP
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/approvedby
+                  valueString: APPROVEDBY
+                - url: http://xcaliber-fhir/structureDefinition/enteredby
+                  valueString: ENTEREDBY
+            - actor:
+                reference: Practitioner/2345678901
+                display: Dr. Mark Jones
+                type: Practitioner
+              function:
+                coding:
+                - code: OP
+            route:
+              coding:
+              - display: Intramuscular
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/administerroutedescription
+                valueString: IM injection into deltoid muscle
+            doseQuantity:
+              value: 0.5
+              unit: ml
+            education:
+            - id: '12345'
+              presentationDate: '2022-01-01'
+            note:
+            - text: Patient was informed about potential side effects and benefits
+                of the vaccine.
+              author:
+                reference: Practitioner/1234567890
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/administernote
+                valueString: ADMINISTERNOTE
+            - text: Vaccine administered as part of routine childhood immunization
+                schedule.
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/approveddate
+              valueDateTime: '2022-01-01T08:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/submitdate
+              valueDateTime: '2022-01-02T10:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/deleted-date
+              valueDateTime: '2023-01-01T08:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/ndc
+              valueString: 49281-860-10
+            - url: http://xcaliber-fhir/structureDefinition/ordereddate
+              valueDateTime: '2022-01-02T12:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/partiallyadministered
+              valueString: false
+            - url: http://xcaliber-fhir/structureDefinition/prescribeddate
+              valueDateTime: '2022-01-01T11:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/visgivendate
+              valueDateTime: '2022-01-03T14:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/vaccinesectionnote
+              valueString: Section note sample
+            - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassid
+              valueInteger: 1001
+            - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassname
+              valueString: Routine Immunization
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Immunization
+          id: immunization-123
+          meta:
+            profile:
+            - http://hl7.org/fhir/Profile/immunization-vaccination
+            - http://hl7.org/fhir/StructureDefinition/immunization
+            versionId: 4.0.1
+          text:
+            div: <div xmlns="http://www.w3.org/1999/xhtml">John Doe's immunization
+              record</div>
+          status: completed
+          statusReason:
+            coding:
+            - system: http://xcaliber-fhir/structureDefinition/refused-reason
+              display: Patient refused due to allergy
+            - system: http://custom.codeset/declinedreason
+              code: DECLINED
+              display: Patient declined
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/refuseddate
+              valueDateTime: '2022-01-01T09:30:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/refusednote
+              valueString: Patient stated fear of needles
+            text: Vaccine administered
+          vaccineCode:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+              code: INN-272
+              display: Inactivated Poliovirus Vaccine
+            - system: http://hl7.org/fhir/sid/cvx
+              code: '10'
+              display: Poliovirus, inactivated
+            - system: http://hl7.org/fhir/sid/ndc
+              code: 49281-860-10
+            text: Poliovirus Vaccine
+          vaccineDate: '2022-01-01T12:30:00+00:00'
+          site:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/immunization-site
+              code: deltoid
+              display: Deltoid
+          performer:
+          - actor:
+              reference: Practitioner/1234567890
+              display: Dr. Jane Smith
+            function:
+              coding:
+              - code: OP
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/approvedby
+                valueString: APPROVEDBY
+              - url: http://xcaliber-fhir/structureDefinition/enteredby
+                valueString: ENTEREDBY
+          - actor:
+              reference: Practitioner/2345678901
+              display: Dr. Mark Jones
+              type: Practitioner
+            function:
+              coding:
+              - code: OP
+          route:
+            coding:
+            - display: Intramuscular
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/administerroutedescription
+              valueString: IM injection into deltoid muscle
+          doseQuantity:
+            value: 0.5
+            unit: ml
+          education:
+          - id: '12345'
+            presentationDate: '2022-01-01'
+          note:
+          - text: Patient was informed about potential side effects and benefits of
+              the vaccine.
+            author:
+              reference: Practitioner/1234567890
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/administernote
+              valueString: ADMINISTERNOTE
+          - text: Vaccine administered as part of routine childhood immunization schedule.
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/approveddate
+            valueDateTime: '2022-01-01T08:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/submitdate
+            valueDateTime: '2022-01-02T10:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/deleted-date
+            valueDateTime: '2023-01-01T08:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/ndc
+            valueString: 49281-860-10
+          - url: http://xcaliber-fhir/structureDefinition/ordereddate
+            valueDateTime: '2022-01-02T12:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/partiallyadministered
+            valueString: false
+          - url: http://xcaliber-fhir/structureDefinition/prescribeddate
+            valueDateTime: '2022-01-01T11:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/visgivendate
+            valueDateTime: '2022-01-03T14:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/vaccinesectionnote
+            valueString: Section note sample
+          - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassid
+            valueInteger: 1001
+          - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassname
+            valueString: Routine Immunization
+    error400ofgetinImmunizationimmunizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofgetinImmunizationimmunizationid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinImmunizationimmunizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error500ofgetinImmunizationimmunizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    response200ofputinImmunizationimmunizationid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+            id:
+              type: string
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                versionId:
+                  type: string
+            text:
+              type: object
+              properties:
+                div:
+                  type: string
+            status:
+              type: string
+            statusReason:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      display:
+                        type: string
+                      code:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueDateTime:
+                        type: string
+                      valueString:
+                        type: string
+                text:
+                  type: string
+            vaccineCode:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                text:
+                  type: string
+            vaccineDate:
+              type: string
+            site:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+            performer:
+              type: array
+              items:
+                type: object
+                properties:
+                  actor:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                      display:
+                        type: string
+                      type:
+                        type: string
+                  function:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+            route:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      display:
+                        type: string
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      valueString:
+                        type: string
+            doseQuantity:
+              type: object
+              properties:
+                value:
+                  type: number
+                unit:
+                  type: string
+            education:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  presentationDate:
+                    type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  author:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueDateTime:
+                    type: string
+                  valueString:
+                    type: string
+                  valueInteger:
+                    type: integer
+          example:
+            resourceType: Immunization
+            id: immunization-123
+            meta:
+              profile:
+              - http://hl7.org/fhir/Profile/immunization-vaccination
+              - http://hl7.org/fhir/StructureDefinition/immunization
+              versionId: 4.0.1
+            text:
+              div: <div xmlns="http://www.w3.org/1999/xhtml">John Doe's immunization
+                record</div>
+            status: completed
+            statusReason:
+              coding:
+              - system: http://xcaliber-fhir/structureDefinition/refused-reason
+                display: Patient refused due to allergy
+              - system: http://custom.codeset/declinedreason
+                code: DECLINED
+                display: Patient declined
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/refuseddate
+                valueDateTime: '2022-01-01T09:30:00+00:00'
+              - url: http://xcaliber-fhir/structureDefinition/refusednote
+                valueString: Patient stated fear of needles
+              text: Vaccine administered
+            vaccineCode:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+                code: INN-272
+                display: Inactivated Poliovirus Vaccine
+              - system: http://hl7.org/fhir/sid/cvx
+                code: '10'
+                display: Poliovirus, inactivated
+              - system: http://hl7.org/fhir/sid/ndc
+                code: 49281-860-10
+              text: Poliovirus Vaccine
+            vaccineDate: '2022-01-01T12:30:00+00:00'
+            site:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/immunization-site
+                code: deltoid
+                display: Deltoid
+            performer:
+            - actor:
+                reference: Practitioner/1234567890
+                display: Dr. Jane Smith
+              function:
+                coding:
+                - code: OP
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/approvedby
+                  valueString: APPROVEDBY
+                - url: http://xcaliber-fhir/structureDefinition/enteredby
+                  valueString: ENTEREDBY
+            - actor:
+                reference: Practitioner/2345678901
+                display: Dr. Mark Jones
+                type: Practitioner
+              function:
+                coding:
+                - code: OP
+            route:
+              coding:
+              - display: Intramuscular
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/administerroutedescription
+                valueString: IM injection into deltoid muscle
+            doseQuantity:
+              value: 0.5
+              unit: ml
+            education:
+            - id: '12345'
+              presentationDate: '2022-01-01'
+            note:
+            - text: Patient was informed about potential side effects and benefits
+                of the vaccine.
+              author:
+                reference: Practitioner/1234567890
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/administernote
+                valueString: ADMINISTERNOTE
+            - text: Vaccine administered as part of routine childhood immunization
+                schedule.
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/approveddate
+              valueDateTime: '2022-01-01T08:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/submitdate
+              valueDateTime: '2022-01-02T10:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/deleted-date
+              valueDateTime: '2023-01-01T08:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/ndc
+              valueString: 49281-860-10
+            - url: http://xcaliber-fhir/structureDefinition/ordereddate
+              valueDateTime: '2022-01-02T12:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/partiallyadministered
+              valueString: false
+            - url: http://xcaliber-fhir/structureDefinition/prescribeddate
+              valueDateTime: '2022-01-01T11:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/visgivendate
+              valueDateTime: '2022-01-03T14:00:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/vaccinesectionnote
+              valueString: Section note sample
+            - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassid
+              valueInteger: 1001
+            - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassname
+              valueString: Routine Immunization
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Immunization
+          id: immunization-123
+          meta:
+            profile:
+            - http://hl7.org/fhir/Profile/immunization-vaccination
+            - http://hl7.org/fhir/StructureDefinition/immunization
+            versionId: 4.0.1
+          text:
+            div: <div xmlns="http://www.w3.org/1999/xhtml">John Doe's immunization
+              record</div>
+          status: completed
+          statusReason:
+            coding:
+            - system: http://xcaliber-fhir/structureDefinition/refused-reason
+              display: Patient refused due to allergy
+            - system: http://custom.codeset/declinedreason
+              code: DECLINED
+              display: Patient declined
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/refuseddate
+              valueDateTime: '2022-01-01T09:30:00+00:00'
+            - url: http://xcaliber-fhir/structureDefinition/refusednote
+              valueString: Patient stated fear of needles
+            text: Vaccine administered
+          vaccineCode:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/vaccine-code
+              code: INN-272
+              display: Inactivated Poliovirus Vaccine
+            - system: http://hl7.org/fhir/sid/cvx
+              code: '10'
+              display: Poliovirus, inactivated
+            - system: http://hl7.org/fhir/sid/ndc
+              code: 49281-860-10
+            text: Poliovirus Vaccine
+          vaccineDate: '2022-01-01T12:30:00+00:00'
+          site:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/immunization-site
+              code: deltoid
+              display: Deltoid
+          performer:
+          - actor:
+              reference: Practitioner/1234567890
+              display: Dr. Jane Smith
+            function:
+              coding:
+              - code: OP
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/approvedby
+                valueString: APPROVEDBY
+              - url: http://xcaliber-fhir/structureDefinition/enteredby
+                valueString: ENTEREDBY
+          - actor:
+              reference: Practitioner/2345678901
+              display: Dr. Mark Jones
+              type: Practitioner
+            function:
+              coding:
+              - code: OP
+          route:
+            coding:
+            - display: Intramuscular
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/administerroutedescription
+              valueString: IM injection into deltoid muscle
+          doseQuantity:
+            value: 0.5
+            unit: ml
+          education:
+          - id: '12345'
+            presentationDate: '2022-01-01'
+          note:
+          - text: Patient was informed about potential side effects and benefits of
+              the vaccine.
+            author:
+              reference: Practitioner/1234567890
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/administernote
+              valueString: ADMINISTERNOTE
+          - text: Vaccine administered as part of routine childhood immunization schedule.
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/approveddate
+            valueDateTime: '2022-01-01T08:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/submitdate
+            valueDateTime: '2022-01-02T10:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/deleted-date
+            valueDateTime: '2023-01-01T08:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/ndc
+            valueString: 49281-860-10
+          - url: http://xcaliber-fhir/structureDefinition/ordereddate
+            valueDateTime: '2022-01-02T12:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/partiallyadministered
+            valueString: false
+          - url: http://xcaliber-fhir/structureDefinition/prescribeddate
+            valueDateTime: '2022-01-01T11:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/visgivendate
+            valueDateTime: '2022-01-03T14:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/vaccinesectionnote
+            valueString: Section note sample
+          - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassid
+            valueInteger: 1001
+          - url: http://xcaliber-fhir/structureDefinition/clinicalorderclassname
+            valueString: Routine Immunization
+    error400ofputinImmunizationimmunizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofputinImmunizationimmunizationid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofputinImmunizationimmunizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Immunization not found
+        details:
+          type: string
+          example: No Immunization resource with given id
+      example:
+        statusCode: 404
+        message: Immunization not found
+        details: No Immunization resource with given id
+    error500ofputinImmunizationimmunizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    response204ofdeleteinImmunizationimmunizationid:
+      type: object
+      properties:
+        id:
+          type: string
+          example: immunization-123
+        status:
+          type: string
+          example: deleted
+      example:
+        id: immunization-123
+        status: deleted
+    error400ofdeleteinImmunizationimmunizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofdeleteinImmunizationimmunizationid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofdeleteinImmunizationimmunizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Immunization not found
+        details:
+          type: string
+          example: No Immunization resource with given id
+      example:
+        statusCode: 404
+        message: Immunization not found
+        details: No Immunization resource with given id
+    error500ofdeleteinImmunizationimmunizationid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    Context:
+      type: object
+      properties:
+        requestId:
+          type: string
+          example: abc123
+        source:
+          type: string
+          example: ATHENA
+        quorum:
+          type: boolean
+          example: true
+        notify:
+          type: boolean
+          example: true
+        departmentId:
+          type: string
+          example: '150'
+      required:
+      - requestId
+      - source
+      - quorum
+      - notify
+      additionalProperties: true
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

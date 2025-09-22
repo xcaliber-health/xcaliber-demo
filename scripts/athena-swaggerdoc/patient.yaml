@@ -1,0 +1,3046 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as 
+    Fire) is a standard for exchanging healthcare information electronically. It
+    is designed to be a modern, flexible, and web-based alternative to older, 
+    more cumbersome standards like HL7 v2. FHIR uses a RESTful API specification
+    to define how to interact with Resources - this means it uses standard HTTP 
+    verbs (GET, POST, PUT, DELETE). Resources are the fundamental units of data 
+    in FHIR; they can represent anything from patient demographics to clinical 
+    observations to medications.
+servers:
+  - url: https://xchange-sandbox.xcaliberapis.com
+  - url: https://your.api.server
+tags:
+  - name: Patient
+    description: Operations related to Patient resources in Athena
+paths:
+  /api/v2/Patient:
+    get:
+      tags:
+        - Patient
+      summary: Get All Patients
+      operationId: getAllPatients
+      parameters:
+        - &id001
+          name: x-source-id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Source system identifier.
+        - &id002
+          name: x-interaction-mode
+          in: header
+          required: true
+          schema:
+            type: boolean
+          description: Interaction mode flag (true/false).
+        - name: address
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: address'
+        - name: address-city
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: address-city'
+        - name: address-country
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: address-country'
+        - name: address-postalcode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: address-postalcode'
+        - name: address-state
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: address-state'
+        - name: address-use
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: address-use'
+        - name: birthdate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: 'Filter: birthdate'
+        - name: email
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: email'
+        - name: family
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: family'
+        - name: gender
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: gender'
+        - name: given
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: given'
+        - name: phone
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: phone'
+        - name: phonetic
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: phonetic'
+        - name: telecom
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: telecom'
+        - name: USCoreEthnicity
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: USCoreEthnicity'
+        - name: USCorePatientGenderIdentity
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: USCorePatientGenderIdentity'
+        - name: USCoreRace
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: USCoreRace'
+        - name: active
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 'Filter: active'
+        - name: death-date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: 'Filter: death-date'
+        - name: deceased
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 'Filter: deceased'
+        - name: general-practitioner
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: general-practitioner'
+        - name: identifier
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: identifier'
+        - name: language
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: language'
+        - name: link
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: link'
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: name'
+        - name: organization
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: organization'
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinPatient'
+              example: &id003
+                resourceType: Patient
+                id: '12345'
+                name:
+                  - use: official
+                    given:
+                      - John
+                      - A.
+                    family: Doe
+                    suffix: Jr.
+                  - use: usual
+                    given:
+                      - John
+                  - use: old
+                    given:
+                      - Johnny
+                birthDate: '1980-01-01'
+                gender: male
+                maritalStatus:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
+                      code: M
+                      display: Married
+                address:
+                  - line:
+                      - 123 Main St
+                      - Apt 4B
+                    city: Metropolis
+                    state: NY
+                    postalCode: '12345'
+                    country: US
+                  - line:
+                      - 123 Sample Street
+                      - Apt 456
+                    city: Sample City
+                    state: Sample State
+                    postalCode: '12345'
+                    country: US
+                    extension:
+                      - url: 
+                          http://example.org/fhir/StructureDefinition/guarantor-employer-id
+                        valueId: EMP123456
+                telecom:
+                  - system: phone
+                    value: '+123456789'
+                    use: mobile
+                  - system: email
+                    value: johndoe@example.com
+                    use: home
+                  - system: phone
+                    value: '+1987654321'
+                    use: home
+                  - system: phone
+                    value: '+1123456789'
+                    use: work
+                  - system: phone
+                    value: '+1098765432'
+                    use: mobile
+                    extension:
+                      - url: 
+                          http://example.org/fhir/StructureDefinition/telecom-extension
+                        valueString: Preferred contact method
+                  - system: email
+                    value: example@example.com
+                identifier:
+                  - use: official
+                    system: http://example.org/fhir/identifier
+                    value: '12345'
+                  - type:
+                      text: ssn
+                      coding:
+                        - system: http://terminology.hl7.org/CodeSystem/v2-0203
+                          code: SS
+                    system: http://hl7.org/fhir/sid/us-ssn
+                    value: 123-45-6789
+                  - system: US Census industry code
+                    value: '1234'
+                  - system: US Census occupation code
+                    value: '5678'
+                  - type:
+                      text: drivers license
+                      coding:
+                        - system: http://terminology.hl7.org/CodeSystem/v2-0203
+                          code: DL
+                    period:
+                      end: '2025-12-31'
+                    use: official
+                    value: D1234567
+                    assigner:
+                      reference: State/CA
+                communication:
+                  - language:
+                      coding:
+                        - system: urn:ietf:bcp:47
+                          code: en
+                          display: English
+                contact:
+                  - relationship:
+                      - coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/v2-0131
+                            code: N
+                            display: Next of Kin
+                    name:
+                      family: Doe
+                      given:
+                        - John
+                    telecom:
+                      - system: phone
+                        value: '+123456789'
+                        use: home
+                    address:
+                      line:
+                        - 123 Main St
+                      city: Anytown
+                      state: Anystate
+                      postalCode: '12345'
+                      country: USA
+                    extension:
+                      - url: 
+                          http://example.org/fhir/StructureDefinition/contact-extension
+                        valueString: Additional contact information
+                generalPractitioner:
+                  - reference: Practitioner/12345
+                contained:
+                  - resourceType: RelatedPerson
+                    id: guarantor
+                    name:
+                      - family: Doe
+                        given:
+                          - John
+                    telecom:
+                      - system: email
+                        value: guarantor@example.com
+                      - system: phone
+                        value: '+1234567890'
+                    relationship:
+                      - coding:
+                          - code: O
+                            display: Guardian
+                        text: Guardian
+                    identifier:
+                      - system: guarantor-ssn
+                        value: 123-45-6789
+                    extension:
+                      - url: 
+                          http://example.org/fhir/StructureDefinition/guarantor-address-same-as-patient
+                        valueBoolean: true
+                      - url: 
+                          http://example.org/fhir/StructureDefinition/guarantor-employer-id
+                        valueId: employer-123
+                  - resourceType: RelatedPerson
+                    id: guardian
+                    name:
+                      - family: Smith
+                        given:
+                          - Jane
+                  - resourceType: Organization
+                    id: employer
+                    name: Acme Corporation
+                  - resourceType: RelatedPerson
+                    id: next-of-kin
+                    name:
+                      - family: Doe
+                        given:
+                          - Jane
+                  - resourceType: Consent
+                    id: consent
+                    status: active
+                    extension:
+                      - url: 
+                          http://example.org/fhir/StructureDefinition/consenttotext
+                        valueBoolean: true
+                      - url: 
+                          http://example.org/fhir/StructureDefinition/consenttocall
+                        valueBoolean: false
+                  - resourceType: QuestionnaireResponse
+                    id: questionnaire
+                    status: completed
+                    item:
+                      - linkId: agriculturalworker
+                        answer:
+                          - valueString: 'Yes'
+                      - linkId: agriculturalworkertype
+                        answer:
+                          - valueString: Farmer
+                      - linkId: caresummarydeliverypreference
+                        answer:
+                          - valueString: Email
+                      - linkId: contactpreference_announcement_email
+                        answer:
+                          - valueBoolean: true
+                      - linkId: contactpreference_announcement_sms
+                        answer:
+                          - valueBoolean: false
+                      - linkId: contactpreference_announcement_phone
+                        answer:
+                          - valueBoolean: true
+                      - linkId: contactpreference_appointment_email
+                        answer:
+                          - valueBoolean: true
+                      - linkId: contactpreference_appointment_phone
+                        answer:
+                          - valueBoolean: false
+                      - linkId: contactpreference_appointment_sms
+                        answer:
+                          - valueBoolean: true
+                      - linkId: contactpreference_billing_email
+                        answer:
+                          - valueBoolean: false
+                      - linkId: contactpreference_billing_phone
+                        answer:
+                          - valueBoolean: true
+                      - linkId: contactpreference_billing_sms
+                        answer:
+                          - valueBoolean: false
+                      - linkId: contactpreference_lab_email
+                        answer:
+                          - valueBoolean: true
+                      - linkId: contactpreference_lab_sms
+                        answer:
+                          - valueBoolean: false
+                      - linkId: contactpreference_lab_phone
+                        answer:
+                          - valueBoolean: true
+                      - linkId: donotcallyn
+                        answer:
+                          - valueBoolean: false
+                      - linkId: hasmobileyn
+                        answer:
+                          - valueBoolean: true
+                      - linkId: homeboundyn
+                        answer:
+                          - valueBoolean: false
+                      - linkId: homeless
+                        answer:
+                          - valueString: 'Yes'
+                      - linkId: homelesstype
+                        answer:
+                          - valueString: Temporary
+                      - linkId: onlinestatementonlyyn
+                        answer:
+                          - valueBoolean: false
+                      - linkId: povertylevelcalculated
+                        answer:
+                          - valueDecimal: 1.5
+                      - linkId: povertylevelfamilysize
+                        answer:
+                          - valueDecimal: 4
+                      - linkId: povertylevelfamilysizedeclined
+                        answer:
+                          - valueBoolean: false
+                      - linkId: povertylevelincomedeclined
+                        answer:
+                          - valueBoolean: true
+                      - linkId: povertylevelincomepayperiod
+                        answer:
+                          - valueString: Monthly
+                      - linkId: povertylevelincomeperpayperiod
+                        answer:
+                          - valueInteger: 2000
+                      - linkId: povertylevelincomerangedeclined
+                        answer:
+                          - valueBoolean: true
+                      - linkId: publichousing
+                        answer:
+                          - valueString: 'Yes'
+                      - linkId: schoolbasedhealthcenter
+                        answer:
+                          - valueString: 'No'
+                      - linkId: veteran
+                        answer:
+                          - valueString: 'Yes'
+                      - linkId: customField1
+                        text: Custom Field
+                        answer:
+                          - valueCoding:
+                              code: option1
+                              display: Custom Value 1
+                      - linkId: customField2
+                        text: Custom Field
+                        answer:
+                          - valueString: Custom Value 2
+                    extension:
+                      - url: http://example.org/fhir/StructureDefinition/veteran
+                        valueString: 'Yes'
+                extension:
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-legal-sex
+                    valueCode: male
+                  - url: http://example.org/fhir/StructureDefinition/patient-sex
+                    valueCode: female
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-clinical-order-type-group-id
+                    valueString: '12345'
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-countrycode
+                    valueString: US
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-defaultpharmacyncpdpid
+                    valueString: '1234567'
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-ethnicitycodes
+                    extension:
+                      - url: 
+                          http://example.org/fhir/StructureDefinition/patient-ethnicitycodes
+                        valueCode: 2186-5
+                      - url: 
+                          http://example.org/fhir/StructureDefinition/patient-ethnicitycodes
+                        valueCode: 2135-2
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-genderidentityother
+                    valueString: Non-binary
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-ignorerestrictions
+                    valueBoolean: true
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-industrycode
+                    valueString: '1234'
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-notes
+                    valueString: Patient has a history of hypertension.
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-portal-access-given
+                    valueBoolean: true
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-preferred-pronouns
+                    valueString: they/them
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-primary-department-id
+                    valueString: '12345'
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-department-id
+                    valueInteger: 6789
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-referral-source-id
+                    valueString: referral-source-001
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-registration-date
+                    valueString: '2023-10-01'
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/referralSourceOther
+                    valueString: Community Health Center
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/sexualOrientation
+                    valueString: Heterosexual
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/sexualOrientationOther
+                    valueString: Pansexual
+                  - url: http://example.org/fhir/StructureDefinition/ssn
+                    valueString: 123-45-6789
+                  - url: http://example.org/fhir/StructureDefinition/status
+                    valueString: Active
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/allPatientStatuses
+                    valueString: Active, Inactive
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/localPatientId
+                    valueString: LOC123456
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/previousPatientIds
+                    valueString: PREV123456
+                  - url: 
+                      http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+                    extension:
+                      - url: 
+                          http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+                        valueCode: 2106-3
+                      - url: 
+                          http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+                        valueCode: 2054-5
+                  - url: 
+                      http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+                    extension:
+                      - url: 
+                          http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+                        valueCode: 2186-5
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/patient-birthPlace
+                    valueString: Anytown, Anystate
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/guarantor-address-same-as-patient
+                    valueBoolean: true
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/ignore-restrictions
+                    valueBoolean: false
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/mobile-carrier-id
+                    valueString: '12345'
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/next-kin-name
+                    valueString: John Doe
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/next-kin-phone
+                    valueString: '+1234567890'
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/next-kin-relationship
+                    valueString: Brother
+                  - url: http://example.org/fhir/StructureDefinition/notes
+                    valueString: Patient prefers morning appointments.
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/portal-access-given
+                    valueBoolean: true
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/preferred-pronouns
+                    valueString: they/them
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/primary-department-id
+                    valueString: dept-001
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/referral-source-id
+                    valueString: ref-123
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/referral-source-other
+                    valueString: Community Event
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/sexual-orientation
+                    valueString: Heterosexual
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/sexual-orientation-other
+                    valueString: Not specified
+                  - url: http://example.org/fhir/StructureDefinition/ssn
+                    valueString: 123-45-6789
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/email-extension
+                    valueString: example@example.com
+                deceasedDateTime: '2023-01-01T00:00:00Z'
+        '400':
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinBasic'
+        '401':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinPatient'
+        '404':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofpostinPatient'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinPatient'
+    post:
+      tags:
+        - Patient
+      summary: Create Patient
+      operationId: createPatient
+      parameters:
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example: &id004
+              context:
+                requestId: abc123
+                source: ATHENA
+                quorum: true
+                notify: true
+                departmentId: '150'
+              data:
+                resourceType: Patient
+                name:
+                  - use: official
+                    family: Jammy
+                    given:
+                      - William
+                      - ''
+                    text: William Jammy
+                  - use: old
+                    given:
+                      - Willy
+                communication:
+                  - language:
+                      coding:
+                        - system: http://hl7.org/fhir/ValueSet/all-languages
+                          code: deu
+                address:
+                  - line:
+                      - 1st Line
+                      - 2nd Line
+                    city: TEST CITY
+                    state: CA
+                    postalCode: '11201'
+                    country: US
+                birthDate: '1961-01-01'
+                gender: Male
+                maritalStatus:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
+                      code: UNK
+                      display: unknown
+                generalPractitioner:
+                  - reference: Practitioner/89
+                contact:
+                  - name: {}
+                    relationship:
+                      - coding:
+                          - system: 
+                              http://terminology.hl7.org/3.1.0/CodeSystem-v2-0131.html
+                            code: EP
+                            display: SPOUSE
+                    telecom:
+                      - system: phone
+                        value: '8746733099'
+                        use: home
+                      - system: phone
+                        value: '8846321092'
+                        use: mobile
+                    extension:
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/telecom/contactpreference
+                        valueBoolean: MOBILEPHONE
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/legal-sex
+                    valueCode: M
+                  - url: 
+                      http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex
+                    valueCode: M
+                  - url: http://xcaliber-fhir/structureDefinition/country-code
+                    valueString: USA
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/default-pharmacy-ncpdp-id
+                    valueString: '2623735'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/ethnicity-codes
+                    extension:
+                      - url: 
+                          http://xcaliber-fhir/structureDefinition/ethnicity-codes
+                        valueCode: 2165-9
+                  - url: http://xcaliber-fhir/structureDefinition/notes
+                    valueString: scrambled notes
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/portal-access-given
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/preferred-pronouns
+                    valueString: he/him
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/primary-department-id
+                    valueString: '150'
+                  - url: http://xcaliber-fhir/structureDefinition/department-id
+                    valueInteger: '150'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/referral-source-id
+                    valueString: '1'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/registration-date
+                    valueString: '2016-04-25'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/sexual-orientation
+                    valueString: Something else
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/sexual-orientation-other
+                    valueString: hello 1
+                  - url: http://xcaliber-fhir/structureDefinition/status
+                    valueString: active
+                  - url: 
+                      http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+                    extension:
+                      - url: 
+                          http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+                        valueCode: 1006-6
+                      - url: 
+                          http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+                        valueCode: 1424-1
+                  - url: 
+                      http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+                    extension:
+                      - url: 
+                          http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+                        valueCode: 2165-9
+                telecom:
+                  - system: phone
+                    value: '8765434567'
+                    use: home
+                  - system: phone
+                    value: '8765678767'
+                    use: work
+                  - extension: []
+                    system: phone
+                    value: '8285648983'
+                    use: mobile
+                  - extension: []
+                    system: email
+                    value: williamjohn12314@yopmail.com
+      responses:
+        '200':
+          description: Patient created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofpostinPatient'
+              example:
+                name:
+                  - given:
+                      - John
+                      - A
+                    family: Doe
+                    suffix:
+                      - Jr.
+                birthDate: '1980-01-01'
+                telecom:
+                  - system: email
+                    value: john.doe@example.com
+                  - system: phone
+                    value: 555-555-5555
+                nickname: Johnny
+                extension:
+                  - url: http://example.org/fhir/StructureDefinition/race
+                    valueString: Caucasian
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/contactpreference-lab-email
+                    valueBoolean: true
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/contactpreference-announcement-sms
+                    valueBoolean: false
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/poverty-level-income-pay-period
+                    valueString: monthly
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/poverty-level-family-size
+                    valueInteger: 4
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/occupation-code
+                    valueString: '12345'
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/homeless-type
+                    valueString: temporary
+        '400':
+          description: Missing or invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinBasic'
+        '401':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinPatient'
+        '404':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofpostinPatient'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinPatient'
+        '201':
+          description: Created
+          content:
+            application/json:
+              example: &id005
+                context:
+                  requestId: 4c13d9a9c80f8a9ff8165ac99be89f59
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  id: '28655'
+                  status: success
+  /api/v2/Patient/{patient-id}:
+    get:
+      tags:
+        - Patient
+      summary: Get Patient by ID
+      operationId: getPatientById
+      parameters:
+        - name: patient-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the patient to retrieve. Required."
+
+
+            (or alternatively)
+
+
+            "ID of the patient to fetch. Must be a valid patient ID."'
+        - *id001
+        - *id002
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinPatientpatientid'
+              example: *id003
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinPatientpatientid'
+              example:
+                statusCode: 400
+                message: Bad Request
+                details: Invalid parameter
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinPatientpatientid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinPatientpatientid'
+              example:
+                statusCode: 404
+                message: Resource not found
+                details: Patient with id not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinPatientpatientid'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Unexpected server failure.
+    put:
+      tags:
+        - Patient
+      summary: Update Patient
+      operationId: updatePatient
+      parameters:
+        - name: patient-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the patient to update. Required for
+            updating patient information."'
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example: *id004
+      responses:
+        '200':
+          description: Patient updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofputinPatientpatientid'
+              example:
+                name:
+                  - given:
+                      - John
+                      - A
+                    family: Doe
+                    suffix:
+                      - Jr.
+                birthDate: '1980-01-01'
+                telecom:
+                  - system: email
+                    value: john.doe@example.com
+                  - system: phone
+                    value: 555-555-5555
+                nickname: Johnny
+                extension:
+                  - url: http://example.org/fhir/StructureDefinition/race
+                    valueString: Caucasian
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/contactpreference-lab-email
+                    valueBoolean: true
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/contactpreference-announcement-sms
+                    valueBoolean: false
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/poverty-level-income-pay-period
+                    valueString: monthly
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/poverty-level-family-size
+                    valueInteger: 4
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/occupation-code
+                    valueString: '12345'
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/homeless-type
+                    valueString: temporary
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofputinPatientpatientid'
+              example:
+                statusCode: 400
+                message: Bad Request
+                details: Invalid parameter
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofputinPatientpatientid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofputinPatientpatientid'
+              example:
+                statusCode: 404
+                message: Resource not found
+                details: Patient with id not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofputinPatientpatientid'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Unexpected server failure.
+        '201':
+          description: Updated
+          content:
+            application/json:
+              example: *id005
+    delete:
+      tags:
+        - Patient
+      summary: Delete Patient
+      operationId: deletePatient
+      parameters:
+        - name: patient-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the patient to delete. Required for
+            deleting a patient''s record."
+
+
+            Let me know if you''d like me to suggest any further improvements!'
+        - *id001
+        - *id002
+      responses:
+        '200':
+          description: Patient deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofdeleteinPatientpatientid'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofdeleteinPatientpatientid'
+              example:
+                statusCode: 400
+                message: Bad Request
+                details: Invalid parameter
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinPatientpatientid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofdeleteinPatientpatientid'
+              example:
+                statusCode: 404
+                message: Resource not found
+                details: Patient with id not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinPatientpatientid'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Unexpected server failure.
+components:
+  schemas:
+    PatientRequest:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+                - requestId
+                - source
+                - quorum
+                - notify
+            resourceType:
+              type: string
+              example: Patient
+            id:
+              type: string
+              example: example
+            active:
+              type: boolean
+              example: true
+            extension:
+              type: array
+              items:
+                type: object
+            telecom:
+              type: array
+              items:
+                type: object
+            managingOrganization:
+              type: object
+            communication:
+              type: array
+              items:
+                type: object
+            maritalStatus:
+              type: object
+            deceasedBoolean:
+              type: boolean
+            multipleBirthBoolean:
+              type: boolean
+            multipleBirthIndex:
+              type: integer
+            photo:
+              type: array
+              items:
+                type: object
+            name:
+              type: array
+              items:
+                type: object
+            gender:
+              type: object
+            birthDate:
+              type: string
+            address:
+              type: array
+              items:
+                type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Patient
+          id: example
+          active: true
+          extension:
+            - url: http://xcaliber-fhir/structureDefinition/LEGALSEX
+              valueCode: example
+            - url: http://xcaliber-fhir/structureDefinition/SEX
+              valueCode: example
+            - url: 
+                http://xcaliber-fhir/structureDefinition/CLINICALORDERTYPEGROUPID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/COUNTRYCODE
+              valueString: example
+            - url: 
+                http://xcaliber-fhir/structureDefinition/DEFAULTPHARMACYNCPDPID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/ETHNICITYCODES
+              extension:
+                - url: ETHNICITYCODES
+                  valueCode: example
+            - url: http://xcaliber-fhir/structureDefinition/GENDERIDENTITYOTHER
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/IGNORERESTRICTIONS
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/INDUSTRYCODE
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/MOBILECARRIERID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/NOTES
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/PORTALACCESSGIVEN
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/PREFERREDPRONOUNS
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/PRIMARYDEPARTMENTID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/DEPARTMENTID
+              valueInteger: 1
+            - url: http://xcaliber-fhir/structureDefinition/REFERRALSOURCEID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/REGISTRATIONDATE
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/REFERRALSOURCEOTHER
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/SEXUALORIENTATION
+              valueString: example
+            - url: 
+                http://xcaliber-fhir/structureDefinition/SEXUALORIENTATIONOTHER
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/SSN
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/STATUS
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/ALLPATIENTSTATUSES
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/LOCALPATIENTID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/PREVIOUSPATIENTIDS
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/CONTACTPREFERENCE
+              valueString: example
+            - url: 
+                http://xcaliber-fhir/structureDefinition/GUARANTORADDRESSSAMEASPATIENT
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/GUARANTOREMPLOYERID
+              valueId: example
+            - url: http://xcaliber-fhir/structureDefinition/CONSENTTOTEXT
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/CONSENTTOCALL
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/VETERAN
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/us-core-race
+              extension:
+                - url: 
+                    http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+                  valueCode: example
+            - url: http://xcaliber-fhir/structureDefinition/us-core-ethnicity
+              extension:
+                - url: 
+                    http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+                  valueCode: example
+            - url: http://xcaliber-fhir/structureDefinition/consent-to-text
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/consent-to-call
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/insured-signature
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/patient-signature
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/privacy-notice
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/expiration-date
+              valueDate: '2024-01-01'
+          telecom:
+            - system: phone
+              value: '1234567890'
+            - system: email
+              value: alice.smith@example.com
+          managingOrganization:
+            reference: Organization/example
+          communication:
+            - language:
+                coding:
+                  - system: urn:iso:std:iso:2166
+                    value: en
+                preferred: true
+          maritalStatus:
+            coding:
+              - system: http://terminology.hl7.org/CodeSystem/marital-status
+                valueCode: single
+          deceasedBoolean: false
+          multipleBirthBoolean: false
+          multipleBirthIndex: 1
+          photo:
+            - contentType: image/jpeg
+              url: https://example.com/alice_smith_photo.jpg
+          name:
+            - use: official
+              family: Smith
+              given:
+                - Alice
+          gender:
+            valueCode: female
+          birthDate: '1985-02-12'
+          address:
+            - city: Sampleville
+              line:
+                - 123 Main St
+              state: NY
+              postalCode: '12345'
+              country: US
+    ExtractedSchema195:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+                - requestId
+                - source
+                - quorum
+                - notify
+            resourceType:
+              type: string
+              example: Patient
+            id:
+              type: string
+              example: example
+            active:
+              type: boolean
+              example: true
+            extension:
+              type: array
+              items:
+                type: object
+            telecom:
+              type: array
+              items:
+                type: object
+            managingOrganization:
+              type: object
+            communication:
+              type: array
+              items:
+                type: object
+            maritalStatus:
+              type: object
+            deceasedBoolean:
+              type: boolean
+            multipleBirthBoolean:
+              type: boolean
+            multipleBirthIndex:
+              type: integer
+            photo:
+              type: array
+              items:
+                type: object
+            name:
+              type: array
+              items:
+                type: object
+            gender:
+              type: object
+            birthDate:
+              type: string
+            address:
+              type: array
+              items:
+                type: object
+          description: '"Patient data to update. Provide a JSON object with updated
+            patient details."'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Patient
+          id: example
+          active: true
+          extension:
+            - url: http://xcaliber-fhir/structureDefinition/LEGALSEX
+              valueCode: example
+            - url: http://xcaliber-fhir/structureDefinition/SEX
+              valueCode: example
+            - url: 
+                http://xcaliber-fhir/structureDefinition/CLINICALORDERTYPEGROUPID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/COUNTRYCODE
+              valueString: example
+            - url: 
+                http://xcaliber-fhir/structureDefinition/DEFAULTPHARMACYNCPDPID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/ETHNICITYCODES
+              extension:
+                - url: ETHNICITYCODES
+                  valueCode: example
+            - url: http://xcaliber-fhir/structureDefinition/GENDERIDENTITYOTHER
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/IGNORERESTRICTIONS
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/INDUSTRYCODE
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/MOBILECARRIERID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/NOTES
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/PORTALACCESSGIVEN
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/PREFERREDPRONOUNS
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/PRIMARYDEPARTMENTID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/DEPARTMENTID
+              valueInteger: 1
+            - url: http://xcaliber-fhir/structureDefinition/REFERRALSOURCEID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/REGISTRATIONDATE
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/REFERRALSOURCEOTHER
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/SEXUALORIENTATION
+              valueString: example
+            - url: 
+                http://xcaliber-fhir/structureDefinition/SEXUALORIENTATIONOTHER
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/SSN
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/STATUS
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/ALLPATIENTSTATUSES
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/LOCALPATIENTID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/PREVIOUSPATIENTIDS
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/CONTACTPREFERENCE
+              valueString: example
+            - url: 
+                http://xcaliber-fhir/structureDefinition/GUARANTORADDRESSSAMEASPATIENT
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/GUARANTOREMPLOYERID
+              valueId: example
+            - url: http://xcaliber-fhir/structureDefinition/CONSENTTOTEXT
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/CONSENTTOCALL
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/VETERAN
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/us-core-race
+              extension:
+                - url: 
+                    http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+                  valueCode: example
+            - url: http://xcaliber-fhir/structureDefinition/us-core-ethnicity
+              extension:
+                - url: 
+                    http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+                  valueCode: example
+            - url: http://xcaliber-fhir/structureDefinition/consent-to-text
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/consent-to-call
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/insured-signature
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/patient-signature
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/privacy-notice
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/expiration-date
+              valueDate: '2024-01-01'
+          telecom:
+            - system: phone
+              value: '1234567890'
+            - system: email
+              value: alice.smith@example.com
+          managingOrganization:
+            reference: Organization/example
+          communication:
+            - language:
+                coding:
+                  - system: urn:iso:std:iso:2166
+                    value: en
+                preferred: true
+          maritalStatus:
+            coding:
+              - system: http://terminology.hl7.org/CodeSystem/marital-status
+                valueCode: single
+          deceasedBoolean: false
+          multipleBirthBoolean: false
+          multipleBirthIndex: 1
+          photo:
+            - contentType: image/jpeg
+              url: https://example.com/alice_smith_photo.jpg
+          name:
+            - use: official
+              family: Smith
+              given:
+                - Alice
+          gender:
+            valueCode: female
+          birthDate: '1985-02-12'
+          address:
+            - city: Sampleville
+              line:
+                - 123 Main St
+              state: NY
+              postalCode: '12345'
+              country: US
+    response200ofgetinPatient:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+                - requestId
+                - source
+                - quorum
+                - notify
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 123
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Patient
+                      id:
+                        type: string
+                        example: example
+                      active:
+                        type: boolean
+                        example: true
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                        example:
+                          - url: LEGALSEX
+                            valueCode: example
+                          - url: SEX
+                            valueCode: example
+                      telecom:
+                        type: array
+                        items:
+                          type: object
+                        example:
+                          - system: phone
+                            value: 1234567890
+                          - system: email
+                            value: alice.smith@example.com
+                      managingOrganization:
+                        type: object
+                        example:
+                          reference: Organization/example
+                      communication:
+                        type: array
+                        items:
+                          type: object
+                        example:
+                          - language:
+                              coding:
+                                - system: urn:iso:std:iso:2166
+                                  value: en
+                              preferred: true
+                      maritalStatus:
+                        type: object
+                        example:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/marital-status
+                              valueCode: single
+                      deceasedBoolean:
+                        type: boolean
+                        example: false
+                      multipleBirthBoolean:
+                        type: boolean
+                        example: false
+                      multipleBirthIndex:
+                        type: integer
+                        example: 1
+                      photo:
+                        type: array
+                        items:
+                          type: object
+                        example:
+                          - contentType: image/jpeg
+                            url: https://example.com/alice_smith_photo.jpg
+                      name:
+                        type: array
+                        items:
+                          type: object
+                        example:
+                          - use: official
+                            family: Smith
+                            given:
+                              - Alice
+                      gender:
+                        type: object
+                        example:
+                          valueCode: female
+                      birthDate:
+                        type: string
+                        example: '1985-02-12'
+                      address:
+                        type: array
+                        items:
+                          type: object
+                        example:
+                          - city: Sampleville
+                            line:
+                              - 123 Main St
+                            state: NY
+                            postalCode: 12345
+                            country: US
+      required:
+        - context
+        - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 123
+          entry:
+            - resource:
+                resourceType: Patient
+                id: example
+                active: true
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/LEGALSEX
+                    valueCode: example
+                  - url: http://xcaliber-fhir/structureDefinition/SEX
+                    valueCode: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/CLINICALORDERTYPEGROUPID
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/COUNTRYCODE
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/DEFAULTPHARMACYNCPDPID
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/ETHNICITYCODES
+                    extension:
+                      - url: ETHNICITYCODES
+                        valueCode: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/GENDERIDENTITYOTHER
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/IGNORERESTRICTIONS
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/INDUSTRYCODE
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/MOBILECARRIERID
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/NOTES
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/PORTALACCESSGIVEN
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/PREFERREDPRONOUNS
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/PRIMARYDEPARTMENTID
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/DEPARTMENTID
+                    valueInteger: 1
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/REFERRALSOURCEID
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/REGISTRATIONDATE
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/REFERRALSOURCEOTHER
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/SEXUALORIENTATION
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/SEXUALORIENTATIONOTHER
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/SSN
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/STATUS
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/ALLPATIENTSTATUSES
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/LOCALPATIENTID
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/PREVIOUSPATIENTIDS
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/CONTACTPREFERENCE
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/GUARANTORADDRESSSAMEASPATIENT
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/GUARANTOREMPLOYERID
+                    valueId: example
+                  - url: http://xcaliber-fhir/structureDefinition/CONSENTTOTEXT
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/CONSENTTOCALL
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/VETERAN
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/us-core-race
+                    extension:
+                      - url: 
+                          http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+                        valueCode: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/us-core-ethnicity
+                    extension:
+                      - url: 
+                          http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+                        valueCode: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/consent-to-text
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/consent-to-call
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/insured-signature
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/patient-signature
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/privacy-notice
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/expiration-date
+                    valueDate: '2024-01-01'
+                telecom:
+                  - system: phone
+                    value: '1234567890'
+                  - system: email
+                    value: alice.smith@example.com
+                managingOrganization:
+                  reference: Organization/example
+                communication:
+                  - language:
+                      coding:
+                        - system: urn:iso:std:iso:2166
+                          value: en
+                      preferred: true
+                maritalStatus:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/marital-status
+                      valueCode: single
+                deceasedBoolean: false
+                multipleBirthBoolean: false
+                multipleBirthIndex: 1
+                photo:
+                  - contentType: image/jpeg
+                    url: https://example.com/alice_smith_photo.jpg
+                name:
+                  - use: official
+                    family: Smith
+                    given:
+                      - Alice
+                gender:
+                  valueCode: female
+                birthDate: '1985-02-12'
+                address:
+                  - city: Sampleville
+                    line:
+                      - 123 Main St
+                    state: NY
+                    postalCode: '12345'
+                    country: US
+    error500ofgetinBasic:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+          description: HTTP status code for the error.
+        message:
+          type: string
+          example: Missing patientId
+          description: Error message summary.
+        details:
+          type: string
+          nullable: true
+          example: Optional details
+          oneOf:
+            - type: string
+              description: Additional string details about the error.
+            - type: object
+              description: Additional object details about the error.
+            - type: string
+            - type: object
+          description: Optional detailed error information.
+        status:
+          type: string
+          description: Error status, typically "error"
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details:
+        status: error
+      description: Error response structure as per implementation
+    error401ofpostinPatient:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+        - success
+        - code
+        - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofpostinPatient:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+          description: HTTP status code for "not found" errors.
+        message:
+          type: string
+          example: MedicationRequest not found
+          description: A message indicating the observation resource was not 
+            found.
+        details:
+          type: string
+          example: No MedicationRequest exists with the given ID
+          nullable: true
+          description: Further details about the 404 error.
+      example:
+        statusCode: 404
+        message: MedicationRequest not found
+        details: No MedicationRequest exists with the given ID
+      required:
+        - statusCode
+        - message
+        - details
+    error500ofpostinPatient:
+      type: object
+      required:
+        - statusCode
+        - message
+        - details
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+          description: HTTP status code for server errors.
+        message:
+          type: string
+          example: Internal server error
+          description: Description of the server error.
+        details:
+          type: object
+          example: {}
+          nullable: true
+          description: Additional error details.
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+    response200ofpostinPatient:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+                - requestId
+                - source
+                - quorum
+                - notify
+            resourceType:
+              type: string
+              example: Patient
+            id:
+              type: string
+              example: example
+            active:
+              type: boolean
+              example: true
+            extension:
+              type: array
+              items:
+                type: object
+            telecom:
+              type: array
+              items:
+                type: object
+            managingOrganization:
+              type: object
+            communication:
+              type: array
+              items:
+                type: object
+            maritalStatus:
+              type: object
+            deceasedBoolean:
+              type: boolean
+            multipleBirthBoolean:
+              type: boolean
+            multipleBirthIndex:
+              type: integer
+            photo:
+              type: array
+              items:
+                type: object
+            name:
+              type: array
+              items:
+                type: object
+            gender:
+              type: object
+            birthDate:
+              type: string
+            address:
+              type: array
+              items:
+                type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Patient
+          id: example
+          active: true
+          extension:
+            - url: http://xcaliber-fhir/structureDefinition/LEGALSEX
+              valueCode: example
+            - url: http://xcaliber-fhir/structureDefinition/SEX
+              valueCode: example
+            - url: 
+                http://xcaliber-fhir/structureDefinition/CLINICALORDERTYPEGROUPID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/COUNTRYCODE
+              valueString: example
+            - url: 
+                http://xcaliber-fhir/structureDefinition/DEFAULTPHARMACYNCPDPID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/ETHNICITYCODES
+              extension:
+                - url: ETHNICITYCODES
+                  valueCode: example
+            - url: http://xcaliber-fhir/structureDefinition/GENDERIDENTITYOTHER
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/IGNORERESTRICTIONS
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/INDUSTRYCODE
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/MOBILECARRIERID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/NOTES
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/PORTALACCESSGIVEN
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/PREFERREDPRONOUNS
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/PRIMARYDEPARTMENTID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/DEPARTMENTID
+              valueInteger: 1
+            - url: http://xcaliber-fhir/structureDefinition/REFERRALSOURCEID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/REGISTRATIONDATE
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/REFERRALSOURCEOTHER
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/SEXUALORIENTATION
+              valueString: example
+            - url: 
+                http://xcaliber-fhir/structureDefinition/SEXUALORIENTATIONOTHER
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/SSN
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/STATUS
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/ALLPATIENTSTATUSES
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/LOCALPATIENTID
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/PREVIOUSPATIENTIDS
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/CONTACTPREFERENCE
+              valueString: example
+            - url: 
+                http://xcaliber-fhir/structureDefinition/GUARANTORADDRESSSAMEASPATIENT
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/GUARANTOREMPLOYERID
+              valueId: example
+            - url: http://xcaliber-fhir/structureDefinition/CONSENTTOTEXT
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/CONSENTTOCALL
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/VETERAN
+              valueString: example
+            - url: http://xcaliber-fhir/structureDefinition/us-core-race
+              extension:
+                - url: 
+                    http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+                  valueCode: example
+            - url: http://xcaliber-fhir/structureDefinition/us-core-ethnicity
+              extension:
+                - url: 
+                    http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+                  valueCode: example
+            - url: http://xcaliber-fhir/structureDefinition/consent-to-text
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/consent-to-call
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/insured-signature
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/patient-signature
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/privacy-notice
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/expiration-date
+              valueDate: '2024-01-01'
+          telecom:
+            - system: phone
+              value: '1234567890'
+            - system: email
+              value: alice.smith@example.com
+          managingOrganization:
+            reference: Organization/example
+          communication:
+            - language:
+                coding:
+                  - system: urn:iso:std:iso:2166
+                    value: en
+                preferred: true
+          maritalStatus:
+            coding:
+              - system: http://terminology.hl7.org/CodeSystem/marital-status
+                valueCode: single
+          deceasedBoolean: false
+          multipleBirthBoolean: false
+          multipleBirthIndex: 1
+          photo:
+            - contentType: image/jpeg
+              url: https://example.com/alice_smith_photo.jpg
+          name:
+            - use: official
+              family: Smith
+              given:
+                - Alice
+          gender:
+            valueCode: female
+          birthDate: '1985-02-12'
+          address:
+            - city: Sampleville
+              line:
+                - 123 Main St
+              state: NY
+              postalCode: '12345'
+              country: US
+    response200ofgetinPatientpatientid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+                - requestId
+                - source
+                - quorum
+                - notify
+            resourceType:
+              type: string
+              example: Patient
+            id:
+              type: string
+              example: example
+            active:
+              type: boolean
+              example: true
+            extension:
+              type: array
+              items:
+                type: object
+            telecom:
+              type: array
+              items:
+                type: object
+            managingOrganization:
+              type: object
+            communication:
+              type: array
+              items:
+                type: object
+            maritalStatus:
+              type: object
+            deceasedBoolean:
+              type: boolean
+            multipleBirthBoolean:
+              type: boolean
+            multipleBirthIndex:
+              type: integer
+            photo:
+              type: array
+              items:
+                type: object
+            name:
+              type: array
+              items:
+                type: object
+            gender:
+              type: object
+            birthDate:
+              type: string
+            address:
+              type: array
+              items:
+                type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: Patient
+                id: example
+                active: true
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/LEGALSEX
+                    valueCode: example
+                  - url: http://xcaliber-fhir/structureDefinition/SEX
+                    valueCode: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/CLINICALORDERTYPEGROUPID
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/COUNTRYCODE
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/DEFAULTPHARMACYNCPDPID
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/ETHNICITYCODES
+                    extension:
+                      - url: ETHNICITYCODES
+                        valueCode: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/GENDERIDENTITYOTHER
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/IGNORERESTRICTIONS
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/INDUSTRYCODE
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/MOBILECARRIERID
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/NOTES
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/PORTALACCESSGIVEN
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/PREFERREDPRONOUNS
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/PRIMARYDEPARTMENTID
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/DEPARTMENTID
+                    valueInteger: 1
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/REFERRALSOURCEID
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/REGISTRATIONDATE
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/REFERRALSOURCEOTHER
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/SEXUALORIENTATION
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/SEXUALORIENTATIONOTHER
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/SSN
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/STATUS
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/ALLPATIENTSTATUSES
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/LOCALPATIENTID
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/PREVIOUSPATIENTIDS
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/CONTACTPREFERENCE
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/GUARANTORADDRESSSAMEASPATIENT
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/GUARANTOREMPLOYERID
+                    valueId: example
+                  - url: http://xcaliber-fhir/structureDefinition/CONSENTTOTEXT
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/CONSENTTOCALL
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/VETERAN
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/us-core-race
+                    extension:
+                      - url: 
+                          http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+                        valueCode: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/us-core-ethnicity
+                    extension:
+                      - url: 
+                          http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+                        valueCode: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/consent-to-text
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/consent-to-call
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/insured-signature
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/patient-signature
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/privacy-notice
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/expiration-date
+                    valueDate: '2024-01-01'
+                telecom:
+                  - system: phone
+                    value: '1234567890'
+                  - system: email
+                    value: alice.smith@example.com
+                managingOrganization:
+                  reference: Organization/example
+                communication:
+                  - language:
+                      coding:
+                        - system: urn:iso:std:iso:2166
+                          value: en
+                      preferred: true
+                maritalStatus:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/marital-status
+                      valueCode: single
+                deceasedBoolean: false
+                multipleBirthBoolean: false
+                multipleBirthIndex: 1
+                photo:
+                  - contentType: image/jpeg
+                    url: https://example.com/alice_smith_photo.jpg
+                name:
+                  - use: official
+                    family: Smith
+                    given:
+                      - Alice
+                gender:
+                  valueCode: female
+                birthDate: '1985-02-12'
+                address:
+                  - city: Sampleville
+                    line:
+                      - 123 Main St
+                    state: NY
+                    postalCode: '12345'
+                    country: US
+    error400ofgetinPatientpatientid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Bad Request
+        details:
+          type: string
+          example: Invalid parameter
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Bad Request
+        details: Invalid parameter
+    error401ofgetinPatientpatientid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+        - success
+        - code
+        - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinPatientpatientid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Resource not found
+        details:
+          type: string
+          example: Patient with id not found
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 404
+        message: Resource not found
+        details: Patient with id not found
+    error500ofgetinPatientpatientid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Unexpected server failure.
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Unexpected server failure.
+    response200ofputinPatientpatientid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+                - requestId
+                - source
+                - quorum
+                - notify
+            resourceType:
+              type: string
+              example: Patient
+            id:
+              type: string
+              example: example
+            active:
+              type: boolean
+              example: true
+            extension:
+              type: array
+              items:
+                type: object
+            telecom:
+              type: array
+              items:
+                type: object
+            managingOrganization:
+              type: object
+            communication:
+              type: array
+              items:
+                type: object
+            maritalStatus:
+              type: object
+            deceasedBoolean:
+              type: boolean
+            multipleBirthBoolean:
+              type: boolean
+            multipleBirthIndex:
+              type: integer
+            photo:
+              type: array
+              items:
+                type: object
+            name:
+              type: array
+              items:
+                type: object
+            gender:
+              type: object
+            birthDate:
+              type: string
+            address:
+              type: array
+              items:
+                type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: Patient
+                id: example
+                active: true
+                extension:
+                  - url: http://xcaliber-fhir/structureDefinition/LEGALSEX
+                    valueCode: example
+                  - url: http://xcaliber-fhir/structureDefinition/SEX
+                    valueCode: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/CLINICALORDERTYPEGROUPID
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/COUNTRYCODE
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/DEFAULTPHARMACYNCPDPID
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/ETHNICITYCODES
+                    extension:
+                      - url: ETHNICITYCODES
+                        valueCode: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/GENDERIDENTITYOTHER
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/IGNORERESTRICTIONS
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/INDUSTRYCODE
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/MOBILECARRIERID
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/NOTES
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/PORTALACCESSGIVEN
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/PREFERREDPRONOUNS
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/PRIMARYDEPARTMENTID
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/DEPARTMENTID
+                    valueInteger: 1
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/REFERRALSOURCEID
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/REGISTRATIONDATE
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/REFERRALSOURCEOTHER
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/SEXUALORIENTATION
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/SEXUALORIENTATIONOTHER
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/SSN
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/STATUS
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/ALLPATIENTSTATUSES
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/LOCALPATIENTID
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/PREVIOUSPATIENTIDS
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/CONTACTPREFERENCE
+                    valueString: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/GUARANTORADDRESSSAMEASPATIENT
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/GUARANTOREMPLOYERID
+                    valueId: example
+                  - url: http://xcaliber-fhir/structureDefinition/CONSENTTOTEXT
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/CONSENTTOCALL
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/VETERAN
+                    valueString: example
+                  - url: http://xcaliber-fhir/structureDefinition/us-core-race
+                    extension:
+                      - url: 
+                          http://hl7.org/fhir/us/core/StructureDefinition/us-core-race
+                        valueCode: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/us-core-ethnicity
+                    extension:
+                      - url: 
+                          http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity
+                        valueCode: example
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/consent-to-text
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/consent-to-call
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/insured-signature
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/patient-signature
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/privacy-notice
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/expiration-date
+                    valueDate: '2024-01-01'
+                telecom:
+                  - system: phone
+                    value: '1234567890'
+                  - system: email
+                    value: alice.smith@example.com
+                managingOrganization:
+                  reference: Organization/example
+                communication:
+                  - language:
+                      coding:
+                        - system: urn:iso:std:iso:2166
+                          value: en
+                      preferred: true
+                maritalStatus:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/marital-status
+                      valueCode: single
+                deceasedBoolean: false
+                multipleBirthBoolean: false
+                multipleBirthIndex: 1
+                photo:
+                  - contentType: image/jpeg
+                    url: https://example.com/alice_smith_photo.jpg
+                name:
+                  - use: official
+                    family: Smith
+                    given:
+                      - Alice
+                gender:
+                  valueCode: female
+                birthDate: '1985-02-12'
+                address:
+                  - city: Sampleville
+                    line:
+                      - 123 Main St
+                    state: NY
+                    postalCode: '12345'
+                    country: US
+    error400ofputinPatientpatientid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Bad Request
+        details:
+          type: string
+          example: Invalid parameter
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Bad Request
+        details: Invalid parameter
+    error401ofputinPatientpatientid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+        - success
+        - code
+        - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofputinPatientpatientid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Resource not found
+        details:
+          type: string
+          example: Patient with id not found
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 404
+        message: Resource not found
+        details: Patient with id not found
+    error500ofputinPatientpatientid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Unexpected server failure.
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Unexpected server failure.
+    response200ofdeleteinPatientpatientid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+                - requestId
+                - source
+                - quorum
+                - notify
+            id:
+              type: string
+              example: '123456'
+            status:
+              type: string
+              example: success
+      required:
+        - context
+        - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                id: '123456'
+                status: success
+    error400ofdeleteinPatientpatientid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Bad Request
+        details:
+          type: string
+          example: Invalid parameter
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 400
+        message: Bad Request
+        details: Invalid parameter
+    error401ofdeleteinPatientpatientid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+        - success
+        - code
+        - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofdeleteinPatientpatientid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Resource not found
+        details:
+          type: string
+          example: Patient with id not found
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 404
+        message: Resource not found
+        details: Patient with id not found
+    error500ofdeleteinPatientpatientid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Unexpected server failure.
+      required:
+        - statusCode
+        - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Unexpected server failure.
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - Auth: []

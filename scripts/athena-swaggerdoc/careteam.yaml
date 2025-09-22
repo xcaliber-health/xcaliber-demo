@@ -1,0 +1,792 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: CareTeam
+  description: Represents a group of healthcare professionals, caregivers, and related
+    participants involved in the care of a patient. The CareTeam resource documents
+    roles, relationships, and responsibilities, enabling coordination and communication
+    among team members to support patient-centered care. It supports capturing both
+    planned and actual team compositions, as well as associated details such as timeframes,
+    organizations, and roles. Extensions and references to patients, practitioners,
+    or other resources allow comprehensive modeling of real-world care delivery teams.
+paths:
+  /api/v2/CareTeam:
+    get:
+      summary: List CareTeam resources
+      operationId: getAthenaCareTeam
+      tags:
+      - CareTeam
+      parameters:
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: date'
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: USCoreCareTeamRole
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: USCoreCareTeamRole'
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: category'
+      - name: encounter
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: encounter'
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: name'
+      - name: participant
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: participant'
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: status'
+      - name: subject
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: subject'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinCareTeam'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinCareTeam'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinCareTeam'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: CareTeam
+                        subject:
+                          reference: Patient/123
+                        contained:
+                        - resourceType: Practitioner
+                          id: '90210'
+                          name:
+                          - given:
+                            - John
+                            - Michael
+                            family: Smith
+                            text: Dr. John Smith
+                            suffix:
+                            - MD
+                            extension: []
+                          address:
+                          - line:
+                            - 123 Main St
+                            - Suite 100
+                            city: Springfield
+                            country: US
+                            state: IL
+                            postalCode: '62701'
+                          qualification:
+                          - code:
+                              text: Internal Medicine
+                          extension:
+                          - url: http://xcaliber-fhir/structureDefinition/facility-id
+                            valueString: facility123
+                        - resourceType: Practitioner
+                          id: practitioner-1
+                          name:
+                          - text: Dr. Smith
+                            suffix:
+                            - MD
+                            extension:
+                            - url: http://xcaliber-fhir/structureDefinition/preferred-name
+                              valueString: John Smith
+                          identifier:
+                          - type:
+                              text: npi
+                            value: '1234567890'
+                          telecom:
+                          - system: fax
+                            value: 555-123-4567
+                          - system: phone
+                            value: 555-987-6543
+                          qualification:
+                          - code:
+                              text: Internal Medicine
+                        participant:
+                        - id: member123
+                          member:
+                            reference: Practitioner/90210
+                          role:
+                          - coding:
+                            - code: primary
+                              display: Primary Care Provider
+                        - member:
+                            reference: '#practitioner-1'
+                        note:
+                        - text: Primary care team for patient management
+    post:
+      summary: Create CareTeam resource
+      operationId: createCareTeamInAthena
+      tags:
+      - CareTeam
+      parameters:
+      - *id001
+      - *id002
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      
+      responses:
+        '201':
+          description: CareTeam resource created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response201ofpostinCareTeam'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinCareTeam'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinCareTeam'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinCareTeam'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Accepted:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: CareTeam
+                  status: active
+                  name: Care Coordination Team
+                  subject:
+                    reference: Patient/4406
+                  participant:
+                  - member:
+                      reference: Practitioner/27
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/patient-facing-call
+                    valueString: Y
+                  - url: http://xcaliber-fhir/structureDefinition/third-party-user-name
+                    valueString: care-navigator
+                  - url: http://xcaliber-fhir/structureDefinition/department-id
+                    valueInteger: 150
+                  - url: http://xcaliber-fhir/structureDefinition/recipient-class-id
+                    valueInteger: 301
+  /api/v2/CareTeam/{care-team-id}:
+    delete:
+      summary: Delete CareTeam member by ID
+      operationId: deleteAthenaCareTeam
+      tags:
+      - CareTeam
+      parameters:
+      - name: care-team-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier of the CareTeam to delete a member from.
+          Required for deletion."'
+      - *id001
+      - *id002
+      responses:
+        '200':
+          description: Deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofdeleteinCareTeamcareteamid'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofdeleteinCareTeamcareteamid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinCareTeamcareteamid'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinCareTeamcareteamid'
+components:
+  schemas:
+    ExtractedSchema427:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          description: '"Context in which the CareTeam is being created. Contains
+            relevant information about the creation request."
+
+
+            Alternatively, if you''d like a slightly different phrasing:
+
+
+            "Additional context for creating the CareTeam resource, such as relevant
+            metadata or references."'
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: CareTeam
+            id:
+              type: string
+              example: careteam-123
+            status:
+              type: string
+              example: active
+            category:
+              type: array
+              items:
+                type: object
+            name:
+              type: string
+              example: Primary Care Team
+            subject:
+              type: object
+            participant:
+              type: array
+              items:
+                type: object
+            period:
+              type: object
+            managingOrganization:
+              type: array
+              items:
+                type: object
+            extension:
+              type: array
+              items:
+                type: object
+          required:
+          - resourceType
+          - id
+          - status
+          - participant
+          description: '"CareTeam resource data to be created. Contains attributes
+            such as patient, practitioner, and care team details."'
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: CareTeam
+          id: careteam-123
+          status: active
+          name: Primary Care Team
+          participant:
+          - role:
+            - coding:
+              - code: practitioner
+            member:
+              reference: Practitioner/98765
+    response200ofgetinCareTeam:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: CareTeam
+            id:
+              type: string
+              example: careteam-123
+            status:
+              type: string
+              example: active
+            category:
+              type: array
+              items:
+                type: object
+            name:
+              type: string
+              example: Primary Care Team
+            subject:
+              type: object
+            participant:
+              type: array
+              items:
+                type: object
+            period:
+              type: object
+            managingOrganization:
+              type: array
+              items:
+                type: object
+            extension:
+              type: array
+              items:
+                type: object
+          required:
+          - resourceType
+          - id
+          - status
+          - participant
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: CareTeam
+              id: careteam-123
+              status: active
+              name: Primary Care Team
+              participant:
+              - role:
+                - coding:
+                  - code: practitioner
+                member:
+                  reference: Practitioner/98765
+    error400ofgetinCareTeam:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: extra details here
+    error401ofgetinCareTeam:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinCareTeam:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: extra details here
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: extra details here
+    response201ofpostinCareTeam:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: CareTeam
+            id:
+              type: string
+              example: careteam-123
+            status:
+              type: string
+              example: active
+            category:
+              type: array
+              items:
+                type: object
+            name:
+              type: string
+              example: Primary Care Team
+            subject:
+              type: object
+            participant:
+              type: array
+              items:
+                type: object
+            period:
+              type: object
+            managingOrganization:
+              type: array
+              items:
+                type: object
+            extension:
+              type: array
+              items:
+                type: object
+          required:
+          - resourceType
+          - id
+          - status
+          - participant
+      required:
+      - context
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: CareTeam
+              id: careteam-123
+              status: active
+              name: Primary Care Team
+              participant:
+              - role:
+                - coding:
+                  - code: practitioner
+                member:
+                  reference: Practitioner/98765
+    error400ofpostinCareTeam:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: extra details here
+    error401ofpostinCareTeam:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofpostinCareTeam:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: extra details here
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: extra details here
+    response200ofdeleteinCareTeamcareteamid:
+      type: object
+      properties:
+        id:
+          type: string
+          example: careteam-123
+        status:
+          type: string
+          example: deleted
+      required:
+      - id
+      - status
+      example:
+        id: careteam-123
+        status: deleted
+    error400ofdeleteinCareTeamcareteamid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: extra details here
+    error401ofdeleteinCareTeamcareteamid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofdeleteinCareTeamcareteamid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: extra details here
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: extra details here
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

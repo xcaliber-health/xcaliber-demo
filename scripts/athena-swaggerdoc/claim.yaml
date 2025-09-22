@@ -1,0 +1,2280 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as 
+    Fire) is a standard for exchanging healthcare information electronically. It
+    is designed to be a modern, flexible, and web-based alternative to older, 
+    more cumbersome standards like HL7 v2. FHIR uses a RESTful API specification
+    to define how to interact with Resources - this means it uses standard HTTP 
+    verbs (GET, POST, PUT, DELETE). Resources are the fundamental units of data 
+    in FHIR; they can represent anything from patient demographics to clinical 
+    observations to medications.
+servers:
+  - url: https://xchange-sandbox.xcaliberapis.com
+  - url: https://your.api.server
+tags:
+  - name: Claim
+    description: Claim resources in FHIR are used to submit and manage requests 
+      for payment for healthcare services provided to a patient. The Claim 
+      resource captures essential billing information, including patient 
+      identifiers, provider details, service dates, procedures performed, 
+      diagnoses, payment amounts, and adjudication outcomes.
+paths:
+  /api/v2/Claim:
+    get:
+      summary: List Claim resources
+      operationId: getAthenaClaimsV2
+      tags:
+        - Claim
+      parameters:
+        - &id001
+          name: x-source-id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Source system identifier.
+        - &id002
+          name: x-interaction-mode
+          in: header
+          required: true
+          schema:
+            type: boolean
+          description: Interaction mode flag (true/false).
+        - name: care-team
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: care-team'
+        - name: created
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: created'
+        - name: detail-udi
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: detail-udi'
+        - name: encounter
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: encounter'
+        - name: enterer
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: enterer'
+        - name: facility
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: facility'
+        - name: identifier
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: identifier'
+        - name: insurer
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: insurer'
+        - name: item-udi
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: item-udi'
+        - name: patient
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 'Filter: patient'
+        - name: payee
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: payee'
+        - name: priority
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: priority'
+        - name: procedure-udi
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: procedure-udi'
+        - name: provider
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: provider'
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: status'
+        - name: subdetail-udi
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: subdetail-udi'
+        - name: use
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: use'
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: List of Claim resources in FHIR Bundle
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinClaim'
+              example:
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  bundle:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 1
+                    entry:
+                      - resource:
+                          resourceType: Claim
+                          id: example
+                          meta:
+                            profile:
+                              - http://hl7.org/fhir/us/core/StructureDefinition/us-core-claim-v1
+                              - http://hl7.org/fhir/us/core/StructureDefinition/us-core-backboneelement
+                            tag:
+                              - code: HIST
+                                display: History
+                                valueCodeableConcept:
+                                  coding:
+                                    - system: 
+                                        http://terminology.hl7.org/CodeSystem/history-status
+                                      code: active
+                                      display: Active
+                            lastUpdated: '2022-01-01T00:00:00Z'
+                          extension:
+                            - url: TINY_URLS.CLAIM.ALLOWABLEAMOUNT
+                              valueString: '150.00'
+                            - url: TINY_URLS.CLAIM.ALLOWABLEMAX
+                              valueString: '200.00'
+                            - url: TINY_URLS.CLAIM.ALLOWABLEMIN
+                              valueString: '100.00'
+                            - url: TINY_URLS.CLAIM.APPOINTMENTID
+                              valueString: appt-98765
+                            - url: TINY_URLS.CLAIM.DELETEDDIAGNOSIS
+                              valueString: E11.9
+                            - url: TINY_URLS.CLAIM.DEPARTMENTID
+                              valueString: dept-12345
+                            - url: TINY_URLS.CLAIM.NOTE
+                              valueString: Follow-up required in two weeks.
+                            - url: TINY_URLS.CLAIM.PATIENTPAYERNOTE
+                              valueString: Patient responsible for copay.
+                            - url: TINY_URLS.CLAIM.PRIMARYINSURANCEPACKAGEID
+                              valueString: ins-pkg-001
+                            - url: TINY_URLS.CLAIM.PRIMARYINSURANCESTATUS
+                              valueString: active
+                            - url: TINY_URLS.CLAIM.PROCEDURECHARGEAMOUNT
+                              valueString: '350.00'
+                            - url: TINY_URLS.CLAIM.PROCEDURETRANSACTIONID
+                              valueString: txn-45678
+                            - url: TINY_URLS.CLAIM.REFERRALAUTHID
+                              valueString: auth-78901
+                            - url: TINY_URLS.CLAIM.REFERRINGPROVIDERID
+                              valueString: prov-1122
+                            - url: TINY_URLS.CLAIM.RESERVED19
+                              valueString: Reserved field value
+                            - url: TINY_URLS.CLAIM.SECONDARYINSURANCEPACKAGEID
+                              valueString: ins-pkg-002
+                            - url: TINY_URLS.CLAIM.TRANSACTIONDETAILS
+                              valueString: '{"date":"2022-04-01","type":"charge","status":"completed"}'
+                            - url: TINY_URLS.CLAIM.TRANSACTIONID
+                              valueString: txn-99887
+                          text:
+                            div: <div><p>This is a claim resource.</p></div>
+                          item:
+                            - sequence: 1
+                              status: entered
+                              detail:
+                                sequence: 1
+                                code:
+                                  coding:
+                                    - system: 
+                                        http://terminology.hl7.org/CodeSystem/procedure-code-system
+                                      code: example-procedure-code
+                                      display: Example Procedure Code
+                                description:
+                                  coding:
+                                    - system: 
+                                        http://terminology.hl7.org/CodeSystem/procedure-code-system
+                                      code: example-procedure-description
+                                      display: Example Procedure Description
+                                quantity:
+                                  value: 1
+                                  unit: pc
+                                performer:
+                                  - reference: Practitioner/example
+                                partOf:
+                                  reference: Encounter/example
+                          payment:
+                            - sequence: 1
+                              status: entered
+                              detail:
+                                sequence: 1
+                                code:
+                                  coding:
+                                    - system: 
+                                        http://terminology.hl7.org/CodeSystem/claim-payment-intent
+                                      code: usual
+                                      display: Usual, customary, and reasonable
+                                value:
+                                  currency: USD
+                                  valueQuantity:
+                                    value: 100
+                                    comparator: greater
+                                payee:
+                                  reference: Practitioner/example
+                                businessArrangement:
+                                  code:
+                                    coding:
+                                      - system: 
+                                          http://terminology.hl7.org/CodeSystem/claim-payment-business-arrangement
+                                        code: none
+                                        display: None
+                                payeeRelated:
+                                  - sequence: 1
+                                    type: provider
+                                    value:
+                                      reference: Practitioner/example
+                          adjudication:
+                            - sequence: 1
+                              status: entered
+                              detail:
+                                sequence: 1
+                                outcome:
+                                  coding:
+                                    - system: 
+                                        http://terminology.hl7.org/CodeSystem/claim-adjudication-outcome
+                                      code: approved
+                                      display: Approved
+                                reason:
+                                  coding:
+                                    - system: 
+                                        http://terminology.hl7.org/CodeSystem/claim-adjudication-reason
+                                      code: preauthorization-not-required
+                                      display: Preauthorization not required
+                                financialResponsibility:
+                                  - sequence: 2
+                                    type: insurer
+                                    value:
+                                      percent: 20
+                                      currency: USD
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinClaim'
+              example:
+                statusCode: 400
+                message: Required value missing
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinClaim'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinClaim'
+              example:
+                statusCode: 404
+                message: Not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinClaim'
+              example:
+                statusCode: 500
+                message: Internal server error
+    post:
+      summary: Create Athena Claim
+      tags:
+        - Claim
+      parameters:
+        - *id001
+        - *id002
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+        - name: patient
+          in: query
+          required: true
+          schema:
+            type: string
+          description: ""
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ExtractedSchema1132'
+            example:
+              context:
+                requestId: abc123
+                source: ATHENA
+                quorum: true
+                notify: true
+              data:
+                resourceType: Claim
+                id: example
+                meta:
+                  profile:
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-claim-v1
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-backboneelement
+                  tag:
+                    - code: HIST
+                      display: History
+                      valueCodeableConcept:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/history-status
+                            code: active
+                            display: Active
+                  lastUpdated: '2022-01-01T00:00:00Z'
+                extension:
+                  - url: TINY_URLS.CLAIM.ALLOWABLEAMOUNT
+                    valueString: '150.00'
+                  - url: TINY_URLS.CLAIM.ALLOWABLEMAX
+                    valueString: '200.00'
+                  - url: TINY_URLS.CLAIM.ALLOWABLEMIN
+                    valueString: '100.00'
+                  - url: TINY_URLS.CLAIM.APPOINTMENTID
+                    valueString: appt-98765
+                  - url: TINY_URLS.CLAIM.DELETEDDIAGNOSIS
+                    valueString: E11.9
+                  - url: TINY_URLS.CLAIM.DEPARTMENTID
+                    valueString: dept-12345
+                  - url: TINY_URLS.CLAIM.NOTE
+                    valueString: Follow-up required in two weeks.
+                  - url: TINY_URLS.CLAIM.PATIENTPAYERNOTE
+                    valueString: Patient responsible for copay.
+                  - url: TINY_URLS.CLAIM.PRIMARYINSURANCEPACKAGEID
+                    valueString: ins-pkg-001
+                  - url: TINY_URLS.CLAIM.PRIMARYINSURANCESTATUS
+                    valueString: active
+                  - url: TINY_URLS.CLAIM.PROCEDURECHARGEAMOUNT
+                    valueString: '350.00'
+                  - url: TINY_URLS.CLAIM.PROCEDURETRANSACTIONID
+                    valueString: txn-45678
+                  - url: TINY_URLS.CLAIM.REFERRALAUTHID
+                    valueString: auth-78901
+                  - url: TINY_URLS.CLAIM.REFERRINGPROVIDERID
+                    valueString: prov-1122
+                  - url: TINY_URLS.CLAIM.RESERVED19
+                    valueString: Reserved field value
+                  - url: TINY_URLS.CLAIM.SECONDARYINSURANCEPACKAGEID
+                    valueString: ins-pkg-002
+                  - url: TINY_URLS.CLAIM.TRANSACTIONDETAILS
+                    valueString: '{"date":"2022-04-01","type":"charge","status":"completed"}'
+                  - url: TINY_URLS.CLAIM.TRANSACTIONID
+                    valueString: txn-99887
+                text:
+                  div: <div><p>This is a claim resource.</p></div>
+                item:
+                  - sequence: 1
+                    status: entered
+                    detail:
+                      sequence: 1
+                      code:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/procedure-code-system
+                            code: example-procedure-code
+                            display: Example Procedure Code
+                      description:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/procedure-code-system
+                            code: example-procedure-description
+                            display: Example Procedure Description
+                      quantity:
+                        value: 1
+                        unit: pc
+                      performer:
+                        - reference: Practitioner/example
+                      partOf:
+                        reference: Encounter/example
+                payment:
+                  - sequence: 1
+                    status: entered
+                    detail:
+                      sequence: 1
+                      code:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/claim-payment-intent
+                            code: usual
+                            display: Usual, customary, and reasonable
+                      value:
+                        currency: USD
+                        valueQuantity:
+                          value: 100
+                          comparator: greater
+                      payee:
+                        reference: Practitioner/example
+                      businessArrangement:
+                        code:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-payment-business-arrangement
+                              code: none
+                              display: None
+                      payeeRelated:
+                        - sequence: 1
+                          type: provider
+                          value:
+                            reference: Practitioner/example
+                adjudication:
+                  - sequence: 1
+                    status: entered
+                    detail:
+                      sequence: 1
+                      outcome:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/claim-adjudication-outcome
+                            code: approved
+                            display: Approved
+                      reason:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/claim-adjudication-reason
+                            code: preauthorization-not-required
+                            display: Preauthorization not required
+                      financialResponsibility:
+                        - sequence: 2
+                          type: insurer
+                          value:
+                            percent: 20
+                            currency: USD
+      responses:
+        '200':
+          description: Claim created
+          content:
+            application/json:
+              example:
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Claim
+                  id: example
+                  meta:
+                    profile:
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-claim-v1
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-backboneelement
+                    tag:
+                      - code: HIST
+                        display: History
+                        valueCodeableConcept:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/history-status
+                              code: active
+                              display: Active
+                    lastUpdated: '2022-01-01T00:00:00Z'
+                  extension:
+                    - url: TINY_URLS.CLAIM.ALLOWABLEAMOUNT
+                      valueString: '150.00'
+                    - url: TINY_URLS.CLAIM.ALLOWABLEMAX
+                      valueString: '200.00'
+                    - url: TINY_URLS.CLAIM.ALLOWABLEMIN
+                      valueString: '100.00'
+                    - url: TINY_URLS.CLAIM.APPOINTMENTID
+                      valueString: appt-98765
+                    - url: TINY_URLS.CLAIM.DELETEDDIAGNOSIS
+                      valueString: E11.9
+                    - url: TINY_URLS.CLAIM.DEPARTMENTID
+                      valueString: dept-12345
+                    - url: TINY_URLS.CLAIM.NOTE
+                      valueString: Follow-up required in two weeks.
+                    - url: TINY_URLS.CLAIM.PATIENTPAYERNOTE
+                      valueString: Patient responsible for copay.
+                    - url: TINY_URLS.CLAIM.PRIMARYINSURANCEPACKAGEID
+                      valueString: ins-pkg-001
+                    - url: TINY_URLS.CLAIM.PRIMARYINSURANCESTATUS
+                      valueString: active
+                    - url: TINY_URLS.CLAIM.PROCEDURECHARGEAMOUNT
+                      valueString: '350.00'
+                    - url: TINY_URLS.CLAIM.PROCEDURETRANSACTIONID
+                      valueString: txn-45678
+                    - url: TINY_URLS.CLAIM.REFERRALAUTHID
+                      valueString: auth-78901
+                    - url: TINY_URLS.CLAIM.REFERRINGPROVIDERID
+                      valueString: prov-1122
+                    - url: TINY_URLS.CLAIM.RESERVED19
+                      valueString: Reserved field value
+                    - url: TINY_URLS.CLAIM.SECONDARYINSURANCEPACKAGEID
+                      valueString: ins-pkg-002
+                    - url: TINY_URLS.CLAIM.TRANSACTIONDETAILS
+                      valueString: '{"date":"2022-04-01","type":"charge","status":"completed"}'
+                    - url: TINY_URLS.CLAIM.TRANSACTIONID
+                      valueString: txn-99887
+                  text:
+                    div: <div><p>This is a claim resource.</p></div>
+                  item:
+                    - sequence: 1
+                      status: entered
+                      detail:
+                        sequence: 1
+                        code:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/procedure-code-system
+                              code: example-procedure-code
+                              display: Example Procedure Code
+                        description:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/procedure-code-system
+                              code: example-procedure-description
+                              display: Example Procedure Description
+                        quantity:
+                          value: 1
+                          unit: pc
+                        performer:
+                          - reference: Practitioner/example
+                        partOf:
+                          reference: Encounter/example
+                  payment:
+                    - sequence: 1
+                      status: entered
+                      detail:
+                        sequence: 1
+                        code:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-payment-intent
+                              code: usual
+                              display: Usual, customary, and reasonable
+                        value:
+                          currency: USD
+                          valueQuantity:
+                            value: 100
+                            comparator: greater
+                        payee:
+                          reference: Practitioner/example
+                        businessArrangement:
+                          code:
+                            coding:
+                              - system: 
+                                  http://terminology.hl7.org/CodeSystem/claim-payment-business-arrangement
+                                code: none
+                                display: None
+                        payeeRelated:
+                          - sequence: 1
+                            type: provider
+                            value:
+                              reference: Practitioner/example
+                  adjudication:
+                    - sequence: 1
+                      status: entered
+                      detail:
+                        sequence: 1
+                        outcome:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-adjudication-outcome
+                              code: approved
+                              display: Approved
+                        reason:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-adjudication-reason
+                              code: preauthorization-not-required
+                              display: Preauthorization not required
+                        financialResponsibility:
+                          - sequence: 2
+                            type: insurer
+                            value:
+                              percent: 20
+                              currency: USD
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinClaim'
+              example:
+                statusCode: 400
+                message: Required value missing
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinClaim'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofpostinClaim'
+              example:
+                statusCode: 404
+                message: Not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinClaim'
+              example:
+                statusCode: 500
+                message: Internal server error
+  /api/v2/Claim/{claim-id}:
+    get:
+      summary: Get Claim resource by ID
+      operationId: getAthenaClaimByIdV2
+      tags:
+        - Claim
+      parameters:
+        - name: claim-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The claim identifier
+        - *id001
+        - *id002
+        
+      responses:
+        '200':
+          description: FHIR Claim resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinClaimclaimid'
+              example:
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Claim
+                  id: example
+                  meta:
+                    profile:
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-claim-v1
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-backboneelement
+                    tag:
+                      - code: HIST
+                        display: History
+                        valueCodeableConcept:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/history-status
+                              code: active
+                              display: Active
+                    lastUpdated: '2022-01-01T00:00:00Z'
+                  extension:
+                    - url: TINY_URLS.CLAIM.ALLOWABLEAMOUNT
+                      valueString: '150.00'
+                    - url: TINY_URLS.CLAIM.ALLOWABLEMAX
+                      valueString: '200.00'
+                    - url: TINY_URLS.CLAIM.ALLOWABLEMIN
+                      valueString: '100.00'
+                    - url: TINY_URLS.CLAIM.APPOINTMENTID
+                      valueString: appt-98765
+                    - url: TINY_URLS.CLAIM.DELETEDDIAGNOSIS
+                      valueString: E11.9
+                    - url: TINY_URLS.CLAIM.DEPARTMENTID
+                      valueString: dept-12345
+                    - url: TINY_URLS.CLAIM.NOTE
+                      valueString: Follow-up required in two weeks.
+                    - url: TINY_URLS.CLAIM.PATIENTPAYERNOTE
+                      valueString: Patient responsible for copay.
+                    - url: TINY_URLS.CLAIM.PRIMARYINSURANCEPACKAGEID
+                      valueString: ins-pkg-001
+                    - url: TINY_URLS.CLAIM.PRIMARYINSURANCESTATUS
+                      valueString: active
+                    - url: TINY_URLS.CLAIM.PROCEDURECHARGEAMOUNT
+                      valueString: '350.00'
+                    - url: TINY_URLS.CLAIM.PROCEDURETRANSACTIONID
+                      valueString: txn-45678
+                    - url: TINY_URLS.CLAIM.REFERRALAUTHID
+                      valueString: auth-78901
+                    - url: TINY_URLS.CLAIM.REFERRINGPROVIDERID
+                      valueString: prov-1122
+                    - url: TINY_URLS.CLAIM.RESERVED19
+                      valueString: Reserved field value
+                    - url: TINY_URLS.CLAIM.SECONDARYINSURANCEPACKAGEID
+                      valueString: ins-pkg-002
+                    - url: TINY_URLS.CLAIM.TRANSACTIONDETAILS
+                      valueString: '{"date":"2022-04-01","type":"charge","status":"completed"}'
+                    - url: TINY_URLS.CLAIM.TRANSACTIONID
+                      valueString: txn-99887
+                  text:
+                    div: <div><p>This is a claim resource.</p></div>
+                  item:
+                    - sequence: 1
+                      status: entered
+                      detail:
+                        sequence: 1
+                        code:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/procedure-code-system
+                              code: example-procedure-code
+                              display: Example Procedure Code
+                        description:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/procedure-code-system
+                              code: example-procedure-description
+                              display: Example Procedure Description
+                        quantity:
+                          value: 1
+                          unit: pc
+                        performer:
+                          - reference: Practitioner/example
+                        partOf:
+                          reference: Encounter/example
+                  payment:
+                    - sequence: 1
+                      status: entered
+                      detail:
+                        sequence: 1
+                        code:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-payment-intent
+                              code: usual
+                              display: Usual, customary, and reasonable
+                        value:
+                          currency: USD
+                          valueQuantity:
+                            value: 100
+                            comparator: greater
+                        payee:
+                          reference: Practitioner/example
+                        businessArrangement:
+                          code:
+                            coding:
+                              - system: 
+                                  http://terminology.hl7.org/CodeSystem/claim-payment-business-arrangement
+                                code: none
+                                display: None
+                        payeeRelated:
+                          - sequence: 1
+                            type: provider
+                            value:
+                              reference: Practitioner/example
+                  adjudication:
+                    - sequence: 1
+                      status: entered
+                      detail:
+                        sequence: 1
+                        outcome:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-adjudication-outcome
+                              code: approved
+                              display: Approved
+                        reason:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-adjudication-reason
+                              code: preauthorization-not-required
+                              display: Preauthorization not required
+                        financialResponsibility:
+                          - sequence: 2
+                            type: insurer
+                            value:
+                              percent: 20
+                              currency: USD
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinClaimclaimid'
+              example:
+                statusCode: 400
+                message: Required value missing
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinClaimclaimid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinClaimclaimid'
+              example:
+                statusCode: 404
+                message: Not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinClaimclaimid'
+              example:
+                statusCode: 500
+                message: Internal server error
+    put:
+      summary: Update Athena Claim
+      tags:
+        - Claim
+      parameters:
+        - name: claim-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the Athena claim to update. Required
+            for updating an existing claim."'
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ExtractedSchema1147'
+            example:
+              context:
+                requestId: abc123
+                source: ATHENA
+                quorum: true
+                notify: true
+              data:
+                resourceType: Claim
+                id: example
+                meta:
+                  profile:
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-claim-v1
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-backboneelement
+                  tag:
+                    - code: HIST
+                      display: History
+                      valueCodeableConcept:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/history-status
+                            code: active
+                            display: Active
+                  lastUpdated: '2022-01-01T00:00:00Z'
+                extension:
+                  - url: TINY_URLS.CLAIM.ALLOWABLEAMOUNT
+                    valueString: '150.00'
+                  - url: TINY_URLS.CLAIM.ALLOWABLEMAX
+                    valueString: '200.00'
+                  - url: TINY_URLS.CLAIM.ALLOWABLEMIN
+                    valueString: '100.00'
+                  - url: TINY_URLS.CLAIM.APPOINTMENTID
+                    valueString: appt-98765
+                  - url: TINY_URLS.CLAIM.DELETEDDIAGNOSIS
+                    valueString: E11.9
+                  - url: TINY_URLS.CLAIM.DEPARTMENTID
+                    valueString: dept-12345
+                  - url: TINY_URLS.CLAIM.NOTE
+                    valueString: Follow-up required in two weeks.
+                  - url: TINY_URLS.CLAIM.PATIENTPAYERNOTE
+                    valueString: Patient responsible for copay.
+                  - url: TINY_URLS.CLAIM.PRIMARYINSURANCEPACKAGEID
+                    valueString: ins-pkg-001
+                  - url: TINY_URLS.CLAIM.PRIMARYINSURANCESTATUS
+                    valueString: active
+                  - url: TINY_URLS.CLAIM.PROCEDURECHARGEAMOUNT
+                    valueString: '350.00'
+                  - url: TINY_URLS.CLAIM.PROCEDURETRANSACTIONID
+                    valueString: txn-45678
+                  - url: TINY_URLS.CLAIM.REFERRALAUTHID
+                    valueString: auth-78901
+                  - url: TINY_URLS.CLAIM.REFERRINGPROVIDERID
+                    valueString: prov-1122
+                  - url: TINY_URLS.CLAIM.RESERVED19
+                    valueString: Reserved field value
+                  - url: TINY_URLS.CLAIM.SECONDARYINSURANCEPACKAGEID
+                    valueString: ins-pkg-002
+                  - url: TINY_URLS.CLAIM.TRANSACTIONDETAILS
+                    valueString: '{"date":"2022-04-01","type":"charge","status":"completed"}'
+                  - url: TINY_URLS.CLAIM.TRANSACTIONID
+                    valueString: txn-99887
+                text:
+                  div: <div><p>This is a claim resource.</p></div>
+                item:
+                  - sequence: 1
+                    status: entered
+                    detail:
+                      sequence: 1
+                      code:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/procedure-code-system
+                            code: example-procedure-code
+                            display: Example Procedure Code
+                      description:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/procedure-code-system
+                            code: example-procedure-description
+                            display: Example Procedure Description
+                      quantity:
+                        value: 1
+                        unit: pc
+                      performer:
+                        - reference: Practitioner/example
+                      partOf:
+                        reference: Encounter/example
+                payment:
+                  - sequence: 1
+                    status: entered
+                    detail:
+                      sequence: 1
+                      code:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/claim-payment-intent
+                            code: usual
+                            display: Usual, customary, and reasonable
+                      value:
+                        currency: USD
+                        valueQuantity:
+                          value: 100
+                          comparator: greater
+                      payee:
+                        reference: Practitioner/example
+                      businessArrangement:
+                        code:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-payment-business-arrangement
+                              code: none
+                              display: None
+                      payeeRelated:
+                        - sequence: 1
+                          type: provider
+                          value:
+                            reference: Practitioner/example
+                adjudication:
+                  - sequence: 1
+                    status: entered
+                    detail:
+                      sequence: 1
+                      outcome:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/claim-adjudication-outcome
+                            code: approved
+                            display: Approved
+                      reason:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/claim-adjudication-reason
+                            code: preauthorization-not-required
+                            display: Preauthorization not required
+                      financialResponsibility:
+                        - sequence: 2
+                          type: insurer
+                          value:
+                            percent: 20
+                            currency: USD
+      responses:
+        '200':
+          description: Claim updated
+          content:
+            application/json:
+              example:
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Claim
+                  id: example
+                  meta:
+                    profile:
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-claim-v1
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-backboneelement
+                    tag:
+                      - code: HIST
+                        display: History
+                        valueCodeableConcept:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/history-status
+                              code: active
+                              display: Active
+                    lastUpdated: '2022-01-01T00:00:00Z'
+                  extension:
+                    - url: TINY_URLS.CLAIM.ALLOWABLEAMOUNT
+                      valueString: '150.00'
+                    - url: TINY_URLS.CLAIM.ALLOWABLEMAX
+                      valueString: '200.00'
+                    - url: TINY_URLS.CLAIM.ALLOWABLEMIN
+                      valueString: '100.00'
+                    - url: TINY_URLS.CLAIM.APPOINTMENTID
+                      valueString: appt-98765
+                    - url: TINY_URLS.CLAIM.DELETEDDIAGNOSIS
+                      valueString: E11.9
+                    - url: TINY_URLS.CLAIM.DEPARTMENTID
+                      valueString: dept-12345
+                    - url: TINY_URLS.CLAIM.NOTE
+                      valueString: Follow-up required in two weeks.
+                    - url: TINY_URLS.CLAIM.PATIENTPAYERNOTE
+                      valueString: Patient responsible for copay.
+                    - url: TINY_URLS.CLAIM.PRIMARYINSURANCEPACKAGEID
+                      valueString: ins-pkg-001
+                    - url: TINY_URLS.CLAIM.PRIMARYINSURANCESTATUS
+                      valueString: active
+                    - url: TINY_URLS.CLAIM.PROCEDURECHARGEAMOUNT
+                      valueString: '350.00'
+                    - url: TINY_URLS.CLAIM.PROCEDURETRANSACTIONID
+                      valueString: txn-45678
+                    - url: TINY_URLS.CLAIM.REFERRALAUTHID
+                      valueString: auth-78901
+                    - url: TINY_URLS.CLAIM.REFERRINGPROVIDERID
+                      valueString: prov-1122
+                    - url: TINY_URLS.CLAIM.RESERVED19
+                      valueString: Reserved field value
+                    - url: TINY_URLS.CLAIM.SECONDARYINSURANCEPACKAGEID
+                      valueString: ins-pkg-002
+                    - url: TINY_URLS.CLAIM.TRANSACTIONDETAILS
+                      valueString: '{"date":"2022-04-01","type":"charge","status":"completed"}'
+                    - url: TINY_URLS.CLAIM.TRANSACTIONID
+                      valueString: txn-99887
+                  text:
+                    div: <div><p>This is a claim resource.</p></div>
+                  item:
+                    - sequence: 1
+                      status: entered
+                      detail:
+                        sequence: 1
+                        code:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/procedure-code-system
+                              code: example-procedure-code
+                              display: Example Procedure Code
+                        description:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/procedure-code-system
+                              code: example-procedure-description
+                              display: Example Procedure Description
+                        quantity:
+                          value: 1
+                          unit: pc
+                        performer:
+                          - reference: Practitioner/example
+                        partOf:
+                          reference: Encounter/example
+                  payment:
+                    - sequence: 1
+                      status: entered
+                      detail:
+                        sequence: 1
+                        code:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-payment-intent
+                              code: usual
+                              display: Usual, customary, and reasonable
+                        value:
+                          currency: USD
+                          valueQuantity:
+                            value: 100
+                            comparator: greater
+                        payee:
+                          reference: Practitioner/example
+                        businessArrangement:
+                          code:
+                            coding:
+                              - system: 
+                                  http://terminology.hl7.org/CodeSystem/claim-payment-business-arrangement
+                                code: none
+                                display: None
+                        payeeRelated:
+                          - sequence: 1
+                            type: provider
+                            value:
+                              reference: Practitioner/example
+                  adjudication:
+                    - sequence: 1
+                      status: entered
+                      detail:
+                        sequence: 1
+                        outcome:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-adjudication-outcome
+                              code: approved
+                              display: Approved
+                        reason:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-adjudication-reason
+                              code: preauthorization-not-required
+                              display: Preauthorization not required
+                        financialResponsibility:
+                          - sequence: 2
+                            type: insurer
+                            value:
+                              percent: 20
+                              currency: USD
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofputinClaimclaimid'
+              example:
+                statusCode: 400
+                message: Required value missing
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofputinClaimclaimid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofputinClaimclaimid'
+              example:
+                statusCode: 404
+                message: Not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofputinClaimclaimid'
+              example:
+                statusCode: 500
+                message: Internal server error
+    patch:
+      summary: Add Claim Note
+      tags:
+        - Claim
+      parameters:
+        - name: claim-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the claim to add a note to. Required
+            to specify the claim for note addition."'
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ExtractedSchema1155'
+            example:
+              context:
+                requestId: abc123
+                source: ATHENA
+                quorum: true
+                notify: true
+              data:
+                resourceType: Claim
+                id: example
+                meta:
+                  profile:
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-claim-v1
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-backboneelement
+                  tag:
+                    - code: HIST
+                      display: History
+                      valueCodeableConcept:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/history-status
+                            code: active
+                            display: Active
+                  lastUpdated: '2022-01-01T00:00:00Z'
+                extension:
+                  - url: TINY_URLS.CLAIM.ALLOWABLEAMOUNT
+                    valueString: '150.00'
+                  - url: TINY_URLS.CLAIM.ALLOWABLEMAX
+                    valueString: '200.00'
+                  - url: TINY_URLS.CLAIM.ALLOWABLEMIN
+                    valueString: '100.00'
+                  - url: TINY_URLS.CLAIM.APPOINTMENTID
+                    valueString: appt-98765
+                  - url: TINY_URLS.CLAIM.DELETEDDIAGNOSIS
+                    valueString: E11.9
+                  - url: TINY_URLS.CLAIM.DEPARTMENTID
+                    valueString: dept-12345
+                  - url: TINY_URLS.CLAIM.NOTE
+                    valueString: Follow-up required in two weeks.
+                  - url: TINY_URLS.CLAIM.PATIENTPAYERNOTE
+                    valueString: Patient responsible for copay.
+                  - url: TINY_URLS.CLAIM.PRIMARYINSURANCEPACKAGEID
+                    valueString: ins-pkg-001
+                  - url: TINY_URLS.CLAIM.PRIMARYINSURANCESTATUS
+                    valueString: active
+                  - url: TINY_URLS.CLAIM.PROCEDURECHARGEAMOUNT
+                    valueString: '350.00'
+                  - url: TINY_URLS.CLAIM.PROCEDURETRANSACTIONID
+                    valueString: txn-45678
+                  - url: TINY_URLS.CLAIM.REFERRALAUTHID
+                    valueString: auth-78901
+                  - url: TINY_URLS.CLAIM.REFERRINGPROVIDERID
+                    valueString: prov-1122
+                  - url: TINY_URLS.CLAIM.RESERVED19
+                    valueString: Reserved field value
+                  - url: TINY_URLS.CLAIM.SECONDARYINSURANCEPACKAGEID
+                    valueString: ins-pkg-002
+                  - url: TINY_URLS.CLAIM.TRANSACTIONDETAILS
+                    valueString: '{"date":"2022-04-01","type":"charge","status":"completed"}'
+                  - url: TINY_URLS.CLAIM.TRANSACTIONID
+                    valueString: txn-99887
+                text:
+                  div: <div><p>This is a claim resource.</p></div>
+                item:
+                  - sequence: 1
+                    status: entered
+                    detail:
+                      sequence: 1
+                      code:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/procedure-code-system
+                            code: example-procedure-code
+                            display: Example Procedure Code
+                      description:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/procedure-code-system
+                            code: example-procedure-description
+                            display: Example Procedure Description
+                      quantity:
+                        value: 1
+                        unit: pc
+                      performer:
+                        - reference: Practitioner/example
+                      partOf:
+                        reference: Encounter/example
+                payment:
+                  - sequence: 1
+                    status: entered
+                    detail:
+                      sequence: 1
+                      code:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/claim-payment-intent
+                            code: usual
+                            display: Usual, customary, and reasonable
+                      value:
+                        currency: USD
+                        valueQuantity:
+                          value: 100
+                          comparator: greater
+                      payee:
+                        reference: Practitioner/example
+                      businessArrangement:
+                        code:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-payment-business-arrangement
+                              code: none
+                              display: None
+                      payeeRelated:
+                        - sequence: 1
+                          type: provider
+                          value:
+                            reference: Practitioner/example
+                adjudication:
+                  - sequence: 1
+                    status: entered
+                    detail:
+                      sequence: 1
+                      outcome:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/claim-adjudication-outcome
+                            code: approved
+                            display: Approved
+                      reason:
+                        coding:
+                          - system: 
+                              http://terminology.hl7.org/CodeSystem/claim-adjudication-reason
+                            code: preauthorization-not-required
+                            display: Preauthorization not required
+                      financialResponsibility:
+                        - sequence: 2
+                          type: insurer
+                          value:
+                            percent: 20
+                            currency: USD
+      responses:
+        '200':
+          description: Claim note added
+          content:
+            application/json:
+              example:
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Claim
+                  id: example
+                  meta:
+                    profile:
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-claim-v1
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-backboneelement
+                    tag:
+                      - code: HIST
+                        display: History
+                        valueCodeableConcept:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/history-status
+                              code: active
+                              display: Active
+                    lastUpdated: '2022-01-01T00:00:00Z'
+                  extension:
+                    - url: TINY_URLS.CLAIM.ALLOWABLEAMOUNT
+                      valueString: '150.00'
+                    - url: TINY_URLS.CLAIM.ALLOWABLEMAX
+                      valueString: '200.00'
+                    - url: TINY_URLS.CLAIM.ALLOWABLEMIN
+                      valueString: '100.00'
+                    - url: TINY_URLS.CLAIM.APPOINTMENTID
+                      valueString: appt-98765
+                    - url: TINY_URLS.CLAIM.DELETEDDIAGNOSIS
+                      valueString: E11.9
+                    - url: TINY_URLS.CLAIM.DEPARTMENTID
+                      valueString: dept-12345
+                    - url: TINY_URLS.CLAIM.NOTE
+                      valueString: Follow-up required in two weeks.
+                    - url: TINY_URLS.CLAIM.PATIENTPAYERNOTE
+                      valueString: Patient responsible for copay.
+                    - url: TINY_URLS.CLAIM.PRIMARYINSURANCEPACKAGEID
+                      valueString: ins-pkg-001
+                    - url: TINY_URLS.CLAIM.PRIMARYINSURANCESTATUS
+                      valueString: active
+                    - url: TINY_URLS.CLAIM.PROCEDURECHARGEAMOUNT
+                      valueString: '350.00'
+                    - url: TINY_URLS.CLAIM.PROCEDURETRANSACTIONID
+                      valueString: txn-45678
+                    - url: TINY_URLS.CLAIM.REFERRALAUTHID
+                      valueString: auth-78901
+                    - url: TINY_URLS.CLAIM.REFERRINGPROVIDERID
+                      valueString: prov-1122
+                    - url: TINY_URLS.CLAIM.RESERVED19
+                      valueString: Reserved field value
+                    - url: TINY_URLS.CLAIM.SECONDARYINSURANCEPACKAGEID
+                      valueString: ins-pkg-002
+                    - url: TINY_URLS.CLAIM.TRANSACTIONDETAILS
+                      valueString: '{"date":"2022-04-01","type":"charge","status":"completed"}'
+                    - url: TINY_URLS.CLAIM.TRANSACTIONID
+                      valueString: txn-99887
+                  text:
+                    div: <div><p>This is a claim resource.</p></div>
+                  item:
+                    - sequence: 1
+                      status: entered
+                      detail:
+                        sequence: 1
+                        code:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/procedure-code-system
+                              code: example-procedure-code
+                              display: Example Procedure Code
+                        description:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/procedure-code-system
+                              code: example-procedure-description
+                              display: Example Procedure Description
+                        quantity:
+                          value: 1
+                          unit: pc
+                        performer:
+                          - reference: Practitioner/example
+                        partOf:
+                          reference: Encounter/example
+                  payment:
+                    - sequence: 1
+                      status: entered
+                      detail:
+                        sequence: 1
+                        code:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-payment-intent
+                              code: usual
+                              display: Usual, customary, and reasonable
+                        value:
+                          currency: USD
+                          valueQuantity:
+                            value: 100
+                            comparator: greater
+                        payee:
+                          reference: Practitioner/example
+                        businessArrangement:
+                          code:
+                            coding:
+                              - system: 
+                                  http://terminology.hl7.org/CodeSystem/claim-payment-business-arrangement
+                                code: none
+                                display: None
+                        payeeRelated:
+                          - sequence: 1
+                            type: provider
+                            value:
+                              reference: Practitioner/example
+                  adjudication:
+                    - sequence: 1
+                      status: entered
+                      detail:
+                        sequence: 1
+                        outcome:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-adjudication-outcome
+                              code: approved
+                              display: Approved
+                        reason:
+                          coding:
+                            - system: 
+                                http://terminology.hl7.org/CodeSystem/claim-adjudication-reason
+                              code: preauthorization-not-required
+                              display: Preauthorization not required
+                        financialResponsibility:
+                          - sequence: 2
+                            type: insurer
+                            value:
+                              percent: 20
+                              currency: USD
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpatchinClaimclaimid'
+              example:
+                statusCode: 400
+                message: Required value missing
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpatchinClaimclaimid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofpatchinClaimclaimid'
+              example:
+                statusCode: 404
+                message: Not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpatchinClaimclaimid'
+              example:
+                statusCode: 500
+                message: Internal server error
+components:
+  schemas:
+    ExtractedSchema1132:
+      type: object
+      properties: {}
+    ExtractedSchema1147:
+      type: object
+      properties: {}
+    ExtractedSchema1155:
+      type: object
+      properties: {}
+    response200ofgetinClaim:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            bundle:
+              type: object
+              properties:
+                resourceType:
+                  type: string
+                  example: Bundle
+                type:
+                  type: string
+                  example: searchset
+                total:
+                  type: integer
+                  example: 1
+                entry:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      resource:
+                        type: object
+                        properties:
+                          resourceType:
+                            type: string
+                            example: Claim
+                          id:
+                            type: string
+                            example: example
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          bundle:
+            resourceType: Bundle
+            type: searchset
+            total: 1
+            entry:
+              - resource:
+                  resourceType: Claim
+                  id: example
+    error400ofgetinClaim:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Required value missing
+    error401ofgetinClaim:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+        - success
+        - code
+        - message
+    error404ofgetinClaim:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Not found
+    error500ofgetinClaim:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+    error400ofpostinClaim:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Required value missing
+    error401ofpostinClaim:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+        - success
+        - code
+        - message
+    error404ofpostinClaim:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Not found
+    error500ofpostinClaim:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+    response200ofgetinClaimclaimid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Claim
+            id:
+              type: string
+              example: example
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                tag:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      display:
+                        type: string
+                      valueCodeableConcept:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                                display:
+                                  type: string
+                lastUpdated:
+                  type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+            text:
+              type: object
+              properties:
+                div:
+                  type: string
+            item:
+              type: array
+              items:
+                type: object
+                properties:
+                  sequence:
+                    type: integer
+                  status:
+                    type: string
+                  detail:
+                    type: object
+                    properties:
+                      sequence:
+                        type: integer
+                      code:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                                display:
+                                  type: string
+                      description:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                                display:
+                                  type: string
+                      quantity:
+                        type: object
+                        properties:
+                          value:
+                            type: integer
+                          unit:
+                            type: string
+                      performer:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                      partOf:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+            payment:
+              type: array
+              items:
+                type: object
+                properties:
+                  sequence:
+                    type: integer
+                  status:
+                    type: string
+                  detail:
+                    type: object
+                    properties:
+                      sequence:
+                        type: integer
+                      code:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                                display:
+                                  type: string
+                      value:
+                        type: object
+                        properties:
+                          currency:
+                            type: string
+                          valueQuantity:
+                            type: object
+                            properties:
+                              value:
+                                type: integer
+                              comparator:
+                                type: string
+                      payee:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      businessArrangement:
+                        type: object
+                        properties:
+                          code:
+                            type: object
+                            properties:
+                              coding:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    system:
+                                      type: string
+                                    code:
+                                      type: string
+                                    display:
+                                      type: string
+                      payeeRelated:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            sequence:
+                              type: integer
+                            type:
+                              type: string
+                            value:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+            adjudication:
+              type: array
+              items:
+                type: object
+                properties:
+                  sequence:
+                    type: integer
+                  status:
+                    type: string
+                  detail:
+                    type: object
+                    properties:
+                      sequence:
+                        type: integer
+                      outcome:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                                display:
+                                  type: string
+                      reason:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                                display:
+                                  type: string
+                      financialResponsibility:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            sequence:
+                              type: integer
+                            type:
+                              type: string
+                            value:
+                              type: object
+                              properties:
+                                percent:
+                                  type: integer
+                                currency:
+                                  type: string
+      required:
+        - context
+        - data
+      example:
+        context:
+          requestId: example-reqid
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Claim
+          id: example
+          meta:
+            profile:
+              - http://hl7.org/fhir/us/core/StructureDefinition/us-core-claim-v1
+              - http://hl7.org/fhir/us/core/StructureDefinition/us-core-backboneelement
+            tag:
+              - code: HIST
+                display: History
+                valueCodeableConcept:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/history-status
+                      code: active
+                      display: Active
+            lastUpdated: '2022-01-01T00:00:00Z'
+          extension:
+            - url: TINY_URLS.CLAIM.ALLOWABLEAMOUNT
+              valueString: '150.00'
+            - url: TINY_URLS.CLAIM.ALLOWABLEMAX
+              valueString: '200.00'
+            - url: TINY_URLS.CLAIM.ALLOWABLEMIN
+              valueString: '100.00'
+            - url: TINY_URLS.CLAIM.APPOINTMENTID
+              valueString: appt-98765
+            - url: TINY_URLS.CLAIM.DELETEDDIAGNOSIS
+              valueString: E11.9
+            - url: TINY_URLS.CLAIM.DEPARTMENTID
+              valueString: dept-12345
+            - url: TINY_URLS.CLAIM.NOTE
+              valueString: Follow-up required in two weeks.
+            - url: TINY_URLS.CLAIM.PATIENTPAYERNOTE
+              valueString: Patient responsible for copay.
+            - url: TINY_URLS.CLAIM.PRIMARYINSURANCEPACKAGEID
+              valueString: ins-pkg-001
+            - url: TINY_URLS.CLAIM.PRIMARYINSURANCESTATUS
+              valueString: active
+            - url: TINY_URLS.CLAIM.PROCEDURECHARGEAMOUNT
+              valueString: '350.00'
+            - url: TINY_URLS.CLAIM.PROCEDURETRANSACTIONID
+              valueString: txn-45678
+            - url: TINY_URLS.CLAIM.REFERRALAUTHID
+              valueString: auth-78901
+            - url: TINY_URLS.CLAIM.REFERRINGPROVIDERID
+              valueString: prov-1122
+            - url: TINY_URLS.CLAIM.RESERVED19
+              valueString: Reserved field value
+            - url: TINY_URLS.CLAIM.SECONDARYINSURANCEPACKAGEID
+              valueString: ins-pkg-002
+            - url: TINY_URLS.CLAIM.TRANSACTIONDETAILS
+              valueString: '{"date":"2022-04-01","type":"charge","status":"completed"}'
+            - url: TINY_URLS.CLAIM.TRANSACTIONID
+              valueString: txn-99887
+          text:
+            div: <div><p>This is a claim resource.</p></div>
+          item:
+            - sequence: 1
+              status: entered
+              detail:
+                sequence: 1
+                code:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/procedure-code-system
+                      code: example-procedure-code
+                      display: Example Procedure Code
+                description:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/procedure-code-system
+                      code: example-procedure-description
+                      display: Example Procedure Description
+                quantity:
+                  value: 1
+                  unit: pc
+                performer:
+                  - reference: Practitioner/example
+                partOf:
+                  reference: Encounter/example
+          payment:
+            - sequence: 1
+              status: entered
+              detail:
+                sequence: 1
+                code:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/claim-payment-intent
+                      code: usual
+                      display: Usual, customary, and reasonable
+                value:
+                  currency: USD
+                  valueQuantity:
+                    value: 100
+                    comparator: greater
+                payee:
+                  reference: Practitioner/example
+                businessArrangement:
+                  code:
+                    coding:
+                      - system: 
+                          http://terminology.hl7.org/CodeSystem/claim-payment-business-arrangement
+                        code: none
+                        display: None
+                payeeRelated:
+                  - sequence: 1
+                    type: provider
+                    value:
+                      reference: Practitioner/example
+          adjudication:
+            - sequence: 1
+              status: entered
+              detail:
+                sequence: 1
+                outcome:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/claim-adjudication-outcome
+                      code: approved
+                      display: Approved
+                reason:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/claim-adjudication-reason
+                      code: preauthorization-not-required
+                      display: Preauthorization not required
+                financialResponsibility:
+                  - sequence: 2
+                    type: insurer
+                    value:
+                      percent: 20
+                      currency: USD
+    error400ofgetinClaimclaimid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Required value missing
+    error401ofgetinClaimclaimid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+        - success
+        - code
+        - message
+    error404ofgetinClaimclaimid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Not found
+    error500ofgetinClaimclaimid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+    error400ofputinClaimclaimid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Required value missing
+    error401ofputinClaimclaimid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+        - success
+        - code
+        - message
+    error404ofputinClaimclaimid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Not found
+    error500ofputinClaimclaimid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+    error400ofpatchinClaimclaimid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Required value missing
+    error401ofpatchinClaimclaimid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+        - success
+        - code
+        - message
+    error404ofpatchinClaimclaimid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Not found
+    error500ofpatchinClaimclaimid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - Auth: []

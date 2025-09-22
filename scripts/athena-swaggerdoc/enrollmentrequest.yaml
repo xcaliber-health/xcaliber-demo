@@ -1,0 +1,896 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: EnrollmentRequest
+  description: EnrollmentRequest FHIR resource operations in Athena
+paths:
+  /api/v2/EnrollmentRequest/{id}:
+    get:
+      summary: Get EnrollmentRequest by ID
+      operationId: getAthenaEnrollmentRequestByIdV2
+      tags:
+      - EnrollmentRequest
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Specifies the unique identifier of the resource to be retrieved
+          or operated on.
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinEnrollmentRequest'
+              example:
+                statusCode: 400
+                message: Missing patientId
+                details: null
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinEnrollmentRequest'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinEnrollmentRequest'
+              example:
+                statusCode: 404
+                message: Not found
+                details: null
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinEnrollmentRequest'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: null
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: EnrollmentRequest
+                    identifier:
+                    - system: insurance-id
+                      value: INS123456
+                    status: 'true'
+                    extension:
+                    - url: TINY_URLS.COVERAGE.CURRENTSTATUSID
+                      valueInteger: 1
+                    - url: TINY_URLS.COVERAGE.DEPARTMENTID
+                      valueDateTime: '2024-01-15T00:00:00Z'
+                    - url: TINY_URLS.COVERAGE.DEPARTMENTID
+                      valueDateTime: '2024-01-01T00:00:00Z'
+    put:
+      summary: Update EnrollmentRequest in Athena
+      operationId: updateEnrollmentRequestInAthenaV2
+      tags:
+      - EnrollmentRequest
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Unique identifier of the resource to be retrieved or operated
+          on.
+      - *id001
+      - *id002
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofputinEnrollmentRequest'
+              example:
+                statusCode: 400
+                message: Missing patientId
+                details: null
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofputinEnrollmentRequest'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofputinEnrollmentRequest'
+              example:
+                statusCode: 404
+                message: Not found
+                details: null
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofputinEnrollmentRequest'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: null
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Accepted:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: EnrollmentRequest
+                  identifier:
+                  - system: insurance-id
+                    value: INS123456
+                  extension:
+                  - url: current-status-id
+                    valueInteger: 1
+components:
+  schemas:
+    ExtractedSchema27:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+          description: '"Additional metadata for the Update EnrollmentRequest in Athena.
+            Contains contextual information for the request."'
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              enum:
+              - EnrollmentRequest
+            identifier:
+              type: array
+              items:
+                type: object
+                required:
+                - system
+                - value
+                properties:
+                  system:
+                    type: string
+                  value:
+                    type: string
+            status:
+              type: string
+            insurance:
+              type: object
+              required:
+              - coverageCode
+              properties:
+                coverageCode:
+                  type: object
+                  required:
+                  - coding
+                  properties:
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - system
+                        - code
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+            item:
+              type: array
+              items:
+                type: object
+                required:
+                - productCodeableConcept
+                - quantity
+                - subscriber
+                properties:
+                  productCodeableConcept:
+                    type: object
+                    required:
+                    - coding
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - system
+                          - code
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                  quantity:
+                    type: object
+                    required:
+                    - value
+                    - unit
+                    properties:
+                      value:
+                        type: integer
+                      unit:
+                        type: string
+                  subscriber:
+                    type: object
+                    required:
+                    - reference
+                    properties:
+                      reference:
+                        type: object
+                        required:
+                        - reference
+                        properties:
+                          reference:
+                            type: string
+            extension:
+              type: array
+              items:
+                type: object
+                required:
+                - url
+                properties:
+                  url:
+                    type: string
+                  valueInteger:
+                    type: integer
+                  valueDateTime:
+                    type: string
+                    format: date-time
+                  valueReference:
+                    type: object
+                    required:
+                    - reference
+                    properties:
+                      reference:
+                        type: string
+          required:
+          - context
+          - resourceType
+          - identifier
+          - status
+          - insurance
+          - item
+          - extension
+          description: '`data`: The updated enrollment request data. Contains key-value
+            pairs to update the enrollment request in Athena.'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: EnrollmentRequest
+          identifier:
+          - system: urn:oid:2.16.840.1.113883.4.1.511
+            value: '1234567890'
+          status: active
+          insurance:
+            coverageCode:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/coverage-type
+                code: HMO
+          item:
+          - productCodeableConcept:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/coverage-product
+                code: Dental
+            quantity:
+              value: 2
+              unit: piece
+            subscriber:
+              reference:
+                reference: Patient/example
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/coverage-status
+            valueInteger: 1
+          - url: http://xcaliber-fhir/structureDefinition/department-of-coverage
+            valueDateTime: '2023-01-01T00:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/department-of-coverage
+            valueDateTime: '2022-01-01T00:00:00+00:00'
+          - url: http://xcaliber-fhir/structureDefinition/enrollment-request-requester
+            valueReference:
+              reference: Practitioner/example
+          - url: http://xcaliber-fhir/structureDefinition/enrollment-request-requested-date
+            valueDateTime: '2022-01-01T00:00:00+00:00'
+    response200ofgetinEnrollmentRequest:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              enum:
+              - EnrollmentRequest
+            identifier:
+              type: array
+              items:
+                type: object
+                required:
+                - system
+                - value
+                properties:
+                  system:
+                    type: string
+                  value:
+                    type: string
+            status:
+              type: string
+            insurance:
+              type: object
+              required:
+              - coverageCode
+              properties:
+                coverageCode:
+                  type: object
+                  required:
+                  - coding
+                  properties:
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - system
+                        - code
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+            item:
+              type: array
+              items:
+                type: object
+                required:
+                - productCodeableConcept
+                - quantity
+                - subscriber
+                properties:
+                  productCodeableConcept:
+                    type: object
+                    required:
+                    - coding
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - system
+                          - code
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                  quantity:
+                    type: object
+                    required:
+                    - value
+                    - unit
+                    properties:
+                      value:
+                        type: integer
+                      unit:
+                        type: string
+                  subscriber:
+                    type: object
+                    required:
+                    - reference
+                    properties:
+                      reference:
+                        type: object
+                        required:
+                        - reference
+                        properties:
+                          reference:
+                            type: string
+            extension:
+              type: array
+              items:
+                type: object
+                required:
+                - url
+                properties:
+                  url:
+                    type: string
+                  valueInteger:
+                    type: integer
+                  valueDateTime:
+                    type: string
+                    format: date-time
+                  valueReference:
+                    type: object
+                    required:
+                    - reference
+                    properties:
+                      reference:
+                        type: string
+          required:
+          - context
+          - resourceType
+          - identifier
+          - status
+          - insurance
+          - item
+          - extension
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: EnrollmentRequest
+              identifier:
+              - system: urn:oid:2.16.840.1.113883.4.1.511
+                value: '1234567890'
+              status: active
+              insurance:
+                coverageCode:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/coverage-type
+                    code: HMO
+              item:
+              - productCodeableConcept:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/coverage-product
+                    code: Dental
+                quantity:
+                  value: 2
+                  unit: piece
+                subscriber:
+                  reference:
+                    reference: Patient/example
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/coverage-status
+                valueInteger: 1
+              - url: http://xcaliber-fhir/structureDefinition/department-of-coverage
+                valueDateTime: '2023-01-01T00:00:00+00:00'
+              - url: http://xcaliber-fhir/structureDefinition/department-of-coverage
+                valueDateTime: '2022-01-01T00:00:00+00:00'
+              - url: http://xcaliber-fhir/structureDefinition/enrollment-request-requester
+                valueReference:
+                  reference: Practitioner/example
+              - url: http://xcaliber-fhir/structureDefinition/enrollment-request-requested-date
+                valueDateTime: '2022-01-01T00:00:00+00:00'
+    error400ofgetinEnrollmentRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+        details:
+          type: string
+          nullable: true
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: null
+    error401ofgetinEnrollmentRequest:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+    error404ofgetinEnrollmentRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+        details:
+          type: string
+          nullable: true
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: null
+    error500ofgetinEnrollmentRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+        details:
+          type: string
+          nullable: true
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: null
+    response200ofputinEnrollmentRequest:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              enum:
+              - EnrollmentRequest
+            identifier:
+              type: array
+              items:
+                type: object
+                required:
+                - system
+                - value
+                properties:
+                  system:
+                    type: string
+                  value:
+                    type: string
+            status:
+              type: string
+            insurance:
+              type: object
+              required:
+              - coverageCode
+              properties:
+                coverageCode:
+                  type: object
+                  required:
+                  - coding
+                  properties:
+                    coding:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - system
+                        - code
+                        properties:
+                          system:
+                            type: string
+                          code:
+                            type: string
+            item:
+              type: array
+              items:
+                type: object
+                required:
+                - productCodeableConcept
+                - quantity
+                - subscriber
+                properties:
+                  productCodeableConcept:
+                    type: object
+                    required:
+                    - coding
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - system
+                          - code
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                  quantity:
+                    type: object
+                    required:
+                    - value
+                    - unit
+                    properties:
+                      value:
+                        type: integer
+                      unit:
+                        type: string
+                  subscriber:
+                    type: object
+                    required:
+                    - reference
+                    properties:
+                      reference:
+                        type: object
+                        required:
+                        - reference
+                        properties:
+                          reference:
+                            type: string
+            extension:
+              type: array
+              items:
+                type: object
+                required:
+                - url
+                properties:
+                  url:
+                    type: string
+                  valueInteger:
+                    type: integer
+                  valueDateTime:
+                    type: string
+                    format: date-time
+                  valueReference:
+                    type: object
+                    required:
+                    - reference
+                    properties:
+                      reference:
+                        type: string
+          required:
+          - context
+          - resourceType
+          - identifier
+          - status
+          - insurance
+          - item
+          - extension
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: EnrollmentRequest
+              identifier:
+              - system: urn:oid:2.16.840.1.113883.4.1.511
+                value: '1234567890'
+              status: active
+              insurance:
+                coverageCode:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/coverage-type
+                    code: HMO
+              item:
+              - productCodeableConcept:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/coverage-product
+                    code: Dental
+                quantity:
+                  value: 2
+                  unit: piece
+                subscriber:
+                  reference:
+                    reference: Patient/example
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/coverage-status
+                valueInteger: 1
+              - url: http://xcaliber-fhir/structureDefinition/department-of-coverage
+                valueDateTime: '2023-01-01T00:00:00+00:00'
+              - url: http://xcaliber-fhir/structureDefinition/department-of-coverage
+                valueDateTime: '2022-01-01T00:00:00+00:00'
+              - url: http://xcaliber-fhir/structureDefinition/enrollment-request-requester
+                valueReference:
+                  reference: Practitioner/example
+              - url: http://xcaliber-fhir/structureDefinition/enrollment-request-requested-date
+                valueDateTime: '2022-01-01T00:00:00+00:00'
+    error400ofputinEnrollmentRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+        details:
+          type: string
+          nullable: true
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: null
+    error401ofputinEnrollmentRequest:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+    error404ofputinEnrollmentRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+        details:
+          type: string
+          nullable: true
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: null
+    error500ofputinEnrollmentRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+        details:
+          type: string
+          nullable: true
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: null
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

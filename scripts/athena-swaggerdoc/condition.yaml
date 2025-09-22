@@ -1,0 +1,3377 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: Condition
+  description: The Condition FHIR resource records detailed information about a patient's
+    diagnosis, clinical problems, or health concerns, supporting longitudinal health
+    records, decision support, and care planning.
+paths:
+  /api/v2/Condition:
+    get:
+      summary: List Condition resources
+      operationId: getAthenaConditionsV2
+      tags:
+      - Condition
+      - Category-> Encounter-diagnosis
+      - Category-> Problem-list-item
+      parameters:
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: code
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: code'
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: USCoreConditionAssertedDate
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: USCoreConditionAssertedDate'
+      - name: abatement-age
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: abatement-age'
+      - name: abatement-date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: abatement-date'
+      - name: abatement-string
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: abatement-string'
+      - name: asserter
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: asserter'
+      - name: body-site
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: body-site'
+      - name: category
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: category'
+      - name: clinical-status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: clinical-status'
+      - name: encounter
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: encounter'
+      - name: evidence
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: evidence'
+      - name: evidence-detail
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: evidence-detail'
+      - name: onset-age
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: onset-age'
+      - name: onset-date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: onset-date'
+      - name: onset-info
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: onset-info'
+      - name: recorded-date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: recorded-date'
+      - name: severity
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: severity'
+      - name: stage
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: stage'
+      - name: subject
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: subject'
+      - name: verification-status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: verification-status'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinConditioncategoryproblemlistitem'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+              schema:
+                $ref: '#/components/schemas/error401ofgetinConditioncategoryproblemlistitem'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              example:
+                statusCode: 404
+                message: Condition not found
+                details: No Condition resource with given id
+              schema:
+                $ref: '#/components/schemas/error404ofgetinConditioncategoryproblemlistitem'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: An unexpected error occurred
+              schema:
+                $ref: '#/components/schemas/error500ofgetinConditioncategoryproblemlistitem'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example 1:
+                  value:
+                    resourceType: Condition
+                    subject:
+                      reference: Patient/456
+                      id: '456'
+                    clinicalStatus:
+                      coding:
+                      - system: https://terminology.hl7.org/3.1.0/CodeSystem-condition-clinical.html
+                        code: active
+                      - system: http://terminology.hl7.org/CodeSystem/condition-clinical
+                        code: active
+                      extension: []
+                    note:
+                    - text: Patient reports onset after recent travel
+                    extension:
+                    - url: TINY_URLS.CONDITION.DEACTIVATEDDATE
+                      valueDateTime: '2023-12-01T10:30:00Z'
+                    - url: TINY_URLS.CONDITION.DEACTIVATEDUSER
+                      valueString: dr.smith
+                    - url: TINY_URLS.CONDITION.LASTMODIFIEDBY
+                      valueString: nurse.jones
+                    - url: TINY_URLS.CONDITION.LASTMODIFIEDDATETIME
+                      valueDateTime: '2023-12-01T15:45:00Z'
+                    - url: TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE
+                      valueString: Patient reports improvement in symptoms
+                    - url: TINY_URLS.CONDITION.DEPARTMENTID
+                      valueString: '12345'
+                    - url: TINY_URLS.CONDITION.SECTIONNOTE
+                      valueString: Patient reports symptoms improving
+                    - url: http://tiny.url/condition/status
+                      valueString: active
+                    - url: TINY_URLS.CONDITION.EVENTTYPEEND
+                      valueString: RESOLVED
+                    - url: TINY_URLS.CONDITION.EVENTTYPEHIDE
+                      valueString: HIDDEN
+                    - url: TINY_URLS.CONDITION.ENCOUNTERDATETIME
+                      valueDate: '2023-10-15'
+                    - url: TINY_URLS.CONDITION.ONSETDATE
+                      valueDateTime: '2023-10-15T10:30:00Z'
+                    - url: TINY_URLS.CONDITION.SOURCE
+                      valueString: EHR
+                    - url: TINY_URLS.CONDITION.PROBLEMSTATUS
+                      valueString: active
+                    - url: TINY_URLS.CONDITION.LATERALITY
+                      valueString: left
+                    - url: TINY_URLS.CONDITION.EVENTTYPESTART
+                      valueString: START
+                    code:
+                      coding:
+                      - code: E11.9
+                        display: Type 2 diabetes mellitus without complications
+                        system: http://snomed.info/sct
+                      - system: ICD10
+                        code: E11.9
+                        extension:
+                        - url: TINY_URLS.CONDITION.ACCURACYLEVEL
+                          valueString: Best Match
+                      - code: E11.9
+                        system: http://hl7.org/fhir/sid/icd-10-cm
+                        display: Type 2 diabetes mellitus without complications
+                    contained:
+                    - id: clinical-impression-1
+                      resourceType: ClinicalImpression
+                      effectiveDateTime: '2023-11-15T14:20:00Z'
+                      date: '2023-11-15T14:20:00Z'
+                      assessor:
+                        reference: Practitioner/789
+                      code:
+                        coding:
+                        - code: active
+                      finding:
+                      - itemCodeableConcept:
+                          coding:
+                          - code: E11.9
+                            system: http://hl7.org/fhir/sid/icd-10-cm
+                            display: Type 2 diabetes mellitus without complications
+                      note:
+                      - text: Patient presents with elevated glucose levels
+                      extension: []
+                    id: '123'
+                    category:
+                    - coding:
+                      - code: problem-list-item
+                    abatementDateTime: '2023-12-15T10:30:00Z'
+                    onsetDateTime: '2023-01-15T09:00:00Z'
+                Response Example 2:
+                  value:
+                    resourceType: Condition
+                    id: '987654'
+                    subject:
+                      reference: Patient/4406
+                    category:
+                    - coding:
+                      - code: encounter-diagnosis
+                    encounter:
+                      reference: Encounter/7890
+                    code:
+                      coding:
+                      - system: http://snomed.info/sct
+                        code: '44054006'
+                        display: Diabetes mellitus type 2 (disorder)
+                      - system: http://hl7.org/fhir/sid/icd-10-cm
+                        code: E11.9
+                        display: Type 2 diabetes mellitus without complications
+                    extension:
+                    - url: https://example.org/fhir/StructureDefinition/condition-laterality
+                      valueString: left
+                    - url: https://example.org/fhir/StructureDefinition/condition-ranking
+                      valueInteger: 1
+                    - url: https://example.org/fhir/StructureDefinition/condition-supportsLaterality
+                      valueString: 'true'
+                    note:
+                    - text: Primary diagnosis captured during encounter.
+    post:
+      summary: create Condition resource by ID
+      operationId: createAthenaConditionV2
+      tags:
+      - Condition
+      parameters:
+      - *id001
+      - *id002
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofputinConditionconditionid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+              schema:
+                $ref: '#/components/schemas/error401ofputinConditionconditionid'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              example:
+                statusCode: 404
+                message: Condition not found
+                details: No Condition resource with given id
+              schema:
+                $ref: '#/components/schemas/error404ofputinConditionconditionid'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: An unexpected error occurred
+              schema:
+                $ref: '#/components/schemas/error500ofputinConditionconditionid'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Accepted:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: Condition
+                  id: '123'
+                  onsetDateTime: '2023-01-15T09:00:00Z'
+                  extension:
+                  - url: TINY_URLS.CONDITION.DEACTIVATEDDATE
+                    valueString: '2023-12-01T10:30:00Z'
+                  - url: TINY_URLS.CONDITION.DEACTIVATEDUSER
+                    valueString: dr.smith
+                  - url: TINY_URLS.CONDITION.LASTMODIFIEDBY
+                    valueString: nurse.jones
+                  - url: http://tiny.url/condition/status
+                    valueString: active
+                  code:
+                    coding:
+                    - code: E11.9
+                      system: http://snomed.info/sct
+    put:
+      tags:
+      - Condition
+      parameters:
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      - name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: Condition
+                  id: '123'
+                  meta:
+                    extension:
+                    - url: section-note
+                      valueString: Patient reports symptoms improving
+                    - url: replace-note
+                      valueBoolean: false
+                    - url: third-party-username
+                      valueString: dr.smith
+                    - url: patient-facing-call
+                      valueBoolean: true
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Accepted:
+                  value:
+                    message: response is being getting generated.
+  /api/v2/Condition/{condition-id}:
+    get:
+      summary: Get Condition resource by ID
+      operationId: getAthenaConditionV2
+      tags:
+      - Condition
+      - Category-> Encounter-diagnosis
+      - Category-> Problem-list-item
+      parameters:
+      - name: condition-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier of the Condition resource to retrieve. Required
+          for fetching a specific Condition by ID."'
+      - *id001
+      - *id002
+      - name: category
+        in: query
+        required: true
+        schema:
+          type: string
+        description: .
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinConditioncategoryproblemlistitemconditionid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+              schema:
+                $ref: '#/components/schemas/error401ofgetinConditioncategoryproblemlistitemconditionid'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinConditioncategoryproblemlistitemconditionid'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: An unexpected error occurred
+              schema:
+                $ref: '#/components/schemas/error500ofgetinConditioncategoryproblemlistitemconditionid'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example 1:
+                  value:
+                    resourceType: Condition
+                    subject:
+                      reference: Patient/456
+                      id: '456'
+                    clinicalStatus:
+                      coding:
+                      - system: https://terminology.hl7.org/3.1.0/CodeSystem-condition-clinical.html
+                        code: active
+                      - system: http://terminology.hl7.org/CodeSystem/condition-clinical
+                        code: active
+                      extension: []
+                    note:
+                    - text: Patient reports onset after recent travel
+                    extension:
+                    - url: TINY_URLS.CONDITION.DEACTIVATEDDATE
+                      valueDateTime: '2023-12-01T10:30:00Z'
+                    - url: TINY_URLS.CONDITION.DEACTIVATEDUSER
+                      valueString: dr.smith
+                    - url: TINY_URLS.CONDITION.LASTMODIFIEDBY
+                      valueString: nurse.jones
+                    - url: TINY_URLS.CONDITION.LASTMODIFIEDDATETIME
+                      valueDateTime: '2023-12-01T15:45:00Z'
+                    - url: TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE
+                      valueString: Patient reports improvement in symptoms
+                    - url: TINY_URLS.CONDITION.DEPARTMENTID
+                      valueString: '12345'
+                    - url: TINY_URLS.CONDITION.SECTIONNOTE
+                      valueString: Patient reports symptoms improving
+                    - url: http://tiny.url/condition/status
+                      valueString: active
+                    - url: TINY_URLS.CONDITION.EVENTTYPEEND
+                      valueString: RESOLVED
+                    - url: TINY_URLS.CONDITION.EVENTTYPEHIDE
+                      valueString: HIDDEN
+                    - url: TINY_URLS.CONDITION.ENCOUNTERDATETIME
+                      valueDate: '2023-10-15'
+                    - url: TINY_URLS.CONDITION.ONSETDATE
+                      valueDateTime: '2023-10-15T10:30:00Z'
+                    - url: TINY_URLS.CONDITION.SOURCE
+                      valueString: EHR
+                    - url: TINY_URLS.CONDITION.PROBLEMSTATUS
+                      valueString: active
+                    - url: TINY_URLS.CONDITION.LATERALITY
+                      valueString: left
+                    - url: TINY_URLS.CONDITION.EVENTTYPESTART
+                      valueString: START
+                    code:
+                      coding:
+                      - code: E11.9
+                        display: Type 2 diabetes mellitus without complications
+                        system: http://snomed.info/sct
+                      - system: ICD10
+                        code: E11.9
+                        extension:
+                        - url: TINY_URLS.CONDITION.ACCURACYLEVEL
+                          valueString: Best Match
+                      - code: E11.9
+                        system: http://hl7.org/fhir/sid/icd-10-cm
+                        display: Type 2 diabetes mellitus without complications
+                    contained:
+                    - id: clinical-impression-1
+                      resourceType: ClinicalImpression
+                      effectiveDateTime: '2023-11-15T14:20:00Z'
+                      date: '2023-11-15T14:20:00Z'
+                      assessor:
+                        reference: Practitioner/789
+                      code:
+                        coding:
+                        - code: active
+                      finding:
+                      - itemCodeableConcept:
+                          coding:
+                          - code: E11.9
+                            system: http://hl7.org/fhir/sid/icd-10-cm
+                            display: Type 2 diabetes mellitus without complications
+                      note:
+                      - text: Patient presents with elevated glucose levels
+                      extension: []
+                    id: '123'
+                    category:
+                    - coding:
+                      - code: problem-list-item
+                    abatementDateTime: '2023-12-15T10:30:00Z'
+                    onsetDateTime: '2023-01-15T09:00:00Z'
+                Response Example 2:
+                  value:
+                    resourceType: Condition
+                    id: '987654'
+                    subject:
+                      reference: Patient/4406
+                    category:
+                    - coding:
+                      - code: encounter-diagnosis
+                    encounter:
+                      reference: Encounter/7890
+                    code:
+                      coding:
+                      - system: http://snomed.info/sct
+                        code: '44054006'
+                        display: Diabetes mellitus type 2 (disorder)
+                      - system: http://hl7.org/fhir/sid/icd-10-cm
+                        code: E11.9
+                        display: Type 2 diabetes mellitus without complications
+                    extension:
+                    - url: https://example.org/fhir/StructureDefinition/condition-laterality
+                      valueString: left
+                    - url: https://example.org/fhir/StructureDefinition/condition-ranking
+                      valueInteger: 1
+                    - url: https://example.org/fhir/StructureDefinition/condition-supportsLaterality
+                      valueString: 'true'
+                    note:
+                    - text: Primary diagnosis captured during encounter.
+    put:
+      summary: Update Condition resource by ID
+      operationId: updateAthenaConditionV2
+      tags:
+      - Condition
+      parameters:
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+        description: .
+      - name: condition-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier of the condition to update. Required for
+          updating an existing condition."'
+      - *id001
+      - *id002
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofputinConditionconditionid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+              schema:
+                $ref: '#/components/schemas/error401ofputinConditionconditionid'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              example:
+                statusCode: 404
+                message: Condition not found
+                details: No Condition resource with given id
+              schema:
+                $ref: '#/components/schemas/error404ofputinConditionconditionid'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: An unexpected error occurred
+              schema:
+                $ref: '#/components/schemas/error500ofputinConditionconditionid'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Accepted:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example 1:
+                value:
+                  resourceType: Condition
+                  id: diag-12345
+                  code:
+                    coding:
+                    - system: http://snomed.info/sct
+                      code: '38341003'
+                      display: Hypertension (disorder)
+                    - system: http://hl7.org/fhir/sid/icd-9-cm
+                      code: '401.9'
+                      display: Unspecified essential hypertension
+                    - system: http://hl7.org/fhir/sid/icd-10-cm
+                      code: I10
+                      display: Essential (primary) hypertension
+                    text: Hypertension (disorder)
+                  note:
+                  - text: Patient reports occasional headaches; monitor BP at home.
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/laterality
+                    valueString: left
+                  - url: http://xcaliber-fhir/structureDefinition/ranking
+                    valueInteger: 1
+                  - url: http://xcaliber-fhir/structureDefinition/supportslaterality
+                    valueString: Y
+              Request Example 2:
+                value:
+                  resourceType: Condition
+                  id: cond-789
+                  code:
+                    coding:
+                    - system: http://snomed.info/sct
+                      code: '38341003'
+                      display: Hypertension (disorder)
+                    text: Hypertension (disorder)
+                  note:
+                  - text: Patient reports occasional headaches; monitor BP at home.
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/department-id
+                    valueInteger: 150
+                  - url: http://xcaliber-fhir/structureDefinition/bestmatchicd10code
+                    valueString: I10
+                  - url: http://xcaliber-fhir/structureDefinition/deactivateddate
+                    valueString: '2025-09-01'
+                  - url: http://xcaliber-fhir/structureDefinition/deactivateduser
+                    valueString: dr.alice
+                  - url: http://xcaliber-fhir/structureDefinition/lastmodifiedby
+                    valueString: system-sync
+                  - url: http://xcaliber-fhir/structureDefinition/lastmodifieddatetime
+                    valueString: '2025-09-10T14:30:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/mostrecentdiagnosisnote
+                    valueString: BP stabilized; continue meds.
+                  - url: http://xcaliber-fhir/structureDefinition/status
+                    valueString: active
+                  - url: http://xcaliber-fhir/structureDefinition/laterality
+                    valueString: left
+                  - url: http://xcaliber-fhir/structureDefinition/start-date
+                    valueString: 04/09/2024
+                  - url: http://xcaliber-fhir/structureDefinition/patient-facing-call
+                    valueBoolean: true
+                  - url: http://xcaliber-fhir/structureDefinition/third-party-user-name
+                    valueString: care-navigator
+    delete:
+      summary: Delete Condition resource by ID
+      operationId: deleteAthenaConditionV2
+      tags:
+      - Condition
+      parameters:
+      - name: condition-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier of the Condition resource to delete. Required
+          for deletion."'
+      - *id001
+      - *id002
+      responses:
+        '204':
+          description: Condition deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response204ofdeleteinConditionconditionid'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofdeleteinConditionconditionid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinConditionconditionid'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              example:
+                statusCode: 404
+                message: Condition not found
+                details: No Condition resource with given id
+              schema:
+                $ref: '#/components/schemas/error404ofdeleteinConditionconditionid'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: An unexpected error occurred
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinConditionconditionid'
+components:
+  schemas:
+    ExtractedSchema979:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Condition
+            id:
+              type: string
+              example: example-condition
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                  - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+            text:
+              type: object
+              properties:
+                div:
+                  type: string
+                  example: <div><p>A patient has been diagnosed with type 2 diabetes
+                    mellitus.</p></div>
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueDateTime:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  valueString:
+                    type: string
+                    nullable: true
+                  valueCode:
+                    type: string
+                    nullable: true
+              example:
+              - url: TINY_URLS.CONDITION.DEACTIVATEDDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.DEACTIVATEDUSER
+                valueString: example-deactivateduser
+              - url: TINY_URLS.CONDITION.ENCOUNTERDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.EVENTTYPEENCOUNTER
+                valueString: example-eventtypeencounter
+              - url: TINY_URLS.CONDITION.EVENTTYPEEND
+                valueString: example-eventtypeend
+              - url: TINY_URLS.CONDITION.EVENTTYPEHIDE
+                valueString: example-eventtypehide
+              - url: TINY_URLS.CONDITION.EVENTTYPEREACTIVATED
+                valueString: example-eventtypereactivated
+              - url: TINY_URLS.CONDITION.EVENTTYPESTART
+                valueString: example-eventtypestart
+              - url: TINY_URLS.CONDITION.LASTMODIFIEDBY
+                valueString: example-lastmodifiedby
+              - url: TINY_URLS.CONDITION.LASTMODIFIEDDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.LATERALITY
+                valueString: example-laterality
+              - url: TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE
+                valueString: example-mostrecentdiagnosisnote
+              - url: TINY_URLS.CONDITION.ONSETDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.PROBLEMSTATUS
+                valueCode: example
+              - url: TINY_URLS.CONDITION.RANKING
+                valueString: example-ranking
+              - url: TINY_URLS.CONDITION.SECTIONNOTE
+                valueString: example-sectionnote
+              - url: TINY_URLS.CONDITION.SOURCE
+                valueString: example-source
+              - url: TINY_URLS.CONDITION.STATUS
+                valueCode: example
+              - url: TINY_URLS.CONDITION.SUPPORTSLATERALITY
+                valueString: example-supportslaterality
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            code:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://snomed.info/sct
+                    code: 250.02
+                    display: Type 2 diabetes mellitus
+            clinicalStatus:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-clinicalstatus
+                    code: active
+                    display: Active
+            category:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-category
+                    code: chronic
+                    display: Chronic
+            severity:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-severity
+                    code: severe
+                    display: Severe
+            evidence:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              example:
+              - reference: Observation/blood-glucose-level
+            onsetDateTime:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+            abatementDateTime:
+              type: string
+              format: date-time
+              example: '2022-01-07T00:00:00Z'
+            aspect:
+              type: array
+              items:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+                    example:
+                    - system: http://terminology.hl7.org/CodeSystem/condition-aspect
+                      code: manifestation
+                      display: Manifestation
+            verificationStatus:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/observation-verificationstatus
+                    code: confirmed
+                    display: Confirmed
+            recordedDate:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+            lastUpdated:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+          required:
+          - context
+          - resourceType
+          - id
+          - meta
+          - text
+          - extension
+          - subject
+          - code
+          - clinicalStatus
+          - category
+          - severity
+          - evidence
+          - onsetDateTime
+          - abatementDateTime
+          - aspect
+          - verificationStatus
+          - recordedDate
+          - lastUpdated
+          description: '"Condition resource data. Provide a JSON object containing
+            the condition details."'
+      required:
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Condition
+          id: example-condition
+          meta:
+            profile:
+            - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+          text:
+            div: <div><p>A patient has been diagnosed with type 2 diabetes mellitus.</p></div>
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.DEACTIVATEDDATE
+            valueDateTime: '2022-01-01T12:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.DEACTIVATEDUSER
+            valueString: example-deactivateduser
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.ENCOUNTERDATETIME
+            valueDateTime: '2022-01-01T12:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEENCOUNTER
+            valueString: example-eventtypeencounter
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEEND
+            valueString: example-eventtypeend
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEHIDE
+            valueString: example-eventtypehide
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEREACTIVATED
+            valueString: example-eventtypereactivated
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPESTART
+            valueString: example-eventtypestart
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LASTMODIFIEDBY
+            valueString: example-lastmodifiedby
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LASTMODIFIEDDATETIME
+            valueDateTime: '2022-01-01T12:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LATERALITY
+            valueString: example-laterality
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE
+            valueString: example-mostrecentdiagnosisnote
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.ONSETDATE
+            valueDateTime: '2022-01-01T12:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.PROBLEMSTATUS
+            valueCode: example
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.RANKING
+            valueString: example-ranking
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SECTIONNOTE
+            valueString: example-sectionnote
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SOURCE
+            valueString: example-source
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.STATUS
+            valueCode: example
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SUPPORTSLATERALITY
+            valueString: example-supportslaterality
+          subject:
+            reference: Patient/example
+          code:
+            coding:
+            - system: http://snomed.info/sct
+              code: 250.02
+              display: Type 2 diabetes mellitus
+          clinicalStatus:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/condition-clinicalstatus
+              code: active
+              display: Active
+          category:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/condition-category
+              code: chronic
+              display: Chronic
+          severity:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/condition-severity
+              code: severe
+              display: Severe
+          evidence:
+          - reference: Observation/blood-glucose-level
+          onsetDateTime: '2022-01-01T00:00:00Z'
+          abatementDateTime: '2022-01-07T00:00:00Z'
+          aspect:
+          - coding:
+            - system: http://terminology.hl7.org/CodeSystem/condition-aspect
+              code: manifestation
+              display: Manifestation
+          verificationStatus:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/observation-verificationstatus
+              code: confirmed
+              display: Confirmed
+          recordedDate: '2022-01-01T00:00:00Z'
+          lastUpdated: '2022-01-01T00:00:00Z'
+    ExtractedSchema995:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Condition
+            id:
+              type: string
+              example: example-condition
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                  - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+            text:
+              type: object
+              properties:
+                div:
+                  type: string
+                  example: <div><p>A patient has been diagnosed with type 2 diabetes
+                    mellitus.</p></div>
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueDateTime:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  valueString:
+                    type: string
+                    nullable: true
+                  valueCode:
+                    type: string
+                    nullable: true
+              example:
+              - url: TINY_URLS.CONDITION.DEACTIVATEDDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.DEACTIVATEDUSER
+                valueString: example-deactivateduser
+              - url: TINY_URLS.CONDITION.ENCOUNTERDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.EVENTTYPEENCOUNTER
+                valueString: example-eventtypeencounter
+              - url: TINY_URLS.CONDITION.EVENTTYPEEND
+                valueString: example-eventtypeend
+              - url: TINY_URLS.CONDITION.EVENTTYPEHIDE
+                valueString: example-eventtypehide
+              - url: TINY_URLS.CONDITION.EVENTTYPEREACTIVATED
+                valueString: example-eventtypereactivated
+              - url: TINY_URLS.CONDITION.EVENTTYPESTART
+                valueString: example-eventtypestart
+              - url: TINY_URLS.CONDITION.LASTMODIFIEDBY
+                valueString: example-lastmodifiedby
+              - url: TINY_URLS.CONDITION.LASTMODIFIEDDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.LATERALITY
+                valueString: example-laterality
+              - url: TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE
+                valueString: example-mostrecentdiagnosisnote
+              - url: TINY_URLS.CONDITION.ONSETDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.PROBLEMSTATUS
+                valueCode: example
+              - url: TINY_URLS.CONDITION.RANKING
+                valueString: example-ranking
+              - url: TINY_URLS.CONDITION.SECTIONNOTE
+                valueString: example-sectionnote
+              - url: TINY_URLS.CONDITION.SOURCE
+                valueString: example-source
+              - url: TINY_URLS.CONDITION.STATUS
+                valueCode: example
+              - url: TINY_URLS.CONDITION.SUPPORTSLATERALITY
+                valueString: example-supportslaterality
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            code:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://snomed.info/sct
+                    code: 250.02
+                    display: Type 2 diabetes mellitus
+            clinicalStatus:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-clinicalstatus
+                    code: active
+                    display: Active
+            category:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-category
+                    code: chronic
+                    display: Chronic
+            severity:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-severity
+                    code: severe
+                    display: Severe
+            evidence:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              example:
+              - reference: Observation/blood-glucose-level
+            onsetDateTime:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+            abatementDateTime:
+              type: string
+              format: date-time
+              example: '2022-01-07T00:00:00Z'
+            aspect:
+              type: array
+              items:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+                    example:
+                    - system: http://terminology.hl7.org/CodeSystem/condition-aspect
+                      code: manifestation
+                      display: Manifestation
+            verificationStatus:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/observation-verificationstatus
+                    code: confirmed
+                    display: Confirmed
+            recordedDate:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+            lastUpdated:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+          required:
+          - context
+          - resourceType
+          - id
+          - meta
+          - text
+          - extension
+          - subject
+          - code
+          - clinicalStatus
+          - category
+          - severity
+          - evidence
+          - onsetDateTime
+          - abatementDateTime
+          - aspect
+          - verificationStatus
+          - recordedDate
+          - lastUpdated
+          description: '"Condition resource data to update. Provide the updated fields
+            in JSON format."'
+      required:
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Condition
+          id: example-condition
+          meta:
+            profile:
+            - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+          text:
+            div: <div><p>A patient has been diagnosed with type 2 diabetes mellitus.</p></div>
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.DEACTIVATEDDATE
+            valueDateTime: '2022-01-01T12:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.DEACTIVATEDUSER
+            valueString: example-deactivateduser
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.ENCOUNTERDATETIME
+            valueDateTime: '2022-01-01T12:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEENCOUNTER
+            valueString: example-eventtypeencounter
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEEND
+            valueString: example-eventtypeend
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEHIDE
+            valueString: example-eventtypehide
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEREACTIVATED
+            valueString: example-eventtypereactivated
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPESTART
+            valueString: example-eventtypestart
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LASTMODIFIEDBY
+            valueString: example-lastmodifiedby
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LASTMODIFIEDDATETIME
+            valueDateTime: '2022-01-01T12:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LATERALITY
+            valueString: example-laterality
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE
+            valueString: example-mostrecentdiagnosisnote
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.ONSETDATE
+            valueDateTime: '2022-01-01T12:00:00Z'
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.PROBLEMSTATUS
+            valueCode: example
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.RANKING
+            valueString: example-ranking
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SECTIONNOTE
+            valueString: example-sectionnote
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SOURCE
+            valueString: example-source
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.STATUS
+            valueCode: example
+          - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SUPPORTSLATERALITY
+            valueString: example-supportslaterality
+          subject:
+            reference: Patient/example
+          code:
+            coding:
+            - system: http://snomed.info/sct
+              code: 250.02
+              display: Type 2 diabetes mellitus
+          clinicalStatus:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/condition-clinicalstatus
+              code: active
+              display: Active
+          category:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/condition-category
+              code: chronic
+              display: Chronic
+          severity:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/condition-severity
+              code: severe
+              display: Severe
+          evidence:
+          - reference: Observation/blood-glucose-level
+          onsetDateTime: '2022-01-01T00:00:00Z'
+          abatementDateTime: '2022-01-07T00:00:00Z'
+          aspect:
+          - coding:
+            - system: http://terminology.hl7.org/CodeSystem/condition-aspect
+              code: manifestation
+              display: Manifestation
+          verificationStatus:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/observation-verificationstatus
+              code: confirmed
+              display: Confirmed
+          recordedDate: '2022-01-01T00:00:00Z'
+          lastUpdated: '2022-01-01T00:00:00Z'
+    response200ofgetinConditioncategoryproblemlistitem:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Condition
+            id:
+              type: string
+              example: example-condition
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                  - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+            text:
+              type: object
+              properties:
+                div:
+                  type: string
+                  example: <div><p>A patient has been diagnosed with type 2 diabetes
+                    mellitus.</p></div>
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueDateTime:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  valueString:
+                    type: string
+                    nullable: true
+                  valueCode:
+                    type: string
+                    nullable: true
+              example:
+              - url: TINY_URLS.CONDITION.DEACTIVATEDDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.DEACTIVATEDUSER
+                valueString: example-deactivateduser
+              - url: TINY_URLS.CONDITION.ENCOUNTERDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.EVENTTYPEENCOUNTER
+                valueString: example-eventtypeencounter
+              - url: TINY_URLS.CONDITION.EVENTTYPEEND
+                valueString: example-eventtypeend
+              - url: TINY_URLS.CONDITION.EVENTTYPEHIDE
+                valueString: example-eventtypehide
+              - url: TINY_URLS.CONDITION.EVENTTYPEREACTIVATED
+                valueString: example-eventtypereactivated
+              - url: TINY_URLS.CONDITION.EVENTTYPESTART
+                valueString: example-eventtypestart
+              - url: TINY_URLS.CONDITION.LASTMODIFIEDBY
+                valueString: example-lastmodifiedby
+              - url: TINY_URLS.CONDITION.LASTMODIFIEDDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.LATERALITY
+                valueString: example-laterality
+              - url: TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE
+                valueString: example-mostrecentdiagnosisnote
+              - url: TINY_URLS.CONDITION.ONSETDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.PROBLEMSTATUS
+                valueCode: example
+              - url: TINY_URLS.CONDITION.RANKING
+                valueString: example-ranking
+              - url: TINY_URLS.CONDITION.SECTIONNOTE
+                valueString: example-sectionnote
+              - url: TINY_URLS.CONDITION.SOURCE
+                valueString: example-source
+              - url: TINY_URLS.CONDITION.STATUS
+                valueCode: example
+              - url: TINY_URLS.CONDITION.SUPPORTSLATERALITY
+                valueString: example-supportslaterality
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            code:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://snomed.info/sct
+                    code: 250.02
+                    display: Type 2 diabetes mellitus
+            clinicalStatus:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-clinicalstatus
+                    code: active
+                    display: Active
+            category:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-category
+                    code: chronic
+                    display: Chronic
+            severity:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-severity
+                    code: severe
+                    display: Severe
+            evidence:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              example:
+              - reference: Observation/blood-glucose-level
+            onsetDateTime:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+            abatementDateTime:
+              type: string
+              format: date-time
+              example: '2022-01-07T00:00:00Z'
+            aspect:
+              type: array
+              items:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+                    example:
+                    - system: http://terminology.hl7.org/CodeSystem/condition-aspect
+                      code: manifestation
+                      display: Manifestation
+            verificationStatus:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/observation-verificationstatus
+                    code: confirmed
+                    display: Confirmed
+            recordedDate:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+            lastUpdated:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+          required:
+          - context
+          - resourceType
+          - id
+          - meta
+          - text
+          - extension
+          - subject
+          - code
+          - clinicalStatus
+          - category
+          - severity
+          - evidence
+          - onsetDateTime
+          - abatementDateTime
+          - aspect
+          - verificationStatus
+          - recordedDate
+          - lastUpdated
+      required:
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: Condition
+              id: example-condition
+              meta:
+                profile:
+                - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+              text:
+                div: <div><p>A patient has been diagnosed with type 2 diabetes mellitus.</p></div>
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.DEACTIVATEDDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.DEACTIVATEDUSER
+                valueString: example-deactivateduser
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.ENCOUNTERDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEENCOUNTER
+                valueString: example-eventtypeencounter
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEEND
+                valueString: example-eventtypeend
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEHIDE
+                valueString: example-eventtypehide
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEREACTIVATED
+                valueString: example-eventtypereactivated
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPESTART
+                valueString: example-eventtypestart
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LASTMODIFIEDBY
+                valueString: example-lastmodifiedby
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LASTMODIFIEDDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LATERALITY
+                valueString: example-laterality
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE
+                valueString: example-mostrecentdiagnosisnote
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.ONSETDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.PROBLEMSTATUS
+                valueCode: example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.RANKING
+                valueString: example-ranking
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SECTIONNOTE
+                valueString: example-sectionnote
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SOURCE
+                valueString: example-source
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.STATUS
+                valueCode: example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SUPPORTSLATERALITY
+                valueString: example-supportslaterality
+              subject:
+                reference: Patient/example
+              code:
+                coding:
+                - system: http://snomed.info/sct
+                  code: 250.02
+                  display: Type 2 diabetes mellitus
+              clinicalStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-clinicalstatus
+                  code: active
+                  display: Active
+              category:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-category
+                  code: chronic
+                  display: Chronic
+              severity:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-severity
+                  code: severe
+                  display: Severe
+              evidence:
+              - reference: Observation/blood-glucose-level
+              onsetDateTime: '2022-01-01T00:00:00Z'
+              abatementDateTime: '2022-01-07T00:00:00Z'
+              aspect:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-aspect
+                  code: manifestation
+                  display: Manifestation
+              verificationStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/observation-verificationstatus
+                  code: confirmed
+                  display: Confirmed
+              recordedDate: '2022-01-01T00:00:00Z'
+              lastUpdated: '2022-01-01T00:00:00Z'
+    error400ofgetinConditioncategoryproblemlistitem:
+      type: object
+      example:
+        statusCode: 400
+        message: Missing patientId
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+    error401ofgetinConditioncategoryproblemlistitem:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinConditioncategoryproblemlistitem:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Condition not found
+        details:
+          type: string
+          example: No Condition resource with given id
+      example:
+        statusCode: 404
+        message: Condition not found
+        details: No Condition resource with given id
+    error500ofgetinConditioncategoryproblemlistitem:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: An unexpected error occurred
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: An unexpected error occurred
+    response200ofpostinCondition:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Condition
+            id:
+              type: string
+              example: example-condition
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                  - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+            text:
+              type: object
+              properties:
+                div:
+                  type: string
+                  example: <div><p>A patient has been diagnosed with type 2 diabetes
+                    mellitus.</p></div>
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueDateTime:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  valueString:
+                    type: string
+                    nullable: true
+                  valueCode:
+                    type: string
+                    nullable: true
+              example:
+              - url: TINY_URLS.CONDITION.DEACTIVATEDDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.DEACTIVATEDUSER
+                valueString: example-deactivateduser
+              - url: TINY_URLS.CONDITION.ENCOUNTERDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.EVENTTYPEENCOUNTER
+                valueString: example-eventtypeencounter
+              - url: TINY_URLS.CONDITION.EVENTTYPEEND
+                valueString: example-eventtypeend
+              - url: TINY_URLS.CONDITION.EVENTTYPEHIDE
+                valueString: example-eventtypehide
+              - url: TINY_URLS.CONDITION.EVENTTYPEREACTIVATED
+                valueString: example-eventtypereactivated
+              - url: TINY_URLS.CONDITION.EVENTTYPESTART
+                valueString: example-eventtypestart
+              - url: TINY_URLS.CONDITION.LASTMODIFIEDBY
+                valueString: example-lastmodifiedby
+              - url: TINY_URLS.CONDITION.LASTMODIFIEDDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.LATERALITY
+                valueString: example-laterality
+              - url: TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE
+                valueString: example-mostrecentdiagnosisnote
+              - url: TINY_URLS.CONDITION.ONSETDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.PROBLEMSTATUS
+                valueCode: example
+              - url: TINY_URLS.CONDITION.RANKING
+                valueString: example-ranking
+              - url: TINY_URLS.CONDITION.SECTIONNOTE
+                valueString: example-sectionnote
+              - url: TINY_URLS.CONDITION.SOURCE
+                valueString: example-source
+              - url: TINY_URLS.CONDITION.STATUS
+                valueCode: example
+              - url: TINY_URLS.CONDITION.SUPPORTSLATERALITY
+                valueString: example-supportslaterality
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            code:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://snomed.info/sct
+                    code: 250.02
+                    display: Type 2 diabetes mellitus
+            clinicalStatus:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-clinicalstatus
+                    code: active
+                    display: Active
+            category:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-category
+                    code: chronic
+                    display: Chronic
+            severity:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-severity
+                    code: severe
+                    display: Severe
+            evidence:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              example:
+              - reference: Observation/blood-glucose-level
+            onsetDateTime:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+            abatementDateTime:
+              type: string
+              format: date-time
+              example: '2022-01-07T00:00:00Z'
+            aspect:
+              type: array
+              items:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+                    example:
+                    - system: http://terminology.hl7.org/CodeSystem/condition-aspect
+                      code: manifestation
+                      display: Manifestation
+            verificationStatus:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/observation-verificationstatus
+                    code: confirmed
+                    display: Confirmed
+            recordedDate:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+            lastUpdated:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+          required:
+          - context
+          - resourceType
+          - id
+          - meta
+          - text
+          - extension
+          - subject
+          - code
+          - clinicalStatus
+          - category
+          - severity
+          - evidence
+          - onsetDateTime
+          - abatementDateTime
+          - aspect
+          - verificationStatus
+          - recordedDate
+          - lastUpdated
+      required:
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: Condition
+              id: example-condition
+              meta:
+                profile:
+                - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+              text:
+                div: <div><p>A patient has been diagnosed with type 2 diabetes mellitus.</p></div>
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.DEACTIVATEDDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.DEACTIVATEDUSER
+                valueString: example-deactivateduser
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.ENCOUNTERDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEENCOUNTER
+                valueString: example-eventtypeencounter
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEEND
+                valueString: example-eventtypeend
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEHIDE
+                valueString: example-eventtypehide
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEREACTIVATED
+                valueString: example-eventtypereactivated
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPESTART
+                valueString: example-eventtypestart
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LASTMODIFIEDBY
+                valueString: example-lastmodifiedby
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LASTMODIFIEDDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LATERALITY
+                valueString: example-laterality
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE
+                valueString: example-mostrecentdiagnosisnote
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.ONSETDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.PROBLEMSTATUS
+                valueCode: example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.RANKING
+                valueString: example-ranking
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SECTIONNOTE
+                valueString: example-sectionnote
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SOURCE
+                valueString: example-source
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.STATUS
+                valueCode: example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SUPPORTSLATERALITY
+                valueString: example-supportslaterality
+              subject:
+                reference: Patient/example
+              code:
+                coding:
+                - system: http://snomed.info/sct
+                  code: 250.02
+                  display: Type 2 diabetes mellitus
+              clinicalStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-clinicalstatus
+                  code: active
+                  display: Active
+              category:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-category
+                  code: chronic
+                  display: Chronic
+              severity:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-severity
+                  code: severe
+                  display: Severe
+              evidence:
+              - reference: Observation/blood-glucose-level
+              onsetDateTime: '2022-01-01T00:00:00Z'
+              abatementDateTime: '2022-01-07T00:00:00Z'
+              aspect:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-aspect
+                  code: manifestation
+                  display: Manifestation
+              verificationStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/observation-verificationstatus
+                  code: confirmed
+                  display: Confirmed
+              recordedDate: '2022-01-01T00:00:00Z'
+              lastUpdated: '2022-01-01T00:00:00Z'
+    error400ofpostinCondition:
+      type: object
+      example:
+        statusCode: 400
+        message: Missing patientId
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+    error401ofpostinCondition:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofpostinCondition:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Condition not found
+        details:
+          type: string
+          example: No Condition resource with given id
+      example:
+        statusCode: 404
+        message: Condition not found
+        details: No Condition resource with given id
+    error500ofpostinCondition:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: An unexpected error occurred
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: An unexpected error occurred
+    response200ofgetinConditioncategoryproblemlistitemconditionid:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Condition
+            id:
+              type: string
+              example: example-condition
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                  - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+            text:
+              type: object
+              properties:
+                div:
+                  type: string
+                  example: <div><p>A patient has been diagnosed with type 2 diabetes
+                    mellitus.</p></div>
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueDateTime:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  valueString:
+                    type: string
+                    nullable: true
+                  valueCode:
+                    type: string
+                    nullable: true
+              example:
+              - url: TINY_URLS.CONDITION.DEACTIVATEDDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.DEACTIVATEDUSER
+                valueString: example-deactivateduser
+              - url: TINY_URLS.CONDITION.ENCOUNTERDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.EVENTTYPEENCOUNTER
+                valueString: example-eventtypeencounter
+              - url: TINY_URLS.CONDITION.EVENTTYPEEND
+                valueString: example-eventtypeend
+              - url: TINY_URLS.CONDITION.EVENTTYPEHIDE
+                valueString: example-eventtypehide
+              - url: TINY_URLS.CONDITION.EVENTTYPEREACTIVATED
+                valueString: example-eventtypereactivated
+              - url: TINY_URLS.CONDITION.EVENTTYPESTART
+                valueString: example-eventtypestart
+              - url: TINY_URLS.CONDITION.LASTMODIFIEDBY
+                valueString: example-lastmodifiedby
+              - url: TINY_URLS.CONDITION.LASTMODIFIEDDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.LATERALITY
+                valueString: example-laterality
+              - url: TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE
+                valueString: example-mostrecentdiagnosisnote
+              - url: TINY_URLS.CONDITION.ONSETDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.PROBLEMSTATUS
+                valueCode: example
+              - url: TINY_URLS.CONDITION.RANKING
+                valueString: example-ranking
+              - url: TINY_URLS.CONDITION.SECTIONNOTE
+                valueString: example-sectionnote
+              - url: TINY_URLS.CONDITION.SOURCE
+                valueString: example-source
+              - url: TINY_URLS.CONDITION.STATUS
+                valueCode: example
+              - url: TINY_URLS.CONDITION.SUPPORTSLATERALITY
+                valueString: example-supportslaterality
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            code:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://snomed.info/sct
+                    code: 250.02
+                    display: Type 2 diabetes mellitus
+            clinicalStatus:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-clinicalstatus
+                    code: active
+                    display: Active
+            category:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-category
+                    code: chronic
+                    display: Chronic
+            severity:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-severity
+                    code: severe
+                    display: Severe
+            evidence:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              example:
+              - reference: Observation/blood-glucose-level
+            onsetDateTime:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+            abatementDateTime:
+              type: string
+              format: date-time
+              example: '2022-01-07T00:00:00Z'
+            aspect:
+              type: array
+              items:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+                    example:
+                    - system: http://terminology.hl7.org/CodeSystem/condition-aspect
+                      code: manifestation
+                      display: Manifestation
+            verificationStatus:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/observation-verificationstatus
+                    code: confirmed
+                    display: Confirmed
+            recordedDate:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+            lastUpdated:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+          required:
+          - context
+          - resourceType
+          - id
+          - meta
+          - text
+          - extension
+          - subject
+          - code
+          - clinicalStatus
+          - category
+          - severity
+          - evidence
+          - onsetDateTime
+          - abatementDateTime
+          - aspect
+          - verificationStatus
+          - recordedDate
+          - lastUpdated
+      required:
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: Condition
+              id: example-condition
+              meta:
+                profile:
+                - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+              text:
+                div: <div><p>A patient has been diagnosed with type 2 diabetes mellitus.</p></div>
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.DEACTIVATEDDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.DEACTIVATEDUSER
+                valueString: example-deactivateduser
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.ENCOUNTERDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEENCOUNTER
+                valueString: example-eventtypeencounter
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEEND
+                valueString: example-eventtypeend
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEHIDE
+                valueString: example-eventtypehide
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEREACTIVATED
+                valueString: example-eventtypereactivated
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPESTART
+                valueString: example-eventtypestart
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LASTMODIFIEDBY
+                valueString: example-lastmodifiedby
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LASTMODIFIEDDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LATERALITY
+                valueString: example-laterality
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE
+                valueString: example-mostrecentdiagnosisnote
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.ONSETDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.PROBLEMSTATUS
+                valueCode: example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.RANKING
+                valueString: example-ranking
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SECTIONNOTE
+                valueString: example-sectionnote
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SOURCE
+                valueString: example-source
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.STATUS
+                valueCode: example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SUPPORTSLATERALITY
+                valueString: example-supportslaterality
+              subject:
+                reference: Patient/example
+              code:
+                coding:
+                - system: http://snomed.info/sct
+                  code: 250.02
+                  display: Type 2 diabetes mellitus
+              clinicalStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-clinicalstatus
+                  code: active
+                  display: Active
+              category:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-category
+                  code: chronic
+                  display: Chronic
+              severity:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-severity
+                  code: severe
+                  display: Severe
+              evidence:
+              - reference: Observation/blood-glucose-level
+              onsetDateTime: '2022-01-01T00:00:00Z'
+              abatementDateTime: '2022-01-07T00:00:00Z'
+              aspect:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-aspect
+                  code: manifestation
+                  display: Manifestation
+              verificationStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/observation-verificationstatus
+                  code: confirmed
+                  display: Confirmed
+              recordedDate: '2022-01-01T00:00:00Z'
+              lastUpdated: '2022-01-01T00:00:00Z'
+    error400ofgetinConditioncategoryproblemlistitemconditionid:
+      type: object
+      example:
+        statusCode: 400
+        message: Missing patientId
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+    error401ofgetinConditioncategoryproblemlistitemconditionid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinConditioncategoryproblemlistitemconditionid:
+      type: object
+      example:
+        statusCode: 400
+        message: Missing patientId
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+    error500ofgetinConditioncategoryproblemlistitemconditionid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: An unexpected error occurred
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: An unexpected error occurred
+    response200ofputinConditionconditionid:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Condition
+            id:
+              type: string
+              example: example-condition
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                  - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+            text:
+              type: object
+              properties:
+                div:
+                  type: string
+                  example: <div><p>A patient has been diagnosed with type 2 diabetes
+                    mellitus.</p></div>
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueDateTime:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  valueString:
+                    type: string
+                    nullable: true
+                  valueCode:
+                    type: string
+                    nullable: true
+              example:
+              - url: TINY_URLS.CONDITION.DEACTIVATEDDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.DEACTIVATEDUSER
+                valueString: example-deactivateduser
+              - url: TINY_URLS.CONDITION.ENCOUNTERDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.EVENTTYPEENCOUNTER
+                valueString: example-eventtypeencounter
+              - url: TINY_URLS.CONDITION.EVENTTYPEEND
+                valueString: example-eventtypeend
+              - url: TINY_URLS.CONDITION.EVENTTYPEHIDE
+                valueString: example-eventtypehide
+              - url: TINY_URLS.CONDITION.EVENTTYPEREACTIVATED
+                valueString: example-eventtypereactivated
+              - url: TINY_URLS.CONDITION.EVENTTYPESTART
+                valueString: example-eventtypestart
+              - url: TINY_URLS.CONDITION.LASTMODIFIEDBY
+                valueString: example-lastmodifiedby
+              - url: TINY_URLS.CONDITION.LASTMODIFIEDDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.LATERALITY
+                valueString: example-laterality
+              - url: TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE
+                valueString: example-mostrecentdiagnosisnote
+              - url: TINY_URLS.CONDITION.ONSETDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: TINY_URLS.CONDITION.PROBLEMSTATUS
+                valueCode: example
+              - url: TINY_URLS.CONDITION.RANKING
+                valueString: example-ranking
+              - url: TINY_URLS.CONDITION.SECTIONNOTE
+                valueString: example-sectionnote
+              - url: TINY_URLS.CONDITION.SOURCE
+                valueString: example-source
+              - url: TINY_URLS.CONDITION.STATUS
+                valueCode: example
+              - url: TINY_URLS.CONDITION.SUPPORTSLATERALITY
+                valueString: example-supportslaterality
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            code:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://snomed.info/sct
+                    code: 250.02
+                    display: Type 2 diabetes mellitus
+            clinicalStatus:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-clinicalstatus
+                    code: active
+                    display: Active
+            category:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-category
+                    code: chronic
+                    display: Chronic
+            severity:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/condition-severity
+                    code: severe
+                    display: Severe
+            evidence:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              example:
+              - reference: Observation/blood-glucose-level
+            onsetDateTime:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+            abatementDateTime:
+              type: string
+              format: date-time
+              example: '2022-01-07T00:00:00Z'
+            aspect:
+              type: array
+              items:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+                    example:
+                    - system: http://terminology.hl7.org/CodeSystem/condition-aspect
+                      code: manifestation
+                      display: Manifestation
+            verificationStatus:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://terminology.hl7.org/CodeSystem/observation-verificationstatus
+                    code: confirmed
+                    display: Confirmed
+            recordedDate:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+            lastUpdated:
+              type: string
+              format: date-time
+              example: '2022-01-01T00:00:00Z'
+          required:
+          - context
+          - resourceType
+          - id
+          - meta
+          - text
+          - extension
+          - subject
+          - code
+          - clinicalStatus
+          - category
+          - severity
+          - evidence
+          - onsetDateTime
+          - abatementDateTime
+          - aspect
+          - verificationStatus
+          - recordedDate
+          - lastUpdated
+      required:
+      - data
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: Condition
+              id: example-condition
+              meta:
+                profile:
+                - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+              text:
+                div: <div><p>A patient has been diagnosed with type 2 diabetes mellitus.</p></div>
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.DEACTIVATEDDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.DEACTIVATEDUSER
+                valueString: example-deactivateduser
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.ENCOUNTERDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEENCOUNTER
+                valueString: example-eventtypeencounter
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEEND
+                valueString: example-eventtypeend
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEHIDE
+                valueString: example-eventtypehide
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPEREACTIVATED
+                valueString: example-eventtypereactivated
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.EVENTTYPESTART
+                valueString: example-eventtypestart
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LASTMODIFIEDBY
+                valueString: example-lastmodifiedby
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LASTMODIFIEDDATETIME
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.LATERALITY
+                valueString: example-laterality
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE
+                valueString: example-mostrecentdiagnosisnote
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.ONSETDATE
+                valueDateTime: '2022-01-01T12:00:00Z'
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.PROBLEMSTATUS
+                valueCode: example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.RANKING
+                valueString: example-ranking
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SECTIONNOTE
+                valueString: example-sectionnote
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SOURCE
+                valueString: example-source
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.STATUS
+                valueCode: example
+              - url: http://xcaliber-fhir/structureDefinition/TINY_URLS.CONDITION.SUPPORTSLATERALITY
+                valueString: example-supportslaterality
+              subject:
+                reference: Patient/example
+              code:
+                coding:
+                - system: http://snomed.info/sct
+                  code: 250.02
+                  display: Type 2 diabetes mellitus
+              clinicalStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-clinicalstatus
+                  code: active
+                  display: Active
+              category:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-category
+                  code: chronic
+                  display: Chronic
+              severity:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-severity
+                  code: severe
+                  display: Severe
+              evidence:
+              - reference: Observation/blood-glucose-level
+              onsetDateTime: '2022-01-01T00:00:00Z'
+              abatementDateTime: '2022-01-07T00:00:00Z'
+              aspect:
+              - coding:
+                - system: http://terminology.hl7.org/CodeSystem/condition-aspect
+                  code: manifestation
+                  display: Manifestation
+              verificationStatus:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/observation-verificationstatus
+                  code: confirmed
+                  display: Confirmed
+              recordedDate: '2022-01-01T00:00:00Z'
+              lastUpdated: '2022-01-01T00:00:00Z'
+    error400ofputinConditionconditionid:
+      type: object
+      example:
+        statusCode: 400
+        message: Missing patientId
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+    error401ofputinConditionconditionid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofputinConditionconditionid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Condition not found
+        details:
+          type: string
+          example: No Condition resource with given id
+      example:
+        statusCode: 404
+        message: Condition not found
+        details: No Condition resource with given id
+    error500ofputinConditionconditionid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: An unexpected error occurred
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: An unexpected error occurred
+    response204ofdeleteinConditionconditionid:
+      type: object
+      example:
+        id: example
+        status: deleted
+      properties:
+        id:
+          type: string
+          example: example
+        status:
+          type: string
+          example: deleted
+    error400ofdeleteinConditionconditionid:
+      type: object
+      example:
+        statusCode: 400
+        message: Missing patientId
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+    error401ofdeleteinConditionconditionid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofdeleteinConditionconditionid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Condition not found
+        details:
+          type: string
+          example: No Condition resource with given id
+      example:
+        statusCode: 404
+        message: Condition not found
+        details: No Condition resource with given id
+    error500ofdeleteinConditionconditionid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: An unexpected error occurred
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: An unexpected error occurred
+    Context:
+      type: object
+      properties:
+        requestId:
+          type: string
+          example: abc123
+        source:
+          type: string
+          example: ATHENA
+        quorum:
+          type: boolean
+          example: true
+        notify:
+          type: boolean
+          example: true
+        departmentId:
+          type: string
+          example: '150'
+      required:
+      - requestId
+      - source
+      - quorum
+      - notify
+      additionalProperties: true
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

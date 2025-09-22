@@ -1,0 +1,344 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: Basic
+  description: Basic FHIR resource operations, supporting extensions for flexible
+    healthcare data modeling.
+paths:
+  /api/v2/Basic:
+    get:
+      summary: Get a list of Basic
+      operationId: getAthenaBasics
+      tags:
+      - Basic
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: author
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: author'
+      - name: code
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: code'
+      - name: created
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: created'
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: subject
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: subject'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinBasic'
+              example:
+                statusCode: 400
+                message: Either all charts or department id are required
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinBasic'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinBasic'
+              example:
+                statusCode: 500
+                message: Failed to get risk contract
+                details:
+                  some: error_detail
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example 1:
+                  value:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: Basic
+                        id: rc-1001
+                        subject:
+                          reference: Patient/4406
+                        code:
+                          text: risk-contract
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/all-charts
+                          valueString: Y
+                        - url: http://xcaliber-fhir/structureDefinition/department-count
+                          valueInteger: 3
+                    - resource:
+                        resourceType: Basic
+                        id: rc-1002
+                        subject:
+                          reference: Patient/5521
+                        code:
+                          text: risk-contract
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/all-charts
+                          valueString: N
+                        - url: http://xcaliber-fhir/structureDefinition/department-count
+                          valueInteger: 1
+                Response Example 2:
+                  value:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: Basic
+                        identifier:
+                        - value: BRAND-1001
+                          type:
+                            text: communicator-brand-id
+                        code:
+                          text: portal-access
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/access-level
+                          valueString: proxy
+                        - url: http://xcaliber-fhir/structureDefinition/email
+                          valueString: jane.doe@example.com
+                        - url: http://xcaliber-fhir/structureDefinition/name
+                          valueString: Jane Doe
+                        - url: http://xcaliber-fhir/structureDefinition/relationship-to-patient
+                          valueString: Mother
+                    - resource:
+                        resourceType: Basic
+                        identifier:
+                        - value: BRAND-2045
+                          type:
+                            text: communicator-brand-id
+                        code:
+                          text: portal-access
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/access-level
+                          valueString: read-only
+                        - url: http://xcaliber-fhir/structureDefinition/email
+                          valueString: john.smith@example.org
+                        - url: http://xcaliber-fhir/structureDefinition/name
+                          valueString: John Smith
+                        - url: http://xcaliber-fhir/structureDefinition/relationship-to-patient
+                          valueString: Father
+                Response Example 3:
+                  value:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 1
+                    entry:
+                    - resource:
+                        resourceType: Basic
+                        code:
+                          text: portal-status
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/blocked-failed-logins-yn
+                          valueString: N
+                        - url: http://xcaliber-fhir/structureDefinition/entity-to-display
+                          valueString: patient
+                        - url: http://xcaliber-fhir/structureDefinition/familyblocked-failed-logins-yn
+                          valueString: N
+                        - url: http://xcaliber-fhir/structureDefinition/family-registered-yn
+                          valueString: Y
+                        - url: http://xcaliber-fhir/structureDefinition/last-login-entity
+                          valueString: patient
+                        - url: http://xcaliber-fhir/structureDefinition/no-portal-yn
+                          valueString: N
+                        - url: http://xcaliber-fhir/structureDefinition/registered-yn
+                          valueString: Y
+                        - url: http://xcaliber-fhir/structureDefinition/status
+                          valueString: ACTIVE
+                        - url: http://xcaliber-fhir/structureDefinition/terms-accepted
+                          valueString: Y
+                        - url: http://xcaliber-fhir/structureDefinition/portal-registration-date
+                          valueDate: '2025-08-20'
+                        - url: http://xcaliber-fhir/structureDefinition/last-login-date
+                          valueDate: '2025-09-10'
+                        - url: http://xcaliber-fhir/structureDefinition/registered
+                          valueString: 'true'
+                        - url: http://xcaliber-fhir/structureDefinition/blocked-failed-logins
+                          valueString: '0'
+                        - url: http://xcaliber-fhir/structureDefinition/familyblocked-failed-logins
+                          valueString: '0'
+                        - url: http://xcaliber-fhir/structureDefinition/family-registered
+                          valueString: '2'
+                        - url: http://xcaliber-fhir/structureDefinition/no-portal
+                          valueString: 'false'
+                Response Example 4:
+                  value:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: Basic
+                        code:
+                          text: patient-chart-list
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/chart-sharing-group-id
+                          valueInteger: 101
+                        - url: http://xcaliber-fhir/structureDefinition/sample-department-id
+                          valueInteger: 150
+                    - resource:
+                        resourceType: Basic
+                        code:
+                          text: patient-chart-list
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/chart-sharing-group-id
+                          valueInteger: 202
+components:
+  schemas:
+    error500ofgetinBasic:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+          description: HTTP status code for the error.
+        message:
+          type: string
+          example: Missing patientId
+          description: Error message summary.
+        details:
+          type: string
+          nullable: true
+          example: Optional details
+          oneOf:
+          - type: string
+            description: Additional string details about the error.
+          - type: object
+            description: Additional object details about the error.
+          - type: string
+          - type: object
+          description: Optional detailed error information.
+        status:
+          type: string
+          description: Error status, typically "error"
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: null
+        status: error
+      description: Error response structure as per implementation
+    response200ofgetinBasic:
+      type: object
+      description: A wrapper for a list (Bundle) of Basic resources, all extensions
+        included.
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 2
+          entry:
+          - resource:
+              resourceType: Basic
+              id: riskcontractidA
+              subject:
+                reference: Patient/42
+              code:
+                text: risk-contract
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/all-charts
+                valueString: all
+              - url: http://xcaliber-fhir/structureDefinition/department-count
+                valueInteger: 3
+          - resource:
+              resourceType: Basic
+              id: riskcontractidB
+              subject:
+                reference: Patient/43
+              code:
+                text: risk-contract
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/all-charts
+                valueString: none
+    error401ofgetinBasic:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

@@ -1,0 +1,1032 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: FamilyMemberHistory
+  description: Operations related to FHIR FamilyMemberHistory resources in Athena
+paths:
+  /api/v2/FamilyMemberHistory:
+    get:
+      summary: Get Family Member History
+      operationId: getFamilyMemberHistory
+      tags:
+      - FamilyMemberHistory
+      parameters:
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: instantiates-canonical
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: instantiates-canonical'
+      - name: instantiates-uri
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: instantiates-uri'
+      - name: relationship
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: relationship'
+      - name: sex
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: sex'
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: status'
+      - name: code
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: code'
+      - name: date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: date'
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinFamilyMemberHistory'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinFamilyMemberHistory'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinFamilyMemberHistory'
+              example:
+                success: false
+                code: 500
+                message: Internal server error
+                details: Internal server error details
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: FamilyMemberHistory
+                        id: father-123
+                        patient:
+                          reference: Patient/456
+                        status: completed
+                        relationship:
+                          coding:
+                          - code: '123'
+                            display: father
+                        extension:
+                        - url: TINY_URLS.FAMILY_MEMBER_HISTORY.DEPARTMENTID
+                          valueString: DEPT001
+                        - url: TINY_URLS.FAMILY_MEMBER_HISTORY.HISTORY_UNKNOWN
+                          valueString: 'false'
+                        - url: TINY_URLS.FAMILY_MEMBER_HISTORY.HISTORY_UNKNOWN_LAST_MODIFIED_BY
+                          valueString: provider123
+                        - url: TINY_URLS.FAMILY_MEMBER_HISTORY.HISTORY_UNKNOWN_LAST_MODIFIED_DATE_TIME
+                          valueString: '2023-12-01T10:30:00Z'
+                        - url: TINY_URLS.FAMILY_MEMBER_HISTORY.SECTION_NOTE
+                          valueString: Family history notes
+                        - url: TINY_URLS.FAMILY_MEMBER_HISTORY.SECTION_NOTE_LAST_MODIFIED_DATE_TIME
+                          valueString: '2023-10-15T14:30:00Z'
+                        - url: TINY_URLS.FAMILY_MEMBER_HISTORY.SECTION_NOTE_LAST_MODIFIED_BY
+                          valueString: Dr. Smith
+                        - url: TINY_URLS.FAMILY_MEMBER_HISTORY.DEPARTMENT_ID
+                          valueString: DEPT123
+                        condition:
+                        - code:
+                            coding:
+                            - code: '73211009'
+                              display: Diabetes mellitus
+                              system: http://snomed.info/sct
+                          extension: []
+                          note:
+                          - text: Diagnosed at age 45
+    post:
+      summary: Create Family Member History
+      operationId: createFamilyMemberHistory
+      tags: &id003
+      - FamilyMemberHistory
+      parameters:
+      - *id001
+      - *id002
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinFamilyMemberHistory'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinFamilyMemberHistory'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinFamilyMemberHistory'
+              example:
+                success: false
+                code: 500
+                message: Internal server error
+                details: Internal server error details
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Accepted:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: FamilyMemberHistory
+                  relationship:
+                    coding:
+                    - code: '123'
+                      display: father
+                  condition:
+                  - code:
+                      coding:
+                      - code: '73211009'
+                        system: http://snomed.info/sct
+                    note:
+                    - text: Diagnosed at age 45
+                  extension:
+                  - url: TINY_URLS.FAMILY_MEMBER_HISTORY.SECTION_NOTE
+                    valueString: Family history notes
+    put:
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      summary: Create Family Member History
+      operationId: updateFamilyMemberHistory
+      tags: *id003
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: FamilyMemberHistory
+                  id: father-123
+                  meta:
+                    extension:
+                    - url: section-note
+                      valueString: Family history notes
+                    - url: third-party-username
+                      valueString: provider123
+                    - url: patient-facing-call
+                      valueBoolean: false
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Accepted:
+                  value:
+                    message: response is being getting generated.
+  /api/v2/FamilyMemberHistory/{family-member-history-id}:
+    delete:
+      summary: Delete Family Member History
+      operationId: deleteFamilyMemberHistory
+      tags:
+      - FamilyMemberHistory
+      parameters:
+      - *id001
+      - *id002
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofdeleteinFamilyMemberHistoryfamilymemberhistoryid'
+              example:
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Bundle
+                  type: searchset
+                  total: 1
+                  entry:
+                  - resourceType: FamilyMemberHistory
+                    id: '123'
+                  meta:
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/historyunknown
+                      valueString: unknown
+                    - url: http://xcaliber-fhir/structureDefinition/lastmodifiedby
+                      valueString: Dr. Smith
+                    - url: http://xcaliber-fhir/structureDefinition/lastmodifieddatetime
+                      valueDateTime: '2024-06-06T16:00:00+00:00'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinFamilyMemberHistoryfamilymemberhistoryid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinFamilyMemberHistoryfamilymemberhistoryid'
+              example:
+                success: false
+                code: 500
+                message: Internal server error
+                details: Internal server error details
+    parameters:
+    - name: family-member-history-id
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: x-source-id
+      in: header
+      schema:
+        type: string
+      required: true
+      description: '"Unique identifier of the source system that created the family
+        member history record. Required to delete a specific history record."'
+    put:
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      summary: Create Family Member History
+      operationId: updateFamilyMemberHistoryById
+      tags: *id003
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Accepted:
+                  value:
+                    message: response is being getting generated.
+components:
+  schemas:
+    ExtractedSchema736:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 1
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resourceType:
+                    type: string
+                    example: FamilyMemberHistory
+                  id:
+                    type: string
+                    example: '123'
+                required:
+                - resourceType
+                - id
+            meta:
+              type: object
+              properties:
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        example: http://tinyurl.com/historyunknown
+                      valueString:
+                        type: string
+                        example: unknown
+                      valueDateTime:
+                        type: string
+                        format: date-time
+                        example: '2024-06-06T16:00:00+00:00'
+                    required:
+                    - url
+              required:
+              - extension
+          required:
+          - context
+          - resourceType
+          - type
+          - total
+          - entry
+          - meta
+          description: '"Family member history data to be created. Provide the required
+            details in JSON format."'
+      required:
+      - data
+    response200ofgetinFamilyMemberHistory:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 1
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resourceType:
+                    type: string
+                    example: FamilyMemberHistory
+                  id:
+                    type: string
+                    example: '123'
+                required:
+                - resourceType
+                - id
+            meta:
+              type: object
+              properties:
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        example: http://tinyurl.com/historyunknown
+                      valueString:
+                        type: string
+                        example: unknown
+                      valueDateTime:
+                        type: string
+                        format: date-time
+                        example: '2024-06-06T16:00:00+00:00'
+                    required:
+                    - url
+              required:
+              - extension
+          required:
+          - context
+          - resourceType
+          - type
+          - total
+          - entry
+          - meta
+      required:
+      - data
+    error400ofgetinFamilyMemberHistory:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: extra details here
+    error401ofgetinFamilyMemberHistory:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinFamilyMemberHistory:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Internal server error details
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 500
+        message: Internal server error
+        details: Internal server error details
+    response200ofpostinFamilyMemberHistory:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 1
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resourceType:
+                    type: string
+                    example: FamilyMemberHistory
+                  id:
+                    type: string
+                    example: '123'
+                required:
+                - resourceType
+                - id
+            meta:
+              type: object
+              properties:
+                extension:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        example: http://tinyurl.com/historyunknown
+                      valueString:
+                        type: string
+                        example: unknown
+                      valueDateTime:
+                        type: string
+                        format: date-time
+                        example: '2024-06-06T16:00:00+00:00'
+                    required:
+                    - url
+              required:
+              - extension
+          required:
+          - context
+          - resourceType
+          - type
+          - total
+          - entry
+          - meta
+      required:
+      - data
+    error400ofpostinFamilyMemberHistory:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          example: extra details here
+      required:
+      - statusCode
+      - message
+      example:
+        statusCode: 400
+        message: Missing patientId
+        details: extra details here
+    error401ofpostinFamilyMemberHistory:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofpostinFamilyMemberHistory:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Internal server error details
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 500
+        message: Internal server error
+        details: Internal server error details
+    response200ofgetinFamilyMemberHistoryfamilymemberhistoryid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        resourceType:
+          type: string
+          example: Bundle
+        type:
+          type: string
+          example: searchset
+        total:
+          type: integer
+          example: 1
+        entry:
+          type: array
+          items:
+            type: object
+            properties:
+              resourceType:
+                type: string
+                example: FamilyMemberHistory
+              id:
+                type: string
+                example: '123'
+            required:
+            - resourceType
+            - id
+        meta:
+          type: object
+          properties:
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    example: http://tinyurl.com/historyunknown
+                  valueString:
+                    type: string
+                    example: unknown
+                  valueDateTime:
+                    type: string
+                    format: date-time
+                    example: '2024-06-06T16:00:00+00:00'
+                required:
+                - url
+          required:
+          - extension
+      required:
+      - context
+      - resourceType
+      - type
+      - total
+      - entry
+      - meta
+    error401ofgetinFamilyMemberHistoryfamilymemberhistoryid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinFamilyMemberHistoryfamilymemberhistoryid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Internal server error details
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 500
+        message: Internal server error
+        details: Internal server error details
+    response200ofdeleteinFamilyMemberHistoryfamilymemberhistoryid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        resourceType:
+          type: string
+          example: Bundle
+        type:
+          type: string
+          example: searchset
+        total:
+          type: integer
+          example: 1
+        entry:
+          type: array
+          items:
+            type: object
+            properties:
+              resourceType:
+                type: string
+                example: FamilyMemberHistory
+              id:
+                type: string
+                example: '123'
+            required:
+            - resourceType
+            - id
+        meta:
+          type: object
+          properties:
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    example: http://tinyurl.com/historyunknown
+                  valueString:
+                    type: string
+                    example: unknown
+                  valueDateTime:
+                    type: string
+                    format: date-time
+                    example: '2024-06-06T16:00:00+00:00'
+                required:
+                - url
+          required:
+          - extension
+      required:
+      - context
+      - resourceType
+      - type
+      - total
+      - entry
+      - meta
+    error401ofdeleteinFamilyMemberHistoryfamilymemberhistoryid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofdeleteinFamilyMemberHistoryfamilymemberhistoryid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Internal server error details
+      required:
+      - success
+      - code
+      - message
+      example:
+        success: false
+        code: 500
+        message: Internal server error
+        details: Internal server error details
+    Context:
+      type: object
+      properties:
+        requestId:
+          type: string
+          example: abc123
+        source:
+          type: string
+          example: ATHENA
+        quorum:
+          type: boolean
+          example: true
+        notify:
+          type: boolean
+          example: true
+        departmentId:
+          type: string
+          example: '150'
+      required:
+      - requestId
+      - source
+      - quorum
+      - notify
+      additionalProperties: true
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

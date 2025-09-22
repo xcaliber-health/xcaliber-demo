@@ -1,0 +1,904 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: ExplanationOfBenefit
+  description: FHIR ExplanationOfBenefit resource operations.
+paths:
+  /api/v2/ExplanationOfBenefit:
+    get:
+      summary: List ExplanationOfBenefit resources
+      operationId: getAthenaExplanationOfBenefitV2
+      tags:
+      - ExplanationOfBenefit
+      parameters:
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: care-team
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: care-team'
+      - name: claim
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: claim'
+      - name: coverage
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: coverage'
+      - name: created
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: created'
+      - name: detail-udi
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: detail-udi'
+      - name: disposition
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: disposition'
+      - name: encounter
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: encounter'
+      - name: enterer
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: enterer'
+      - name: facility
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: facility'
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: identifier'
+      - name: item-udi
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: item-udi'
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: payee
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: payee'
+      - name: procedure-udi
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: procedure-udi'
+      - name: provider
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: provider'
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: status'
+      - name: subdetail-udi
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: subdetail-udi'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinExplanationOfBenefit'
+              example:
+                statusCode: 400
+                message: Some error message
+                details: Invalid query
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinExplanationOfBenefit'
+              example:
+                statusCode: 404
+                message: Resource not found
+                details: ExplanationOfBenefit does not exist
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinExplanationOfBenefit'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Athena API error details
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: ExplanationOfBenefit
+                    id: '12345'
+                    identifier:
+                    - value: AUTH-2024-001
+                      type:
+                        text: referral-auth-number
+                    - value: REQ-789
+                      type:
+                        text: requisition-id
+                    benefitPeriod:
+                      start: '2024-01-01'
+                    status: active
+                    use: preauthorization
+                    outcome: complete
+                    diagnosis:
+                    - diagnosisCodeableConcept:
+                        coding:
+                        - code: Z00.00
+                    - diagnosisCodeableConcept:
+                        coding:
+                        - system: icd10
+                          code: Z00.00
+                    - diagnosisCodeableConcept:
+                        coding:
+                        - system: icd9
+                          code: V70.0
+                    procedure:
+                    - procedureCodeableConcept:
+                        coding:
+                        - code: '99213'
+                    - procedureCodeableConcept:
+                        coding:
+                        - code: '12345'
+                    insurance:
+                    - extension:
+                      - url: http://xcaliber-fhir/structureDefinition/insurance-id-number
+                        valueString: INS123456
+                      - url: http://xcaliber-fhir/structureDefinition/insurance-package-name
+                        valueString: Premium Health Plan
+                    provider:
+                      reference: Practitioner/90210
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/ansi-name-code
+                      valueString: ANSI001
+                    - url: http://xcaliber-fhir/structureDefinition/ansi-specialty-code
+                      valueString: SPEC123
+                    - url: http://xcaliber-fhir/structureDefinition/appointment-ids
+                      valueString: APT001,APT002
+                    - url: http://xcaliber-fhir/structureDefinition/department-id
+                      valueString: DEPT456
+                    - url: http://xcaliber-fhir/structureDefinition/referral-auth-units
+                      valueString: '10'
+                    - url: http://xcaliber-fhir/structureDefinition/referred-to-provider-id
+                      valueString: Practitioner/90210
+                    - url: http://xcaliber-fhir/structureDefinition/specialty
+                      valueString: Cardiology
+                    - url: http://xcaliber-fhir/structureDefinition/specialty-id
+                      valueString: CARD001
+                    - url: http://xcaliber-fhir/structureDefinition/visits-approved
+                      valueInteger: 5
+                    - url: http://xcaliber-fhir/structureDefinition/visits-left
+                      valueInteger: '3'
+                    - url: http://xcaliber-fhir/structureDefinition/specifies-visits
+                      valueBoolean: true
+                    - url: http://xcaliber-fhir/structureDefinition/expiration-date
+                      valueDate: '2024-12-31'
+                    - url: http://xcaliber-fhir/structureDefinition/department-id
+                      valueString: '12345'
+                    - url: http://xcaliber-fhir/structureDefinition/document-id
+                      valueString: DOC789
+                    - url: http://xcaliber-fhir/structureDefinition/end-date
+                      valueString: '2024-12-31'
+                    - url: http://xcaliber-fhir/structureDefinition/expired
+                      valueBoolean: false
+                    - url: http://xcaliber-fhir/structureDefinition/last-modified
+                      valueString: '2024-01-15T10:30:00Z'
+                    - url: http://xcaliber-fhir/structureDefinition/last-modified-by
+                      valueString: admin123
+                    - url: http://xcaliber-fhir/structureDefinition/no-referral-required
+                      valueBoolean: true
+                    - url: http://xcaliber-fhir/structureDefinition/note
+                      valueString: Patient requires follow-up
+                    - url: http://xcaliber-fhir/structureDefinition/notes-to-provider
+                      valueString: Please review lab results
+                    - url: http://xcaliber-fhir/structureDefinition/referral-auth-units
+                      valueString: '5'
+    post:
+      summary: Create ExplanationOfBenefit
+      operationId: createExplanationOfBenefitInAthena
+      tags:
+      - ExplanationOfBenefit
+      parameters:
+      - *id001
+      - *id002
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+        description: 'Filter: patient'
+      - name: department-id
+        in: query
+        required: true
+        schema:
+          type: string
+        description: ''
+      requestBody:
+        content:
+          application/json:
+            example:
+              context: &id003
+                requestId: abc123
+                source: ATHENA
+                quorum: true
+                notify: true
+                departmentId: '150'
+              data: &id004
+                resourceType: ExplanationOfBenefit
+                identifier:
+                - value: REFERRAL
+                  type:
+                    text: referral-auth-number
+                benefitPeriod: {}
+                status: active
+                use: preauthorization
+                outcome: complete
+                diagnosis: []
+                procedure: []
+                insurance:
+                - coverage:
+                    reference: Coverage/25198
+                  extension:
+                  - url: null
+                    valueString: null
+                provider:
+                  reference: Practitioner/2
+                extension:
+                - url: http://xcaliber-fhir/structureDefinition/appointment-ids
+                patient:
+                  reference: Patient/4406
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response201ofpostinExplanationOfBenefit'
+              example:
+                context:
+                  requestId: b611b87e7bc1f44298272080260e19ae
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  id: EOB ID
+                  status: success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinExplanationOfBenefit'
+              example:
+                statusCode: 400
+                message: Invalid request body
+                details: FHIR validation error
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinExplanationOfBenefit'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Athena API error details
+  /api/v2/ExplanationOfBenefit/{explanation-of-benefit-id}:
+    put:
+      summary: Update ExplanationOfBenefit
+      operationId: updateExplanationOfBenefitInAthena
+      tags:
+      - ExplanationOfBenefit
+      parameters:
+      - name: explanation-of-benefit-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier for the Explanation of Benefit to be updated.
+          Required for updating an existing Explanation of Benefit."'
+      - *id001
+      - *id002
+      requestBody:
+        content:
+          application/json:
+            example:
+              context: *id003
+              data: *id004
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofputinExplanationOfBenefitexplanationofbenefitid'
+              example:
+                context:
+                  requestId: 94dbf1e39393b91c9183d06728c60aa3
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  id: EOB id
+                  status: success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofputinExplanationOfBenefitexplanationofbenefitid'
+              example:
+                statusCode: 400
+                message: Invalid request body
+                details: FHIR validation error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofputinExplanationOfBenefitexplanationofbenefitid'
+              example:
+                statusCode: 404
+                message: ExplanationOfBenefit not found
+                details: Resource not found for ID
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofputinExplanationOfBenefitexplanationofbenefitid'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Athena API error details
+components:
+  schemas:
+    ExtractedSchema222:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: ExplanationOfBenefit
+            id:
+              type: string
+            status:
+              type: string
+            patient:
+              type: object
+              properties:
+                reference:
+                  type: string
+          required:
+          - context
+          - resourceType
+          - id
+          - status
+          - patient
+          description: '"Request body containing the ExplanationOfBenefit details.
+            See schema for required properties."'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: ExplanationOfBenefit
+          id: '123'
+          status: active
+          patient:
+            reference: Patient/123456
+    ExtractedSchema229:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: ExplanationOfBenefit
+            id:
+              type: string
+            status:
+              type: string
+            patient:
+              type: object
+              properties:
+                reference:
+                  type: string
+          required:
+          - context
+          - resourceType
+          - id
+          - status
+          - patient
+          description: '"Updated ExplanationOfBenefit data. Provide the fields to
+            be updated in the JSON payload."'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: ExplanationOfBenefit
+          id: '123'
+          status: active
+          patient:
+            reference: Patient/123456
+    response200ofgetinExplanationOfBenefit:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          context:
+                            type: object
+                            properties:
+                              requestId:
+                                type: string
+                                example: abc123
+                              source:
+                                type: string
+                                example: ATHENA
+                              quorum:
+                                type: boolean
+                                example: true
+                              notify:
+                                type: boolean
+                                example: true
+                            required:
+                            - requestId
+                            - source
+                            - quorum
+                            - notify
+                          resourceType:
+                            type: string
+                            example: ExplanationOfBenefit
+                          id:
+                            type: string
+                          status:
+                            type: string
+                          patient:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                        required:
+                        - context
+                        - resourceType
+                        - id
+                        - status
+                        - patient
+                    example:
+                      context:
+                        requestId: abc123
+                        source: ATHENA
+                        quorum: true
+                        notify: true
+                      data:
+                        resourceType: ExplanationOfBenefit
+                        id: '123'
+                        status: active
+                        patient:
+                          reference: Patient/123456
+          required:
+          - context
+          - resourceType
+          - type
+          - total
+          - entry
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              context:
+                requestId: abc123
+                source: ATHENA
+                quorum: true
+                notify: true
+              data:
+                resourceType: ExplanationOfBenefit
+                id: '123'
+                status: active
+                patient:
+                  reference: Patient/123456
+    error400ofgetinExplanationOfBenefit:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Some error message
+        details:
+          type: string
+          example: Invalid request body
+      example:
+        statusCode: 400
+        message: Some error message
+        details: Invalid request body
+    error404ofgetinExplanationOfBenefit:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Resource not found
+        details:
+          type: string
+          example: ExplanationOfBenefit does not exist
+      example:
+        statusCode: 404
+        message: Resource not found
+        details: ExplanationOfBenefit does not exist
+    error500ofgetinExplanationOfBenefit:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Athena API error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Athena API error details
+    response201ofpostinExplanationOfBenefit:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            id:
+              type: string
+            status:
+              type: string
+              example: success
+          required:
+          - context
+          - id
+          - status
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              id: referralauthid-from-athena
+              status: success
+    error400ofpostinExplanationOfBenefit:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Some error message
+        details:
+          type: string
+          example: Invalid request body
+      example:
+        statusCode: 400
+        message: Some error message
+        details: Invalid request body
+    error500ofpostinExplanationOfBenefit:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Athena API error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Athena API error details
+    response200ofputinExplanationOfBenefitexplanationofbenefitid:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            id:
+              type: string
+            status:
+              type: string
+              example: success
+          required:
+          - context
+          - id
+          - status
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              id: referralauthid-from-athena
+              status: success
+    error400ofputinExplanationOfBenefitexplanationofbenefitid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Some error message
+        details:
+          type: string
+          example: Invalid request body
+      example:
+        statusCode: 400
+        message: Some error message
+        details: Invalid request body
+    error404ofputinExplanationOfBenefitexplanationofbenefitid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Resource not found
+        details:
+          type: string
+          example: ExplanationOfBenefit does not exist
+      example:
+        statusCode: 404
+        message: Resource not found
+        details: ExplanationOfBenefit does not exist
+    error500ofputinExplanationOfBenefitexplanationofbenefitid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Athena API error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Athena API error details
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

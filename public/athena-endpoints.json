@@ -1,0 +1,1190 @@
+[
+  {
+    "resource": "allergyintolerance",
+    "path": "/AllergyIntolerance",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "appointment",
+    "path": "/Appointment",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "basic",
+    "path": "/Basic",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "code",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: code"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "careplan",
+    "path": "/CarePlan",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "careteam",
+    "path": "/CareTeam",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "claim",
+    "path": "/Claim",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "communication",
+    "path": "/Communication",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "condition",
+    "path": "/Condition",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "category",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: category"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "coverage",
+    "path": "/Coverage",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "diagnosticreport",
+    "path": "/DiagnosticReport",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "category",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: category"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "documentReference",
+    "path": "/DocumentReference",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "category",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: category"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "eligibilityresponse",
+    "path": "/CoverageEligibilityResponse",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "encounter",
+    "path": "/Encounter",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "resource": "episodeofcare",
+    "path": "/EpisodeOfCare",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "explanationofbenefit",
+    "path": "/ExplanationOfBenefit",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "familymemberhistory",
+    "path": "/FamilyMemberHistory",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "goal",
+    "path": "/Goal",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "immunization",
+    "path": "/Immunization",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "resource": "insurancepackage",
+    "path": "/InsurancePlan",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "insurancepackage",
+    "path": "/InsurancePlan/category/case-policies",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "location",
+    "path": "/Location",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "resource": "media",
+    "path": "/Media",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      },
+      {
+        "name": "category",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "resource": "medicationrequest",
+    "path": "/MedicationRequest",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "resource": "medicationstatement",
+    "path": "/MedicationStatement",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "resource": "observation",
+    "path": "/Observation",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "resource": "organization",
+    "path": "/Organization",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      },
+      {
+        "name": "category",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "resource": "organization",
+    "path": "/Organization/category/employer",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      },
+      {
+        "name": "category",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "resource": "patient",
+    "path": "/Patient",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "paymentnotice",
+    "path": "//PaymentNotice",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      },
+      {
+        "name": "additional-payment-info",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "name": "date",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "name": "patient-id-list",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "resource": "person",
+    "path": "/Person",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "practitioner",
+    "path": "/Practitioner",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "practitionerRole",
+    "path": "/PractitionerRole",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "procedure",
+    "path": "/Procedure",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "resource": "provenance",
+    "path": "/Provenance",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "questionnaire",
+    "path": "/Questionnaire",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      }
+    ]
+  },
+  {
+    "resource": "questionnaireresponse",
+    "path": "/QuestionnaireResponse",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      },
+      {
+        "name": "category",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "resource": "questionnaireresponse",
+    "path": "/QuestionnaireResponse/_history",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter: patient"
+      },
+      {
+        "name": "departmentId",
+        "in": "query",
+        "type": "string",
+        "description": "Department identifier."
+      },
+      {
+        "name": "category",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "resource": "servicerequest",
+    "path": "/ServiceRequest",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "categorycode",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "name": "encounter",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "resource": "tasks",
+    "path": "/Task",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier."
+      },
+      {
+        "name": "x-interaction-mode",
+        "in": "header",
+        "type": "boolean",
+        "description": "Interaction mode flag (true/false)."
+      },
+      {
+        "name": "practitioner",
+        "in": "query",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  }
+]

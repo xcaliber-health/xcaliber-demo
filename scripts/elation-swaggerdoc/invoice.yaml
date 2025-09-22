@@ -1,0 +1,1744 @@
+openapi: 3.0.3
+info:
+  title: Elation Invoice API
+  version: 1.0.0
+  description: "Source Ids:\n- Athena: 083fe714-e36e-4851-b2e7-a7166b439f67\n- Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f\n\nInvoice Endpoints\n\n\"Invoice\" resource represents a bill for healthcare services or products provided to a patient. It's part of the financial module within FHIR, specifically designed for billing purposes.\n \nExample: After a patient's doctor's visit and prescription, the healthcare provider generates an \"Invoice\" resource in FHIR to bill the patient's insurance. This invoice details the specific services provided (consultation, medication), their associated costs, and relevant codes. The insurance company processes this invoice, determining coverage and patient responsibility, then sends an ExplanationOfBenefit (EOB) back to the provider detailing the financial breakdown.\n\nDependent Sources:\n\nPatient\n"
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.com
+tags:
+- name: Invoices
+  description: Operations related to invoices in Elation
+paths:
+  /api/v1/Invoice:
+    get:
+      tags:
+      - Invoices
+      summary: Get list of Invoices
+      operationId: getElationInvoices
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+      - name: account
+        in: query
+        required: false
+        description: Search parameter 'account' for invoice.
+        schema:
+          type: integer
+      - name: date
+        in: query
+        required: false
+        description: Search parameter 'date' for invoice.
+        schema:
+          type: string
+          format: date
+      - name: identifier
+        in: query
+        required: false
+        description: Search parameter 'identifier' for invoice.
+        schema:
+          type: string
+      - name: issuer
+        in: query
+        required: false
+        description: Search parameter 'issuer' for invoice.
+        schema:
+          type: string
+      - name: participant
+        in: query
+        required: false
+        description: Search parameter 'participant' for invoice.
+        schema:
+          type: string
+      - name: participant-role
+        in: query
+        required: false
+        description: Search parameter 'participant-role' for invoice.
+        schema:
+          type: string
+      - name: recipient
+        in: query
+        required: false
+        description: Search parameter 'recipient' for invoice.
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        description: Search parameter 'status' for invoice.
+        schema:
+          type: string
+      - name: subject
+        in: query
+        required: false
+        description: Search parameter 'subject' for invoice.
+        schema:
+          type: string
+      - name: totalgross
+        in: query
+        required: false
+        description: Search parameter 'totalgross' for invoice.
+        schema:
+          type: string
+      - name: totalnet
+        in: query
+        required: false
+        description: Search parameter 'totalnet' for invoice.
+        schema:
+          type: string
+      - name: type
+        in: query
+        required: false
+        description: Search parameter 'type' for invoice.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Bundle of invoices
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                      source:
+                        type: string
+                      quorum:
+                        type: boolean
+                      notify:
+                        type: boolean
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                  data:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Bundle
+                      type:
+                        type: string
+                        example: searchset
+                      total:
+                        type: integer
+                        example: 1
+                      entry:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            resource:
+                              type: object
+                              properties:
+                                context:
+                                  type: object
+                                  properties:
+                                    requestId:
+                                      type: string
+                                    source:
+                                      type: string
+                                    quorum:
+                                      type: boolean
+                                    notify:
+                                      type: boolean
+                                  required:
+                                  - requestId
+                                  - source
+                                  - quorum
+                                  - notify
+                                data:
+                                  type: object
+                                  properties:
+                                    resourceType:
+                                      type: string
+                                      example: Invoice
+                                    id:
+                                      type: string
+                                      example: example
+                                    meta:
+                                      type: object
+                                      properties:
+                                        profile:
+                                          type: array
+                                          items:
+                                            type: string
+                                          example:
+                                          - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinicaldocument-metadata
+                                        tag:
+                                          type: array
+                                          items:
+                                            type: object
+                                            properties:
+                                              code:
+                                                type: string
+                                                example: HIS
+                                              display:
+                                                type: string
+                                                example: Hospital Information System
+                                              system:
+                                                type: string
+                                                example: http://terminology.hl7.org/CodeSystem/v3-ActReason
+                                    extension:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          url:
+                                            type: string
+                                          valueString:
+                                            type: string
+                                    identifier:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          use:
+                                            type: string
+                                          system:
+                                            type: string
+                                          value:
+                                            type: string
+                                    status:
+                                      type: string
+                                    intent:
+                                      type: string
+                                    item:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          sequence:
+                                            type: integer
+                                          coding:
+                                            type: array
+                                            items:
+                                              type: object
+                                              properties:
+                                                system:
+                                                  type: string
+                                                code:
+                                                  type: string
+                                                display:
+                                                  type: string
+                                          productOrService:
+                                            type: object
+                                            properties:
+                                              reference:
+                                                type: string
+                                          quantity:
+                                            type: object
+                                            properties:
+                                              value:
+                                                type: integer
+                                              unitCode:
+                                                type: string
+                                          price:
+                                            type: object
+                                            properties:
+                                              currency:
+                                                type: string
+                                              value:
+                                                type: integer
+                                    totalCharges:
+                                      type: object
+                                      properties:
+                                        currency:
+                                          type: string
+                                        value:
+                                          type: integer
+                                    paymentReceived:
+                                      type: integer
+                                    due:
+                                      type: integer
+                                    created:
+                                      type: string
+                                    createdBy:
+                                      type: object
+                                      properties:
+                                        reference:
+                                          type: string
+                                    lastUpdated:
+                                      type: string
+                                    lastUpdatedBy:
+                                      type: object
+                                      properties:
+                                        reference:
+                                          type: string
+                                    paymentNotice:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          reference:
+                                            type: string
+                                    insurance:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          reference:
+                                            type: string
+                                    diagnosis:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          reference:
+                                            type: string
+                                    note:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          text:
+                                            type: string
+                                    entry:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          fullUrl:
+                                            type: string
+                                          resource:
+                                            type: object
+                                            properties:
+                                              resourceType:
+                                                type: string
+                                              id:
+                                                type: string
+                                          request:
+                                            type: object
+                                            properties:
+                                              method:
+                                                type: string
+                                              url:
+                                                type: string
+                                          status:
+                                            type: string
+                              example:
+                                context:
+                                  requestId: abc123
+                                  source: ELATION
+                                  quorum: true
+                                  notify: true
+                                data:
+                                  resourceType: Invoice
+                                  id: example
+                                  meta:
+                                    profile:
+                                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinicaldocument-metadata
+                                    tag:
+                                    - code: HIS
+                                      display: Hospital Information System
+                                      system: http://terminology.hl7.org/CodeSystem/v3-ActReason
+                                  extension:
+                                  - url: http://xcaliber-fhir/structureDefinition/ref
+                                    valueString: REF123456
+                                  - url: http://xcaliber-fhir/structureDefinition/service-date
+                                    valueString: 2022-01-01
+                                  - url: http://xcaliber-fhir/structureDefinition/payment-date
+                                    valueString: 2022-01-02
+                                  - url: http://xcaliber-fhir/structureDefinition/id
+                                    valueString: VN-789
+                                  - url: http://xcaliber-fhir/structureDefinition/signed-date
+                                    valueString: 2022-01-03
+                                  - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                                    valueString: 2022-01-04
+                                  - url: http://xcaliber-fhir/structureDefinition/referring-physician
+                                    valueString: Dr. John Doe, CA
+                                  - url: http://xcaliber-fhir/structureDefinition/created-date
+                                    valueString: 2022-01-01
+                                  - url: http://xcaliber-fhir/structureDefinition/modified-date
+                                    valueString: 2022-01-05
+                                  identifier:
+                                  - use: usual
+                                    system: urn:oid:2.16.840.1.113883.4.1
+                                    value: 123456789012
+                                  status: draft
+                                  intent: offerAndAccept
+                                  item:
+                                  - sequence: 1
+                                    coding:
+                                    - system: http://terminology.hl7.org/CodeSystem/fhir-billing-item-type
+                                      code: 84013-3
+                                      display: Procedure
+                                    productOrService:
+                                      reference: Procedure/example-procedure
+                                    quantity:
+                                      value: 1
+                                      unitCode: each
+                                    price:
+                                      currency: USD
+                                      value: 200
+                                  - sequence: 2
+                                    coding:
+                                    - system: http://terminology.hl7.org/CodeSystem/fhir-billing-item-type
+                                      code: 84010-3
+                                      display: MedicalSupply
+                                    productOrService:
+                                      reference: MedicalSupply/example-supply
+                                    quantity:
+                                      value: 5
+                                      unitCode: unit
+                                    price:
+                                      currency: USD
+                                      value: 50
+                                  totalCharges:
+                                    currency: USD
+                                    value: 350
+                                  paymentReceived: 0
+                                  due: 350
+                                  created: 2022-01-01 12:34:56
+                                  createdBy:
+                                    reference: Practitioner/example-practitioner
+                                  lastUpdated: 2022-01-01 12:34:56
+                                  lastUpdatedBy:
+                                    reference: Practitioner/example-practitioner
+                                  paymentNotice:
+                                  - reference: PaymentNotice/example-payment-notice
+                                  insurance:
+                                  - reference: InsurancePlan/example-insurance
+                                  diagnosis:
+                                  - reference: Diagnosis/example-diagnosis
+                                  note:
+                                  - text: This invoice includes services provided on 2022-01-01.
+                                  entry:
+                                  - fullUrl: Invoice/example
+                                    resource:
+                                      resourceType: Invoice
+                                      id: example
+                                    request:
+                                      method: PUT
+                                      url: Invoice/example
+                                    status: not-modified
+                example:
+                  context:
+                    requestId: abc123
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 1
+                    entry:
+                    - resource:
+                        resourceType: Invoice
+                        id: example
+                        meta:
+                          profile:
+                          - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinicaldocument-metadata
+                          tag:
+                          - code: HIS
+                            display: Hospital Information System
+                            system: http://terminology.hl7.org/CodeSystem/v3-ActReason
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/ref
+                          valueString: REF123456
+                        - url: http://xcaliber-fhir/structureDefinition/service-date
+                          valueString: 2022-01-01
+                        - url: http://xcaliber-fhir/structureDefinition/payment-date
+                          valueString: 2022-01-02
+                        - url: http://xcaliber-fhir/structureDefinition/id
+                          valueString: VN-789
+                        - url: http://xcaliber-fhir/structureDefinition/signed-date
+                          valueString: 2022-01-03
+                        - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                          valueString: 2022-01-04
+                        - url: http://xcaliber-fhir/structureDefinition/referring-physician
+                          valueString: Dr. John Doe, CA
+                        - url: http://xcaliber-fhir/structureDefinition/created-date
+                          valueString: 2022-01-01
+                        - url: http://xcaliber-fhir/structureDefinition/modified-date
+                          valueString: 2022-01-05
+                        identifier:
+                        - use: usual
+                          system: urn:oid:2.16.840.1.113883.4.1
+                          value: 123456789012
+                        status: draft
+                        intent: offerAndAccept
+                        item:
+                        - sequence: 1
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/fhir-billing-item-type
+                            code: 84013-3
+                            display: Procedure
+                          productOrService:
+                            reference: Procedure/example-procedure
+                          quantity:
+                            value: 1
+                            unitCode: each
+                          price:
+                            currency: USD
+                            value: 200
+                        - sequence: 2
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/fhir-billing-item-type
+                            code: 84010-3
+                            display: MedicalSupply
+                          productOrService:
+                            reference: MedicalSupply/example-supply
+                          quantity:
+                            value: 5
+                            unitCode: unit
+                          price:
+                            currency: USD
+                            value: 50
+                        totalCharges:
+                          currency: USD
+                          value: 350
+                        paymentReceived: 0
+                        due: 350
+                        created: 2022-01-01 12:34:56
+                        createdBy:
+                          reference: Practitioner/example-practitioner
+                        lastUpdated: 2022-01-01 12:34:56
+                        lastUpdatedBy:
+                          reference: Practitioner/example-practitioner
+                        paymentNotice:
+                        - reference: PaymentNotice/example-payment-notice
+                        insurance:
+                        - reference: InsurancePlan/example-insurance
+                        diagnosis:
+                        - reference: Diagnosis/example-diagnosis
+                        note:
+                        - text: This invoice includes services provided on 2022-01-01.
+                        entry:
+                        - fullUrl: Invoice/example
+                          resource:
+                            resourceType: Invoice
+                            id: example
+                          request:
+                            method: PUT
+                            url: Invoice/example
+                          status: not-modified
+        '400':
+          description: Missing patient ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: patient id is missing
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 400
+                  message: patient id is missing
+                  status: error
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  details:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                        example: You are not authorized to access this resource
+                example:
+                  statusCode: 401
+                  message: Unauthorized
+                  details:
+                    error: You are not authorized to access this resource
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                    example: {}
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+    parameters: []
+  /api/v1/Invoice/{invoice-id}:
+    get:
+      tags:
+      - Invoices
+      summary: Get Invoice by ID
+      operationId: getElationInvoiceById
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: invoice-id
+        in: path
+        required: true
+        description: .
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Invoice retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                      source:
+                        type: string
+                      quorum:
+                        type: boolean
+                      notify:
+                        type: boolean
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                  data:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Invoice
+                      id:
+                        type: string
+                        example: example
+                      meta:
+                        type: object
+                        properties:
+                          profile:
+                            type: array
+                            items:
+                              type: string
+                            example:
+                            - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinicaldocument-metadata
+                          tag:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                code:
+                                  type: string
+                                  example: HIS
+                                display:
+                                  type: string
+                                  example: Hospital Information System
+                                system:
+                                  type: string
+                                  example: http://terminology.hl7.org/CodeSystem/v3-ActReason
+                      extension:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            valueString:
+                              type: string
+                      identifier:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            use:
+                              type: string
+                            system:
+                              type: string
+                            value:
+                              type: string
+                      status:
+                        type: string
+                      intent:
+                        type: string
+                      item:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            sequence:
+                              type: integer
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                            productOrService:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                            quantity:
+                              type: object
+                              properties:
+                                value:
+                                  type: integer
+                                unitCode:
+                                  type: string
+                            price:
+                              type: object
+                              properties:
+                                currency:
+                                  type: string
+                                value:
+                                  type: integer
+                      totalCharges:
+                        type: object
+                        properties:
+                          currency:
+                            type: string
+                          value:
+                            type: integer
+                      paymentReceived:
+                        type: integer
+                      due:
+                        type: integer
+                      created:
+                        type: string
+                      createdBy:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      lastUpdated:
+                        type: string
+                      lastUpdatedBy:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      paymentNotice:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                      insurance:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                      diagnosis:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                      note:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            text:
+                              type: string
+                      entry:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            fullUrl:
+                              type: string
+                            resource:
+                              type: object
+                              properties:
+                                resourceType:
+                                  type: string
+                                id:
+                                  type: string
+                            request:
+                              type: object
+                              properties:
+                                method:
+                                  type: string
+                                url:
+                                  type: string
+                            status:
+                              type: string
+                example:
+                  context:
+                    requestId: abc123
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Invoice
+                    id: example
+                    meta:
+                      profile:
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinicaldocument-metadata
+                      tag:
+                      - code: HIS
+                        display: Hospital Information System
+                        system: http://terminology.hl7.org/CodeSystem/v3-ActReason
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/ref
+                      valueString: REF123456
+                    - url: http://xcaliber-fhir/structureDefinition/service-date
+                      valueString: 2022-01-01
+                    - url: http://xcaliber-fhir/structureDefinition/payment-date
+                      valueString: 2022-01-02
+                    - url: http://xcaliber-fhir/structureDefinition/id
+                      valueString: VN-789
+                    - url: http://xcaliber-fhir/structureDefinition/signed-date
+                      valueString: 2022-01-03
+                    - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                      valueString: 2022-01-04
+                    - url: http://xcaliber-fhir/structureDefinition/referring-physician
+                      valueString: Dr. John Doe, CA
+                    - url: http://xcaliber-fhir/structureDefinition/created-date
+                      valueString: 2022-01-01
+                    - url: http://xcaliber-fhir/structureDefinition/modified-date
+                      valueString: 2022-01-05
+                    identifier:
+                    - use: usual
+                      system: urn:oid:2.16.840.1.113883.4.1
+                      value: 123456789012
+                    status: draft
+                    intent: offerAndAccept
+                    item:
+                    - sequence: 1
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/fhir-billing-item-type
+                        code: 84013-3
+                        display: Procedure
+                      productOrService:
+                        reference: Procedure/example-procedure
+                      quantity:
+                        value: 1
+                        unitCode: each
+                      price:
+                        currency: USD
+                        value: 200
+                    - sequence: 2
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/fhir-billing-item-type
+                        code: 84010-3
+                        display: MedicalSupply
+                      productOrService:
+                        reference: MedicalSupply/example-supply
+                      quantity:
+                        value: 5
+                        unitCode: unit
+                      price:
+                        currency: USD
+                        value: 50
+                    totalCharges:
+                      currency: USD
+                      value: 350
+                    paymentReceived: 0
+                    due: 350
+                    created: 2022-01-01 12:34:56
+                    createdBy:
+                      reference: Practitioner/example-practitioner
+                    lastUpdated: 2022-01-01 12:34:56
+                    lastUpdatedBy:
+                      reference: Practitioner/example-practitioner
+                    paymentNotice:
+                    - reference: PaymentNotice/example-payment-notice
+                    insurance:
+                    - reference: InsurancePlan/example-insurance
+                    diagnosis:
+                    - reference: Diagnosis/example-diagnosis
+                    note:
+                    - text: This invoice includes services provided on 2022-01-01.
+                    entry:
+                    - fullUrl: Invoice/example
+                      resource:
+                        resourceType: Invoice
+                        id: example
+                      request:
+                        method: PUT
+                        url: Invoice/example
+                      status: not-modified
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message:
+                    type: string
+                    example: Unauthorized
+                  details:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                        example: You are not authorized to access this resource
+                example:
+                  statusCode: 401
+                  message: Unauthorized
+                  details:
+                    error: You are not authorized to access this resource
+        '400':
+          description: Missing patient ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: patient id is missing
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 400
+                  message: patient id is missing
+                  status: error
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: object
+                    example: {}
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: {}
+components:
+  schemas:
+    InvoiceBundleResponse:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+            source:
+              type: string
+            quorum:
+              type: boolean
+            notify:
+              type: boolean
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 1
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    properties:
+                      context:
+                        type: object
+                        properties:
+                          requestId:
+                            type: string
+                          source:
+                            type: string
+                          quorum:
+                            type: boolean
+                          notify:
+                            type: boolean
+                        required:
+                        - requestId
+                        - source
+                        - quorum
+                        - notify
+                      data:
+                        type: object
+                        properties:
+                          resourceType:
+                            type: string
+                            example: Invoice
+                          id:
+                            type: string
+                            example: example
+                          meta:
+                            type: object
+                            properties:
+                              profile:
+                                type: array
+                                items:
+                                  type: string
+                                example:
+                                - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinicaldocument-metadata
+                              tag:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    code:
+                                      type: string
+                                      example: HIS
+                                    display:
+                                      type: string
+                                      example: Hospital Information System
+                                    system:
+                                      type: string
+                                      example: http://terminology.hl7.org/CodeSystem/v3-ActReason
+                          extension:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                valueString:
+                                  type: string
+                          identifier:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                use:
+                                  type: string
+                                system:
+                                  type: string
+                                value:
+                                  type: string
+                          status:
+                            type: string
+                          intent:
+                            type: string
+                          item:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                sequence:
+                                  type: integer
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      system:
+                                        type: string
+                                      code:
+                                        type: string
+                                      display:
+                                        type: string
+                                productOrService:
+                                  type: object
+                                  properties:
+                                    reference:
+                                      type: string
+                                quantity:
+                                  type: object
+                                  properties:
+                                    value:
+                                      type: integer
+                                    unitCode:
+                                      type: string
+                                price:
+                                  type: object
+                                  properties:
+                                    currency:
+                                      type: string
+                                    value:
+                                      type: integer
+                          totalCharges:
+                            type: object
+                            properties:
+                              currency:
+                                type: string
+                              value:
+                                type: integer
+                          paymentReceived:
+                            type: integer
+                          due:
+                            type: integer
+                          created:
+                            type: string
+                          createdBy:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                          lastUpdated:
+                            type: string
+                          lastUpdatedBy:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                          paymentNotice:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                          insurance:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                          diagnosis:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                reference:
+                                  type: string
+                          note:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                text:
+                                  type: string
+                          entry:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                fullUrl:
+                                  type: string
+                                resource:
+                                  type: object
+                                  properties:
+                                    resourceType:
+                                      type: string
+                                    id:
+                                      type: string
+                                request:
+                                  type: object
+                                  properties:
+                                    method:
+                                      type: string
+                                    url:
+                                      type: string
+                                status:
+                                  type: string
+                    example:
+                      context:
+                        requestId: abc123
+                        source: ELATION
+                        quorum: true
+                        notify: true
+                      data:
+                        resourceType: Invoice
+                        id: example
+                        meta:
+                          profile:
+                          - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinicaldocument-metadata
+                          tag:
+                          - code: HIS
+                            display: Hospital Information System
+                            system: http://terminology.hl7.org/CodeSystem/v3-ActReason
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/ref
+                          valueString: REF123456
+                        - url: http://xcaliber-fhir/structureDefinition/service-date
+                          valueString: 2022-01-01
+                        - url: http://xcaliber-fhir/structureDefinition/payment-date
+                          valueString: 2022-01-02
+                        - url: http://xcaliber-fhir/structureDefinition/id
+                          valueString: VN-789
+                        - url: http://xcaliber-fhir/structureDefinition/signed-date
+                          valueString: 2022-01-03
+                        - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                          valueString: 2022-01-04
+                        - url: http://xcaliber-fhir/structureDefinition/referring-physician
+                          valueString: Dr. John Doe, CA
+                        - url: http://xcaliber-fhir/structureDefinition/created-date
+                          valueString: 2022-01-01
+                        - url: http://xcaliber-fhir/structureDefinition/modified-date
+                          valueString: 2022-01-05
+                        identifier:
+                        - use: usual
+                          system: urn:oid:2.16.840.1.113883.4.1
+                          value: 123456789012
+                        status: draft
+                        intent: offerAndAccept
+                        item:
+                        - sequence: 1
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/fhir-billing-item-type
+                            code: 84013-3
+                            display: Procedure
+                          productOrService:
+                            reference: Procedure/example-procedure
+                          quantity:
+                            value: 1
+                            unitCode: each
+                          price:
+                            currency: USD
+                            value: 200
+                        - sequence: 2
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/fhir-billing-item-type
+                            code: 84010-3
+                            display: MedicalSupply
+                          productOrService:
+                            reference: MedicalSupply/example-supply
+                          quantity:
+                            value: 5
+                            unitCode: unit
+                          price:
+                            currency: USD
+                            value: 50
+                        totalCharges:
+                          currency: USD
+                          value: 350
+                        paymentReceived: 0
+                        due: 350
+                        created: 2022-01-01 12:34:56
+                        createdBy:
+                          reference: Practitioner/example-practitioner
+                        lastUpdated: 2022-01-01 12:34:56
+                        lastUpdatedBy:
+                          reference: Practitioner/example-practitioner
+                        paymentNotice:
+                        - reference: PaymentNotice/example-payment-notice
+                        insurance:
+                        - reference: InsurancePlan/example-insurance
+                        diagnosis:
+                        - reference: Diagnosis/example-diagnosis
+                        note:
+                        - text: This invoice includes services provided on 2022-01-01.
+                        entry:
+                        - fullUrl: Invoice/example
+                          resource:
+                            resourceType: Invoice
+                            id: example
+                          request:
+                            method: PUT
+                            url: Invoice/example
+                          status: not-modified
+      example:
+        context:
+          requestId: abc123
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: Invoice
+              id: example
+              meta:
+                profile:
+                - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinicaldocument-metadata
+                tag:
+                - code: HIS
+                  display: Hospital Information System
+                  system: http://terminology.hl7.org/CodeSystem/v3-ActReason
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/ref
+                valueString: REF123456
+              - url: http://xcaliber-fhir/structureDefinition/service-date
+                valueString: 2022-01-01
+              - url: http://xcaliber-fhir/structureDefinition/payment-date
+                valueString: 2022-01-02
+              - url: http://xcaliber-fhir/structureDefinition/id
+                valueString: VN-789
+              - url: http://xcaliber-fhir/structureDefinition/signed-date
+                valueString: 2022-01-03
+              - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                valueString: 2022-01-04
+              - url: http://xcaliber-fhir/structureDefinition/referring-physician
+                valueString: Dr. John Doe, CA
+              - url: http://xcaliber-fhir/structureDefinition/created-date
+                valueString: 2022-01-01
+              - url: http://xcaliber-fhir/structureDefinition/modified-date
+                valueString: 2022-01-05
+              identifier:
+              - use: usual
+                system: urn:oid:2.16.840.1.113883.4.1
+                value: 123456789012
+              status: draft
+              intent: offerAndAccept
+              item:
+              - sequence: 1
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/fhir-billing-item-type
+                  code: 84013-3
+                  display: Procedure
+                productOrService:
+                  reference: Procedure/example-procedure
+                quantity:
+                  value: 1
+                  unitCode: each
+                price:
+                  currency: USD
+                  value: 200
+              - sequence: 2
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/fhir-billing-item-type
+                  code: 84010-3
+                  display: MedicalSupply
+                productOrService:
+                  reference: MedicalSupply/example-supply
+                quantity:
+                  value: 5
+                  unitCode: unit
+                price:
+                  currency: USD
+                  value: 50
+              totalCharges:
+                currency: USD
+                value: 350
+              paymentReceived: 0
+              due: 350
+              created: 2022-01-01 12:34:56
+              createdBy:
+                reference: Practitioner/example-practitioner
+              lastUpdated: 2022-01-01 12:34:56
+              lastUpdatedBy:
+                reference: Practitioner/example-practitioner
+              paymentNotice:
+              - reference: PaymentNotice/example-payment-notice
+              insurance:
+              - reference: InsurancePlan/example-insurance
+              diagnosis:
+              - reference: Diagnosis/example-diagnosis
+              note:
+              - text: This invoice includes services provided on 2022-01-01.
+              entry:
+              - fullUrl: Invoice/example
+                resource:
+                  resourceType: Invoice
+                  id: example
+                request:
+                  method: PUT
+                  url: Invoice/example
+                status: not-modified
+    InvoiceResponse:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+            source:
+              type: string
+            quorum:
+              type: boolean
+            notify:
+              type: boolean
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: Invoice
+            id:
+              type: string
+              example: example
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                  - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinicaldocument-metadata
+                tag:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: HIS
+                      display:
+                        type: string
+                        example: Hospital Information System
+                      system:
+                        type: string
+                        example: http://terminology.hl7.org/CodeSystem/v3-ActReason
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+            identifier:
+              type: array
+              items:
+                type: object
+                properties:
+                  use:
+                    type: string
+                  system:
+                    type: string
+                  value:
+                    type: string
+            status:
+              type: string
+            intent:
+              type: string
+            item:
+              type: array
+              items:
+                type: object
+                properties:
+                  sequence:
+                    type: integer
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+                  productOrService:
+                    type: object
+                    properties:
+                      reference:
+                        type: string
+                  quantity:
+                    type: object
+                    properties:
+                      value:
+                        type: integer
+                      unitCode:
+                        type: string
+                  price:
+                    type: object
+                    properties:
+                      currency:
+                        type: string
+                      value:
+                        type: integer
+            totalCharges:
+              type: object
+              properties:
+                currency:
+                  type: string
+                value:
+                  type: integer
+            paymentReceived:
+              type: integer
+            due:
+              type: integer
+            created:
+              type: string
+            createdBy:
+              type: object
+              properties:
+                reference:
+                  type: string
+            lastUpdated:
+              type: string
+            lastUpdatedBy:
+              type: object
+              properties:
+                reference:
+                  type: string
+            paymentNotice:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+            insurance:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+            diagnosis:
+              type: array
+              items:
+                type: object
+                properties:
+                  reference:
+                    type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  fullUrl:
+                    type: string
+                  resource:
+                    type: object
+                    properties:
+                      resourceType:
+                        type: string
+                      id:
+                        type: string
+                  request:
+                    type: object
+                    properties:
+                      method:
+                        type: string
+                      url:
+                        type: string
+                  status:
+                    type: string
+      example:
+        context:
+          requestId: abc123
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Invoice
+          id: example
+          meta:
+            profile:
+            - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinicaldocument-metadata
+            tag:
+            - code: HIS
+              display: Hospital Information System
+              system: http://terminology.hl7.org/CodeSystem/v3-ActReason
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/ref
+            valueString: REF123456
+          - url: http://xcaliber-fhir/structureDefinition/service-date
+            valueString: 2022-01-01
+          - url: http://xcaliber-fhir/structureDefinition/payment-date
+            valueString: 2022-01-02
+          - url: http://xcaliber-fhir/structureDefinition/id
+            valueString: VN-789
+          - url: http://xcaliber-fhir/structureDefinition/signed-date
+            valueString: 2022-01-03
+          - url: http://xcaliber-fhir/structureDefinition/deleted-date
+            valueString: 2022-01-04
+          - url: http://xcaliber-fhir/structureDefinition/referring-physician
+            valueString: Dr. John Doe, CA
+          - url: http://xcaliber-fhir/structureDefinition/created-date
+            valueString: 2022-01-01
+          - url: http://xcaliber-fhir/structureDefinition/modified-date
+            valueString: 2022-01-05
+          identifier:
+          - use: usual
+            system: urn:oid:2.16.840.1.113883.4.1
+            value: 123456789012
+          status: draft
+          intent: offerAndAccept
+          item:
+          - sequence: 1
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/fhir-billing-item-type
+              code: 84013-3
+              display: Procedure
+            productOrService:
+              reference: Procedure/example-procedure
+            quantity:
+              value: 1
+              unitCode: each
+            price:
+              currency: USD
+              value: 200
+          - sequence: 2
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/fhir-billing-item-type
+              code: 84010-3
+              display: MedicalSupply
+            productOrService:
+              reference: MedicalSupply/example-supply
+            quantity:
+              value: 5
+              unitCode: unit
+            price:
+              currency: USD
+              value: 50
+          totalCharges:
+            currency: USD
+            value: 350
+          paymentReceived: 0
+          due: 350
+          created: 2022-01-01 12:34:56
+          createdBy:
+            reference: Practitioner/example-practitioner
+          lastUpdated: 2022-01-01 12:34:56
+          lastUpdatedBy:
+            reference: Practitioner/example-practitioner
+          paymentNotice:
+          - reference: PaymentNotice/example-payment-notice
+          insurance:
+          - reference: InsurancePlan/example-insurance
+          diagnosis:
+          - reference: Diagnosis/example-diagnosis
+          note:
+          - text: This invoice includes services provided on 2022-01-01.
+          entry:
+          - fullUrl: Invoice/example
+            resource:
+              resourceType: Invoice
+              id: example
+            request:
+              method: PUT
+              url: Invoice/example
+            status: not-modified
+    Error400:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: patient id is missing
+        status:
+          type: string
+          example: error
+      example:
+        statusCode: 400
+        message: patient id is missing
+        status: error
+    Error401:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Unauthorized
+        details:
+          type: object
+          properties:
+            error:
+              type: string
+              example: You are not authorized to access this resource
+      example:
+        statusCode: 401
+        message: Unauthorized
+        details:
+          error: You are not authorized to access this resource
+    Error500:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: object
+          example: {}
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: {}
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    xSourceId:
+      name: x-source-id
+      in: header
+      required: true
+      schema:
+        type: string
+      description: "Source identifier header required for routing.\nAthena: 083fe714-e36e-4851-b2e7-a7166b439f67\n Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f — \U0001F534 On demand filter"
+externalDocs:
+  description: Run in Postman
+  url: https://app.postman.com/import/openapi
+security:
+- bearerAuth: []

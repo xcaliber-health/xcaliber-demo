@@ -1,0 +1,2193 @@
+openapi: 3.0.3
+info:
+  title: Elation Observation API
+  version: 1.0.0
+  description: "Source Ids:\n- Athena: 083fe714-e36e-4851-b2e7-a7166b439f67\n- Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f\n\nObservation Endpoints\n\n\"Observation\" resource is a fundamental building block for representing measurements\nand assessments made about a patient (e.g. vitals), device, or other subject.\n\n Example: A nurse measures a patient's blood pressure and records the result as\n 120/80 mmHg. This measurement is stored as an Observation resource in the patient's\n EHR. The Observation resource includes the LOINC code for blood pressure, the\n date and time of the measurement, and the nurse who performed it. This information\n can then be used by other healthcare providers to monitor the patient's blood\n pressure over time, assess their cardiovascular risk, and make informed treatment\n decisions.\n\nDependent Sources:\n\nPatient\n\nEncounter\n"
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.com
+tags:
+- name: Observation
+  description: Operations related to Observations in Elation
+paths:
+  /api/v2/Observation:
+    get:
+      tags:
+      - Observation
+      summary: Get a list of Observations
+      operationId: getElationObservations
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+      - name: based-on
+        in: query
+        required: false
+        description: Search parameter 'based-on' for observation.
+        schema:
+          type: string
+      - name: category
+        in: query
+        required: false
+        description: Search parameter 'category' for observation.
+        schema:
+          type: string
+      - name: code-value-concept
+        in: query
+        required: false
+        description: Search parameter 'code-value-concept' for observation.
+        schema:
+          type: string
+          format: token
+      - name: code-value-date
+        in: query
+        required: false
+        description: Search parameter 'code-value-date' for observation.
+        schema:
+          type: string
+          format: token
+      - name: code-value-quantity
+        in: query
+        required: false
+        description: Search parameter 'code-value-quantity' for observation.
+        schema:
+          type: string
+          format: token
+      - name: code-value-string
+        in: query
+        required: false
+        description: Search parameter 'code-value-string' for observation.
+        schema:
+          type: string
+          format: token
+      - name: combo-code
+        in: query
+        required: false
+        description: Search parameter 'combo-code' for observation.
+        schema:
+          type: string
+          format: token
+      - name: combo-code-value-concept
+        in: query
+        required: false
+        description: Search parameter 'combo-code-value-concept' for observation.
+        schema:
+          type: string
+          format: token
+      - name: combo-code-value-quantity
+        in: query
+        required: false
+        description: Search parameter 'combo-code-value-quantity' for observation.
+        schema:
+          type: string
+          format: token
+      - name: combo-data-absent-reason
+        in: query
+        required: false
+        description: Search parameter 'combo-data-absent-reason' for observation.
+        schema:
+          type: string
+      - name: combo-value-concept
+        in: query
+        required: false
+        description: Search parameter 'combo-value-concept' for observation.
+        schema:
+          type: string
+      - name: combo-value-quantity
+        in: query
+        required: false
+        description: Search parameter 'combo-value-quantity' for observation.
+        schema:
+          type: string
+      - name: component-code
+        in: query
+        required: false
+        description: Search parameter 'component-code' for observation.
+        schema:
+          type: string
+          format: token
+      - name: component-code-value-concept
+        in: query
+        required: false
+        description: Search parameter 'component-code-value-concept' for observation.
+        schema:
+          type: string
+          format: token
+      - name: component-code-value-quantity
+        in: query
+        required: false
+        description: Search parameter 'component-code-value-quantity' for observation.
+        schema:
+          type: string
+          format: token
+      - name: component-data-absent-reason
+        in: query
+        required: false
+        description: Search parameter 'component-data-absent-reason' for observation.
+        schema:
+          type: string
+      - name: component-value-concept
+        in: query
+        required: false
+        description: Search parameter 'component-value-concept' for observation.
+        schema:
+          type: string
+      - name: component-value-quantity
+        in: query
+        required: false
+        description: Search parameter 'component-value-quantity' for observation.
+        schema:
+          type: string
+      - name: data-absent-reason
+        in: query
+        required: false
+        description: Search parameter 'data-absent-reason' for observation.
+        schema:
+          type: string
+      - name: derived-from
+        in: query
+        required: false
+        description: Search parameter 'derived-from' for observation.
+        schema:
+          type: string
+      - name: device
+        in: query
+        required: false
+        description: Search parameter 'device' for observation.
+        schema:
+          type: string
+      - name: focus
+        in: query
+        required: false
+        description: Search parameter 'focus' for observation.
+        schema:
+          type: string
+      - name: has-member
+        in: query
+        required: false
+        description: Search parameter 'has-member' for observation.
+        schema:
+          type: boolean
+      - name: method
+        in: query
+        required: false
+        description: Search parameter 'method' for observation.
+        schema:
+          type: string
+      - name: part-of
+        in: query
+        required: false
+        description: Search parameter 'part-of' for observation.
+        schema:
+          type: string
+      - name: performer
+        in: query
+        required: false
+        description: Search parameter 'performer' for observation.
+        schema:
+          type: string
+      - name: specimen
+        in: query
+        required: false
+        description: Search parameter 'specimen' for observation.
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        description: Search parameter 'status' for observation.
+        schema:
+          type: string
+      - name: subject
+        in: query
+        required: false
+        description: Search parameter 'subject' for observation.
+        schema:
+          type: string
+      - name: value-concept
+        in: query
+        required: false
+        description: Search parameter 'value-concept' for observation.
+        schema:
+          type: string
+      - name: value-date
+        in: query
+        required: false
+        description: Search parameter 'value-date' for observation.
+        schema:
+          type: string
+          format: date
+      - name: value-quantity
+        in: query
+        required: false
+        description: Search parameter 'value-quantity' for observation.
+        schema:
+          type: string
+      - name: value-string
+        in: query
+        required: false
+        description: Search parameter 'value-string' for observation.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - context
+                - data
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: abc123
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - resourceType
+                      - status
+                      - code
+                      - subject
+                      properties:
+                        resourceType:
+                          type: string
+                          example: Observation
+                        id:
+                          type: string
+                          example: obs-1234
+                        status:
+                          type: string
+                          example: final
+                        code:
+                          type: object
+                          properties:
+                            coding:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  system:
+                                    type: string
+                                  code:
+                                    type: string
+                                  display:
+                                    type: string
+                            text:
+                              type: string
+                        subject:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                        encounter:
+                          type: object
+                          properties:
+                            reference:
+                              type: string
+                        effectiveDateTime:
+                          type: string
+                          format: date-time
+                        valueString:
+                          type: string
+                      example:
+                        resourceType: Observation
+                        id: exampleObservation
+                        meta:
+                          profile:
+                          - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/practice
+                          valueString: example-practice
+                        - url: http://xcaliber-fhir/structureDefinition/visit-note
+                          valueString: example-visit-note
+                        - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+                          valueString: example-non-visit-note
+                        - url: http://xcaliber-fhir/structureDefinition/document-date
+                          valueString: '2022-03-01'
+                        - url: http://xcaliber-fhir/structureDefinition/chart-date
+                          valueString: '2022-03-01'
+                        - url: http://xcaliber-fhir/structureDefinition/signed-date
+                          valueString: '2022-03-01'
+                        - url: http://xcaliber-fhir/structureDefinition/signed-by
+                          valueString: example-signer
+                        - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                          valueString: '2022-03-01'
+                        - url: http://xcaliber-fhir/structureDefinition/label
+                          valueString: example-label
+                        status: final
+                        code:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/observation-category
+                            code: vital-signs
+                            display: Vital Signs
+                        subject:
+                          reference: Patient/example
+                          display: John Doe
+                        effectiveDateTime: '2022-03-01T12:00:00Z'
+                        issued: '2022-03-01T12:00:00Z'
+                        performer:
+                        - reference: Practitioner/example
+                          display: Dr. Jane Smith
+                        value:
+                        - valueCodeableConcept:
+                            coding:
+                            - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                              code: systolic
+                              display: Systolic
+                            valueQuantity:
+                              value: 120
+                              unit: mmHg
+                        interpretation: Normal
+                        note:
+                        - text: This observation was taken during a routine check-up.
+                example:
+                  context:
+                    requestId: abc123
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                  - resourceType: Observation
+                    id: exampleObservation
+                    meta:
+                      profile:
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/practice
+                      valueString: example-practice
+                    - url: http://xcaliber-fhir/structureDefinition/visit-note
+                      valueString: example-visit-note
+                    - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+                      valueString: example-non-visit-note
+                    - url: http://xcaliber-fhir/structureDefinition/document-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/chart-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/signed-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/signed-by
+                      valueString: example-signer
+                    - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/label
+                      valueString: example-label
+                    status: final
+                    code:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/observation-category
+                        code: vital-signs
+                        display: Vital Signs
+                    subject:
+                      reference: Patient/example
+                      display: John Doe
+                    effectiveDateTime: '2022-03-01T12:00:00Z'
+                    issued: '2022-03-01T12:00:00Z'
+                    performer:
+                    - reference: Practitioner/example
+                      display: Dr. Jane Smith
+                    value:
+                    - valueCodeableConcept:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                          code: systolic
+                          display: Systolic
+                        valueQuantity:
+                          value: 120
+                          unit: mmHg
+                    interpretation: Normal
+                    note:
+                    - text: This observation was taken during a routine check-up.
+        '400':
+          description: Missing required field or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 400
+                  message: Bad request
+                  status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: string
+                    example: Error details here
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: Error details here
+                  status: error
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Resource not found
+                example:
+                  statusCode: 404
+                  message: Resource not found
+    post:
+      tags:
+      - Observation
+      summary: Create Observation
+      operationId: createObservation
+      requestBody:
+        description: FHIR Observation resource to create
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - context
+              - data
+              properties:
+                context:
+                  type: object
+                  properties:
+                    requestId:
+                      type: string
+                      example: abc123
+                    source:
+                      type: string
+                      example: ELATION
+                    quorum:
+                      type: boolean
+                      example: true
+                    notify:
+                      type: boolean
+                      example: true
+                  required:
+                  - requestId
+                  - source
+                  - quorum
+                  - notify
+                data:
+                  type: object
+                  required:
+                  - resourceType
+                  - status
+                  - code
+                  - subject
+                  properties:
+                    resourceType:
+                      type: string
+                      example: Observation
+                    id:
+                      type: string
+                      example: obs-1234
+                    status:
+                      type: string
+                      example: final
+                    code:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                              display:
+                                type: string
+                        text:
+                          type: string
+                    subject:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                    encounter:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                    effectiveDateTime:
+                      type: string
+                      format: date-time
+                    valueString:
+                      type: string
+                  example:
+                    resourceType: Observation
+                    id: exampleObservation
+                    meta:
+                      profile:
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/practice
+                      valueString: example-practice
+                    - url: http://xcaliber-fhir/structureDefinition/visit-note
+                      valueString: example-visit-note
+                    - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+                      valueString: example-non-visit-note
+                    - url: http://xcaliber-fhir/structureDefinition/document-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/chart-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/signed-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/signed-by
+                      valueString: example-signer
+                    - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/label
+                      valueString: example-label
+                    status: final
+                    code:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/observation-category
+                        code: vital-signs
+                        display: Vital Signs
+                    subject:
+                      reference: Patient/example
+                      display: John Doe
+                    effectiveDateTime: '2022-03-01T12:00:00Z'
+                    issued: '2022-03-01T12:00:00Z'
+                    performer:
+                    - reference: Practitioner/example
+                      display: Dr. Jane Smith
+                    value:
+                    - valueCodeableConcept:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                          code: systolic
+                          display: Systolic
+                        valueQuantity:
+                          value: 120
+                          unit: mmHg
+                    interpretation: Normal
+                    note:
+                    - text: This observation was taken during a routine check-up.
+              example:
+                context:
+                  requestId: abc123
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Observation
+                  id: exampleObservation
+                  meta:
+                    profile:
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/practice
+                    valueString: example-practice
+                  - url: http://xcaliber-fhir/structureDefinition/visit-note
+                    valueString: example-visit-note
+                  - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+                    valueString: example-non-visit-note
+                  - url: http://xcaliber-fhir/structureDefinition/document-date
+                    valueString: '2022-03-01'
+                  - url: http://xcaliber-fhir/structureDefinition/chart-date
+                    valueString: '2022-03-01'
+                  - url: http://xcaliber-fhir/structureDefinition/signed-date
+                    valueString: '2022-03-01'
+                  - url: http://xcaliber-fhir/structureDefinition/signed-by
+                    valueString: example-signer
+                  - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                    valueString: '2022-03-01'
+                  - url: http://xcaliber-fhir/structureDefinition/label
+                    valueString: example-label
+                  status: final
+                  code:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/observation-category
+                      code: vital-signs
+                      display: Vital Signs
+                  subject:
+                    reference: Patient/example
+                    display: John Doe
+                  effectiveDateTime: '2022-03-01T12:00:00Z'
+                  issued: '2022-03-01T12:00:00Z'
+                  performer:
+                  - reference: Practitioner/example
+                    display: Dr. Jane Smith
+                  value:
+                  - valueCodeableConcept:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                        code: systolic
+                        display: Systolic
+                      valueQuantity:
+                        value: 120
+                        unit: mmHg
+                  interpretation: Normal
+                  note:
+                  - text: This observation was taken during a routine check-up.
+      responses:
+        '201':
+          description: Observation created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - context
+                - data
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: abc123
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                  data:
+                    type: object
+                    required:
+                    - resourceType
+                    - status
+                    - code
+                    - subject
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Observation
+                      id:
+                        type: string
+                        example: obs-1234
+                      status:
+                        type: string
+                        example: final
+                      code:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                                display:
+                                  type: string
+                          text:
+                            type: string
+                      subject:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      encounter:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      effectiveDateTime:
+                        type: string
+                        format: date-time
+                      valueString:
+                        type: string
+                    example:
+                      resourceType: Observation
+                      id: exampleObservation
+                      meta:
+                        profile:
+                        - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/practice
+                        valueString: example-practice
+                      - url: http://xcaliber-fhir/structureDefinition/visit-note
+                        valueString: example-visit-note
+                      - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+                        valueString: example-non-visit-note
+                      - url: http://xcaliber-fhir/structureDefinition/document-date
+                        valueString: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/chart-date
+                        valueString: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/signed-date
+                        valueString: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/signed-by
+                        valueString: example-signer
+                      - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                        valueString: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/label
+                        valueString: example-label
+                      status: final
+                      code:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/observation-category
+                          code: vital-signs
+                          display: Vital Signs
+                      subject:
+                        reference: Patient/example
+                        display: John Doe
+                      effectiveDateTime: '2022-03-01T12:00:00Z'
+                      issued: '2022-03-01T12:00:00Z'
+                      performer:
+                      - reference: Practitioner/example
+                        display: Dr. Jane Smith
+                      value:
+                      - valueCodeableConcept:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                            code: systolic
+                            display: Systolic
+                          valueQuantity:
+                            value: 120
+                            unit: mmHg
+                      interpretation: Normal
+                      note:
+                      - text: This observation was taken during a routine check-up.
+                example:
+                  context:
+                    requestId: abc123
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Observation
+                    id: exampleObservation
+                    meta:
+                      profile:
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/practice
+                      valueString: example-practice
+                    - url: http://xcaliber-fhir/structureDefinition/visit-note
+                      valueString: example-visit-note
+                    - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+                      valueString: example-non-visit-note
+                    - url: http://xcaliber-fhir/structureDefinition/document-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/chart-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/signed-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/signed-by
+                      valueString: example-signer
+                    - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/label
+                      valueString: example-label
+                    status: final
+                    code:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/observation-category
+                        code: vital-signs
+                        display: Vital Signs
+                    subject:
+                      reference: Patient/example
+                      display: John Doe
+                    effectiveDateTime: '2022-03-01T12:00:00Z'
+                    issued: '2022-03-01T12:00:00Z'
+                    performer:
+                    - reference: Practitioner/example
+                      display: Dr. Jane Smith
+                    value:
+                    - valueCodeableConcept:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                          code: systolic
+                          display: Systolic
+                        valueQuantity:
+                          value: 120
+                          unit: mmHg
+                    interpretation: Normal
+                    note:
+                    - text: This observation was taken during a routine check-up.
+        '400':
+          description: Missing required field in body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 400
+                  message: Bad request
+                  status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: string
+                    example: Error details here
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: Error details here
+                  status: error
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Resource not found
+                example:
+                  statusCode: 404
+                  message: Resource not found
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: patient
+        in: query
+        required: true
+        description: Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter
+        schema:
+          type: string
+    parameters: []
+  /api/v2/Observation/{observation-id}:
+    get:
+      tags:
+      - Observation
+      summary: Get Observation by ID
+      operationId: getObservationById
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: observation-id
+        in: path
+        required: true
+        description: Filter by Patient reference/id (FHIR patient).
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - context
+                - data
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: abc123
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                  data:
+                    type: object
+                    required:
+                    - resourceType
+                    - status
+                    - code
+                    - subject
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Observation
+                      id:
+                        type: string
+                        example: obs-1234
+                      status:
+                        type: string
+                        example: final
+                      code:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                                display:
+                                  type: string
+                          text:
+                            type: string
+                      subject:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      encounter:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      effectiveDateTime:
+                        type: string
+                        format: date-time
+                      valueString:
+                        type: string
+                    example:
+                      resourceType: Observation
+                      id: exampleObservation
+                      meta:
+                        profile:
+                        - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/practice
+                        valueString: example-practice
+                      - url: http://xcaliber-fhir/structureDefinition/visit-note
+                        valueString: example-visit-note
+                      - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+                        valueString: example-non-visit-note
+                      - url: http://xcaliber-fhir/structureDefinition/document-date
+                        valueString: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/chart-date
+                        valueString: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/signed-date
+                        valueString: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/signed-by
+                        valueString: example-signer
+                      - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                        valueString: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/label
+                        valueString: example-label
+                      status: final
+                      code:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/observation-category
+                          code: vital-signs
+                          display: Vital Signs
+                      subject:
+                        reference: Patient/example
+                        display: John Doe
+                      effectiveDateTime: '2022-03-01T12:00:00Z'
+                      issued: '2022-03-01T12:00:00Z'
+                      performer:
+                      - reference: Practitioner/example
+                        display: Dr. Jane Smith
+                      value:
+                      - valueCodeableConcept:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                            code: systolic
+                            display: Systolic
+                          valueQuantity:
+                            value: 120
+                            unit: mmHg
+                      interpretation: Normal
+                      note:
+                      - text: This observation was taken during a routine check-up.
+                example:
+                  context:
+                    requestId: abc123
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Observation
+                    id: exampleObservation
+                    meta:
+                      profile:
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/practice
+                      valueString: example-practice
+                    - url: http://xcaliber-fhir/structureDefinition/visit-note
+                      valueString: example-visit-note
+                    - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+                      valueString: example-non-visit-note
+                    - url: http://xcaliber-fhir/structureDefinition/document-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/chart-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/signed-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/signed-by
+                      valueString: example-signer
+                    - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/label
+                      valueString: example-label
+                    status: final
+                    code:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/observation-category
+                        code: vital-signs
+                        display: Vital Signs
+                    subject:
+                      reference: Patient/example
+                      display: John Doe
+                    effectiveDateTime: '2022-03-01T12:00:00Z'
+                    issued: '2022-03-01T12:00:00Z'
+                    performer:
+                    - reference: Practitioner/example
+                      display: Dr. Jane Smith
+                    value:
+                    - valueCodeableConcept:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                          code: systolic
+                          display: Systolic
+                        valueQuantity:
+                          value: 120
+                          unit: mmHg
+                    interpretation: Normal
+                    note:
+                    - text: This observation was taken during a routine check-up.
+        '400':
+          description: Missing required field or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 400
+                  message: Bad request
+                  status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: string
+                    example: Error details here
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: Error details here
+                  status: error
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Resource not found
+                example:
+                  statusCode: 404
+                  message: Resource not found
+    put:
+      tags:
+      - Observation
+      summary: Update Observation
+      operationId: updateObservation
+      parameters:
+      - name: x-source-id
+        in: header
+        required: true
+        description: Source system identifier. — 🔴 On demand filter
+        schema:
+          type: string
+      - name: observation-id
+        in: path
+        required: true
+        description: .
+        schema:
+          type: string
+      requestBody:
+        description: FHIR Observation resource to update
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - context
+              - data
+              properties:
+                context:
+                  type: object
+                  properties:
+                    requestId:
+                      type: string
+                      example: abc123
+                    source:
+                      type: string
+                      example: ELATION
+                    quorum:
+                      type: boolean
+                      example: true
+                    notify:
+                      type: boolean
+                      example: true
+                  required:
+                  - requestId
+                  - source
+                  - quorum
+                  - notify
+                data:
+                  type: object
+                  required:
+                  - resourceType
+                  - status
+                  - code
+                  - subject
+                  properties:
+                    resourceType:
+                      type: string
+                      example: Observation
+                    id:
+                      type: string
+                      example: obs-1234
+                    status:
+                      type: string
+                      example: final
+                    code:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                              display:
+                                type: string
+                        text:
+                          type: string
+                    subject:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                    encounter:
+                      type: object
+                      properties:
+                        reference:
+                          type: string
+                    effectiveDateTime:
+                      type: string
+                      format: date-time
+                    valueString:
+                      type: string
+                  example:
+                    resourceType: Observation
+                    id: exampleObservation
+                    meta:
+                      profile:
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/practice
+                      valueString: example-practice
+                    - url: http://xcaliber-fhir/structureDefinition/visit-note
+                      valueString: example-visit-note
+                    - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+                      valueString: example-non-visit-note
+                    - url: http://xcaliber-fhir/structureDefinition/document-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/chart-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/signed-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/signed-by
+                      valueString: example-signer
+                    - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/label
+                      valueString: example-label
+                    status: final
+                    code:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/observation-category
+                        code: vital-signs
+                        display: Vital Signs
+                    subject:
+                      reference: Patient/example
+                      display: John Doe
+                    effectiveDateTime: '2022-03-01T12:00:00Z'
+                    issued: '2022-03-01T12:00:00Z'
+                    performer:
+                    - reference: Practitioner/example
+                      display: Dr. Jane Smith
+                    value:
+                    - valueCodeableConcept:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                          code: systolic
+                          display: Systolic
+                        valueQuantity:
+                          value: 120
+                          unit: mmHg
+                    interpretation: Normal
+                    note:
+                    - text: This observation was taken during a routine check-up.
+              example:
+                context:
+                  requestId: abc123
+                  source: ELATION
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Observation
+                  id: exampleObservation
+                  meta:
+                    profile:
+                    - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/practice
+                    valueString: example-practice
+                  - url: http://xcaliber-fhir/structureDefinition/visit-note
+                    valueString: example-visit-note
+                  - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+                    valueString: example-non-visit-note
+                  - url: http://xcaliber-fhir/structureDefinition/document-date
+                    valueString: '2022-03-01'
+                  - url: http://xcaliber-fhir/structureDefinition/chart-date
+                    valueString: '2022-03-01'
+                  - url: http://xcaliber-fhir/structureDefinition/signed-date
+                    valueString: '2022-03-01'
+                  - url: http://xcaliber-fhir/structureDefinition/signed-by
+                    valueString: example-signer
+                  - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                    valueString: '2022-03-01'
+                  - url: http://xcaliber-fhir/structureDefinition/label
+                    valueString: example-label
+                  status: final
+                  code:
+                    coding:
+                    - system: http://terminology.hl7.org/CodeSystem/observation-category
+                      code: vital-signs
+                      display: Vital Signs
+                  subject:
+                    reference: Patient/example
+                    display: John Doe
+                  effectiveDateTime: '2022-03-01T12:00:00Z'
+                  issued: '2022-03-01T12:00:00Z'
+                  performer:
+                  - reference: Practitioner/example
+                    display: Dr. Jane Smith
+                  value:
+                  - valueCodeableConcept:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                        code: systolic
+                        display: Systolic
+                      valueQuantity:
+                        value: 120
+                        unit: mmHg
+                  interpretation: Normal
+                  note:
+                  - text: This observation was taken during a routine check-up.
+      responses:
+        '200':
+          description: Observation updated
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - context
+                - data
+                properties:
+                  context:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                        example: abc123
+                      source:
+                        type: string
+                        example: ELATION
+                      quorum:
+                        type: boolean
+                        example: true
+                      notify:
+                        type: boolean
+                        example: true
+                    required:
+                    - requestId
+                    - source
+                    - quorum
+                    - notify
+                  data:
+                    type: object
+                    required:
+                    - resourceType
+                    - status
+                    - code
+                    - subject
+                    properties:
+                      resourceType:
+                        type: string
+                        example: Observation
+                      id:
+                        type: string
+                        example: obs-1234
+                      status:
+                        type: string
+                        example: final
+                      code:
+                        type: object
+                        properties:
+                          coding:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                system:
+                                  type: string
+                                code:
+                                  type: string
+                                display:
+                                  type: string
+                          text:
+                            type: string
+                      subject:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      encounter:
+                        type: object
+                        properties:
+                          reference:
+                            type: string
+                      effectiveDateTime:
+                        type: string
+                        format: date-time
+                      valueString:
+                        type: string
+                    example:
+                      resourceType: Observation
+                      id: exampleObservation
+                      meta:
+                        profile:
+                        - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+                      extension:
+                      - url: http://xcaliber-fhir/structureDefinition/practice
+                        valueString: example-practice
+                      - url: http://xcaliber-fhir/structureDefinition/visit-note
+                        valueString: example-visit-note
+                      - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+                        valueString: example-non-visit-note
+                      - url: http://xcaliber-fhir/structureDefinition/document-date
+                        valueString: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/chart-date
+                        valueString: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/signed-date
+                        valueString: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/signed-by
+                        valueString: example-signer
+                      - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                        valueString: '2022-03-01'
+                      - url: http://xcaliber-fhir/structureDefinition/label
+                        valueString: example-label
+                      status: final
+                      code:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/observation-category
+                          code: vital-signs
+                          display: Vital Signs
+                      subject:
+                        reference: Patient/example
+                        display: John Doe
+                      effectiveDateTime: '2022-03-01T12:00:00Z'
+                      issued: '2022-03-01T12:00:00Z'
+                      performer:
+                      - reference: Practitioner/example
+                        display: Dr. Jane Smith
+                      value:
+                      - valueCodeableConcept:
+                          coding:
+                          - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                            code: systolic
+                            display: Systolic
+                          valueQuantity:
+                            value: 120
+                            unit: mmHg
+                      interpretation: Normal
+                      note:
+                      - text: This observation was taken during a routine check-up.
+                example:
+                  context:
+                    requestId: abc123
+                    source: ELATION
+                    quorum: true
+                    notify: true
+                  data:
+                    resourceType: Observation
+                    id: exampleObservation
+                    meta:
+                      profile:
+                      - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+                    extension:
+                    - url: http://xcaliber-fhir/structureDefinition/practice
+                      valueString: example-practice
+                    - url: http://xcaliber-fhir/structureDefinition/visit-note
+                      valueString: example-visit-note
+                    - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+                      valueString: example-non-visit-note
+                    - url: http://xcaliber-fhir/structureDefinition/document-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/chart-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/signed-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/signed-by
+                      valueString: example-signer
+                    - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                      valueString: '2022-03-01'
+                    - url: http://xcaliber-fhir/structureDefinition/label
+                      valueString: example-label
+                    status: final
+                    code:
+                      coding:
+                      - system: http://terminology.hl7.org/CodeSystem/observation-category
+                        code: vital-signs
+                        display: Vital Signs
+                    subject:
+                      reference: Patient/example
+                      display: John Doe
+                    effectiveDateTime: '2022-03-01T12:00:00Z'
+                    issued: '2022-03-01T12:00:00Z'
+                    performer:
+                    - reference: Practitioner/example
+                      display: Dr. Jane Smith
+                    value:
+                    - valueCodeableConcept:
+                        coding:
+                        - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                          code: systolic
+                          display: Systolic
+                        valueQuantity:
+                          value: 120
+                          unit: mmHg
+                    interpretation: Normal
+                    note:
+                    - text: This observation was taken during a routine check-up.
+        '400':
+          description: Missing required field or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 400
+                  message: Bad request
+                  status: error
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  details:
+                    type: string
+                    example: Error details here
+                  status:
+                    type: string
+                    example: error
+                example:
+                  statusCode: 500
+                  message: Internal server error
+                  details: Error details here
+                  status: error
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: Resource not found
+                example:
+                  statusCode: 404
+                  message: Resource not found
+components:
+  schemas:
+    Observation:
+      type: object
+      required:
+      - resourceType
+      - status
+      - code
+      - subject
+      properties:
+        resourceType:
+          type: string
+          example: Observation
+        id:
+          type: string
+          example: obs-1234
+        status:
+          type: string
+          example: final
+        code:
+          type: object
+          properties:
+            coding:
+              type: array
+              items:
+                type: object
+                properties:
+                  system:
+                    type: string
+                  code:
+                    type: string
+                  display:
+                    type: string
+            text:
+              type: string
+        subject:
+          type: object
+          properties:
+            reference:
+              type: string
+        encounter:
+          type: object
+          properties:
+            reference:
+              type: string
+        effectiveDateTime:
+          type: string
+          format: date-time
+        valueString:
+          type: string
+      example:
+        resourceType: Observation
+        id: exampleObservation
+        meta:
+          profile:
+          - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+        extension:
+        - url: http://xcaliber-fhir/structureDefinition/practice
+          valueString: example-practice
+        - url: http://xcaliber-fhir/structureDefinition/visit-note
+          valueString: example-visit-note
+        - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+          valueString: example-non-visit-note
+        - url: http://xcaliber-fhir/structureDefinition/document-date
+          valueString: '2022-03-01'
+        - url: http://xcaliber-fhir/structureDefinition/chart-date
+          valueString: '2022-03-01'
+        - url: http://xcaliber-fhir/structureDefinition/signed-date
+          valueString: '2022-03-01'
+        - url: http://xcaliber-fhir/structureDefinition/signed-by
+          valueString: example-signer
+        - url: http://xcaliber-fhir/structureDefinition/deleted-date
+          valueString: '2022-03-01'
+        - url: http://xcaliber-fhir/structureDefinition/label
+          valueString: example-label
+        status: final
+        code:
+          coding:
+          - system: http://terminology.hl7.org/CodeSystem/observation-category
+            code: vital-signs
+            display: Vital Signs
+        subject:
+          reference: Patient/example
+          display: John Doe
+        effectiveDateTime: '2022-03-01T12:00:00Z'
+        issued: '2022-03-01T12:00:00Z'
+        performer:
+        - reference: Practitioner/example
+          display: Dr. Jane Smith
+        value:
+        - valueCodeableConcept:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+              code: systolic
+              display: Systolic
+            valueQuantity:
+              value: 120
+              unit: mmHg
+        interpretation: Normal
+        note:
+        - text: This observation was taken during a routine check-up.
+    ObservationListResponse:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - resourceType
+            - status
+            - code
+            - subject
+            properties:
+              resourceType:
+                type: string
+                example: Observation
+              id:
+                type: string
+                example: obs-1234
+              status:
+                type: string
+                example: final
+              code:
+                type: object
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        system:
+                          type: string
+                        code:
+                          type: string
+                        display:
+                          type: string
+                  text:
+                    type: string
+              subject:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              encounter:
+                type: object
+                properties:
+                  reference:
+                    type: string
+              effectiveDateTime:
+                type: string
+                format: date-time
+              valueString:
+                type: string
+            example:
+              resourceType: Observation
+              id: exampleObservation
+              meta:
+                profile:
+                - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/practice
+                valueString: example-practice
+              - url: http://xcaliber-fhir/structureDefinition/visit-note
+                valueString: example-visit-note
+              - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+                valueString: example-non-visit-note
+              - url: http://xcaliber-fhir/structureDefinition/document-date
+                valueString: '2022-03-01'
+              - url: http://xcaliber-fhir/structureDefinition/chart-date
+                valueString: '2022-03-01'
+              - url: http://xcaliber-fhir/structureDefinition/signed-date
+                valueString: '2022-03-01'
+              - url: http://xcaliber-fhir/structureDefinition/signed-by
+                valueString: example-signer
+              - url: http://xcaliber-fhir/structureDefinition/deleted-date
+                valueString: '2022-03-01'
+              - url: http://xcaliber-fhir/structureDefinition/label
+                valueString: example-label
+              status: final
+              code:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/observation-category
+                  code: vital-signs
+                  display: Vital Signs
+              subject:
+                reference: Patient/example
+                display: John Doe
+              effectiveDateTime: '2022-03-01T12:00:00Z'
+              issued: '2022-03-01T12:00:00Z'
+              performer:
+              - reference: Practitioner/example
+                display: Dr. Jane Smith
+              value:
+              - valueCodeableConcept:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                    code: systolic
+                    display: Systolic
+                  valueQuantity:
+                    value: 120
+                    unit: mmHg
+              interpretation: Normal
+              note:
+              - text: This observation was taken during a routine check-up.
+      example:
+        context:
+          requestId: abc123
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+        - resourceType: Observation
+          id: exampleObservation
+          meta:
+            profile:
+            - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/practice
+            valueString: example-practice
+          - url: http://xcaliber-fhir/structureDefinition/visit-note
+            valueString: example-visit-note
+          - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+            valueString: example-non-visit-note
+          - url: http://xcaliber-fhir/structureDefinition/document-date
+            valueString: '2022-03-01'
+          - url: http://xcaliber-fhir/structureDefinition/chart-date
+            valueString: '2022-03-01'
+          - url: http://xcaliber-fhir/structureDefinition/signed-date
+            valueString: '2022-03-01'
+          - url: http://xcaliber-fhir/structureDefinition/signed-by
+            valueString: example-signer
+          - url: http://xcaliber-fhir/structureDefinition/deleted-date
+            valueString: '2022-03-01'
+          - url: http://xcaliber-fhir/structureDefinition/label
+            valueString: example-label
+          status: final
+          code:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/observation-category
+              code: vital-signs
+              display: Vital Signs
+          subject:
+            reference: Patient/example
+            display: John Doe
+          effectiveDateTime: '2022-03-01T12:00:00Z'
+          issued: '2022-03-01T12:00:00Z'
+          performer:
+          - reference: Practitioner/example
+            display: Dr. Jane Smith
+          value:
+          - valueCodeableConcept:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                code: systolic
+                display: Systolic
+              valueQuantity:
+                value: 120
+                unit: mmHg
+          interpretation: Normal
+          note:
+          - text: This observation was taken during a routine check-up.
+    ObservationGetByIdResponse:
+      type: object
+      required:
+      - context
+      - data
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ELATION
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          required:
+          - requestId
+          - source
+          - quorum
+          - notify
+        data:
+          type: object
+          required:
+          - resourceType
+          - status
+          - code
+          - subject
+          properties:
+            resourceType:
+              type: string
+              example: Observation
+            id:
+              type: string
+              example: obs-1234
+            status:
+              type: string
+              example: final
+            code:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                text:
+                  type: string
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+            encounter:
+              type: object
+              properties:
+                reference:
+                  type: string
+            effectiveDateTime:
+              type: string
+              format: date-time
+            valueString:
+              type: string
+          example:
+            resourceType: Observation
+            id: exampleObservation
+            meta:
+              profile:
+              - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+            extension:
+            - url: http://xcaliber-fhir/structureDefinition/practice
+              valueString: example-practice
+            - url: http://xcaliber-fhir/structureDefinition/visit-note
+              valueString: example-visit-note
+            - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+              valueString: example-non-visit-note
+            - url: http://xcaliber-fhir/structureDefinition/document-date
+              valueString: '2022-03-01'
+            - url: http://xcaliber-fhir/structureDefinition/chart-date
+              valueString: '2022-03-01'
+            - url: http://xcaliber-fhir/structureDefinition/signed-date
+              valueString: '2022-03-01'
+            - url: http://xcaliber-fhir/structureDefinition/signed-by
+              valueString: example-signer
+            - url: http://xcaliber-fhir/structureDefinition/deleted-date
+              valueString: '2022-03-01'
+            - url: http://xcaliber-fhir/structureDefinition/label
+              valueString: example-label
+            status: final
+            code:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/observation-category
+                code: vital-signs
+                display: Vital Signs
+            subject:
+              reference: Patient/example
+              display: John Doe
+            effectiveDateTime: '2022-03-01T12:00:00Z'
+            issued: '2022-03-01T12:00:00Z'
+            performer:
+            - reference: Practitioner/example
+              display: Dr. Jane Smith
+            value:
+            - valueCodeableConcept:
+                coding:
+                - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                  code: systolic
+                  display: Systolic
+                valueQuantity:
+                  value: 120
+                  unit: mmHg
+            interpretation: Normal
+            note:
+            - text: This observation was taken during a routine check-up.
+      example:
+        context:
+          requestId: abc123
+          source: ELATION
+          quorum: true
+          notify: true
+        data:
+          resourceType: Observation
+          id: exampleObservation
+          meta:
+            profile:
+            - http://hl7.org/fhir/us/core/StructureDefinition/us-core-clinical-statement
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/practice
+            valueString: example-practice
+          - url: http://xcaliber-fhir/structureDefinition/visit-note
+            valueString: example-visit-note
+          - url: http://xcaliber-fhir/structureDefinition/non-visit-note
+            valueString: example-non-visit-note
+          - url: http://xcaliber-fhir/structureDefinition/document-date
+            valueString: '2022-03-01'
+          - url: http://xcaliber-fhir/structureDefinition/chart-date
+            valueString: '2022-03-01'
+          - url: http://xcaliber-fhir/structureDefinition/signed-date
+            valueString: '2022-03-01'
+          - url: http://xcaliber-fhir/structureDefinition/signed-by
+            valueString: example-signer
+          - url: http://xcaliber-fhir/structureDefinition/deleted-date
+            valueString: '2022-03-01'
+          - url: http://xcaliber-fhir/structureDefinition/label
+            valueString: example-label
+          status: final
+          code:
+            coding:
+            - system: http://terminology.hl7.org/CodeSystem/observation-category
+              code: vital-signs
+              display: Vital Signs
+          subject:
+            reference: Patient/example
+            display: John Doe
+          effectiveDateTime: '2022-03-01T12:00:00Z'
+          issued: '2022-03-01T12:00:00Z'
+          performer:
+          - reference: Practitioner/example
+            display: Dr. Jane Smith
+          value:
+          - valueCodeableConcept:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/vital-signs-blood-pressure
+                code: systolic
+                display: Systolic
+              valueQuantity:
+                value: 120
+                unit: mmHg
+          interpretation: Normal
+          note:
+          - text: This observation was taken during a routine check-up.
+    Error400:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Bad request
+        status:
+          type: string
+          example: error
+      example:
+        statusCode: 400
+        message: Bad request
+        status: error
+    Error404:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Resource not found
+      example:
+        statusCode: 404
+        message: Resource not found
+    Error500:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Error details here
+        status:
+          type: string
+          example: error
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Error details here
+        status: error
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    xSourceId:
+      name: x-source-id
+      in: header
+      required: true
+      schema:
+        type: string
+      description: "Source identifier header required for routing.\nAthena: 083fe714-e36e-4851-b2e7-a7166b439f67\n Elation: 2341a165-3168-4961-9e99-be1aa6c29b9f — \U0001F534 On demand filter"
+externalDocs:
+  description: Run in Postman
+  url: https://app.postman.com/import/openapi
+security:
+- bearerAuth: []

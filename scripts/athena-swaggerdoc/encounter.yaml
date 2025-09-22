@@ -1,0 +1,2426 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: Encounter
+  description: Encounter resource operations in Athena.
+paths:
+  /api/v2/Encounter:
+    get:
+      summary: List Encounters
+      operationId: getEncountersFromAthenaV2
+      tags:
+      - Encounter
+      parameters:
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: USCoreEncounterDischargeDisposition
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: USCoreEncounterDischargeDisposition'
+      - name: account
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+        description: 'Filter: account'
+      - name: appointment
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: appointment'
+      - name: based-on
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: based-on'
+      - name: class
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: class'
+      - name: diagnosis
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: diagnosis'
+      - name: episode-of-care
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: episode-of-care'
+      - name: length
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: length'
+      - name: location
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: location'
+      - name: location-period
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: location-period'
+      - name: part-of
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: part-of'
+      - name: participant
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: participant'
+      - name: participant-type
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: participant-type'
+      - name: practitioner
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: practitioner'
+      - name: reason-code
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: reason-code'
+      - name: reason-reference
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: reason-reference'
+      - name: service-provider
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: service-provider'
+      - name: special-arrangement
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: special-arrangement'
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: status'
+      - name: subject
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: subject'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinEncounter'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinEncounter'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinEncounter'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Encounter
+                    extension:
+                    - url: TINY_URLS.ENCOUNTER.PATIENTSTATUSID
+                      valueString: active
+                    - url: TINY_URLS.ENCOUNTER.PROVIDERFIRSTNAME
+                      valueString: John
+                    - url: TINY_URLS.ENCOUNTER.PROVIDERLASTNAME
+                      valueString: Smith
+                    - url: TINY_URLS.ENCOUNTER.PROVIDERPHONE
+                      valueString: 555-123-4567
+                    - url: TINY_URLS.ENCOUNTER.ENCOUNTERVISITNAME
+                      valueString: Annual Physical
+                    - url: TINY_URLS.ENCOUNTER.LASTREOPENED
+                      valueDate: '2023-10-15'
+                    - url: TINY_URLS.ENCOUNTER.LASTUPDATED
+                      valueDate: '2023-10-20'
+                    - url: TINY_URLS.ENCOUNTER.REVIEWEDANDSIGNEDBY
+                      valueString: Dr. Jane Doe
+                    - url: TINY_URLS.ENCOUNTER.REVIEWEDANDSIGNEDDATE
+                      valueDate: '2023-10-18'
+                    - url: TINY_URLS.ENCOUNTER.STATUS
+                      valueString: completed
+                    - url: TINY_URLS.ENCOUNTER.DEPARTMENTID
+                      valueString: '789'
+                    - url: TINY_URLS.ENCOUNTER.STAGE
+                      valueString: active
+                    - url: TINY_URLS.ENCOUNTER.CLOSEDDATE
+                      valueDate: '2023-12-01'
+                    - url: TINY_URLS.ENCOUNTER.CLOSEDUSER
+                      valueString: admin
+                    - url: TINY_URLS.ENCOUNTER.PATIENTLOCATION
+                      valueString: Room 101
+                    - url: TINY_URLS.ENCOUNTER.PATIENTLOCATIONID
+                      valueInteger: 101
+                    - url: TINY_URLS.ENCOUNTER.PATIENTSTATUS
+                      valueString: discharged
+                    - url: TINY_URLS.ENCOUNTER.PATIENTSTATUSID
+                      valueString: '3'
+                    - url: TINY_URLS.ENCOUNTER.REVIEWED_AND_SIGNED_DATE
+                      valueDate: '2024-01-15'
+                    - url: TINY_URLS.ENCOUNTER.STATUS
+                      valueString: open
+                    - url: TINY_URLS.ENCOUNTER.DESCRIPTION
+                      valueString: Routine checkup
+                    - url: TINY_URLS.ENCOUNTER.DIAGNOSISID
+                      valueInteger: 456
+                    - url: TINY_URLS.ENCOUNTER.NOTE
+                      valueString: Patient doing well
+                    id: '12345'
+                    status: in-progress
+                    type:
+                    - coding: []
+                    - coding:
+                      - system: TINY_URLS.ENCOUNTER.XCALIBER_ATHENA_EXTENSION
+                        code: office-visit
+                        display: office-visit
+                    subject:
+                      reference: Patient/123
+                    participant:
+                    - individual:
+                        reference: Practitioner/90210
+                    appointment:
+                    - reference: Appointment/67890
+                    period:
+                      start: '2023-01-15T09:00:00Z'
+                      end: '2023-01-15T10:00:00Z'
+                    location:
+                    - location:
+                        reference: Location/101
+                        type: Department
+                    - location:
+                        reference: Location/202
+                        display: Room 202A
+                        type: Patient
+                    contained:
+                    - resourceType: Practitioner
+                      id: '90210'
+                      name:
+                      - family: Smith
+                        given:
+                        - John
+                        use: official
+                    - resourceType: Practitioner
+                      telecom:
+                      - system: phone
+                        value: 555-1234
+                        use: work
+                      name:
+                      - given:
+                        - John
+                        family: Smith
+                        use: official
+                    class:
+                      code: AMB
+                      display: ambulatory
+                      system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                    diagnosis:
+                    - use:
+                        coding:
+                        - code: '12345'
+                          system: http://snomed.info/sct
+                          display: Example diagnosis
+                        - code: Z00.00
+                          system: http://hl7.org/fhir/sid/icd-10-cm
+                          display: ICD diagnosis
+                      extension:
+                      - url: TINY_URLS.ENCOUNTER.NOTE
+                        valueString: Diagnosis note
+    post:
+      summary: Create an Encounter
+      operationId: createEncounterInAthena
+      tags:
+      - Encounter
+      parameters:
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+      - *id001
+      - *id002
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinEncounter'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinEncounter'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinEncounter'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Accepted:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: Encounter
+                  extension:
+                  - url: TINY_URLS.ENCOUNTER.DEPARTMENTID
+                    valueString: '789'
+  /api/v2/Encounter/{encounter-id}:
+    get:
+      summary: Get Encounter by ID
+      operationId: getAthenaEncounterByIdV2
+      tags:
+      - Encounter
+      parameters:
+      - name: encounter-id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: '"Unique identifier of the encounter to retrieve. Required for
+          fetching a specific encounter."'
+      - *id001
+      - *id002
+      
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinEncounterencounterid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinEncounterencounterid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinEncounterencounterid'
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Encounter
+                    extension:
+                    - url: TINY_URLS.ENCOUNTER.PATIENTSTATUSID
+                      valueString: active
+                    - url: TINY_URLS.ENCOUNTER.PROVIDERFIRSTNAME
+                      valueString: John
+                    - url: TINY_URLS.ENCOUNTER.PROVIDERLASTNAME
+                      valueString: Smith
+                    - url: TINY_URLS.ENCOUNTER.PROVIDERPHONE
+                      valueString: 555-123-4567
+                    - url: TINY_URLS.ENCOUNTER.ENCOUNTERVISITNAME
+                      valueString: Annual Physical
+                    - url: TINY_URLS.ENCOUNTER.LASTREOPENED
+                      valueDate: '2023-10-15'
+                    - url: TINY_URLS.ENCOUNTER.LASTUPDATED
+                      valueDate: '2023-10-20'
+                    - url: TINY_URLS.ENCOUNTER.REVIEWEDANDSIGNEDBY
+                      valueString: Dr. Jane Doe
+                    - url: TINY_URLS.ENCOUNTER.REVIEWEDANDSIGNEDDATE
+                      valueDate: '2023-10-18'
+                    - url: TINY_URLS.ENCOUNTER.STATUS
+                      valueString: completed
+                    - url: TINY_URLS.ENCOUNTER.DEPARTMENTID
+                      valueString: '789'
+                    - url: TINY_URLS.ENCOUNTER.STAGE
+                      valueString: active
+                    - url: TINY_URLS.ENCOUNTER.CLOSEDDATE
+                      valueDate: '2023-12-01'
+                    - url: TINY_URLS.ENCOUNTER.CLOSEDUSER
+                      valueString: admin
+                    - url: TINY_URLS.ENCOUNTER.PATIENTLOCATION
+                      valueString: Room 101
+                    - url: TINY_URLS.ENCOUNTER.PATIENTLOCATIONID
+                      valueInteger: 101
+                    - url: TINY_URLS.ENCOUNTER.PATIENTSTATUS
+                      valueString: discharged
+                    - url: TINY_URLS.ENCOUNTER.PATIENTSTATUSID
+                      valueString: '3'
+                    - url: TINY_URLS.ENCOUNTER.REVIEWED_AND_SIGNED_DATE
+                      valueDate: '2024-01-15'
+                    - url: TINY_URLS.ENCOUNTER.STATUS
+                      valueString: open
+                    - url: TINY_URLS.ENCOUNTER.DESCRIPTION
+                      valueString: Routine checkup
+                    - url: TINY_URLS.ENCOUNTER.DIAGNOSISID
+                      valueInteger: 456
+                    - url: TINY_URLS.ENCOUNTER.NOTE
+                      valueString: Patient doing well
+                    id: '12345'
+                    status: in-progress
+                    type:
+                    - coding: []
+                    - coding:
+                      - system: TINY_URLS.ENCOUNTER.XCALIBER_ATHENA_EXTENSION
+                        code: office-visit
+                        display: office-visit
+                    subject:
+                      reference: Patient/123
+                    participant:
+                    - individual:
+                        reference: Practitioner/90210
+                    appointment:
+                    - reference: Appointment/67890
+                    period:
+                      start: '2023-01-15T09:00:00Z'
+                      end: '2023-01-15T10:00:00Z'
+                    location:
+                    - location:
+                        reference: Location/101
+                        type: Department
+                    - location:
+                        reference: Location/202
+                        display: Room 202A
+                        type: Patient
+                    contained:
+                    - resourceType: Practitioner
+                      id: '90210'
+                      name:
+                      - family: Smith
+                        given:
+                        - John
+                        use: official
+                    - resourceType: Practitioner
+                      telecom:
+                      - system: phone
+                        value: 555-1234
+                        use: work
+                      name:
+                      - given:
+                        - John
+                        family: Smith
+                        use: official
+                    class:
+                      code: AMB
+                      display: ambulatory
+                      system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                    diagnosis:
+                    - use:
+                        coding:
+                        - code: '12345'
+                          system: http://snomed.info/sct
+                          display: Example diagnosis
+                        - code: Z00.00
+                          system: http://hl7.org/fhir/sid/icd-10-cm
+                          display: ICD diagnosis
+                      extension:
+                      - url: TINY_URLS.ENCOUNTER.NOTE
+                        valueString: Diagnosis note
+    put:
+      summary: Update an Encounter
+      operationId: updateAthenaEncounter
+      tags:
+      - Encounter
+      parameters:
+      - name: encounter-id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: '"Unique identifier of the Encounter resource to update. Required
+          for updating an existing Encounter."'
+      - *id001
+      - *id002
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofputinEncounterencounterid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofputinEncounterencounterid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofputinEncounterencounterid'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Accepted:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: Encounter
+                  id: '12345'
+                  extension:
+                  - url: review-of-systems
+                    valueString: Routine checkup
+                  - url: template-ids
+                    valueString: '[]'
+                  - url: replace-section-note
+                    valueBoolean: false
+                  - url: section-note
+                    valueString: ''
+                  - url: hpi-to-ros
+                    valueBoolean: true
+                  - url: reported-by
+                    valueString: ''
+                  - url: well-child-section-note
+                    valueString: Patient doing well
+                  - url: well-child-ros
+                    valueString: Routine checkup
+                  - url: well-child-template-ids
+                    valueString: '12345'
+                  - url: well-child-replace-section-note
+                    valueBoolean: true
+                  - url: well-child-reported-by
+                    valueString: Dr. Jane Doe
+                  - url: ros-section-note
+                    valueString: Patient doing well
+                  - url: ros-template-ids
+                    valueString: '12345'
+                  - url: ros-replace-section-note
+                    valueBoolean: true
+                  - url: ros-reported-by
+                    valueString: Dr. Jane Doe
+    delete:
+      summary: Delete an Encounter
+      operationId: deleteEncounterInAthena
+      tags:
+      - Encounter
+      parameters:
+      - name: encounter-id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: '"Unique identifier of the Encounter resource to delete. Required
+          for deletion."'
+      - *id001
+      - *id002
+      responses:
+        '200':
+          description: Encounter deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofdeleteinEncounterencounterid'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofdeleteinEncounterencounterid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofdeleteinEncounterencounterid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofdeleteinEncounterencounterid'
+components:
+  schemas:
+    ExtractedSchema540:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Encounter
+          id: '123'
+          status: finished
+          class:
+            system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+            code: AMB
+            display: ambulatory
+          subject:
+            reference: Patient/42
+          period:
+            start: '2024-05-15T10:00:00Z'
+            end: '2024-05-15T10:30:00Z'
+          reasonCode:
+          - extension:
+            - url: http://xcaliber-fhir/structureDefinition/encounter-reason-note
+              valueString: Routine follow-up
+            - url: http://xcaliber-fhir/structureDefinition/encounter-reason-note-last-modified-datetime
+              valueDateTime: '2024-06-06T15:00:00Z'
+            coding:
+            - code: A1
+              display: Consultation
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/encounter-reason-last-modified-user
+                valueString: dr.jones
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/assessment-text
+            valueString: Patient stable. Continue medication.
+          - url: http://xcaliber-fhir/structureDefinition/physical-exam
+            valueString: '{"exam":"normal"}'
+          - url: http://xcaliber-fhir/structureDefinition/review-of-systems
+            valueString: '{"systems":["normal"]}'
+          - url: http://xcaliber-fhir/structureDefinition/procedure-documentation
+            extension:
+            - url: http://example/structureDefinition/procedure-documentation-text
+              valueString: Procedure completed successfully.
+          location:
+            reference: Location/001
+          practitioner:
+            reference: Practitioner/007
+          partOf:
+            reference: ChargeItem/abc
+          diagnosis:
+          - code:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/v3-CodeSystem-20806-5
+                code: '123456'
+                display: Sample Diagnosis Code
+          note:
+          - text: This is a sample note for the encounter.
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Encounter
+            id:
+              type: string
+              example: '123'
+            status:
+              type: string
+              example: finished
+            class:
+              type: object
+              properties:
+                system:
+                  type: string
+                  example: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                code:
+                  type: string
+                  example: AMB
+                display:
+                  type: string
+                  example: ambulatory
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/42
+            period:
+              type: object
+              properties:
+                start:
+                  type: string
+                  example: '2024-05-15T10:00:00Z'
+                end:
+                  type: string
+                  example: '2024-05-15T10:30:00Z'
+            reasonCode:
+              type: array
+              items:
+                type: object
+                properties:
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+                        valueDateTime:
+                          type: string
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        display:
+                          type: string
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            location:
+              type: object
+              properties:
+                reference:
+                  type: string
+            practitioner:
+              type: object
+              properties:
+                reference:
+                  type: string
+            partOf:
+              type: object
+              properties:
+                reference:
+                  type: string
+            diagnosis:
+              type: array
+              items:
+                type: object
+                properties:
+                  code:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            display:
+                              type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+          required:
+          - context
+          - resourceType
+          - id
+          - status
+          - class
+          - subject
+          - period
+          - reasonCode
+          - extension
+          - location
+          - practitioner
+          - partOf
+          - diagnosis
+          - note
+          description: '"Encounter data to be created. Provide a JSON object containing
+            encounter details."'
+      required:
+      - data
+    ExtractedSchema560:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Encounter
+          id: '123'
+          status: finished
+          class:
+            system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+            code: AMB
+            display: ambulatory
+          subject:
+            reference: Patient/42
+          period:
+            start: '2024-05-15T10:00:00Z'
+            end: '2024-05-15T10:30:00Z'
+          reasonCode:
+          - extension:
+            - url: http://xcaliber-fhir/structureDefinition/encounter-reason-note
+              valueString: Routine follow-up
+            - url: http://xcaliber-fhir/structureDefinition/encounter-reason-note-last-modified-datetime
+              valueDateTime: '2024-06-06T15:00:00Z'
+            coding:
+            - code: A1
+              display: Consultation
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/encounter-reason-last-modified-user
+                valueString: dr.jones
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/assessment-text
+            valueString: Patient stable. Continue medication.
+          - url: http://xcaliber-fhir/structureDefinition/physical-exam
+            valueString: '{"exam":"normal"}'
+          - url: http://xcaliber-fhir/structureDefinition/review-of-systems
+            valueString: '{"systems":["normal"]}'
+          - url: http://xcaliber-fhir/structureDefinition/procedure-documentation
+            extension:
+            - url: http://example/structureDefinition/procedure-documentation-text
+              valueString: Procedure completed successfully.
+          location:
+            reference: Location/001
+          practitioner:
+            reference: Practitioner/007
+          partOf:
+            reference: ChargeItem/abc
+          diagnosis:
+          - code:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/v3-CodeSystem-20806-5
+                code: '123456'
+                display: Sample Diagnosis Code
+          note:
+          - text: This is a sample note for the encounter.
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Encounter
+            id:
+              type: string
+              example: '123'
+            status:
+              type: string
+              example: finished
+            class:
+              type: object
+              properties:
+                system:
+                  type: string
+                  example: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                code:
+                  type: string
+                  example: AMB
+                display:
+                  type: string
+                  example: ambulatory
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/42
+            period:
+              type: object
+              properties:
+                start:
+                  type: string
+                  example: '2024-05-15T10:00:00Z'
+                end:
+                  type: string
+                  example: '2024-05-15T10:30:00Z'
+            reasonCode:
+              type: array
+              items:
+                type: object
+                properties:
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+                        valueDateTime:
+                          type: string
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        display:
+                          type: string
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            location:
+              type: object
+              properties:
+                reference:
+                  type: string
+            practitioner:
+              type: object
+              properties:
+                reference:
+                  type: string
+            partOf:
+              type: object
+              properties:
+                reference:
+                  type: string
+            diagnosis:
+              type: array
+              items:
+                type: object
+                properties:
+                  code:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            display:
+                              type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+          required:
+          - context
+          - resourceType
+          - id
+          - status
+          - class
+          - subject
+          - period
+          - reasonCode
+          - extension
+          - location
+          - practitioner
+          - partOf
+          - diagnosis
+          - note
+          description: '"Encounter data to update. Provide a JSON object with updated
+            fields."'
+      required:
+      - data
+    response200ofgetinEncounter:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 2
+          entry:
+          - resource:
+              resourceType: Encounter
+              id: '123'
+              status: finished
+              class:
+                system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                code: AMB
+                display: ambulatory
+              subject:
+                reference: Patient/42
+              period:
+                start: '2024-05-15T10:00:00Z'
+                end: '2024-05-15T10:30:00Z'
+              reasonCode:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/encounter-reason-note
+                  valueString: Routine follow-up
+                - url: http://xcaliber-fhir/structureDefinition/encounter-reason-note-last-modified-datetime
+                  valueDateTime: '2024-06-06T15:00:00Z'
+                coding:
+                - code: A1
+                  display: Consultation
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/encounter-reason-last-modified-user
+                    valueString: dr.jones
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/assessment-text
+                valueString: Patient stable. Continue medication.
+              - url: http://xcaliber-fhir/structureDefinition/physical-exam
+                valueString: '{"exam":"normal"}'
+              - url: http://xcaliber-fhir/structureDefinition/review-of-systems
+                valueString: '{"systems":["normal"]}'
+              - url: http://xcaliber-fhir/structureDefinition/procedure-documentation
+                extension:
+                - url: http://example/structureDefinition/procedure-documentation-text
+                  valueString: Procedure completed successfully.
+              location:
+                reference: Location/001
+              practitioner:
+                reference: Practitioner/007
+              partOf:
+                reference: ChargeItem/abc
+              diagnosis:
+              - code:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/v3-CodeSystem-20806-5
+                    code: '123456'
+                    display: Sample Diagnosis Code
+              note:
+              - text: This is a sample note for the encounter.
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Bundle
+            type:
+              type: string
+              example: searchset
+            total:
+              type: integer
+              example: 2
+            entry:
+              type: array
+              items:
+                type: object
+                properties:
+                  resource:
+                    type: object
+                    example:
+                      context:
+                        requestId: abc123
+                        source: ATHENA
+                        quorum: true
+                        notify: true
+                      data:
+                        resourceType: Encounter
+                        id: '123'
+                        status: finished
+                        class:
+                          system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                          code: AMB
+                          display: ambulatory
+                        subject:
+                          reference: Patient/42
+                        period:
+                          start: '2024-05-15T10:00:00Z'
+                          end: '2024-05-15T10:30:00Z'
+                        reasonCode:
+                        - extension:
+                          - url: http://xcaliber-fhir/structureDefinition/encounter-reason-note
+                            valueString: Routine follow-up
+                          - url: http://xcaliber-fhir/structureDefinition/encounter-reason-note-last-modified-datetime
+                            valueDateTime: '2024-06-06T15:00:00Z'
+                          coding:
+                          - code: A1
+                            display: Consultation
+                            extension:
+                            - url: http://xcaliber-fhir/structureDefinition/encounter-reason-last-modified-user
+                              valueString: dr.jones
+                        extension:
+                        - url: http://xcaliber-fhir/structureDefinition/assessment-text
+                          valueString: Patient stable. Continue medication.
+                        - url: http://xcaliber-fhir/structureDefinition/physical-exam
+                          valueString: '{"exam":"normal"}'
+                        - url: http://xcaliber-fhir/structureDefinition/review-of-systems
+                          valueString: '{"systems":["normal"]}'
+                        - url: http://xcaliber-fhir/structureDefinition/procedure-documentation
+                          extension:
+                          - url: http://example/structureDefinition/procedure-documentation-text
+                            valueString: Procedure completed successfully.
+                        location:
+                          reference: Location/001
+                        practitioner:
+                          reference: Practitioner/007
+                        partOf:
+                          reference: ChargeItem/abc
+                        diagnosis:
+                        - code:
+                            coding:
+                            - system: http://terminology.hl7.org/CodeSystem/v3-CodeSystem-20806-5
+                              code: '123456'
+                              display: Sample Diagnosis Code
+                        note:
+                        - text: This is a sample note for the encounter.
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          context:
+                            type: object
+                            properties:
+                              requestId:
+                                type: string
+                                example: abc123
+                              source:
+                                type: string
+                                example: ATHENA
+                              quorum:
+                                type: boolean
+                                example: true
+                              notify:
+                                type: boolean
+                                example: true
+                            required:
+                            - requestId
+                            - source
+                            - quorum
+                            - notify
+                          resourceType:
+                            type: string
+                            example: Encounter
+                          id:
+                            type: string
+                            example: '123'
+                          status:
+                            type: string
+                            example: finished
+                          class:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                                example: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                              code:
+                                type: string
+                                example: AMB
+                              display:
+                                type: string
+                                example: ambulatory
+                          subject:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                                example: Patient/42
+                          period:
+                            type: object
+                            properties:
+                              start:
+                                type: string
+                                example: '2024-05-15T10:00:00Z'
+                              end:
+                                type: string
+                                example: '2024-05-15T10:30:00Z'
+                          reasonCode:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                extension:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      url:
+                                        type: string
+                                      valueString:
+                                        type: string
+                                      valueDateTime:
+                                        type: string
+                                coding:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      code:
+                                        type: string
+                                      display:
+                                        type: string
+                                      extension:
+                                        type: array
+                                        items:
+                                          type: object
+                                          properties:
+                                            url:
+                                              type: string
+                                            valueString:
+                                              type: string
+                          extension:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                                valueString:
+                                  type: string
+                                extension:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      url:
+                                        type: string
+                                      valueString:
+                                        type: string
+                          location:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                          practitioner:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                          partOf:
+                            type: object
+                            properties:
+                              reference:
+                                type: string
+                          diagnosis:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                code:
+                                  type: object
+                                  properties:
+                                    coding:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          system:
+                                            type: string
+                                          code:
+                                            type: string
+                                          display:
+                                            type: string
+                          note:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                text:
+                                  type: string
+                        required:
+                        - context
+                        - resourceType
+                        - id
+                        - status
+                        - class
+                        - subject
+                        - period
+                        - reasonCode
+                        - extension
+                        - location
+                        - practitioner
+                        - partOf
+                        - diagnosis
+                        - note
+                    required:
+                    - data
+          required:
+          - context
+          - resourceType
+          - type
+          - total
+          - entry
+      required:
+      - data
+    error400ofgetinEncounter:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofgetinEncounter:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinEncounter:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    response201ofpostinEncounter:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: Encounter
+              id: '123'
+              status: finished
+              class:
+                system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                code: AMB
+                display: ambulatory
+              subject:
+                reference: Patient/42
+              period:
+                start: '2024-05-15T10:00:00Z'
+                end: '2024-05-15T10:30:00Z'
+              reasonCode:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/encounter-reason-note
+                  valueString: Routine follow-up
+                - url: http://xcaliber-fhir/structureDefinition/encounter-reason-note-last-modified-datetime
+                  valueDateTime: '2024-06-06T15:00:00Z'
+                coding:
+                - code: A1
+                  display: Consultation
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/encounter-reason-last-modified-user
+                    valueString: dr.jones
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/assessment-text
+                valueString: Patient stable. Continue medication.
+              - url: http://xcaliber-fhir/structureDefinition/physical-exam
+                valueString: '{"exam":"normal"}'
+              - url: http://xcaliber-fhir/structureDefinition/review-of-systems
+                valueString: '{"systems":["normal"]}'
+              - url: http://xcaliber-fhir/structureDefinition/procedure-documentation
+                extension:
+                - url: http://example/structureDefinition/procedure-documentation-text
+                  valueString: Procedure completed successfully.
+              location:
+                reference: Location/001
+              practitioner:
+                reference: Practitioner/007
+              partOf:
+                reference: ChargeItem/abc
+              diagnosis:
+              - code:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/v3-CodeSystem-20806-5
+                    code: '123456'
+                    display: Sample Diagnosis Code
+              note:
+              - text: This is a sample note for the encounter.
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Encounter
+            id:
+              type: string
+              example: '123'
+            status:
+              type: string
+              example: finished
+            class:
+              type: object
+              properties:
+                system:
+                  type: string
+                  example: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                code:
+                  type: string
+                  example: AMB
+                display:
+                  type: string
+                  example: ambulatory
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/42
+            period:
+              type: object
+              properties:
+                start:
+                  type: string
+                  example: '2024-05-15T10:00:00Z'
+                end:
+                  type: string
+                  example: '2024-05-15T10:30:00Z'
+            reasonCode:
+              type: array
+              items:
+                type: object
+                properties:
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+                        valueDateTime:
+                          type: string
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        display:
+                          type: string
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            location:
+              type: object
+              properties:
+                reference:
+                  type: string
+            practitioner:
+              type: object
+              properties:
+                reference:
+                  type: string
+            partOf:
+              type: object
+              properties:
+                reference:
+                  type: string
+            diagnosis:
+              type: array
+              items:
+                type: object
+                properties:
+                  code:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            display:
+                              type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+          required:
+          - context
+          - resourceType
+          - id
+          - status
+          - class
+          - subject
+          - period
+          - reasonCode
+          - extension
+          - location
+          - practitioner
+          - partOf
+          - diagnosis
+          - note
+      required:
+      - data
+    error400ofpostinEncounter:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofpostinEncounter:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofpostinEncounter:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    response200ofgetinEncounterencounterid:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: Encounter
+              id: '123'
+              status: finished
+              class:
+                system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                code: AMB
+                display: ambulatory
+              subject:
+                reference: Patient/42
+              period:
+                start: '2024-05-15T10:00:00Z'
+                end: '2024-05-15T10:30:00Z'
+              reasonCode:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/encounter-reason-note
+                  valueString: Routine follow-up
+                - url: http://xcaliber-fhir/structureDefinition/encounter-reason-note-last-modified-datetime
+                  valueDateTime: '2024-06-06T15:00:00Z'
+                coding:
+                - code: A1
+                  display: Consultation
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/encounter-reason-last-modified-user
+                    valueString: dr.jones
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/assessment-text
+                valueString: Patient stable. Continue medication.
+              - url: http://xcaliber-fhir/structureDefinition/physical-exam
+                valueString: '{"exam":"normal"}'
+              - url: http://xcaliber-fhir/structureDefinition/review-of-systems
+                valueString: '{"systems":["normal"]}'
+              - url: http://xcaliber-fhir/structureDefinition/procedure-documentation
+                extension:
+                - url: http://example/structureDefinition/procedure-documentation-text
+                  valueString: Procedure completed successfully.
+              location:
+                reference: Location/001
+              practitioner:
+                reference: Practitioner/007
+              partOf:
+                reference: ChargeItem/abc
+              diagnosis:
+              - code:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/v3-CodeSystem-20806-5
+                    code: '123456'
+                    display: Sample Diagnosis Code
+              note:
+              - text: This is a sample note for the encounter.
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Encounter
+            id:
+              type: string
+              example: '123'
+            status:
+              type: string
+              example: finished
+            class:
+              type: object
+              properties:
+                system:
+                  type: string
+                  example: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                code:
+                  type: string
+                  example: AMB
+                display:
+                  type: string
+                  example: ambulatory
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/42
+            period:
+              type: object
+              properties:
+                start:
+                  type: string
+                  example: '2024-05-15T10:00:00Z'
+                end:
+                  type: string
+                  example: '2024-05-15T10:30:00Z'
+            reasonCode:
+              type: array
+              items:
+                type: object
+                properties:
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+                        valueDateTime:
+                          type: string
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        display:
+                          type: string
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            location:
+              type: object
+              properties:
+                reference:
+                  type: string
+            practitioner:
+              type: object
+              properties:
+                reference:
+                  type: string
+            partOf:
+              type: object
+              properties:
+                reference:
+                  type: string
+            diagnosis:
+              type: array
+              items:
+                type: object
+                properties:
+                  code:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            display:
+                              type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+          required:
+          - context
+          - resourceType
+          - id
+          - status
+          - class
+          - subject
+          - period
+          - reasonCode
+          - extension
+          - location
+          - practitioner
+          - partOf
+          - diagnosis
+          - note
+      required:
+      - data
+    error400ofgetinEncounterencounterid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofgetinEncounterencounterid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinEncounterencounterid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    response200ofputinEncounterencounterid:
+      type: object
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: Encounter
+              id: '123'
+              status: finished
+              class:
+                system: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                code: AMB
+                display: ambulatory
+              subject:
+                reference: Patient/42
+              period:
+                start: '2024-05-15T10:00:00Z'
+                end: '2024-05-15T10:30:00Z'
+              reasonCode:
+              - extension:
+                - url: http://xcaliber-fhir/structureDefinition/encounter-reason-note
+                  valueString: Routine follow-up
+                - url: http://xcaliber-fhir/structureDefinition/encounter-reason-note-last-modified-datetime
+                  valueDateTime: '2024-06-06T15:00:00Z'
+                coding:
+                - code: A1
+                  display: Consultation
+                  extension:
+                  - url: http://xcaliber-fhir/structureDefinition/encounter-reason-last-modified-user
+                    valueString: dr.jones
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/assessment-text
+                valueString: Patient stable. Continue medication.
+              - url: http://xcaliber-fhir/structureDefinition/physical-exam
+                valueString: '{"exam":"normal"}'
+              - url: http://xcaliber-fhir/structureDefinition/review-of-systems
+                valueString: '{"systems":["normal"]}'
+              - url: http://xcaliber-fhir/structureDefinition/procedure-documentation
+                extension:
+                - url: http://example/structureDefinition/procedure-documentation-text
+                  valueString: Procedure completed successfully.
+              location:
+                reference: Location/001
+              practitioner:
+                reference: Practitioner/007
+              partOf:
+                reference: ChargeItem/abc
+              diagnosis:
+              - code:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/v3-CodeSystem-20806-5
+                    code: '123456'
+                    display: Sample Diagnosis Code
+              note:
+              - text: This is a sample note for the encounter.
+      properties:
+        data:
+          type: object
+          properties:
+            context:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  example: abc123
+                source:
+                  type: string
+                  example: ATHENA
+                quorum:
+                  type: boolean
+                  example: true
+                notify:
+                  type: boolean
+                  example: true
+              required:
+              - requestId
+              - source
+              - quorum
+              - notify
+            resourceType:
+              type: string
+              example: Encounter
+            id:
+              type: string
+              example: '123'
+            status:
+              type: string
+              example: finished
+            class:
+              type: object
+              properties:
+                system:
+                  type: string
+                  example: http://terminology.hl7.org/CodeSystem/v3-ActCode
+                code:
+                  type: string
+                  example: AMB
+                display:
+                  type: string
+                  example: ambulatory
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/42
+            period:
+              type: object
+              properties:
+                start:
+                  type: string
+                  example: '2024-05-15T10:00:00Z'
+                end:
+                  type: string
+                  example: '2024-05-15T10:30:00Z'
+            reasonCode:
+              type: array
+              items:
+                type: object
+                properties:
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+                        valueDateTime:
+                          type: string
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        display:
+                          type: string
+                        extension:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                              valueString:
+                                type: string
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+                  extension:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        valueString:
+                          type: string
+            location:
+              type: object
+              properties:
+                reference:
+                  type: string
+            practitioner:
+              type: object
+              properties:
+                reference:
+                  type: string
+            partOf:
+              type: object
+              properties:
+                reference:
+                  type: string
+            diagnosis:
+              type: array
+              items:
+                type: object
+                properties:
+                  code:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            display:
+                              type: string
+            note:
+              type: array
+              items:
+                type: object
+                properties:
+                  text:
+                    type: string
+          required:
+          - context
+          - resourceType
+          - id
+          - status
+          - class
+          - subject
+          - period
+          - reasonCode
+          - extension
+          - location
+          - practitioner
+          - partOf
+          - diagnosis
+          - note
+      required:
+      - data
+    error400ofputinEncounterencounterid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofputinEncounterencounterid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofputinEncounterencounterid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    response200ofdeleteinEncounterencounterid:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '123'
+        status:
+          type: string
+          example: deleted
+      example:
+        id: '123'
+        status: deleted
+    error400ofdeleteinEncounterencounterid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofdeleteinEncounterencounterid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofdeleteinEncounterencounterid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+          nullable: true
+      example:
+        statusCode: 400
+        message: Missing patientId
+    Context:
+      type: object
+      properties:
+        requestId:
+          type: string
+          example: abc123
+        source:
+          type: string
+          example: ATHENA
+        quorum:
+          type: boolean
+          example: true
+        notify:
+          type: boolean
+          example: true
+        departmentId:
+          type: string
+          example: '150'
+      required:
+      - requestId
+      - source
+      - quorum
+      - notify
+      additionalProperties: true
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

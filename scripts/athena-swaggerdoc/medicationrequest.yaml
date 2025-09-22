@@ -1,0 +1,1552 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as Fire)
+    is a standard for exchanging healthcare information electronically. It is designed
+    to be a modern, flexible, and web-based alternative to older, more cumbersome
+    standards like HL7 v2. FHIR uses a RESTful API specification to define how to
+    interact with Resources - this means it uses standard HTTP verbs (GET, POST, PUT,
+    DELETE). Resources are the fundamental units of data in FHIR; they can represent
+    anything from patient demographics to clinical observations to medications.
+servers:
+- url: https://xchange-sandbox.xcaliberapis.com
+- url: https://your.api.server
+tags:
+- name: MedicationRequest
+  description: MedicationRequest resource operations
+paths:
+  /api/v2/MedicationRequest:
+    get:
+      summary: Get a list of Medication Requests
+      operationId: getListOfMedicationRequests
+      tags:
+      - MedicationRequest
+      parameters:
+      - &id001
+        name: x-source-id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Source system identifier.
+      - &id002
+        name: x-interaction-mode
+        in: header
+        required: true
+        schema:
+          type: boolean
+        description: Interaction mode flag (true/false).
+      - name: authoredon
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: authoredon'
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: category'
+      - name: date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+        description: 'Filter: date'
+      - name: encounter
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: encounter'
+      - name: intended-dispenser
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: intended-dispenser'
+      - name: intended-performer
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: intended-performer'
+      - name: intended-performertype
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: intended-performertype'
+      - name: intent
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: intent'
+      - name: priority
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: priority'
+      - name: requester
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: requester'
+      - name: subject
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Filter: subject'
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinMedicationRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinMedicationRequest'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinMedicationRequest'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Server error details
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: Bundle
+                    type: searchset
+                    total: 2
+                    entry:
+                    - resource:
+                        resourceType: MedicationRequest
+                        id: '12345'
+                        subject:
+                          reference: Patient/123
+                        encounter:
+                          reference: Encounter/456
+                        intent: order
+                        medicationCodeableConcept:
+                          coding:
+                          - system: ATHENA
+                            code: '789'
+                            display: Prescription Order
+                          - code: '12345'
+                            system: http://example.com/external-codes
+                            display: External medication code
+                          text: Medication prescription description
+                        statusReason:
+                          coding:
+                          - code: contraindication123
+                            system: http://example.com/contraindications
+                            display: Drug contraindication
+                          - code: declined456
+                            system: http://example.com/declined-reasons
+                            display: Patient declined
+                          text: Patient declined due to side effects
+                        recorder:
+                          display: Dr. Smith
+                        doNotPerform: true
+                        extension:
+                        - url: TINY_URLS.MEDICATION_REQUEST.DEPARTMENTID
+                          valueInteger: 101
+                        - url: TINY_URLS.MEDICATION_REQUEST.ASSIGNEDUSER
+                          valueString: dr.smith
+                        - url: TINY_URLS.MEDICATION_REQUEST.FACILITYORDERCODE
+                          valueString: FAC001
+                        - url: TINY_URLS.MEDICATION_REQUEST.FACILITYORDERCODEDESCRIPTION
+                          valueString: Facility Order Code Description
+                        - url: TINY_URLS.MEDICATION_REQUEST.LASTMODIFIEDBY
+                          valueString: Dr. Smith
+                        - url: TINY_URLS.MEDICATION_REQUEST.LASTMODIFIEDDATETIME
+                          valueDateTime: '2023-10-15T14:30:00Z'
+                        - url: TINY_URLS.MEDICATION_REQUEST.NDC
+                          valueString: 12345-678-90
+                        - url: TINY_URLS.MEDICATION_REQUEST.ORDERINGPROVIDER
+                          valueString: Dr. Johnson
+                        - url: TINY_URLS.MEDICATION_REQUEST.SPECIMENCOLLECTIONSITE
+                          valueString: Left arm
+                        - url: TINY_URLS.MEDICATION_REQUEST.FUTURESUBMITDATE
+                          valueDate: '2024-01-15'
+                        - url: TINY_URLS.MEDICATION_REQUEST.EARLIESTFILLDATE
+                          valueDate: '2024-01-10'
+                        contained:
+                        - resourceType: Practitioner
+                          id: '123'
+                          name: []
+                          address: []
+                        - resourceType: Practitioner
+                          id: '12345'
+                          name:
+                          - text: Dr. John Smith
+                            use: official
+                          address:
+                          - city: Atlanta
+                            state: GA
+                            postalCode: '30309'
+                          telecom:
+                          - value: 555-123-4567
+                            system: fax
+                          - value: 555-987-6543
+                            system: phone
+                          extension:
+                          - url: TINY_URLS.MEDICATION_REQUEST.CLIANUMBER
+                            valueString: CLI123456
+    post:
+      summary: Create Medication Request
+      operationId: createMedicationRequest
+      tags:
+      - MedicationRequest
+      parameters:
+      - *id001
+      - *id002
+      - name: departmentId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Department identifier.
+      - name: patient
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinMedicationRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinMedicationRequest'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinMedicationRequest'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Server error details
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    message: response is being getting generated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Request Example:
+                value:
+                  resourceType: MedicationRequest
+                  reasonCode:
+                  - coding:
+                    - system: http://snomed.info/sct
+                      code: contraindication123
+                      display: Drug contraindication
+                  medicationCodeableConcept:
+                    coding:
+                    - system: ATHENA
+                      code: '789'
+                      display: Prescription Order
+                  note:
+                  - authorString: practitioner
+                    text: Practitioner note text
+                  dispenseRequest:
+                    numberOfRepeatsAllowed: 5
+                  dosageInstruction:
+                  - timing:
+                      repeat:
+                        frequency: 2
+                        duration: 7
+                        when:
+                        - AC
+                    doseAndRate:
+                    - doseQuantity:
+                        value: 10
+                        unit: mg
+                    additionalInstruction:
+                    - text: Take with food
+                  substitution:
+                    allowedBoolean: true
+                  performer:
+                  - reference: Organization/FAC001
+                  extension:
+                  - url: TINY_URLS.MEDICATION_REQUEST.NDC
+                    valueId: 12345-678-90
+                  - url: TINY_URLS.MEDICATION_REQUEST.RXNORM_ID
+                    valueId: RX123
+                  - url: TINY_URLS.MEDICATION_REQUEST.PHARMACY_NCP_DP_ID
+                    valueId: NCPDP456
+                  - url: TINY_URLS.MEDICATION_REQUEST.ADMINISTER_NOTE
+                    valueString: Administer with meals
+                  - url: TINY_URLS.MEDICATION_REQUEST.EXTERNAL_NOTE
+                    valueString: External pharmacy note
+                  - url: TINY_URLS.MEDICATION_REQUEST.PHARMACY_NOTE
+                    valueString: Pharmacy specific instructions
+                  - url: TINY_URLS.MEDICATION_REQUEST.UNSTRUCTURED_SIG
+                    valueString: Take as directed
+                  - url: TINY_URLS.MEDICATION_REQUEST.ORDERING_MODE
+                    valueCode: electronic
+  /api/v2/MedicationRequest/{medication-request-id}:
+    get:
+      summary: Get MedicationRequest by ID
+      operationId: getMedicationRequestById
+      tags:
+      - MedicationRequest
+      parameters:
+      - name: medication-request-id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: '"Unique identifier of the MedicationRequest resource to retrieve.
+          Required for fetching a specific medication request by ID."'
+      - *id001
+      - *id002
+      
+      responses:
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinMedicationRequestmedicationrequestid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinMedicationRequestmedicationrequestid'
+              example:
+                success: false
+                code: 401
+                message: Http Exception
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinMedicationRequestmedicationrequestid'
+              example:
+                statusCode: 404
+                message: MedicationRequest not found
+                details: No MedicationRequest exists with the given ID
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinMedicationRequestmedicationrequestid'
+              example:
+                statusCode: 500
+                message: Internal server error
+                details: Server error details
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                Response Example:
+                  value:
+                    resourceType: MedicationRequest
+                    id: '12345'
+                    subject:
+                      reference: Patient/123
+                    encounter:
+                      reference: Encounter/456
+                    intent: order
+                    medicationCodeableConcept:
+                      coding:
+                      - system: ATHENA
+                        code: '789'
+                        display: Prescription Order
+                      - code: '12345'
+                        system: http://example.com/external-codes
+                        display: External medication code
+                      text: Medication prescription description
+                    statusReason:
+                      coding:
+                      - code: contraindication123
+                        system: http://example.com/contraindications
+                        display: Drug contraindication
+                      - code: declined456
+                        system: http://example.com/declined-reasons
+                        display: Patient declined
+                      text: Patient declined due to side effects
+                    recorder:
+                      display: Dr. Smith
+                    doNotPerform: true
+                    extension:
+                    - url: TINY_URLS.MEDICATION_REQUEST.DEPARTMENTID
+                      valueInteger: 101
+                    - url: TINY_URLS.MEDICATION_REQUEST.ASSIGNEDUSER
+                      valueString: dr.smith
+                    - url: TINY_URLS.MEDICATION_REQUEST.FACILITYORDERCODE
+                      valueString: FAC001
+                    - url: TINY_URLS.MEDICATION_REQUEST.FACILITYORDERCODEDESCRIPTION
+                      valueString: Facility Order Code Description
+                    - url: TINY_URLS.MEDICATION_REQUEST.LASTMODIFIEDBY
+                      valueString: Dr. Smith
+                    - url: TINY_URLS.MEDICATION_REQUEST.LASTMODIFIEDDATETIME
+                      valueDateTime: '2023-10-15T14:30:00Z'
+                    - url: TINY_URLS.MEDICATION_REQUEST.NDC
+                      valueString: 12345-678-90
+                    - url: TINY_URLS.MEDICATION_REQUEST.ORDERINGPROVIDER
+                      valueString: Dr. Johnson
+                    - url: TINY_URLS.MEDICATION_REQUEST.SPECIMENCOLLECTIONSITE
+                      valueString: Left arm
+                    - url: TINY_URLS.MEDICATION_REQUEST.FUTURESUBMITDATE
+                      valueDate: '2024-01-15'
+                    - url: TINY_URLS.MEDICATION_REQUEST.EARLIESTFILLDATE
+                      valueDate: '2024-01-10'
+                    contained:
+                    - resourceType: Practitioner
+                      id: '123'
+                      name: []
+                      address: []
+                    - resourceType: Practitioner
+                      id: '12345'
+                      name:
+                      - text: Dr. John Smith
+                        use: official
+                      address:
+                      - city: Atlanta
+                        state: GA
+                        postalCode: '30309'
+                      telecom:
+                      - value: 555-123-4567
+                        system: fax
+                      - value: 555-987-6543
+                        system: phone
+                      extension:
+                      - url: TINY_URLS.MEDICATION_REQUEST.CLIANUMBER
+                        valueString: CLI123456
+components:
+  schemas:
+    ExtractedSchema45:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+          description: '"Contextual information for the medication request, such as
+            patient and prescriber details. Required for creating a medication request."'
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: MedicationRequest
+            id:
+              type: string
+              example: example-medication-request
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                  - http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest
+                versionId:
+                  type: string
+                  example: 4.0.1
+            status:
+              type: string
+              example: active
+            intent:
+              type: string
+              example: order
+            medicationCodeableConcept:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://snomed.info/sct
+                    code: '36218007'
+                    display: Ibuprofen
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+              example:
+              - url: https://tiny.url/medicationrequest/assigneduser
+                valueString: assigned-user-id
+            dosageAndInformation:
+              type: array
+              items:
+                type: object
+                properties:
+                  sequence:
+                    type: integer
+                  timing:
+                    type: object
+                    properties:
+                      repeat:
+                        type: object
+                        properties:
+                          frequency:
+                            type: string
+                          period:
+                            type: object
+                            properties:
+                              duration:
+                                type: object
+                                properties:
+                                  value:
+                                    type: integer
+                                  unitCode:
+                                    type: string
+                              count:
+                                type: integer
+                  doseAndRate:
+                    type: object
+                    properties:
+                      quantity:
+                        type: object
+                        properties:
+                          value:
+                            type: integer
+                          unitCode:
+                            type: string
+                      text:
+                        type: string
+                  route:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            display:
+                              type: string
+            medicationRequestStatusHistory:
+              type: array
+              items:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  reasonCode:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                              display:
+                                type: string
+                  statusDate:
+                    type: string
+          description: '"Medication request details, including patient information,
+            medication, and dosage instructions. See schema for required fields."'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: MedicationRequest
+          id: example-medication-request
+          meta:
+            profile:
+            - http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest
+            versionId: 4.0.1
+          status: active
+          intent: order
+          medicationCodeableConcept:
+            coding:
+            - system: http://snomed.info/sct
+              code: '36218007'
+              display: Ibuprofen
+          subject:
+            reference: Patient/example
+          extension:
+          - url: http://xcaliber-fhir/structureDefinition/assigneduser
+            valueString: assigned-user-id
+          - url: http://xcaliber-fhir/structureDefinition/facilityordercode
+            valueString: FAC-123
+          - url: http://xcaliber-fhir/structureDefinition/facilityordercodedescription
+            valueString: Facility Order Code Description
+          - url: http://xcaliber-fhir/structureDefinition/lastmodifiedby
+            valueString: user-last-modified
+          - url: http://xcaliber-fhir/structureDefinition/ndc
+            valueString: 0123456789
+          - url: http://xcaliber-fhir/structureDefinition/orderingprovider
+            valueString: Dr. John Doe
+          - url: http://xcaliber-fhir/structureDefinition/specimencollectionsite
+            valueString: Left Arm
+          dosageAndInformation:
+          - sequence: 1
+            timing:
+              repeat:
+                frequency: daily
+                period:
+                  duration:
+                    value: 12
+                    unitCode: hour
+                  count: 2
+            doseAndRate:
+              quantity:
+                value: 200
+                unitCode: mg
+              text: Take 200mg every 12 hours
+            route:
+              coding:
+              - system: http://terminology.hl7.org/CodeSystem/route-of-administration
+                code: oral
+                display: Oral
+          medicationRequestStatusHistory:
+          - status: completed
+            reasonCode:
+            - coding:
+              - system: http://terminology.hl7.org/CodeSystem/medication-request-status-reason
+                code: allergy
+                display: Allergy
+            statusDate: '2022-01-01T12:00:00Z'
+    response200ofgetinMedicationRequest:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: MedicationRequest
+            id:
+              type: string
+              example: example-medication-request
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                  - http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest
+                versionId:
+                  type: string
+                  example: 4.0.1
+            status:
+              type: string
+              example: active
+            intent:
+              type: string
+              example: order
+            medicationCodeableConcept:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://snomed.info/sct
+                    code: '36218007'
+                    display: Ibuprofen
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+              example:
+              - url: https://tiny.url/medicationrequest/assigneduser
+                valueString: assigned-user-id
+            dosageAndInformation:
+              type: array
+              items:
+                type: object
+                properties:
+                  sequence:
+                    type: integer
+                  timing:
+                    type: object
+                    properties:
+                      repeat:
+                        type: object
+                        properties:
+                          frequency:
+                            type: string
+                          period:
+                            type: object
+                            properties:
+                              duration:
+                                type: object
+                                properties:
+                                  value:
+                                    type: integer
+                                  unitCode:
+                                    type: string
+                              count:
+                                type: integer
+                  doseAndRate:
+                    type: object
+                    properties:
+                      quantity:
+                        type: object
+                        properties:
+                          value:
+                            type: integer
+                          unitCode:
+                            type: string
+                      text:
+                        type: string
+                  route:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            display:
+                              type: string
+            medicationRequestStatusHistory:
+              type: array
+              items:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  reasonCode:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                              display:
+                                type: string
+                  statusDate:
+                    type: string
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: MedicationRequest
+              id: example-medication-request
+              meta:
+                profile:
+                - http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest
+                versionId: 4.0.1
+              status: active
+              intent: order
+              medicationCodeableConcept:
+                coding:
+                - system: http://snomed.info/sct
+                  code: '36218007'
+                  display: Ibuprofen
+              subject:
+                reference: Patient/example
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/assigneduser
+                valueString: assigned-user-id
+              - url: http://xcaliber-fhir/structureDefinition/facilityordercode
+                valueString: FAC-123
+              - url: http://xcaliber-fhir/structureDefinition/facilityordercodedescription
+                valueString: Facility Order Code Description
+              - url: http://xcaliber-fhir/structureDefinition/lastmodifiedby
+                valueString: user-last-modified
+              - url: http://xcaliber-fhir/structureDefinition/ndc
+                valueString: 0123456789
+              - url: http://xcaliber-fhir/structureDefinition/orderingprovider
+                valueString: Dr. John Doe
+              - url: http://xcaliber-fhir/structureDefinition/specimencollectionsite
+                valueString: Left Arm
+              dosageAndInformation:
+              - sequence: 1
+                timing:
+                  repeat:
+                    frequency: daily
+                    period:
+                      duration:
+                        value: 12
+                        unitCode: hour
+                      count: 2
+                doseAndRate:
+                  quantity:
+                    value: 200
+                    unitCode: mg
+                  text: Take 200mg every 12 hours
+                route:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/route-of-administration
+                    code: oral
+                    display: Oral
+              medicationRequestStatusHistory:
+              - status: completed
+                reasonCode:
+                - coding:
+                  - system: http://terminology.hl7.org/CodeSystem/medication-request-status-reason
+                    code: allergy
+                    display: Allergy
+                statusDate: '2022-01-01T12:00:00Z'
+    error400ofgetinMedicationRequest:
+      type: object
+      example:
+        statusCode: 400
+        message: Missing patientId
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+    error401ofgetinMedicationRequest:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofgetinMedicationRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Server error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+    response201ofpostinMedicationRequest:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: MedicationRequest
+            id:
+              type: string
+              example: example-medication-request
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                  - http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest
+                versionId:
+                  type: string
+                  example: 4.0.1
+            status:
+              type: string
+              example: active
+            intent:
+              type: string
+              example: order
+            medicationCodeableConcept:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://snomed.info/sct
+                    code: '36218007'
+                    display: Ibuprofen
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+              example:
+              - url: https://tiny.url/medicationrequest/assigneduser
+                valueString: assigned-user-id
+            dosageAndInformation:
+              type: array
+              items:
+                type: object
+                properties:
+                  sequence:
+                    type: integer
+                  timing:
+                    type: object
+                    properties:
+                      repeat:
+                        type: object
+                        properties:
+                          frequency:
+                            type: string
+                          period:
+                            type: object
+                            properties:
+                              duration:
+                                type: object
+                                properties:
+                                  value:
+                                    type: integer
+                                  unitCode:
+                                    type: string
+                              count:
+                                type: integer
+                  doseAndRate:
+                    type: object
+                    properties:
+                      quantity:
+                        type: object
+                        properties:
+                          value:
+                            type: integer
+                          unitCode:
+                            type: string
+                      text:
+                        type: string
+                  route:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            display:
+                              type: string
+            medicationRequestStatusHistory:
+              type: array
+              items:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  reasonCode:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                              display:
+                                type: string
+                  statusDate:
+                    type: string
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: MedicationRequest
+              id: example-medication-request
+              meta:
+                profile:
+                - http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest
+                versionId: 4.0.1
+              status: active
+              intent: order
+              medicationCodeableConcept:
+                coding:
+                - system: http://snomed.info/sct
+                  code: '36218007'
+                  display: Ibuprofen
+              subject:
+                reference: Patient/example
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/assigneduser
+                valueString: assigned-user-id
+              - url: http://xcaliber-fhir/structureDefinition/facilityordercode
+                valueString: FAC-123
+              - url: http://xcaliber-fhir/structureDefinition/facilityordercodedescription
+                valueString: Facility Order Code Description
+              - url: http://xcaliber-fhir/structureDefinition/lastmodifiedby
+                valueString: user-last-modified
+              - url: http://xcaliber-fhir/structureDefinition/ndc
+                valueString: 0123456789
+              - url: http://xcaliber-fhir/structureDefinition/orderingprovider
+                valueString: Dr. John Doe
+              - url: http://xcaliber-fhir/structureDefinition/specimencollectionsite
+                valueString: Left Arm
+              dosageAndInformation:
+              - sequence: 1
+                timing:
+                  repeat:
+                    frequency: daily
+                    period:
+                      duration:
+                        value: 12
+                        unitCode: hour
+                      count: 2
+                doseAndRate:
+                  quantity:
+                    value: 200
+                    unitCode: mg
+                  text: Take 200mg every 12 hours
+                route:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/route-of-administration
+                    code: oral
+                    display: Oral
+              medicationRequestStatusHistory:
+              - status: completed
+                reasonCode:
+                - coding:
+                  - system: http://terminology.hl7.org/CodeSystem/medication-request-status-reason
+                    code: allergy
+                    display: Allergy
+                statusDate: '2022-01-01T12:00:00Z'
+    error400ofpostinMedicationRequest:
+      type: object
+      example:
+        statusCode: 400
+        message: Missing patientId
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+    error401ofpostinMedicationRequest:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error500ofpostinMedicationRequest:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Server error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+    response200ofgetinMedicationRequestmedicationrequestid:
+      type: object
+      properties:
+        context:
+          type: object
+          properties:
+            requestId:
+              type: string
+              example: abc123
+            source:
+              type: string
+              example: ATHENA
+            quorum:
+              type: boolean
+              example: true
+            notify:
+              type: boolean
+              example: true
+        data:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: MedicationRequest
+            id:
+              type: string
+              example: example-medication-request
+            meta:
+              type: object
+              properties:
+                profile:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                  - http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest
+                versionId:
+                  type: string
+                  example: 4.0.1
+            status:
+              type: string
+              example: active
+            intent:
+              type: string
+              example: order
+            medicationCodeableConcept:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                      code:
+                        type: string
+                      display:
+                        type: string
+                  example:
+                  - system: http://snomed.info/sct
+                    code: '36218007'
+                    display: Ibuprofen
+            subject:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  valueString:
+                    type: string
+              example:
+              - url: https://tiny.url/medicationrequest/assigneduser
+                valueString: assigned-user-id
+            dosageAndInformation:
+              type: array
+              items:
+                type: object
+                properties:
+                  sequence:
+                    type: integer
+                  timing:
+                    type: object
+                    properties:
+                      repeat:
+                        type: object
+                        properties:
+                          frequency:
+                            type: string
+                          period:
+                            type: object
+                            properties:
+                              duration:
+                                type: object
+                                properties:
+                                  value:
+                                    type: integer
+                                  unitCode:
+                                    type: string
+                              count:
+                                type: integer
+                  doseAndRate:
+                    type: object
+                    properties:
+                      quantity:
+                        type: object
+                        properties:
+                          value:
+                            type: integer
+                          unitCode:
+                            type: string
+                      text:
+                        type: string
+                  route:
+                    type: object
+                    properties:
+                      coding:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            system:
+                              type: string
+                            code:
+                              type: string
+                            display:
+                              type: string
+            medicationRequestStatusHistory:
+              type: array
+              items:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  reasonCode:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        coding:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              system:
+                                type: string
+                              code:
+                                type: string
+                              display:
+                                type: string
+                  statusDate:
+                    type: string
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+          - resource:
+              resourceType: MedicationRequest
+              id: example-medication-request
+              meta:
+                profile:
+                - http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest
+                versionId: 4.0.1
+              status: active
+              intent: order
+              medicationCodeableConcept:
+                coding:
+                - system: http://snomed.info/sct
+                  code: '36218007'
+                  display: Ibuprofen
+              subject:
+                reference: Patient/example
+              extension:
+              - url: http://xcaliber-fhir/structureDefinition/assigneduser
+                valueString: assigned-user-id
+              - url: http://xcaliber-fhir/structureDefinition/facilityordercode
+                valueString: FAC-123
+              - url: http://xcaliber-fhir/structureDefinition/facilityordercodedescription
+                valueString: Facility Order Code Description
+              - url: http://xcaliber-fhir/structureDefinition/lastmodifiedby
+                valueString: user-last-modified
+              - url: http://xcaliber-fhir/structureDefinition/ndc
+                valueString: 0123456789
+              - url: http://xcaliber-fhir/structureDefinition/orderingprovider
+                valueString: Dr. John Doe
+              - url: http://xcaliber-fhir/structureDefinition/specimencollectionsite
+                valueString: Left Arm
+              dosageAndInformation:
+              - sequence: 1
+                timing:
+                  repeat:
+                    frequency: daily
+                    period:
+                      duration:
+                        value: 12
+                        unitCode: hour
+                      count: 2
+                doseAndRate:
+                  quantity:
+                    value: 200
+                    unitCode: mg
+                  text: Take 200mg every 12 hours
+                route:
+                  coding:
+                  - system: http://terminology.hl7.org/CodeSystem/route-of-administration
+                    code: oral
+                    display: Oral
+              medicationRequestStatusHistory:
+              - status: completed
+                reasonCode:
+                - coding:
+                  - system: http://terminology.hl7.org/CodeSystem/medication-request-status-reason
+                    code: allergy
+                    display: Allergy
+                statusDate: '2022-01-01T12:00:00Z'
+    error400ofgetinMedicationRequestmedicationrequestid:
+      type: object
+      example:
+        statusCode: 400
+        message: Missing patientId
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Missing patientId
+        details:
+          type: string
+    error401ofgetinMedicationRequestmedicationrequestid:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Http Exception
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinMedicationRequestmedicationrequestid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: MedicationRequest not found
+        details:
+          type: string
+          example: No MedicationRequest exists with the given ID
+      example:
+        statusCode: 404
+        message: MedicationRequest not found
+        details: No MedicationRequest exists with the given ID
+    error500ofgetinMedicationRequestmedicationrequestid:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal server error
+        details:
+          type: string
+          example: Server error details
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Auth: []

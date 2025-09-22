@@ -1,0 +1,2897 @@
+openapi: 3.0.0
+info:
+  title: Interoperability APIs (FHIR++)
+  version: latest
+  description: FHIR (Fast Healthcare Interoperability Resources, prounced as 
+    Fire) is a standard for exchanging healthcare information electronically. It
+    is designed to be a modern, flexible, and web-based alternative to older, 
+    more cumbersome standards like HL7 v2. FHIR uses a RESTful API specification
+    to define how to interact with Resources - this means it uses standard HTTP 
+    verbs (GET, POST, PUT, DELETE). Resources are the fundamental units of data 
+    in FHIR; they can represent anything from patient demographics to clinical 
+    observations to medications.
+servers:
+  - url: https://xchange-sandbox.xcaliberapis.com
+  - url: https://your.api.server
+tags:
+  - name: Observation
+    description: FHIR Observation resource operations
+paths:
+  /api/v2/Observation:
+    get:
+      tags:
+        - Observation
+        - Category-> laboratory
+        - Category-> Exam
+      summary: Get a list of Observations
+      operationId: getAthenaObservationsV2
+      parameters:
+        - &id001
+          name: x-source-id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Source system identifier.
+        - &id002
+          name: x-interaction-mode
+          in: header
+          required: true
+          schema:
+            type: boolean
+          description: Interaction mode flag (true/false).
+        - name: based-on
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: based-on'
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: category'
+        - name: code-value-concept
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: code-value-concept'
+        - name: code-value-date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: 'Filter: code-value-date'
+        - name: code-value-quantity
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: code-value-quantity'
+        - name: code-value-string
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: code-value-string'
+        - name: combo-code
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: combo-code'
+        - name: combo-code-value-concept
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: combo-code-value-concept'
+        - name: combo-code-value-quantity
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: combo-code-value-quantity'
+        - name: combo-data-absent-reason
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: combo-data-absent-reason'
+        - name: combo-value-concept
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: combo-value-concept'
+        - name: combo-value-quantity
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: combo-value-quantity'
+        - name: component-code
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: component-code'
+        - name: component-code-value-concept
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: component-code-value-concept'
+        - name: component-code-value-quantity
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: component-code-value-quantity'
+        - name: component-data-absent-reason
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: component-data-absent-reason'
+        - name: component-value-concept
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: component-value-concept'
+        - name: component-value-quantity
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: component-value-quantity'
+        - name: data-absent-reason
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: data-absent-reason'
+        - name: derived-from
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: 'Filter: derived-from'
+        - name: device
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: device'
+        - name: focus
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: focus'
+        - name: has-member
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 'Filter: has-member'
+        - name: method
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: method'
+        - name: part-of
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: part-of'
+        - name: performer
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: performer'
+        - name: specimen
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: specimen'
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: status'
+        - name: subject
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: subject'
+        - name: value-concept
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: value-concept'
+        - name: value-date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: 'Filter: value-date'
+        - name: value-quantity
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: value-quantity'
+        - name: value-string
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter: value-string'
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+        - name: patient
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                context:
+                  requestId: abc123
+                  source: ATHENA
+                  quorum: true
+                  notify: true
+                data:
+                  resourceType: Observation
+                  id: '12345'
+                  status: final
+                  category:
+                    - coding:
+                        - system: 
+                            http://terminology.hl7.org/CodeSystem/observation-category
+                          code: vital-signs
+                          display: Vital Signs
+                        - system: 
+                            http://terminology.hl7.org/CodeSystem/observation-category
+                          code: exam
+                          display: Exam
+                  code:
+                    coding:
+                      - system: http://snomed.info/sct
+                        code: '425044008'
+                        display: Physical exam section (record artifact)
+                      - system: http://loinc.org
+                        code: 12345-6
+                        display: Heart rate
+                    text: Physical exam section
+                  subject:
+                    reference: Patient/67890
+                    id: '67890'
+                  encounter:
+                    reference: Encounter/encounter123
+                  issued: '2023-10-01T12:00:00Z'
+                  valueQuantity:
+                    value: 72
+                    unit: beats/minute
+                  dataAbsentReason:
+                    coding:
+                      - system: 
+                          http://terminology.hl7.org/CodeSystem/data-absent-reason
+                        code: not performed
+                  note:
+                    - text: Summary of physical exam findings.
+                  extension:
+                    - url: http://example.org/fhir/Observation/clinicalelementid
+                      valueString: clinical-element-123
+                    - url: http://example.org/fhir/Observation/createdby
+                      valueString: creator-username
+                    - url: http://example.org/fhir/Observation/createddate
+                      valueString: '2023-10-01T12:00:00Z'
+                    - url: http://example.org/fhir/Observation/isgraphable
+                      valueBoolean: true
+                    - url: http://example.org/fhir/Observation/lastmodifiedby
+                      valueString: modifier-username
+                    - url: http://example.org/fhir/Observation/lastmodifieddate
+                      valueString: '2023-10-02T14:00:00Z'
+                    - url: http://example.org/fhir/Observation/readingid
+                      valueInteger: 789
+                    - url: http://example.org/fhir/Observation/source
+                      valueString: source-system
+                    - url: http://example.org/fhir/Observation/sourceid
+                      valueInteger: 456
+                    - url: 
+                        http://xcaliber-fhir/structureDefinition/clinical-Element-Id
+                      valueCodeableConcept:
+                        coding:
+                          - system: http://loinc.org
+                            code: 1234-5
+                            display: Example Code
+                        text: Example Codeable Concept
+                    - url: 
+                        http://example.org/fhir/Observation/sectionnotelastmodifiedby
+                      valueString: Dr. Smith
+                    - url: 
+                        http://example.org/fhir/Observation/sectionnotelastmodifieddatetime
+                      valueDateTime: '2023-10-01T10:00:00Z'
+                    - url: http://example.org/fhir/Observation/lastmodifiedby
+                      valueString: Dr. Jones
+                    - url: 
+                        http://example.org/fhir/Observation/lastmodifieddatetime
+                      valueDateTime: '2023-10-01T11:00:00Z'
+                    - url: 
+                        http://example.org/fhir/Observation/physicalexam_template
+                      valueString: '{"exam":"Normal"}'
+                    - url: 
+                        http://example.org/fhir/StructureDefinition/physicalexam-templatedata
+                      valueString: '{"key":"value"}'
+                    - url: 
+                        http://example.org/fhir/StructureDefinition/replace-section-note
+                      valueBoolean: true
+                    - url: 
+                        http://example.org/fhir/StructureDefinition/section-note
+                      valueBoolean: false
+                  component:
+                    - code:
+                        coding:
+                          - system: http://loinc.org
+                            code: 85354-9
+                            display: BLOOD PRESSURE
+                      extension:
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/is-Graphable
+                          valueBoolean: true
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/last-Modified-By
+                          valueString: Dr. John Doe
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/last-Modified-Date
+                          valueString: '2023-10-01T12:00:00Z'
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/reading-Id
+                          valueInteger: 12345
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/source
+                          valueString: Electronic Health Record
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/source-Id
+                          valueInteger: 67890
+                        - url: 
+                            http://example.org/fhir/StructureDefinition/clinical-Element-Id
+                          valueString: BP123
+                      id: vital123
+                    - code:
+                        coding:
+                          - system: http://loinc.org
+                            code: 1234-5
+                            display: Example Code
+                      valueQuantity:
+                        value: 98.6
+                        unit: degrees
+                        system: http://unitsofmeasure.org
+                        code: deg
+                  referenceRange:
+                    - high:
+                        value: 120
+                      low:
+                        value: 80
+                      extension:
+                        - url: http://example.org/fhir/Observation/highordinal
+                          valueString: High Ordinal Example
+                        - url: http://example.org/fhir/Observation/lowordinal
+                          valueString: Low Ordinal Example
+                        - url: http://example.org/fhir/Observation/prefix
+                          valueString: Prefix Example
+                  method:
+                    coding:
+                      - system: http://loinc.org
+                        code: method-code
+                        display: Method Display
+                    text: Method Text
+                  bodySite:
+                    coding:
+                      - system: http://snomed.info/sct
+                        code: body-site-code
+                        display: Body Site Display
+                    text: Body Site Text
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinObservation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinObservation'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinObservation'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinObservation'
+    post:
+      tags:
+        - Observation
+      summary: Create Observation
+      operationId: createAthenaObservation
+      parameters:
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example: &id003
+              context:
+                requestId: abc123
+                source: ATHENA
+                quorum: true
+                notify: true
+                departmentId: '150'
+              data:
+                resourceType: Observation
+                code:
+                  coding:
+                    - system: http://loinc.org
+                      code: 12345-6
+                      display: Blood Pressure
+                valueQuantity:
+                  value: 120
+                  unit: mmHg
+                issued: '2023-10-01T12:00:00Z'
+                extension:
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/clinical-element-id
+                    valueString: VITALS.BP
+                  - url: http://example.org/fhir/StructureDefinition/created-by
+                    valueString: Nurse A
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/created-date
+                    valueString: '2023-10-01T10:00:00Z'
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/is-graphable
+                    valueBoolean: true
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/last-modified-by
+                    valueString: Doctor B
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/modified-date
+                    valueString: '2023-10-01T11:00:00Z'
+                  - url: http://example.org/fhir/StructureDefinition/reading-id
+                    valueInteger: 123
+                  - url: http://example.org/fhir/StructureDefinition/source
+                    valueString: DEVICEGENERATED
+                  - url: http://example.org/fhir/StructureDefinition/source-id
+                    valueInteger: 456
+      responses:
+        '201':
+          description: Observation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response201ofpostinObservation'
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofpostinObservation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofpostinObservation'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofpostinObservation'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofpostinObservation'
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                resourceType: Observation
+                code:
+                  coding:
+                    - system: http://loinc.org
+                      code: 12345-6
+                      display: Blood Pressure
+                valueQuantity:
+                  value: 120
+                  unit: mmHg
+                issued: '2023-10-01T12:00:00Z'
+                extension:
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/clinical-element-id
+                    valueString: VITALS.BP
+                  - url: http://example.org/fhir/StructureDefinition/created-by
+                    valueString: Nurse A
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/created-date
+                    valueString: '2023-10-01T10:00:00Z'
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/is-graphable
+                    valueBoolean: true
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/last-modified-by
+                    valueString: Doctor B
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/modified-date
+                    valueString: '2023-10-01T11:00:00Z'
+                  - url: http://example.org/fhir/StructureDefinition/reading-id
+                    valueInteger: 123
+                  - url: http://example.org/fhir/StructureDefinition/source
+                    valueString: DEVICEGENERATED
+                  - url: http://example.org/fhir/StructureDefinition/source-id
+                    valueInteger: 456
+  /api/v2/Observation/{observation-id}:
+    get:
+      tags:
+        - Observation
+      summary: Get Observation by ID
+      operationId: getAthenaObservationV2
+      parameters:
+        - name: observation-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the Observation resource to retrieve.
+            Required for fetching a specific Observation by ID."
+
+
+            Alternatively, an even more concise version:
+
+
+            "ID of the Observation resource to retrieve."'
+        - *id001
+        - *id002
+        - name: departmentId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Department identifier.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response200ofgetinObservationobservationid'
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofgetinObservationobservationid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofgetinObservationobservationid'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofgetinObservationobservationid'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofgetinObservationobservationid'
+    put:
+      tags:
+        - Observation
+        - Category-> Exam
+      summary: Update Observation
+      operationId: updateAthenaObservations
+      parameters:
+        - name: observation-id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: '"Unique identifier of the Observation resource to update.
+            Required for updating an existing Observation."'
+        - *id001
+        - *id002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example: *id003
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                resourceType: Observation
+                code:
+                  coding:
+                    - system: http://loinc.org
+                      code: 12345-6
+                      display: Blood Pressure
+                valueQuantity:
+                  value: 120
+                  unit: mmHg
+                issued: '2023-10-01T12:00:00Z'
+                extension:
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/clinical-element-id
+                    valueString: VITALS.BP
+                  - url: http://example.org/fhir/StructureDefinition/created-by
+                    valueString: Nurse A
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/created-date
+                    valueString: '2023-10-01T10:00:00Z'
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/is-graphable
+                    valueBoolean: true
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/last-modified-by
+                    valueString: Doctor B
+                  - url: 
+                      http://example.org/fhir/StructureDefinition/modified-date
+                    valueString: '2023-10-01T11:00:00Z'
+                  - url: http://example.org/fhir/StructureDefinition/reading-id
+                    valueInteger: 123
+                  - url: http://example.org/fhir/StructureDefinition/source
+                    valueString: DEVICEGENERATED
+                  - url: http://example.org/fhir/StructureDefinition/source-id
+                    valueInteger: 456
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error400ofputinObservationcategoryexamobservationid'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error401ofputinObservationcategoryexamobservationid'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error404ofputinObservationcategoryexamobservationid'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error500ofputinObservationcategoryexamobservationid'
+components:
+  schemas:
+    ExtractedSchema1085:
+      type: object
+      required:
+        - context
+        - data
+      properties:
+        context:
+          type: object
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+          properties:
+            requestId:
+              type: string
+              example: abc123
+              description: Unique request ID for traceability and audit.
+            source:
+              type: string
+              example: ATHENA
+              description: Source system of the request (e.g., 'ATHENA').
+            quorum:
+              type: boolean
+              example: true
+              description: Indicates quorum for processing.
+            notify:
+              type: boolean
+              example: true
+              description: If true, downstream systems should be notified.
+          description: '"Additional context for the observation, such as location
+            or environment details. See schema for supported properties."'
+        data:
+          type: object
+          required:
+            - resourceType
+            - meta
+            - id
+            - status
+            - subject
+            - effectiveDateTime
+            - issued
+            - performer
+            - category
+            - code
+            - extension
+          properties:
+            resourceType:
+              type: string
+              example: Observation
+              description: FHIR resource type, always 'Observation'.
+            meta:
+              type: object
+              required:
+                - versionId
+              properties:
+                versionId:
+                  type: string
+                  example: 4.0.1
+                  description: Version identifier for the resource.
+            id:
+              type: string
+              example: exampleObservation
+              description: Unique resource identifier for the observation.
+            status:
+              type: string
+              example: final
+              description: Status of the observation.
+            subject:
+              type: object
+              required:
+                - reference
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+                  description: Reference to the patient resource.
+            effectiveDateTime:
+              type: string
+              example: '2022-03-01T12:00:00Z'
+              description: Date and time the observation was effective.
+            issued:
+              type: string
+              example: '2022-03-01T12:00:00Z'
+              description: Date and time the observation was issued.
+            performer:
+              type: array
+              items:
+                type: object
+                required:
+                  - reference
+                properties:
+                  reference:
+                    type: string
+                    example: Practitioner/example
+                    description: Reference to the performer of the observation.
+            category:
+              type: array
+              items:
+                type: object
+                required:
+                  - coding
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - system
+                        - code
+                        - display
+                      properties:
+                        system:
+                          type: string
+                          example: 
+                            http://terminology.hl7.org/CodeSystem/observation-category
+                        code:
+                          type: string
+                          example: OBS
+                        display:
+                          type: string
+                          example: Observation
+            code:
+              type: object
+              required:
+                - coding
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - system
+                      - code
+                      - display
+                    properties:
+                      system:
+                        type: string
+                        example: http://loinc.org
+                      code:
+                        type: string
+                        example: 718-7
+                      display:
+                        type: string
+                        example: Hemoglobin
+            valueCodeableConcept:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: Hemoglobin A1c
+            valueQuantity:
+              type: object
+              properties:
+                value:
+                  type: number
+                  example: 13.5
+                unit:
+                  type: string
+                  example: g/dL
+            interpretation:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                        example: 
+                          http://terminology.hl7.org/CodeSystem/observation-interpretation
+                      code:
+                        type: string
+                        example: N
+                      display:
+                        type: string
+                        example: Normal
+            effectiveTime:
+              type: object
+              properties:
+                period:
+                  type: object
+                  properties:
+                    start:
+                      type: string
+                      example: '2022-03-01T12:00:00Z'
+                    end:
+                      type: string
+                      example: '2022-03-01T12:00:00Z'
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    example: 
+                      http://xcaliber-fhir/structureDefinition/clinical-element-id
+                  valueString:
+                    type: string
+                    example: BP_SYS
+                  valueBoolean:
+                    type: boolean
+                    example: true
+                  valueInteger:
+                    type: integer
+                    example: 10045
+                  valueDateTime:
+                    type: string
+                    example: '2024-06-01T10:00:00Z'
+          description: '**data**: The observation data to be created, containing key-value
+            pairs of observation attributes. See schema for required and optional
+            fields.'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Observation
+          meta:
+            versionId: 4.0.1
+          id: exampleObservation
+          status: final
+          subject:
+            reference: Patient/example
+          effectiveDateTime: '2022-03-01T12:00:00Z'
+          issued: '2022-03-01T12:00:00Z'
+          performer:
+            - reference: Practitioner/example
+          category:
+            - coding:
+                - system: 
+                    http://terminology.hl7.org/CodeSystem/observation-category
+                  code: OBS
+                  display: Observation
+          code:
+            coding:
+              - system: http://loinc.org
+                code: 718-7
+                display: Hemoglobin
+          valueCodeableConcept:
+            text: Hemoglobin A1c
+          valueQuantity:
+            value: 13.5
+            unit: g/dL
+          interpretation:
+            coding:
+              - system: 
+                  http://terminology.hl7.org/CodeSystem/observation-interpretation
+                code: N
+                display: Normal
+          effectiveTime:
+            period:
+              start: '2022-03-01T12:00:00Z'
+              end: '2022-03-01T12:00:00Z'
+          extension:
+            - url: http://xcaliber-fhir/structureDefinition/clinical-element-id
+              valueString: BP_SYS
+            - url: http://xcaliber-fhir/structureDefinition/created-by
+              valueString: Dr. Smith
+            - url: http://xcaliber-fhir/structureDefinition/created-date
+              valueString: '2024-05-01T08:00:00Z'
+            - url: http://xcaliber-fhir/structureDefinition/is-graphable
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/last-modified-by
+              valueString: Nurse Allen
+            - url: http://xcaliber-fhir/structureDefinition/modified-date
+              valueString: '2024-05-02T08:00:00Z'
+            - url: http://xcaliber-fhir/structureDefinition/reading-id
+              valueInteger: 10045
+            - url: http://xcaliber-fhir/structureDefinition/source
+              valueString: DeviceX
+            - url: http://xcaliber-fhir/structureDefinition/source-id
+              valueInteger: 302
+            - url: http://xcaliber-fhir/structureDefinition/high-ordinal
+              valueString: 90th
+            - url: http://xcaliber-fhir/structureDefinition/low-ordinal
+              valueString: 10th
+            - url: http://xcaliber-fhir/structureDefinition/prefix
+              valueString: BP
+            - url: http://xcaliber-fhir/structureDefinition/section-note
+              valueBoolean: true
+            - url: 
+                http://xcaliber-fhir/structureDefinition/section-note-last-modified-by
+              valueString: Dr. Adams
+            - url: 
+                http://xcaliber-fhir/structureDefinition/section-note-last-modified-datetime
+              valueDateTime: '2024-06-01T10:00:00Z'
+            - url: 
+                http://xcaliber-fhir/structureDefinition/physicalexam-template
+              valueString: '{"heart":"normal","lungs":"clear"}'
+            - url: 
+                http://xcaliber-fhir/structureDefinition/physicalexam-templatedata
+              valueString: '{"data":"custom layout data"}'
+            - url: http://xcaliber-fhir/structureDefinition/replace-section-note
+              valueBoolean: false
+    ExtractedSchema1102:
+      type: object
+      required:
+        - context
+        - data
+      properties:
+        context:
+          type: object
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+          properties:
+            requestId:
+              type: string
+              example: abc123
+              description: Unique request ID for traceability and audit.
+            source:
+              type: string
+              example: ATHENA
+              description: Source system of the request (e.g., 'ATHENA').
+            quorum:
+              type: boolean
+              example: true
+              description: Indicates quorum for processing.
+            notify:
+              type: boolean
+              example: true
+              description: If true, downstream systems should be notified.
+          description: '"Context information for the updated observation. Contains
+            relevant details about the update."
+
+
+            Alternatively, if you''d like to make it even more concise:
+
+
+            "Additional context details for the updated observation."'
+        data:
+          type: object
+          required:
+            - resourceType
+            - meta
+            - id
+            - status
+            - subject
+            - effectiveDateTime
+            - issued
+            - performer
+            - category
+            - code
+            - extension
+          properties:
+            resourceType:
+              type: string
+              example: Observation
+              description: FHIR resource type, always 'Observation'.
+            meta:
+              type: object
+              required:
+                - versionId
+              properties:
+                versionId:
+                  type: string
+                  example: 4.0.1
+                  description: Version identifier for the resource.
+            id:
+              type: string
+              example: exampleObservation
+              description: Unique resource identifier for the observation.
+            status:
+              type: string
+              example: final
+              description: Status of the observation.
+            subject:
+              type: object
+              required:
+                - reference
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+                  description: Reference to the patient resource.
+            effectiveDateTime:
+              type: string
+              example: '2022-03-01T12:00:00Z'
+              description: Date and time the observation was effective.
+            issued:
+              type: string
+              example: '2022-03-01T12:00:00Z'
+              description: Date and time the observation was issued.
+            performer:
+              type: array
+              items:
+                type: object
+                required:
+                  - reference
+                properties:
+                  reference:
+                    type: string
+                    example: Practitioner/example
+                    description: Reference to the performer of the observation.
+            category:
+              type: array
+              items:
+                type: object
+                required:
+                  - coding
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - system
+                        - code
+                        - display
+                      properties:
+                        system:
+                          type: string
+                          example: 
+                            http://terminology.hl7.org/CodeSystem/observation-category
+                        code:
+                          type: string
+                          example: OBS
+                        display:
+                          type: string
+                          example: Observation
+            code:
+              type: object
+              required:
+                - coding
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - system
+                      - code
+                      - display
+                    properties:
+                      system:
+                        type: string
+                        example: http://loinc.org
+                      code:
+                        type: string
+                        example: 718-7
+                      display:
+                        type: string
+                        example: Hemoglobin
+            valueCodeableConcept:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: Hemoglobin A1c
+            valueQuantity:
+              type: object
+              properties:
+                value:
+                  type: number
+                  example: 13.5
+                unit:
+                  type: string
+                  example: g/dL
+            interpretation:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                        example: 
+                          http://terminology.hl7.org/CodeSystem/observation-interpretation
+                      code:
+                        type: string
+                        example: N
+                      display:
+                        type: string
+                        example: Normal
+            effectiveTime:
+              type: object
+              properties:
+                period:
+                  type: object
+                  properties:
+                    start:
+                      type: string
+                      example: '2022-03-01T12:00:00Z'
+                    end:
+                      type: string
+                      example: '2022-03-01T12:00:00Z'
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    example: 
+                      http://xcaliber-fhir/structureDefinition/clinical-element-id
+                  valueString:
+                    type: string
+                    example: BP_SYS
+                  valueBoolean:
+                    type: boolean
+                    example: true
+                  valueInteger:
+                    type: integer
+                    example: 10045
+                  valueDateTime:
+                    type: string
+                    example: '2024-06-01T10:00:00Z'
+          description: '"Updated observation data. Provide the new values for the
+            observation fields."'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Observation
+          meta:
+            versionId: 4.0.1
+          id: exampleObservation
+          status: final
+          subject:
+            reference: Patient/example
+          effectiveDateTime: '2022-03-01T12:00:00Z'
+          issued: '2022-03-01T12:00:00Z'
+          performer:
+            - reference: Practitioner/example
+          category:
+            - coding:
+                - system: 
+                    http://terminology.hl7.org/CodeSystem/observation-category
+                  code: OBS
+                  display: Observation
+          code:
+            coding:
+              - system: http://loinc.org
+                code: 718-7
+                display: Hemoglobin
+          valueCodeableConcept:
+            text: Hemoglobin A1c
+          valueQuantity:
+            value: 13.5
+            unit: g/dL
+          interpretation:
+            coding:
+              - system: 
+                  http://terminology.hl7.org/CodeSystem/observation-interpretation
+                code: N
+                display: Normal
+          effectiveTime:
+            period:
+              start: '2022-03-01T12:00:00Z'
+              end: '2022-03-01T12:00:00Z'
+          extension:
+            - url: http://xcaliber-fhir/structureDefinition/clinical-element-id
+              valueString: BP_SYS
+            - url: http://xcaliber-fhir/structureDefinition/created-by
+              valueString: Dr. Smith
+            - url: http://xcaliber-fhir/structureDefinition/created-date
+              valueString: '2024-05-01T08:00:00Z'
+            - url: http://xcaliber-fhir/structureDefinition/is-graphable
+              valueBoolean: true
+            - url: http://xcaliber-fhir/structureDefinition/last-modified-by
+              valueString: Nurse Allen
+            - url: http://xcaliber-fhir/structureDefinition/modified-date
+              valueString: '2024-05-02T08:00:00Z'
+            - url: http://xcaliber-fhir/structureDefinition/reading-id
+              valueInteger: 10045
+            - url: http://xcaliber-fhir/structureDefinition/source
+              valueString: DeviceX
+            - url: http://xcaliber-fhir/structureDefinition/source-id
+              valueInteger: 302
+            - url: http://xcaliber-fhir/structureDefinition/high-ordinal
+              valueString: 90th
+            - url: http://xcaliber-fhir/structureDefinition/low-ordinal
+              valueString: 10th
+            - url: http://xcaliber-fhir/structureDefinition/prefix
+              valueString: BP
+            - url: http://xcaliber-fhir/structureDefinition/section-note
+              valueBoolean: true
+            - url: 
+                http://xcaliber-fhir/structureDefinition/section-note-last-modified-by
+              valueString: Dr. Adams
+            - url: 
+                http://xcaliber-fhir/structureDefinition/section-note-last-modified-datetime
+              valueDateTime: '2024-06-01T10:00:00Z'
+            - url: 
+                http://xcaliber-fhir/structureDefinition/physicalexam-template
+              valueString: '{"heart":"normal","lungs":"clear"}'
+            - url: 
+                http://xcaliber-fhir/structureDefinition/physicalexam-templatedata
+              valueString: '{"data":"custom layout data"}'
+            - url: http://xcaliber-fhir/structureDefinition/replace-section-note
+              valueBoolean: false
+    response200ofgetinObservation:
+      type: object
+      required:
+        - context
+        - data
+      properties:
+        context:
+          type: object
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+          properties:
+            requestId:
+              type: string
+              example: abc123
+              description: Unique request ID for traceability and audit.
+            source:
+              type: string
+              example: ATHENA
+              description: Source system of the request (e.g., 'ATHENA').
+            quorum:
+              type: boolean
+              example: true
+              description: Indicates quorum for processing.
+            notify:
+              type: boolean
+              example: true
+              description: If true, downstream systems should be notified.
+        data:
+          type: object
+          required:
+            - resourceType
+            - meta
+            - id
+            - status
+            - subject
+            - effectiveDateTime
+            - issued
+            - performer
+            - category
+            - code
+            - extension
+          properties:
+            resourceType:
+              type: string
+              example: Observation
+              description: FHIR resource type, always 'Observation'.
+            meta:
+              type: object
+              required:
+                - versionId
+              properties:
+                versionId:
+                  type: string
+                  example: 4.0.1
+                  description: Version identifier for the resource.
+            id:
+              type: string
+              example: exampleObservation
+              description: Unique resource identifier for the observation.
+            status:
+              type: string
+              example: final
+              description: Status of the observation.
+            subject:
+              type: object
+              required:
+                - reference
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+                  description: Reference to the patient resource.
+            effectiveDateTime:
+              type: string
+              example: '2022-03-01T12:00:00Z'
+              description: Date and time the observation was effective.
+            issued:
+              type: string
+              example: '2022-03-01T12:00:00Z'
+              description: Date and time the observation was issued.
+            performer:
+              type: array
+              items:
+                type: object
+                required:
+                  - reference
+                properties:
+                  reference:
+                    type: string
+                    example: Practitioner/example
+                    description: Reference to the performer of the observation.
+            category:
+              type: array
+              items:
+                type: object
+                required:
+                  - coding
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - system
+                        - code
+                        - display
+                      properties:
+                        system:
+                          type: string
+                          example: 
+                            http://terminology.hl7.org/CodeSystem/observation-category
+                        code:
+                          type: string
+                          example: OBS
+                        display:
+                          type: string
+                          example: Observation
+            code:
+              type: object
+              required:
+                - coding
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - system
+                      - code
+                      - display
+                    properties:
+                      system:
+                        type: string
+                        example: http://loinc.org
+                      code:
+                        type: string
+                        example: 718-7
+                      display:
+                        type: string
+                        example: Hemoglobin
+            valueCodeableConcept:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: Hemoglobin A1c
+            valueQuantity:
+              type: object
+              properties:
+                value:
+                  type: number
+                  example: 13.5
+                unit:
+                  type: string
+                  example: g/dL
+            interpretation:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                        example: 
+                          http://terminology.hl7.org/CodeSystem/observation-interpretation
+                      code:
+                        type: string
+                        example: N
+                      display:
+                        type: string
+                        example: Normal
+            effectiveTime:
+              type: object
+              properties:
+                period:
+                  type: object
+                  properties:
+                    start:
+                      type: string
+                      example: '2022-03-01T12:00:00Z'
+                    end:
+                      type: string
+                      example: '2022-03-01T12:00:00Z'
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    example: 
+                      http://xcaliber-fhir/structureDefinition/clinical-element-id
+                  valueString:
+                    type: string
+                    example: BP_SYS
+                  valueBoolean:
+                    type: boolean
+                    example: true
+                  valueInteger:
+                    type: integer
+                    example: 10045
+                  valueDateTime:
+                    type: string
+                    example: '2024-06-01T10:00:00Z'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: Observation
+                meta:
+                  versionId: 4.0.1
+                id: exampleObservation
+                status: final
+                subject:
+                  reference: Patient/example
+                effectiveDateTime: '2022-03-01T12:00:00Z'
+                issued: '2022-03-01T12:00:00Z'
+                performer:
+                  - reference: Practitioner/example
+                category:
+                  - coding:
+                      - system: 
+                          http://terminology.hl7.org/CodeSystem/observation-category
+                        code: OBS
+                        display: Observation
+                code:
+                  coding:
+                    - system: http://loinc.org
+                      code: 718-7
+                      display: Hemoglobin
+                valueCodeableConcept:
+                  text: Hemoglobin A1c
+                valueQuantity:
+                  value: 13.5
+                  unit: g/dL
+                interpretation:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/observation-interpretation
+                      code: N
+                      display: Normal
+                effectiveTime:
+                  period:
+                    start: '2022-03-01T12:00:00Z'
+                    end: '2022-03-01T12:00:00Z'
+                extension:
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/clinical-element-id
+                    valueString: BP_SYS
+                  - url: http://xcaliber-fhir/structureDefinition/created-by
+                    valueString: Dr. Smith
+                  - url: http://xcaliber-fhir/structureDefinition/created-date
+                    valueString: '2024-05-01T08:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/is-graphable
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/last-modified-by
+                    valueString: Nurse Allen
+                  - url: http://xcaliber-fhir/structureDefinition/modified-date
+                    valueString: '2024-05-02T08:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/reading-id
+                    valueInteger: 10045
+                  - url: http://xcaliber-fhir/structureDefinition/source
+                    valueString: DeviceX
+                  - url: http://xcaliber-fhir/structureDefinition/source-id
+                    valueInteger: 302
+                  - url: http://xcaliber-fhir/structureDefinition/high-ordinal
+                    valueString: 90th
+                  - url: http://xcaliber-fhir/structureDefinition/low-ordinal
+                    valueString: 10th
+                  - url: http://xcaliber-fhir/structureDefinition/prefix
+                    valueString: BP
+                  - url: http://xcaliber-fhir/structureDefinition/section-note
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/section-note-last-modified-by
+                    valueString: Dr. Adams
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/section-note-last-modified-datetime
+                    valueDateTime: '2024-06-01T10:00:00Z'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/physicalexam-template
+                    valueString: '{"heart":"normal","lungs":"clear"}'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/physicalexam-templatedata
+                    valueString: '{"data":"custom layout data"}'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/replace-section-note
+                    valueBoolean: false
+    error400ofgetinObservation:
+      type: object
+      required:
+        - statusCode
+        - message
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+          description: HTTP status code (typically 400 for client error)
+        message:
+          type: string
+          example: Missing patientId
+          description: Human-readable error message
+        details:
+          oneOf:
+            - type: string
+            - type: object
+          description: Optional details about the error
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofgetinObservation:
+      type: object
+      required:
+        - success
+        - code
+        - message
+      properties:
+        success:
+          type: boolean
+          example: false
+          description: Indicates the operation was not successful.
+        code:
+          type: integer
+          example: 401
+          description: HTTP error code for unauthorized access.
+        message:
+          type: string
+          example: Http Exception
+          description: Error message for unauthorized access.
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinObservation:
+      type: object
+      required:
+        - statusCode
+        - message
+        - details
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+          description: HTTP status code for "not found" errors.
+        message:
+          type: string
+          example: Observation not found
+          description: A message indicating the observation resource was not 
+            found.
+        details:
+          type: string
+          example: No Observation exists with the given ID.
+          description: Further details about the 404 error.
+      example:
+        statusCode: 404
+        message: Observation not found
+        details: No Observation exists with the given ID.
+    error500ofgetinObservation:
+      type: object
+      required:
+        - statusCode
+        - message
+        - details
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+          description: HTTP status code for server errors.
+        message:
+          type: string
+          example: Internal server error
+          description: Description of the server error.
+        details:
+          type: string
+          example: Server error details
+          description: Additional error details.
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+    response201ofpostinObservation:
+      type: object
+      required:
+        - context
+        - data
+      properties:
+        context:
+          type: object
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+          properties:
+            requestId:
+              type: string
+              example: abc123
+              description: Unique request ID for traceability and audit.
+            source:
+              type: string
+              example: ATHENA
+              description: Source system of the request (e.g., 'ATHENA').
+            quorum:
+              type: boolean
+              example: true
+              description: Indicates quorum for processing.
+            notify:
+              type: boolean
+              example: true
+              description: If true, downstream systems should be notified.
+        data:
+          type: object
+          required:
+            - resourceType
+            - meta
+            - id
+            - status
+            - subject
+            - effectiveDateTime
+            - issued
+            - performer
+            - category
+            - code
+            - extension
+          properties:
+            resourceType:
+              type: string
+              example: Observation
+              description: FHIR resource type, always 'Observation'.
+            meta:
+              type: object
+              required:
+                - versionId
+              properties:
+                versionId:
+                  type: string
+                  example: 4.0.1
+                  description: Version identifier for the resource.
+            id:
+              type: string
+              example: exampleObservation
+              description: Unique resource identifier for the observation.
+            status:
+              type: string
+              example: final
+              description: Status of the observation.
+            subject:
+              type: object
+              required:
+                - reference
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+                  description: Reference to the patient resource.
+            effectiveDateTime:
+              type: string
+              example: '2022-03-01T12:00:00Z'
+              description: Date and time the observation was effective.
+            issued:
+              type: string
+              example: '2022-03-01T12:00:00Z'
+              description: Date and time the observation was issued.
+            performer:
+              type: array
+              items:
+                type: object
+                required:
+                  - reference
+                properties:
+                  reference:
+                    type: string
+                    example: Practitioner/example
+                    description: Reference to the performer of the observation.
+            category:
+              type: array
+              items:
+                type: object
+                required:
+                  - coding
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - system
+                        - code
+                        - display
+                      properties:
+                        system:
+                          type: string
+                          example: 
+                            http://terminology.hl7.org/CodeSystem/observation-category
+                        code:
+                          type: string
+                          example: OBS
+                        display:
+                          type: string
+                          example: Observation
+            code:
+              type: object
+              required:
+                - coding
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - system
+                      - code
+                      - display
+                    properties:
+                      system:
+                        type: string
+                        example: http://loinc.org
+                      code:
+                        type: string
+                        example: 718-7
+                      display:
+                        type: string
+                        example: Hemoglobin
+            valueCodeableConcept:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: Hemoglobin A1c
+            valueQuantity:
+              type: object
+              properties:
+                value:
+                  type: number
+                  example: 13.5
+                unit:
+                  type: string
+                  example: g/dL
+            interpretation:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                        example: 
+                          http://terminology.hl7.org/CodeSystem/observation-interpretation
+                      code:
+                        type: string
+                        example: N
+                      display:
+                        type: string
+                        example: Normal
+            effectiveTime:
+              type: object
+              properties:
+                period:
+                  type: object
+                  properties:
+                    start:
+                      type: string
+                      example: '2022-03-01T12:00:00Z'
+                    end:
+                      type: string
+                      example: '2022-03-01T12:00:00Z'
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    example: 
+                      http://xcaliber-fhir/structureDefinition/clinical-element-id
+                  valueString:
+                    type: string
+                    example: BP_SYS
+                  valueBoolean:
+                    type: boolean
+                    example: true
+                  valueInteger:
+                    type: integer
+                    example: 10045
+                  valueDateTime:
+                    type: string
+                    example: '2024-06-01T10:00:00Z'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: Observation
+                meta:
+                  versionId: 4.0.1
+                id: exampleObservation
+                status: final
+                subject:
+                  reference: Patient/example
+                effectiveDateTime: '2022-03-01T12:00:00Z'
+                issued: '2022-03-01T12:00:00Z'
+                performer:
+                  - reference: Practitioner/example
+                category:
+                  - coding:
+                      - system: 
+                          http://terminology.hl7.org/CodeSystem/observation-category
+                        code: OBS
+                        display: Observation
+                code:
+                  coding:
+                    - system: http://loinc.org
+                      code: 718-7
+                      display: Hemoglobin
+                valueCodeableConcept:
+                  text: Hemoglobin A1c
+                valueQuantity:
+                  value: 13.5
+                  unit: g/dL
+                interpretation:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/observation-interpretation
+                      code: N
+                      display: Normal
+                effectiveTime:
+                  period:
+                    start: '2022-03-01T12:00:00Z'
+                    end: '2022-03-01T12:00:00Z'
+                extension:
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/clinical-element-id
+                    valueString: BP_SYS
+                  - url: http://xcaliber-fhir/structureDefinition/created-by
+                    valueString: Dr. Smith
+                  - url: http://xcaliber-fhir/structureDefinition/created-date
+                    valueString: '2024-05-01T08:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/is-graphable
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/last-modified-by
+                    valueString: Nurse Allen
+                  - url: http://xcaliber-fhir/structureDefinition/modified-date
+                    valueString: '2024-05-02T08:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/reading-id
+                    valueInteger: 10045
+                  - url: http://xcaliber-fhir/structureDefinition/source
+                    valueString: DeviceX
+                  - url: http://xcaliber-fhir/structureDefinition/source-id
+                    valueInteger: 302
+                  - url: http://xcaliber-fhir/structureDefinition/high-ordinal
+                    valueString: 90th
+                  - url: http://xcaliber-fhir/structureDefinition/low-ordinal
+                    valueString: 10th
+                  - url: http://xcaliber-fhir/structureDefinition/prefix
+                    valueString: BP
+                  - url: http://xcaliber-fhir/structureDefinition/section-note
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/section-note-last-modified-by
+                    valueString: Dr. Adams
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/section-note-last-modified-datetime
+                    valueDateTime: '2024-06-01T10:00:00Z'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/physicalexam-template
+                    valueString: '{"heart":"normal","lungs":"clear"}'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/physicalexam-templatedata
+                    valueString: '{"data":"custom layout data"}'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/replace-section-note
+                    valueBoolean: false
+    error400ofpostinObservation:
+      type: object
+      required:
+        - statusCode
+        - message
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+          description: HTTP status code (typically 400 for client error)
+        message:
+          type: string
+          example: Missing patientId
+          description: Human-readable error message
+        details:
+          oneOf:
+            - type: string
+            - type: object
+          description: Optional details about the error
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofpostinObservation:
+      type: object
+      required:
+        - success
+        - code
+        - message
+      properties:
+        success:
+          type: boolean
+          example: false
+          description: Indicates the operation was not successful.
+        code:
+          type: integer
+          example: 401
+          description: HTTP error code for unauthorized access.
+        message:
+          type: string
+          example: Http Exception
+          description: Error message for unauthorized access.
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofpostinObservation:
+      type: object
+      required:
+        - statusCode
+        - message
+        - details
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+          description: HTTP status code for "not found" errors.
+        message:
+          type: string
+          example: Observation not found
+          description: A message indicating the observation resource was not 
+            found.
+        details:
+          type: string
+          example: No Observation exists with the given ID.
+          description: Further details about the 404 error.
+      example:
+        statusCode: 404
+        message: Observation not found
+        details: No Observation exists with the given ID.
+    error500ofpostinObservation:
+      type: object
+      required:
+        - statusCode
+        - message
+        - details
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+          description: HTTP status code for server errors.
+        message:
+          type: string
+          example: Internal server error
+          description: Description of the server error.
+        details:
+          type: string
+          example: Server error details
+          description: Additional error details.
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+    response200ofgetinObservationobservationid:
+      type: object
+      required:
+        - context
+        - data
+      properties:
+        context:
+          type: object
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+          properties:
+            requestId:
+              type: string
+              example: abc123
+              description: Unique request ID for traceability and audit.
+            source:
+              type: string
+              example: ATHENA
+              description: Source system of the request (e.g., 'ATHENA').
+            quorum:
+              type: boolean
+              example: true
+              description: Indicates quorum for processing.
+            notify:
+              type: boolean
+              example: true
+              description: If true, downstream systems should be notified.
+        data:
+          type: object
+          required:
+            - resourceType
+            - meta
+            - id
+            - status
+            - subject
+            - effectiveDateTime
+            - issued
+            - performer
+            - category
+            - code
+            - extension
+          properties:
+            resourceType:
+              type: string
+              example: Observation
+              description: FHIR resource type, always 'Observation'.
+            meta:
+              type: object
+              required:
+                - versionId
+              properties:
+                versionId:
+                  type: string
+                  example: 4.0.1
+                  description: Version identifier for the resource.
+            id:
+              type: string
+              example: exampleObservation
+              description: Unique resource identifier for the observation.
+            status:
+              type: string
+              example: final
+              description: Status of the observation.
+            subject:
+              type: object
+              required:
+                - reference
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+                  description: Reference to the patient resource.
+            effectiveDateTime:
+              type: string
+              example: '2022-03-01T12:00:00Z'
+              description: Date and time the observation was effective.
+            issued:
+              type: string
+              example: '2022-03-01T12:00:00Z'
+              description: Date and time the observation was issued.
+            performer:
+              type: array
+              items:
+                type: object
+                required:
+                  - reference
+                properties:
+                  reference:
+                    type: string
+                    example: Practitioner/example
+                    description: Reference to the performer of the observation.
+            category:
+              type: array
+              items:
+                type: object
+                required:
+                  - coding
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - system
+                        - code
+                        - display
+                      properties:
+                        system:
+                          type: string
+                          example: 
+                            http://terminology.hl7.org/CodeSystem/observation-category
+                        code:
+                          type: string
+                          example: OBS
+                        display:
+                          type: string
+                          example: Observation
+            code:
+              type: object
+              required:
+                - coding
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - system
+                      - code
+                      - display
+                    properties:
+                      system:
+                        type: string
+                        example: http://loinc.org
+                      code:
+                        type: string
+                        example: 718-7
+                      display:
+                        type: string
+                        example: Hemoglobin
+            valueCodeableConcept:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: Hemoglobin A1c
+            valueQuantity:
+              type: object
+              properties:
+                value:
+                  type: number
+                  example: 13.5
+                unit:
+                  type: string
+                  example: g/dL
+            interpretation:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                        example: 
+                          http://terminology.hl7.org/CodeSystem/observation-interpretation
+                      code:
+                        type: string
+                        example: N
+                      display:
+                        type: string
+                        example: Normal
+            effectiveTime:
+              type: object
+              properties:
+                period:
+                  type: object
+                  properties:
+                    start:
+                      type: string
+                      example: '2022-03-01T12:00:00Z'
+                    end:
+                      type: string
+                      example: '2022-03-01T12:00:00Z'
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    example: 
+                      http://xcaliber-fhir/structureDefinition/clinical-element-id
+                  valueString:
+                    type: string
+                    example: BP_SYS
+                  valueBoolean:
+                    type: boolean
+                    example: true
+                  valueInteger:
+                    type: integer
+                    example: 10045
+                  valueDateTime:
+                    type: string
+                    example: '2024-06-01T10:00:00Z'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: Observation
+                meta:
+                  versionId: 4.0.1
+                id: exampleObservation
+                status: final
+                subject:
+                  reference: Patient/example
+                effectiveDateTime: '2022-03-01T12:00:00Z'
+                issued: '2022-03-01T12:00:00Z'
+                performer:
+                  - reference: Practitioner/example
+                category:
+                  - coding:
+                      - system: 
+                          http://terminology.hl7.org/CodeSystem/observation-category
+                        code: OBS
+                        display: Observation
+                code:
+                  coding:
+                    - system: http://loinc.org
+                      code: 718-7
+                      display: Hemoglobin
+                valueCodeableConcept:
+                  text: Hemoglobin A1c
+                valueQuantity:
+                  value: 13.5
+                  unit: g/dL
+                interpretation:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/observation-interpretation
+                      code: N
+                      display: Normal
+                effectiveTime:
+                  period:
+                    start: '2022-03-01T12:00:00Z'
+                    end: '2022-03-01T12:00:00Z'
+                extension:
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/clinical-element-id
+                    valueString: BP_SYS
+                  - url: http://xcaliber-fhir/structureDefinition/created-by
+                    valueString: Dr. Smith
+                  - url: http://xcaliber-fhir/structureDefinition/created-date
+                    valueString: '2024-05-01T08:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/is-graphable
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/last-modified-by
+                    valueString: Nurse Allen
+                  - url: http://xcaliber-fhir/structureDefinition/modified-date
+                    valueString: '2024-05-02T08:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/reading-id
+                    valueInteger: 10045
+                  - url: http://xcaliber-fhir/structureDefinition/source
+                    valueString: DeviceX
+                  - url: http://xcaliber-fhir/structureDefinition/source-id
+                    valueInteger: 302
+                  - url: http://xcaliber-fhir/structureDefinition/high-ordinal
+                    valueString: 90th
+                  - url: http://xcaliber-fhir/structureDefinition/low-ordinal
+                    valueString: 10th
+                  - url: http://xcaliber-fhir/structureDefinition/prefix
+                    valueString: BP
+                  - url: http://xcaliber-fhir/structureDefinition/section-note
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/section-note-last-modified-by
+                    valueString: Dr. Adams
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/section-note-last-modified-datetime
+                    valueDateTime: '2024-06-01T10:00:00Z'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/physicalexam-template
+                    valueString: '{"heart":"normal","lungs":"clear"}'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/physicalexam-templatedata
+                    valueString: '{"data":"custom layout data"}'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/replace-section-note
+                    valueBoolean: false
+    error400ofgetinObservationobservationid:
+      type: object
+      required:
+        - statusCode
+        - message
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+          description: HTTP status code (typically 400 for client error)
+        message:
+          type: string
+          example: Missing patientId
+          description: Human-readable error message
+        details:
+          oneOf:
+            - type: string
+            - type: object
+          description: Optional details about the error
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofgetinObservationobservationid:
+      type: object
+      required:
+        - success
+        - code
+        - message
+      properties:
+        success:
+          type: boolean
+          example: false
+          description: Indicates the operation was not successful.
+        code:
+          type: integer
+          example: 401
+          description: HTTP error code for unauthorized access.
+        message:
+          type: string
+          example: Http Exception
+          description: Error message for unauthorized access.
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofgetinObservationobservationid:
+      type: object
+      required:
+        - statusCode
+        - message
+        - details
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+          description: HTTP status code for "not found" errors.
+        message:
+          type: string
+          example: Observation not found
+          description: A message indicating the observation resource was not 
+            found.
+        details:
+          type: string
+          example: No Observation exists with the given ID.
+          description: Further details about the 404 error.
+      example:
+        statusCode: 404
+        message: Observation not found
+        details: No Observation exists with the given ID.
+    error500ofgetinObservationobservationid:
+      type: object
+      required:
+        - statusCode
+        - message
+        - details
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+          description: HTTP status code for server errors.
+        message:
+          type: string
+          example: Internal server error
+          description: Description of the server error.
+        details:
+          type: string
+          example: Server error details
+          description: Additional error details.
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+    response200ofputinObservationcategoryexamobservationid:
+      type: object
+      required:
+        - context
+        - data
+      properties:
+        context:
+          type: object
+          required:
+            - requestId
+            - source
+            - quorum
+            - notify
+          properties:
+            requestId:
+              type: string
+              example: abc123
+              description: Unique request ID for traceability and audit.
+            source:
+              type: string
+              example: ATHENA
+              description: Source system of the request (e.g., 'ATHENA').
+            quorum:
+              type: boolean
+              example: true
+              description: Indicates quorum for processing.
+            notify:
+              type: boolean
+              example: true
+              description: If true, downstream systems should be notified.
+        data:
+          type: object
+          required:
+            - resourceType
+            - meta
+            - id
+            - status
+            - subject
+            - effectiveDateTime
+            - issued
+            - performer
+            - category
+            - code
+            - extension
+          properties:
+            resourceType:
+              type: string
+              example: Observation
+              description: FHIR resource type, always 'Observation'.
+            meta:
+              type: object
+              required:
+                - versionId
+              properties:
+                versionId:
+                  type: string
+                  example: 4.0.1
+                  description: Version identifier for the resource.
+            id:
+              type: string
+              example: exampleObservation
+              description: Unique resource identifier for the observation.
+            status:
+              type: string
+              example: final
+              description: Status of the observation.
+            subject:
+              type: object
+              required:
+                - reference
+              properties:
+                reference:
+                  type: string
+                  example: Patient/example
+                  description: Reference to the patient resource.
+            effectiveDateTime:
+              type: string
+              example: '2022-03-01T12:00:00Z'
+              description: Date and time the observation was effective.
+            issued:
+              type: string
+              example: '2022-03-01T12:00:00Z'
+              description: Date and time the observation was issued.
+            performer:
+              type: array
+              items:
+                type: object
+                required:
+                  - reference
+                properties:
+                  reference:
+                    type: string
+                    example: Practitioner/example
+                    description: Reference to the performer of the observation.
+            category:
+              type: array
+              items:
+                type: object
+                required:
+                  - coding
+                properties:
+                  coding:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - system
+                        - code
+                        - display
+                      properties:
+                        system:
+                          type: string
+                          example: 
+                            http://terminology.hl7.org/CodeSystem/observation-category
+                        code:
+                          type: string
+                          example: OBS
+                        display:
+                          type: string
+                          example: Observation
+            code:
+              type: object
+              required:
+                - coding
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - system
+                      - code
+                      - display
+                    properties:
+                      system:
+                        type: string
+                        example: http://loinc.org
+                      code:
+                        type: string
+                        example: 718-7
+                      display:
+                        type: string
+                        example: Hemoglobin
+            valueCodeableConcept:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: Hemoglobin A1c
+            valueQuantity:
+              type: object
+              properties:
+                value:
+                  type: number
+                  example: 13.5
+                unit:
+                  type: string
+                  example: g/dL
+            interpretation:
+              type: object
+              properties:
+                coding:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      system:
+                        type: string
+                        example: 
+                          http://terminology.hl7.org/CodeSystem/observation-interpretation
+                      code:
+                        type: string
+                        example: N
+                      display:
+                        type: string
+                        example: Normal
+            effectiveTime:
+              type: object
+              properties:
+                period:
+                  type: object
+                  properties:
+                    start:
+                      type: string
+                      example: '2022-03-01T12:00:00Z'
+                    end:
+                      type: string
+                      example: '2022-03-01T12:00:00Z'
+            extension:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    example: 
+                      http://xcaliber-fhir/structureDefinition/clinical-element-id
+                  valueString:
+                    type: string
+                    example: BP_SYS
+                  valueBoolean:
+                    type: boolean
+                    example: true
+                  valueInteger:
+                    type: integer
+                    example: 10045
+                  valueDateTime:
+                    type: string
+                    example: '2024-06-01T10:00:00Z'
+      example:
+        context:
+          requestId: abc123
+          source: ATHENA
+          quorum: true
+          notify: true
+        data:
+          resourceType: Bundle
+          type: searchset
+          total: 1
+          entry:
+            - resource:
+                resourceType: Observation
+                meta:
+                  versionId: 4.0.1
+                id: exampleObservation
+                status: final
+                subject:
+                  reference: Patient/example
+                effectiveDateTime: '2022-03-01T12:00:00Z'
+                issued: '2022-03-01T12:00:00Z'
+                performer:
+                  - reference: Practitioner/example
+                category:
+                  - coding:
+                      - system: 
+                          http://terminology.hl7.org/CodeSystem/observation-category
+                        code: OBS
+                        display: Observation
+                code:
+                  coding:
+                    - system: http://loinc.org
+                      code: 718-7
+                      display: Hemoglobin
+                valueCodeableConcept:
+                  text: Hemoglobin A1c
+                valueQuantity:
+                  value: 13.5
+                  unit: g/dL
+                interpretation:
+                  coding:
+                    - system: 
+                        http://terminology.hl7.org/CodeSystem/observation-interpretation
+                      code: N
+                      display: Normal
+                effectiveTime:
+                  period:
+                    start: '2022-03-01T12:00:00Z'
+                    end: '2022-03-01T12:00:00Z'
+                extension:
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/clinical-element-id
+                    valueString: BP_SYS
+                  - url: http://xcaliber-fhir/structureDefinition/created-by
+                    valueString: Dr. Smith
+                  - url: http://xcaliber-fhir/structureDefinition/created-date
+                    valueString: '2024-05-01T08:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/is-graphable
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/last-modified-by
+                    valueString: Nurse Allen
+                  - url: http://xcaliber-fhir/structureDefinition/modified-date
+                    valueString: '2024-05-02T08:00:00Z'
+                  - url: http://xcaliber-fhir/structureDefinition/reading-id
+                    valueInteger: 10045
+                  - url: http://xcaliber-fhir/structureDefinition/source
+                    valueString: DeviceX
+                  - url: http://xcaliber-fhir/structureDefinition/source-id
+                    valueInteger: 302
+                  - url: http://xcaliber-fhir/structureDefinition/high-ordinal
+                    valueString: 90th
+                  - url: http://xcaliber-fhir/structureDefinition/low-ordinal
+                    valueString: 10th
+                  - url: http://xcaliber-fhir/structureDefinition/prefix
+                    valueString: BP
+                  - url: http://xcaliber-fhir/structureDefinition/section-note
+                    valueBoolean: true
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/section-note-last-modified-by
+                    valueString: Dr. Adams
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/section-note-last-modified-datetime
+                    valueDateTime: '2024-06-01T10:00:00Z'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/physicalexam-template
+                    valueString: '{"heart":"normal","lungs":"clear"}'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/physicalexam-templatedata
+                    valueString: '{"data":"custom layout data"}'
+                  - url: 
+                      http://xcaliber-fhir/structureDefinition/replace-section-note
+                    valueBoolean: false
+    error400ofputinObservationcategoryexamobservationid:
+      type: object
+      required:
+        - statusCode
+        - message
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+          description: HTTP status code (typically 400 for client error)
+        message:
+          type: string
+          example: Missing patientId
+          description: Human-readable error message
+        details:
+          oneOf:
+            - type: string
+            - type: object
+          description: Optional details about the error
+      example:
+        statusCode: 400
+        message: Missing patientId
+    error401ofputinObservationcategoryexamobservationid:
+      type: object
+      required:
+        - success
+        - code
+        - message
+      properties:
+        success:
+          type: boolean
+          example: false
+          description: Indicates the operation was not successful.
+        code:
+          type: integer
+          example: 401
+          description: HTTP error code for unauthorized access.
+        message:
+          type: string
+          example: Http Exception
+          description: Error message for unauthorized access.
+      example:
+        success: false
+        code: 401
+        message: Http Exception
+    error404ofputinObservationcategoryexamobservationid:
+      type: object
+      required:
+        - statusCode
+        - message
+        - details
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+          description: HTTP status code for "not found" errors.
+        message:
+          type: string
+          example: Observation not found
+          description: A message indicating the observation resource was not 
+            found.
+        details:
+          type: string
+          example: No Observation exists with the given ID.
+          description: Further details about the 404 error.
+      example:
+        statusCode: 404
+        message: Observation not found
+        details: No Observation exists with the given ID.
+    error500ofputinObservationcategoryexamobservationid:
+      type: object
+      required:
+        - statusCode
+        - message
+        - details
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+          description: HTTP status code for server errors.
+        message:
+          type: string
+          example: Internal server error
+          description: Description of the server error.
+        details:
+          type: string
+          example: Server error details
+          description: Additional error details.
+      example:
+        statusCode: 500
+        message: Internal server error
+        details: Server error details
+  securitySchemes:
+    Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - Auth: []
