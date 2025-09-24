@@ -1,3 +1,4 @@
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -7,4 +8,7 @@ export default defineConfig({
   server: {
     open: "/scheduling/find", // 👈 dev server will open this route
   },
+  build: {
+    outDir: "build" // 👈 change output folder to "build"
+  }
 })
