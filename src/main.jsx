@@ -40,7 +40,9 @@ function VitalsTabWrapper() {
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Routes>
+      <Route path="/" element={<DashboardLayout />} />
       <Route element={<DashboardLayout />}>
+      
         {/* Scheduling */}
         <Route path="/scheduling" element={<AppointmentDashboard />} />
         <Route path="/scheduling/find" element={<FindAppointment />} />
