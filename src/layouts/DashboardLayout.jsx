@@ -37,16 +37,21 @@ export default function DashboardLayout() {
       <div className="flex h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50 overflow-hidden">
         {/* Sidebar */}
         <aside className="w-72 bg-white/95 backdrop-blur-sm shadow-2xl flex flex-col fixed left-0 top-0 bottom-0 border-r border-white/20">
-          {/* Logo Section */}
-          <div className="p-6 border-b border-gray-100/50">
-            <div className="flex items-center gap-3">
-              <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                  XCaliber Health Apps
-                </h1>
+          
+            {/* Logo Section */}
+          <div className="px-4 py-3 border-b border-gray-100/50">
+            <div className="flex items-center justify-center space-x-3 ml-2">
+              <div className="relative">
+                <img
+                  src="/logo.png"
+                  alt="XCaliber Logo"
+                  className="h-14 w-auto drop-shadow-sm"
+                />
               </div>
             </div>
           </div>
+
+
 
           {/* Navigation */}
           <nav className="flex-1 p-4 space-y-1">
