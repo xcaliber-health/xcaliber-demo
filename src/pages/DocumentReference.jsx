@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { FileText, Loader2 } from "lucide-react";
 import EntitiesTable from "./EntitiesTable";
+import samplePDF from "../assets/sample.pdf";
 
 // ✅ Reusable UI Components
 function Card({ children, className = "" }) {
@@ -100,11 +101,19 @@ export default function DocumentReference() {
                       {loading ? (
                         <Loader2 className="animate-spin h-6 w-6 text-indigo-500" />
                       ) : (
+                        // <iframe
+                        //   src={`${import.meta.env.BASE_URL}sample.pdf`}
+                        //   title="PDF Viewer"
+                        //   className="w-full h-full border rounded-lg"
+                        // />
+                        
+
                         <iframe
-                          src={`${import.meta.env.BASE_URL}sample.pdf`}
-                          title="PDF Viewer"
-                          className="w-full h-full border rounded-lg"
+                        src={samplePDF}
+                        title="PDF Viewer"
+                        className="w-full h-full border rounded-lg"
                         />
+
                       )}
                     </>
                   ) : (
