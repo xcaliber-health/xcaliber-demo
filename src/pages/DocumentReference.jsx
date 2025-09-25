@@ -1,6 +1,4 @@
 
-
-
 import React, { useState, useEffect } from "react";
 import { FileText, Loader2 } from "lucide-react";
 import EntitiesTable from "./EntitiesTable";
@@ -63,7 +61,12 @@ export default function DocumentReference() {
       {/* Content */}
       <div className="flex-1 px-4 pb-2 overflow-hidden min-h-0">
         <div className="max-w-6xl mx-auto h-full flex flex-col">
-          <Card className="flex-1 flex flex-col overflow-hidden">
+          <Card className="flex-1 flex flex-col overflow-hidden relative">
+            {/* Patient ID - top right */}
+            <div className="absolute top-4 right-4 text-sm font-medium text-gray-800">
+              Patient ID: <span className="font-bold">4406</span>
+            </div>
+
             <div className="flex-1 flex flex-col p-3 overflow-hidden min-h-0">
               {/* Tab Buttons */}
               <div className="flex-shrink-0 flex gap-2 mb-3">
@@ -98,7 +101,7 @@ export default function DocumentReference() {
                         <Loader2 className="animate-spin h-6 w-6 text-indigo-500" />
                       ) : (
                         <iframe
-                          src="/sample.pdf"
+                          src={`${import.meta.env.BASE_URL}sample.pdf`}
                           title="PDF Viewer"
                           className="w-full h-full border rounded-lg"
                         />
