@@ -5,7 +5,7 @@ import { fhirFetch } from "./fhir";
 export async function fetchAllergies(patientId, sourceId,departmentId) {
   return fhirFetch(`/AllergyIntolerance?patient=${patientId}&departmentId=${departmentId}`, {
     sourceId,
-    headers: { "x-interaction-mode": "true" },
+    headers: { "x-interaction-mode": "false" },
   });
 }
 

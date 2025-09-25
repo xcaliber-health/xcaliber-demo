@@ -10,7 +10,7 @@ export const usePatientTabs = () => {
       label: "Vitals",
       headers: ["Date", "Type", "Value", "Unit"],
       url: (id) => `/Observation?patient=${id}&departmentId=${departmentId}`,
-      headersConfig: { "x-interaction-mode": "true" },
+      headersConfig: { "x-interaction-mode": "false" },
       mapRow: (obs) => {
         if (!obs.component?.length) return [];
         return obs.component.map((comp) => {
@@ -34,7 +34,7 @@ export const usePatientTabs = () => {
         "Reactions",
       ],
       url: (id) => `/AllergyIntolerance?departmentId=${departmentId}&patient=${id}`,
-      headersConfig: { "x-interaction-mode": "true" },
+      headersConfig: { "x-interaction-mode": "false" },
       mapRow: (res) => {
         const row = [];
         const allergy = res.code?.coding?.[0]?.display;
@@ -59,7 +59,7 @@ export const usePatientTabs = () => {
       label: "Immunizations",
       headers: ["Vaccine", "Date", "Status"],
       url: (id) => `/Immunization?patient=${id}&departmentId=${departmentId}`,
-      headersConfig: { "x-interaction-mode": "true" },
+      headersConfig: { "x-interaction-mode": "false" },
       mapRow: (res) => {
         const row = [];
         const vaccine = res.vaccineCode?.coding?.[0]?.display;
@@ -76,7 +76,7 @@ export const usePatientTabs = () => {
       headers: ["Report", "Status", "Date"],
       url: (patientId, category = "lab-results") =>
         `/DiagnosticReport?patient=${patientId}&departmentId=${departmentId}&category=${category}`,
-      headersConfig: { "x-interaction-mode": "true" },
+      headersConfig: { "x-interaction-mode": "false" },
       mapRow: (res) => {
         const report = res.code?.text || res.code?.coding?.[0]?.display;
         const status = res.status;
@@ -92,7 +92,7 @@ export const usePatientTabs = () => {
       label: "Orders",
       headers: ["Code", "Status", "Intent"],
       url: (id) => `/ServiceRequest?patient=${id}&departmentId=${departmentId}&categorycode=lab_order_category_code&encounter=47219`,
-      headersConfig: { "x-interaction-mode": "true" },
+      headersConfig: { "x-interaction-mode": "false" },
       mapRow: (res) => [res.code?.text, res.status, res.intent].filter(Boolean),
     },
 
@@ -101,7 +101,7 @@ export const usePatientTabs = () => {
       headers: ["Type", "Date", "Status"],
       url: (patientId, category = "VisitNotes") =>
         `/DocumentReference?patient=${patientId}&departmentId=${departmentId}&category=${category}`,
-      headersConfig: { "x-interaction-mode": "true" },
+      headersConfig: { "x-interaction-mode": "false" },
       mapRow: (res) =>
         [res.type?.text, res.date && new Date(res.date).toLocaleDateString(), res.status].filter(
           Boolean
@@ -134,7 +134,7 @@ export const usePatientTabs = () => {
       label: "Encounters",
       headers: ["Type", "Status", "Start", "End", "Practitioner", "Last Updated"],
       url: (id) => `/Encounter?patient=${id}&departmentId=${departmentId}`,
-      headersConfig: { "x-interaction-mode": "true" },
+      headersConfig: { "x-interaction-mode": "false" },
       mapRow: (res) => {
         const type = res.class?.display;
         const status =
@@ -166,7 +166,7 @@ export const usePatientTabs = () => {
       label: "Conditions",
       headers: ["Condition", "Clinical Status", "Onset"],
       url: (id) => `/Condition?patient=${id}&departmentId=${departmentId}&category=problem-list-item`,
-      headersConfig: { "x-interaction-mode": "true" },
+      headersConfig: { "x-interaction-mode": "false" },
       mapRow: (res) => {
         const conditionName = res.code?.coding?.[0]?.display;
         const clinicalStatus =
@@ -189,7 +189,7 @@ export const usePatientTabs = () => {
   // ✅ url needs patientId + dept + practitioner
   url: (id) =>
     `/Task?patient=${id}&departmentId=${departmentId}&practitioner=67`,
-  headersConfig: { "x-interaction-mode": "true" },
+  headersConfig: { "x-interaction-mode": "false" },
   mapRow: (res) => [
     res.description || res.code?.coding?.[0]?.display, // fallback if description missing
     res.status,
@@ -197,22 +197,11 @@ export const usePatientTabs = () => {
   ].filter(Boolean),
 },
 
-
-    // familyHistory: {
-    //   label: "Family History",
-    //   headers: ["Relation", "Condition"],
-    //   url: (id) => `/FamilyMemberHistory?patient=${id}&departmentId=${departmentId}`,
-    //   headersConfig: { "x-interaction-mode": "true" },
-    //   mapRow: (res) => [
-    //     res.relationship?.text,
-    //     res.condition?.map((c) => c.code?.text).filter(Boolean).join(", "),
-    //   ].filter(Boolean),
-    // },
     familyHistory: {
   label: "Family History",
   headers: ["Relation", "Condition"],
   url: (id) => `/FamilyMemberHistory?patient=${id}&departmentId=${departmentId}`, 
-  headersConfig: { "x-interaction-mode": "true" },
+  headersConfig: { "x-interaction-mode": "false" },
   mapRow: (res) => [
     res.relationship?.coding?.[0]?.display || "-",
     res.condition
@@ -228,7 +217,7 @@ export const usePatientTabs = () => {
       headers: ["History Type", "Status", "Authored", "Rank"],
       url: (id) =>
         `/QuestionnaireResponse?patient=${id}&departmentId=${departmentId}&category=medical-history`,
-      headersConfig: { "x-interaction-mode": "true" },
+      headersConfig: { "x-interaction-mode": "false" },
       mapRow: (res) => {
         const row = [];
         const historyType = res.extension?.find(
@@ -249,7 +238,7 @@ export const usePatientTabs = () => {
       label: "Medications",
       headers: ["Medication", "Status"],
       url: (id) => `/MedicationStatement?patient=${id}&departmentId=${departmentId}`,
-      headersConfig: { "x-interaction-mode": "true" },
+      headersConfig: { "x-interaction-mode": "false" },
       mapRow: (res) => [res.medicationCodeableConcept?.text, res.status].filter(Boolean),
     },
 
@@ -257,7 +246,7 @@ export const usePatientTabs = () => {
       label: "Procedures",
       headers: ["Procedure", "Status", "Date"],
       url: (id) => `/Procedure?patient=${id}&departmentId=${departmentId}`,
-      headersConfig: { "x-interaction-mode": "true" },
+      headersConfig: { "x-interaction-mode": "false" },
       mapRow: (res) => {
         const row = [];
         const procedure = res.code?.coding?.[0]?.display;
@@ -273,7 +262,7 @@ export const usePatientTabs = () => {
       headers: ["Code", "Created"],
       url: (patientId, code) =>
         `/Basic?patient=${patientId}&departmentId=${departmentId}${code ? `&code=${code}` : ""}`,
-      headersConfig: { "x-interaction-mode": "true" },
+      headersConfig: { "x-interaction-mode": "false" },
       mapRow: (res) => [
         res.code?.text,
         res.created ? new Date(res.created).toLocaleDateString() : null,

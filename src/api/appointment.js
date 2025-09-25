@@ -21,7 +21,7 @@ export async function fetchAppointments({ patientId, providerId, sourceId, depar
 
   const bundle = await fhirFetch(url, {
     sourceId,
-    headers: isAthena ? { "x-interaction-mode": "true" } : undefined,
+    headers: isAthena ? { "x-interaction-mode": "false" } : undefined,
   });
 
   return (bundle.entry || []).map((e) => {
