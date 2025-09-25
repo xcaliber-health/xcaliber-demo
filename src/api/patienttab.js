@@ -89,7 +89,7 @@ export const usePatientTabs = () => {
     },
 
     serviceRequests: {
-      label: "Service Requests",
+      label: "Orders",
       headers: ["Code", "Status", "Intent"],
       url: (id) => `/ServiceRequest?patient=${id}&departmentId=${departmentId}&categorycode=lab_order_category_code&encounter=47219`,
       headersConfig: { "x-interaction-mode": "true" },

@@ -1,7 +1,7 @@
 
 import { Link, Outlet, useLocation } from "react-router-dom"; 
 import { useState, createContext } from "react";
-import { Calendar, Users, FileText, Folder, Database, Settings, ChevronDown } from "lucide-react";
+import { Calendar, Users, FileText, Folder, Database, Settings, ChevronDown ,ClipboardList} from "lucide-react";
 
 export const AppContext = createContext();
 
@@ -30,6 +30,7 @@ export default function DashboardLayout() {
     { to: "/claims", label: "Claims List", icon: FileText },
     { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
     { to: "/fhir-browser", label: "FHIR Browser", icon: Database }, 
+    { to: "/document-reference", label: "Unstructured", icon: ClipboardList },
   ];
 
   return (
