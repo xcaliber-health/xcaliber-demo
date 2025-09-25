@@ -195,7 +195,7 @@ export default function PatientChart() {
         </div>
 
         {/* Tab Content */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto h-[calc(100vh-250px)]">
           {tabLoading[activeTab] ? (
             <div className="flex items-center justify-center py-12 text-gray-500">
               <Loader2 className="h-6 w-6 animate-spin mr-2" />

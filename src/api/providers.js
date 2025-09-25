@@ -25,7 +25,7 @@ export async function fetchProvidersDirectory(sourceId, departmentId, name = "",
       });
     } else {
       // 🔹 Fetch by name
-      let url = `/Practitioner?_count=100&departmentId=${departmentId}`;
+      let url = `/Practitioner?_count=100`;
       if (name) url += `&name=${encodeURIComponent(name)}`;
 
       const bundle = await fhirFetch(url, {
@@ -85,7 +85,7 @@ export async function fetchProviders(sourceId, departmentId, count = 100, search
       }
     } else {
       // 🔹 Default search by name
-      let url = `/Practitioner?_count=${count}&departmentId=${departmentId}`;
+      let url = `/Practitioner?_count=${count}`;
       if (search) {
         url += `&name=${encodeURIComponent(search)}`;
       }

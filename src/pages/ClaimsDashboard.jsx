@@ -149,13 +149,13 @@ export default function ClaimsDashboard() {
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gradient-to-r from-indigo-50 to-purple-50 sticky top-0 z-10 text-gray-600 uppercase text-xs">
                       <tr>
-                        <th className="px-6 py-3">Claim ID</th>
-                        <th className="px-6 py-3">Patient</th>
-                        <th className="px-6 py-3">Provider</th>
-                        <th className="px-6 py-3">Date</th>
-                        <th className="px-6 py-3">Status</th>
-                        <th className="px-6 py-3">Billed</th>
-                        <th className="px-6 py-3">Actions</th>
+                        <th className="px-6 py-3 text-left">Claim ID</th>
+                        <th className="px-6 py-3 text-left">Patient</th>
+                        <th className="px-6 py-3 text-left">Provider</th>
+                        <th className="px-6 py-3 text-left">Date</th>
+                        <th className="px-6 py-3 text-left">Status</th>
+                        <th className="px-6 py-3 text-left">Billed</th>
+                        <th className="px-6 py-3 text-left">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-100">

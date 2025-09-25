@@ -89,7 +89,7 @@ export const usePatientTabs = () => {
     },
 
     serviceRequests: {
-      label: "Service Requests",
+      label: "Orders",
       headers: ["Code", "Status", "Intent"],
       url: (id) => `/ServiceRequest?patient=${id}&departmentId=${departmentId}&categorycode=lab_order_category_code&encounter=47219`,
       headersConfig: { "x-interaction-mode": "true" },
@@ -183,13 +183,6 @@ export const usePatientTabs = () => {
       },
     },
 
-    /*tasks: {
-      label: "Tasks",
-      headers: ["Description", "Status", "Intent"],
-      url: (id) => `/Task?patient=${id}&departmentId=${departmentId}`,
-      headersConfig: { "x-interaction-mode": "true" },
-      mapRow: (res) => [res.description, res.status, res.intent].filter(Boolean),
-    },*/
     tasks: {
   label: "Tasks",
   headers: ["Description", "Status", "Intent"],
@@ -205,16 +198,30 @@ export const usePatientTabs = () => {
 },
 
 
+    // familyHistory: {
+    //   label: "Family History",
+    //   headers: ["Relation", "Condition"],
+    //   url: (id) => `/FamilyMemberHistory?patient=${id}&departmentId=${departmentId}`,
+    //   headersConfig: { "x-interaction-mode": "true" },
+    //   mapRow: (res) => [
+    //     res.relationship?.text,
+    //     res.condition?.map((c) => c.code?.text).filter(Boolean).join(", "),
+    //   ].filter(Boolean),
+    // },
     familyHistory: {
-      label: "Family History",
-      headers: ["Relation", "Condition"],
-      url: (id) => `/FamilyMemberHistory?patient=${id}&departmentId=${departmentId}`,
-      headersConfig: { "x-interaction-mode": "true" },
-      mapRow: (res) => [
-        res.relationship?.text,
-        res.condition?.map((c) => c.code?.text).filter(Boolean).join(", "),
-      ].filter(Boolean),
-    },
+  label: "Family History",
+  headers: ["Relation", "Condition"],
+  url: (id) => `/FamilyMemberHistory?patient=${id}&departmentId=${departmentId}`, 
+  headersConfig: { "x-interaction-mode": "true" },
+  mapRow: (res) => [
+    res.relationship?.coding?.[0]?.display || "-",
+    res.condition
+      ?.map((c) => c.code?.coding?.map((code) => code.display).filter(Boolean).join(", "))
+      .filter(Boolean)
+      .join("; ") || "-",
+  ],
+},
+
 
     questionnaireResponses: {
       label: "Questionnaire Responses",

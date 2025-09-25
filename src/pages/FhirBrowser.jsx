@@ -181,23 +181,24 @@ export default function FhirBrowser() {
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
       <aside className="w-64 border-r overflow-y-auto bg-gray-50 p-4">
-        <h2 className="font-bold mb-3">FHIR Resources</h2>
-        <ul className="space-y-2">
-          {endpoints.map((ep, idx) => (
-            <li
-              key={idx}
-              className={`cursor-pointer p-2 rounded hover:bg-gray-200 ${
-                selected === ep ? "bg-gray-300 font-semibold" : ""
-              }`}
-              onClick={() => handleSelect(ep)}
-            >
-              {toPascalCase(ep.resource)}
-            </li>
-          ))}
-        </ul>
-      </aside>
+  <h2 className="font-bold mb-3 pl-3">FHIR Resources</h2>
+  <ul className="divide-y divide-gray-200">
+    {endpoints.map((ep, idx) => (
+      <li
+        key={idx}
+        className={`cursor-pointer px-3 py-2 rounded flex items-center justify-between hover:bg-gray-200 ${
+          selected === ep ? "bg-gray-300 font-semibold" : ""
+        }`}
+        onClick={() => handleSelect(ep)}
+      >
+        <span className="truncate">{toPascalCase(ep.resource)}</span>
+      </li>
+    ))}
+  </ul>
+</aside>
+
+
       
       {/* Main */}
       <main className="flex-1 p-6 overflow-y-auto">
