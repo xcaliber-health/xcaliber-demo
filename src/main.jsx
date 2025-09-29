@@ -32,6 +32,9 @@ import FhirBrowser from "./pages/FhirBrowser";
 //DocumentReference Page
 import DocumentReference from "./pages/DocumentReference"; 
 
+// Notes App
+import NotesApp from "./pages/NotesApp";
+
 
 // ✅ Wrapper to inject props into VitalsTab
 function VitalsTabWrapper() {
@@ -69,6 +72,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
         {/* ✅ DocumentReference Viewer */}
         <Route path="/document-reference" element={<DocumentReference />} />
+
+        {/* Notes App */}
+        <Route path="/notes" element={<NotesApp />} />
+        <Route path="/notes/:patientId" element={<NotesApp />} />
+        <Route path="/notes/:patientId/:noteId" element={<NotesApp />} />
         
       </Route>
 
