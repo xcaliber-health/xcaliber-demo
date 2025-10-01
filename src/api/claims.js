@@ -9,6 +9,7 @@ export async function fetchClaims(patientId, sourceId) {
       headers: {
         "x-interaction-mode": "false", // ✅ important for Athena passthrough
       },
+       
     }
   );
 

@@ -36,7 +36,7 @@ function Button({ children, className = "", ...props }) {
 }
 
 export default function ClaimsDashboard() {
-  const { ehr, sourceId, departmentId } = useContext(AppContext);
+  const { ehr, sourceId, departmentId, setLatestCurl } = useContext(AppContext);
 
   const patientId =
     ehr === "Athena"
@@ -69,7 +69,7 @@ export default function ClaimsDashboard() {
 
       try {
         if (!debouncedSearch) {
-          const data = await fetchClaims(patientId, sourceId, departmentId);
+          const data = await fetchClaims(patientId, sourceId, departmentId, setLatestCurl);
           if (!cancelled) {
             setClaims(data);
             setCurrentPage(1);
@@ -78,7 +78,7 @@ export default function ClaimsDashboard() {
           return;
         }
 
-        const claim = await fetchClaimById(debouncedSearch, sourceId, patientId, departmentId);
+        const claim = await fetchClaimById(debouncedSearch, sourceId, patientId, departmentId, setLatestCurl);
         if (!cancelled) {
           setClaims(claim ? [claim] : []);
           setCurrentPage(1);

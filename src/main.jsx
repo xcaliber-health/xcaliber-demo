@@ -1,6 +1,6 @@
 import React,{useContext} from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useParams,Navigate } from "react-router-dom";
 import "./index.css";
 import { Toaster } from "react-hot-toast";
 
@@ -29,11 +29,21 @@ import ProviderDirectory from "./pages/ProviderDirectory";
 //Fhir Browser
 import FhirBrowser from "./pages/FhirBrowser";
 
+// Event Browser 
+import EventBrowser from "./pages/EventBrowser";
+
 //DocumentReference Page
 import DocumentReference from "./pages/DocumentReference"; 
 
 // Notes App
 import NotesApp from "./pages/NotesApp";
+
+// Orders Dashboard
+import OrdersDashboard from "./pages/OrdersDashboard";
+import CreateOrder from "./pages/CreateOrder"; 
+
+//Custom Clinical Processing 
+import ClinicalProcessing from "./pages/ClinicalProcessing";
 
 
 // ✅ Wrapper to inject props into VitalsTab
@@ -46,7 +56,7 @@ function VitalsTabWrapper() {
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<DashboardLayout />} />
+      <Route path="/" element={<Navigate to="/scheduling/find" replace />} />
       <Route element={<DashboardLayout />}>
       
         {/* Scheduling */}
@@ -70,6 +80,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         {/*Fhir Browser*/}
         <Route path="/fhir-browser" element={<FhirBrowser />} />
 
+        {/* Event Browser */}
+        <Route path="/event-browser" element={<EventBrowser />} />
+
         {/* ✅ DocumentReference Viewer */}
         <Route path="/document-reference" element={<DocumentReference />} />
 
@@ -77,6 +90,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/notes" element={<NotesApp />} />
         <Route path="/notes/:patientId" element={<NotesApp />} />
         <Route path="/notes/:patientId/:noteId" element={<NotesApp />} />
+
+        {/* Orders Dashboard */}
+        <Route path="/orders" element={<OrdersDashboard />} />
+        <Route path="/orders/create" element={<CreateOrder />} />
+
+        {/* Custom Clinical Processing */}
+        <Route path="/custom-clinical-processing" element={<ClinicalProcessing />} />
         
       </Route>
 
