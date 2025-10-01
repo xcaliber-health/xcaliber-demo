@@ -48,3 +48,5 @@ export async function fhirFetch(
   console.log("📦 fhirFetch JSON:", responseBody);
   return responseBody;
 }
+
+
