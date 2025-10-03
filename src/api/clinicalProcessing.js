@@ -1,31 +1,4 @@
-// // src/api/pdfService.js
-// import axios from "axios";
 
-// const API_URL = "https://blitz.xcaliberapis.com/sample/bff/api/pdf";
-
-// // Upload a clinical PDF and return structured entities
-// export async function uploadClinicalPdf(file) {
-//   if (!file) {
-//     throw new Error("No PDF file provided");
-//   }
-
-//   const formData = new FormData();
-//   formData.append("pdfFile", file);
-
-//   const response = await axios.post(API_URL, formData, {
-//     headers: { "Content-Type": "multipart/form-data" },
-//   });
-
-//   // Entities come as a string, parse it
-//   const entities = JSON.parse(response.data.entities);
-
-//   return {
-//     message: response.data.message,
-//     id: response.data.id,
-//     bytes: response.data.bytes,
-//     entities,
-//   };
-// }
 import axios from "axios";
 
 const API_URL = "https://blitz.xcaliberapis.com/sample/bff/api/pdf";
@@ -38,10 +11,6 @@ export async function uploadClinicalPdf(file) {
 
   const formData = new FormData();
   formData.append("pdfFile", file);
-
-//   const response = await axios.post(API_URL, formData, {
-//     headers: { "Content-Type": "multipart/form-data" },
-//   });
 try {
   const response = await axios.post(API_URL, formData, {
     headers: { "Content-Type": "multipart/form-data" },
