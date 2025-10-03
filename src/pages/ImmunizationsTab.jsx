@@ -25,7 +25,20 @@ export default function ImmunizationsTab({ patientId }) {
       setLoading(true);
       try {
         const data = await fetchImmunizations(patientId, sourceId, departmentId);
-        setImmunizations(data.entry || []);
+        let entries = data.entry || [];
+
+        // Sort by latest date
+        entries.sort((a, b) => {
+          const dateA = a.resource?.occurrenceDate
+            ? new Date(a.resource.occurrenceDate)
+            : new Date(a.resource?.meta?.lastUpdated || 0);
+          const dateB = b.resource?.occurrenceDate
+            ? new Date(b.resource.occurrenceDate)
+            : new Date(b.resource?.meta?.lastUpdated || 0);
+          return dateB - dateA;
+        });
+
+        setImmunizations(entries);
         toast.success("Immunizations loaded successfully");
       } catch (err) {
         console.error("Error fetching immunizations:", err);
@@ -38,13 +51,11 @@ export default function ImmunizationsTab({ patientId }) {
     loadImmunizations();
   }, [patientId, sourceId, departmentId]);
 
-  // ✅ Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ✅ Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!patientId || !departmentId || !sourceId) return;
@@ -141,22 +152,30 @@ export default function ImmunizationsTab({ patientId }) {
         </div>
       ) : immunizations.length > 0 ? (
         <div className="space-y-2">
-          {immunizations.map((i, idx) => (
-            <div
-              key={idx}
-              className="p-3 border rounded-lg shadow-sm bg-white hover:shadow-md transition"
-            >
-              <p className="font-medium text-gray-800">
-                {i.resource?.vaccineCode?.coding?.[0]?.display || "Vaccine"}
-              </p>
-              <p className="text-sm text-gray-600">
-                Date: {i.resource?.occurrenceDate || "-"}
-              </p>
-              <p className="text-sm text-gray-500">
-                Status: {i.resource?.status || "-"}
-              </p>
-            </div>
-          ))}
+          {immunizations.map((i, idx) => {
+            const dateValue = i.resource?.occurrenceDate
+              ? new Date(i.resource.occurrenceDate)
+              : i.resource?.meta?.lastUpdated
+              ? new Date(i.resource.meta.lastUpdated)
+              : null;
+
+            return (
+              <div
+                key={idx}
+                className="p-3 border rounded-lg shadow-sm bg-white hover:shadow-md transition"
+              >
+                <p className="font-medium text-gray-800">
+                  {i.resource?.vaccineCode?.coding?.[0]?.display || "Vaccine"}
+                </p>
+                <p className="text-sm text-gray-600">
+                  Date: {dateValue ? dateValue.toLocaleDateString() : "-"}
+                </p>
+                <p className="text-sm text-gray-500">
+                  Status: {i.resource?.status || "-"}
+                </p>
+              </div>
+            );
+          })}
         </div>
       ) : (
         <p className="text-gray-500">No immunizations found.</p>

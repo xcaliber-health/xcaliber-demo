@@ -475,24 +475,37 @@ function FhirBrowser() {
                         </div>
                       ) : (
                         <div className="space-y-2">
-                          {filteredResourceList.map((res) => (
-                            <div
-                              key={res.id}
-                              className={`
-                                cursor-pointer p-4 rounded-xl transition-all duration-200 border w-full
-                                ${selectedResourceId === res.id
-                                  ? "bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-200 shadow-md"
-                                  : "hover:bg-gray-50 border-gray-200"
-                                }
-                              `}
-                              onClick={() => handleSelectResourceId(res.id)}
-                            >
-                              <div className="font-mono text-sm text-gray-800">{res.id}</div>
-                              {res.resourceType && (
-                                <div className="text-xs text-gray-500 mt-1">{res.resourceType}</div>
-                              )}
-                            </div>
-                          ))}
+                          <table className="min-w-full border border-gray-200 rounded-xl overflow-hidden">
+  <thead className="bg-indigo-100">
+    <tr>
+      <th className="px-16 py-2 text-left text-sm font-semibold text-indigo-600">ID</th>
+      <th className="px-16 py-2 text-left text-sm font-semibold text-indigo-600">Last Updated</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    {filteredResourceList.map((res) => (
+      <tr
+        key={res.id}
+        className={`cursor-pointer transition-colors duration-200 ${
+          selectedResourceId === res.id
+            ? "bg-indigo-50"
+            : "hover:bg-gray-50"
+        }`}
+        onClick={() => handleSelectResourceId(res.id)}
+      >
+        <td className="px-16 py-2 font-mono text-sm text-gray-800">{res.id}</td>
+        <td className="px-16 py-2 text-sm text-gray-600">
+          {res.meta?.lastUpdated
+            ? new Date(res.meta.lastUpdated).toLocaleString()
+            : "—"}
+        </td>
+        
+      </tr>
+    ))}
+  </tbody>
+</table>
+
                         </div>
                       )}
                     </div>
