@@ -102,7 +102,7 @@ export default function EventBrowser() {
   };
 
   const getEventType = (event) =>
-    event.eventType.split(".")[0] || "No Event Type";
+    event.eventType || "No Event Type";
 
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">

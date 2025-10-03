@@ -3,6 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import { uploadClinicalPdf } from "../api/clinicalProcessing";
 import { Loader2, HeartPulse, ChevronDown, ChevronRight, UploadCloud } from "lucide-react";
 import toast from "react-hot-toast";
+const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
+
 
 function Card({ children, className = "" }) {
   return (
@@ -47,7 +49,9 @@ export default function ClinicalProcessing() {
     }
 
     try {
-      const statusResponse = await fetch(`https://blitz.xcaliberapis.com/sample/bff/api/request/${requestId}`);
+      //const statusResponse = await fetch(`https://blitz.xcaliberapis.com/sample/bff/api/request/${requestId}`);
+      const statusResponse = await fetch(`${SAMPLE_BFF_URL}/api/request/${requestId}`);
+
       const statusData = await statusResponse.json();
       console.log("PDF Status Response:", statusData);
 
