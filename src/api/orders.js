@@ -111,7 +111,7 @@ export async function fetchOrders({
   encounterId,
   sourceId,
   departmentId,
-  categoryCode,
+  category,
 }) {
   if (!patientId || !sourceId) {
     throw new Error("Missing patientId or sourceId when calling fetchOrders");
@@ -119,7 +119,7 @@ export async function fetchOrders({
 
   let url = `/ServiceRequest?patient=${patientId}&encounter=${encounterId}`;
   if (departmentId) url += `&departmentId=${departmentId}`;
-  if (categoryCode) url += `&categorycode=${categoryCode}`;
+  if (category) url += `&category=${category}`;
 
   const bundle = await fhirFetch(url, {
     sourceId,
