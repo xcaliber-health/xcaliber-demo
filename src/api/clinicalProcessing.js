@@ -1,7 +1,9 @@
 
 import axios from "axios";
 
-const API_URL = "https://blitz.xcaliberapis.com/sample/bff/api/pdf";
+
+const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
+
 
 // Upload a clinical PDF and return structured entities with status info
 export async function uploadClinicalPdf(file) {
@@ -12,7 +14,7 @@ export async function uploadClinicalPdf(file) {
   const formData = new FormData();
   formData.append("pdfFile", file);
 try {
-  const response = await axios.post(API_URL, formData, {
+  const response = await axios.post(`${SAMPLE_BFF_URL}/api/pdf`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
   return response.data;
