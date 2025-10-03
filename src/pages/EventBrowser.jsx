@@ -38,8 +38,6 @@ export default function EventBrowser() {
 
   const API_URL =
     "https://blitz.xcaliberapis.com/subscription-interop/api/v2/events?tenantId=512fe16b-57cc-3887-b28f-829f21aa9ef2&x-data-product-id=0000-0000-0000-0000";
-    
-
 
   // debounce search input
   useEffect(() => {
@@ -77,8 +75,7 @@ export default function EventBrowser() {
     try {
       const res = await axios.get(
         `https://blitz.xcaliberapis.com/subscription-interop/api/v2/events/${event.id}?tenantId=512fe16b-57cc-3887-b28f-829f21aa9ef2&x-data-product-id=0000-0000-0000-0000`
-    
-);
+      );
 
       setJsonString(JSON.stringify(res.data, null, 2));
       setIsValid(true);
@@ -103,6 +100,14 @@ export default function EventBrowser() {
 
   const getEventType = (event) =>
     event.eventType || "No Event Type";
+
+  const formatCreatedTime = (time) => {
+    try {
+      return new Date(time).toLocaleString();
+    } catch {
+      return time;
+    }
+  };
 
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
@@ -218,6 +223,9 @@ export default function EventBrowser() {
                         <th className="py-2 px-4 border-b text-left text-sm font-medium text-indigo-700">
                           Event Type
                         </th>
+                        <th className="py-2 px-4 border-b text-left text-sm font-medium text-indigo-700">
+                          Created Time
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -232,6 +240,9 @@ export default function EventBrowser() {
                           </td>
                           <td className="py-2 px-4 border-b text-sm text-gray-600">
                             {getEventType(event)}
+                          </td>
+                          <td className="py-2 px-4 border-b text-sm text-gray-600">
+                            {formatCreatedTime(event.createdTime || event.createdAt || "")}
                           </td>
                         </tr>
                       ))}

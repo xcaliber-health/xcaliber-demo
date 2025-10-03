@@ -9,7 +9,6 @@ import toast from "react-hot-toast";
 export default function VitalsTab({ patientId }) {
   const { sourceId, departmentId } = useContext(AppContext);
 
-  // ✅ Separate states for clarity
   const [vitals, setVitals] = useState([]);
   const [loadingList, setLoadingList] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -27,13 +26,21 @@ export default function VitalsTab({ patientId }) {
     respiration: "",
   });
 
-  // Fetch vitals
   useEffect(() => {
     async function loadVitals() {
       setLoadingList(true);
       try {
         const data = await fetchVitals(patientId, departmentId, sourceId);
-        setVitals(data.entry || []);
+        const sortedVitals = (data.entry || []).sort((a, b) => {
+          const timeA =
+            new Date(a.resource?.meta?.created || a.resource?.meta?.lastUpdated).getTime() ||
+            0;
+          const timeB =
+            new Date(b.resource?.meta?.created || b.resource?.meta?.lastUpdated).getTime() ||
+            0;
+          return timeB - timeA; // latest first
+        });
+        setVitals(sortedVitals);
         toast.success("Vitals loaded successfully");
       } catch (err) {
         console.error("Error fetching vitals:", err);
@@ -54,7 +61,6 @@ export default function VitalsTab({ patientId }) {
     e.preventDefault();
     setSubmitting(true);
 
-    // Prepare only numeric values
     const sanitizedValues = {
       systolic: formValues.systolic ? Number(formValues.systolic) : undefined,
       diastolic: formValues.diastolic ? Number(formValues.diastolic) : undefined,
@@ -83,7 +89,16 @@ export default function VitalsTab({ patientId }) {
         respiration: "",
       });
       const updated = await fetchVitals(patientId, departmentId, sourceId);
-      setVitals(updated.entry || []);
+      const sortedUpdated = (updated.entry || []).sort((a, b) => {
+        const timeA =
+          new Date(a.resource?.meta?.created || a.resource?.meta?.lastUpdated).getTime() ||
+          0;
+        const timeB =
+          new Date(b.resource?.meta?.created || b.resource?.meta?.lastUpdated).getTime() ||
+          0;
+        return timeB - timeA;
+      });
+      setVitals(sortedUpdated);
     } catch (err) {
       console.error("Error creating vitals:", err);
       toast.error("Failed to add vitals");
@@ -208,7 +223,6 @@ export default function VitalsTab({ patientId }) {
                 />
               </div>
 
-              {/* Submit button with spinner */}
               <button
                 type="submit"
                 className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
@@ -244,30 +258,39 @@ export default function VitalsTab({ patientId }) {
         </div>
       ) : vitals.length > 0 ? (
         <div className="space-y-2">
-          {vitals.map((item, idx) => (
-            <div
-              key={idx}
-              className="p-3 border rounded-lg shadow-sm bg-white"
-            >
-              <p className="text-sm text-gray-600">
-                {item.resource?.code?.coding?.[0]?.display || "Vital"}
-              </p>
-              <p className="font-medium">
-                {item.resource?.valueQuantity?.value
-                  ? `${item.resource.valueQuantity.value} ${
-                      item.resource.valueQuantity.unit || ""
-                    }`
-                  : item.resource?.component
-                      ?.map(
-                        (c) =>
-                          `${c.code?.coding?.[0]?.display}: ${
-                            c.valueQuantity?.value
-                          } ${c.valueQuantity?.unit || ""}`
-                      )
-                      .join(", ")}
-              </p>
-            </div>
-          ))}
+          {vitals.map((item, idx) => {
+            const createdTime =
+              item.resource?.meta?.created || item.resource?.meta?.lastUpdated;
+            return (
+              <div
+                key={idx}
+                className="p-3 border rounded-lg shadow-sm bg-white"
+              >
+                <p className="text-sm text-gray-600">
+                  {item.resource?.code?.coding?.[0]?.display || "Vital"}
+                </p>
+                <p className="font-medium">
+                  {item.resource?.valueQuantity?.value
+                    ? `${item.resource.valueQuantity.value} ${
+                        item.resource.valueQuantity.unit || ""
+                      }`
+                    : item.resource?.component
+                        ?.map(
+                          (c) =>
+                            `${c.code?.coding?.[0]?.display}: ${
+                              c.valueQuantity?.value
+                            } ${c.valueQuantity?.unit || ""}`
+                        )
+                        .join(", ")}
+                </p>
+                {createdTime && (
+                  <p className="text-xs text-gray-400">
+                    Created: {new Date(createdTime).toLocaleString()}
+                  </p>
+                )}
+              </div>
+            );
+          })}
         </div>
       ) : (
         <p className="text-gray-500">No vitals found.</p>

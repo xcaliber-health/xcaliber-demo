@@ -1,8 +1,7 @@
 
 import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
-import { ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 import toast from "react-hot-toast";
 import { fhirFetch } from "../api/fhir";
 import { usePatientTabs } from "../api/patienttab";
@@ -13,7 +12,6 @@ import ImmunizationsTab from "../pages/ImmunizationsTab";
 
 export default function PatientChart() {
   const navigate = useNavigate();
-
   const { id } = useParams();
   const { sourceId, departmentId } = useContext(AppContext);
   const patientTabs = usePatientTabs();
@@ -23,11 +21,8 @@ export default function PatientChart() {
   const [data, setData] = useState({});
   const [tabErrors, setTabErrors] = useState({});
   const [activeTab, setActiveTab] = useState("vitals");
-
-  // 👇 separate loading states
   const [patientLoading, setPatientLoading] = useState(false);
-  const [tabLoading, setTabLoading] = useState({}); // { vitals: false, allergies: true, ... }
-
+  const [tabLoading, setTabLoading] = useState({});
   const [error, setError] = useState(null);
 
   const [documentCategory, setDocumentCategory] = useState("VisitNotes");
@@ -60,7 +55,16 @@ export default function PatientChart() {
           `/Appointment?patient=${id}&departmentId=${departmentId}`,
           { sourceId, headers: { "x-interaction-mode": "true" } }
         );
-        setAppointments(bundle.entry?.map((e) => e.resource) || []);
+        let entries = bundle.entry?.map((e) => e.resource) || [];
+
+        // Sort appointments by latest start date
+        entries.sort((a, b) => {
+          const dateA = new Date(a.start || a.meta?.lastUpdated || 0);
+          const dateB = new Date(b.start || b.meta?.lastUpdated || 0);
+          return dateB - dateA;
+        });
+
+        setAppointments(entries);
       } catch (err) {
         setTabErrors((prev) => ({ ...prev, appointments: err.message }));
         toast.error("Failed to load appointments");
@@ -130,6 +134,7 @@ export default function PatientChart() {
     <div className="p-6 grid grid-cols-3 gap-6">
       {/* Left Column */}
       <div className="col-span-1 space-y-4">
+        {/* Patient Info */}
         <div className="bg-white p-4 shadow rounded-lg border">
           <h2 className="text-xl font-semibold">{patient.name}</h2>
           <p className="text-gray-600">
@@ -141,25 +146,50 @@ export default function PatientChart() {
           <p>Status: {patient.status}</p>
         </div>
 
-        <div className="bg-white p-4 shadow rounded-lg border">
+        {/* Appointments Card */}
+        <div className="bg-white p-4 shadow rounded-lg border flex flex-col">
           <h3 className="font-semibold mb-2">Upcoming Appointments</h3>
-          <ul className="space-y-2 max-h-48 overflow-y-auto">
-            {appointments.length > 0 ? (
-              appointments.map((a) => (
-                <li key={a.id} className="text-sm border-b pb-1">
-                  {a.serviceType?.[0]?.text || "Appointment"} —{" "}
-                  {a.start ? new Date(a.start).toLocaleString() : "No date"} (
-                  {a.status})
-                </li>
-              ))
-            ) : (
-              <li className="text-sm text-gray-500">No appointments</li>
-            )}
-          </ul>
+
+          {appointments.length > 0 ? (
+            <div className="overflow-y-auto max-h-80 border-t border-gray-200">
+              <table className="w-full border border-gray-300 text-sm">
+                <thead className="bg-gray-100 sticky top-0 z-10">
+                  <tr>
+                    <th className="px-2 py-1 border">Practitioner ID</th>
+                    <th className="px-2 py-1 border">Type</th>
+                    <th className="px-2 py-1 border">Date</th>
+                    <th className="px-2 py-1 border">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {appointments.map((a) => {
+                    const practitioner = a.participant?.find(
+                      (p) => p.actor?.reference?.startsWith("Practitioner/")
+                    );
+                    const practitionerId =
+                      practitioner?.actor?.reference?.split("/")[1] || "Unknown";
+
+                    return (
+                      <tr key={a.id} className="hover:bg-gray-50">
+                        <td className="border px-2 py-1">{practitionerId}</td>
+                        <td className="border px-2 py-1">
+                          {a.appointmentType?.text || "-"}
+                        </td>
+                        <td className="border px-2 py-1">
+                          {a.start ? new Date(a.start).toLocaleString() : "-"}
+                        </td>
+                        <td className="border px-2 py-1">{a.status || "-"}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500">No appointments</p>
+          )}
           {tabErrors.appointments && (
-            <p className="text-red-500 text-sm mt-1">
-              {tabErrors.appointments}
-            </p>
+            <p className="text-red-500 text-sm mt-1">{tabErrors.appointments}</p>
           )}
         </div>
       </div>
@@ -167,15 +197,15 @@ export default function PatientChart() {
       {/* Right Column */}
       <div className="col-span-2 bg-white p-4 shadow rounded-lg border">
         {/* Back button */}
-<div className="mb-4">
-  <button
-    onClick={() => navigate("/patients")}
-    className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 font-medium"
-  >
-    <ArrowLeft className="h-4 w-4" />
-    Back to Patients
-  </button>
-</div>
+        <div className="mb-4">
+          <button
+            onClick={() => navigate("/patients")}
+            className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 font-medium"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Patients
+          </button>
+        </div>
 
         {/* Tabs */}
         <div className="flex items-center space-x-4 border-b mb-4 overflow-x-auto no-scrollbar">
@@ -286,7 +316,7 @@ function FHIRTable({ headers, rows, tab, error }) {
         {rows.map((row, i) => (
           <tr
             key={i}
-            className="hover:bg-gray-50 transition-colors"
+            className="hover:bg-gray-50"
           >
             {row.map((cell, j) => (
               <td

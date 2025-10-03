@@ -22,7 +22,10 @@ export const usePatientTabs = () => {
         },[departmentId]);
       },
     },
+    
 
+
+  
     allergies: {
       label: "Allergies",
       headers: [
@@ -71,6 +74,7 @@ export const usePatientTabs = () => {
       },
     },
 
+    
     diagnosticReports: {
       label: "Diagnostic Reports",
       headers: ["Report", "Status", "Date"],
@@ -91,7 +95,7 @@ export const usePatientTabs = () => {
     serviceRequests: {
       label: "Orders",
       headers: ["Code", "Status", "Intent"],
-      url: (id) => `/ServiceRequest?patient=${id}&departmentId=${departmentId}&categorycode=lab_order_category_code&encounter=47219`,
+      url: (id) => `/ServiceRequest?patient=${id}&departmentId=${departmentId}&category=108252007&encounter=47219`,
       headersConfig: { "x-interaction-mode": "false" },
       mapRow: (res) => [res.code?.text, res.status, res.intent].filter(Boolean),
     },

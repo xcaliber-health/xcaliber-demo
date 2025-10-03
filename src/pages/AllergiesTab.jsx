@@ -9,7 +9,6 @@ import toast from "react-hot-toast";
 export default function AllergiesTab({ patientId }) {
   const { sourceId, departmentId } = useContext(AppContext);
 
-  // ✅ separate states
   const [allergies, setAllergies] = useState([]);
   const [loadingList, setLoadingList] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -23,13 +22,21 @@ export default function AllergiesTab({ patientId }) {
     onsetDate: "",
   });
 
-  // Fetch allergies
   useEffect(() => {
     async function loadAllergies() {
       setLoadingList(true);
       try {
         const data = await fetchAllergies(patientId, sourceId, departmentId);
-        setAllergies(data.entry || []);
+
+        const sorted = (data.entry || []).sort((a, b) => {
+          const timeA =
+            new Date(a.resource?.meta?.created || a.resource?.meta?.lastUpdated).getTime() || 0;
+          const timeB =
+            new Date(b.resource?.meta?.created || b.resource?.meta?.lastUpdated).getTime() || 0;
+          return timeB - timeA; // newest first
+        });
+
+        setAllergies(sorted);
         toast.success("Allergies loaded successfully");
       } catch (err) {
         console.error("Error fetching allergies:", err);
@@ -38,6 +45,7 @@ export default function AllergiesTab({ patientId }) {
         setLoadingList(false);
       }
     }
+
     if (patientId && sourceId && departmentId) loadAllergies();
   }, [patientId, sourceId, departmentId]);
 
@@ -60,8 +68,18 @@ export default function AllergiesTab({ patientId }) {
         status: "",
         onsetDate: "",
       });
+
       const updated = await fetchAllergies(patientId, sourceId, departmentId);
-      setAllergies(updated.entry || []);
+
+      const sorted = (updated.entry || []).sort((a, b) => {
+        const timeA =
+          new Date(a.resource?.meta?.created || a.resource?.meta?.lastUpdated).getTime() || 0;
+        const timeB =
+          new Date(b.resource?.meta?.created || b.resource?.meta?.lastUpdated).getTime() || 0;
+        return timeB - timeA;
+      });
+
+      setAllergies(sorted);
     } catch (err) {
       console.error("Error creating allergy:", err);
       toast.error("Failed to add allergy");
@@ -83,7 +101,7 @@ export default function AllergiesTab({ patientId }) {
         </button>
       </div>
 
-      {/* Dialog */}
+      {/* Add Allergy Dialog */}
       {open && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-2xl shadow-xl w-[400px]">
@@ -112,7 +130,6 @@ export default function AllergiesTab({ patientId }) {
                 />
               </div>
 
-              {/* Submit button with spinner */}
               <button
                 type="submit"
                 className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
@@ -139,38 +156,70 @@ export default function AllergiesTab({ patientId }) {
         </div>
       )}
 
-      {/* Display allergies list */}
+      {/* Allergies List */}
       {loadingList ? (
         <div className="flex items-center justify-center py-6 text-gray-600">
           <Loader2 className="h-6 w-6 animate-spin mr-2" />
           Loading allergies...
         </div>
       ) : allergies.length > 0 ? (
-        <div className="space-y-2">
-          {allergies.map((item, idx) => (
-            <div
-              key={idx}
-              className="p-3 border rounded-lg shadow-sm bg-white hover:shadow-md transition"
-            >
-              <p className="text-sm text-gray-600">
-                {item.resource?.code?.text || "Allergy"}
-              </p>
-              <p className="font-medium text-gray-800">
-                {item.resource?.reaction
-                  ?.map(
-                    (r) =>
-                      `Reaction: ${r.description || "-"}, Severity: ${
-                        r.severity || "-"
-                      }, Onset: ${r.onset?.split("T")[0] || "-"}`
-                  )
-                  .join(" | ")}
-              </p>
-              <p className="text-sm text-gray-500">
-                Status:{" "}
-                {item.resource?.clinicalStatus?.coding?.[0]?.code || "-"}
-              </p>
-            </div>
-          ))}
+        <div className="space-y-4">
+          {allergies.map((item, idx) => {
+            const createdTime = item.resource?.meta?.created;
+            const lastUpdated = item.resource?.meta?.lastUpdated;
+
+            return (
+              <div
+                key={idx}
+                className="p-4 border rounded-lg shadow-sm bg-white hover:shadow-md transition"
+              >
+                {/* Allergy Heading */}
+                <h3 className="text-lg font-bold text-blue-600 mb-2">
+                  Allergy: {item.resource?.code?.coding?.[0]?.display || "Unknown"}
+                </h3>
+
+                {/* Reactions as List */}
+                <div className="mb-2">
+                  <h4 className="font-medium text-gray-700">Reactions:</h4>
+                  <ul className="list-disc list-inside text-sm text-gray-800">
+                    {item.resource?.reaction?.length > 0 ? (
+                      item.resource.reaction.map((r, i) => (
+                        <li key={i}>
+                          {r.description ? (
+                            <>
+                              <span className="font-semibold">{r.description}</span> —{" "}
+                            </>
+                          ) : null}
+                          Severity: {r.severity || "-"}
+                          {r.onset && `, Onset: ${r.onset.split("T")[0]}`}
+                        </li>
+                      ))
+                    ) : (
+                      <li>No reactions recorded</li>
+                    )}
+                  </ul>
+                </div>
+
+                {/* Status */}
+                <p className="text-sm text-gray-500">
+                  <span className="font-medium">Status:</span>{" "}
+                  {item.resource?.clinicalStatus?.coding?.[0]?.code || "-"}
+                </p>
+
+                {/* Created & Updated */}
+                {createdTime && (
+                  <p className="text-xs text-gray-400">
+                    Created: {new Date(createdTime).toLocaleString()}
+                  </p>
+                )}
+                {lastUpdated && (
+                  <p className="text-xs text-gray-400">
+                    Last Updated: {new Date(lastUpdated).toLocaleString()}
+                  </p>
+                )}
+              </div>
+            );
+          })}
         </div>
       ) : (
         <p className="text-gray-500">No allergies found.</p>
