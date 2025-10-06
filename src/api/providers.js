@@ -30,7 +30,7 @@ export async function fetchProvidersDirectory(sourceId, departmentId, name = "",
 
       const bundle = await fhirFetch(url, {
         sourceId,
-        headers: { "x-interaction-mode": "false" },
+        headers: { "x-interaction-mode": "true" },
       });
 
       providers = (bundle.entry || []).map((e) => {
@@ -68,7 +68,7 @@ export async function fetchProviders(sourceId, departmentId, count = 100, search
       // 🔹 Treat search as Provider ID
       const practitioner = await fhirFetch(`/Practitioner/${search}`, {
         sourceId,
-        headers: { "x-interaction-mode": "false" },
+        headers: { "x-interaction-mode": "true" },
       });
 
       if (practitioner) {
@@ -92,7 +92,7 @@ export async function fetchProviders(sourceId, departmentId, count = 100, search
 
       const bundle = await fhirFetch(url, {
         sourceId,
-        headers: { "x-interaction-mode": "false" },
+        headers: { "x-interaction-mode": "true" },
       });
 
       providers = (bundle.entry || []).map((e) => {
