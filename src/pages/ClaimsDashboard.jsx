@@ -1,6 +1,6 @@
 
 import { useEffect, useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchClaims, fetchClaimById } from "../api/claims";
 import { AppContext } from "../layouts/DashboardLayout";
 import { Loader2, Search, Users } from "lucide-react";
@@ -50,6 +50,9 @@ export default function ClaimsDashboard() {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const navigate = useNavigate();
+
+  const [showCurlModal, setShowCurlModal] = useState(false);
 
   const totalPages = Math.ceil(claims.length / itemsPerPage);
   const paginatedClaims = claims.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -167,11 +170,22 @@ export default function ClaimsDashboard() {
                           <td className="px-6 py-4">{c.serviceDate ? new Date(c.serviceDate).toLocaleDateString() : "N/A"}</td>
                           <td className="px-6 py-4 capitalize">{c.status}</td>
                           <td className="px-6 py-4">${(c.totalBilled ?? 0).toFixed(2)}</td>
-                          <td className="px-6 py-4">
-                            <Link to={`/claims/${c.id}`} className="text-indigo-600 hover:underline">
+      
+                           <td className="px-6 py-4">
+                            <button
+                              onClick={async () => {
+                                await fetchClaimById(c.id, sourceId, patientId, departmentId, setLatestCurl);
+                                setShowCurlModal(true); // ensure this is defined
+                                
+
+                                navigate(`/claims/${c.id}`);
+                              }}
+                              className="text-indigo-600 hover:underline"
+                            >
                               View
-                            </Link>
+                            </button>
                           </td>
+
                         </tr>
                       ))}
                     </tbody>
@@ -197,10 +211,10 @@ export default function ClaimsDashboard() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .custom-scrollbar {
           scrollbar-width: thin;
-          scrollbar-color: #e0e7ff #f8fafc;
+          scrollbar-color: #6978a7ff #f8fafc;
         }
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;

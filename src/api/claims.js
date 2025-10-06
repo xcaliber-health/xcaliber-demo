@@ -1,7 +1,7 @@
 
 import { fhirFetch } from "./fhir";
 
-export async function fetchClaims(patientId, sourceId) {
+export async function fetchClaims(patientId, sourceId, setLatestCurl) {
   const bundle = await fhirFetch(
     `/Claim?_count=1000&patient=${patientId}`,
     {
@@ -9,7 +9,7 @@ export async function fetchClaims(patientId, sourceId) {
       headers: {
         "x-interaction-mode": "false", // ✅ important for Athena passthrough
       },
-       
+       setLatestCurl ,
     }
   );
 
@@ -76,9 +76,10 @@ export async function fetchClaims(patientId, sourceId) {
 }
 
 
-export async function fetchClaimById(claimId, sourceId, patientId, departmentId) {
+export async function fetchClaimById(claimId, sourceId, patientId, departmentId, setLatestCurl
+) {
   const url = `/Claim/${claimId}?patient=${patientId}&departmentId=${departmentId}`;
-  const c = await fhirFetch(url, { sourceId });
+  const c = await fhirFetch(url, { sourceId ,setLatestCurl});
 
   // Notes (Athena only)
   const notes = (c.contained || [])
