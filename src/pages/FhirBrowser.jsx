@@ -158,7 +158,7 @@ function FhirBrowser() {
       headers: {
         Authorization: "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ4Y2FsaWJlci1oZWFsdGguc2VydmljZS1hY2NvdW50LmlkIjoiNTFmNjg5M2EtMmZkZi00NDE3LWEzODUtOGEzOTlmYWRjNWUzIiwieGNhbGliZXItaGVhbHRoLmFjY291bnQuaWQiOiI5MWI1YzdlMy02NmQxLTRiMGMtODRmZC0yYzZjYjVjZjgzZmMiLCJ4Y2FsaWJlci1oZWFsdGguaW5zdGFuY2UuaWQiOiI5MTcyNmQyOC1lY2QxLTM2ZGYtODEzMi02MjdhZTgwZmUzMzIiLCJ1c2VyIjp7InVzZXJJZCI6ImI1M2VmNzJmLWVmNDYtNGQ5Yi1iMjhiLTJkZTI2OTJiYThiYSIsInVzZXJOYW1lIjoiSm9obiBTbWl0aCJ9LCJ4Y2FsaWJlci1oZWFsdGguc2NvcGVzIjpbIjkxNzI2ZDI4LWVjZDEtMzZkZi04MTMyLTYyN2FlODBmZTMzMi4qIl0sImNsYWltcyI6WyJtb2RlbHM6KiIsImFjdGl2aXRpZXM6KiIsIkFjdGl2aXRpZXM6KiIsInRhZ3M6KiIsImF0dHJpYnV0ZXM6KiIsImVudGl0aWVzOioiLCJwcm92aWRlci5lbnRyaWVzOioiLCJwYXRpZW50LmVudHJpZXM6KiIsInByb3ZpZGVyLXRvdGFsLmVudHJpZXM6KiIsIkNhc2VzLmVudHJpZXM6KiIsIlByb2ZpbGUuZW50cmllczoqIiwiVXNlci5lbnRyaWVzOioiLCJSb2xlLmVudHJpZXM6KiIsInZpZXcuZW50cmllczoqIiwiQ29kZXIuZW50cmllcyIsIm9yY2hfZXZlbnRzLmVudHJpZXM6KiIsInVzZXJ2aWV3cy5lbnRyaWVzOioiLCJWaWV3LmVudHJpZXM6KiIsIndvcmtlci5lbnRyaWVzOioiLCJyb2xlLmVudHJpZXM6KiIsIndvcmtpdGVtLmVudHJpZXM6KiIsInBlcm1pc3Npb25fcG9saWN5LmVudHJpZXM6KiIsImNvbGxlY3Rpb24uZW50cmllczoqIiwiZmlsdGVyLmVudHJpZXM6KiIsIm9yY2hlc3RyYXRpb25fd29ya2Zsb3dfc3RhdGlzdGljcy5lbnRyaWVzOioiLCJvcmNoZXN0cmF0aW9uX2V2ZW50LmVudHJpZXM6KiIsIndvcmtmbG93LmVudHJpZXM6KiIsIm9yY2hlc3RyYXRpb25fd29ya2Zsb3cuZW50cmllczoqIiwiY29kZXNldHM6KiJdLCJncmFudFR5cGUiOiJjbGllbnRfY3JlZGVudGlhbHMiLCJpc3N1ZXJVcmwiOiJodHRwOi8vYmxpdHoueGNhbGliZXJhcGlzLmNvbS9hcGkvdjEvYXV0aC90b2tlblYyIiwiZXhwaXJ5QXQiOiIyMDI2LTA1LTE3VDIzOjU5OjU5WiIsInhjYWxpYmVyLWhlYWx0aC50ZW5hbnQuaWQiOiI1MTJmZTE2Yi01N2NjLTM4ODctYjI4Zi04MjlmMjFhYTllZjIiLCJpYXQiOjE3NTA0MDY1NTQsImV4cCI6MTc3OTAwNDk1NH0.XSt7JtaIhBZkWRC7rxLwnejiJR3pPsrTosR_AUS21R06b26o2PYRpxa4FusRZx1lk85H8Jg1-49A6J3RSwbMyU1zyg-dfr3zbma1Y08qpwvip35iQEF-LIF5gEN5rz4dfzLeMss2hV15EApCVdJwY4c57aKiqoy6CvepMD6yu_up0tpDQDpI3l_mxrN5DqRX5LmLeKBQ3D-wKUuFJi2CQmPi7VJg7yn-rnTSCqJoenjPAjgk2Gn5qu9agu43OBHuWZqLFr1k0YKzMVvXek-sdVWqS6I4BgjcGLcCF4FzYrzm2BNPefPIBKxrvfA22l5e7NUmdu-Ncv47nv44es8ydA",
         "x-source-id": "ef123977-6ef1-3e8e-a30f-3879cea0b344",
-        "x-interaction-mode": "true",
+        "x-interaction-mode": "false",
       },
       defaultParams: {
         patient: "4406",
@@ -451,7 +451,7 @@ function FhirBrowser() {
               <div className="h-full flex gap-6">
                 {/* Resource ID card only if response not present */}
                 {resourceList.length > 0 && !response && (
-                  <Card className="flex-1 rounded-xl flex flex-col max-h-[520px]">
+                  <Card className="flex-1 rounded-xl flex flex-col max-h-[710px]">
                     <div className="p-4 border-b border-gray-100">
                       <h3 className="font-semibold text-gray-800 flex items-center gap-2 mb-3">
                         <List className="w-4 h-4" />
@@ -514,7 +514,7 @@ function FhirBrowser() {
 
                 {/* Response card only if response present */}
                 {response && (
-                  <Card className={`flex-1 flex flex-col max-h-[520px] ${isFullscreen ? "fixed inset-4 z-50" : ""}`} gradient>
+                  <Card className={`flex-1 flex flex-col max-h-[710px] ${isFullscreen ? "fixed inset-4 z-50" : ""}`} gradient>
                     <div className="flex items-center justify-between p-4 border-b border-gray-100">
                       <div className="flex items-center gap-3">
                         <FileText className="w-5 h-5 text-indigo-600" />
