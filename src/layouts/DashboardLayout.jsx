@@ -1,59 +1,45 @@
 
+
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useState, useEffect, createContext } from "react";
-import { Calendar, Users, FileText, Folder, Database, ChevronDown, ClipboardList, HeartPulse, Notebook, PackageCheck, Code2,List } from "lucide-react";
+import {
+  Calendar,
+  Users,
+  FileText,
+  Folder,
+  Database,
+  ChevronDown,
+  ClipboardList,
+  HeartPulse,
+  Notebook,
+  PackageCheck,
+  Code2,
+  List,
+} from "lucide-react";
 
 export const AppContext = createContext();
-
-function CurlModal({ curlCommand, onClose }) {
-  const [copySuccess, setCopySuccess] = useState("");
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(curlCommand)
-      .then(() => setCopySuccess("Copied!"))
-      .catch(() => setCopySuccess("Failed to copy"));
-  };
-
-  
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-lg w-full">
-        <h2 className="text-xl font-semibold mb-4">cURL Request</h2>
-        <textarea
-          className="w-full h-40 rounded border p-2 mb-4 font-mono text-sm"
-          readOnly
-          value={curlCommand}
-        />
-        <div className="flex justify-between items-center">
-          <button
-            onClick={copyToClipboard}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-          >
-            Copy to Clipboard
-          </button>
-          <button onClick={onClose} className="text-gray-600 hover:text-gray-900">
-            Close
-          </button>
-        </div>
-        {copySuccess && <p className="text-green-600 mt-2">{copySuccess}</p>}
-      </div>
-    </div>
-  );
-}
 
 export default function DashboardLayout() {
   const [ehr, setEhr] = useState("Athena");
   const [departmentId, setDepartmentId] = useState("1");
   const [showSplash, setShowSplash] = useState(true);
-  const [showCurlModal, setShowCurlModal] = useState(false);
+  const [showCurlDrawer, setShowCurlDrawer] = useState(false);
   const [curlCommand, setCurlCommand] = useState("");
-  
+  const [copySuccess, setCopySuccess] = useState("");
+
   const handleGetCurlClick = () => {
-  setShowCurlModal(true);
-};
+    setShowCurlDrawer(true);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard
+      .writeText(curlCommand)
+      .then(() => setCopySuccess("Copied!"))
+      .catch(() => setCopySuccess("Failed to copy"));
+  };
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowSplash(false), 3000); // auto-dismiss after 3s
+    const timer = setTimeout(() => setShowSplash(false), 3000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -80,18 +66,26 @@ export default function DashboardLayout() {
         { to: "/patients", label: "Patient Chart", icon: Users },
         { to: "/claims", label: "Claims List", icon: FileText },
         { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
-        { to: "/document-reference", label: "Clinical Document Attachments", icon: ClipboardList },
-        { to: "/custom-clinical-processing", label: "Custom Clinical Processing", icon: HeartPulse },
+        {
+          to: "/document-reference",
+          label: "Clinical Document Attachments",
+          icon: ClipboardList,
+        },
+        {
+          to: "/custom-clinical-processing",
+          label: "Custom Clinical Processing",
+          icon: HeartPulse,
+        },
         { to: "/notes", label: "Notes", icon: Notebook },
         { to: "/orders", label: "Orders", icon: PackageCheck },
       ],
     },
     {
       title: "FHIR++",
-      links: [{ to: "/fhir-browser", label: "FHIR Browser", icon: Database },
+      links: [
+        { to: "/fhir-browser", label: "FHIR Browser", icon: Database },
         { to: "/event-browser", label: "Event Browser", icon: List },
       ],
-      
     },
   ];
 
@@ -104,46 +98,42 @@ export default function DashboardLayout() {
           className="h-28 w-auto animate-pulse drop-shadow-xl"
         />
         <p className="mt-6 text-gray-600 text-sm font-medium tracking-wide text-center px-6">
-          This demo application uses <span className="font-semibold text-blue-600">non-PHI</span> sample data only.
+          This demo application uses{" "}
+          <span className="font-semibold text-blue-600">non-PHI</span> sample data
+          only.
         </p>
       </div>
     );
   }
 
-  const generateCurlCommand = () => {
-    const baseUrl = "https://api.example.com/data";
-    const url = `${baseUrl}?sourceId=${sourceId}&departmentId=${departmentId}`;
-    return `curl -X GET "${url}" -H "Accept: application/json"`;
-  };
-
-  // const handleGetCurlClick = () => {
-  //   const curl = generateCurlCommand();
-  //   setCurlCommand(curl);
-  //   setShowCurlModal(true);
-  // };
-  
-
-
   return (
-    <AppContext.Provider value={{ ehr, departmentId, sourceId, setLatestCurl: setCurlCommand  }}>
+    <AppContext.Provider
+      value={{
+        ehr,
+        departmentId,
+        sourceId,
+        setLatestCurl: setCurlCommand, // This is important
+      }}
+    >
       <div className="flex h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50 overflow-hidden">
+        {/* Sidebar */}
         <aside className="w-72 bg-white/95 backdrop-blur-sm shadow-2xl flex flex-col fixed left-0 top-0 bottom-0 border-r border-white/20">
           <div className="px-4 py-3 border-b border-gray-100/50">
             <div className="flex items-center justify-center space-x-3 ml-2">
-              <div className="relative">
-                <img
-                  src="/logo.png"
-                  alt="XCaliber Logo"
-                  className="h-14 w-auto drop-shadow-sm"
-                />
-              </div>
+              <img
+                src="/logo.png"
+                alt="XCaliber Logo"
+                className="h-14 w-auto drop-shadow-sm"
+              />
             </div>
           </div>
 
           <nav className="flex-1 p-4 space-y-6 overflow-y-auto">
             {navGroups.map((group) => (
               <div key={group.title}>
-                <h3 className="px-2 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">{group.title}</h3>
+                <h3 className="px-2 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  {group.title}
+                </h3>
                 <div className="space-y-1">
                   {group.links.map((link) => {
                     const Icon = link.icon;
@@ -160,10 +150,18 @@ export default function DashboardLayout() {
                       >
                         <div
                           className={`p-2 rounded-lg transition-colors ${
-                            isActive ? "bg-white/20" : "bg-gray-100 group-hover:bg-blue-100"
+                            isActive
+                              ? "bg-white/20"
+                              : "bg-gray-100 group-hover:bg-blue-100"
                           }`}
                         >
-                          <Icon className={`h-4 w-4 ${isActive ? "text-white" : "text-gray-600 group-hover:text-blue-600"}`} />
+                          <Icon
+                            className={`h-4 w-4 ${
+                              isActive
+                                ? "text-white"
+                                : "text-gray-600 group-hover:text-blue-600"
+                            }`}
+                          />
                         </div>
                         <span className="font-medium">{link.label}</span>
                       </Link>
@@ -175,6 +173,7 @@ export default function DashboardLayout() {
           </nav>
         </aside>
 
+        {/* Main Content */}
         <div className="flex-1 ml-72 flex flex-col overflow-hidden">
           <header className="h-16 bg-white/95 backdrop-blur-sm shadow-lg border-b border-white/20 flex items-center justify-between px-6 space-x-4">
             <div className="flex items-center">
@@ -217,6 +216,7 @@ export default function DashboardLayout() {
             <Outlet />
           </main>
 
+          {/* Floating Get Curl Button */}
           <button
             onClick={handleGetCurlClick}
             className="fixed bottom-8 right-8 bg-blue-600 text-white py-3 px-5 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
@@ -225,12 +225,44 @@ export default function DashboardLayout() {
             <Code2 className="w-6 h-6" />
           </button>
 
-          {showCurlModal && (
-            <CurlModal
-              curlCommand={curlCommand}
-              onClose={() => setShowCurlModal(false)}
+          {/* Curl Drawer */}
+          {showCurlDrawer && (
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
+              onClick={() => setShowCurlDrawer(false)}
             />
           )}
+          <div
+            className={`fixed top-0 right-0 h-full bg-white shadow-2xl w-96 transform transition-transform duration-300 ease-in-out z-50 ${
+              showCurlDrawer ? "translate-x-0" : "translate-x-full"
+            }`}
+          >
+            <div className="flex flex-col h-full p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">cURL Request</h2>
+                <button
+                  onClick={() => setShowCurlDrawer(false)}
+                  className="text-gray-600 hover:text-gray-900 text-2xl font-bold"
+                >
+                  ×
+                </button>
+              </div>
+              <textarea
+                className="flex-1 w-full rounded border p-2 font-mono text-sm mb-4 resize-none"
+                readOnly
+                value={curlCommand} // <- now uses the actual generated curl
+              />
+              <button
+                onClick={copyToClipboard}
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+              >
+                Copy to Clipboard
+              </button>
+              {copySuccess && (
+                <p className="text-green-600 mt-2">{copySuccess}</p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </AppContext.Provider>
