@@ -2,7 +2,7 @@
 import { fhirFetch } from "./fhir";
 
 // Fetch list of patients (by name or ID)
-export async function fetchPatients(sourceId, ehr, search = "william", departmentId, options = {}) {
+export async function fetchPatients(sourceId, ehr, search = "william", departmentId,setLatestCurl, options = {}) {
   if (!sourceId) throw new Error("Missing sourceId when calling fetchPatients");
 
   // Detect if search is numeric → treat as patient ID
@@ -19,7 +19,7 @@ export async function fetchPatients(sourceId, ehr, search = "william", departmen
 
   console.log("Fetching patients with URL:", url);
 
-  const bundle = await fhirFetch(url, { sourceId, headers: options.headers });
+  const bundle = await fhirFetch(url, { sourceId, headers: options.headers,setLatestCurl, });
   console.log("Raw FHIR Patient bundle:", bundle);
 
   // If searching by ID, bundle.entry might not exist (single patient)
@@ -49,8 +49,8 @@ export async function fetchPatients(sourceId, ehr, search = "william", departmen
 }
 
 // Fetch a single patient by ID
-export async function fetchPatient(id, sourceId) {
+export async function fetchPatient(id, sourceId, setLatestCurl) {
   if (!id || !sourceId) throw new Error("Missing id or sourceId when calling fetchPatient");
   const url = `/Patient/${id}`;
-  return fhirFetch(url, { sourceId });
+  return fhirFetch(url, { sourceId, setLatestCurl  });
 }

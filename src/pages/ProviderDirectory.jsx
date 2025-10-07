@@ -37,7 +37,7 @@ function Button({ children, className = "", ...props }) {
 }
 
 export default function ProviderDirectory() {
-  const { sourceId, departmentId } = useContext(AppContext);
+  const { sourceId, departmentId,setLatestCurl } = useContext(AppContext);
   const [providers, setProviders] = useState([]);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState(search);
@@ -62,7 +62,7 @@ export default function ProviderDirectory() {
     const name = isProviderId ? "" : debouncedSearch;
     const providerId = isProviderId ? debouncedSearch : "";
 
-    fetchProvidersDirectory(sourceId, departmentId, name, providerId)
+    fetchProvidersDirectory(sourceId, departmentId, name, providerId,setLatestCurl)
       .then(({ providers }) => {
         setProviders(providers);
         toast.success("Providers loaded successfully");

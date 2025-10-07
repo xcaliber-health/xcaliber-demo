@@ -2,7 +2,7 @@
 // src/api/providers.js
 import { fhirFetch } from "./fhir";
 
-export async function fetchProvidersDirectory(sourceId, departmentId, name = "", providerId = "") {
+export async function fetchProvidersDirectory(sourceId, departmentId, name = "", providerId = "",setLatestCurl) {
   if (!sourceId) throw new Error("Missing sourceId");
   if (!departmentId) throw new Error("Missing departmentId");
 
@@ -31,6 +31,7 @@ export async function fetchProvidersDirectory(sourceId, departmentId, name = "",
       const bundle = await fhirFetch(url, {
         sourceId,
         headers: { "x-interaction-mode": "true" },
+        setLatestCurl,
       });
 
       providers = (bundle.entry || []).map((e) => {
@@ -56,7 +57,7 @@ export async function fetchProvidersDirectory(sourceId, departmentId, name = "",
 }
 
 // 2. Find Appointment → includes departmentId + optional search (name or id)
-export async function fetchProviders(sourceId, departmentId, count = 100, search = "") {
+export async function fetchProviders(sourceId, departmentId, count = 100, search = "",setLatestCurl) {
   if (!sourceId) throw new Error("Missing sourceId");
   if (!departmentId) throw new Error("Missing departmentId");
 
@@ -93,6 +94,7 @@ export async function fetchProviders(sourceId, departmentId, count = 100, search
       const bundle = await fhirFetch(url, {
         sourceId,
         headers: { "x-interaction-mode": "true" },
+        setLatestCurl,
       });
 
       providers = (bundle.entry || []).map((e) => {

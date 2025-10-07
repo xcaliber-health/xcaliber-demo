@@ -72,7 +72,7 @@ export default function ClaimsDashboard() {
 
       try {
         if (!debouncedSearch) {
-          const data = await fetchClaims(patientId, sourceId, departmentId, setLatestCurl);
+          const data = await fetchClaims(patientId, sourceId, setLatestCurl);
           if (!cancelled) {
             setClaims(data);
             setCurrentPage(1);
