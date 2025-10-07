@@ -9,39 +9,68 @@ export async function fetchAllergies(patientId, sourceId,departmentId) {
   });
 }
 
-// ✅ Create a new allergy
-export async function createAllergy(patientId, sourceId,departmentId, values) {
+
+// ✅ Create a new allergy (all user-entered values)
+export async function createAllergy(patientId, sourceId, departmentId, values) {
   const now = new Date().toISOString();
 
   const allergy = {
     resourceType: "AllergyIntolerance",
     clinicalStatus: {
       coding: [
-        { system: "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical", code: values.status || "active" },
+        {
+          system: "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+          code: values.status || "active",
+        },
       ],
     },
     verificationStatus: {
       coding: [
-        { system: "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification", code: "unconfirmed" },
+        {
+          system: "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+          code: "unconfirmed",
+        },
       ],
     },
     type: "allergy",
-    category: ["food", "medication", "environment", "other"],
+    category: values.category ? [values.category] : ["medication"],
+    code: {
+      coding: [
+        {
+          system: "athena",
+          code: values.code || "",
+          display: values.allergy || "",
+        },
+      ],
+      text: values.allergy || "",
+    },
     patient: { reference: `Patient/${patientId}` },
-    code: { text: values.allergy },
-    reaction: [
+    criticality: values.criticality || "high",
+    note: values.note ? [{ text: values.note }] : [],
+    onsetDateTime: values.onsetDate ? new Date(values.onsetDate).toISOString() : now,
+    reaction: values.reaction
+      ? [
+          {
+            description: values.reaction,
+            severity: values.severity || "moderate",
+            onset: values.onsetDate ? new Date(values.onsetDate).toISOString() : now,
+          },
+        ]
+      : [],
+    extension: [
       {
-        description: values.reaction,
-        severity: values.severity,
-        onset: values.onsetDate || now,
+        url: "http://xcaliber-fhir/structureDefinition/department-id",
+        valueString: String(departmentId),
       },
     ],
   };
 
+  console.log("📤 createAllergy body:", allergy);
+
   return fhirFetch(`/AllergyIntolerance?patient=${patientId}&departmentId=${departmentId}`, {
     sourceId,
     method: "POST",
+    body: allergy,
     headers: { "Content-Type": "application/fhir+json" },
-    body: JSON.stringify(allergy),
   });
 }

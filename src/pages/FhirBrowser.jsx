@@ -571,6 +571,7 @@ function FhirBrowser() {
                           occurrencesHighlight: false,
                           overviewRulerBorder: false,
                           hideCursorInOverviewRuler: true,
+                          stickyScroll: { enabled: false },
                         }}
                         theme="vs"
                       />

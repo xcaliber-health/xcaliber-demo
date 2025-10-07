@@ -62,7 +62,7 @@ export default function PatientList() {
   const rowsPerPage = 10;
 
   const navigate = useNavigate();
-  const { ehr, sourceId, departmentId } = useContext(AppContext);
+  const { ehr, sourceId, departmentId, setLatestCurl } = useContext(AppContext);
 
   const totalPages = Math.ceil(patients.length / rowsPerPage);
   const paginatedPatients = patients.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
@@ -77,7 +77,7 @@ export default function PatientList() {
     setLoading(true);
     (async () => {
       try {
-        const res = await fetchPatients(sourceId, ehr, debouncedSearch, departmentId, { headers: { "x-interaction-mode": "true" } });
+        const res = await fetchPatients(sourceId, ehr, debouncedSearch, departmentId,setLatestCurl, { headers: { "x-interaction-mode": "false" } });
         setPatients(res);
         if (!initialLoaded) {
           res.length ? toast.success(`Loaded ${res.length} patient(s)`) : toast("No patients found", { icon: "ℹ️" });

@@ -36,7 +36,7 @@ function Input(props) {
 }
 
 export default function FindAppointment() {
-  const { sourceId, departmentId } = useContext(AppContext);
+  const { sourceId, departmentId,setLatestCurl } = useContext(AppContext);
   const navigate = useNavigate();
 
   const [providers, setProviders] = useState([]);
@@ -68,7 +68,7 @@ export default function FindAppointment() {
 
       try {
         if (!q) {
-          const { providers: list } = await fetchProviders(sourceId, departmentId, backendCount, "");
+          const { providers: list } = await fetchProviders(sourceId, departmentId, backendCount, "",setLatestCurl);
           if (!cancelled) {
             setProviders(list);
             setCurrentPage(1);
@@ -89,7 +89,7 @@ export default function FindAppointment() {
           } catch {}
         }
 
-        const { providers: byName } = await fetchProviders(sourceId, departmentId, backendCount, q);
+        const { providers: byName } = await fetchProviders(sourceId, departmentId, backendCount, q,setLatestCurl);
         if (!cancelled) {
           setProviders(byName);
           setCurrentPage(1);
