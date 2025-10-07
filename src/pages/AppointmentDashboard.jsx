@@ -42,7 +42,7 @@ function Select({ children, className = "", ...props }) {
 const localizer = momentLocalizer(moment);
 
 export default function AppointmentDashboard() {
-  const { sourceId, departmentId } = useContext(AppContext);
+  const { sourceId, departmentId,setLatestCurl } = useContext(AppContext);
   const location = useLocation();
   const { providerId, providerName } = location.state || {};
 
@@ -75,11 +75,12 @@ export default function AppointmentDashboard() {
       sourceId,
       departmentId,
       providerId,
+      setLatestCurl,
     })
       .then(setAppointments)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, [sourceId, departmentId, patientId, providerId]);
+  }, [sourceId, departmentId, patientId, providerId,setLatestCurl]);
 
   // ✅ Apply filter
   const filteredAppointments =

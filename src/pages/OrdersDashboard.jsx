@@ -28,7 +28,7 @@ function Button({ children, className = "", ...props }) {
 }
 
 export default function OrdersDashboard() {
-  const { sourceId, departmentId } = useContext(AppContext);
+  const { sourceId, departmentId,setLatestCurl } = useContext(AppContext);
   const navigate = useNavigate();
 
   const [orders, setOrders] = useState([]);
@@ -54,6 +54,7 @@ export default function OrdersDashboard() {
         sourceId,
         departmentId,
         category,
+        setLatestCurl,
       });
       setOrders(list || []);
       toast.success(`Loaded ${list?.length || 0} orders`);
@@ -67,7 +68,7 @@ export default function OrdersDashboard() {
 
   useEffect(() => {
     loadOrders();
-  }, [category]); // Reload orders when category changes
+  }, [category,setLatestCurl]); // Reload orders when category changes
 
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">

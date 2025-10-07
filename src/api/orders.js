@@ -13,6 +13,7 @@ export async function createOrder({
   priority,
   performerReference,
   performerDisplay,
+  setLatestCurl,
 }) {
   if (!sourceId || !departmentId) {
     throw new Error("Missing sourceId or departmentId for createOrder");
@@ -85,6 +86,7 @@ export async function createOrder({
         "source-id": sourceId,
         "x-interaction-mode": "false",
         "Content-Type": "application/json",
+        
       },
       body: JSON.stringify(postBody),
     }
@@ -112,6 +114,7 @@ export async function fetchOrders({
   sourceId,
   departmentId,
   category,
+  setLatestCurl,
 }) {
   if (!patientId || !sourceId) {
     throw new Error("Missing patientId or sourceId when calling fetchOrders");
@@ -126,6 +129,7 @@ export async function fetchOrders({
     headers: {
       "Authorization": `Bearer ${import.meta.env.VITE_API_TOKEN}`,
     },
+    setLatestCurl,
   });
 
   return (bundle.entry || []).map((e) => {
