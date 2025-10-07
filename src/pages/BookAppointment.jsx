@@ -1,8 +1,9 @@
 
 import { useState, useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AppContext } from "../layouts/DashboardLayout";
 import { createAppointment } from "../api/appointment";
+import { Loader2, Calendar, ArrowRight } from "lucide-react";
 
 // Appointment type mappings
 const appointmentMappings = {
@@ -15,8 +16,38 @@ const appointmentMappings = {
   "443": { display: "Hearing Eval", location: "Location/1" },
 };
 
+// Reusable Components
+function Card({ children, className = "" }) {
+  return (
+    <div className={`bg-white/95 backdrop-blur-sm shadow-xl rounded-3xl border border-white/20 ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+function Button({ children, className = "", ...props }) {
+  return (
+    <button
+      {...props}
+      className={`px-4 py-2 rounded-xl font-medium transition-all duration-200 disabled:opacity-50 transform hover:scale-105 active:scale-95 ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function Input(props) {
+  return (
+    <input
+      {...props}
+      className="border-2 border-gray-200/50 py-3 px-4 rounded-2xl w-full focus:ring-2 focus:ring-indigo-500 focus:border-indigo-300 outline-none bg-white/80 backdrop-blur-sm transition-all duration-200 placeholder:text-gray-400"
+    />
+  );
+}
+
 export default function BookAppointment() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { sourceId, departmentId, patientName } = useContext(AppContext);
 
   const { provider } = location.state || {};
@@ -27,7 +58,6 @@ export default function BookAppointment() {
     ? import.meta.env.VITE_ATHENA_PATIENT_ID
     : import.meta.env.VITE_ELATION_PATIENT_ID;
 
-  // Local state
   const [date, setDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -75,7 +105,6 @@ export default function BookAppointment() {
         `✅ Appointment (${typeInfo.display}) successfully booked for ${date} ${startTime} - ${endTime}`
       );
 
-      // reset only on success
       setDate("");
       setStartTime("");
       setEndTime("");
@@ -88,115 +117,111 @@ export default function BookAppointment() {
   }
 
   return (
-    <div className="max-w-xl mx-auto mt-6">
-      {/* Card */}
-      <div className="bg-white shadow-md rounded-2xl overflow-hidden">
-        {/* Card Header */}
-        <div className="bg-gray-100 px-4 py-3 border-b">
-          <h2 className="text-lg font-semibold text-gray-800">
-            Book Appointment
-          </h2>
-        </div>
-
-        {/* Card Content */}
-        <div className="p-4 space-y-4">
-          {/* Patient + Provider */}
-          <div className="bg-gray-50 p-3 rounded border text-sm">
-            {/*<p>
-              <strong>Patient:</strong> {patientName}
-            </p>*/}
-            <p>
-              <strong>Provider:</strong> {provider.name}
-            </p>
-          </div>
-
-          {/* Date input */}
-          <div>
-            <label className="block font-medium mb-1">Select Date</label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="border p-2 rounded w-full"
-            />
-          </div>
-
-          {/* Start time input */}
-          <div>
-            <label className="block font-medium mb-1">Start Time</label>
-            <input
-              type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              className="border p-2 rounded w-full"
-            />
-          </div>
-
-          {/* End time input */}
-          <div>
-            <label className="block font-medium mb-1">End Time</label>
-            <input
-              type="time"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              className="border p-2 rounded w-full"
-            />
-          </div>
-
-          {/* Appointment type dropdown */}
-          <div>
-            <label className="block font-medium mb-1">Appointment Type</label>
-            <select
-              value={appointmentType}
-              onChange={(e) => setAppointmentType(e.target.value)}
-              className="border p-2 rounded w-full"
-            >
-              {appointmentTypes.map((t) => (
-                <option key={t.code} value={t.code}>
-                  {t.display}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Confirm button */}
-          <button
-            onClick={handleBook}
-            disabled={
-              loading || !date || !startTime || !endTime || !appointmentType
-            }
-            className="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600 disabled:opacity-50"
-          >
-            {loading ? "Booking..." : "Confirm & Book"}
-          </button>
-
-          {/* Success message */}
-          {successMsg && (
-            <div className="mt-2 p-3 bg-green-100 text-green-700 rounded flex justify-between">
-              <span>{successMsg}</span>
-              <button
-                onClick={() => setSuccessMsg("")}
-                className="ml-2 font-bold"
-              >
-                ✕
-              </button>
+    <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
+      {/* Header */}
+      <div className="flex-shrink-0 p-4 pb-1">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Calendar className="w-5 h-5 text-white" />
             </div>
-          )}
-
-          {/* Error message */}
-          {errorMsg && (
-            <div className="mt-2 p-3 bg-red-100 text-red-700 rounded flex justify-between">
-              <span>{errorMsg}</span>
-              <button
-                onClick={() => setErrorMsg("")}
-                className="ml-2 font-bold"
-              >
-                ✕
-              </button>
+            <div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Book Appointment
+              </h1>
+              <p className="text-sm text-gray-600">Confirm details and schedule your appointment</p>
             </div>
-          )}
+          </div>
         </div>
       </div>
+
+      {/* Content */}
+      <div className="flex-1 px-4 pb-4 overflow-auto">
+        <div className="max-w-4xl mx-auto h-full flex flex-col">
+          <Card className="flex-1 flex flex-col overflow-hidden p-6">
+            {/* Provider Info */}
+            <div className="bg-indigo-50 p-3 rounded-xl border border-indigo-100 mb-4">
+              <p><strong>Provider:</strong> {provider.name}</p>
+              {patientName && <p><strong>Patient:</strong> {patientName}</p>}
+            </div>
+
+            {/* Form */}
+            <div className="space-y-4 flex-1 overflow-y-auto custom-scrollbar">
+              <div>
+                <label className="block font-medium mb-1">Select Date</label>
+                <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+              </div>
+
+              <div>
+                <label className="block font-medium mb-1">Start Time</label>
+                <Input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+              </div>
+
+              <div>
+                <label className="block font-medium mb-1">End Time</label>
+                <Input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+              </div>
+
+              <div>
+                <label className="block font-medium mb-1">Appointment Type</label>
+                <select
+                  value={appointmentType}
+                  onChange={(e) => setAppointmentType(e.target.value)}
+                  className="border-2 border-gray-200/50 py-3 px-4 rounded-2xl w-full focus:ring-2 focus:ring-indigo-500"
+                >
+                  {appointmentTypes.map((t) => (
+                    <option key={t.code} value={t.code}>{t.display}</option>
+                  ))}
+                </select>
+              </div>
+
+              <Button
+                onClick={handleBook}
+                disabled={loading || !date || !startTime || !endTime || !appointmentType}
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white w-full flex justify-center items-center gap-2"
+              >
+                {loading ? <Loader2 className="animate-spin h-4 w-4" /> : "Confirm & Book"}
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+
+              {successMsg && (
+                <div className="p-3 bg-green-100 text-green-700 rounded flex justify-between">
+                  <span>{successMsg}</span>
+                  <button onClick={() => setSuccessMsg("")} className="ml-2 font-bold">✕</button>
+                </div>
+              )}
+
+              {errorMsg && (
+                <div className="p-3 bg-red-100 text-red-700 rounded flex justify-between">
+                  <span>{errorMsg}</span>
+                  <button onClick={() => setErrorMsg("")} className="ml-2 font-bold">✕</button>
+                </div>
+              )}
+            </div>
+          </Card>
+        </div>
+      </div>
+
+      <style jsx>{`
+        .custom-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: #e0e7ff #f8fafc;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f8fafc;
+          border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #e0e7ff;
+          border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #c7d2fe;
+        }
+      `}</style>
     </div>
   );
 }
