@@ -136,32 +136,8 @@ export default function DocumentReference() {
         </div>
       </div>
 
-      {/* Tabs + Dropdowns */}
-      {/* <div className="flex gap-4 px-6 items-center mb-4">
-        <Button className={activeTab === "text" ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-700"} onClick={() => setActiveTab("text")}>
-          PDF
-        </Button>
-        <Button className={activeTab === "json" ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-700"} onClick={() => setActiveTab("json")}>
-          JSON
-        </Button>
+      
 
-        <div className="flex gap-4 ml-auto">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Patient ID</label>
-            <select value={patientId} onChange={(e) => setPatientId(e.target.value)} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white">
-              <option value="4406">4406</option>
-              
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Document ID</label>
-            <select value={documentId} onChange={(e) => setDocumentId(e.target.value)} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white">
-              <option value="231756">231756</option>
-              
-            </select>
-          </div>
-        </div>
-      </div>  */}
             {/* Tabs + Dropdowns */}
       <div className="flex-shrink-0 px-6 pb-3">
         <div className="max-w-7xl mx-auto flex items-end justify-between gap-4">
