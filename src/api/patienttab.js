@@ -161,8 +161,8 @@ export const usePatientTabs = () => {
             (ext) => ext.url === "http://xcaliber-fhir/structureDefinition/last-updated"
           )?.valueDate || res.meta?.lastUpdated;
         const lastUpdatedFormatted = lastUpdated ? new Date(lastUpdated).toLocaleString() : null;
+        return [type, status, start, end || "", practitioner || "", lastUpdatedFormatted || ""];
 
-        return [type, status, start, end, practitioner, lastUpdatedFormatted].filter(Boolean);
       },
     },
 
