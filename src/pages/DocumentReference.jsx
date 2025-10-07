@@ -150,14 +150,14 @@ export default function DocumentReference() {
             <label className="block text-sm font-medium text-gray-700">Patient ID</label>
             <select value={patientId} onChange={(e) => setPatientId(e.target.value)} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white">
               <option value="4406">4406</option>
-              <option value="4407">4407</option>
+              
             </select>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">Document ID</label>
             <select value={documentId} onChange={(e) => setDocumentId(e.target.value)} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white">
               <option value="231756">231756</option>
-              <option value="231757">231757</option>
+              
             </select>
           </div>
         </div>
