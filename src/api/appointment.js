@@ -2,7 +2,7 @@
 import { fhirFetch } from "./fhir";
 
 // Fetch appointments
-export async function fetchAppointments({ patientId, providerId, sourceId, departmentId }) {
+export async function fetchAppointments({ patientId, providerId, sourceId, departmentId,setLatestCurl }) {
   if (!patientId || !sourceId) {
     throw new Error("Missing patientId or sourceId when calling fetchAppointments");
   }
@@ -22,6 +22,7 @@ export async function fetchAppointments({ patientId, providerId, sourceId, depar
   const bundle = await fhirFetch(url, {
     sourceId,
     headers: isAthena ? { "x-interaction-mode": "false" } : undefined,
+    setLatestCurl,
   });
 
   return (bundle.entry || []).map((e) => {
