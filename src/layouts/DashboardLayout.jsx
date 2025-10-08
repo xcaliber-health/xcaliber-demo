@@ -269,6 +269,7 @@ export default function DashboardLayout() {
         { to: "/custom-clinical-processing", label: "Custom Clinical Processing", icon: HeartPulse },
         { to: "/notes", label: "Notes", icon: Notebook },
         { to: "/orders", label: "Orders", icon: PackageCheck },
+        { to: "/scripts", label: "Scripts List", icon: List },
       ],
     },
     {

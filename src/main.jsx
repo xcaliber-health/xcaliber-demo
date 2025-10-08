@@ -44,6 +44,7 @@ import CreateOrder from "./pages/CreateOrder";
 
 //Custom Clinical Processing 
 import ClinicalProcessing from "./pages/ClinicalProcessing";
+import RecordingsList from "./pages/RecordingsList";
 
 
 // ✅ Wrapper to inject props into VitalsTab
@@ -98,6 +99,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         {/* Custom Clinical Processing */}
         <Route path="/custom-clinical-processing" element={<ClinicalProcessing />} />
         
+        <Route path="/scripts" element={<RecordingsList />} />
       </Route>
 
     </Routes>
