@@ -7,7 +7,7 @@ import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function VitalsTab({ patientId }) {
-  const { sourceId, departmentId } = useContext(AppContext);
+  const { sourceId, departmentId, setLatestCurl } = useContext(AppContext);
 
   const [vitals, setVitals] = useState([]);
   const [loadingList, setLoadingList] = useState(false);
@@ -30,7 +30,7 @@ export default function VitalsTab({ patientId }) {
     async function loadVitals() {
       setLoadingList(true);
       try {
-        const data = await fetchVitals(patientId, departmentId, sourceId);
+        const data = await fetchVitals(patientId, departmentId, sourceId, setLatestCurl);
         const sortedVitals = (data.entry || []).sort((a, b) => {
           const timeA =
             new Date(a.resource?.meta?.created || a.resource?.meta?.lastUpdated).getTime() ||
@@ -50,7 +50,7 @@ export default function VitalsTab({ patientId }) {
       }
     }
     if (patientId && sourceId && departmentId) loadVitals();
-  }, [patientId, sourceId, departmentId]);
+  }, [patientId, sourceId, departmentId, setLatestCurl]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

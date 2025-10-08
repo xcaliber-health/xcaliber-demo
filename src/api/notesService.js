@@ -48,16 +48,23 @@ async function getAllNotes({ departmentId, category, sourceId, patientId,setLate
 /**
  * Get a single note by ID.
  */
-async function getNoteById(id, { departmentId, patientId, category, sourceId }) {
+
+async function getNoteById(id, { departmentId, patientId, category, sourceId, setLatestCurl }) {
   if (!sourceId) throw new Error("sourceId is required");
   if (!departmentId) throw new Error("departmentId is required");
   if (!patientId) throw new Error("patientId is required");
   if (!category) throw new Error("category is required");
 
   const path = `/DocumentReference/${id}?patient=${patientId}&category=${category}&departmentId=${departmentId}`;
-  const data = await fhirFetch(path, { sourceId });
+  const data = await fhirFetch(path, { sourceId, setLatestCurl });
 
   const resource = data.resource || data;
+
+  // Helper to extract extension values by URL
+  const getExtensionValue = (url) => {
+    const ext = resource.extension?.find((e) => e.url === url);
+    return ext?.valueString || ext?.valueInteger || ext?.valueDate || ext?.valueDateTime || null;
+  };
 
   return {
     id: resource.id,
@@ -67,7 +74,17 @@ async function getNoteById(id, { departmentId, patientId, category, sourceId }) 
     createdAt: resource.date,
     content: atob(resource.content?.[0]?.attachment?.data || ""),
     status: resource.status || "-",
-    priority: resource.priority || "-",
+    priority: getExtensionValue("http://xcaliber-fhir/structureDefinition/priority") || "-",
+    internalNote: getExtensionValue("http://xcaliber-fhir/structureDefinition/internal-note") || "-",
+    documentRoute: getExtensionValue("http://xcaliber-fhir/structureDefinition/document-route"),
+    documentSource: getExtensionValue("http://xcaliber-fhir/structureDefinition/document-source"),
+    documentTypeId: getExtensionValue("http://xcaliber-fhir/structureDefinition/document-type-id"),
+    lastModifiedDateTime: getExtensionValue("http://xcaliber-fhir/structureDefinition/last-modified-datetime"),
+    lastModifiedUser: getExtensionValue("http://xcaliber-fhir/structureDefinition/last-modified-user"),
+    observationDate: getExtensionValue("http://xcaliber-fhir/structureDefinition/observation-date"),
+    createdUser: getExtensionValue("http://xcaliber-fhir/structureDefinition/created-user"),
+    contentUrl: resource.content?.[0]?.attachment?.url || null,
+    metaLastUpdated: resource.meta?.lastUpdated || null,
     contextType: resource.context ? Object.keys(resource.context)[0] : null,
     contextId: resource.context
       ? resource.context[Object.keys(resource.context)[0]]?.[0]?.reference?.split("/")[1]

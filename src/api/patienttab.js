@@ -3,7 +3,7 @@ import { useContext, useMemo } from "react";
 import { AppContext } from "../layouts/DashboardLayout";
 
 export const usePatientTabs = () => {
-  const { departmentId } = useContext(AppContext);
+  const { departmentId  } = useContext(AppContext);
 
   return useMemo(() => ({
     vitals: {
@@ -11,6 +11,7 @@ export const usePatientTabs = () => {
       headers: ["Date", "Type", "Value", "Unit"],
       url: (id) => `/Observation?patient=${id}&departmentId=${departmentId}`,
       headersConfig: { "x-interaction-mode": "false" },
+      
       mapRow: (obs) => {
         if (!obs.component?.length) return [];
         return obs.component.map((comp) => {
@@ -19,7 +20,7 @@ export const usePatientTabs = () => {
           const unit = comp.valueQuantity?.unit;
           const date = obs.issued ? new Date(obs.issued).toLocaleString() : null;
           return [date, type, value, unit].filter(Boolean);
-        },[departmentId]);
+        },[departmentId ]);
       },
     },
     

@@ -2,16 +2,17 @@
 import { fhirFetch } from "./fhir";
 
 // ✅ Fetch allergies for a patient
-export async function fetchAllergies(patientId, sourceId,departmentId) {
+export async function fetchAllergies(patientId, sourceId,departmentId, setLatestCurl) {
   return fhirFetch(`/AllergyIntolerance?patient=${patientId}&departmentId=${departmentId}`, {
     sourceId,
     headers: { "x-interaction-mode": "false" },
+    setLatestCurl,
   });
 }
 
 
 // ✅ Create a new allergy (all user-entered values)
-export async function createAllergy(patientId, sourceId, departmentId, values) {
+export async function createAllergy(patientId, sourceId, departmentId, values, setLatestCurl) {
   const now = new Date().toISOString();
 
   const allergy = {
@@ -72,5 +73,6 @@ export async function createAllergy(patientId, sourceId, departmentId, values) {
     method: "POST",
     body: allergy,
     headers: { "Content-Type": "application/fhir+json" },
+    setLatestCurl
   });
 }

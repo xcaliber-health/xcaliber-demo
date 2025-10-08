@@ -2,12 +2,13 @@
 import { fhirFetch } from "./fhir"; 
 
 // ✅ Fetch Immunizations for a patient
-export async function fetchImmunizations(patientId, sourceId, departmentId) {
+export async function fetchImmunizations(patientId, sourceId, departmentId, setLatestCurl) {
   const bundle = await fhirFetch(
     `/Immunization?patient=${patientId}&departmentId=${departmentId}`, // ✅ include departmentId
     {
       sourceId,
       headers: { "x-interaction-mode": "false" },
+      setLatestCurl,
     }
   );
   return bundle;

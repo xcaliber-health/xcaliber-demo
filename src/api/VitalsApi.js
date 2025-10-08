@@ -2,10 +2,11 @@
 import { fhirFetch } from "./fhir";
 
 // ✅ GET Vitals (Observations)
-export async function fetchVitals(patientId, departmentId, sourceId) {
+export async function fetchVitals(patientId, departmentId, sourceId, setLatestCurl) {
   return fhirFetch(`/Observation?patient=${patientId}&departmentId=${departmentId}`, {
     sourceId,
     headers: { "x-interaction-mode": "false" },
+    setLatestCurl
   });
 }
 

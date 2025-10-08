@@ -13,7 +13,7 @@ import ImmunizationsTab from "../pages/ImmunizationsTab";
 export default function PatientChart() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { sourceId, departmentId } = useContext(AppContext);
+  const { sourceId, departmentId, setLatestCurl } = useContext(AppContext);
   const patientTabs = usePatientTabs();
 
   const [patient, setPatient] = useState(null);
@@ -38,7 +38,8 @@ export default function PatientChart() {
       try {
         const fhir = await fhirFetch(`/Patient/${id}`, {
           sourceId,
-          headers: { "x-interaction-mode": "true" },
+          headers: { "x-interaction-mode": "false" },
+          setLatestCurl,
         });
         setPatient(parsePatient(fhir));
       } catch (err) {
@@ -53,7 +54,7 @@ export default function PatientChart() {
       try {
         const bundle = await fhirFetch(
           `/Appointment?patient=${id}&departmentId=${departmentId}`,
-          { sourceId, headers: { "x-interaction-mode": "true" } }
+          { sourceId, headers: { "x-interaction-mode": "false" },setLatestCurl }
         );
         let entries = bundle.entry?.map((e) => e.resource) || [];
 
@@ -96,7 +97,7 @@ export default function PatientChart() {
             ? config.url(id, basicCode)
             : config.url(id);
 
-        const bundle = await fhirFetch(url, { sourceId, headers });
+        const bundle = await fhirFetch(url, { sourceId, headers, setLatestCurl, });
 
         setData((prev) => ({
           ...prev,

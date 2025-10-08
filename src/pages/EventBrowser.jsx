@@ -1,8 +1,9 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Editor from "@monaco-editor/react";
 import { Loader2, Search, List } from "lucide-react";
+import { AppContext } from "../layouts/DashboardLayout";
 
 function Card({ children, className = "" }) {
   return (
@@ -24,6 +25,7 @@ function Input(props) {
 }
 
 export default function EventBrowser() {
+  const { setLatestCurl } = useContext(AppContext);
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -45,17 +47,38 @@ export default function EventBrowser() {
     return () => clearTimeout(t);
   }, [search]);
 
-  // fetch events
   useEffect(() => {
+  const fetchEvents = async () => {
     setLoading(true);
-    axios
-      .get(API_URL)
-      .then((res) => {
-        setEvents(res.data || []);
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }, []);
+
+    const headers = {
+      "Content-Type": "application/fhir+json",
+      Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+    };
+
+    try {
+      const res = await axios.get(API_URL, { headers });
+      setEvents(res.data || []);
+
+      // ➡ Build cURL string for "Get All Events"
+      let curlCommand = `curl "${API_URL}" \\\n  -X GET`;
+      Object.entries(headers).forEach(([key, value]) => {
+        curlCommand += ` \\\n  -H "${key}: ${value}"`;
+      });
+
+      if (setLatestCurl) {
+        setLatestCurl(curlCommand);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchEvents();
+}, []);
+
 
   const filteredEvents = events.filter((event) =>
     event.id.toLowerCase().includes(debouncedSearch.toLowerCase())
@@ -67,26 +90,44 @@ export default function EventBrowser() {
     currentPage * rowsPerPage
   );
 
+  
   const handleSelect = async (event) => {
-    setSelectedEvent(event);
-    setJsonLoading(true);
-    setJsonString("");
+  setSelectedEvent(event);
+  setJsonLoading(true);
+  setJsonString("");
 
-    try {
-      const res = await axios.get(
-        `https://blitz.xcaliberapis.com/subscription-interop/api/v2/events/${event.id}?tenantId=512fe16b-57cc-3887-b28f-829f21aa9ef2&x-data-product-id=0000-0000-0000-0000`
-      );
+  const url = `https://blitz.xcaliberapis.com/subscription-interop/api/v2/events/${event.id}?tenantId=512fe16b-57cc-3887-b28f-829f21aa9ef2&x-data-product-id=0000-0000-0000-0000`;
 
-      setJsonString(JSON.stringify(res.data, null, 2));
-      setIsValid(true);
-    } catch (err) {
-      console.error(err);
-      setJsonString(`Error fetching event: ${err.message}`);
-      setIsValid(false);
-    } finally {
-      setJsonLoading(false);
-    }
+  const headers = {
+    
+    "Content-Type": "application/fhir+json",
+    Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
   };
+
+  // ➡ Build cURL string
+  let curlCommand = `curl "${url}" \\\n  -X GET`;
+  Object.entries(headers).forEach(([key, value]) => {
+    curlCommand += ` \\\n  -H "${key}: ${value}"`;
+  });
+
+  // ➡ Pass cURL to DashboardLayout
+  if (setLatestCurl) {
+    setLatestCurl(curlCommand);
+  }
+
+  try {
+    const res = await axios.get(url, { headers }); // ✅ here we use axios.get with headers
+    setJsonString(JSON.stringify(res.data, null, 2));
+    setIsValid(true);
+  } catch (err) {
+    console.error(err);
+    setJsonString(`Error fetching event: ${err.message}`);
+    setIsValid(false);
+  } finally {
+    setJsonLoading(false);
+  }
+};
+
 
   const handleEditorChange = (value) => {
     setJsonString(value);
