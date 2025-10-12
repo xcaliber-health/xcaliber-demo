@@ -7,7 +7,7 @@ import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function ImmunizationsTab({ patientId }) {
-  const { sourceId, departmentId } = useContext(AppContext);
+  const { sourceId, departmentId , setLatestCurl} = useContext(AppContext);
   const [immunizations, setImmunizations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -24,7 +24,7 @@ export default function ImmunizationsTab({ patientId }) {
 
       setLoading(true);
       try {
-        const data = await fetchImmunizations(patientId, sourceId, departmentId);
+        const data = await fetchImmunizations(patientId, sourceId, departmentId, setLatestCurl);
         let entries = data.entry || [];
 
         // Sort by latest date
@@ -49,7 +49,7 @@ export default function ImmunizationsTab({ patientId }) {
     }
 
     loadImmunizations();
-  }, [patientId, sourceId, departmentId]);
+  }, [patientId, sourceId, departmentId, setLatestCurl]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

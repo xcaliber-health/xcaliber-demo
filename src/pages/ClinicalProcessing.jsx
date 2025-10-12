@@ -1,10 +1,11 @@
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { uploadClinicalPdf } from "../api/clinicalProcessing";
 import { Loader2, HeartPulse, ChevronDown, ChevronRight, UploadCloud } from "lucide-react";
 import toast from "react-hot-toast";
-const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
+import { AppContext } from "../layouts/DashboardLayout"; 
 
+const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
 
 function Card({ children, className = "" }) {
   return (
@@ -30,8 +31,10 @@ export default function ClinicalProcessing() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [openSections, setOpenSections] = useState({});
-
   const isMounted = useRef(true);
+
+  // ✅ ADD THIS — pulls the setter from DashboardLayout
+  const { setLatestCurl } = useContext(AppContext);
 
   useEffect(() => {
     return () => {
@@ -49,9 +52,7 @@ export default function ClinicalProcessing() {
     }
 
     try {
-      //const statusResponse = await fetch(`https://blitz.xcaliberapis.com/sample/bff/api/request/${requestId}`);
       const statusResponse = await fetch(`${SAMPLE_BFF_URL}/api/request/${requestId}`);
-
       const statusData = await statusResponse.json();
       console.log("PDF Status Response:", statusData);
 
@@ -60,7 +61,6 @@ export default function ClinicalProcessing() {
       if (statusData.status === "PROCESSING") {
         setTimeout(() => pollStatus(requestId, retries - 1), 5000);
       } else if (statusData.status === "SUCCESS") {
-        // FIX: Parse entities before setting data
         let parsedEntities = {};
         try {
           parsedEntities = JSON.parse(statusData.entities);
@@ -68,8 +68,6 @@ export default function ClinicalProcessing() {
           console.error("Failed to parse entities JSON:", err);
           toast.error("Failed to parse processed data.");
         }
-
-        console.log("Parsed Entities:", parsedEntities);
 
         setData(parsedEntities);
         toast.success("PDF processed successfully");
@@ -92,10 +90,12 @@ export default function ClinicalProcessing() {
       toast.error("Please select a PDF file first.");
       return;
     }
+
     setLoading(true);
 
     try {
-      const response = await uploadClinicalPdf(file);
+      // ✅ Now works because setLatestCurl is defined via context
+      const response = await uploadClinicalPdf(file, setLatestCurl);
       console.log("Upload response:", response);
 
       if (response.status === "ACCEPTED") {

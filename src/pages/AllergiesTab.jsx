@@ -7,7 +7,7 @@ import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function AllergiesTab({ patientId }) {
-  const { sourceId, departmentId } = useContext(AppContext);
+  const { sourceId, departmentId, setLatestCurl } = useContext(AppContext);
 
   const [allergies, setAllergies] = useState([]);
   const [loadingList, setLoadingList] = useState(false);
@@ -33,7 +33,7 @@ export default function AllergiesTab({ patientId }) {
     async function loadAllergies() {
       setLoadingList(true);
       try {
-        const data = await fetchAllergies(patientId, sourceId, departmentId);
+        const data = await fetchAllergies(patientId, sourceId, departmentId, setLatestCurl);
 
         const sorted = (data.entry || []).sort((a, b) => {
           const timeA =
@@ -54,7 +54,7 @@ export default function AllergiesTab({ patientId }) {
     }
 
     if (patientId && sourceId && departmentId) loadAllergies();
-  }, [patientId, sourceId, departmentId]);
+  }, [patientId, sourceId, departmentId, setLatestCurl]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,7 +65,7 @@ export default function AllergiesTab({ patientId }) {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await createAllergy(patientId, sourceId, departmentId, formValues);
+      await createAllergy(patientId, sourceId, departmentId, formValues, setLatestCurl);
       toast.success("Allergy created successfully");
       setOpen(false);
       setFormValues({
@@ -82,7 +82,7 @@ export default function AllergiesTab({ patientId }) {
         status: "",
       });
 
-      const updated = await fetchAllergies(patientId, sourceId, departmentId);
+      const updated = await fetchAllergies(patientId, sourceId, departmentId, setLatestCurl);
 
       const sorted = (updated.entry || []).sort((a, b) => {
         const timeA =

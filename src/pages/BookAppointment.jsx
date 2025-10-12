@@ -48,7 +48,7 @@ function Input(props) {
 export default function BookAppointment() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { sourceId, departmentId, patientName } = useContext(AppContext);
+  const { sourceId, departmentId, patientName,setLatestCurl } = useContext(AppContext);
 
   const { provider } = location.state || {};
   if (!provider) return <p>Missing provider info</p>;
@@ -99,6 +99,7 @@ export default function BookAppointment() {
         start: start.toISOString(),
         end: end.toISOString(),
         appointmentType: { code: appointmentType, display: typeInfo.display },
+        setLatestCurl,
       });
 
       setSuccessMsg(

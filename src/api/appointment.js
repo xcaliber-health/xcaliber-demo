@@ -74,7 +74,8 @@ export async function createAppointment({
   end,
   sourceId,
   departmentId,
-  appointmentType = { code: "562", display: "Nurse Visit" }, // default
+  appointmentType = { code: "562", display: "Nurse Visit" },
+  setLatestCurl, // default
 }) {
   if (!patientId || !providerId || !start || !end || !sourceId) {
     throw new Error("Missing required fields for createAppointment");
@@ -129,6 +130,7 @@ export async function createAppointment({
     sourceId,
     body: resource, // fhirFetch handles JSON.stringify
     headers: isAthena ? { "x-interaction-mode": "true" } : undefined,
+    setLatestCurl,
   });
 
   return response;

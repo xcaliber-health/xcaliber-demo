@@ -37,6 +37,7 @@ import DocumentReference from "./pages/DocumentReference";
 
 // Notes App
 import NotesApp from "./pages/NotesApp";
+import ViewNote from "./pages/ViewNote";
 
 // Orders Dashboard
 import OrdersDashboard from "./pages/OrdersDashboard";
@@ -44,6 +45,7 @@ import CreateOrder from "./pages/CreateOrder";
 
 //Custom Clinical Processing 
 import ClinicalProcessing from "./pages/ClinicalProcessing";
+import RecordingsList from "./pages/RecordingsList";
 
 
 // ✅ Wrapper to inject props into VitalsTab
@@ -90,6 +92,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/notes" element={<NotesApp />} />
         <Route path="/notes/:patientId" element={<NotesApp />} />
         <Route path="/notes/:patientId/:noteId" element={<NotesApp />} />
+        <Route path="/note/:id" element={<ViewNote />} />
 
         {/* Orders Dashboard */}
         <Route path="/orders" element={<OrdersDashboard />} />
@@ -98,6 +101,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         {/* Custom Clinical Processing */}
         <Route path="/custom-clinical-processing" element={<ClinicalProcessing />} />
         
+        <Route path="/scripts" element={<RecordingsList />} />
       </Route>
 
     </Routes>

@@ -254,6 +254,13 @@ function FhirBrowser() {
       url += (url.includes("?") ? "&" : "?") + queryParams;
     }
 
+    // --- Add cURL generation here ---
+    const curl = `curl -X GET "${url}" ` +
+      Object.entries(headers)
+        .map(([key, value]) => `-H "${key}: ${value}"`)
+        .join(" ");
+    setLatestCurl(curl);
+
     try {
       const res = await axios.get(url, { headers });
       const resources = res.data.entry?.map((entry) => entry.resource) || [];
@@ -274,13 +281,20 @@ function FhirBrowser() {
       setLoading(false);
     }
   };
-
+  const { setLatestCurl } = useContext(AppContext);
   const handleSelectResourceId = async (id) => {
     setSelectedResourceId(id);
     if (!selected) return;
 
     setLoading(true);
     const url = `${baseUrl}${selected.path}/${id}`;
+    // Generate cURL
+    const curl = `curl -X GET "${url}" ` +
+      Object.entries(headers)
+        .map(([key, value]) => `-H "${key}: ${value}"`)
+        .join(" ");
+
+    setLatestCurl(curl);
     try {
       const res = await axios.get(url, { headers });
       setResponse(res.data);
