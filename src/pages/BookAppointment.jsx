@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AppContext } from "../layouts/DashboardLayout";
 import { createAppointment } from "../api/appointment";
 import { Loader2, Calendar, ArrowRight } from "lucide-react";
-
+const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
 // Appointment type mappings
 const appointmentMappings = {
   "562": { display: "Nurse Visit", location: "Location/150" },
@@ -110,7 +110,7 @@ async function handleBook() {
     setSuccessMsg(notificationMessage);
 
     // Send SMS to backend
-    await fetch("http://localhost:3000/api/send-sms", {
+    await fetch(`${SAMPLE_BFF_URL}/api/send-sms`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ to: "+918919154020", body: notificationMessage }),
