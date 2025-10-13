@@ -1,151 +1,227 @@
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../layouts/DashboardLayout";
+import { createClaim } from "../api/claims";
+import { Loader2, ArrowRight } from "lucide-react";
+import toast from "react-hot-toast"; // ✅ Toast notifications
+
+function Card({ children, className = "" }) {
+  return (
+    <div className={`bg-white/95 backdrop-blur-sm shadow-xl rounded-3xl border border-white/20 ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+function Button({ children, className = "", ...props }) {
+  return (
+    <button
+      {...props}
+      className={`px-4 py-2 rounded-xl font-medium transition-all duration-200 disabled:opacity-50 transform hover:scale-105 active:scale-95 ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function Input(props) {
+  return (
+    <input
+      {...props}
+      className="border-2 border-gray-200/50 py-3 px-4 rounded-2xl w-full focus:ring-2 focus:ring-indigo-500 focus:border-indigo-300 outline-none bg-white/80 backdrop-blur-sm transition-all duration-200 placeholder:text-gray-400"
+    />
+  );
+}
 
 export default function NewClaim() {
   const navigate = useNavigate();
-  const [patient, setPatient] = useState("");
-  const [coverage, setCoverage] = useState("");
-  const [items, setItems] = useState([
-    { code: "", description: "", quantity: 1, unitPrice: 0 }
+  const { sourceId, setLatestCurl } = useContext(AppContext);
+
+  // Options
+  const patientOptions = ["12345"];
+  const departmentOptions = [101];
+  const providerOptions = ["9876", "54321", "67890", "98765"];
+  const procedureCodeOptions = ["99213", "93000"];
+  const icd10Options = ["M54.50"];
+  const customFieldOptions = [{ customfieldid: "CF-100", optionid: "OPT-1", value: "Value A" }];
+  const insuranceOptions = ["Coverage/PRIM-001", "Coverage/SEC-002"];
+  const referralAuthOptions = [445566];
+
+  // State
+  const [patientId, setPatientId] = useState(patientOptions[0]);
+  const [departmentId, setDepartmentId] = useState(departmentOptions[0]);
+  const [supervisingProviderId, setSupervisingProviderId] = useState(providerOptions[0]);
+  const [referringProviderId, setReferringProviderId] = useState(providerOptions[1]);
+  const [orderingProviderId, setOrderingProviderId] = useState(providerOptions[2]);
+  const [renderingProviderId, setRenderingProviderId] = useState(providerOptions[3]);
+  const [primaryInsuranceId, setPrimaryInsuranceId] = useState(insuranceOptions[0]);
+  const [secondaryInsuranceId, setSecondaryInsuranceId] = useState(insuranceOptions[1]);
+  const [referralAuthId, setReferralAuthId] = useState(referralAuthOptions[0]);
+  const [serviceDate, setServiceDate] = useState("2025-01-11");
+
+  const [claimCharges, setClaimCharges] = useState([
+    { procedurecode: procedureCodeOptions[0], unitamount: 15000, allowableamount: 12000, allowablemin: 10000, allowablemax: 13000, linenote: "Primary procedure", icd10code1: icd10Options[0] },
+    { procedurecode: procedureCodeOptions[1], unitamount: 10000, allowableamount: 0, allowablemin: 0, allowablemax: 0, linenote: "", icd10code1: "" }
   ]);
 
+  const [customFields, setCustomFields] = useState([
+    { customfieldid: customFieldOptions[0].customfieldid, optionid: customFieldOptions[0].optionid, customfieldvalue: customFieldOptions[0].value }
+  ]);
+
+  const [loading, setLoading] = useState(false);
+
+  // Submit handler
   const handleSubmit = async () => {
-    const newClaim = {
-      patient: { id: patient, name: patient },
-      provider: { id: "pr1", name: "Demo Provider" },
-      coverage: { id: coverage, plan: coverage },
-      serviceDate: new Date().toISOString(),
-      totalBilled: items.reduce((sum, i) => sum + i.unitPrice * i.quantity, 0),
-      items
+    const body = {
+      patientid: patientId,
+      departmentid: Number(departmentId),
+      supervisingproviderid: supervisingProviderId,
+      referringproviderid: referringProviderId,
+      orderingproviderid: orderingProviderId,
+      renderingproviderid: renderingProviderId,
+      primarypatientinsuranceid: primaryInsuranceId,
+      secondarypatientinsuranceid: secondaryInsuranceId,
+      referralauthid: Number(referralAuthId),
+      servicedate: serviceDate,
+      claimcharges: claimCharges,
+      customfields: customFields,
+      patient: { reference: `Patient/${patientId}` },
+      departmentId: { reference: `departmentId/${departmentId}` },
+      extension: [{ url: "http://xcaliber-fhir/structureDefinition/department-id", valueString: `${departmentId}` }]
     };
 
-    const res = await fetch("http://localhost:5000/api/claims", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newClaim)
-    });
+    try {
+      setLoading(true);
+      const saved = await createClaim(body, sourceId, setLatestCurl);
+      setLoading(false);
 
-    const saved = await res.json();
-    navigate(`/claims/${saved.id}`);
+      if (saved?.id) {
+        toast.success(`✅ Claim successfully created (ID: ${saved.id})`);
+        navigate(`/claims/${saved.id}`);
+      } else {
+        toast.error("Failed to create claim: invalid response from server");
+      }
+    } catch (err) {
+      setLoading(false);
+      toast.error(`Failed to create claim: ${err.message}`);
+    }
   };
 
-  const totalBilled = items.reduce((sum, i) => sum + i.unitPrice * i.quantity, 0);
+  const totalBilled = claimCharges.reduce((sum, c) => sum + c.unitamount, 0);
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">New Claim</h1>
-
-      <div className="bg-white shadow rounded-2xl p-6 space-y-6">
-        {/* Patient & Coverage */}
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <label className="block font-medium mb-1">Patient Name</label>
-            <input
-              value={patient}
-              onChange={(e) => setPatient(e.target.value)}
-              className="border rounded-lg p-3 w-full focus:ring-2 focus:ring-blue-400 outline-none"
-            />
-          </div>
-          <div>
-            <label className="block font-medium mb-1">Coverage Plan</label>
-            <input
-              value={coverage}
-              onChange={(e) => setCoverage(e.target.value)}
-              className="border rounded-lg p-3 w-full focus:ring-2 focus:ring-blue-400 outline-none"
-            />
-          </div>
+    <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
+      {/* Header */}
+      <div className="flex-shrink-0 p-4 pb-1">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">New Claim</h1>
+          <p className="text-sm text-gray-600">Fill the form and submit the claim</p>
         </div>
+      </div>
 
-        {/* Services Table */}
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Services</h2>
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-left border divide-y divide-gray-200">
-              <thead className="bg-gray-100 text-gray-700">
-                <tr>
-                  <th className="p-2">CPT Code</th>
-                  <th className="p-2">Description</th>
-                  <th className="p-2 w-20">Qty</th>
-                  <th className="p-2 w-24">Unit Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50">
-                    <td className="p-2">
-                      <input
-                        value={item.code}
-                        onChange={(e) =>
-                          setItems(items.map((it, i) =>
-                            i === idx ? { ...it, code: e.target.value } : it
-                          ))
-                        }
-                        className="border rounded px-2 py-1 w-full"
-                      />
-                    </td>
-                    <td className="p-2">
-                      <input
-                        value={item.description}
-                        onChange={(e) =>
-                          setItems(items.map((it, i) =>
-                            i === idx ? { ...it, description: e.target.value } : it
-                          ))
-                        }
-                        className="border rounded px-2 py-1 w-full"
-                      />
-                    </td>
-                    <td className="p-2">
-                      <input
-                        type="number"
-                        value={item.quantity}
-                        onChange={(e) =>
-                          setItems(items.map((it, i) =>
-                            i === idx ? { ...it, quantity: Number(e.target.value) } : it
-                          ))
-                        }
-                        className="border rounded px-2 py-1 w-full text-center"
-                      />
-                    </td>
-                    <td className="p-2">
-                      <input
-                        type="number"
-                        value={item.unitPrice}
-                        onChange={(e) =>
-                          setItems(items.map((it, i) =>
-                            i === idx ? { ...it, unitPrice: Number(e.target.value) } : it
-                          ))
-                        }
-                        className="border rounded px-2 py-1 w-full text-right"
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      {/* Content */}
+      <div className="flex-1 px-4 pb-4 overflow-auto">
+        <div className="max-w-4xl mx-auto h-full flex flex-col">
+          <Card className="flex-1 flex flex-col overflow-hidden p-6 space-y-4">
 
-          <button
-            onClick={() =>
-              setItems([...items, { code: "", description: "", quantity: 1, unitPrice: 0 }])
-            }
-            className="mt-2 bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded shadow-sm"
-          >
-            + Add Item
-          </button>
-        </div>
+            {/* Patient & Department */}
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block font-medium mb-1">Patient ID</label>
+                <select value={patientId} onChange={e => setPatientId(e.target.value)} className="border-2 border-gray-200/50 py-3 px-4 rounded-2xl w-full">
+                  {patientOptions.map(p => <option key={p} value={p}>{p}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block font-medium mb-1">Department ID</label>
+                <select value={departmentId} onChange={e => setDepartmentId(e.target.value)} className="border-2 border-gray-200/50 py-3 px-4 rounded-2xl w-full">
+                  {departmentOptions.map(d => <option key={d} value={d}>{d}</option>)}
+                </select>
+              </div>
+            </div>
 
-        {/* Total & Submit */}
-        <div className="flex justify-between items-center mt-4">
-          <div className="text-lg font-medium">
-            Total Billed: ${totalBilled.toFixed(2)}
-          </div>
-          <button
-            onClick={handleSubmit}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg shadow"
-          >
-            Submit Claim
-          </button>
+            {/* Providers */}
+            <div className="grid md:grid-cols-2 gap-4">
+              {[{label:"Supervising Provider", val: supervisingProviderId, set: setSupervisingProviderId},
+                {label:"Referring Provider", val: referringProviderId, set:setReferringProviderId},
+                {label:"Ordering Provider", val: orderingProviderId, set:setOrderingProviderId},
+                {label:"Rendering Provider", val: renderingProviderId, set:setRenderingProviderId}].map((p, idx) => (
+                <div key={idx}>
+                  <label className="block font-medium mb-1">{p.label}</label>
+                  <select value={p.val} onChange={e => p.set(e.target.value)} className="border-2 border-gray-200/50 py-3 px-4 rounded-2xl w-full">
+                    {providerOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                </div>
+              ))}
+            </div>
+
+            {/* Insurances & Referral */}
+            <div className="grid md:grid-cols-2 gap-4">
+              {[{label:"Primary Insurance", val:primaryInsuranceId, set:setPrimaryInsuranceId, options:insuranceOptions},
+                {label:"Secondary Insurance", val:secondaryInsuranceId, set:setSecondaryInsuranceId, options:insuranceOptions},
+                {label:"Referral Authorization", val:referralAuthId, set:setReferralAuthId, options:referralAuthOptions}].map((f, idx) => (
+                <div key={idx}>
+                  <label className="block font-medium mb-1">{f.label}</label>
+                  <select value={f.val} onChange={e=>f.set(e.target.value)} className="border-2 border-gray-200/50 py-3 px-4 rounded-2xl w-full">
+                    {f.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                </div>
+              ))}
+              <div>
+                <label className="block font-medium mb-1">Service Date</label>
+                <Input type="date" value={serviceDate} onChange={e=>setServiceDate(e.target.value)} />
+              </div>
+            </div>
+
+            {/* Claim Charges */}
+            <div>
+              <h2 className="text-xl font-semibold mb-2">Claim Charges</h2>
+              {claimCharges.map((c, idx) => (
+                <div key={idx} className="grid md:grid-cols-6 gap-2 mb-2">
+                  <select value={c.procedurecode} onChange={e=>setClaimCharges(claimCharges.map((v,i)=>i===idx?{...v, procedurecode:e.target.value}:v))} className="border-2 border-gray-200/50 py-2 px-3 rounded-2xl">
+                    {procedureCodeOptions.map(pc => <option key={pc} value={pc}>{pc}</option>)}
+                  </select>
+                  <Input type="number" placeholder="Unit Amount" value={c.unitamount} onChange={e=>setClaimCharges(claimCharges.map((v,i)=>i===idx?{...v, unitamount:Number(e.target.value)}:v))} />
+                  <Input type="number" placeholder="Allowable Amount" value={c.allowableamount} onChange={e=>setClaimCharges(claimCharges.map((v,i)=>i===idx?{...v, allowableamount:Number(e.target.value)}:v))} />
+                  <Input type="number" placeholder="Min" value={c.allowablemin} onChange={e=>setClaimCharges(claimCharges.map((v,i)=>i===idx?{...v, allowablemin:Number(e.target.value)}:v))} />
+                  <Input type="number" placeholder="Max" value={c.allowablemax} onChange={e=>setClaimCharges(claimCharges.map((v,i)=>i===idx?{...v, allowablemax:Number(e.target.value)}:v))} />
+                  <select value={c.icd10code1} onChange={e=>setClaimCharges(claimCharges.map((v,i)=>i===idx?{...v, icd10code1:e.target.value}:v))} className="border-2 border-gray-200/50 py-2 px-3 rounded-2xl">
+                    <option value="">-- ICD10 --</option>
+                    {icd10Options.map(icd => <option key={icd} value={icd}>{icd}</option>)}
+                  </select>
+                </div>
+              ))}
+            </div>
+
+            {/* Custom Fields */}
+            <div>
+              <h2 className="text-xl font-semibold mb-2">Custom Fields</h2>
+              {customFields.map((c, idx)=>(
+
+                <div key={idx} className="grid md:grid-cols-3 gap-2 mb-2">
+                  <select value={c.customfieldid} onChange={e=>setCustomFields(customFields.map((v,i)=>i===idx?{...v, customfieldid:e.target.value}:v))} className="border-2 border-gray-200/50 py-2 px-3 rounded-2xl">
+                    {customFieldOptions.map(f => <option key={f.customfieldid} value={f.customfieldid}>{f.customfieldid}</option>)}
+                  </select>
+                  <select value={c.optionid} onChange={e=>setCustomFields(customFields.map((v,i)=>i===idx?{...v, optionid:e.target.value}:v))} className="border-2 border-gray-200/50 py-2 px-3 rounded-2xl">
+                    {customFieldOptions.map(f => <option key={f.optionid} value={f.optionid}>{f.optionid}</option>)}
+                  </select>
+                  <Input placeholder="Value" value={c.customfieldvalue} onChange={e=>setCustomFields(customFields.map((v,i)=>i===idx?{...v, customfieldvalue:e.target.value}:v))} />
+                </div>
+
+              ))}
+            </div>
+
+            {/* Total & Submit */}
+            <div className="flex justify-between items-center mt-4">
+              <div className="font-medium">Total Billed: ${totalBilled.toFixed(2)}</div>
+              <Button onClick={handleSubmit} disabled={loading} className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white w-40 flex justify-center items-center gap-2">
+                {loading ? <Loader2 className="animate-spin h-4 w-4" /> : "Submit Claim"}
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </div>
+
+          </Card>
         </div>
       </div>
     </div>

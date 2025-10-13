@@ -14,25 +14,42 @@ export async function fetchImmunizations(patientId, sourceId, departmentId, setL
   return bundle;
 }
 
-// ✅ Create a new Immunization
+
 export async function createImmunization(patientId, sourceId, departmentId, data) {
+  const vaccineMap = {
+    "Influenza": { cvx: "141", ndc: "49281-0400-20" },
+  };
+
+  const selectedVaccine = vaccineMap[data.vaccineName] || { cvx: "", ndc: "" };
+
   const body = {
     resourceType: "Immunization",
     status: "completed",
-    patient: { reference: `Patient/${patientId}` },
     vaccineCode: {
-      text: data.vaccine,
+      coding: [
+        { system: "http://hl7.org/fhir/sid/cvx", code: selectedVaccine.cvx },
+        { system: "http://hl7.org/fhir/sid/ndc", code: selectedVaccine.ndc }
+      ]
     },
-    occurrenceDate: data.occurrenceDate,
+    occurrenceDateTime: new Date(data.occurrenceDate).toISOString().replace(/\.\d{3}Z$/, "Z"),
+    extension: [
+      {
+        url: "http://xcaliber-fhir/structureDefinition/department-id",
+        valueString: String(data.departmentId || departmentId || "")
+      }
+    ],
+    patient: {
+      reference: `Patient/${patientId}`
+    }
   };
 
-  return await fhirFetch("/Immunization?patient=${patientId}&departmentId=${departmentId}", {
+  console.log("📤 Immunization POST body:", body);
+
+  // ✅ Read body once
+  return await fhirFetch(`/Immunization`, {
     sourceId,
     method: "POST",
-    headers: { 
-      "Content-Type": "application/fhir+json",
-      "x-interaction-mode": false  
-    },
     body,
+    headers: { "Content-Type": "application/fhir+json" },
   });
 }

@@ -38,6 +38,7 @@ import DocumentReference from "./pages/DocumentReference";
 // Notes App
 import NotesApp from "./pages/NotesApp";
 import ViewNote from "./pages/ViewNote";
+import NewNote from "./pages/NewNote";
 
 // Orders Dashboard
 import OrdersDashboard from "./pages/OrdersDashboard";
@@ -90,8 +91,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
         {/* Notes App */}
         <Route path="/notes" element={<NotesApp />} />
-        <Route path="/notes/:patientId" element={<NotesApp />} />
-        <Route path="/notes/:patientId/:noteId" element={<NotesApp />} />
+          <Route path="/create-note" element={<NewNote />} />
         <Route path="/note/:id" element={<ViewNote />} />
 
         {/* Orders Dashboard */}

@@ -207,7 +207,7 @@ export default function PatientList() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style >{`
         .custom-scrollbar {
           scrollbar-width: thin;
           scrollbar-color: #e0e7ff #f8fafc;

@@ -8,6 +8,7 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { AppContext } from "../layouts/DashboardLayout";
 import { fetchDocumentPDF, fetchDiagnosticReport } from "../api/documentReference2";
+import toast from "react-hot-toast";
 
 function Card({ children, className = "" }) {
   return (
@@ -19,7 +20,10 @@ function Card({ children, className = "" }) {
 
 function Button({ children, className = "", ...props }) {
   return (
-    <button {...props} className={`px-4 py-2 rounded-xl font-medium transition-all duration-200 disabled:opacity-50 transform hover:scale-105 active:scale-95 ${className}`}>
+    <button
+      {...props}
+      className={`px-4 py-2 rounded-xl font-medium transition-all duration-200 disabled:opacity-50 transform hover:scale-105 active:scale-95 ${className}`}
+    >
       {children}
     </button>
   );
@@ -42,30 +46,38 @@ export default function DocumentReference() {
 
   const [resourceGroups, setResourceGroups] = useState({});
   const [selectedResourceType, setSelectedResourceType] = useState(null);
+  const jsonContainerRef = useRef(null);
 
   useEffect(() => {
     if (!sourceId || !departmentId) return;
 
     async function loadData() {
       setLoading(true);
+
+      let pdf = null;
+      let json = null;
+
       try {
-        const pdfPromise = fetchDocumentPDF({ patientId, documentId, departmentId, category, sourceId, setLatestCurl }).catch(err => {
+        try {
+          pdf = await fetchDocumentPDF({ patientId, documentId, departmentId, category, sourceId, setLatestCurl });
+        } catch (err) {
           console.error("PDF fetch error:", err);
-          return null;
-        });
+          toast.error(`Failed to load PDF: ${err.message || "Server error"}`);
+        }
 
-        const jsonPromise = fetchDiagnosticReport({ patientId, documentId, departmentId, category, sourceId, setLatestCurl }).catch(err => {
+        try {
+          json = await fetchDiagnosticReport({ patientId, documentId, departmentId, category, sourceId, setLatestCurl });
+        } catch (err) {
           console.error("JSON fetch error:", err);
-          return null;
-        });
+          toast.error(`Failed to load JSON: ${err.message || "Server error"}`);
+        }
 
-        const [pdf, json] = await Promise.all([pdfPromise, jsonPromise]);
         setPdfUrl(pdf);
         setJsonData(json);
 
         if (json && json.contained) {
           const grouped = {};
-          json.contained.forEach(resource => {
+          json.contained.forEach((resource) => {
             const type = resource.resourceType || "Unknown";
             if (!grouped[type]) grouped[type] = [];
             grouped[type].push(resource);
@@ -81,13 +93,14 @@ export default function DocumentReference() {
         }
       } catch (err) {
         console.error("Unexpected error:", err);
+        toast.error(`Unexpected error: ${err.message || "Something went wrong"}`);
       } finally {
         setLoading(false);
       }
     }
 
     loadData();
-  }, [sourceId, departmentId, patientId, documentId]);
+  }, [sourceId, departmentId, patientId, documentId, setLatestCurl]);
 
   const handleCopy = () => {
     if (selectedResourceType) {
@@ -95,6 +108,7 @@ export default function DocumentReference() {
     } else {
       navigator.clipboard.writeText(JSON.stringify(jsonData, null, 2));
     }
+    toast.success("Copied to clipboard!");
   };
 
   const handleDownload = () => {
@@ -108,9 +122,9 @@ export default function DocumentReference() {
     a.download = "document.json";
     a.click();
     URL.revokeObjectURL(url);
+    toast.success("JSON downloaded!");
   };
 
-  const jsonContainerRef = useRef(null);
   const handleFullscreen = () => {
     if (jsonContainerRef.current) {
       jsonContainerRef.current.requestFullscreen();
@@ -136,16 +150,20 @@ export default function DocumentReference() {
         </div>
       </div>
 
-      
-
-            {/* Tabs + Dropdowns */}
+      {/* Tabs + Dropdowns */}
       <div className="flex-shrink-0 px-6 pb-3">
         <div className="max-w-7xl mx-auto flex items-end justify-between gap-4">
           <div className="flex gap-3">
-            <Button className={activeTab === "text" ? "bg-indigo-600 text-white shadow-lg" : "bg-gray-100 text-gray-700"} onClick={() => setActiveTab("text")}>
+            <Button
+              className={activeTab === "text" ? "bg-indigo-600 text-white shadow-lg" : "bg-gray-100 text-gray-700"}
+              onClick={() => setActiveTab("text")}
+            >
               PDF
             </Button>
-            <Button className={activeTab === "json" ? "bg-indigo-600 text-white shadow-lg" : "bg-gray-100 text-gray-700"} onClick={() => setActiveTab("json")}>
+            <Button
+              className={activeTab === "json" ? "bg-indigo-600 text-white shadow-lg" : "bg-gray-100 text-gray-700"}
+              onClick={() => setActiveTab("json")}
+            >
               JSON
             </Button>
           </div>
@@ -153,21 +171,27 @@ export default function DocumentReference() {
           <div className="flex gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Patient ID</label>
-              <select value={patientId} onChange={(e) => setPatientId(e.target.value)} className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+              <select
+                value={patientId}
+                onChange={(e) => setPatientId(e.target.value)}
+                className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
                 <option value="4406">4406</option>
               </select>
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Document ID</label>
-              <select value={documentId} onChange={(e) => setDocumentId(e.target.value)} className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+              <select
+                value={documentId}
+                onChange={(e) => setDocumentId(e.target.value)}
+                className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
                 <option value="231756">231756</option>
               </select>
             </div>
           </div>
         </div>
       </div>
-
-      
 
       {/* Viewer */}
       <div className="flex-1 px-6 pb-6 pt-4 overflow-hidden">
@@ -178,34 +202,46 @@ export default function DocumentReference() {
                 <Loader2 className="animate-spin h-6 w-6 text-indigo-500" />
               </div>
             ) : activeTab === "text" ? (
-              <div className="w-full h-full rounded-2xl overflow-hidden border border-gray-200 shadow-lg">
-                <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
-                  <div style={{ height: "100%" }}>
-                    <Viewer fileUrl={pdfUrl} plugins={[defaultLayoutPluginInstance]} />
-                  </div>
-                </Worker>
-              </div>
-            ) : (
+              pdfUrl ? (
+                <div className="w-full h-full rounded-2xl overflow-hidden border border-gray-200 shadow-lg">
+                  <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
+                    <div style={{ height: "100%" }}>
+                      <Viewer fileUrl={pdfUrl} plugins={[defaultLayoutPluginInstance]} />
+                    </div>
+                  </Worker>
+                </div>
+              ) : (
+                <div className="flex justify-center items-center h-full text-gray-500">
+                  ❌ PDF not available
+                </div>
+              )
+            ) : jsonData ? (
               <div className="flex flex-col h-full">
                 {!selectedResourceType ? (
-                  <div className="overflow-auto">
-                    <table className="min-w-full bg-white">
-                      <thead>
-                        <tr>
-                          <th className="px-4 py-2 border-b text-left">Resource Type</th>
-                          <th className="px-4 py-2 border-b text-left">Count</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {Object.entries(resourceGroups).map(([type, resources]) => (
-                          <tr key={type} className="hover:bg-gray-100 cursor-pointer" onClick={() => setSelectedResourceType(type)}>
-                            <td className="px-4 py-2 border-b">{type}</td>
-                            <td className="px-4 py-2 border-b">{resources.length}</td>
+                  Object.keys(resourceGroups).length > 0 ? (
+                    <div className="overflow-auto">
+                      <table className="min-w-full bg-white">
+                        <thead>
+                          <tr>
+                            <th className="px-4 py-2 border-b text-left">Resource Type</th>
+                            <th className="px-4 py-2 border-b text-left">Count</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody>
+                          {Object.entries(resourceGroups).map(([type, resources]) => (
+                            <tr key={type} className="hover:bg-gray-100 cursor-pointer" onClick={() => setSelectedResourceType(type)}>
+                              <td className="px-4 py-2 border-b">{type}</td>
+                              <td className="px-4 py-2 border-b">{resources.length}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <div className="flex justify-center items-center h-full text-gray-500">
+                      ❌ No JSON resources available
+                    </div>
+                  )
                 ) : (
                   <>
                     <div className="flex justify-between items-center bg-gray-50 border-b p-2">
@@ -233,11 +269,22 @@ export default function DocumentReference() {
                         defaultLanguage="json"
                         value={JSON.stringify(resourceGroups[selectedResourceType], null, 2)}
                         theme="vs-light"
-                        options={{ readOnly: true, minimap: { enabled: false }, fontSize: 14, lineNumbers: "on", wordWrap: "on" ,stickyScroll: { enabled: false },}}
+                        options={{
+                          readOnly: true,
+                          minimap: { enabled: false },
+                          fontSize: 14,
+                          lineNumbers: "on",
+                          wordWrap: "on",
+                          stickyScroll: { enabled: false },
+                        }}
                       />
                     </div>
                   </>
                 )}
+              </div>
+            ) : (
+              <div className="flex justify-center items-center h-full text-gray-500">
+                ❌ JSON data not available
               </div>
             )}
           </Card>

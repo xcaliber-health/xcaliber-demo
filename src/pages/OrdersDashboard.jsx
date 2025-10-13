@@ -50,7 +50,7 @@ export default function OrdersDashboard() {
     try {
       const list = await fetchOrders({
         patientId: "4406",
-        encounterId: "34507",
+        encounterId: "44602",
         sourceId,
         departmentId,
         category,
@@ -68,7 +68,7 @@ export default function OrdersDashboard() {
 
   useEffect(() => {
     loadOrders();
-  }, [category,setLatestCurl]); // Reload orders when category changes
+  }, [category,setLatestCurl]); 
 
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">

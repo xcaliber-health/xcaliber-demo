@@ -30,7 +30,7 @@ export async function fetchProvidersDirectory(sourceId, departmentId, name = "",
 
       const bundle = await fhirFetch(url, {
         sourceId,
-        headers: { "x-interaction-mode": "true" },
+        headers: { "x-interaction-mode": "false" },
         setLatestCurl,
       });
 
@@ -69,7 +69,7 @@ export async function fetchProviders(sourceId, departmentId, count = 100, search
       // 🔹 Treat search as Provider ID
       const practitioner = await fhirFetch(`/Practitioner/${search}`, {
         sourceId,
-        headers: { "x-interaction-mode": "true" },
+        headers: { "x-interaction-mode": "false" },
       });
 
       if (practitioner) {
@@ -93,7 +93,7 @@ export async function fetchProviders(sourceId, departmentId, count = 100, search
 
       const bundle = await fhirFetch(url, {
         sourceId,
-        headers: { "x-interaction-mode": "true" },
+        headers: { "x-interaction-mode": "false" },
         setLatestCurl,
       });
 

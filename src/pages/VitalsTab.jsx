@@ -1,5 +1,4 @@
 
-// src/pages/VitalsTab.jsx
 import { useEffect, useState, useContext } from "react";
 import { fetchVitals, createVitals } from "../api/VitalsApi";
 import { AppContext } from "../layouts/DashboardLayout";
@@ -8,22 +7,15 @@ import toast from "react-hot-toast";
 
 export default function VitalsTab({ patientId }) {
   const { sourceId, departmentId, setLatestCurl } = useContext(AppContext);
-
   const [vitals, setVitals] = useState([]);
   const [loadingList, setLoadingList] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [open, setOpen] = useState(false);
 
   const [formValues, setFormValues] = useState({
-    systolic: "",
-    diastolic: "",
-    heightFt: "",
-    heightIn: "",
-    weight: "",
-    bmi: "",
-    pulse: "",
-    temperature: "",
-    respiration: "",
+    name: "Blood Pressure",
+    value: "",
+    unit: "mmHg",
   });
 
   useEffect(() => {
@@ -31,19 +23,12 @@ export default function VitalsTab({ patientId }) {
       setLoadingList(true);
       try {
         const data = await fetchVitals(patientId, departmentId, sourceId, setLatestCurl);
-        const sortedVitals = (data.entry || []).sort((a, b) => {
-          const timeA =
-            new Date(a.resource?.meta?.created || a.resource?.meta?.lastUpdated).getTime() ||
-            0;
-          const timeB =
-            new Date(b.resource?.meta?.created || b.resource?.meta?.lastUpdated).getTime() ||
-            0;
-          return timeB - timeA; // latest first
-        });
-        setVitals(sortedVitals);
-        toast.success("Vitals loaded successfully");
+        const sorted = (data.entry || []).sort(
+          (a, b) => new Date(b.resource?.meta?.lastUpdated).getTime() - new Date(a.resource?.meta?.lastUpdated).getTime()
+        );
+        setVitals(sorted);
       } catch (err) {
-        console.error("Error fetching vitals:", err);
+        console.error(err);
         toast.error("Failed to load vitals");
       } finally {
         setLoadingList(false);
@@ -54,54 +39,32 @@ export default function VitalsTab({ patientId }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormValues((prev) => ({ ...prev, [name]: value }));
+    setFormValues(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formValues.name || !formValues.value) return toast.error("Name and value are required");
+
     setSubmitting(true);
-
-    const sanitizedValues = {
-      systolic: formValues.systolic ? Number(formValues.systolic) : undefined,
-      diastolic: formValues.diastolic ? Number(formValues.diastolic) : undefined,
-      heightFt: formValues.heightFt ? Number(formValues.heightFt) : 0,
-      heightIn: formValues.heightIn ? Number(formValues.heightIn) : 0,
-      weight: formValues.weight ? Number(formValues.weight) : undefined,
-      bmi: formValues.bmi ? Number(formValues.bmi) : undefined,
-      pulse: formValues.pulse ? Number(formValues.pulse) : undefined,
-      temperature: formValues.temperature ? Number(formValues.temperature) : undefined,
-      respiration: formValues.respiration ? Number(formValues.respiration) : undefined,
-    };
-
     try {
-      await createVitals(patientId, departmentId, sourceId, sanitizedValues);
-      toast.success("Vitals added successfully");
+      await createVitals(patientId, departmentId, sourceId, formValues);
+      toast.success("Vital added successfully");
       setOpen(false);
-      setFormValues({
-        systolic: "",
-        diastolic: "",
-        heightFt: "",
-        heightIn: "",
-        weight: "",
-        bmi: "",
-        pulse: "",
-        temperature: "",
-        respiration: "",
-      });
-      const updated = await fetchVitals(patientId, departmentId, sourceId);
-      const sortedUpdated = (updated.entry || []).sort((a, b) => {
-        const timeA =
-          new Date(a.resource?.meta?.created || a.resource?.meta?.lastUpdated).getTime() ||
-          0;
-        const timeB =
-          new Date(b.resource?.meta?.created || b.resource?.meta?.lastUpdated).getTime() ||
-          0;
-        return timeB - timeA;
-      });
-      setVitals(sortedUpdated);
-    } catch (err) {
-      console.error("Error creating vitals:", err);
-      toast.error("Failed to add vitals");
+      setFormValues({ name: "", value: "", unit: "mmHg" });
+
+      // refresh list
+      const updated = await fetchVitals(patientId, departmentId, sourceId, setLatestCurl);
+      const sorted = (updated.entry || []).sort(
+        (a, b) => new Date(b.resource?.meta?.lastUpdated).getTime() - new Date(a.resource?.meta?.lastUpdated).getTime()
+      );
+      setVitals(sorted);
+    
+    }catch (err) {
+    console.error(err);
+    const status = err?.status || err?.response?.status || "Unknown";
+    const message = err?.message || "Failed to add vital";
+    toast.error(`${message}: Failed to add vitals`);
     } finally {
       setSubmitting(false);
     }
@@ -109,133 +72,66 @@ export default function VitalsTab({ patientId }) {
 
   return (
     <div className="p-4">
-      {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Vitals</h2>
         <button
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           onClick={() => setOpen(true)}
         >
-          Add Vitals
+          Add Vital
         </button>
       </div>
 
-      {/* Dialog */}
       {open && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
-            <h2 className="text-lg font-semibold mb-4">Add Vitals</h2>
+            <h2 className="text-lg font-semibold mb-4">Add Vital</h2>
             <form onSubmit={handleSubmit} className="space-y-3">
-              {/* Blood Pressure */}
               <div>
-                <label className="block mb-1">Blood Pressure</label>
-                <div className="flex space-x-2">
-                  <input
-                    name="systolic"
-                    placeholder="Sys"
-                    value={formValues.systolic}
-                    onChange={handleChange}
-                    className="border p-1 w-16"
-                  />
-                  <input
-                    name="diastolic"
-                    placeholder="Dia"
-                    value={formValues.diastolic}
-                    onChange={handleChange}
-                    className="border p-1 w-16"
-                  />
-                </div>
-              </div>
-
-              {/* Height */}
-              <div>
-                <label className="block mb-1">Height</label>
-                <div className="flex space-x-2">
-                  <input
-                    name="heightFt"
-                    placeholder="ft"
-                    value={formValues.heightFt}
-                    onChange={handleChange}
-                    className="border p-1 w-16"
-                  />
-                  <input
-                    name="heightIn"
-                    placeholder="in"
-                    value={formValues.heightIn}
-                    onChange={handleChange}
-                    className="border p-1 w-16"
-                  />
-                </div>
-              </div>
-
-              {/* Weight */}
-              <div>
-                <label className="block mb-1">Weight (lbs)</label>
+                <label className="block mb-1">Vital Name</label>
                 <input
-                  name="weight"
-                  value={formValues.weight}
+                  name="name"
+                  value={formValues.name}
                   onChange={handleChange}
-                  className="border p-1 w-full"
+                  placeholder="e.g. Blood Pressure"
+                  className="border p-2 w-full"
+                  required
                 />
               </div>
-
-              {/* BMI */}
               <div>
-                <label className="block mb-1">BMI</label>
+                <label className="block mb-1">Value</label>
                 <input
-                  name="bmi"
-                  value={formValues.bmi}
+                  type="number"
+                  name="value"
+                  value={formValues.value}
                   onChange={handleChange}
-                  className="border p-1 w-full"
+                  placeholder="e.g. 120"
+                  className="border p-2 w-full"
+                  required
                 />
               </div>
-
-              {/* Pulse */}
               <div>
-                <label className="block mb-1">Pulse Rate (bpm)</label>
+                <label className="block mb-1">Unit</label>
                 <input
-                  name="pulse"
-                  value={formValues.pulse}
+                  type="text"
+                  name="unit"
+                  value={formValues.unit}
                   onChange={handleChange}
-                  className="border p-1 w-full"
-                />
-              </div>
-
-              {/* Temperature */}
-              <div>
-                <label className="block mb-1">Body Temperature (°F)</label>
-                <input
-                  name="temperature"
-                  value={formValues.temperature}
-                  onChange={handleChange}
-                  className="border p-1 w-full"
-                />
-              </div>
-
-              {/* Respiration */}
-              <div>
-                <label className="block mb-1">Respiration Rate (bpm)</label>
-                <input
-                  name="respiration"
-                  value={formValues.respiration}
-                  onChange={handleChange}
-                  className="border p-1 w-full"
+                  className="border p-2 w-full"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                 disabled={submitting}
+                className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
               >
                 {submitting ? (
                   <span className="flex items-center justify-center">
                     <Loader2 className="h-5 w-5 animate-spin mr-2" />
                     Saving...
                   </span>
-                ) : (
-                  "Save"
-                )}
+                ) : "Save"}
               </button>
 
               <button
@@ -250,7 +146,6 @@ export default function VitalsTab({ patientId }) {
         </div>
       )}
 
-      {/* Display vitals list */}
       {loadingList ? (
         <div className="flex items-center justify-center py-6 text-gray-600">
           <Loader2 className="h-6 w-6 animate-spin mr-2" />
@@ -259,42 +154,19 @@ export default function VitalsTab({ patientId }) {
       ) : vitals.length > 0 ? (
         <div className="space-y-2">
           {vitals.map((item, idx) => {
-            const createdTime =
-              item.resource?.meta?.created || item.resource?.meta?.lastUpdated;
+            const res = item.resource;
             return (
-              <div
-                key={idx}
-                className="p-3 border rounded-lg shadow-sm bg-white"
-              >
-                <p className="text-sm text-gray-600">
-                  {item.resource?.code?.coding?.[0]?.display || "Vital"}
-                </p>
-                <p className="font-medium">
-                  {item.resource?.valueQuantity?.value
-                    ? `${item.resource.valueQuantity.value} ${
-                        item.resource.valueQuantity.unit || ""
-                      }`
-                    : item.resource?.component
-                        ?.map(
-                          (c) =>
-                            `${c.code?.coding?.[0]?.display}: ${
-                              c.valueQuantity?.value
-                            } ${c.valueQuantity?.unit || ""}`
-                        )
-                        .join(", ")}
-                </p>
-                {createdTime && (
-                  <p className="text-xs text-gray-400">
-                    Created: {new Date(createdTime).toLocaleString()}
-                  </p>
+              <div key={idx} className="p-3 border rounded-lg bg-white shadow-sm">
+                <p className="font-medium">{res?.code?.coding?.[0]?.display || "Vital"}</p>
+                <p>{res?.valueQuantity?.value} {res?.valueQuantity?.unit}</p>
+                {res?.meta?.lastUpdated && (
+                  <p className="text-xs text-gray-400">{new Date(res.meta.lastUpdated).toLocaleString()}</p>
                 )}
               </div>
             );
           })}
         </div>
-      ) : (
-        <p className="text-gray-500">No vitals found.</p>
-      )}
+      ) : <p className="text-gray-500">No vitals found.</p>}
     </div>
   );
 }

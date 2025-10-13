@@ -46,11 +46,18 @@ export async function fhirFetch(
   console.log("⬅️ fhirFetch Response status:", response.status, response.statusText);
 
   let responseBody;
-  try {
-    responseBody = await response.json();
-  } catch {
-    responseBody = await response.text();
-  }
+  // try {
+  //   responseBody = await response.json();
+  // } catch {
+  //   responseBody = await response.text();
+  // }
+  const text = await response.text();
+try {
+  responseBody = text ? JSON.parse(text) : {};
+} catch {
+  responseBody = text;
+}
+
 
   if (!response.ok) {
     console.error("❌ fhirFetch error body:", responseBody);

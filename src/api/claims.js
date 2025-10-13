@@ -140,4 +140,26 @@ export async function fetchClaimById(claimId, sourceId, patientId, departmentId,
     extensions,
   };
 }
+// Create a new claim
+export async function createClaim(claimBody, sourceId, setLatestCurl) {
+  if (!claimBody.patientid || !claimBody.departmentid) {
+    throw new Error("claimBody must include patientid and departmentid");
+  }
 
+  const url = `/Claim?patient=${claimBody.patientid}&departmentId=${claimBody.departmentid}`;
+
+  try {
+    const res = await fhirFetch(url, {
+      sourceId,
+      method: "POST",
+      body: claimBody,
+      headers: { "Content-Type": "application/json" },
+      setLatestCurl,
+    });
+
+    return res; // return the created claim resource
+  } catch (err) {
+    console.error("Error creating claim:", err);
+    throw err;
+  }
+}

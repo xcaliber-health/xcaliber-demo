@@ -62,8 +62,8 @@ export default function DashboardLayout() {
     {
       title: "Sample Workflows",
       links: [
-        { to: "/scheduling/find", label: "Scheduling", icon: Calendar },
-        { to: "/patients", label: "Patient Chart", icon: Users },
+        { to: "/scheduling/find", label: "Scheduling Mobile App", icon: Calendar },
+        { to: "/patients", label: "Oncologist Patient Chart", icon: Users },
         { to: "/claims", label: "Claims List", icon: FileText },
         { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
         {
