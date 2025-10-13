@@ -120,14 +120,15 @@ export async function fetchOrders({
     throw new Error("Missing patientId or sourceId when calling fetchOrders");
   }
 
-  let url = `/ServiceRequest?patient=${patientId}&encounter=${encounterId}`;
-  if (departmentId) url += `&departmentId=${departmentId}`;
+  let url = `/ServiceRequest?patient=${patientId}&encounter=Encounter/${encounterId}`;
+  //if (departmentId) url += `&departmentId=${departmentId}`;
   if (category) url += `&category=${category}`;
 
   const bundle = await fhirFetch(url, {
     sourceId,
     headers: {
       "Authorization": `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+      "x-interaction-mode": "false",
     },
     setLatestCurl,
   });

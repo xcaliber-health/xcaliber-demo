@@ -12,53 +12,65 @@ export async function fetchAllergies(patientId, sourceId,departmentId, setLatest
 
 
 // ✅ Create a new allergy (all user-entered values)
+
 export async function createAllergy(patientId, sourceId, departmentId, values, setLatestCurl) {
-  const now = new Date().toISOString();
+  const allergyMap = {
+    Penicillin: "12345", // allergy name → allergenid & code
+  };
+
+  const allergenid = allergyMap[values.allergy] || "";
 
   const allergy = {
     resourceType: "AllergyIntolerance",
-    clinicalStatus: {
-      coding: [
-        {
-          system: "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
-          code: values.status || "active",
-        },
-      ],
-    },
-    verificationStatus: {
-      coding: [
-        {
-          system: "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
-          code: "unconfirmed",
-        },
-      ],
-    },
-    type: "allergy",
-    category: values.category ? [values.category] : ["medication"],
+
     code: {
       coding: [
         {
-          system: "athena",
-          code: values.code || "",
-          display: values.allergy || "",
+          system: "athena",      // hidden fixed system
+          code: allergenid,      // set from allergyMap
+          display: values.allergy // allergy name from dropdown
         },
       ],
-      text: values.allergy || "",
+      text: values.allergy,
     },
-    patient: { reference: `Patient/${patientId}` },
+
+    category: values.category ? [values.category] : ["medication"],
+
+    patient: {
+      reference: `Patient/${patientId}`,
+    },
+
     criticality: values.criticality || "high",
+
     note: values.note ? [{ text: values.note }] : [],
-    onsetDateTime: values.onsetDate ? new Date(values.onsetDate).toISOString() : now,
-    reaction: values.reaction
-      ? [
-          {
-            description: values.reaction,
-            severity: values.severity || "moderate",
-            onset: values.onsetDate ? new Date(values.onsetDate).toISOString() : now,
-          },
-        ]
-      : [],
+
+    onsetDateTime: values.onsetDateTime
+      ? new Date(values.onsetDateTime).toISOString()
+      : new Date().toISOString(),
+
+    reaction: [],
+
+    allergenid: allergenid, // required field
+
     extension: [
+      ...(values.deactivatedDate
+        ? [
+            {
+              url: "http://xcaliber-fhir/structureDefinition/DEACTIVATEDDATE",
+              valueString: new Date(values.deactivatedDate).toISOString(),
+            },
+          ]
+        : []),
+
+      ...(values.reactivatedDate
+        ? [
+            {
+              url: "http://xcaliber-fhir/structureDefinition/REACTIVATEDATE",
+              valueDate: values.reactivatedDate,
+            },
+          ]
+        : []),
+
       {
         url: "http://xcaliber-fhir/structureDefinition/department-id",
         valueString: String(departmentId),
@@ -73,6 +85,6 @@ export async function createAllergy(patientId, sourceId, departmentId, values, s
     method: "POST",
     body: allergy,
     headers: { "Content-Type": "application/fhir+json" },
-    setLatestCurl
+    setLatestCurl,
   });
 }

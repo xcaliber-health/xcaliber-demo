@@ -119,117 +119,123 @@ export default function AllergiesTab({ patientId }) {
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-2xl shadow-xl w-[500px] max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-semibold mb-4">Add Allergy</h2>
+            
             <form onSubmit={handleSubmit} className="space-y-3">
-              <input
-                name="allergy"
-                value={formValues.allergy}
-                onChange={handleChange}
-                placeholder="Allergy"
-                className="border rounded-lg p-2 w-full"
-                required
-              />
-              <input
-                name="code"
-                value={formValues.code}
-                onChange={handleChange}
-                placeholder="Code"
-                className="border rounded-lg p-2 w-full"
-                required
-              />
-              <input
-                name="system"
-                value={formValues.system}
-                onChange={handleChange}
-                placeholder="System"
-                className="border rounded-lg p-2 w-full"
-              />
-              <select
-                name="category"
-                value={formValues.category}
-                onChange={handleChange}
-                className="border rounded-lg p-2 w-full"
-              >
-                <option value="medication">Medication</option>
-                <option value="food">Food</option>
-                <option value="environment">Environment</option>
-                <option value="biologic">Biologic</option>
-              </select>
-              <select
-                name="criticality"
-                value={formValues.criticality}
-                onChange={handleChange}
-                className="border rounded-lg p-2 w-full"
-              >
-                <option value="">Select Criticality</option>
-                <option value="low">Low</option>
-                <option value="high">High</option>
-                <option value="unable-to-assess">Unable to assess</option>
-              </select>
-              <input
-                name="reaction"
-                value={formValues.reaction}
-                onChange={handleChange}
-                placeholder="Reaction"
-                className="border rounded-lg p-2 w-full"
-              />
-              <input
-                name="onsetDateTime"
-                type="datetime-local"
-                value={formValues.onsetDateTime}
-                onChange={handleChange}
-                className="border rounded-lg p-2 w-full"
-              />
-              <input
-                name="note"
-                value={formValues.note}
-                onChange={handleChange}
-                placeholder="Note"
-                className="border rounded-lg p-2 w-full"
-              />
-              <input
-                name="deactivatedDate"
-                type="datetime-local"
-                value={formValues.deactivatedDate}
-                onChange={handleChange}
-                className="border rounded-lg p-2 w-full"
-              />
-              <input
-                name="reactivatedDate"
-                type="date"
-                value={formValues.reactivatedDate}
-                onChange={handleChange}
-                className="border rounded-lg p-2 w-full"
-              />
-              <input
-                name="status"
-                value={formValues.status}
-                onChange={handleChange}
-                placeholder="Status"
-                className="border rounded-lg p-2 w-full"
-              />
+  {/* Allergy dropdown */}
+  <label className="font-medium">Allergy</label>
+  <select
+    name="allergy"
+    value={formValues.allergy}
+    onChange={handleChange}
+    className="border rounded-lg p-2 w-full"
+    required
+  >
+    <option value="">Select an allergy</option>
+    <option value="Penicillin">Penicillin</option>
+    {/* You can add more allergy options here */}
+  </select>
 
-              <button
-                type="submit"
-                className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
-                disabled={submitting}
-              >
-                {submitting ? (
-                  <span className="flex items-center justify-center">
-                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                    Saving...
-                  </span>
-                ) : (
-                  "Save"
-                )}
-              </button>
-              <button
-                type="button"
-                className="mt-2 w-full px-4 py-2 border rounded-lg hover:bg-gray-50"
-                onClick={() => setOpen(false)}
-              >
-                Cancel
-              </button>
-            </form>
+  {/* Hidden code field (auto set to 12345) */}
+  <input
+    type="hidden"
+    name="code"
+    value="12345"
+  />
+
+  {/* Category */}
+  <label className="font-medium">Category</label>
+  <select
+    name="category"
+    value={formValues.category}
+    onChange={handleChange}
+    className="border rounded-lg p-2 w-full"
+  >
+    <option value="medication">Medication</option>
+    <option value="food">Food</option>
+    <option value="environment">Environment</option>
+    <option value="biologic">Biologic</option>
+  </select>
+
+  {/* Criticality */}
+  <label className="font-medium">Criticality</label>
+  <select
+    name="criticality"
+    value={formValues.criticality}
+    onChange={handleChange}
+    className="border rounded-lg p-2 w-full"
+  >
+    <option value="">Select Criticality</option>
+    <option value="low">Low</option>
+    <option value="high">High</option>
+    <option value="unable-to-assess">Unable to assess</option>
+  </select>
+
+  {/* Note */}
+  <label className="font-medium">Note</label>
+  <input
+    name="note"
+    value={formValues.note}
+    onChange={handleChange}
+    placeholder="Note"
+    className="border rounded-lg p-2 w-full"
+  />
+
+  {/* Onset Date */}
+  <label className="font-medium">Onset Date</label>
+  <input
+    name="onsetDateTime"
+    type="datetime-local"
+    value={formValues.onsetDateTime}
+    onChange={handleChange}
+    className="border rounded-lg p-2 w-full"
+  />
+
+  {/* Deactivated Date */}
+  <label className="font-medium">Deactivated Date</label>
+  <input
+    name="deactivatedDate"
+    type="datetime-local"
+    value={formValues.deactivatedDate}
+    onChange={handleChange}
+    className="border rounded-lg p-2 w-full"
+  />
+
+  {/* Reactivated Date */}
+  <label className="font-medium">Reactivated Date</label>
+  <input
+    name="reactivatedDate"
+    type="date"
+    value={formValues.reactivatedDate}
+    onChange={handleChange}
+    className="border rounded-lg p-2 w-full"
+  />
+
+  {/* Save Button */}
+  <button
+    type="submit"
+    className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+    disabled={submitting}
+  >
+    {submitting ? (
+      <span className="flex items-center justify-center">
+        <Loader2 className="h-5 w-5 animate-spin mr-2" />
+        Saving...
+      </span>
+    ) : (
+      "Save"
+    )}
+  </button>
+
+  {/* Cancel Button */}
+  <button
+    type="button"
+    className="mt-2 w-full px-4 py-2 border rounded-lg hover:bg-gray-50"
+    onClick={() => setOpen(false)}
+  >
+    Cancel
+  </button>
+</form>
+
           </div>
         </div>
       )}

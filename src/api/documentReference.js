@@ -1,4 +1,4 @@
-import { fhirFetch } from "./fhir"; // your existing fhirFetch wrapper
+import { fhirFetch } from "./fhir"; 
 
 // Fetch documents list for a patient + category + department
 export async function fetchDocumentReferences(patientId, category, departmentId) {

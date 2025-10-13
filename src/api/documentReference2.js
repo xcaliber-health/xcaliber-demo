@@ -5,7 +5,7 @@ export async function fetchDocumentPDF({ patientId, documentId, departmentId, ca
   if (!sourceId) throw new Error("sourceId is missing when calling fetchDocumentPDF");
 
   const url = `/Media/${documentId}?patient=${patientId}&departmentId=${departmentId}&category=${category}`;
-  const response = await fhirFetch(url, { sourceId, setLatestCurl });
+  const response = await fhirFetch(url, { sourceId,headers: { "x-interaction-mode": "true" }, setLatestCurl });
 
   const base64Data = response?.content?.data;
   if (!base64Data) throw new Error("No PDF data found in response");

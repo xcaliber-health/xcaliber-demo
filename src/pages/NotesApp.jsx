@@ -132,9 +132,13 @@ export default function NotesApp() {
 
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <Button onClick={() => navigate("/create-note")}>
+              {/* <Button onClick={() => navigate("/create-note")}>
                 <Plus className="w-4 h-4" /> New Note
-              </Button>
+              </Button> */}
+              <Button onClick={() => navigate("/create-note")}>
+  <Plus className="w-4 h-4" /> New Note
+</Button>
+
 
               <div className="flex items-center gap-2">
                 <Filter className="w-4 h-4 text-gray-500" />

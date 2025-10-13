@@ -1,5 +1,4 @@
 
-// src/pages/ImmunizationsTab.jsx
 import { useEffect, useState, useContext } from "react";
 import { fetchImmunizations, createImmunization } from "../api/ImmunizationsApi";
 import { AppContext } from "../layouts/DashboardLayout";
@@ -7,17 +6,21 @@ import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function ImmunizationsTab({ patientId }) {
-  const { sourceId, departmentId , setLatestCurl} = useContext(AppContext);
+  const { sourceId, departmentId, setLatestCurl } = useContext(AppContext);
   const [immunizations, setImmunizations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
+  const vaccineMap = {
+    "Influenza": { cvx: "141", ndc: "49281-0400-20" },
+  };
+
   const [formValues, setFormValues] = useState({
-    vaccine: "",
+    vaccineName: "",
     occurrenceDate: "",
+    departmentId: departmentId || "",
   });
 
-  // ✅ Fetch immunizations
   useEffect(() => {
     async function loadImmunizations() {
       if (!patientId || !departmentId || !sourceId) return;
@@ -27,7 +30,6 @@ export default function ImmunizationsTab({ patientId }) {
         const data = await fetchImmunizations(patientId, sourceId, departmentId, setLatestCurl);
         let entries = data.entry || [];
 
-        // Sort by latest date
         entries.sort((a, b) => {
           const dateA = a.resource?.occurrenceDate
             ? new Date(a.resource.occurrenceDate)
@@ -62,13 +64,23 @@ export default function ImmunizationsTab({ patientId }) {
 
     setLoading(true);
     try {
-      await createImmunization(patientId, sourceId, departmentId, formValues);
+      const vaccineCodes = vaccineMap[formValues.vaccineName] || { cvx: "", ndc: "" };
+      await createImmunization(patientId, sourceId, departmentId, {
+        ...formValues,
+        vaccineCvx: vaccineCodes.cvx,
+        vaccineNdc: vaccineCodes.ndc
+      });
+
       toast.success("Immunization added successfully");
 
       setOpen(false);
-      setFormValues({ vaccine: "", occurrenceDate: "" });
+      setFormValues({
+        vaccineName: "",
+        occurrenceDate: "",
+        departmentId: departmentId || "",
+      });
 
-      const updated = await fetchImmunizations(patientId, sourceId, departmentId);
+      const updated = await fetchImmunizations(patientId, sourceId, departmentId, setLatestCurl);
       setImmunizations(updated.entry || []);
     } catch (err) {
       console.error("Error creating immunization:", err);
@@ -80,7 +92,6 @@ export default function ImmunizationsTab({ patientId }) {
 
   return (
     <div className="p-4">
-      {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Immunizations</h2>
         <button
@@ -91,30 +102,36 @@ export default function ImmunizationsTab({ patientId }) {
         </button>
       </div>
 
-      {/* Dialog Form */}
       {open && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-2xl shadow-xl w-[400px]">
+          <div className="bg-white p-6 rounded-2xl shadow-xl w-[400px] max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-semibold mb-4">Add Immunization</h2>
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
-                <label className="block mb-1">Vaccine</label>
-                <input
-                  type="text"
-                  name="vaccine"
-                  value={formValues.vaccine}
+                <label className="block mb-1">Vaccine Name</label>
+                <select
+                  name="vaccineName"
+                  value={formValues.vaccineName}
                   onChange={handleChange}
-                  className="border rounded-lg p-2 w-full focus:ring focus:ring-blue-200"
-                />
+                  className="border rounded-lg p-2 w-full"
+                  required
+                >
+                  <option value="">Select Vaccine</option>
+                  {Object.keys(vaccineMap).map((vaccine) => (
+                    <option key={vaccine} value={vaccine}>{vaccine}</option>
+                  ))}
+                </select>
               </div>
+
               <div>
                 <label className="block mb-1">Occurrence Date</label>
                 <input
-                  type="date"
+                  type="datetime-local"
                   name="occurrenceDate"
                   value={formValues.occurrenceDate}
                   onChange={handleChange}
-                  className="border rounded-lg p-2 w-full focus:ring focus:ring-blue-200"
+                  className="border rounded-lg p-2 w-full"
+                  required
                 />
               </div>
 
@@ -132,6 +149,7 @@ export default function ImmunizationsTab({ patientId }) {
                   "Save"
                 )}
               </button>
+
               <button
                 type="button"
                 className="mt-2 w-full px-4 py-2 border rounded-lg hover:bg-gray-50"
@@ -144,7 +162,6 @@ export default function ImmunizationsTab({ patientId }) {
         </div>
       )}
 
-      {/* Display immunizations list */}
       {loading ? (
         <div className="flex items-center justify-center py-6 text-gray-600">
           <Loader2 className="h-6 w-6 animate-spin mr-2" />
@@ -160,10 +177,7 @@ export default function ImmunizationsTab({ patientId }) {
               : null;
 
             return (
-              <div
-                key={idx}
-                className="p-3 border rounded-lg shadow-sm bg-white hover:shadow-md transition"
-              >
+              <div key={idx} className="p-3 border rounded-lg shadow-sm bg-white hover:shadow-md transition">
                 <p className="font-medium text-gray-800">
                   {i.resource?.vaccineCode?.coding?.[0]?.display || "Vaccine"}
                 </p>
