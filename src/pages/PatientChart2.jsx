@@ -14,6 +14,8 @@ import FamilyHistoryTab from "../pages/FamilyHistoryTab";
 import DocumentTab from "../pages/DocumentTab";
 import ConditionsTab from "./ConditionsTab";
 import QuestionnaireTab from "./QuestionnaireTab";
+import ProcedureTab from "../pages/ProcedureTab";
+
 
 
 export default function PatientChart() {
@@ -32,8 +34,8 @@ export default function PatientChart() {
   const [error, setError] = useState(null);
 
   const [documentCategory, setDocumentCategory] = useState("clinical-document");
-  const [diagnosticCategory, setDiagnosticCategory] = useState("lab-results");
-  const [basicCode, setBasicCode] = useState("portal-status");
+  const [diagnosticCategory, setDiagnosticCategory] = useState("lab-result");
+  const [basicCode, setBasicCode] = useState("risk-contract");
 
   // ---------------- Load patient + appointments ----------------
   useEffect(() => {
@@ -84,7 +86,7 @@ export default function PatientChart() {
 
   // ---------------- Load tab data ----------------
   useEffect(() => {
-    if (["vitals", "allergies", "immunizations","documents","conditions","questionnaireResponses"].includes(activeTab)) return;
+    if (["vitals", "allergies", "immunizations","documents","conditions","questionnaireResponses","procedures","familyHistory"].includes(activeTab)) return;
     if (!id || !sourceId) return;
 
     const loadTabData = async () => {
@@ -242,6 +244,9 @@ export default function PatientChart() {
             <VitalsTab patientId={id} sourceId={sourceId} />
           ) : activeTab === "allergies" ? (
             <AllergiesTab patientId={id} sourceId={sourceId} />
+            ) : activeTab === "procedures" ? (
+  <ProcedureTab patientId={id} />
+
           ) : activeTab === "encounters" ? (
             <EncountersTab
               patientId={id}

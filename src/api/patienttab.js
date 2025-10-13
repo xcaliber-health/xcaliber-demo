@@ -24,7 +24,7 @@ export const usePatientTabs = () => {
     diagnosticReports: {
       label: "Diagnostic Reports",
       headers: ["Report", "Status", "Date"],
-      url: (patientId, category = "lab-results") =>
+      url: (patientId, category = "lab-result") =>
         `/DiagnosticReport?patient=${patientId}&departmentId=${departmentId}&category=${category}`,
       headersConfig: { "x-interaction-mode": "false" },
       mapRow: (res) => {
@@ -35,7 +35,7 @@ export const usePatientTabs = () => {
           : null;
         return [report, status, date].filter(Boolean);
       },
-      categoryOptions: ["imaging-result", "lab-results"],
+      categoryOptions: ["imaging-result", "lab-result"],
     },
 
     
@@ -72,8 +72,8 @@ documents: {
   headers: ["Description", "Status", "Intent"],
   
   url: (id) =>
-    `/Task?patient=${id}&departmentId=${departmentId}&practitioner=67`,
-  headersConfig: { "x-interaction-mode": "false" },
+    `/Task?practitioner=112&_count=1000`,
+  headersConfig: { "x-interaction-mode": "true" },
   mapRow: (res) => [
     res.description || res.code?.coding?.[0]?.display, 
     res.status,
@@ -100,31 +100,26 @@ documents: {
     },
 
     procedures: {
-      label: "Procedures",
-      headers: ["Procedure", "Status", "Date"],
-      url: (id) => `/Procedure?patient=${id}&departmentId=${departmentId}`,
-      headersConfig: { "x-interaction-mode": "false" },
-      mapRow: (res) => {
-        const row = [];
-        const procedure = res.code?.coding?.[0]?.display;
-        if (procedure) row.push(procedure);
-        if (res.status) row.push(res.status);
-        if (res.performedDateTime) row.push(new Date(res.performedDateTime).toLocaleDateString());
-        return row;
-      },
-    },
+  label: "Procedures",
+},
 
     basics: {
-      label: "Basic Records",
-      headers: ["Code", "Created"],
-      url: (patientId, code) =>
-        `/Basic?patient=${patientId}&departmentId=${departmentId}${code ? `&code=${code}` : ""}`,
-      headersConfig: { "x-interaction-mode": "false" },
-      mapRow: (res) => [
-        res.code?.text,
-        res.created ? new Date(res.created).toLocaleDateString() : null,
-      ].filter(Boolean),
-      codeOptions: ["portal-status"],
-    },
+  label: "Basic Records",
+  headers: ["Code", "Last Updated"],
+  url: (patientId, code) =>
+    `/Basic?departmentId=${departmentId}${code ? `&code=${code}` : ""}`,
+  headersConfig: { "x-interaction-mode": "true" },
+  mapRow: (res) => {
+    const resource = res.resource || res; 
+    return [
+      resource.code?.text || null,
+      resource.meta?.lastUpdated
+        ? new Date(resource.meta.lastUpdated).toLocaleDateString()
+        : null,
+    ].filter(Boolean);
+  },
+  codeOptions: ["risk-contract"],
+},
+
   }), [departmentId]);
 };

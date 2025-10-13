@@ -31,15 +31,12 @@ export default function ClinicalProcessing() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [openSections, setOpenSections] = useState({});
+  const [activeStep, setActiveStep] = useState(0); // 0: Upload, 1: Entities, 2: Writeback
   const isMounted = useRef(true);
-
-  // ✅ ADD THIS — pulls the setter from DashboardLayout
   const { setLatestCurl } = useContext(AppContext);
 
   useEffect(() => {
-    return () => {
-      isMounted.current = false;
-    };
+    return () => { isMounted.current = false; };
   }, []);
 
   const pollStatus = async (requestId, retries = 50) => {
@@ -54,7 +51,6 @@ export default function ClinicalProcessing() {
     try {
       const statusResponse = await fetch(`${SAMPLE_BFF_URL}/api/request/${requestId}`);
       const statusData = await statusResponse.json();
-      console.log("PDF Status Response:", statusData);
 
       if (!isMounted.current) return;
 
@@ -68,10 +64,10 @@ export default function ClinicalProcessing() {
           console.error("Failed to parse entities JSON:", err);
           toast.error("Failed to parse processed data.");
         }
-
         setData(parsedEntities);
         toast.success("PDF processed successfully");
         setLoading(false);
+        setActiveStep(1); // move to Entities step
       } else {
         toast.error("Failed to process PDF");
         setLoading(false);
@@ -94,10 +90,7 @@ export default function ClinicalProcessing() {
     setLoading(true);
 
     try {
-      // ✅ Now works because setLatestCurl is defined via context
       const response = await uploadClinicalPdf(file, setLatestCurl);
-      console.log("Upload response:", response);
-
       if (response.status === "ACCEPTED") {
         toast.success("PDF upload accepted. Processing started.");
         pollStatus(response.id);
@@ -112,9 +105,9 @@ export default function ClinicalProcessing() {
     }
   };
 
-  const toggleSection = (key) => {
-    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
+  const toggleSection = (key) => setOpenSections(prev => ({ ...prev, [key]: !prev[key] }));
+
+  const steps = ["Upload", "Entities", "Writeback"];
 
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
@@ -133,38 +126,47 @@ export default function ClinicalProcessing() {
             </div>
           </div>
 
-          {/* Upload Section */}
-          <Card className="p-6">
-            <div className="flex flex-col md:flex-row items-center gap-4">
-              <label className="flex items-center gap-2 cursor-pointer bg-white border border-gray-300 px-4 py-2 rounded-2xl hover:bg-gray-50 shadow-sm">
-                <UploadCloud className="w-5 h-5 text-indigo-500" />
-                <span className="text-sm font-medium">Choose PDF</span>
-                <input
-                  type="file"
-                  accept="application/pdf"
-                  onChange={(e) => setFile(e.target.files[0])}
-                  className="hidden"
-                />
-              </label>
-              <span className="text-sm text-gray-500">{file?.name || "No file selected"}</span>
-              <Button
-                onClick={handleUpload}
-                disabled={loading}
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex items-center gap-2"
-              >
-                {loading ? <Loader2 className="animate-spin w-5 h-5" /> : "Upload & Process"}
-              </Button>
-            </div>
-          </Card>
-        </div>
-      </div>
+          {/* Breadcrumbs */}
+          <div className="flex items-center gap-4 mb-4">
+            {steps.map((step, idx) => (
+              <div key={step} className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveStep(idx)}>
+                <span className={`px-3 py-1 rounded-full font-medium ${activeStep === idx ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-700"}`}>
+                  {step}
+                </span>
+                {idx < steps.length - 1 && <ChevronRight className="w-4 h-4 text-gray-400" />}
+              </div>
+            ))}
+          </div>
 
-      {/* Content */}
-      <div className="flex-1 px-4 pb-2 overflow-hidden min-h-0">
-        <div className="max-w-6xl mx-auto h-full flex flex-col">
-          {data && (
-            <Card className="flex-1 flex flex-col overflow-hidden max-h-[600px]">
-              <div className="flex-1 flex flex-col p-4 overflow-auto custom-scrollbar">
+          {/* Step Content */}
+          {activeStep === 0 && (
+            <Card className="p-6">
+              <div className="flex flex-col md:flex-row items-center gap-4">
+                <label className="flex items-center gap-2 cursor-pointer bg-white border border-gray-300 px-4 py-2 rounded-2xl hover:bg-gray-50 shadow-sm">
+                  <UploadCloud className="w-5 h-5 text-indigo-500" />
+                  <span className="text-sm font-medium">Choose PDF</span>
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    onChange={(e) => setFile(e.target.files[0])}
+                    className="hidden"
+                  />
+                </label>
+                <span className="text-sm text-gray-500">{file?.name || "No file selected"}</span>
+                <Button
+                  onClick={handleUpload}
+                  disabled={loading}
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex items-center gap-2"
+                >
+                  {loading ? <Loader2 className="animate-spin w-5 h-5" /> : "Upload & Process"}
+                </Button>
+              </div>
+            </Card>
+          )}
+
+          {activeStep === 1 && data && (
+            <Card className="flex-1 flex flex-col overflow-hidden max-h-[600px] p-4">
+              <div className="flex-1 flex flex-col overflow-auto custom-scrollbar">
                 {Object.entries(data).map(([key, items]) => (
                   <div key={key} className="py-2">
                     <button
@@ -189,12 +191,9 @@ export default function ClinicalProcessing() {
                         <table className="min-w-full text-sm text-left border">
                           <thead className="bg-gray-100 text-gray-700">
                             <tr>
-                              {items.length > 0 &&
-                                Object.keys(items[0]).map((field) => (
-                                  <th key={field} className="px-3 py-2 border">
-                                    {field}
-                                  </th>
-                                ))}
+                              {items.length > 0 && Object.keys(items[0]).map(field => (
+                                <th key={field} className="px-3 py-2 border">{field}</th>
+                              ))}
                             </tr>
                           </thead>
                           <tbody>
@@ -214,6 +213,12 @@ export default function ClinicalProcessing() {
                   </div>
                 ))}
               </div>
+            </Card>
+          )}
+
+          {activeStep === 2 && (
+            <Card className="p-6 text-gray-500 flex items-center justify-center">
+              <p>Writeback step will be implemented here.</p>
             </Card>
           )}
         </div>

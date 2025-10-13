@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../layouts/DashboardLayout";
 import { fetchProviders, fetchProviderByIdSimple } from "../api/providers";
 import toast from "react-hot-toast";
-import { Loader2, Search, Users, Calendar, ArrowRight, CalendarDays } from "lucide-react";
+import { Loader2, Search, Users, Calendar, ArrowRight, CalendarDays, Bell } from "lucide-react";
 
 // ✅ Reusable Tailwind components
 function Card({ children, className = "" }) {
@@ -127,7 +127,16 @@ export default function FindAppointment() {
               </h1>
               <p className="text-sm text-gray-600">Search and book appointments with healthcare providers</p>
             </div>
+            {/* ✅ Notifications Button */}
+  <Button
+  className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-md flex items-center gap-2 text-sm px-3 py-2"
+  onClick={() => navigate("/notifications")}
+>
+  <Bell className="w-4 h-4" /> Notifications
+</Button>
+
           </div>
+
 
           <div className="relative max-w-2xl">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-indigo-400 h-5 w-5" />

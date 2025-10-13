@@ -11,6 +11,7 @@ import { AppContext } from "./layouts/DashboardLayout";
 import AppointmentDashboard from "./pages/AppointmentDashboard"; // Screen 3
 import FindAppointment from "./pages/FindAppointment";           // Screen 1
 import BookAppointment from "./pages/BookAppointment";           // Screen 2
+import VirtualPhone from "./pages/VirtualPhone";
 
 // Patient pages
 import PatientList from "./pages/PatientList";
@@ -66,6 +67,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/scheduling" element={<AppointmentDashboard />} />
         <Route path="/scheduling/find" element={<FindAppointment />} />
         <Route path="/scheduling/book" element={<BookAppointment />} />
+        <Route path="/notifications" element={<VirtualPhone />} />
 
         {/* Patients */}
         <Route path="/patients" element={<PatientList />} />

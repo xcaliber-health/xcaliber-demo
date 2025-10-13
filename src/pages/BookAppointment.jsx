@@ -70,52 +70,68 @@ export default function BookAppointment() {
     ([code, info]) => ({ code, display: info.display })
   );
 
-  async function handleBook() {
-    setErrorMsg("");
-    setSuccessMsg("");
+  
 
-    if (!date || !startTime || !endTime || !appointmentType) {
-      setErrorMsg("Please select date, start/end time, and appointment type.");
-      return;
-    }
+async function handleBook() {
+  setErrorMsg("");
+  setSuccessMsg("");
 
-    const start = new Date(`${date}T${startTime}:00Z`);
-    const end = new Date(`${date}T${endTime}:00Z`);
-
-    if (end <= start) {
-      setErrorMsg("End time must be later than start time.");
-      return;
-    }
-
-    const typeInfo = appointmentMappings[appointmentType];
-
-    try {
-      setLoading(true);
-      await createAppointment({
-        patientId,
-        providerId: provider.id,
-        sourceId,
-        departmentId,
-        start: start.toISOString(),
-        end: end.toISOString(),
-        appointmentType: { code: appointmentType, display: typeInfo.display },
-        setLatestCurl,
-      });
-
-      setSuccessMsg(
-        `✅ Appointment (${typeInfo.display}) successfully booked for ${date} ${startTime} - ${endTime}`
-      );
-
-      setDate("");
-      setStartTime("");
-      setEndTime("");
-      setAppointmentType("562");
-    } catch (err) {
-      setErrorMsg(`Booking failed: ${err.message}`);
-    } finally {
-      setLoading(false);
-    }
+  if (!date || !startTime || !endTime || !appointmentType) {
+    setErrorMsg("Please select date, start/end time, and appointment type.");
+    return;
   }
+
+  const start = new Date(`${date}T${startTime}:00Z`);
+  const end = new Date(`${date}T${endTime}:00Z`);
+
+  if (end <= start) {
+    setErrorMsg("End time must be later than start time.");
+    return;
+  }
+
+  const typeInfo = appointmentMappings[appointmentType];
+
+  try {
+    setLoading(true);
+
+    await createAppointment({
+      patientId,
+      providerId: provider.id,
+      sourceId,
+      departmentId,
+      start: start.toISOString(),
+      end: end.toISOString(),
+      appointmentType: { code: appointmentType, display: typeInfo.display },
+      setLatestCurl,
+    });
+
+    const notificationMessage = `📩 Your appointment (${typeInfo.display}) with ${provider.name} is confirmed for ${date} ${startTime} - ${endTime}`;
+
+    setSuccessMsg(notificationMessage);
+
+    // Send SMS to backend
+    await fetch("http://localhost:3000/api/send-sms", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ to: "+918919154020", body: notificationMessage }),
+    });
+
+    // ✅ Push to VirtualPhone via localStorage
+    const notifications = JSON.parse(localStorage.getItem("virtualPhoneNotifications") || "[]");
+    notifications.push(notificationMessage);
+    localStorage.setItem("virtualPhoneNotifications", JSON.stringify(notifications));
+
+    // Clear form
+    setDate("");
+    setStartTime("");
+    setEndTime("");
+    setAppointmentType("562");
+  } catch (err) {
+    setErrorMsg(`Booking failed: ${err.message}`);
+  } finally {
+    setLoading(false);
+  }
+}
 
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
@@ -203,7 +219,7 @@ export default function BookAppointment() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style >{`
         .custom-scrollbar {
           scrollbar-width: thin;
           scrollbar-color: #e0e7ff #f8fafc;
