@@ -1,15 +1,23 @@
-
 import { useState, useRef, useEffect, useContext } from "react";
 import { uploadClinicalPdf } from "../api/clinicalProcessing";
-import { Loader2, HeartPulse, ChevronDown, ChevronRight, UploadCloud } from "lucide-react";
+import { submitEntity } from "../api/HandleEntity";
+import {
+  Loader2,
+  HeartPulse,
+  ChevronDown,
+  ChevronRight,
+  UploadCloud,
+} from "lucide-react";
 import toast from "react-hot-toast";
-import { AppContext } from "../layouts/DashboardLayout"; 
+import { AppContext } from "../layouts/DashboardLayout";
 
 const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
 
 function Card({ children, className = "" }) {
   return (
-    <div className={`bg-white/95 backdrop-blur-sm shadow-xl rounded-3xl border border-white/20 ${className}`}>
+    <div
+      className={`bg-white/95 backdrop-blur-sm shadow-xl rounded-3xl border border-white/20 ${className}`}
+    >
       {children}
     </div>
   );
@@ -30,10 +38,11 @@ export default function ClinicalProcessing() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
+  const [editedData, setEditedData] = useState({});
   const [openSections, setOpenSections] = useState({});
+  const [activeStep, setActiveStep] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
   const isMounted = useRef(true);
-
-  // ✅ ADD THIS — pulls the setter from DashboardLayout
   const { setLatestCurl } = useContext(AppContext);
 
   useEffect(() => {
@@ -44,17 +53,14 @@ export default function ClinicalProcessing() {
 
   const pollStatus = async (requestId, retries = 50) => {
     if (!isMounted.current) return;
-
     if (retries <= 0) {
       toast.error("PDF processing timed out.");
       setLoading(false);
       return;
     }
-
     try {
       const statusResponse = await fetch(`${SAMPLE_BFF_URL}/api/request/${requestId}`);
       const statusData = await statusResponse.json();
-      console.log("PDF Status Response:", statusData);
 
       if (!isMounted.current) return;
 
@@ -68,20 +74,19 @@ export default function ClinicalProcessing() {
           console.error("Failed to parse entities JSON:", err);
           toast.error("Failed to parse processed data.");
         }
-
         setData(parsedEntities);
+        setEditedData(parsedEntities);
         toast.success("PDF processed successfully");
         setLoading(false);
+        setActiveStep(1);
       } else {
         toast.error("Failed to process PDF");
         setLoading(false);
       }
     } catch (error) {
       console.error("Error polling status:", error);
-      if (isMounted.current) {
-        toast.error("Error while checking PDF status");
-        setLoading(false);
-      }
+      toast.error("Error while checking PDF status");
+      setLoading(false);
     }
   };
 
@@ -90,14 +95,9 @@ export default function ClinicalProcessing() {
       toast.error("Please select a PDF file first.");
       return;
     }
-
     setLoading(true);
-
     try {
-      // ✅ Now works because setLatestCurl is defined via context
       const response = await uploadClinicalPdf(file, setLatestCurl);
-      console.log("Upload response:", response);
-
       if (response.status === "ACCEPTED") {
         toast.success("PDF upload accepted. Processing started.");
         pollStatus(response.id);
@@ -112,15 +112,35 @@ export default function ClinicalProcessing() {
     }
   };
 
-  const toggleSection = (key) => {
+  const toggleSection = (key) =>
     setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  const steps = ["Upload", "Entities", "Writeback"];
+
+  const handleFieldChange = (sectionKey, rowIndex, field, value) => {
+    const updated = { ...editedData };
+    updated[sectionKey][rowIndex][field] = value;
+    setEditedData(updated);
+  };
+
+  const handleSubmitAll = async () => {
+    try {
+      toast.loading("Submitting all entities...");
+      await submitEntity(editedData, setLatestCurl);
+      toast.dismiss();
+      toast.success("All entities submitted successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.dismiss();
+      toast.error("Submit failed.");
+    }
   };
 
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
-      {/* Header */}
       <div className="flex-shrink-0 p-4 pb-1">
         <div className="max-w-6xl mx-auto">
+          {/* Header */}
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
               <HeartPulse className="w-5 h-5 text-white" />
@@ -129,43 +149,73 @@ export default function ClinicalProcessing() {
               <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Custom Clinical Processing
               </h1>
-              <p className="text-sm text-gray-600">Upload a clinical PDF and extract structured data</p>
+              <p className="text-sm text-gray-600">
+                Upload a clinical PDF and extract structured data
+              </p>
             </div>
           </div>
 
-          {/* Upload Section */}
-          <Card className="p-6">
-            <div className="flex flex-col md:flex-row items-center gap-4">
-              <label className="flex items-center gap-2 cursor-pointer bg-white border border-gray-300 px-4 py-2 rounded-2xl hover:bg-gray-50 shadow-sm">
-                <UploadCloud className="w-5 h-5 text-indigo-500" />
-                <span className="text-sm font-medium">Choose PDF</span>
-                <input
-                  type="file"
-                  accept="application/pdf"
-                  onChange={(e) => setFile(e.target.files[0])}
-                  className="hidden"
-                />
-              </label>
-              <span className="text-sm text-gray-500">{file?.name || "No file selected"}</span>
-              <Button
-                onClick={handleUpload}
-                disabled={loading}
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex items-center gap-2"
+          {/* Breadcrumbs */}
+          <div className="flex items-center gap-4 mb-4">
+            {steps.map((step, idx) => (
+              <div
+                key={step}
+                className="flex items-center gap-2 cursor-pointer"
+                onClick={() => setActiveStep(idx)}
               >
-                {loading ? <Loader2 className="animate-spin w-5 h-5" /> : "Upload & Process"}
-              </Button>
-            </div>
-          </Card>
-        </div>
-      </div>
+                <span
+                  className={`px-3 py-1 rounded-full font-medium ${
+                    activeStep === idx
+                      ? "bg-indigo-600 text-white"
+                      : "bg-gray-200 text-gray-700"
+                  }`}
+                >
+                  {step}
+                </span>
+                {idx < steps.length - 1 && (
+                  <ChevronRight className="w-4 h-4 text-gray-400" />
+                )}
+              </div>
+            ))}
+          </div>
 
-      {/* Content */}
-      <div className="flex-1 px-4 pb-2 overflow-hidden min-h-0">
-        <div className="max-w-6xl mx-auto h-full flex flex-col">
-          {data && (
-            <Card className="flex-1 flex flex-col overflow-hidden max-h-[600px]">
-              <div className="flex-1 flex flex-col p-4 overflow-auto custom-scrollbar">
-                {Object.entries(data).map(([key, items]) => (
+          {/* Step 0: Upload */}
+          {activeStep === 0 && (
+            <Card className="p-6">
+              <div className="flex flex-col md:flex-row items-center gap-4">
+                <label className="flex items-center gap-2 cursor-pointer bg-white border border-gray-300 px-4 py-2 rounded-2xl hover:bg-gray-50 shadow-sm">
+                  <UploadCloud className="w-5 h-5 text-indigo-500" />
+                  <span className="text-sm font-medium">Choose PDF</span>
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    onChange={(e) => setFile(e.target.files[0])}
+                    className="hidden"
+                  />
+                </label>
+                <span className="text-sm text-gray-500">
+                  {file?.name || "No file selected"}
+                </span>
+                <Button
+                  onClick={handleUpload}
+                  disabled={loading}
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex items-center gap-2"
+                >
+                  {loading ? (
+                    <Loader2 className="animate-spin w-5 h-5" />
+                  ) : (
+                    "Upload & Process"
+                  )}
+                </Button>
+              </div>
+            </Card>
+          )}
+
+          {/* Step 1: Entities */}
+          {activeStep === 1 && data && (
+            <Card className="flex-1 flex flex-col overflow-hidden max-h-[600px] p-4">
+              <div className="flex-1 flex flex-col overflow-auto custom-scrollbar">
+                {Object.entries(editedData).map(([key, items]) => (
                   <div key={key} className="py-2">
                     <button
                       onClick={() => toggleSection(key)}
@@ -202,7 +252,24 @@ export default function ClinicalProcessing() {
                               <tr key={idx} className="hover:bg-gray-50">
                                 {Object.entries(item).map(([field, value]) => (
                                   <td key={field} className="px-3 py-2 border">
-                                    {typeof value === "object" ? JSON.stringify(value) : String(value)}
+                                    {isEditing ? (
+                                      <input
+                                        value={editedData[key][idx][field] ?? ""}
+                                        onChange={(e) =>
+                                          handleFieldChange(
+                                            key,
+                                            idx,
+                                            field,
+                                            e.target.value
+                                          )
+                                        }
+                                        className="border rounded px-2 py-1 w-full text-sm"
+                                      />
+                                    ) : typeof value === "object" ? (
+                                      JSON.stringify(value)
+                                    ) : (
+                                      String(value)
+                                    )}
                                   </td>
                                 ))}
                               </tr>
@@ -214,6 +281,29 @@ export default function ClinicalProcessing() {
                   </div>
                 ))}
               </div>
+
+              {/* Bottom Buttons */}
+              <div className="flex justify-end gap-2 mt-4">
+                <Button
+                  onClick={() => setIsEditing((prev) => !prev)}
+                  className="bg-yellow-500 text-white"
+                >
+                  {isEditing ? "Stop Review" : "Review"}
+                </Button>
+                <Button
+                  onClick={handleSubmitAll}
+                  className="bg-indigo-600 text-white"
+                >
+                  Submit
+                </Button>
+              </div>
+            </Card>
+          )}
+
+          {/* Step 2: Writeback */}
+          {activeStep === 2 && (
+            <Card className="p-6 text-gray-500 flex items-center justify-center">
+              <p>Writeback step will be implemented here.</p>
             </Card>
           )}
         </div>
@@ -223,21 +313,21 @@ export default function ClinicalProcessing() {
       <style>{`
         .custom-scrollbar {
           scrollbar-width: thin;
-          scrollbar-color: #e0e7ff #f8fafc;
+          scrollbar-color: #E0E7FF #F8FAFC;
         }
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: #f8fafc;
+          background: #F8FAFC;
           border-radius: 3px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #e0e7ff;
+          background: #E0E7FF;
           border-radius: 3px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #c7d2fe;
+          background: #C7D2FE;
         }
       `}</style>
     </div>
