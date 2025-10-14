@@ -15,6 +15,7 @@ import {
   PackageCheck,
   Code2,
   List,
+  Cpu,
 } from "lucide-react";
 
 export const AppContext = createContext();
@@ -78,7 +79,7 @@ export default function DashboardLayout() {
         },
         { to: "/notes", label: "Notes", icon: Notebook },
         { to: "/orders", label: "Orders", icon: PackageCheck },
-        { to: "/scripts", label: "Scripts List", icon: List },
+        
       ],
     },
     {
@@ -86,6 +87,7 @@ export default function DashboardLayout() {
       links: [
         { to: "/fhir-browser", label: "FHIR Browser", icon: Database },
         { to: "/event-browser", label: "Event Browser", icon: List },
+        { to: "/scripts", label: "EHR Operator", icon: Cpu },
       ],
     },
   ];
@@ -123,7 +125,7 @@ export default function DashboardLayout() {
             <div className="flex items-center justify-center space-x-3 ml-2">
               <img
                 src="/logo.png"
-                alt="XCaliber Logo"
+                alt="Acme Health Logo"
                 className="h-14 w-auto drop-shadow-sm"
               />
             </div>
@@ -266,6 +268,17 @@ export default function DashboardLayout() {
           </div>
         </div>
       </div>
+      
+{/* Powered by XCaliber */}
+<div className="fixed bottom-8 right-24 flex items-center gap-3 text-gray-600 text-lg opacity-90 pointer-events-none z-50">
+  <span className="font-bold text-lg">Powered by</span>
+  <img src="/XCaliber.png" alt="XCaliber Logo" className="h-10 w-auto" />
+</div>
+
+
+
+
+
     </AppContext.Provider>
   );
 }

@@ -3,8 +3,8 @@ import { useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AppContext } from "../layouts/DashboardLayout";
 import { createAppointment } from "../api/appointment";
-import { Loader2, Calendar, ArrowRight } from "lucide-react";
-const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
+import { Loader2, Calendar, ArrowRight, Bell } from "lucide-react";
+
 // Appointment type mappings
 const appointmentMappings = {
   "562": { display: "Nurse Visit", location: "Location/150" },
@@ -15,6 +15,9 @@ const appointmentMappings = {
   "1064": { display: "Any angela", location: "Location/1" },
   "443": { display: "Hearing Eval", location: "Location/1" },
 };
+
+const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
+const NOTIFICATION_PHONE_NUMBER = "+91999999999";
 
 // Reusable Components
 function Card({ children, className = "" }) {
@@ -113,7 +116,7 @@ async function handleBook() {
     await fetch(`${SAMPLE_BFF_URL}/api/send-sms`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ to: "+918919154020", body: notificationMessage }),
+      body: JSON.stringify({ to: NOTIFICATION_PHONE_NUMBER, body: notificationMessage }),
     });
 
     // ✅ Push to VirtualPhone via localStorage
@@ -135,21 +138,33 @@ async function handleBook() {
 
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
-      {/* Header */}
-      <div className="flex-shrink-0 p-4 pb-1">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-              <Calendar className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                Book Appointment
-              </h1>
-              <p className="text-sm text-gray-600">Confirm details and schedule your appointment</p>
-            </div>
-          </div>
-        </div>
+      
+{/* Header */}
+<div className="flex-shrink-0 p-4 pb-1">
+  <div className="max-w-4xl mx-auto flex items-center justify-between">
+    <div className="flex items-center gap-3 mb-2">
+      <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+        <Calendar className="w-5 h-5 text-white" />
+      </div>
+      <div>
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          Book Appointment
+        </h1>
+        <p className="text-sm text-gray-600">Confirm details and schedule your appointment</p>
+      </div>
+    </div>
+
+    {/* ✅ Notifications Button */}
+    <Button
+      className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-md flex items-center gap-2 text-sm px-3 py-2"
+      onClick={() => navigate("/notifications")}
+    >
+      <Bell className="w-4 h-4" /> Notifications
+    </Button>
+  </div>
+
+
+
       </div>
 
       {/* Content */}
