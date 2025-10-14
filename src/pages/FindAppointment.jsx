@@ -127,13 +127,15 @@ export default function FindAppointment() {
               </h1>
               <p className="text-sm text-gray-600">Search and book appointments with healthcare providers</p>
             </div>
-            {/* ✅ Notifications Button */}
-  <Button
-  className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-md flex items-center gap-2 text-sm px-3 py-2"
+            
+{/* ✅ Notifications Button */}
+<Button
+  className="ml-auto bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-md flex items-center gap-2 text-sm px-3 py-2"
   onClick={() => navigate("/notifications")}
 >
   <Bell className="w-4 h-4" /> Notifications
 </Button>
+
 
           </div>
 
