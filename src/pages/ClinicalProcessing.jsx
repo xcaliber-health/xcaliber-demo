@@ -43,6 +43,20 @@ export default function ClinicalProcessing() {
   const isMounted = useRef(true);
   const { sourceId, departmentId, setLatestCurl } = useContext(AppContext);
 
+  const getAbnormalitiesByFile = (fileName) => {
+  if (!fileName) return [];
+
+  if (fileName.toLowerCase().includes("hemo")) {
+    return ["Hemoglobin level is critically low"];
+  } else if (fileName.toLowerCase().includes("pcv")) {
+    return ["Packed Cell Volume (PCV) is high"];
+  } else if (fileName.toLowerCase().includes("rbc")) {
+    return ["Red Blood Cell (RBC) count is low"];
+  } else {
+    return ["Hemoglobin level is critically low"];
+  }
+  };
+
   useEffect(() => {
     return () => {
       isMounted.current = false;
@@ -183,12 +197,16 @@ export default function ClinicalProcessing() {
             <Card className="flex-1 flex flex-col overflow-hidden max-h-[600px] p-4">
               {/* Abnormalities */}
               {/* Hardcoded Abnormality Div */}
-              <div className="bg-red-100 border border-red-400 text-red-800 px-4 py-2 rounded-lg mb-4">
-                <h2 className="font-bold mb-1">Abnormality Detected</h2>
-                <ul className="list-disc pl-5">
-                  <li>Low Hemoglobin: 5 g/dL</li>
-                </ul>
-              </div>
+              {file && getAbnormalitiesByFile(file.name).length > 0 && (
+                <div className="bg-red-100 border border-red-400 text-red-800 px-4 py-2 rounded-lg mb-4">
+                  <h2 className="font-bold mb-1">Abnormality Detected</h2>
+                  <ul className="list-disc pl-5">
+                    {getAbnormalitiesByFile(file.name).map((ab, idx) => (
+                      <li key={idx}>{ab}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Entities Table */}
               <div className="flex-1 flex flex-col overflow-auto custom-scrollbar">
