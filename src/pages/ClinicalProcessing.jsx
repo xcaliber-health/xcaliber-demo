@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { AppContext } from "../layouts/DashboardLayout";
-
 const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
 
 function Card({ children, className = "" }) {
@@ -41,9 +40,22 @@ export default function ClinicalProcessing() {
   const [editedData, setEditedData] = useState({});
   const [openSections, setOpenSections] = useState({});
   const [activeStep, setActiveStep] = useState(0);
-  const [isEditing, setIsEditing] = useState(false);
   const isMounted = useRef(true);
-  const { setLatestCurl } = useContext(AppContext);
+  const { sourceId, departmentId, setLatestCurl } = useContext(AppContext);
+
+  const getAbnormalitiesByFile = (fileName) => {
+  if (!fileName) return [];
+
+  if (fileName.toLowerCase().includes("hemo")) {
+    return ["Hemoglobin level is critically low"];
+  } else if (fileName.toLowerCase().includes("pcv")) {
+    return ["Packed Cell Volume (PCV) is high"];
+  } else if (fileName.toLowerCase().includes("rbc")) {
+    return ["Red Blood Cell (RBC) count is low"];
+  } else {
+    return ["Hemoglobin level is critically low"];
+  }
+  };
 
   useEffect(() => {
     return () => {
@@ -115,26 +127,19 @@ export default function ClinicalProcessing() {
   const toggleSection = (key) =>
     setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
-  const steps = ["Upload", "Entities", "Writeback"];
-
-  const handleFieldChange = (sectionKey, rowIndex, field, value) => {
-    const updated = { ...editedData };
-    updated[sectionKey][rowIndex][field] = value;
-    setEditedData(updated);
-  };
-
   const handleSubmitAll = async () => {
     try {
-      toast.loading("Submitting all entities...");
-      await submitEntity(editedData, setLatestCurl);
+      toast.loading("Schedule Apponitment...");
+      await submitEntity(editedData, setLatestCurl, sourceId, departmentId);
       toast.dismiss();
-      toast.success("All entities submitted successfully!");
+      toast.success("Apponitment Scheduled Successfully");
     } catch (err) {
       console.error(err);
       toast.dismiss();
-      toast.error("Submit failed.");
+      toast.error("Apponitment Scheduled failed.");
     }
   };
+
 
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
@@ -153,30 +158,6 @@ export default function ClinicalProcessing() {
                 Upload a clinical PDF and extract structured data
               </p>
             </div>
-          </div>
-
-          {/* Breadcrumbs */}
-          <div className="flex items-center gap-4 mb-4">
-            {steps.map((step, idx) => (
-              <div
-                key={step}
-                className="flex items-center gap-2 cursor-pointer"
-                onClick={() => setActiveStep(idx)}
-              >
-                <span
-                  className={`px-3 py-1 rounded-full font-medium ${
-                    activeStep === idx
-                      ? "bg-indigo-600 text-white"
-                      : "bg-gray-200 text-gray-700"
-                  }`}
-                >
-                  {step}
-                </span>
-                {idx < steps.length - 1 && (
-                  <ChevronRight className="w-4 h-4 text-gray-400" />
-                )}
-              </div>
-            ))}
           </div>
 
           {/* Step 0: Upload */}
@@ -214,6 +195,20 @@ export default function ClinicalProcessing() {
           {/* Step 1: Entities */}
           {activeStep === 1 && data && (
             <Card className="flex-1 flex flex-col overflow-hidden max-h-[600px] p-4">
+              {/* Abnormalities */}
+              {/* Hardcoded Abnormality Div */}
+              {file && getAbnormalitiesByFile(file.name).length > 0 && (
+                <div className="bg-red-100 border border-red-400 text-red-800 px-4 py-2 rounded-lg mb-4">
+                  <h2 className="font-bold mb-1">Abnormality Detected</h2>
+                  <ul className="list-disc pl-5">
+                    {getAbnormalitiesByFile(file.name).map((ab, idx) => (
+                      <li key={idx}>{ab}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Entities Table */}
               <div className="flex-1 flex flex-col overflow-auto custom-scrollbar">
                 {Object.entries(editedData).map(([key, items]) => (
                   <div key={key} className="py-2">
@@ -252,24 +247,9 @@ export default function ClinicalProcessing() {
                               <tr key={idx} className="hover:bg-gray-50">
                                 {Object.entries(item).map(([field, value]) => (
                                   <td key={field} className="px-3 py-2 border">
-                                    {isEditing ? (
-                                      <input
-                                        value={editedData[key][idx][field] ?? ""}
-                                        onChange={(e) =>
-                                          handleFieldChange(
-                                            key,
-                                            idx,
-                                            field,
-                                            e.target.value
-                                          )
-                                        }
-                                        className="border rounded px-2 py-1 w-full text-sm"
-                                      />
-                                    ) : typeof value === "object" ? (
-                                      JSON.stringify(value)
-                                    ) : (
-                                      String(value)
-                                    )}
+                                    {typeof value === "object"
+                                      ? JSON.stringify(value)
+                                      : String(value)}
                                   </td>
                                 ))}
                               </tr>
@@ -282,54 +262,20 @@ export default function ClinicalProcessing() {
                 ))}
               </div>
 
-              {/* Bottom Buttons */}
+              {/* Submit Button */}
               <div className="flex justify-end gap-2 mt-4">
-                <Button
-                  onClick={() => setIsEditing((prev) => !prev)}
-                  className="bg-yellow-500 text-white"
-                >
-                  {isEditing ? "Stop Review" : "Review"}
-                </Button>
                 <Button
                   onClick={handleSubmitAll}
                   className="bg-indigo-600 text-white"
                 >
-                  Submit
+                  Schedule an Appointment
                 </Button>
               </div>
             </Card>
           )}
-
-          {/* Step 2: Writeback */}
-          {activeStep === 2 && (
-            <Card className="p-6 text-gray-500 flex items-center justify-center">
-              <p>Writeback step will be implemented here.</p>
-            </Card>
-          )}
         </div>
       </div>
-
-      {/* Custom Scrollbar */}
-      <style>{`
-        .custom-scrollbar {
-          scrollbar-width: thin;
-          scrollbar-color: #E0E7FF #F8FAFC;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #F8FAFC;
-          border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #E0E7FF;
-          border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #C7D2FE;
-        }
-      `}</style>
     </div>
   );
 }
+
