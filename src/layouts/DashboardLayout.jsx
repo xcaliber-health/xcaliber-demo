@@ -182,7 +182,8 @@ export default function DashboardLayout() {
                 <div className="space-y-1">
                   {group.links.map((link) => {
                     const Icon = link.icon;
-                    const isActive = activePath.startsWith(link.to);
+                    //const isActive = activePath.startsWith(link.to);
+                    const isActive = activePath === link.to;
                     return (
                       <Link
                         key={link.to}
