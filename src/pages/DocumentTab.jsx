@@ -110,13 +110,13 @@ export default function DocumentTab({ patientId }) {
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Documents</h2>
-        <button
+        {/* <button
           onClick={() => setOpen(true)}
           className="flex items-center gap-2 bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700"
         >
           <Plus className="w-4 h-4" />
           Add Document
-        </button>
+        </button> */}
       </div>
 
       {/* Category Dropdown */}

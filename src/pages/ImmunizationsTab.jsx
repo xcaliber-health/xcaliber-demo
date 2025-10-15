@@ -11,8 +11,20 @@ export default function ImmunizationsTab({ patientId }) {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
+  // const vaccineMap = {
+  //   "Influenza": { cvx: "141", ndc: "49281-0400-20" },
+  // };
   const vaccineMap = {
-    "Influenza": { cvx: "141", ndc: "49281-0400-20" },
+    "Influenza": "141",
+    "poliovirus vaccine, inactivated": "10",
+    "typhoid Vi capsular polysaccharide vaccine": "101",
+    "hepatitis A and hepatitis B vaccine": "104",
+    "diphtheria, tetanus toxoids and acellular pertussis vaccine, 5 pertussis antigens": "106",
+    "DTaP-hepatitis B and poliovirus vaccine": "110",
+    "tetanus and diphtheria toxoids, adsorbed, preservative free, for adult use (5 Lf of tetanus toxoid and 2 Lf of diphtheria toxoid)": "113",
+    "meningococcal polysaccharide (groups A, C, Y and W-135) diphtheria toxoid conjugate vaccine (MCV4P)": "114",
+    "tetanus toxoid, reduced diphtheria toxoid, and acellular pertussis vaccine, adsorbed": "115",
+    "rotavirus, live, pentavalent vaccine": "116",
   };
 
   const [formValues, setFormValues] = useState({
@@ -58,37 +70,74 @@ export default function ImmunizationsTab({ patientId }) {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!patientId || !departmentId || !sourceId) return;
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!patientId || !departmentId || !sourceId) return;
 
-    setLoading(true);
-    try {
-      const vaccineCodes = vaccineMap[formValues.vaccineName] || { cvx: "", ndc: "" };
-      await createImmunization(patientId, sourceId, departmentId, {
-        ...formValues,
-        vaccineCvx: vaccineCodes.cvx,
-        vaccineNdc: vaccineCodes.ndc
-      });
+  //   setLoading(true);
+  //   try {
+  //     const vaccineCodes = vaccineMap[formValues.vaccineName] || { cvx: "", ndc: "" };
+  //     await createImmunization(patientId, sourceId, departmentId, {
+  //       ...formValues,
+  //       vaccineCvx: vaccineCodes.cvx,
+  //       vaccineNdc: vaccineCodes.ndc
+  //     });
 
-      toast.success("Immunization added successfully");
+  //     toast.success("Immunization added successfully");
 
-      setOpen(false);
-      setFormValues({
-        vaccineName: "",
-        occurrenceDate: "",
-        departmentId: departmentId || "",
-      });
+  //     setOpen(false);
+  //     setFormValues({
+  //       vaccineName: "",
+  //       occurrenceDate: "",
+  //       departmentId: departmentId || "",
+  //     });
 
-      const updated = await fetchImmunizations(patientId, sourceId, departmentId, setLatestCurl);
-      setImmunizations(updated.entry || []);
-    } catch (err) {
-      console.error("Error creating immunization:", err);
-      toast.error("Failed to add immunization");
-    } finally {
+  //     const updated = await fetchImmunizations(patientId, sourceId, departmentId, setLatestCurl);
+  //     setImmunizations(updated.entry || []);
+  //   } catch (err) {
+  //     console.error("Error creating immunization:", err);
+  //     toast.error("Failed to add immunization");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!patientId || !departmentId || !sourceId) return;
+
+  setLoading(true);
+  try {
+    const vaccineCvx = vaccineMap[formValues.vaccineName]; // just the string
+
+    if (!vaccineCvx) {
+      toast.error("Please select a valid vaccine");
       setLoading(false);
+      return;
     }
-  };
+
+    await createImmunization(patientId, sourceId, departmentId, {
+      ...formValues,
+      vaccineCvx, // ✅ pass string directly
+    });
+
+    toast.success("Immunization added successfully");
+
+    setOpen(false);
+    setFormValues({
+      vaccineName: "",
+      occurrenceDate: "",
+      departmentId: departmentId || "",
+    });
+
+    const updated = await fetchImmunizations(patientId, sourceId, departmentId, setLatestCurl);
+    setImmunizations(updated.entry || []);
+  } catch (err) {
+    console.error("Error creating immunization:", err);
+    toast.error("Failed to add immunization");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="p-4">

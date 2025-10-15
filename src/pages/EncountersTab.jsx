@@ -144,7 +144,7 @@ export default function EncountersTab({ patientId }) {
                 </select>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="block mb-1">Start Time</label>
                 <input
                   name="start"
@@ -165,7 +165,58 @@ export default function EncountersTab({ patientId }) {
                   onChange={handleChange}
                   className="border p-2 rounded-lg w-full"
                 />
-              </div>
+              </div> */}
+              {/* Start Time */}
+<label className="block mb-1">Start Time</label>
+<div className="flex gap-2">
+  <input
+    type="datetime-local"
+    value={formValues.startTemp || formValues.start}
+    onChange={(e) =>
+      setFormValues((prev) => ({ ...prev, startTemp: e.target.value }))
+    }
+    className="border p-2 rounded-lg flex-1"
+    required
+  />
+  <button
+    type="button"
+    className="px-3 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+    onClick={() => {
+      setFormValues((prev) => ({
+        ...prev,
+        start: prev.startTemp,
+      }));
+    }}
+  >
+    OK
+  </button>
+</div>
+
+{/* End Time */}
+<label className="block mb-1">End Time</label>
+<div className="flex gap-2">
+  <input
+    type="datetime-local"
+    value={formValues.endTemp || formValues.end}
+    onChange={(e) =>
+      setFormValues((prev) => ({ ...prev, endTemp: e.target.value }))
+    }
+    className="border p-2 rounded-lg flex-1"
+  />
+  <button
+    type="button"
+    className="px-3 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+    onClick={() => {
+      setFormValues((prev) => ({
+        ...prev,
+        end: prev.endTemp,
+      }));
+    }}
+  >
+    OK
+  </button>
+</div>
+
 
               <div>
                 <label className="block mb-1">Provider First Name</label>

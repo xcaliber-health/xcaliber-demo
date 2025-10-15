@@ -2,13 +2,40 @@
 import { fhirFetch } from "./fhir";
 
 // Fetch all questionnaire responses
-export async function fetchQuestionnaireResponses(patientId, departmentId, sourceId, setLatestCurl, category = "medical-history") {
-  if (!patientId || !departmentId || !sourceId) throw new Error("Missing required parameters");
+// export async function fetchQuestionnaireResponses(patientId, departmentId, sourceId, setLatestCurl, category = "medical-history") {
+//   if (!patientId || !departmentId || !sourceId) throw new Error("Missing required parameters");
 
-  const url = `/QuestionnaireResponse?patient=${patientId}&departmentId=${departmentId}&category=${category}`;
-  const bundle = await fhirFetch(url, { sourceId, headers: { "x-interaction-mode": "false" }, setLatestCurl });
+//   const url = `/QuestionnaireResponse?patient=${patientId}&departmentId=${departmentId}&category=${category}`;
+//   const bundle = await fhirFetch(url, { sourceId, headers: { "x-interaction-mode": "false" }, setLatestCurl });
+//   return bundle.entry?.map((e) => e.resource) || [];
+// }
+const ELATION_SOURCE_ID = import.meta.env.VITE_SOURCE_ID_ELATION;
+
+// ✅ Fetch all questionnaire responses
+export async function fetchQuestionnaireResponses(
+  patientId,
+  departmentId,
+  sourceId,
+  setLatestCurl,
+  category = "medical-history"
+) {
+  if (!patientId || !sourceId) throw new Error("Missing required parameters");
+
+  // Choose URL based on source
+  const url =
+    sourceId === ELATION_SOURCE_ID
+      ? `/QuestionnaireResponse?patient=${patientId}`
+      : `/QuestionnaireResponse?patient=${patientId}&departmentId=${departmentId}&category=${category}`;
+
+  const bundle = await fhirFetch(url, {
+    sourceId,
+    headers: { "x-interaction-mode": "false" },
+    setLatestCurl,
+  });
+
   return bundle.entry?.map((e) => e.resource) || [];
 }
+
 
 // Map response to table row
 export function mapQuestionnaireRow(res) {

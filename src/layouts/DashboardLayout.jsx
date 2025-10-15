@@ -2,6 +2,7 @@
 
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useState, useEffect, createContext } from "react";
+import { io } from "socket.io-client";
 import {
   Calendar,
   Users,
@@ -16,6 +17,8 @@ import {
   Code2,
   List,
   Cpu,
+  DownloadCloud,
+  Cloud,
 } from "lucide-react";
 
 export const AppContext = createContext();
@@ -27,6 +30,8 @@ export default function DashboardLayout() {
   const [showCurlDrawer, setShowCurlDrawer] = useState(false);
   const [curlCommand, setCurlCommand] = useState("");
   const [copySuccess, setCopySuccess] = useState("");
+  const [messages, setMessages] = useState([]);
+
 
   const handleGetCurlClick = () => {
     setShowCurlDrawer(true);
@@ -59,38 +64,71 @@ export default function DashboardLayout() {
     192, 194, 195,
   ];
 
-  const navGroups = [
+    const navGroups = [
     {
-      title: "Sample Workflows",
+      title: "Integration & Interoperability",
+      links: [
+        { to: "/patients", label: "Oncologist Patient Chart", icon: Users },
+        { to: "/scripts", label: "EHR Operator", icon: Cpu },
+        { to: "/claims-streaming", label: "Claims Data Streaming", icon: Cloud },
+      ],
+    },
+    {
+      title: "Sample App Workflows",
       links: [
         { to: "/scheduling/find", label: "Scheduling Mobile App", icon: Calendar },
-        { to: "/patients", label: "Oncologist Patient Chart", icon: Users },
-        { to: "/claims", label: "Claims List", icon: FileText },
-        { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
-        {
-          to: "/document-reference",
-          label: "Clinical Document Attachments",
-          icon: ClipboardList,
-        },
         {
           to: "/custom-clinical-processing",
           label: "Custom Clinical Processing",
           icon: HeartPulse,
         },
+        { to: "/bulk-data-extraction", label: "Bulk Data Extraction", icon: DownloadCloud },
+        {
+          to: "/document-reference",
+          label: "Clinical Document Attachments",
+          icon: ClipboardList,
+        },
+        { to: "/claims", label: "Claims List", icon: FileText },
+        { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
         { to: "/notes", label: "Notes", icon: Notebook },
         { to: "/orders", label: "Orders", icon: PackageCheck },
-        
       ],
     },
     {
-      title: "FHIR++",
+      title: "Developer Tools",
       links: [
         { to: "/fhir-browser", label: "FHIR Browser", icon: Database },
         { to: "/event-browser", label: "Event Browser", icon: List },
-        { to: "/scripts", label: "EHR Operator", icon: Cpu },
       ],
     },
   ];
+
+
+  useEffect(() => {
+    //const socket = io(import.meta.env.VITE_SOCKET_URL || "http://localhost:3000", {
+    const socket = io(import.meta.env.VITE_SOCKET_URL, {
+      transports: ["websocket", "polling"],
+      reconnection: true,
+      withCredentials: true,
+    });
+
+    console.log("Connecting to socket...");
+
+    socket.on("connect", () => console.log("Socket connected:", socket.id));
+    socket.on("disconnect", () => console.log("Socket disconnected"));
+
+    // Listen for incoming messages (e.g., SMS notifications)
+    socket.on("new-sms", (msg) => {
+      console.log("Received SMS:", msg);
+      setMessages((prev) => [
+        ...prev,
+        { text: msg.body || JSON.stringify(msg), sender: "clinic" },
+      ]);
+    });
+
+    return () => socket.disconnect();
+  }, []);
+
 
   if (showSplash) {
     return (
@@ -115,7 +153,8 @@ export default function DashboardLayout() {
         ehr,
         departmentId,
         sourceId,
-        setLatestCurl: setCurlCommand, // This is important
+        setLatestCurl: setCurlCommand,
+        messages, // This is important
       }}
     >
       <div className="flex h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50 overflow-hidden">

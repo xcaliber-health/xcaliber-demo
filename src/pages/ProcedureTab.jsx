@@ -105,14 +105,14 @@ export default function ProcedureTab({ patientId }) {
   return (
     <div>
       {/* Add Procedure Button */}
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <button
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           onClick={() => setModalOpen(true)}
         >
           <Plus className="h-4 w-4" /> Add Procedure
         </button>
-      </div>
+      </div> */}
 
       {/* Procedures Table */}
       <table className="w-full border border-gray-300 shadow rounded-lg overflow-hidden text-sm">

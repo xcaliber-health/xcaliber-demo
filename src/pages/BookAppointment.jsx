@@ -17,7 +17,7 @@ const appointmentMappings = {
 };
 
 const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
-const NOTIFICATION_PHONE_NUMBER = "+91999999999";
+const NOTIFICATION_PHONE_NUMBER = import.meta.env.VITE_NOTIFICATION_PHONE_NUMBER;
 
 // Reusable Components
 function Card({ children, className = "" }) {
@@ -113,16 +113,15 @@ async function handleBook() {
     setSuccessMsg(notificationMessage);
 
     // Send SMS to backend
-    await fetch(`${SAMPLE_BFF_URL}/api/send-sms`, {
+   await fetch(`${SAMPLE_BFF_URL}/api/send-sms`, {
+    //await fetch("http://localhost:3000/api/send-sms", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ to: NOTIFICATION_PHONE_NUMBER, body: notificationMessage }),
     });
 
-    // ✅ Push to VirtualPhone via localStorage
-    const notifications = JSON.parse(localStorage.getItem("virtualPhoneNotifications") || "[]");
-    notifications.push(notificationMessage);
-    localStorage.setItem("virtualPhoneNotifications", JSON.stringify(notifications));
+    
 
     // Clear form
     setDate("");
@@ -130,7 +129,7 @@ async function handleBook() {
     setEndTime("");
     setAppointmentType("562");
   } catch (err) {
-    setErrorMsg(`Booking failed: ${err.message}`);
+    //setErrorMsg(`Booking failed: ${err.message}`);
   } finally {
     setLoading(false);
   }
@@ -179,20 +178,43 @@ async function handleBook() {
 
             {/* Form */}
             <div className="space-y-4 flex-1 overflow-y-auto custom-scrollbar">
+              
               <div>
-                <label className="block font-medium mb-1">Select Date</label>
-                <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-              </div>
+  <label className="block font-medium mb-1">Select Date</label>
+  <Input
+    type="date"
+    value={date}
+    onChange={(e) => {
+      setDate(e.target.value);
+      e.target.blur(); // Close calendar immediately
+    }}
+  />
+</div>
 
-              <div>
-                <label className="block font-medium mb-1">Start Time</label>
-                <Input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-              </div>
+<div>
+  <label className="block font-medium mb-1">Start Time</label>
+  <Input
+    type="time"
+    value={startTime}
+    onChange={(e) => {
+      setStartTime(e.target.value);
+      e.target.blur(); // Close time picker
+    }}
+  />
+</div>
 
-              <div>
-                <label className="block font-medium mb-1">End Time</label>
-                <Input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
-              </div>
+<div>
+  <label className="block font-medium mb-1">End Time</label>
+  <Input
+    type="time"
+    value={endTime}
+    onChange={(e) => {
+      setEndTime(e.target.value);
+      e.target.blur(); // Close time picker
+    }}
+  />
+</div>
+
 
               <div>
                 <label className="block font-medium mb-1">Appointment Type</label>

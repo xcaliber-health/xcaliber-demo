@@ -157,7 +157,7 @@ export default function PatientChart() {
 
         {/* Appointments Card */}
         <div className="bg-white p-4 shadow rounded-lg border flex flex-col">
-          <h3 className="font-semibold mb-2">Upcoming Appointments</h3>
+          <h3 className="font-semibold mb-2">Appointments</h3>
 
           {appointments.length > 0 ? (
             <div className="overflow-y-auto max-h-80 border-t border-gray-200">

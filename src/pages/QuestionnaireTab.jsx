@@ -84,12 +84,12 @@ export default function QuestionnaireTab({ patientId }) {
       {/* Header + Add button */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Questionnaire Responses</h2>
-        <button
+        {/* <button
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           onClick={() => setOpen(true)}
         >
           Add Response
-        </button>
+        </button> */}
       </div>
 
       {/* Modal Form */}
