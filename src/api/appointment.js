@@ -9,7 +9,7 @@ export async function fetchAppointments({ patientId, providerId, sourceId, depar
 
   const isAthena = sourceId.startsWith("ef");
 
-  let url = `/Appointment?patient=${patientId}&_count=1000`;
+  let url = `/Appointment?patient=${patientId}&_count=10`;
 
   if (isAthena && departmentId) {
     url += `&departmentId=${departmentId}`;

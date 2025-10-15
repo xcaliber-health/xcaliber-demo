@@ -71,6 +71,7 @@ export default function DashboardLayout() {
         { to: "/patients", label: "Oncologist Patient Chart", icon: Users },
         { to: "/scripts", label: "EHR Operator", icon: Cpu },
         { to: "/claims-streaming", label: "Claims Data Streaming", icon: Cloud },
+        { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
       ],
     },
     {
@@ -83,17 +84,19 @@ export default function DashboardLayout() {
           icon: HeartPulse,
         },
         { to: "/bulk-data-extraction", label: "Bulk Data Extraction", icon: DownloadCloud },
-        {
-          to: "/document-reference",
-          label: "Clinical Document Attachments",
-          icon: ClipboardList,
-        },
+        
         { to: "/claims", label: "Claims List", icon: FileText },
-        { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
+        
         { to: "/notes", label: "Notes", icon: Notebook },
         { to: "/orders", label: "Orders", icon: PackageCheck },
       ],
     },
+    {
+    title: "Health AI",
+    links: [
+      { to: "/document-reference", label: "Clinical Document Attachments", icon: ClipboardList },
+    ],
+  },
     {
       title: "Developer Tools",
       links: [
