@@ -86,7 +86,7 @@ export async function fetchProviders(sourceId, departmentId, count = 100, search
       }
     } else {
       // 🔹 Default search by name
-      let url = `/Practitioner?_count=${count}`;
+      let url = `/Practitioner?_count=20`;
       if (search) {
         url += `&name=${encodeURIComponent(search)}`;
       }
