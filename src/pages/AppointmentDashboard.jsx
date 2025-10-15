@@ -356,20 +356,7 @@ export default function AppointmentDashboard() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
-              <Button className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm">
-                Check-In
-              </Button>
-              <Button className="bg-gray-600 hover:bg-gray-700 text-white text-sm">
-                Check-Out
-              </Button>
-              <Button className="bg-amber-500 hover:bg-amber-600 text-white text-sm">
-                Reschedule
-              </Button>
-              <Button className="bg-red-600 hover:bg-red-700 text-white text-sm">
-                Cancel
-              </Button>
-            </div>
+            
           </div>
         </div>
       )}

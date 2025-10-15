@@ -1,21 +1,35 @@
 // src/api/AllergiesApi.js
 import { fhirFetch } from "./fhir";
 
+const ELATION_SOURCE_ID = import.meta.env.VITE_SOURCE_ID_ELATION;
+
 // ✅ Fetch allergies for a patient
-export async function fetchAllergies(patientId, sourceId,departmentId, setLatestCurl) {
-  return fhirFetch(`/AllergyIntolerance?patient=${patientId}&departmentId=${departmentId}`, {
+export async function fetchAllergies(patientId, sourceId, departmentId, setLatestCurl) {
+  const url =
+    sourceId === ELATION_SOURCE_ID
+      ? `/AllergyIntolerance?patient=${patientId}`
+      : `/AllergyIntolerance?patient=${patientId}&departmentId=${departmentId}`;
+
+  return fhirFetch(url, {
     sourceId,
-    headers: { "x-interaction-mode": "false" },
+    headers: {
+      "x-interaction-mode": "false",
+      
+    },
     setLatestCurl,
   });
 }
-
 
 // ✅ Create a new allergy (all user-entered values)
 
 export async function createAllergy(patientId, sourceId, departmentId, values, setLatestCurl) {
   const allergyMap = {
     Penicillin: "12345", // allergy name → allergenid & code
+    "Fish Containing Products": "24442",
+    "fish derived": "19244",
+    "fish oil": "20408",
+    crayfish: "92426",
+    "shellfish derived": "25168",
   };
 
   const allergenid = allergyMap[values.allergy] || "";

@@ -1,9 +1,10 @@
 
 import { useContext, useMemo } from "react";
 import { AppContext } from "../layouts/DashboardLayout";
+const ELATION_SOURCE_ID = import.meta.env.VITE_SOURCE_ID_ELATION;
 
 export const usePatientTabs = () => {
-  const { departmentId  } = useContext(AppContext);
+  const { departmentId,sourceId  } = useContext(AppContext);
 
   return useMemo(() => ({
     
@@ -16,9 +17,9 @@ export const usePatientTabs = () => {
       label: "Allergies",
     },
 
-    immunizations: {
-      label: "Immunizations",
-    },
+    // immunizations: {
+    //   label: "Immunizations",
+    // },
 
     
     diagnosticReports: {
@@ -37,21 +38,38 @@ export const usePatientTabs = () => {
       },
       categoryOptions: ["imaging-result", "lab-result"],
     },
+    
 
     
-    serviceRequests: {
-  label: "Orders",
-  headers: ["Type", "Code", "Status", "Priority", "Date"],
-  url: (id) => `/ServiceRequest?patient=${id}&category=108252007&encounter=Encounter/44602`,
-  headersConfig: { "x-interaction-mode": "false" },
-  mapRow: (res) => [
-    res.category?.[0]?.coding?.[0]?.display || "N/A",  
-    res.category?.[1]?.coding?.[0]?.code || "N/A",
-    res.status || "N/A",                               
-    res.priority || "N/A",                             
-    res.authoredOn || "N/A",
-  ].filter(Boolean),
-},
+//     serviceRequests: {
+//   label: "Orders",
+//   headers: ["Type", "Code", "Status", "Priority", "Date"],
+//   url: (id) => `/ServiceRequest?patient=${id}&category=108252007&encounter=Encounter/44602`,
+//   headersConfig: { "x-interaction-mode": "false" },
+//   mapRow: (res) => [
+//     res.category?.[0]?.coding?.[0]?.display || "N/A",  
+//     res.category?.[1]?.coding?.[0]?.code || "N/A",
+//     res.status || "N/A",                               
+//     res.priority || "N/A",                             
+//     res.authoredOn || "N/A",
+//   ].filter(Boolean),
+// },
+serviceRequests: {
+        label: "Orders",
+        headers: ["Type", "Code", "Status", "Priority", "Date"],
+        url: (id) =>
+          sourceId === ELATION_SOURCE_ID
+            ? `/ServiceRequest?category=108252007&patient=${id}`
+            : `/ServiceRequest?patient=${id}&category=108252007&encounter=Encounter/44602`,
+        headersConfig: { "x-interaction-mode": "false" },
+        mapRow: (res) => [
+          res.category?.[0]?.coding?.[0]?.display || "N/A",
+          res.category?.[1]?.coding?.[0]?.code || "N/A",
+          res.status || "N/A",
+          res.priority || "N/A",
+          res.authoredOn || "N/A",
+        ].filter(Boolean),
+      },
 
 
 documents: {
@@ -91,13 +109,13 @@ documents: {
 },
 
 
-    medications: {
-      label: "Medications",
-      headers: ["Medication", "Status"],
-      url: (id) => `/MedicationStatement?patient=${id}&departmentId=${departmentId}`,
-      headersConfig: { "x-interaction-mode": "false" },
-      mapRow: (res) => [res.medicationCodeableConcept?.text, res.status].filter(Boolean),
-    },
+    // medications: {
+    //   label: "Medications",
+    //   headers: ["Medication", "Status"],
+    //   url: (id) => `/MedicationStatement?patient=${id}&departmentId=${departmentId}`,
+    //   headersConfig: { "x-interaction-mode": "false" },
+    //   mapRow: (res) => [res.medicationCodeableConcept?.text, res.status].filter(Boolean),
+    // },
 
     procedures: {
   label: "Procedures",

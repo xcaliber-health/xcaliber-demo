@@ -49,6 +49,9 @@ import CreateOrder from "./pages/CreateOrder";
 import ClinicalProcessing from "./pages/ClinicalProcessing";
 import RecordingsList from "./pages/RecordingsList";
 
+import BulkDataExtraction from "./pages/BulkDataExtraction";
+
+
 
 // ✅ Wrapper to inject props into VitalsTab
 function VitalsTabWrapper() {
@@ -104,6 +107,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/custom-clinical-processing" element={<ClinicalProcessing />} />
         
         <Route path="/scripts" element={<RecordingsList />} />
+
+        <Route path="/bulk-data-extraction" element={<BulkDataExtraction />} />
+
       </Route>
 
     </Routes>

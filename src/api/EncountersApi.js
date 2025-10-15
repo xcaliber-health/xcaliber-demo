@@ -2,15 +2,36 @@
 import { fhirFetch } from "./fhir";
 
 // ✅ Fetch Encounters
+// export async function fetchEncounters(patientId, sourceId, departmentId, setLatestCurl) {
+//   const bundle = await fhirFetch(
+//     `/Encounter?patient=${patientId}&departmentId=${departmentId}`,
+//     {
+//       sourceId,
+//       headers: { "x-interaction-mode": "false" },
+//       setLatestCurl,
+//     }
+//   );
+//   return bundle;
+// }
+const ELATION_SOURCE_ID = import.meta.env.VITE_SOURCE_ID_ELATION;
+
+// ✅ Fetch Encounters
 export async function fetchEncounters(patientId, sourceId, departmentId, setLatestCurl) {
-  const bundle = await fhirFetch(
-    `/Encounter?patient=${patientId}&departmentId=${departmentId}`,
-    {
-      sourceId,
-      headers: { "x-interaction-mode": "false" },
-      setLatestCurl,
-    }
-  );
+  // Use different URL if source is Elation
+  const url =
+    sourceId === ELATION_SOURCE_ID
+      ? `/Encounter?patient=${patientId}`
+      : `/Encounter?patient=${patientId}&departmentId=${departmentId}`;
+
+  const bundle = await fhirFetch(url, {
+    sourceId,
+    headers: {
+      "x-interaction-mode": "false",
+      
+    },
+    setLatestCurl,
+  });
+
   return bundle;
 }
 

@@ -91,13 +91,13 @@ export default function ConditionsTab({ patientId }) {
   // ---------------- Render ----------------
   return (
     <div className="space-y-4">
-      <button
+      {/* <button
         onClick={() => setOpenForm(true)}
         className="flex items-center gap-2 bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700"
       >
         <Plus className="w-4 h-4" />
         Add Condition
-      </button>
+      </button> */}
 
       {openForm && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">

@@ -33,15 +33,13 @@ export default function AllergiesTab({ patientId }) {
     async function loadAllergies() {
       setLoadingList(true);
       try {
-        const data = await fetchAllergies(patientId, sourceId, departmentId, setLatestCurl);
+        const updated = await fetchAllergies(patientId, sourceId, departmentId, setLatestCurl);
 
-        const sorted = (data.entry || []).sort((a, b) => {
-          const timeA =
-            new Date(a.resource?.meta?.created || a.resource?.meta?.lastUpdated).getTime() || 0;
-          const timeB =
-            new Date(b.resource?.meta?.created || b.resource?.meta?.lastUpdated).getTime() || 0;
-          return timeB - timeA;
-        });
+        const sorted = (updated.entry || []).sort((a, b) => {
+  const timeA = new Date(a.resource?.onsetDateTime || 0).getTime();
+  const timeB = new Date(b.resource?.onsetDateTime || 0).getTime();
+  return timeB - timeA;
+});
 
         setAllergies(sorted);
         toast.success("Allergies loaded successfully");
@@ -85,12 +83,10 @@ export default function AllergiesTab({ patientId }) {
       const updated = await fetchAllergies(patientId, sourceId, departmentId, setLatestCurl);
 
       const sorted = (updated.entry || []).sort((a, b) => {
-        const timeA =
-          new Date(a.resource?.meta?.created || a.resource?.meta?.lastUpdated).getTime() || 0;
-        const timeB =
-          new Date(b.resource?.meta?.created || b.resource?.meta?.lastUpdated).getTime() || 0;
-        return timeB - timeA;
-      });
+  const timeA = new Date(a.resource?.onsetDateTime || 0).getTime();
+  const timeB = new Date(b.resource?.onsetDateTime || 0).getTime();
+  return timeB - timeA;
+});
 
       setAllergies(sorted);
     } catch (err) {
@@ -131,8 +127,13 @@ export default function AllergiesTab({ patientId }) {
     required
   >
     <option value="">Select an allergy</option>
-    <option value="Penicillin">Penicillin</option>
-    {/* You can add more allergy options here */}
+    <option value="Penicillin">Carbamates</option>
+  <option value="Fish Containing Products">Fish Containing Products</option>
+  <option value="fish derived">Fish Derived</option>
+  <option value="fish oil">Fish Oil</option>
+  <option value="crayfish">Cray Fish</option>
+  <option value="shellfish derived">Shellfish Derived</option>
+
   </select>
 
   {/* Hidden code field (auto set to 12345) */}
@@ -180,35 +181,78 @@ export default function AllergiesTab({ patientId }) {
     className="border rounded-lg p-2 w-full"
   />
 
+  
   {/* Onset Date */}
-  <label className="font-medium">Onset Date</label>
+<label className="font-medium">Onset Date</label>
+<div className="flex gap-2">
   <input
-    name="onsetDateTime"
+    name="onsetDateTimeTemp"
     type="datetime-local"
-    value={formValues.onsetDateTime}
-    onChange={handleChange}
-    className="border rounded-lg p-2 w-full"
+    value={formValues.onsetDateTimeTemp || formValues.onsetDateTime}
+    onChange={(e) => setFormValues((prev) => ({ ...prev, onsetDateTimeTemp: e.target.value }))}
+    className="border rounded-lg p-2 flex-1"
   />
+  <button
+    type="button"
+    className="px-3 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+    onClick={() => {
+      setFormValues((prev) => ({
+        ...prev,
+        onsetDateTime: prev.onsetDateTimeTemp,
+      }));
+    }}
+  >
+    OK
+  </button>
+</div>
 
-  {/* Deactivated Date */}
-  <label className="font-medium">Deactivated Date</label>
+{/* Deactivated Date */}
+<label className="font-medium">Deactivated Date</label>
+<div className="flex gap-2">
   <input
-    name="deactivatedDate"
+    name="deactivatedDateTemp"
     type="datetime-local"
-    value={formValues.deactivatedDate}
-    onChange={handleChange}
-    className="border rounded-lg p-2 w-full"
+    value={formValues.deactivatedDateTemp || formValues.deactivatedDate}
+    onChange={(e) => setFormValues((prev) => ({ ...prev, deactivatedDateTemp: e.target.value }))}
+    className="border rounded-lg p-2 flex-1"
   />
+  <button
+    type="button"
+    className="px-3 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+    onClick={() => {
+      setFormValues((prev) => ({
+        ...prev,
+        deactivatedDate: prev.deactivatedDateTemp,
+      }));
+    }}
+  >
+    OK
+  </button>
+</div>
 
-  {/* Reactivated Date */}
-  <label className="font-medium">Reactivated Date</label>
+{/* Reactivated Date */}
+<label className="font-medium">Reactivated Date</label>
+<div className="flex gap-2">
   <input
-    name="reactivatedDate"
+    name="reactivatedDateTemp"
     type="date"
-    value={formValues.reactivatedDate}
-    onChange={handleChange}
-    className="border rounded-lg p-2 w-full"
+    value={formValues.reactivatedDateTemp || formValues.reactivatedDate}
+    onChange={(e) => setFormValues((prev) => ({ ...prev, reactivatedDateTemp: e.target.value }))}
+    className="border rounded-lg p-2 flex-1"
   />
+  <button
+    type="button"
+    className="px-3 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+    onClick={() => {
+      setFormValues((prev) => ({
+        ...prev,
+        reactivatedDate: prev.reactivatedDateTemp,
+      }));
+    }}
+  >
+    OK
+  </button>
+</div>
 
   {/* Save Button */}
   <button
@@ -289,11 +333,17 @@ export default function AllergiesTab({ patientId }) {
                     Created: {new Date(createdTime).toLocaleString()}
                   </p>
                 )}
-                {lastUpdated && (
+                {/* {lastUpdated && (
                   <p className="text-xs text-gray-400">
                     Last Updated: {new Date(lastUpdated).toLocaleString()}
                   </p>
-                )}
+                )} */}
+                {item.resource?.onsetDateTime && (
+  <p className="text-xs text-gray-400">
+    Onset Date: {new Date(item.resource.onsetDateTime).toLocaleString()}
+  </p>
+)}
+
               </div>
             );
           })}
