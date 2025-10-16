@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { HiOutlineCheckCircle, HiOutlineXCircle } from "react-icons/hi";
+import {
+  HiOutlineCheckCircle,
+  HiChevronRight,
+  HiOutlineStop,
+  HiChevronDown,
+  HiChevronUp,
+} from "react-icons/hi";
 
 const backendUrl = import.meta.env.VITE_BASE_URL;
 
@@ -12,8 +18,10 @@ const AssistantFinal = ({ recorderData }) => {
   const [inputValues, setInputValues] = useState({});
   const [replayUrl, setReplayUrl] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
-  const cancelCloseRef = useRef(false);
-  const countdownRef = useRef(6);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [accordionOpen, setAccordionOpen] = useState(false);
+
+  const intervalRef = useRef(null);
 
   // Fetch scripts
   useEffect(() => {
@@ -36,22 +44,13 @@ const AssistantFinal = ({ recorderData }) => {
         setScriptList(scripts);
         if (scripts.length) setActiveScript(scripts[0]);
       } catch (err) {
-        toast.custom(
-          (t) => (
-            <div className="flex items-center gap-2 border-t-4 border-red-500 bg-white text-gray-800 px-4 py-2 rounded shadow">
-              <HiOutlineXCircle className="w-5 h-5 text-red-500" />
-              <span>Failed to fetch scripts</span>
-            </div>
-          ),
-          { duration: 4000 }
-        );
         console.error(err);
       }
     };
     fetchScripts();
   }, [id]);
 
-  // Initialize input values when script changes
+  // Initialize input values
   useEffect(() => {
     if (activeScript?.parameters) {
       const defaults = Object.fromEntries(
@@ -61,197 +60,225 @@ const AssistantFinal = ({ recorderData }) => {
     }
   }, [activeScript]);
 
+  const stopScript = () => {
+    setReplayUrl(null);
+    setIsRunning(false);
+    clearInterval(intervalRef.current);
+  };
+
   const executeTest = async () => {
     if (!activeScript) return;
 
-    cancelCloseRef.current = false;
-    countdownRef.current = 6;
+    setIsCollapsed(true);
 
-    // Running toast
     const runningToastId = toast.custom(
-      (t) => (
+      () => (
         <div className="flex items-center gap-2 border-t-4 border-green-500 bg-white text-gray-800 px-4 py-2 rounded shadow">
           <HiOutlineCheckCircle className="w-5 h-5 text-green-500" />
           <span>Script "{activeScript.title}" is running...</span>
         </div>
       ),
-      { duration: Infinity }
+      { duration: Infinity, position: "bottom-right" }
     );
 
     try {
       setIsRunning(true);
-      setReplayUrl(`${import.meta.env.VITE_VNC_URL}/vnc.html?autoconnect=true&resize=remote`);
+      setReplayUrl(
+        `${
+          import.meta.env.VITE_VNC_URL
+        }/vnc.html?autoconnect=true&resize=remote`
+      );
 
       const response = await fetch(`${backendUrl}/replay`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ uuid: activeScript.uuid, parameters: inputValues }),
+        body: JSON.stringify({
+          uuid: activeScript.uuid,
+          parameters: inputValues,
+        }),
       });
 
-      if (!response.ok) {
-        const errText = await response.text();
-        throw new Error(errText || "Failed to execute script");
-      }
+      if (!response.ok) throw new Error("Failed to execute script");
 
       await response.json();
-
-      // Completed toast
       toast.dismiss(runningToastId);
+
       toast.custom(
-        (t) => (
+        () => (
           <div className="flex items-center gap-2 border-t-4 border-green-500 bg-white text-gray-800 px-4 py-2 rounded shadow">
             <HiOutlineCheckCircle className="w-5 h-5 text-green-500" />
             <span>Script "{activeScript.title}" completed!</span>
           </div>
         ),
-        { duration: 3000 }
+        { duration: 3000, position: "bottom-right" }
       );
-
-      // Enable button immediately
+      
+      // Close the VNC/browser
+      setReplayUrl(null); 
+      setIsCollapsed(false); 
       setIsRunning(false);
-
-      // Countdown toast for sandbox iframe
-      const confirmToastId = toast.custom(
-        (t) => (
-          <div className="flex flex-col gap-2 border-t-4 border-green-500 bg-white text-gray-800 px-4 py-2 rounded shadow">
-            <span>Sandbox will close in {countdownRef.current}s</span>
-            <button
-              className="bg-gray-100 text-green-600 px-2 py-1 rounded hover:bg-gray-200 w-fit"
-              onClick={() => {
-                cancelCloseRef.current = true;
-                toast.dismiss(t.id);
-                toast.custom(
-                  (t2) => (
-                    <div className="flex items-center gap-2 border-t-4 border-green-500 bg-white text-gray-800 px-4 py-2 rounded shadow">
-                      <span>Stayed on sandbox</span>
-                    </div>
-                  ),
-                  { duration: 3000 }
-                );
-              }}
-            >
-              Stay Here
-            </button>
-          </div>
-        ),
-        { duration: Infinity }
-      );
-
-      const countdownInterval = setInterval(() => {
-        if (countdownRef.current > 1) {
-          countdownRef.current -= 1;
-          toast.update(confirmToastId, {
-            render: (t) => (
-              <div className="flex flex-col gap-2 border-t-4 border-green-500 bg-white text-gray-800 px-4 py-2 rounded shadow">
-                <span>Sandbox will close in {countdownRef.current}s</span>
-                <button
-                  className="bg-gray-100 text-green-600 px-2 py-1 rounded hover:bg-gray-200 w-fit"
-                  onClick={() => {
-                    cancelCloseRef.current = true;
-                    toast.dismiss(t.id);
-                    toast.custom(
-                      (t2) => (
-                        <div className="flex items-center gap-2 border-t-4 border-green-500 bg-white text-gray-800 px-4 py-2 rounded shadow">
-                          <span>Stayed on sandbox</span>
-                        </div>
-                      ),
-                      { duration: 3000 }
-                    );
-                  }}
-                >
-                  Stay Here
-                </button>
-              </div>
-            ),
-          });
-        } else {
-          clearInterval(countdownInterval);
-          if (!cancelCloseRef.current) {
-            setReplayUrl(null);
-            toast.dismiss(confirmToastId);
-          }
-        }
-      }, 1000);
-
     } catch (err) {
-      toast.dismiss(runningToastId);
-      toast.custom(
-        (t) => (
-          <div className="flex items-center gap-2 border-t-4 border-red-500 bg-white text-gray-800 px-4 py-2 rounded shadow">
-            <HiOutlineXCircle className="w-5 h-5 text-red-500" />
-            <span>Error: {err.message}</span>
-          </div>
-        ),
-        { duration: 5000 }
-      );
       console.error(err);
-      setReplayUrl(null);
+      toast.dismiss(runningToastId);
       setIsRunning(false);
     }
   };
 
   return (
-    <div className="h-[calc(100vh-60px)] flex gap-4 px-4 py-4 overflow-hidden">
+    <div className="h-[calc(100vh-60px)] flex gap-4 px-4 py-4 overflow-hidden transition-all duration-500">
       <Toaster position="bottom-right" />
-      {/* Left Panel */}
-      <div className="w-1/4 flex flex-col gap-4 overflow-y-auto p-4 bg-white/95 backdrop-blur-sm rounded-3xl border border-white/20 shadow-xl">
-        <h3 className="text-lg font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          Select a Script
-        </h3>
 
-        {scriptList.length ? (
-          <select
-            className="px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            onChange={(e) => setActiveScript(scriptList.find((s) => s.uuid === e.target.value))}
-            value={activeScript?.uuid || ""}
-          >
-            {scriptList.map((script) => (
-              <option key={script.uuid} value={script.uuid}>
-                {script.title}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <p className="text-gray-500 text-sm">No scripts available.</p>
-        )}
-
-        {activeScript?.parameters?.length > 0 && (
-          <>
-            {activeScript.parameters.map((param) => (
-              <div key={param.name} className="flex flex-col gap-2">
-                <label className="text-gray-600 text-sm">{param.description}</label>
-                <input
-                  type={param.name.toLowerCase().includes("password") ? "password" : "text"}
-                  value={inputValues[param.name] || ""}
-                  onChange={(e) => setInputValues({ ...inputValues, [param.name]: e.target.value })}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  placeholder={`Enter ${param.name}`}
-                />
-              </div>
-            ))}
-
+      {/* Sidebar */}
+      <div
+        className={`relative flex flex-col bg-white/95 backdrop-blur-sm rounded-3xl border border-white/20 shadow-xl transition-all duration-500 ease-in-out overflow-hidden ${
+          isCollapsed ? "w-[60px] p-2" : "w-1/4 p-4"
+        }`}
+      >
+        {/* Stop button */}
+        {isRunning && (
+          <div className="w-full flex justify-center mb-2">
             <button
-              className={`mt-2 px-4 py-2 rounded-xl text-white transition 
-                ${isRunning ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"}`}
-              onClick={executeTest}
-              disabled={isRunning}
+              onClick={stopScript}
+              className={`transition-all ${
+                isCollapsed
+                  ? "w-12 h-12 rounded-full flex items-center justify-center text-white"
+                  : "w-full px-4 py-2 rounded-lg text-white text-sm font-semibold flex items-center justify-center"
+              } bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700`}
             >
-              Execute Test
+              {isCollapsed ? (
+                <HiOutlineStop className="w-6 h-6" />
+              ) : (
+                "Stop Workflow"
+              )}
             </button>
-          </>
-        )}
-      </div>
-
-      {/* Right Panel */}
-      <div className="flex-1 flex flex-col overflow-hidden gap-2 p-4 bg-white/95 backdrop-blur-sm rounded-3xl border border-white/20 shadow-xl">
-        {!replayUrl && (
-          <div className="flex flex-1 items-center justify-center text-gray-500 text-xl font-medium">
-            Execute a script to see
           </div>
         )}
 
-        {replayUrl && (
-          <iframe className="w-full h-full border-none rounded-2xl" src={replayUrl} />
+        {/* Sidebar toggle arrow */}
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className={`absolute transition-all ${
+            isCollapsed
+              ? "bottom-4 left-1/2 -translate-x-1/2"
+              : "bottom-4 right-4 translate-x-0"
+          } bg-white border border-gray-200 shadow-lg rounded-full p-1 hover:bg-gray-100`}
+        >
+          <HiChevronRight
+            className={`w-5 h-5 text-gray-600 transform transition-transform ${
+              !isCollapsed ? "rotate-180" : ""
+            }`}
+          />
+        </button>
+
+        {/* Sidebar content */}
+        <div
+          className={`flex flex-col gap-4 transition-opacity duration-300 overflow-visible ${
+            isCollapsed ? "opacity-0 pointer-events-none" : "opacity-100"
+          }`}
+        >
+          <h3 className="text-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            Select a Script
+          </h3>
+
+          {scriptList.length ? (
+            <div className="relative z-0">
+              <select
+                className="px-3 py-2 text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
+                onChange={(e) =>
+                  setActiveScript(
+                    scriptList.find((s) => s.uuid === e.target.value)
+                  )
+                }
+                value={activeScript?.uuid || ""}
+              >
+                {scriptList.map((script) => (
+                  <option key={script.uuid} value={script.uuid}>
+                    {script.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : (
+            <p className="text-gray-500 text-base">No scripts available.</p>
+          )}
+
+          {/* Accordion */}
+          {activeScript?.parameters?.length > 0 && (
+            <div className="flex flex-col gap-2">
+              <button
+                className="flex items-center justify-between text-left text-base font-medium px-2 py-2 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none"
+                onClick={() => setAccordionOpen(!accordionOpen)}
+              >
+                <span>Edit Parameters</span>
+                {accordionOpen ? (
+                  <HiChevronUp className="w-5 h-5" />
+                ) : (
+                  <HiChevronDown className="w-5 h-5" />
+                )}
+              </button>
+
+              {accordionOpen && (
+                <div className="flex flex-col flex-1 bg-gray-50 rounded overflow-hidden">
+                  {/* Scrollable parameter inputs */}
+                  <div className="flex-1 overflow-y-auto p-2 flex flex-col gap-2">
+                    {activeScript.parameters.map((param) => (
+                      <div key={param.name} className="flex flex-col gap-1">
+                        <label className="text-gray-700 text-sm">
+                          {param.description}
+                        </label>
+                        <input
+                          type={
+                            param.name.toLowerCase().includes("password")
+                              ? "password"
+                              : "text"
+                          }
+                          value={inputValues[param.name] || ""}
+                          onChange={(e) =>
+                            setInputValues({
+                              ...inputValues,
+                              [param.name]: e.target.value,
+                            })
+                          }
+                          className="px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm w-full"
+                          placeholder={`Enter ${param.name}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <button
+                className={`mt-3 px-4 py-3 rounded-xl text-white transition ${
+                  isRunning
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-indigo-600 hover:bg-indigo-700"
+                }`}
+                onClick={executeTest}
+                disabled={isRunning}
+              >
+                Execute Test
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Right Panel */}
+      <div
+        className={`flex-1 flex flex-col overflow-hidden gap-2 p-4 bg-white/95 backdrop-blur-sm rounded-3xl border border-white/20 shadow-xl transition-all duration-500 ${
+          isCollapsed ? "w-[calc(100%-80px)]" : "w-full"
+        }`}
+      >
+        {!replayUrl ? (
+          <div className="flex flex-1 items-center justify-center text-gray-500 text-xl font-medium">
+            Execute a script to see
+          </div>
+        ) : (
+          <iframe
+            className="w-full h-full border-none rounded-2xl"
+            src={replayUrl}
+          />
         )}
       </div>
     </div>
