@@ -17,6 +17,7 @@ import {
   Cpu,
   DownloadCloud,
   Cloud,
+  Book
 } from "lucide-react";
 
 export const AppContext = createContext();
@@ -65,20 +66,32 @@ export default function DashboardLayout() {
       links: [
         { to: "/patients", label: "Oncologist Patient Chart", icon: Users },
         { to: "/scripts", label: "EHR Operator", icon: Cpu },
-        { to: "/claims-streaming", label: "Claims Data Streaming", icon: Cloud },
+        {
+          to: "/claims-streaming",
+          label: "Claims Data Streaming",
+          icon: Cloud,
+        },
         { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
       ],
     },
     {
       title: "Sample App Workflows",
       links: [
-        { to: "/scheduling/find", label: "Scheduling Mobile App", icon: Calendar },
+        {
+          to: "/scheduling/find",
+          label: "Scheduling Mobile App",
+          icon: Calendar,
+        },
         {
           to: "/custom-clinical-processing",
           label: "Custom Clinical Processing",
           icon: HeartPulse,
         },
-        { to: "/bulk-data-extraction", label: "Bulk Data Extraction", icon: DownloadCloud },
+        {
+          to: "/bulk-data-extraction",
+          label: "Bulk Data Extraction",
+          icon: DownloadCloud,
+        },
         { to: "/claims", label: "Claims List", icon: FileText },
         { to: "/notes", label: "Notes", icon: Notebook },
         { to: "/orders", label: "Orders", icon: PackageCheck },
@@ -87,7 +100,11 @@ export default function DashboardLayout() {
     {
       title: "Health AI",
       links: [
-        { to: "/document-reference", label: "Clinical Document Attachments", icon: ClipboardList },
+        {
+          to: "/document-reference",
+          label: "Clinical Document Attachments",
+          icon: ClipboardList,
+        },
       ],
     },
     {
@@ -132,7 +149,8 @@ export default function DashboardLayout() {
         />
         <p className="mt-6 text-gray-600 text-sm font-medium tracking-wide text-center px-6">
           This demo application uses{" "}
-          <span className="font-semibold text-indigo-600">non-PHI</span> sample data only.
+          <span className="font-semibold text-indigo-600">non-PHI</span> sample
+          data only.
         </p>
       </div>
     );
@@ -161,50 +179,49 @@ export default function DashboardLayout() {
             </div>
           </div>
 
-<nav className="flex-1 p-4 space-y-6 overflow-y-auto hide-scrollbar">
-  {navGroups.map((group) => (
-    <div key={group.title}>
-      <h3 className="px-2 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-        {group.title}
-      </h3>
-      <div className="space-y-1">
-        {group.links.map((link) => {
-          const Icon = link.icon;
-          const isActive = activePath === link.to;
-          return (
-            <Link
-              key={link.to}
-              to={link.to}
-              className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 transform hover:scale-[1.02] ${
-                isActive
-                  ? "bg-gradient-to-r from-indigo-500 to-indigo-700 text-white shadow-lg shadow-indigo-500/25"
-                  : "text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-indigo-100 hover:text-indigo-700"
-              }`}
-            >
-              <div
-                className={`p-2 rounded-lg transition-colors ${
-                  isActive
-                    ? "bg-white/20"
-                    : "bg-gray-100 group-hover:bg-indigo-100"
-                }`}
-              >
-                <Icon
-                  className={`h-4 w-4 ${
-                    isActive
-                      ? "text-white"
-                      : "text-gray-600 group-hover:text-indigo-600"
-                  }`}
-                />
+          <nav className="flex-1 p-4 space-y-6 overflow-y-auto hide-scrollbar">
+            {navGroups.map((group) => (
+              <div key={group.title}>
+                <h3 className="px-2 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  {group.title}
+                </h3>
+                <div className="space-y-1">
+                  {group.links.map((link) => {
+                    const Icon = link.icon;
+                    const isActive = activePath === link.to;
+                    return (
+                      <Link
+                        key={link.to}
+                        to={link.to}
+                        className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 transform hover:scale-[1.02] ${
+                          isActive
+                            ? "bg-gradient-to-r from-indigo-500 to-indigo-700 text-white shadow-lg shadow-indigo-500/25"
+                            : "text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-indigo-100 hover:text-indigo-700"
+                        }`}
+                      >
+                        <div
+                          className={`p-2 rounded-lg transition-colors ${
+                            isActive
+                              ? "bg-white/20"
+                              : "bg-gray-100 group-hover:bg-indigo-100"
+                          }`}
+                        >
+                          <Icon
+                            className={`h-4 w-4 ${
+                              isActive
+                                ? "text-white"
+                                : "text-gray-600 group-hover:text-indigo-600"
+                            }`}
+                          />
+                        </div>
+                        <span className="font-medium">{link.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
-              <span className="font-medium">{link.label}</span>
-            </Link>
-          );
-        })}
-      </div>
-    </div>
-  ))}
-</nav>
-
+            ))}
+          </nav>
         </aside>
 
         {/* Main Content */}
@@ -248,13 +265,13 @@ export default function DashboardLayout() {
               <div className="flex items-center gap-3">
                 {/* Docs Button */}
                 <a
-                  href="#"
+                  href="https://docs.xcaliberhealth.ai/en"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group relative flex items-center bg-white/80 backdrop-blur-md border border-gray-200 rounded-full shadow-md overflow-hidden transition-all duration-300 w-10 h-10 hover:w-auto hover:pr-4"
                 >
                   <div className="flex items-center justify-center w-10 h-10 flex-none">
-                    <FileText className="w-5 h-5 text-indigo-600 transition-transform duration-300 group-hover:scale-110" />
+                    <Book className="w-5 h-5 text-indigo-600 transition-transform duration-300 group-hover:scale-110" />
                   </div>
                   <span className="whitespace-nowrap text-gray-700 text-sm font-semibold opacity-0 group-hover:opacity-100 ml-2 transition-opacity duration-300">
                     XCaliber Docs
@@ -263,7 +280,7 @@ export default function DashboardLayout() {
 
                 {/* GitHub Button */}
                 <a
-                  href="#"
+                  href="https://github.com/xcaliber-health/xcaliber-demo/tree/master"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group relative flex items-center bg-white/80 backdrop-blur-md border border-gray-200 rounded-full shadow-md overflow-hidden transition-all duration-300 w-10 h-10 hover:w-auto hover:pr-4"
@@ -363,7 +380,9 @@ export default function DashboardLayout() {
                   Copy to Clipboard
                 </button>
                 {copySuccess && (
-                  <p className="text-green-600 text-sm font-medium">{copySuccess}</p>
+                  <p className="text-green-600 text-sm font-medium">
+                    {copySuccess}
+                  </p>
                 )}
               </div>
             </div>
