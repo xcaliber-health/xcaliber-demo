@@ -10,10 +10,16 @@ export async function getResources(ehrName) {
 export async function getIdsForResource(ehrName, resourceName) {
   console.log(`Fetching IDs for ${ehrName} - ${resourceName}`);
   await delay(700);
-  // Simulated source IDs
-  const  ids = ["Lt2IFR5Ah76n4d8TFP5gBJiCIKJuEyZG8Ek3KV3alFE","Lt2IFR5Ah76n4d8TFP5gBFKDGSQZQMMCduhAZRmKPQY"]
-  return ids;
+
+  // Simulated response: each object has an id and a display name
+  const idsWithNames = [
+    { id: "Lt2IFR5Ah76n4d8TFP5gBBtbOkJO5BGTAI4czidqc8I", name: "John William" },
+    { id: "Lt2IFR5Ah76n4d8TFP5gBHRWfrw193tyBW53NMBgCq8", name: "Andrew Mills" },
+  ];
+
+  return idsWithNames;
 }
+
 // frontend/api.js
 export async function getMappingForId(patientId) {
 
