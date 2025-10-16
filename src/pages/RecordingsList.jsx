@@ -98,7 +98,7 @@ const AssistantFinal = ({ recorderData }) => {
         }),
       });
 
-      if (!response.ok) throw new Error("Failed to execute script");
+      if (!response.ok) throw new Error("Failed to execute workflow");
 
       await response.json();
       toast.dismiss(runningToastId);
@@ -107,12 +107,12 @@ const AssistantFinal = ({ recorderData }) => {
         () => (
           <div className="flex items-center gap-2 border-t-4 border-green-500 bg-white text-gray-800 px-4 py-2 rounded shadow">
             <HiOutlineCheckCircle className="w-5 h-5 text-green-500" />
-            <span>Script "{activeScript.title}" completed!</span>
+            <span>Workflow "{activeScript.title}" completed!</span>
           </div>
         ),
         { duration: 3000, position: "bottom-right" }
       );
-      
+
       // Close the VNC/browser
       setReplayUrl(null); 
       setIsCollapsed(false); 
@@ -177,7 +177,7 @@ const AssistantFinal = ({ recorderData }) => {
           }`}
         >
           <h3 className="text-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Select a Script
+            Select a Workflow
           </h3>
 
           {scriptList.length ? (
@@ -199,7 +199,7 @@ const AssistantFinal = ({ recorderData }) => {
               </select>
             </div>
           ) : (
-            <p className="text-gray-500 text-base">No scripts available.</p>
+            <p className="text-gray-500 text-base">No workflows available.</p>
           )}
 
           {/* Accordion */}
@@ -257,7 +257,7 @@ const AssistantFinal = ({ recorderData }) => {
                 onClick={executeTest}
                 disabled={isRunning}
               >
-                Execute Test
+                Execute
               </button>
             </div>
           )}
@@ -272,7 +272,7 @@ const AssistantFinal = ({ recorderData }) => {
       >
         {!replayUrl ? (
           <div className="flex flex-1 items-center justify-center text-gray-500 text-xl font-medium">
-            Execute a script to see
+            Execute a workflow to see
           </div>
         ) : (
           <iframe
