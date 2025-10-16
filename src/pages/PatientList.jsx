@@ -325,60 +325,120 @@ export default function PatientList() {
     return () => clearTimeout(t);
   }, [search]);
 
+  // useEffect(() => {
+  //   if (!sourceId) return;
+  //   setLoading(true);
+
+  //   const loadPatients = async () => {
+  //     try {
+  //       let data = [];
+
+  //       if (isMockSource) {
+  //         data = ECW_MOCK_PATIENTS.map(p => ({
+  //           id: p.id,
+  //           name: getPatientFullName(p.name),
+  //           gender: p.gender || "Unknown",
+  //           birthDate: p.birthDate || "Unknown",
+  //           email: p.email || "",
+  //           phone: p.phone || "",
+  //           status: p.status || "N/A"
+  //         }));
+  //       } else {
+  //         // Fetch real patients for Athena/Elation
+  //         const rawData = await fetchPatients(
+  //           sourceId,
+  //           ehr,
+  //           baseUrl,
+  //           debouncedSearch,
+  //           departmentId,
+  //           setLatestCurl,
+  //           { headers: { "x-interaction-mode": "false" } }
+  //         );
+  //         data = rawData.map(p => ({
+  //           ...p,
+  //           name: getPatientFullName(p.name),
+  //           gender: p.gender || "Unknown",
+  //           birthDate: p.birthDate || "Unknown",
+  //           email: p.email || "",
+  //           phone: p.phone || "",
+  //           status: p.status || "N/A"
+  //         }));
+  //       }
+
+  //       setPatients(data);
+  //       if (!initialLoaded) {
+  //         data.length ? toast.success(`Loaded ${data.length} patient(s)`) : toast("No patients found", { icon: "ℹ️" });
+  //       }
+  //     } catch (err) {
+  //       toast.error(err?.message || "Failed to fetch patients");
+  //     } finally {
+  //       setLoading(false);
+  //       setInitialLoaded(true);
+  //     }
+  //   };
+
+  //   loadPatients();
+  // }, [sourceId, departmentId, ehr, baseUrl, debouncedSearch, initialLoaded]);
   useEffect(() => {
-    if (!sourceId) return;
-    setLoading(true);
+  if (!sourceId) return;
 
-    const loadPatients = async () => {
-      try {
-        let data = [];
+  setLoading(true);
+  setPatients([]); // reset previous patients
+  setCurrentPage(1); // reset pagination
 
-        if (isMockSource) {
-          data = ECW_MOCK_PATIENTS.map(p => ({
-            id: p.id,
-            name: getPatientFullName(p.name),
-            gender: p.gender || "Unknown",
-            birthDate: p.birthDate || "Unknown",
-            email: p.email || "",
-            phone: p.phone || "",
-            status: p.status || "N/A"
-          }));
-        } else {
-          // Fetch real patients for Athena/Elation
-          const rawData = await fetchPatients(
-            sourceId,
-            ehr,
-            baseUrl,
-            debouncedSearch,
-            departmentId,
-            setLatestCurl,
-            { headers: { "x-interaction-mode": "false" } }
-          );
-          data = rawData.map(p => ({
-            ...p,
-            name: getPatientFullName(p.name),
-            gender: p.gender || "Unknown",
-            birthDate: p.birthDate || "Unknown",
-            email: p.email || "",
-            phone: p.phone || "",
-            status: p.status || "N/A"
-          }));
-        }
+  const loadPatients = async () => {
+    try {
+      let data = [];
 
-        setPatients(data);
-        if (!initialLoaded) {
-          data.length ? toast.success(`Loaded ${data.length} patient(s)`) : toast("No patients found", { icon: "ℹ️" });
-        }
-      } catch (err) {
-        toast.error(err?.message || "Failed to fetch patients");
-      } finally {
-        setLoading(false);
-        setInitialLoaded(true);
+      if (isMockSource) {
+        data = ECW_MOCK_PATIENTS.map(p => ({
+          id: p.id,
+          name: getPatientFullName(p.name),
+          gender: p.gender || "Unknown",
+          birthDate: p.birthDate || "Unknown",
+          email: p.email || "",
+          phone: p.phone || "",
+          status: p.status || "N/A"
+        }));
+        // simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+      } else {
+        const rawData = await fetchPatients(
+          sourceId,
+          ehr,
+          baseUrl,
+          debouncedSearch,
+          departmentId,
+          setLatestCurl,
+          { headers: { "x-interaction-mode": "false" } }
+        );
+        data = rawData.map(p => ({
+          ...p,
+          name: getPatientFullName(p.name),
+          gender: p.gender || "Unknown",
+          birthDate: p.birthDate || "Unknown",
+          email: p.email || "",
+          phone: p.phone || "",
+          status: p.status || "N/A"
+        }));
       }
-    };
 
-    loadPatients();
-  }, [sourceId, departmentId, ehr, baseUrl, debouncedSearch, initialLoaded]);
+      setPatients(data);
+      data.length
+        ? toast.success(`Loaded ${data.length} patient(s)`)
+        : toast("No patients found", { icon: "ℹ️" });
+
+    } catch (err) {
+      toast.error(err?.message || "Failed to fetch patients");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadPatients();
+}, [sourceId, departmentId, ehr, baseUrl, debouncedSearch]);
+
+
 
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
