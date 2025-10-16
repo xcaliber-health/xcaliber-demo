@@ -5,12 +5,14 @@ const TOKEN = import.meta.env.VITE_API_TOKEN;
 
 export async function fhirFetch(
   path,
-  { sourceId, method = "GET", body, headers = {}, setLatestCurl } = {}
+  { baseUrl, sourceId, method = "GET", body, headers = {}, setLatestCurl } = {}
 ) {
   if (!sourceId) {
     throw new Error("sourceId is missing when calling fhirFetch");
   }
 
+  const BASE = baseUrl || import.meta.env.VITE_API_BASE;
+  //const url = `${BASE}${path}`;
   const url = `${BASE}${path}`;
   console.log("➡️ fhirFetch Request:", method, url, "sourceId:", sourceId);
 

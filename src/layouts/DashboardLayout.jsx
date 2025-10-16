@@ -49,11 +49,46 @@ export default function DashboardLayout() {
     return () => clearTimeout(timer);
   }, []);
 
+  // 👇 Base URL map for different EHRs
+// const baseUrlMap = {
+//   Athena: import.meta.env.VITE_API_BASE, // same as default
+//   Elation: import.meta.env.VITE_API_BASE, // same as default
+//   ECW: import.meta.env.VITE_API_BASE_ECW, // ⚡️ special URL for ECW
+// };
+const baseUrlMap = {
+  Athena: import.meta.env.VITE_API_BASE,
+  Elation: import.meta.env.VITE_API_BASE,
+  ECW: import.meta.env.VITE_API_BASE_ECW,
+  Epic: import.meta.env.VITE_SOURCE_ID_EPIC_MOCK,
+  Kno2: import.meta.env.VITE_SOURCE_ID_KNO2_MOCK,
+  Cerner: import.meta.env.VITE_SOURCE_ID_CERNER_MOCK,
+  Meditech: import.meta.env.VITE_SOURCE_ID_MEDITECH_MOCK,
+  PracticeFusion: import.meta.env.VITE_SOURCE_ID_PRACTICEFUSION_MOCK,
+  Veradigm: import.meta.env.VITE_SOURCE_ID_VERADIGM_MOCK,
+};
+
+  // const sourceIdMap = {
+  //   Athena: import.meta.env.VITE_SOURCE_ID_ATHENA,
+  //   Elation: import.meta.env.VITE_SOURCE_ID_ELATION,
+  //   ECW: import.meta.env.VITE_SOURCE_ID_ECW,
+  // };
   const sourceIdMap = {
-    Athena: import.meta.env.VITE_SOURCE_ID_ATHENA,
-    Elation: import.meta.env.VITE_SOURCE_ID_ELATION,
-  };
-  const sourceId = sourceIdMap[ehr] || null;
+  Athena: import.meta.env.VITE_SOURCE_ID_ATHENA,
+  Elation: import.meta.env.VITE_SOURCE_ID_ELATION,
+  ECW: import.meta.env.VITE_SOURCE_ID_ECW,
+  Epic: import.meta.env.VITE_SOURCE_ID_EPIC_MOCK,
+  Kno2: import.meta.env.VITE_SOURCE_ID_KNO2_MOCK,
+  Cerner: import.meta.env.VITE_SOURCE_ID_CERNER_MOCK,
+  Meditech: import.meta.env.VITE_SOURCE_ID_MEDITECH_MOCK,
+  PracticeFusion: import.meta.env.VITE_SOURCE_ID_PRACTICEFUSION_MOCK,
+  Veradigm: import.meta.env.VITE_SOURCE_ID_VERADIGM_MOCK,
+};
+
+  //const sourceId = sourceIdMap[ehr] || null;
+  // Use selected EHR to pick the right base URL + sourceId
+const sourceId = sourceIdMap[ehr] || import.meta.env.VITE_SOURCE_ID_ATHENA;
+const baseUrl = baseUrlMap[ehr] || import.meta.env.VITE_API_BASE;
+
 
   const location = useLocation();
   const activePath = location.pathname;
@@ -156,68 +191,72 @@ export default function DashboardLayout() {
         ehr,
         departmentId,
         sourceId,
+        baseUrl,
         setLatestCurl: setCurlCommand,
         messages, // This is important
       }}
     >
       <div className="flex h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50 overflow-hidden">
+        
         {/* Sidebar */}
-        <aside className="w-72 bg-white/95 backdrop-blur-sm shadow-2xl flex flex-col fixed left-0 top-0 bottom-0 border-r border-white/20">
-          <div className="px-4 py-3 border-b border-gray-100/50">
-            <div className="flex items-center justify-center space-x-3 ml-2">
-              <img
-                src="/logo.png"
-                alt="Acme Health Logo"
-                className="h-14 w-auto drop-shadow-sm"
-              />
-            </div>
-          </div>
+<aside className="w-72 bg-white shadow-xl flex flex-col fixed left-0 top-0 bottom-0 border-r border-gray-200 z-50">
+  <div className="px-4 py-3 border-b border-gray-100 bg-white">
+    <div className="flex items-center justify-center">
+      <img
+        src="/logo.png"
+        alt="Acme Health Logo"
+        className="h-12 w-auto drop-shadow-sm"
+      />
+    </div>
+  </div>
 
-          <nav className="flex-1 p-4 space-y-6 overflow-y-auto">
-            {navGroups.map((group) => (
-              <div key={group.title}>
-                <h3 className="px-2 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  {group.title}
-                </h3>
-                <div className="space-y-1">
-                  {group.links.map((link) => {
-                    const Icon = link.icon;
-                    //const isActive = activePath.startsWith(link.to);
-                    const isActive = activePath === link.to;
-                    return (
-                      <Link
-                        key={link.to}
-                        to={link.to}
-                        className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 transform hover:scale-[1.02] ${
-                          isActive
-                            ? "bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg shadow-blue-500/25"
-                            : "text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700"
-                        }`}
-                      >
-                        <div
-                          className={`p-2 rounded-lg transition-colors ${
-                            isActive
-                              ? "bg-white/20"
-                              : "bg-gray-100 group-hover:bg-blue-100"
-                          }`}
-                        >
-                          <Icon
-                            className={`h-4 w-4 ${
-                              isActive
-                                ? "text-white"
-                                : "text-gray-600 group-hover:text-blue-600"
-                            }`}
-                          />
-                        </div>
-                        <span className="font-medium">{link.label}</span>
-                      </Link>
-                    );
-                  })}
+  {/* 🧭 Navigation */}
+  <nav className="flex-1 px-3 py-3 space-y-4 overflow-y-auto">
+    {navGroups.map((group) => (
+      <div key={group.title}>
+        <h3 className="px-2 mb-1 text-[11px] font-semibold text-gray-500 uppercase tracking-wide">
+          {group.title}
+        </h3>
+        <div className="space-y-[2px]">
+          {group.links.map((link) => {
+            const Icon = link.icon;
+            const isActive = activePath === link.to;
+            return (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={`group flex items-center gap-2 p-2 rounded-lg transition-all duration-200 ${
+                  isActive
+                    ? "bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md"
+                    : "text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700"
+                }`}
+              >
+                <div
+                  className={`p-1.5 rounded-md ${
+                    isActive
+                      ? "bg-white/20"
+                      : "bg-gray-100 group-hover:bg-blue-100"
+                  }`}
+                >
+                  <Icon
+                    className={`h-4 w-4 ${
+                      isActive
+                        ? "text-white"
+                        : "text-gray-600 group-hover:text-blue-600"
+                    }`}
+                  />
                 </div>
-              </div>
-            ))}
-          </nav>
-        </aside>
+                <span className="text-sm font-medium">{link.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    ))}
+  </nav>
+</aside>
+
+
 
         {/* Main Content */}
         <div className="flex-1 ml-72 flex flex-col overflow-hidden">
@@ -236,7 +275,15 @@ export default function DashboardLayout() {
                   className="appearance-none bg-gradient-to-r from-white to-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-300 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
                 >
                   <option value="Athena">Athena</option>
-                  <option value="Elation">Elation</option>
+<option value="Elation">Elation</option>
+<option value="ECW">eCW</option>
+<option value="Epic">Epic</option>
+<option value="Kno2">Kno2</option>
+<option value="Cerner">Cerner</option>
+<option value="Meditech">Meditech</option>
+<option value="PracticeFusion">Practice Fusion</option>
+<option value="Veradigm">Veradigm</option>
+
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
@@ -260,6 +307,7 @@ export default function DashboardLayout() {
 
           <main className="flex-1 overflow-y-auto">
             <Outlet />
+            
           </main>
 
           {/* Floating Get Curl Button */}

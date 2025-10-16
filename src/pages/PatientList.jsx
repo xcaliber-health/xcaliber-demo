@@ -62,7 +62,7 @@ export default function PatientList() {
   const rowsPerPage = 10;
 
   const navigate = useNavigate();
-  const { ehr, sourceId, departmentId, setLatestCurl } = useContext(AppContext);
+  const { ehr, sourceId,baseUrl, departmentId, setLatestCurl } = useContext(AppContext);
 
   const totalPages = Math.ceil(patients.length / rowsPerPage);
   const paginatedPatients = patients.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
@@ -77,7 +77,7 @@ export default function PatientList() {
     setLoading(true);
     (async () => {
       try {
-        const res = await fetchPatients(sourceId, ehr, debouncedSearch, departmentId,setLatestCurl, { headers: { "x-interaction-mode": "false" } });
+        const res = await fetchPatients(sourceId, ehr,baseUrl, debouncedSearch, departmentId,setLatestCurl, { headers: { "x-interaction-mode": "false" } });
         setPatients(res);
         if (!initialLoaded) {
           res.length ? toast.success(`Loaded ${res.length} patient(s)`) : toast("No patients found", { icon: "ℹ️" });
@@ -89,7 +89,7 @@ export default function PatientList() {
         setInitialLoaded(true);
       }
     })();
-  }, [sourceId, departmentId, ehr, debouncedSearch, initialLoaded]);
+  }, [sourceId, departmentId, ehr,baseUrl, debouncedSearch, initialLoaded]);
 
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
