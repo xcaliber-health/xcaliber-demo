@@ -25,7 +25,7 @@ export const AppContext = createContext();
 
 export default function DashboardLayout() {
   const [ehr, setEhr] = useState("Athena");
-  const [departmentId, setDepartmentId] = useState("1");
+  const [departmentId, setDepartmentId] = useState("150");
   const [showSplash, setShowSplash] = useState(true);
   const [showCurlDrawer, setShowCurlDrawer] = useState(false);
   const [curlCommand, setCurlCommand] = useState("");
