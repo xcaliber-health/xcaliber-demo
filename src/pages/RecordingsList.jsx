@@ -24,9 +24,13 @@ const AssistantFinal = ({ recorderData }) => {
   const intervalRef = useRef(null);
 
   // Fetch scripts
+  const [loading, setLoading] = useState(false);
+
+  // Inside useEffect for fetching scripts
   useEffect(() => {
     const fetchScripts = async () => {
       try {
+        setLoading(true);
         let scripts = [];
         if (id) {
           const res = await fetch(`${backendUrl}/file/${id}`);
@@ -45,6 +49,8 @@ const AssistantFinal = ({ recorderData }) => {
         if (scripts.length) setActiveScript(scripts[0]);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchScripts();
@@ -64,6 +70,7 @@ const AssistantFinal = ({ recorderData }) => {
     setReplayUrl(null);
     setIsRunning(false);
     clearInterval(intervalRef.current);
+    setIsCollapsed(false);
   };
 
   const executeTest = async () => {
@@ -114,8 +121,8 @@ const AssistantFinal = ({ recorderData }) => {
       );
 
       // Close the VNC/browser
-      setReplayUrl(null); 
-      setIsCollapsed(false); 
+      setReplayUrl(null);
+      setIsCollapsed(false);
       setIsRunning(false);
     } catch (err) {
       console.error(err);
@@ -141,7 +148,7 @@ const AssistantFinal = ({ recorderData }) => {
               onClick={stopScript}
               className={`transition-all ${
                 isCollapsed
-                  ? "w-12 h-12 rounded-full flex items-center justify-center text-white"
+                  ? "w-10 h-10 rounded-full flex items-center justify-center text-white"
                   : "w-full px-4 py-2 rounded-lg text-white text-sm font-semibold flex items-center justify-center"
               } bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700`}
             >
@@ -180,10 +187,18 @@ const AssistantFinal = ({ recorderData }) => {
             Select a Workflow
           </h3>
 
-          {scriptList.length ? (
+          {/* Script selector / loader / empty message */}
+          {loading ? (
+            <div className="flex items-center justify-center py-2 gap-2">
+              <div className="w-5 h-5 border-2 border-indigo-300 border-t-indigo-600 rounded-full animate-spin"></div>
+              <span className="text-gray-600 text-sm font-medium">
+                Loading workflows...
+              </span>
+            </div>
+          ) : scriptList.length > 0 ? (
             <div className="relative z-0">
               <select
-                className="px-3 py-2 text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
+                className="px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
                 onChange={(e) =>
                   setActiveScript(
                     scriptList.find((s) => s.uuid === e.target.value)
@@ -199,7 +214,7 @@ const AssistantFinal = ({ recorderData }) => {
               </select>
             </div>
           ) : (
-            <p className="text-gray-500 text-base">No workflows available.</p>
+            <p className="text-gray-500 text-sm">No workflows available.</p>
           )}
 
           {/* Accordion */}
