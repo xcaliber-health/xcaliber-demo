@@ -23,7 +23,7 @@ export default function ClinicalProcessing() {
   const { setLatestCurl } = useContext(AppContext);
 
   // ⏱ configurable mock delay
-  const TIME_FACTOR = 200; // milliseconds
+  const TIME_FACTOR = 4000; // milliseconds
 
   const getAbnormalitiesByFile = (fileName) => {
     if (!fileName) return [];
