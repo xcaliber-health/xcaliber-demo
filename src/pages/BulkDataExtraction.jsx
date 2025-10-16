@@ -1,5 +1,6 @@
-
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "../layouts/DashboardLayout";
 import {
   Users,
   Database,
@@ -16,8 +17,7 @@ import {
   getIdsForResource,
   getMappingForId,
 } from "../api/bulkData";
-
-// ✅ Reusable Card component
+// :white_check_mark: Reusable Card component
 function Card({ children, className = "" }) {
   return (
     <div
@@ -27,8 +27,7 @@ function Card({ children, className = "" }) {
     </div>
   );
 }
-
-// ✅ Reusable Dropdown component
+// :white_check_mark: Reusable Dropdown component
 function Dropdown({ label, options, value, onChange }) {
   return (
     <div className="flex flex-col">
@@ -48,11 +47,9 @@ function Dropdown({ label, options, value, onChange }) {
     </div>
   );
 }
-
-// ✅ Copy-to-Clipboard Button Component
+// :white_check_mark: Copy-to-Clipboard Button Component
 function CopyButton({ text }) {
   const [copied, setCopied] = useState(false);
-
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(text);
@@ -62,7 +59,6 @@ function CopyButton({ text }) {
       console.error("Failed to copy text:", err);
     }
   };
-
   return (
     <button
       onClick={handleCopy}
@@ -82,11 +78,10 @@ function CopyButton({ text }) {
     </button>
   );
 }
-
 export default function BulkDataExtraction() {
   const ehrOptions = ["Athena", "Elation", "ECW", "Epic", "Cerner"];
-
-  // ✅ Set default selected EHRs
+  // :white_check_mark: Set default selected EHRs
+  const navigate = useNavigate(); 
   const [sourceEHR, setSourceEHR] = useState("ECW");
   const [targetEHR, setTargetEHR] = useState("Athena");
   const [resources, setResources] = useState([]);
@@ -96,8 +91,7 @@ export default function BulkDataExtraction() {
   const [mappedId, setMappedId] = useState(null);
   const [loadingResources, setLoadingResources] = useState(false);
   const [loadingIds, setLoadingIds] = useState(false);
-
-  // ✅ Fetch resources when both EHRs selected
+  // :white_check_mark: Fetch resources when both EHRs selected
   useEffect(() => {
     if (sourceEHR && targetEHR) {
       setLoadingResources(true);
@@ -106,8 +100,7 @@ export default function BulkDataExtraction() {
         .finally(() => setLoadingResources(false));
     }
   }, [sourceEHR, targetEHR]);
-
-  // ✅ Fetch IDs when resource expanded
+  // :white_check_mark: Fetch IDs when resource expanded
   const handleExpandResource = async (resource) => {
     if (expandedResource === resource) {
       setExpandedResource(null); // collapse
@@ -121,15 +114,14 @@ export default function BulkDataExtraction() {
       setLoadingIds(false);
     }
   };
-
-  // ✅ Fetch mapping for selected ID
-  const handleSelectId = async (id, resource) => {
+  // :white_check_mark: Fetch mapping for selected ID
+  const handleSelectId = async (id) => {
+    console.log("Selected ID:", id);
     setSelectedId(id);
     setMappedId(null);
-    const mapped = await getMappingForId(sourceEHR, targetEHR, resource, id);
+    const mapped = await getMappingForId(id);
     setMappedId(mapped);
   };
-
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
       <div className="flex-shrink-0 p-4 pb-1">
@@ -148,7 +140,6 @@ export default function BulkDataExtraction() {
               </p>
             </div>
           </div>
-
           {/* Dropdowns */}
           <div className="grid md:grid-cols-2 gap-4 mb-6">
             <Dropdown
@@ -164,7 +155,6 @@ export default function BulkDataExtraction() {
               onChange={(e) => setTargetEHR(e.target.value)}
             />
           </div>
-
           {/* Main Panel */}
           <div className="grid md:grid-cols-3 gap-4">
             {/* Resources + IDs */}
@@ -193,63 +183,70 @@ export default function BulkDataExtraction() {
                           <ChevronDown className="w-4 h-4" />
                         )}
                       </div>
-                      {expandedResource === r && (
-                        <ul className="mt-2 space-y-1 pl-4">
-                          {loadingIds ? (
-                            <li className="text-gray-500 text-sm">Loading IDs...</li>
-                          ) : (
-                            (resourceIds[r] || []).map((id) => (
-                              <li
-                                key={id}
-                                onClick={() => handleSelectId(id, r)}
-                                className={`p-2 rounded-xl cursor-pointer text-sm ${
-                                  selectedId === id
-                                    ? "bg-purple-100 text-purple-700 font-medium"
-                                    : "hover:bg-gray-50"
-                                }`}
-                              >
-                                {id}
-                              </li>
-                            ))
-                          )}
-                        </ul>
-                      )}
+                        {expandedResource === r && (
+                          <ul className="mt-2 space-y-1 pl-4">
+                            {loadingIds ? (
+                              <li className="text-gray-500 text-sm">Loading IDs...</li>
+                            ) : (
+                              (resourceIds[r] || []).map((id) => (
+                                <li
+                                  key={id}
+                                  onClick={() => handleSelectId(id)} // ✅ pass the actual ID
+                                  className={`p-2 rounded-xl cursor-pointer text-sm ${
+                                    selectedId === id
+                                      ? "bg-purple-100 text-purple-700 font-medium"
+                                      : "hover:bg-gray-50"
+                                  }`}
+                                >
+                                  {id}
+                                </li>
+                              ))
+                            )}
+                          </ul>
+                        )}
+
                     </li>
                   ))}
                 </ul>
               )}
             </Card>
-
             {/* Target Mapping */}
             <Card className="p-4">
-              <h2 className="font-semibold mb-3 text-indigo-600">
-                Target Mapping
-              </h2>
-              {selectedId ? (
-                mappedId ? (
-                  <div className="flex flex-col gap-2">
-                    <p className="text-sm text-gray-500">Mapped ID</p>
-                    <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="text-green-500 w-5 h-5" />
-                        <span className="text-green-700 font-medium text-lg">
-                          {mappedId}
-                        </span>
+                  <h2 className="font-semibold mb-3 text-indigo-600">
+                    Target Mapping
+                  </h2>
+                  {selectedId ? (
+                    mappedId ? (
+                      <div className="flex flex-col gap-2">
+                        <p className="text-sm text-gray-500">Mapped ID</p>
+                        <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-4 py-3">
+                          <div className="flex items-center gap-2">
+                            <CheckCircle className="text-green-500 w-5 h-5" />
+                            <span className="text-green-700 font-medium text-lg">
+                              {mappedId}
+                            </span>
+                          </div>
+                          <CopyButton text={mappedId} />
+                        </div>
+                        {/* New button to navigate */}
+                        <button
+                          onClick={() => navigate(`/patients/${mappedId}`)}
+                          className="mt-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2 px-3 rounded-xl transition"
+                        >
+                          Go to Patient
+                        </button>
                       </div>
-                      <CopyButton text={mappedId} />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2 text-gray-500 text-sm">
-                    <RefreshCw className="animate-spin w-4 h-4" />
-                    Checking mapping...
-                  </div>
-                )
-              ) : (
-                <p className="text-gray-500 text-sm">
-                  Select an ID to view mapping.
-                </p>
-              )}
+                    ) : (
+                      <div className="flex items-center gap-2 text-gray-500 text-sm">
+                        <RefreshCw className="animate-spin w-4 h-4" />
+                        Checking mapping...
+                      </div>
+                    )
+                  ) : (
+                    <p className="text-gray-500 text-sm">
+                      Select an ID to view mapping.
+                    </p>
+                  )}
             </Card>
           </div>
         </div>

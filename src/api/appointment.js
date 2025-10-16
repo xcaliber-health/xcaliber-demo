@@ -1,6 +1,6 @@
 
 import { fhirFetch } from "./fhir";
-
+const TOKEN = import.meta.env.VITE_API_TOKEN;
 // Fetch appointments
 export async function fetchAppointments({ patientId, providerId, sourceId, departmentId,setLatestCurl }) {
   if (!patientId || !sourceId) {
@@ -135,3 +135,19 @@ export async function createAppointment({
 
   return response;
 }
+
+export async function getAppointment(id) {
+  console.log("Fetching appointment with ID:", id);
+  const res = await fetch(
+    `https://blitz.xcaliberapis.com/fhir-gateway-2/fhir/R4/Appointment/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+        "X-Source-Id": "ef123977-6ef1-3e8e-a30f-3879cea0b344",
+      },
+    }
+  );
+  if (!res.ok) throw new Error("Failed to fetch appointment");
+  return res.json();
+}
+

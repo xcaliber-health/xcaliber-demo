@@ -1,5 +1,18 @@
-
+const BASE = import.meta.env.VITE_API_BASE;
+const TOKEN = import.meta.env.VITE_API_TOKEN;
+const ECW_URL = import.meta.env.VITE_ECW_BASE_URL;
+const ECW_SOURCE_ID = import.meta.env.VITE_ECW_SOURCE_ID;
+const ATHENA_SOURCE_ID = import.meta.env.VITE_REFERENCE_SOURCE_ID;
+const ELATION_SOURCE_ID = import.meta.env.VITE_REFERENCE_SOURCE_ID;
 import React, { useEffect, useState, useContext } from "react";
+import mockElation from "../mock-data/mock-elation.json";
+import mockEpic from "../mock-data/mock-epic.json";
+import mockKno2 from "../mock-data/mock-kno2.json";
+import mockMeditech from "../mock-data/mock-meditech.json";
+import mockCerner from "../mock-data/mock-cerner.json";
+import mockVeradigm from "../mock-data/mock-veradigm.json";
+import mockpracticefusion from "../mock-data/mock-practicefusion.json";
+import mockPointClickCare from "../mock-data/mock-pointclick.json";
 import axios from "axios";
 import Editor from "@monaco-editor/react";
 import {
@@ -153,11 +166,11 @@ function FhirBrowser() {
 
   const EHR_CONFIG = {
     Athena: {
-      baseUrl: "https://blitz.xcaliberapis.com/fhir-gateway-2/fhir/R4",
+      baseUrl: BASE,
       endpointsFile: "/athena-endpoints.json",
       headers: {
-        Authorization: "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ4Y2FsaWJlci1oZWFsdGguc2VydmljZS1hY2NvdW50LmlkIjoiNTFmNjg5M2EtMmZkZi00NDE3LWEzODUtOGEzOTlmYWRjNWUzIiwieGNhbGliZXItaGVhbHRoLmFjY291bnQuaWQiOiI5MWI1YzdlMy02NmQxLTRiMGMtODRmZC0yYzZjYjVjZjgzZmMiLCJ4Y2FsaWJlci1oZWFsdGguaW5zdGFuY2UuaWQiOiI5MTcyNmQyOC1lY2QxLTM2ZGYtODEzMi02MjdhZTgwZmUzMzIiLCJ1c2VyIjp7InVzZXJJZCI6ImI1M2VmNzJmLWVmNDYtNGQ5Yi1iMjhiLTJkZTI2OTJiYThiYSIsInVzZXJOYW1lIjoiSm9obiBTbWl0aCJ9LCJ4Y2FsaWJlci1oZWFsdGguc2NvcGVzIjpbIjkxNzI2ZDI4LWVjZDEtMzZkZi04MTMyLTYyN2FlODBmZTMzMi4qIl0sImNsYWltcyI6WyJtb2RlbHM6KiIsImFjdGl2aXRpZXM6KiIsIkFjdGl2aXRpZXM6KiIsInRhZ3M6KiIsImF0dHJpYnV0ZXM6KiIsImVudGl0aWVzOioiLCJwcm92aWRlci5lbnRyaWVzOioiLCJwYXRpZW50LmVudHJpZXM6KiIsInByb3ZpZGVyLXRvdGFsLmVudHJpZXM6KiIsIkNhc2VzLmVudHJpZXM6KiIsIlByb2ZpbGUuZW50cmllczoqIiwiVXNlci5lbnRyaWVzOioiLCJSb2xlLmVudHJpZXM6KiIsInZpZXcuZW50cmllczoqIiwiQ29kZXIuZW50cmllcyIsIm9yY2hfZXZlbnRzLmVudHJpZXM6KiIsInVzZXJ2aWV3cy5lbnRyaWVzOioiLCJWaWV3LmVudHJpZXM6KiIsIndvcmtlci5lbnRyaWVzOioiLCJyb2xlLmVudHJpZXM6KiIsIndvcmtpdGVtLmVudHJpZXM6KiIsInBlcm1pc3Npb25fcG9saWN5LmVudHJpZXM6KiIsImNvbGxlY3Rpb24uZW50cmllczoqIiwiZmlsdGVyLmVudHJpZXM6KiIsIm9yY2hlc3RyYXRpb25fd29ya2Zsb3dfc3RhdGlzdGljcy5lbnRyaWVzOioiLCJvcmNoZXN0cmF0aW9uX2V2ZW50LmVudHJpZXM6KiIsIndvcmtmbG93LmVudHJpZXM6KiIsIm9yY2hlc3RyYXRpb25fd29ya2Zsb3cuZW50cmllczoqIiwiY29kZXNldHM6KiJdLCJncmFudFR5cGUiOiJjbGllbnRfY3JlZGVudGlhbHMiLCJpc3N1ZXJVcmwiOiJodHRwOi8vYmxpdHoueGNhbGliZXJhcGlzLmNvbS9hcGkvdjEvYXV0aC90b2tlblYyIiwiZXhwaXJ5QXQiOiIyMDI2LTA1LTE3VDIzOjU5OjU5WiIsInhjYWxpYmVyLWhlYWx0aC50ZW5hbnQuaWQiOiI1MTJmZTE2Yi01N2NjLTM4ODctYjI4Zi04MjlmMjFhYTllZjIiLCJpYXQiOjE3NTA0MDY1NTQsImV4cCI6MTc3OTAwNDk1NH0.XSt7JtaIhBZkWRC7rxLwnejiJR3pPsrTosR_AUS21R06b26o2PYRpxa4FusRZx1lk85H8Jg1-49A6J3RSwbMyU1zyg-dfr3zbma1Y08qpwvip35iQEF-LIF5gEN5rz4dfzLeMss2hV15EApCVdJwY4c57aKiqoy6CvepMD6yu_up0tpDQDpI3l_mxrN5DqRX5LmLeKBQ3D-wKUuFJi2CQmPi7VJg7yn-rnTSCqJoenjPAjgk2Gn5qu9agu43OBHuWZqLFr1k0YKzMVvXek-sdVWqS6I4BgjcGLcCF4FzYrzm2BNPefPIBKxrvfA22l5e7NUmdu-Ncv47nv44es8ydA",
-        "x-source-id": "ef123977-6ef1-3e8e-a30f-3879cea0b344",
+        Authorization: "Bearer "+ TOKEN,
+        "x-source-id": ATHENA_SOURCE_ID,
         "x-interaction-mode": "false",
       },
       defaultParams: {
@@ -166,14 +179,47 @@ function FhirBrowser() {
       },
     },
     Elation: {
-      baseUrl: "https://blitz.xcaliberapis.com/fhir-gateway-2/fhir/R4",
-      endpointsFile: "/elation-endpoints.json",
-      headers: {
-        Authorization: "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ4Y2FsaWJlci1oZWFsdGguc2VydmljZS1hY2NvdW50LmlkIjoiNTFmNjg5M2EtMmZkZi00NDE3LWEzODUtOGEzOTlmYWRjNWUzIiwieGNhbGliZXItaGVhbHRoLmFjY291bnQuaWQiOiI5MWI1YzdlMy02NmQxLTRiMGMtODRmZC0yYzZjYjVjZjgzZmMiLCJ4Y2FsaWJlci1oZWFsdGguaW5zdGFuY2UuaWQiOiI5MTcyNmQyOC1lY2QxLTM2ZGYtODEzMi02MjdhZTgwZmUzMzIiLCJ1c2VyIjp7InVzZXJJZCI6ImI1M2VmNzJmLWVmNDYtNGQ5Yi1iMjhiLTJkZTI2OTJiYThiYSIsInVzZXJOYW1lIjoiSm9obiBTbWl0aCJ9LCJ4Y2FsaWJlci1oZWFsdGguc2NvcGVzIjpbIjkxNzI2ZDI4LWVjZDEtMzZkZi04MTMyLTYyN2FlODBmZTMzMi4qIl0sImNsYWltcyI6WyJtb2RlbHM6KiIsImFjdGl2aXRpZXM6KiIsIkFjdGl2aXRpZXM6KiIsInRhZ3M6KiIsImF0dHJpYnV0ZXM6KiIsImVudGl0aWVzOioiLCJwcm92aWRlci5lbnRyaWVzOioiLCJwYXRpZW50LmVudHJpZXM6KiIsInByb3ZpZGVyLXRvdGFsLmVudHJpZXM6KiIsIkNhc2VzLmVudHJpZXM6KiIsIlByb2ZpbGUuZW50cmllczoqIiwiVXNlci5lbnRyaWVzOioiLCJSb2xlLmVudHJpZXM6KiIsInZpZXcuZW50cmllczoqIiwiQ29kZXIuZW50cmllcyIsIm9yY2hfZXZlbnRzLmVudHJpZXM6KiIsInVzZXJ2aWV3cy5lbnRyaWVzOioiLCJWaWV3LmVudHJpZXM6KiIsIndvcmtlci5lbnRyaWVzOioiLCJyb2xlLmVudHJpZXM6KiIsIndvcmtpdGVtLmVudHJpZXM6KiIsInBlcm1pc3Npb25fcG9saWN5LmVudHJpZXM6KiIsImNvbGxlY3Rpb24uZW50cmllczoqIiwiZmlsdGVyLmVudHJpZXM6KiIsIm9yY2hlc3RyYXRpb25fd29ya2Zsb3dfc3RhdGlzdGljcy5lbnRyaWVzOioiLCJvcmNoZXN0cmF0aW9uX2V2ZW50LmVudHJpZXM6KiIsIndvcmtmbG93LmVudHJpZXM6KiIsIm9yY2hlc3RyYXRpb25fd29ya2Zsb3cuZW50cmllczoqIiwiY29kZXNldHM6KiJdLCJncmFudFR5cGUiOiJjbGllbnRfY3JlZGVudGlhbHMiLCJpc3N1ZXJVcmwiOiJodHRwOi8vYmxpdHoueGNhbGliZXJhcGlzLmNvbS9hcGkvdjEvYXV0aC90b2tlblYyIiwiZXhwaXJ5QXQiOiIyMDI2LTA1LTE3VDIzOjU5OjU5WiIsInhjYWxpYmVyLWhlYWx0aC50ZW5hbnQuaWQiOiI1MTJmZTE2Yi01N2NjLTM4ODctYjI4Zi04MjlmMjFhYTllZjIiLCJpYXQiOjE3NTA0MDY1NTQsImV4cCI6MTc3OTAwNDk1NH0.XSt7JtaIhBZkWRC7rxLwnejiJR3pPsrTosR_AUS21R06b26o2PYRpxa4FusRZx1lk85H8Jg1-49A6J3RSwbMyU1zyg-dfr3zbma1Y08qpwvip35iQEF-LIF5gEN5rz4dfzLeMss2hV15EApCVdJwY4c57aKiqoy6CvepMD6yu_up0tpDQDpI3l_mxrN5DqRX5LmLeKBQ3D-wKUuFJi2CQmPi7VJg7yn-rnTSCqJoenjPAjgk2Gn5qu9agu43OBHuWZqLFr1k0YKzMVvXek-sdVWqS6I4BgjcGLcCF4FzYrzm2BNPefPIBKxrvfA22l5e7NUmdu-Ncv47nv44es8ydA",
-        "x-source-id": "162fbf17-1eff-398e-8934-854a3091fd65",
-      },
-      defaultParams: {},
+      mock: true,               // flag to use mock
+      mockFile: mockElation,    // the imported mock JSON
     },
+    ECW: {
+      baseUrl: ECW_URL,
+      endpointsFile: "/ecw-endpoints.json",
+      headers: {
+        "x-source-id": ECW_SOURCE_ID,
+      },
+      defaultParams: {
+        patient: "Lt2IFR5Ah76n4d8TFP5gBJiCIKJuEyZG8Ek3KV3alFE"
+      },
+    },
+    Epic: {
+      mock: true, 
+      mockFile: mockEpic,
+    },
+    Kno2: {
+      mock: true, 
+      mockFile: mockKno2,
+    },
+    Cerner: {
+      mock: true, 
+      mockFile: mockCerner,
+    },
+    Meditech: {
+      mock: true, 
+      mockFile: mockMeditech,
+    },
+    PracticeFusion: {
+      mock: true, 
+      mockFile: mockpracticefusion,
+    },
+    Veradigm:{
+      mock: true, 
+      mockFile: mockVeradigm,
+    },
+    PointClickCare:{
+      mock: true, 
+      mockFile:mockPointClickCare,
+    }
   };
 
   const { baseUrl, endpointsFile, headers, defaultParams = {} } =
@@ -206,15 +252,40 @@ function FhirBrowser() {
     }
   }, [response]);
 
-  useEffect(() => {
-    if (!endpointsFile) return;
-    setLoading(true);
-    fetch(endpointsFile)
-      .then((res) => res.json())
-      .then(setEndpoints)
-      .catch((err) => console.error(`Error loading ${endpointsFile}`, err))
-      .finally(() => setLoading(false));
-  }, [endpointsFile]);
+useEffect(() => {
+  const mockMap = {
+    Elation: mockElation,
+    Epic: mockEpic,
+    Kno2: mockKno2,
+    Cerner: mockCerner,
+    Meditech: mockMeditech,
+    PracticeFusion: mockpracticefusion,
+    Veradigm: mockVeradigm,
+    PointClickCare:mockPointClickCare
+  };
+
+  if (mockMap[ehr]) {
+    setEndpoints(
+      Object.keys(mockMap[ehr]).map((res) => ({
+        resource: res,
+        displayName: res,
+        path: `/${res}`
+      }))
+    );
+    return;
+  }
+
+  if (!endpointsFile) return;
+
+  setLoading(true);
+  fetch(endpointsFile)
+    .then((res) => res.json())
+    .then(setEndpoints)
+    .catch((err) => console.error(`Error loading ${endpointsFile}`, err))
+    .finally(() => setLoading(false));
+
+}, [ehr, endpointsFile]); // <-- add `ehr` here!
+
 
   const handleSelect = (endpoint) => {
     setSelected(endpoint);
@@ -224,13 +295,64 @@ function FhirBrowser() {
     setSelectedResourceId(null);
     setResourceSearchTerm("");
 
-    const finalParams = { ...defaultParams };
+    // 🧩 Build params from endpoint defaults + global defaults
+    if (ehr === "Elation") {
+    const resources = mockElation[endpoint.resource] || [];
+    setResourceList(resources);
+    return; // do not hit API
+    }
+    if (ehr === "Epic") {
+    const resources = mockEpic[endpoint.resource] || [];
+    setResourceList(resources);
+    return; // do not hit API
+    }
+    if (ehr === "Kno2") {
+      const resources = mockKno2[endpoint.resource] || [];
+      setResourceList(resources);
+      return;
+    }
+
+    if (ehr === "Cerner") {
+      const resources = mockCerner[endpoint.resource] || [];
+      setResourceList(resources);
+      return;
+    }
+
+    if (ehr === "Meditech") {
+      const resources = mockMeditech[endpoint.resource] || [];
+      setResourceList(resources);
+      return;
+    }
+
+    if (ehr === "PracticeFusion") {
+      const resources = mockpracticefusion[endpoint.resource] || [];
+      setResourceList(resources);
+      return;
+    }
+
+    if (ehr === "Veradigm") {
+      const resources = mockVeradigm[endpoint.resource] || [];
+      setResourceList(resources);
+      return;
+    }
+    if (ehr === "Veradigm") {
+      const resources = mockVeradigm[endpoint.resource] || [];
+      setResourceList(resources);
+      return;
+    }
+
+    const endpointDefaults = {};
+    endpoint.parameters.forEach((p) => {
+      if (p.default !== undefined) {
+        endpointDefaults[p.name] = p.default;
+      }
+    });
+    console.log
+
+    const finalParams = { ...endpointDefaults, ...defaultParams };
     handleAutoFetch(endpoint, finalParams);
   };
 
-  const handleChange = (name, value) => {
-    setParams((prev) => ({ ...prev, [name]: value }));
-  };
 
   const handleAutoFetch = async (endpoint, finalParams) => {
     setLoading(true);
@@ -263,8 +385,14 @@ function FhirBrowser() {
 
     try {
       const res = await axios.get(url, { headers });
-      const resources = res.data.entry?.map((entry) => entry.resource) || [];
+      let resources = [];
+      if(ehr === "ECW"){
+        resources = res.data.data.entry?.map((entry) => entry.resource) || [];
+      }else{
+        resources = res.data.entry?.map((entry) => entry.resource) || [];
+      }
       setResourceList(resources);
+      console.log(resources);
       setResponse(null);
     } catch (err) {
       if (err.response) {
@@ -282,37 +410,26 @@ function FhirBrowser() {
     }
   };
   const { setLatestCurl } = useContext(AppContext);
-  const handleSelectResourceId = async (id) => {
+  const handleSelectResourceId = (id) => {
     setSelectedResourceId(id);
-    if (!selected) return;
-
-    setLoading(true);
-    const url = `${baseUrl}${selected.path}/${id}`;
-    // Generate cURL
-    const curl = `curl -X GET "${url}" ` +
-      Object.entries(headers)
-        .map(([key, value]) => `-H "${key}: ${value}"`)
-        .join(" ");
-
-    setLatestCurl(curl);
-    try {
-      const res = await axios.get(url, { headers });
-      setResponse(res.data);
-    } catch (err) {
-      if (err.response) {
-        setResponse({
-          status: err.response.status,
-          statusText: err.response.statusText,
-          headers: err.response.headers,
-          data: err.response.data,
-        });
-      } else {
-        setResponse({ error: err.message });
-      }
-    } finally {
-      setLoading(false);
+    const selectedResource = resourceList.find((res) => res.id === id);
+    if (selectedResource) {
+      setResponse(selectedResource);
     }
   };
+//   const handleSelectResourceId = (id) => {
+//   setSelectedResourceId(id);
+//   const resource = resourceList.find((r) => r.id === id);
+//   if (resource) {
+//     setResponse(resource);
+//     setJsonString(JSON.stringify(resource, null, 2));
+//     setIsValid(true);
+//     setError(null);
+//   }
+// };
+
+
+
 
   const handleEditorChange = (value) => {
     if (value === undefined) return;
