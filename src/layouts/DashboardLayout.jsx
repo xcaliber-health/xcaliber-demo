@@ -2,7 +2,6 @@
 
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useState, useEffect, createContext } from "react";
-import { io } from "socket.io-client";
 import {
   Calendar,
   Users,
@@ -17,8 +16,6 @@ import {
   Code2,
   List,
   Cpu,
-  DownloadCloud,
-  Cloud,
 } from "lucide-react";
 
 export const AppContext = createContext();
@@ -30,8 +27,6 @@ export default function DashboardLayout() {
   const [showCurlDrawer, setShowCurlDrawer] = useState(false);
   const [curlCommand, setCurlCommand] = useState("");
   const [copySuccess, setCopySuccess] = useState("");
-  const [messages, setMessages] = useState([]);
-
 
   const handleGetCurlClick = () => {
     setShowCurlDrawer(true);
@@ -64,74 +59,38 @@ export default function DashboardLayout() {
     192, 194, 195,
   ];
 
-    const navGroups = [
+  const navGroups = [
     {
-      title: "Integration & Interoperability",
-      links: [
-        { to: "/patients", label: "Oncologist Patient Chart", icon: Users },
-        { to: "/scripts", label: "EHR Operator", icon: Cpu },
-        { to: "/claims-streaming", label: "Claims Data Streaming", icon: Cloud },
-        { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
-      ],
-    },
-    {
-      title: "Sample App Workflows",
+      title: "Sample Workflows",
       links: [
         { to: "/scheduling/find", label: "Scheduling Mobile App", icon: Calendar },
+        { to: "/patients", label: "Oncologist Patient Chart", icon: Users },
+        { to: "/claims", label: "Claims List", icon: FileText },
+        { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
+        {
+          to: "/document-reference",
+          label: "Clinical Document Attachments",
+          icon: ClipboardList,
+        },
         {
           to: "/custom-clinical-processing",
           label: "Custom Clinical Processing",
           icon: HeartPulse,
         },
-        { to: "/bulk-data-extraction", label: "Bulk Data Extraction", icon: DownloadCloud },
-        
-        { to: "/claims", label: "Claims List", icon: FileText },
-        
         { to: "/notes", label: "Notes", icon: Notebook },
         { to: "/orders", label: "Orders", icon: PackageCheck },
+        
       ],
     },
     {
-    title: "Health AI",
-    links: [
-      { to: "/document-reference", label: "Clinical Document Attachments", icon: ClipboardList },
-    ],
-  },
-    {
-      title: "Developer Tools",
+      title: "FHIR++",
       links: [
         { to: "/fhir-browser", label: "FHIR Browser", icon: Database },
         { to: "/event-browser", label: "Event Browser", icon: List },
+        { to: "/scripts", label: "EHR Operator", icon: Cpu },
       ],
     },
   ];
-
-
-  useEffect(() => {
-    //const socket = io(import.meta.env.VITE_SOCKET_URL || "http://localhost:3000", {
-    const socket = io(import.meta.env.VITE_SOCKET_URL, {
-      transports: ["websocket", "polling"],
-      reconnection: true,
-      withCredentials: true,
-    });
-
-    console.log("Connecting to socket...");
-
-    socket.on("connect", () => console.log("Socket connected:", socket.id));
-    socket.on("disconnect", () => console.log("Socket disconnected"));
-
-    // Listen for incoming messages (e.g., SMS notifications)
-    socket.on("new-sms", (msg) => {
-      console.log("Received SMS:", msg);
-      setMessages((prev) => [
-        ...prev,
-        { text: msg.body || JSON.stringify(msg), sender: "clinic" },
-      ]);
-    });
-
-    return () => socket.disconnect();
-  }, []);
-
 
   if (showSplash) {
     return (
@@ -156,8 +115,7 @@ export default function DashboardLayout() {
         ehr,
         departmentId,
         sourceId,
-        setLatestCurl: setCurlCommand,
-        messages, // This is important
+        setLatestCurl: setCurlCommand, // This is important
       }}
     >
       <div className="flex h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50 overflow-hidden">
@@ -182,8 +140,7 @@ export default function DashboardLayout() {
                 <div className="space-y-1">
                   {group.links.map((link) => {
                     const Icon = link.icon;
-                    //const isActive = activePath.startsWith(link.to);
-                    const isActive = activePath === link.to;
+                    const isActive = activePath.startsWith(link.to);
                     return (
                       <Link
                         key={link.to}
@@ -237,6 +194,13 @@ export default function DashboardLayout() {
                 >
                   <option value="Athena">Athena</option>
                   <option value="Elation">Elation</option>
+                  <option value="ECW">ECW</option>
+                  <option value="Epic">Epic</option>
+                  <option value="Kno2">Kno2</option>
+                  <option value="Cerner">Cerner</option>
+                  <option value="Meditech">Meditech</option>
+                  <option value="PracticeFusion">Practice Fusion</option>
+                  <option value="Veradigm">Veradigm</option>
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
