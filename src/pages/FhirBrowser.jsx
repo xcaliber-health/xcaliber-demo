@@ -417,6 +417,17 @@ useEffect(() => {
       setResponse(selectedResource);
     }
   };
+//   const handleSelectResourceId = (id) => {
+//   setSelectedResourceId(id);
+//   const resource = resourceList.find((r) => r.id === id);
+//   if (resource) {
+//     setResponse(resource);
+//     setJsonString(JSON.stringify(resource, null, 2));
+//     setIsValid(true);
+//     setError(null);
+//   }
+// };
+
 
 
 
