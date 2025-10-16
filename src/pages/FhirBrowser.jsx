@@ -12,6 +12,7 @@ import mockMeditech from "../mock-data/mock-meditech.json";
 import mockCerner from "../mock-data/mock-cerner.json";
 import mockVeradigm from "../mock-data/mock-veradigm.json";
 import mockpracticefusion from "../mock-data/mock-practicefusion.json";
+import mockPointClickCare from "../mock-data/mock-pointclick.json";
 import axios from "axios";
 import Editor from "@monaco-editor/react";
 import {
@@ -214,6 +215,10 @@ function FhirBrowser() {
     Veradigm:{
       mock: true, 
       mockFile: mockVeradigm,
+    },
+    PointClickCare:{
+      mock: true, 
+      mockFile:mockPointClickCare,
     }
   };
 
@@ -255,7 +260,8 @@ useEffect(() => {
     Cerner: mockCerner,
     Meditech: mockMeditech,
     PracticeFusion: mockpracticefusion,
-    Veradigm: mockVeradigm
+    Veradigm: mockVeradigm,
+    PointClickCare:mockPointClickCare
   };
 
   if (mockMap[ehr]) {
@@ -324,6 +330,11 @@ useEffect(() => {
       return;
     }
 
+    if (ehr === "Veradigm") {
+      const resources = mockVeradigm[endpoint.resource] || [];
+      setResourceList(resources);
+      return;
+    }
     if (ehr === "Veradigm") {
       const resources = mockVeradigm[endpoint.resource] || [];
       setResourceList(resources);
