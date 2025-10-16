@@ -112,9 +112,10 @@ const AssistantFinal = ({ recorderData }) => {
         ),
         { duration: 3000, position: "bottom-right" }
       );
+      
       // Close the VNC/browser
-      setReplayUrl(null); // ← This will close the iframe
-      setIsCollapsed(false); // ← Optional: open the sidebar
+      setReplayUrl(null); 
+      setIsCollapsed(false); 
       setIsRunning(false);
     } catch (err) {
       console.error(err);
