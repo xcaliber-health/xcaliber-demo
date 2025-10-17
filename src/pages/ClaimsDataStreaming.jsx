@@ -1,7 +1,30 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Database, Server, Play, RotateCw } from "lucide-react";
+
+function Card({ children, className = "" }) {
+  return (
+    <div
+      className={`bg-white/90 backdrop-blur-lg rounded-3xl border border-gray-100 shadow-lg hover:shadow-xl transition-shadow duration-200 ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+function Button({ children, className = "", ...props }) {
+  return (
+    <button
+      {...props}
+      className={`px-4 py-2 rounded-xl font-medium transition-all duration-200 disabled:opacity-50 transform hover:scale-[1.03] active:scale-95 focus:ring-2 focus:ring-indigo-400 focus:outline-none ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
 
 export default function KafkaToSnowflakeDemo() {
+  // --- existing state & logic preserved ---
   const [running, setRunning] = useState(false);
   const [phase, setPhase] = useState("idle");
   const [logs, setLogs] = useState([]);
@@ -64,36 +87,32 @@ export default function KafkaToSnowflakeDemo() {
       simulateCollecting();
     }
   }, [running]);
-
   useEffect(() => {
-    if (logRef.current) {
-      logRef.current.scrollTop = logRef.current.scrollHeight;
-    }
+    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
   }, [logs]);
 
   function pushLog(text) {
-    setLogs((s) => [
-      ...s,
-      `${new Date().toLocaleTimeString()} — ${text}`,
-    ].slice(-200));
+    setLogs((s) =>
+      [...s, `${new Date().toLocaleTimeString()} — ${text}`].slice(-200)
+    );
   }
-
   function simulateCollecting() {
-    pushLog(`Connecting to Kafka topic '${topic}' on partition ${partition}...`);
+    pushLog(
+      `Connecting to Kafka topic '${topic}' on partition ${partition}...`
+    );
     const steps = [
-      { delay: 600, text: "Fetching topic metadata (partitions, leaders)..." },
+      { delay: 600, text: "Fetching topic metadata..." },
       { delay: 1200, text: `Reading latest offset (current: ${offset})...` },
-      { delay: 1900, text: `Inspecting schema registry for topic '${topic}'...` },
+      {
+        delay: 1900,
+        text: `Inspecting schema registry for topic '${topic}'...`,
+      },
       { delay: 2500, text: "Verifying Snowflake target and credentials..." },
     ];
-
-    steps.forEach((s) => {
-      setTimeout(() => pushLog(s.text), s.delay);
-    });
-
+    steps.forEach((s) => setTimeout(() => pushLog(s.text), s.delay));
     setTimeout(() => {
       setPhase("transferring");
-      pushLog("Starting transfer: streaming EDI claims and writing to Snowflake...");
+      pushLog("Starting transfer...");
       simulateTransfer();
     }, 2800);
   }
@@ -102,31 +121,28 @@ export default function KafkaToSnowflakeDemo() {
     let transferred = 0;
     setRowsTransferred(0);
     setThroughput(0);
-
-    const start = Date.now();
-    const duration = 4000;
-
+    const start = Date.now(),
+      duration = 4000;
     const interval = setInterval(() => {
       const elapsed = Date.now() - start;
       const pct = Math.min(1, elapsed / duration);
       const currentThroughput = Math.round(100 + 900 * pct);
       const add = Math.round(currentThroughput * 0.3);
-
       transferred += add;
       setRowsTransferred(transferred);
       setThroughput(currentThroughput);
-
       const sample =
-        sampleEvents.current[Math.floor(Math.random() * sampleEvents.current.length)];
+        sampleEvents.current[
+          Math.floor(Math.random() * sampleEvents.current.length)
+        ];
       pushLog(
-        `Parsed claim ${sample.claim_id} (patient=${sample.patient_id}, proc=${sample.procedure_code}, amt=$${sample.amount.toFixed(
-          2
-        )}, status=${sample.status})`
+        `Parsed claim ${sample.claim_id} (proc=${
+          sample.procedure_code
+        }, amt=$${sample.amount.toFixed(2)})`
       );
-
       if (elapsed >= duration) {
         clearInterval(interval);
-        pushLog(`Flushed ${transferred} rows into Snowflake table ${snowflakeSchema}.`);
+        pushLog(`Flushed ${transferred} rows into ${snowflakeSchema}.`);
         setPhase("completed");
         setRunning(false);
       }
@@ -140,7 +156,6 @@ export default function KafkaToSnowflakeDemo() {
     setPhase("idle");
     setRunning(true);
   }
-
   function handleReset() {
     setRunning(false);
     setPhase("idle");
@@ -149,116 +164,135 @@ export default function KafkaToSnowflakeDemo() {
     setThroughput(0);
   }
 
+  // --- UI ---
   return (
-    <div className="p-6 bg-slate-50 min-h-screen">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-start gap-6">
-          {/* LEFT PANEL — Controls */}
-          <div className="w-2/5 bg-white rounded-2xl shadow p-5">
-            <h2 className="text-xl font-semibold mb-3">
-              Kafka → Snowflake (EDI claims)
+    <div className="h-screen flex flex-col bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-hidden">
+      {/* Header */}
+      <header className="p-4 pb-1">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <Server className="text-white w-5 h-5" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
+                Kafka → Snowflake Demo
+              </h1>
+              <p className="text-sm text-gray-500">
+                Simulate Kafka ingestion into Snowflake
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main */}
+      <main className="flex-1 px-5 py-3 overflow-hidden">
+        <div className="max-w-6xl mx-auto h-full flex gap-6">
+          {/* LEFT PANEL */}
+          <Card className="w-2/5 p-5 flex flex-col overflow-y-auto">
+            <h2 className="text-lg font-semibold text-indigo-700 mb-4">
+              Settings
             </h2>
+            <div className="space-y-3 text-sm">
+              <div>
+                <label className="font-medium text-gray-700">Kafka Topic</label>
+                <input
+                  value={topic}
+                  onChange={(e) => setTopic(e.target.value)}
+                  className="w-full mt-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
+              </div>
 
-            <div className="space-y-3">
-              <label className="block text-sm">Kafka Topic</label>
-              <input
-                className="w-full border rounded px-3 py-2 text-sm"
-                value={topic}
-                onChange={(e) => setTopic(e.target.value)}
-              />
-
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <div className="flex-1">
-                  <label className="block text-sm">Partition</label>
+                  <label className="font-medium text-gray-700">Partition</label>
                   <input
                     type="number"
-                    className="w-full border rounded px-3 py-2 text-sm"
                     value={partition}
                     onChange={(e) => setPartition(Number(e.target.value))}
+                    className="w-full mt-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
                   />
                 </div>
                 <div className="flex-1">
-                  <label className="block text-sm">Starting offset</label>
+                  <label className="font-medium text-gray-700">Offset</label>
                   <input
                     type="number"
-                    className="w-full border rounded px-3 py-2 text-sm"
                     value={offset}
                     onChange={(e) => setOffset(Number(e.target.value))}
+                    className="w-full mt-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
                   />
                 </div>
               </div>
 
-              <label className="block text-sm">Batch size</label>
-              <input
-                type="range"
-                min={100}
-                max={2000}
-                step={50}
-                value={batchSize}
-                onChange={(e) => setBatchSize(Number(e.target.value))}
-              />
-              <div className="text-sm text-slate-500">
-                Batch: {batchSize} rows
+              <div>
+                <label className="font-medium text-gray-700">Batch Size</label>
+                <input
+                  type="range"
+                  min={100}
+                  max={2000}
+                  step={50}
+                  value={batchSize}
+                  onChange={(e) => setBatchSize(Number(e.target.value))}
+                  className="w-full accent-indigo-600 mt-1"
+                />
+                <p className="text-gray-500 text-xs mt-1">
+                  Batch: {batchSize} rows
+                </p>
               </div>
 
-              <label className="block text-sm">Snowflake Target</label>
-              <input
-                className="w-full border rounded px-3 py-2 text-sm"
-                value={snowflakeSchema}
-                onChange={(e) => setSnowflakeSchema(e.target.value)}
-              />
+              <div>
+                <label className="font-medium text-gray-700">
+                  Snowflake Target
+                </label>
+                <input
+                  value={snowflakeSchema}
+                  onChange={(e) => setSnowflakeSchema(e.target.value)}
+                  className="w-full mt-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
+              </div>
 
-              <div className="flex gap-2 mt-4">
-                <button
+              <div className="flex gap-2 pt-2">
+                <Button
                   onClick={handleStart}
                   disabled={running}
-                  className={`flex-1 py-2 rounded-lg font-medium transition disabled:opacity-50 ${
+                  className={`flex-1 ${
                     running
-                      ? "bg-slate-300 text-slate-700"
-                      : "bg-indigo-600 text-white hover:bg-indigo-700"
+                      ? "bg-gray-300 text-gray-600"
+                      : "bg-indigo-600 text-white"
                   }`}
                 >
                   {running ? "Running..." : "Start"}
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={handleReset}
-                  className="px-4 py-2 rounded-lg border"
+                  className="bg-gray-100 border border-gray-300 text-gray-700"
                 >
-                  Reset
-                </button>
+                  <RotateCw className="inline w-4 h-4 mr-1" /> Reset
+                </Button>
               </div>
 
-              <div className="mt-4 text-sm space-y-1">
-                <div>
-                  Status: <span className="font-medium">{phase}</span>
-                </div>
-                <div>
+              <div className="mt-3 text-gray-700 space-y-1">
+                <p>
+                  Status:{" "}
+                  <span className="font-medium text-indigo-700">{phase}</span>
+                </p>
+                <p>
                   Rows transferred:{" "}
                   <span className="font-medium">{rowsTransferred}</span>
-                </div>
-                <div>
+                </p>
+                <p>
                   Throughput:{" "}
                   <span className="font-medium">{throughput} rows/s</span>
-                </div>
-              </div>
-
-              <div className="mt-4">
-                <label className="inline-flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={mappingPreviewOpen}
-                    onChange={() => setMappingPreviewOpen((v) => !v)}
-                  />
-                  <span className="text-sm">Show mapping/schema preview</span>
-                </label>
+                </p>
               </div>
 
               {mappingPreviewOpen && (
-                <div className="mt-3 bg-slate-50 p-3 rounded text-sm border">
-                  <div className="font-medium">
-                    Detected schema (EDI 837 → Snowflake mapping)
-                  </div>
-                  <pre className="text-xs mt-2">{`{
+                <div className="mt-4 bg-indigo-50 border border-indigo-100 rounded-lg p-3 text-xs overflow-auto max-h-60">
+                  <p className="font-medium text-indigo-700 mb-2">
+                    Detected schema
+                  </p>
+                  <pre>{`{
   "claim_id": "STRING",
   "patient_id": "STRING",
   "provider_npi": "STRING",
@@ -272,43 +306,49 @@ export default function KafkaToSnowflakeDemo() {
                 </div>
               )}
             </div>
-          </div>
+          </Card>
 
-          {/* RIGHT PANEL — Visualization */}
-          <div className="flex-1">
-            <div className="bg-white rounded-2xl shadow p-5 mb-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Live Transfer Preview</h3>
-                <div className="text-sm text-slate-500">
-                  Target: <span className="font-medium">{snowflakeSchema}</span>
-                </div>
+          {/* RIGHT PANEL */}
+          <div className="flex-1 flex flex-col gap-4 min-h-0">
+            {/* Live Transfer Preview */}
+            <Card className="flex-1 p-5 flex flex-col min-h-0">
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="text-lg font-semibold text-indigo-700">
+                  Live Transfer Preview
+                </h3>
+                <span className="text-sm text-gray-500">
+                  Target:{" "}
+                  <span className="font-medium text-indigo-600">
+                    {snowflakeSchema}
+                  </span>
+                </span>
               </div>
 
-              <div className="mt-4 grid grid-cols-3 gap-4">
-                {/* Event Stream */}
-                <div className="col-span-2">
-                  <div className="h-40 rounded-lg border p-3 bg-slate-50 overflow-auto text-sm">
-                    <div className="mb-2 text-xs text-slate-500">
-                      Event stream 
+              <div className="grid grid-cols-3 gap-4 flex-1 min-h-0">
+                {/* Stream */}
+                <div className="col-span-2 flex flex-col min-h-0">
+                  <div className="flex-1 bg-indigo-50 border border-gray-200 rounded-xl p-3 flex flex-col overflow-hidden">
+                    <div className="text-xs text-gray-500 mb-2 flex-shrink-0">
+                      Event Stream
                     </div>
-                    <div className="space-y-2">
-                      {Array.from({ length: 6 }).map((_, i) => {
+                    <div className="flex-1 overflow-auto pr-1 text-sm space-y-2">
+                      {Array.from({ length: 8 }).map((_, i) => {
                         const evt =
                           sampleEvents.current[
-                            (i + rowsTransferred) %
-                              sampleEvents.current.length
+                            (i + rowsTransferred) % sampleEvents.current.length
                           ];
                         return (
                           <div
-                            key={`${evt.claim_id}-${i}`}
-                            className="flex items-center justify-between bg-white border rounded px-3 py-1"
+                            key={i}
+                            className="bg-white border rounded-lg px-3 py-1 flex justify-between"
                           >
-                            <div className="text-sm font-medium">
-                              {evt.claim_id} • {evt.procedure_code} • ${evt.amount.toFixed(2)}
-                            </div>
-                            <div className="text-xs text-slate-400">
+                            <span>
+                              {evt.claim_id} • {evt.procedure_code} • $
+                              {evt.amount.toFixed(2)}
+                            </span>
+                            <span className="text-xs text-gray-400">
                               offset {offset + i}
-                            </div>
+                            </span>
                           </div>
                         );
                       })}
@@ -316,22 +356,23 @@ export default function KafkaToSnowflakeDemo() {
                   </div>
                 </div>
 
-                {/* Progress + Offsets */}
-                <div>
-                  <div className="rounded-lg border p-3 bg-slate-50">
-                    <div className="text-xs text-slate-500">Progress</div>
-                    <div className="mt-2 h-3 w-full bg-white rounded overflow-hidden border">
+                {/* Progress */}
+                <div className="flex flex-col bg-indigo-50 border border-gray-200 rounded-xl p-4 justify-between">
+                  <div>
+                    <p className="text-xs text-gray-500">Progress</p>
+                    <div className="mt-2 h-3 bg-white border rounded overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-indigo-500 to-emerald-400"
+                        className="h-full bg-gradient-to-r from-indigo-500 to-purple-500"
                         style={{
                           width: `${Math.min(
                             100,
-                            (rowsTransferred / Math.max(1, batchSize * 10)) * 100
+                            (rowsTransferred / Math.max(1, batchSize * 10)) *
+                              100
                           )}%`,
                         }}
                       />
                     </div>
-                    <div className="mt-2 text-sm font-medium">
+                    <p className="mt-2 text-sm font-medium text-indigo-700">
                       {Math.min(
                         100,
                         Math.round(
@@ -339,98 +380,79 @@ export default function KafkaToSnowflakeDemo() {
                         )
                       )}
                       %
-                    </div>
-
-                    <div className="mt-4 text-xs text-slate-500">
-                      Latency 
-                    </div>
-                    <div className="mt-1 font-medium">
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Latency</p>
+                    <p className="font-medium">
                       {phase === "transferring"
                         ? `${Math.round(50 + Math.random() * 150)} ms`
                         : "—"}
-                    </div>
-                  </div>
-
-                  <div className="mt-3 rounded-lg border p-3 bg-white text-sm">
-                    <div className="text-xs text-slate-500">Offsets</div>
-                    <div className="mt-2">
-                      current: <span className="font-medium">{offset}</span>
-                    </div>
-                    <div>
-                      committed:{" "}
-                      <span className="font-medium">
-                        {offset + rowsTransferred}
-                      </span>
-                    </div>
+                    </p>
                   </div>
                 </div>
               </div>
-            </div>
+            </Card>
 
-            {/* Logs + Metrics */}
-            <div className="bg-white rounded-2xl shadow p-4 h-60 flex">
-              {/* Logs */}
-              <div className="w-1/2 border-r pr-4">
-                <div className="text-sm text-slate-500 mb-2">Live logs</div>
+            {/* Logs & Metrics */}
+            <Card className="p-5 flex flex-1 min-h-[14rem] overflow-hidden">
+              <div className="w-1/2 pr-4 border-r flex flex-col min-h-0">
+                <p className="text-sm text-gray-500 mb-2">Live Logs</p>
                 <div
                   ref={logRef}
-                  className="h-full overflow-auto text-xs bg-slate-50 p-2 rounded"
+                  className="flex-1 bg-indigo-50 rounded-lg p-2 overflow-auto text-xs"
                 >
-                  {logs.length === 0 && (
-                    <div className="text-slate-400">
-                      No logs yet — start to see collection and transfer
-                      steps.
+                  {logs.length === 0 ? (
+                    <div className="text-gray-400">
+                      No logs yet — start to see activity...
                     </div>
+                  ) : (
+                    <AnimatePresence>
+                      {logs.map((l, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, y: -5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 5 }}
+                          className="mb-1"
+                        >
+                          {l}
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
                   )}
-                  <AnimatePresence>
-                    {logs.map((l, i) => (
-                      <motion.div
-                        key={`${l}-${i}`}
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 6 }}
-                        className="mb-1"
-                      >
-                        <div>{l}</div>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
                 </div>
               </div>
 
-              {/* Metrics */}
-              <div className="w-1/2 pl-4 flex flex-col">
-                <div className="text-sm text-slate-500 mb-2">Metrics</div>
-                <div className="flex-1 grid grid-cols-2 gap-3">
-                  <div className="bg-slate-50 rounded p-3 text-sm border">
-                    <div className="text-xs text-slate-500">Rows/sec</div>
-                    <div className="text-lg font-semibold">{throughput}</div>
+              <div className="w-1/2 pl-4 flex flex-col min-h-0">
+                <p className="text-sm text-gray-500 mb-2">Metrics</p>
+                <div className="grid grid-cols-2 gap-3 flex-1">
+                  <div className="bg-indigo-50 rounded-lg border p-3">
+                    <p className="text-xs text-gray-500">Rows/sec</p>
+                    <p className="text-lg font-semibold text-indigo-700">
+                      {throughput}
+                    </p>
                   </div>
-                  <div className="bg-slate-50 rounded p-3 text-sm border">
-                    <div className="text-xs text-slate-500">Total rows</div>
-                    <div className="text-lg font-semibold">
+                  <div className="bg-indigo-50 rounded-lg border p-3">
+                    <p className="text-xs text-gray-500">Total rows</p>
+                    <p className="text-lg font-semibold text-indigo-700">
                       {rowsTransferred}
-                    </div>
+                    </p>
                   </div>
-                  <div className="bg-slate-50 rounded p-3 text-sm border col-span-2">
-                    <div className="text-xs text-slate-500">Last commit</div>
-                    <div className="mt-2 text-sm">
+                  <div className="col-span-2 bg-white border rounded-lg p-3">
+                    <p className="text-xs text-gray-500">Last commit</p>
+                    <p className="mt-1 text-sm text-indigo-700">
                       {phase === "completed"
                         ? `${rowsTransferred} rows committed to ${snowflakeSchema}`
                         : "—"}
-                    </div>
+                    </p>
                   </div>
                 </div>
-
-                <div className="mt-3 text-xs text-slate-400">
-                  Tip: Use the inputs on the left to change topic/offset before
-                  starting .
-                </div>
               </div>
-            </div>
+            </Card>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
