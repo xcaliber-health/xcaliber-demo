@@ -1,6 +1,12 @@
-import React,{useContext} from "react";
+import React, { useContext } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route, useParams,Navigate } from "react-router-dom";
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    useParams,
+    Navigate,
+} from "react-router-dom";
 import "./index.css";
 import { Toaster } from "react-hot-toast";
 
@@ -9,8 +15,8 @@ import { AppContext } from "./layouts/DashboardLayout";
 
 // Scheduling pages
 import AppointmentDashboard from "./pages/AppointmentDashboard"; // Screen 3
-import FindAppointment from "./pages/FindAppointment";           // Screen 1
-import BookAppointment from "./pages/BookAppointment";           // Screen 2
+import FindAppointment from "./pages/FindAppointment"; // Screen 1
+import BookAppointment from "./pages/BookAppointment"; // Screen 2
 import VirtualPhone from "./pages/VirtualPhone";
 
 // Patient pages
@@ -23,18 +29,17 @@ import ClaimsDashboard from "./pages/ClaimsDashboard";
 import ClaimDetail from "./pages/ClaimsDetail";
 import NewClaim from "./pages/NewClaim";
 
-
 // Provider directory/profile
 import ProviderDirectory from "./pages/ProviderDirectory";
 
 //Fhir Browser
 import FhirBrowser from "./pages/FhirBrowser";
 
-// Event Browser 
+// Event Browser
 import EventBrowser from "./pages/EventBrowser";
 
 //DocumentReference Page
-import DocumentReference from "./pages/DocumentReference"; 
+import DocumentReference from "./pages/DocumentReference";
 
 // Notes App
 import NotesApp from "./pages/NotesApp";
@@ -43,9 +48,9 @@ import NewNote from "./pages/NewNote";
 
 // Orders Dashboard
 import OrdersDashboard from "./pages/OrdersDashboard";
-import CreateOrder from "./pages/CreateOrder"; 
+import CreateOrder from "./pages/CreateOrder";
 
-//Custom Clinical Processing 
+//Custom Clinical Processing
 import ClinicalProcessing from "./pages/ClinicalProcessing";
 import RecordingsList from "./pages/RecordingsList";
 
@@ -54,16 +59,14 @@ import BulkDataExtraction from "./pages/BulkDataExtraction";
 import ClaimsDataStreaming from "./pages/ClaimsDataStreaming";
 
 import ChartSummarizer from "./pages/ChartSummarize";
-import DocumentLavbeling from "./pages/DocumentLabeling";
-
-
-
+import DocumentLabeling from "./pages/DocumentLabeling";
+import RawBrowser from "./pages/RawBrowser";
 
 // ✅ Wrapper to inject props into VitalsTab
 function VitalsTabWrapper() {
-  const { id } = useParams();
-  const { sourceId } = useContext(AppContext);
-  return <VitalsTab patientId={id} sourceId={sourceId} />;
+    const { id } = useParams();
+    const { sourceId } = useContext(AppContext);
+    return <VitalsTab patientId={id} sourceId={sourceId} />;
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -132,6 +135,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                     path="/bulk-data-extraction"
                     element={<BulkDataExtraction />}
                 />
+                <Route
+                    path="/claims-streaming"
+                    element={<ClaimsDataStreaming />}
+                />
+                <Route path="/chart-summary" element={<ChartSummarizer />} />
+                <Route path="/raw-browser" element={<RawBrowser />} />
 
                 <Route
                     path="/claims-streaming"
@@ -140,7 +149,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 <Route path="/chart-summary" element={<ChartSummarizer />} />
                 <Route
                     path="/document-labeling"
-                    element={<DocumentLavbeling />}
+                    element={<DocumentLabeling />}
                 />
             </Route>
         </Routes>
