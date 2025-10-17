@@ -1,10 +1,11 @@
-import { useParams, useNavigate } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 
 export default function ChartSummarizer() {
   const  id  = "7002";
   const [summary, setSummary] = useState("");
+  const [showSummaryModal, setShowSummaryModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const PATIENTS = [
@@ -62,9 +63,9 @@ export default function ChartSummarizer() {
     setLoading(true);
     setSummary("");
     try {
-      const input = "Please summarize the patient's history for review."; // sample input
+      const input = "Generate a brief summary for Amina Patel"; // sample input
       const response = await fetch(
-        "https://stage-ray-serve.xcaliberhealth.io/provider-assistant/v1/chat/completions",
+        "https://dev-ray-serve.xcaliberhealth.io/provider-assistant/v1/chat/completions",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -105,105 +106,143 @@ export default function ChartSummarizer() {
 
   return (
 <div className="p-6 grid grid-cols-3 gap-6">
-  {/* Left Column */}
-  <div className="col-span-1 space-y-4">
-    {/* Chart Summarizer Button (above patient info) */}
-    <div className="flex justify-center mb-4">
-      <button
-        onClick={handleChartSummarizer}
-        disabled={loading}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded transition-colors"
-      >
-        {loading ? "Summarizing..." : "Chart Summarizer"}
-      </button>
-    </div>
+      {/* Left Column */}
+      <div className="col-span-1 space-y-4">
+        <div className="bg-white p-4 shadow rounded-lg border flex flex-col">
+          {/* Header with Name + Button */}
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="text-xl font-semibold">{patient.fullName}</h2>
+            <button
+              onClick={() => {
+                handleChartSummarizer();
+                setShowSummaryModal(true);
+              }}
+              disabled={loading}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1.5 rounded text-sm transition-colors"
+            >
+              {loading ? "Summarizing..." : "Chart Summary"}
+            </button>
+          </div>
 
-    <div className="bg-white p-4 shadow rounded-lg border flex flex-col">
-      <h2 className="text-xl font-semibold">{patient.fullName}</h2>
-      <p className="text-gray-600">{patient.gender} | DOB: {patient.birthDate}</p>
-      <p>Email: {patient.telecom.find(t => t.system === "email")?.value || "-"}</p>
-      <p>Phone: {patient.telecom.find(t => t.system === "phone")?.value || "-"}</p>
-      <p>Address: {patient.address?.[0]?.line?.join(", ")}, {patient.address?.[0]?.city}, {patient.address?.[0]?.state}, {patient.address?.[0]?.postalCode}</p>
-      <p>Status: {patient.status}</p>
+          <p className="text-gray-600">{patient.gender} | DOB: {patient.birthDate}</p>
+          <p>Email: {patient.telecom.find(t => t.system === "email")?.value || "-"}</p>
+          <p>Phone: {patient.telecom.find(t => t.system === "phone")?.value || "-"}</p>
+          <p>Address: {patient.address?.[0]?.line?.join(", ")}, {patient.address?.[0]?.city}, {patient.address?.[0]?.state}, {patient.address?.[0]?.postalCode}</p>
+          <p>Status: {patient.status}</p>
 
-      {/* Appointments */}
-      <div className="mt-4">
-        <h3 className="font-semibold mb-2">Appointments</h3>
-        {patient.appointments.length ? (
-          <table className="w-full border border-gray-300 text-sm">
+          {/* Appointments */}
+          <div className="mt-4">
+            <h3 className="font-semibold mb-2">Appointments</h3>
+            {patient.appointments.length ? (
+              <table className="w-full border border-gray-300 text-sm">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="border px-2 py-1 text-left">Type</th>
+                    <th className="border px-2 py-1 text-left">Date</th>
+                    <th className="border px-2 py-1 text-left">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {patient.appointments.map((a, i) => (
+                    <tr key={i} className="hover:bg-gray-50">
+                      <td className="border px-2 py-1">{a.appointmentType.text}</td>
+                      <td className="border px-2 py-1">{new Date(a.start).toLocaleString()}</td>
+                      <td className="border px-2 py-1">{a.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="text-gray-500">No appointments</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Right Column */}
+      <div className="col-span-2 bg-white p-4 shadow rounded-lg border flex flex-col">
+        {/* Tabs Section */}
+        <div className="flex items-center space-x-4 border-b mb-2 overflow-x-auto no-scrollbar">
+          {Object.entries(tabs).map(([key, tab]) => (
+            <button
+              key={key}
+              onClick={() => setActiveTab(key)}
+              className={`py-2 px-4 whitespace-nowrap transition-colors ${
+                activeTab === key
+                  ? "border-b-2 border-blue-500 font-semibold text-blue-600"
+                  : "text-gray-600 hover:text-blue-500"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab Content */}
+        <div className="overflow-x-auto max-h-[60vh] mt-4">
+          <table className="w-full border border-gray-300 shadow rounded-lg overflow-hidden text-sm">
             <thead className="bg-gray-100">
               <tr>
-                <th className="border px-2 py-1 text-left">Type</th>
-                <th className="border px-2 py-1 text-left">Date</th>
-                <th className="border px-2 py-1 text-left">Status</th>
+                {tabs[activeTab].headers.map((h, i) => (
+                  <th key={i} className="border border-gray-300 px-3 py-2 text-left font-semibold text-gray-700">
+                    {h}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {patient.appointments.map((a, i) => (
-                <tr key={i} className="hover:bg-gray-50">
-                  <td className="border px-2 py-1">{a.appointmentType.text}</td>
-                  <td className="border px-2 py-1">{new Date(a.start).toLocaleString()}</td>
-                  <td className="border px-2 py-1">{a.status}</td>
+              {tabs[activeTab].rows.length ? (
+                tabs[activeTab].rows.map((row, i) => (
+                  <tr key={i} className="hover:bg-gray-50">
+                    {row.map((cell, j) => (
+                      <td key={j} className="border border-gray-300 px-3 py-2">
+                        {cell || "-"}
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={tabs[activeTab].headers.length}
+                    className="text-center py-6 text-gray-500"
+                  >
+                    No data available
+                  </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
-        ) : <p className="text-gray-500">No appointments</p>}
+        </div>
+      </div>
+
+{/* Summary Modal */}
+{showSummaryModal && summary && (
+  <div
+    className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 transition-opacity duration-300"
+    onClick={(e) => {
+      // Close when clicking outside the modal
+      if (e.target === e.currentTarget) setShowSummaryModal(false);
+    }}
+  >
+    <div className="bg-white rounded-lg shadow-2xl w-[80%] max-h-[90vh] overflow-y-auto p-10 transform transition-transform duration-300 animate-fadeIn">
+      <div className="flex justify-between items-center border-b pb-3 mb-6">
+        <h3 className="text-2xl font-semibold text-blue-700">Chart Summary</h3>
+        <button
+          onClick={() => setShowSummaryModal(false)}
+          className="text-gray-500 hover:text-red-600 text-3xl font-bold leading-none"
+        >
+          ×
+        </button>
+      </div>
+
+      <div className="prose prose-blue text-lg leading-relaxed max-w-none">
+        <ReactMarkdown>{summary}</ReactMarkdown>
       </div>
     </div>
   </div>
-
-  {/* Right Column */}
-  <div className="col-span-2 bg-white p-4 shadow rounded-lg border flex flex-col">
-    {/* Tabs Section */}
-    <div className="flex items-center space-x-4 border-b mb-2 overflow-x-auto no-scrollbar">
-      {Object.entries(tabs).map(([key, tab]) => (
-        <button
-          key={key}
-          onClick={() => setActiveTab(key)}
-          className={`py-2 px-4 whitespace-nowrap transition-colors ${
-            activeTab === key ? "border-b-2 border-blue-500 font-semibold text-blue-600" : "text-gray-600 hover:text-blue-500"
-          }`}
-        >
-          {tab.label}
-        </button>
-      ))}
-    </div>
-
-    {/* Tab Content */}
-    <div className="overflow-x-auto max-h-[60vh] mt-4">
-      <table className="w-full border border-gray-300 shadow rounded-lg overflow-hidden text-sm">
-        <thead className="bg-gray-100">
-          <tr>
-            {tabs[activeTab].headers.map((h, i) => (
-              <th key={i} className="border border-gray-300 px-3 py-2 text-left font-semibold text-gray-700">{h}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {tabs[activeTab].rows.length ? tabs[activeTab].rows.map((row, i) => (
-            <tr key={i} className="hover:bg-gray-50">
-              {row.map((cell, j) => <td key={j} className="border border-gray-300 px-3 py-2">{cell || "-"}</td>)}
-            </tr>
-          )) : (
-            <tr>
-              <td colSpan={tabs[activeTab].headers.length} className="text-center py-6 text-gray-500">No data available</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
-{/* Summary Section below tabs */}
-{summary && (
-  <div className="mt-4">
-    <h4 className="text-md font-semibold mb-2 text-blue-700">Chart Summary</h4>
-    <div className="p-4 bg-blue-50 border border-blue-200 rounded text-sm text-center whitespace-pre-line w-full">
-      {summary}
-    </div>
-  </div>
 )}
-  </div>
-</div>
+    </div>
 
 
   );
