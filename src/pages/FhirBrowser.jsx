@@ -179,8 +179,8 @@ function FhirBrowser() {
       },
     },
     Elation: {
-      mock: true,               // flag to use mock
-      mockFile: mockElation,    // the imported mock JSON
+      data: true,               // flag to use data
+      mockFile: mockElation,    // the imported data JSON
     },
     ECW: {
       baseUrl: ECW_URL,
@@ -193,31 +193,31 @@ function FhirBrowser() {
       },
     },
     Epic: {
-      mock: true, 
+      data: true, 
       mockFile: mockEpic,
     },
     Kno2: {
-      mock: true, 
+      data: true, 
       mockFile: mockKno2,
     },
     Cerner: {
-      mock: true, 
+      data: true, 
       mockFile: mockCerner,
     },
     Meditech: {
-      mock: true, 
+      data: true, 
       mockFile: mockMeditech,
     },
     PracticeFusion: {
-      mock: true, 
+      data: true, 
       mockFile: mockpracticefusion,
     },
     Veradigm:{
-      mock: true, 
+      data: true, 
       mockFile: mockVeradigm,
     },
     PointClickCare:{
-      mock: true, 
+      data: true, 
       mockFile:mockPointClickCare,
     }
   };

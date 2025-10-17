@@ -16,7 +16,7 @@
 // ) {
 //   if (!sourceId) throw new Error("Missing sourceId when calling fetchPatients");
 
-//   // ✅ ECW mock
+//   // ✅ ECW data
 //   if (sourceId === import.meta.env.VITE_SOURCE_ID_ECW) {
 //     const delay = Math.floor(Math.random() * 400) + 1800;
 //     await new Promise((resolve) => setTimeout(resolve, delay));
@@ -94,7 +94,7 @@
 // export async function fetchPatient(id, sourceId, setLatestCurl) {
 //   if (!id || !sourceId) throw new Error("Missing id or sourceId when calling fetchPatient");
 
-//   // ✅ ECW mock
+//   // ✅ ECW data
 //   if (sourceId === import.meta.env.VITE_SOURCE_ID_ECW) {
 //     const delay = Math.floor(Math.random() * 400) + 1800;
 //     await new Promise((resolve) => setTimeout(resolve, delay));
@@ -106,7 +106,7 @@
 //   return fhirFetch(url, { sourceId, setLatestCurl });
 // }
 import { fhirFetch } from "./fhir"; 
-import { ECW_MOCK_PATIENTS } from "../mocks/patientListMock";
+import { ECW_MOCK_PATIENTS } from "../data/patientListMock";
 
 export async function fetchPatients(
   sourceId,
@@ -121,7 +121,7 @@ export async function fetchPatients(
 
   const safeSearch = (search || "").toLowerCase();
 
-  // Use ECW mock for ECW and all other non-Athena/Elation sources
+  // Use ECW data for ECW and all other non-Athena/Elation sources
   if (
     sourceId === import.meta.env.VITE_SOURCE_ID_ECW ||
     (sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&

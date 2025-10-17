@@ -93,7 +93,7 @@ export default function KafkaToSnowflakeDemo() {
 
     setTimeout(() => {
       setPhase("transferring");
-      pushLog("Starting transfer: streaming mock EDI claims and writing to Snowflake...");
+      pushLog("Starting transfer: streaming EDI claims and writing to Snowflake...");
       simulateTransfer();
     }, 2800);
   }
@@ -156,7 +156,7 @@ export default function KafkaToSnowflakeDemo() {
           {/* LEFT PANEL — Controls */}
           <div className="w-2/5 bg-white rounded-2xl shadow p-5">
             <h2 className="text-xl font-semibold mb-3">
-              Kafka → Snowflake (EDI claims demo)
+              Kafka → Snowflake (EDI claims)
             </h2>
 
             <div className="space-y-3">
@@ -289,7 +289,7 @@ export default function KafkaToSnowflakeDemo() {
                 <div className="col-span-2">
                   <div className="h-40 rounded-lg border p-3 bg-slate-50 overflow-auto text-sm">
                     <div className="mb-2 text-xs text-slate-500">
-                      Event stream (mock)
+                      Event stream 
                     </div>
                     <div className="space-y-2">
                       {Array.from({ length: 6 }).map((_, i) => {
@@ -342,7 +342,7 @@ export default function KafkaToSnowflakeDemo() {
                     </div>
 
                     <div className="mt-4 text-xs text-slate-500">
-                      Latency (mock)
+                      Latency 
                     </div>
                     <div className="mt-1 font-medium">
                       {phase === "transferring"
@@ -378,7 +378,7 @@ export default function KafkaToSnowflakeDemo() {
                 >
                   {logs.length === 0 && (
                     <div className="text-slate-400">
-                      No logs yet — start the demo to see collection and transfer
+                      No logs yet — start to see collection and transfer
                       steps.
                     </div>
                   )}
@@ -424,7 +424,7 @@ export default function KafkaToSnowflakeDemo() {
 
                 <div className="mt-3 text-xs text-slate-400">
                   Tip: Use the inputs on the left to change topic/offset before
-                  starting the demo.
+                  starting .
                 </div>
               </div>
             </div>

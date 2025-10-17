@@ -239,7 +239,7 @@ import {
   conditionMapping,
   clinicalStatusOptions,
 } from "../api/conditionsApi";
-import { ECW_MOCK_PATIENTS } from "../mocks/patientListMock";
+import { ECW_MOCK_PATIENTS } from "../data/patientListMock";
 
 export default function ConditionsTab({ patientId }) {
   const { departmentId, sourceId, setLatestCurl } = useContext(AppContext);
@@ -257,7 +257,7 @@ export default function ConditionsTab({ patientId }) {
 
   const conditionOptions = Object.keys(conditionMapping);
 
-  // Detect mock source
+  // Detect data source
   const isMockSource =
     sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
     sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
@@ -270,9 +270,9 @@ export default function ConditionsTab({ patientId }) {
         let data = [];
 
         if (isMockSource) {
-          // Fetch from mock patients
+          // Fetch from data patients
           const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
-          if (!patientMock) throw new Error("Patient not found in mock data");
+          if (!patientMock) throw new Error("Patient not found in data data");
           data = patientMock.conditions || [];
         } else {
           data = await fetchConditions(patientId, departmentId, sourceId, setLatestCurl);
@@ -312,11 +312,11 @@ export default function ConditionsTab({ patientId }) {
       if (!isMockSource) {
         await createCondition(formData, patientId, departmentId, sourceId, setLatestCurl);
       } else {
-        // Add to mock patient
+        // Add to data patient
         const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
         if (patientMock) {
           patientMock.conditions = patientMock.conditions || [];
-          patientMock.conditions.push({ ...formData, id: `mock-${Date.now()}` });
+          patientMock.conditions.push({ ...formData, id: `data-${Date.now()}` });
         }
       }
 

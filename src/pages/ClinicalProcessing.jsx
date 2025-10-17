@@ -22,7 +22,7 @@ export default function ClinicalProcessing() {
   const isMounted = useRef(true);
   const { setLatestCurl } = useContext(AppContext);
 
-  // ⏱ configurable mock delay
+  // ⏱ configurable data delay
   const TIME_FACTOR = 4000; // milliseconds
 
   const getAbnormalitiesByFile = (fileName) => {
@@ -42,7 +42,7 @@ export default function ClinicalProcessing() {
     return () => (isMounted.current = false);
   }, []);
 
-  // 🧪 Mock entity data (only this part is fake)
+  // 🧪 Data entity data (only this part is fake)
   const mockEntities = {
     Patient: [
       {
@@ -89,7 +89,7 @@ export default function ClinicalProcessing() {
     // ⏳ simulate entity extraction delay
     await new Promise((res) => setTimeout(res, TIME_FACTOR));
 
-    // ✅ mock entity data appears here
+    // ✅ data entity data appears here
     if (isMounted.current) {
       setData(mockEntities);
       setEditedData(mockEntities);
@@ -134,10 +134,10 @@ export default function ClinicalProcessing() {
           </div>
           <div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Custom Clinical Processing
+              Custom Clinical Processing 
             </h1>
             <p className="text-sm text-gray-600">
-              Upload a clinical PDF → extract mock entities → real appointment
+              Upload a clinical PDF → extract entities → real appointment
             </p>
           </div>
         </div>

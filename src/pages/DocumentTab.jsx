@@ -232,7 +232,7 @@ import { Loader2, Plus } from "lucide-react";
 import toast from "react-hot-toast";
 import { AppContext } from "../layouts/DashboardLayout";
 import { fetchDocuments, createDocumentReference } from "../api/documentApi";
-import { ECW_MOCK_PATIENTS } from "../mocks/patientListMock";
+import { ECW_MOCK_PATIENTS } from "../data/patientListMock";
 
 const categoryOptions = [
   "clinical-document",
@@ -290,7 +290,7 @@ export default function DocumentTab({ patientId }) {
         let data = [];
         if (isMockSource) {
           const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
-          if (!patientMock) throw new Error("Patient not found in mock data");
+          if (!patientMock) throw new Error("Patient not found in data data");
           data = (patientMock.documents || []).map((d) => ({ resource: d }));
         } else {
           const fetched = await fetchDocuments(

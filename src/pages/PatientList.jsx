@@ -242,7 +242,7 @@ import { fetchPatients } from "../api/patient";
 import { AppContext } from "../layouts/DashboardLayout";
 import { Search, Users, Phone, Mail, Calendar, User, Activity, Loader2, FileUp as FileUser } from "lucide-react";
 import toast from "react-hot-toast";
-import { ECW_MOCK_PATIENTS } from "../mocks/patientListMock";
+import { ECW_MOCK_PATIENTS } from "../data/patientListMock";
 
 // -------------------- Reusable Tailwind Components --------------------
 function Card({ children, className = "" }) {
@@ -315,7 +315,7 @@ export default function PatientList() {
   const totalPages = Math.ceil(patients.length / rowsPerPage);
   const paginatedPatients = patients.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
-  // Detect mock source
+  // Detect data source
   const isMockSource =
     sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
     sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;

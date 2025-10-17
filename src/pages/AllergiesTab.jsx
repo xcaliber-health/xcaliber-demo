@@ -387,7 +387,7 @@
 //     status: "",
 //   });
 
-//   // Detect mock source
+//   // Detect data source
 //   const isMockSource =
 //     sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
 //     sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
@@ -423,7 +423,7 @@
 //         let data = [];
 //         if (isMockSource) {
 //           const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
-//           if (!patientMock) throw new Error("Patient not found in mock data");
+//           if (!patientMock) throw new Error("Patient not found in data data");
 //           data = (patientMock.allergies || []).map((a) => ({ resource: a }));
 //         } else {
 //           const fetched = await fetchAllergies(patientId, sourceId, departmentId, setLatestCurl);
@@ -675,7 +675,7 @@
 import { useEffect, useState, useContext } from "react";
 import { fetchAllergies, createAllergy } from "../api/AllergiesApi";
 import { AppContext } from "../layouts/DashboardLayout";
-import { ECW_MOCK_PATIENTS } from "../mocks/patientListMock";
+import { ECW_MOCK_PATIENTS } from "../data/patientListMock";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -735,7 +735,7 @@ export default function AllergiesTab({ patientId }) {
         let data = [];
         if (isMockSource) {
           const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
-          if (!patientMock) throw new Error("Patient not found in mock data");
+          if (!patientMock) throw new Error("Patient not found in data data");
           data = (patientMock.allergies || []).map((a) => ({ resource: a }));
         } else {
           const fetched = await fetchAllergies(patientId, sourceId, departmentId, setLatestCurl);

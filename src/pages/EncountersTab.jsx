@@ -359,12 +359,15 @@
 //     </div>
 //   );
 // }
+
+
+
 import { useEffect, useState, useContext } from "react";
 import { fetchEncounters, createEncounter } from "../api/EncountersApi";
 import { AppContext } from "../layouts/DashboardLayout";
 import { Loader2, Plus } from "lucide-react";
 import toast from "react-hot-toast";
-import { ECW_MOCK_PATIENTS } from "../mocks/patientListMock";
+import { ECW_MOCK_PATIENTS } from "../data/patientListMock";
 
 const CLASS_OPTIONS = [
   { label: "Ambulatory", code: "AMB", system: "http://terminology.hl7.org/CodeSystem/v3-ActCode" },
@@ -395,7 +398,7 @@ export default function EncountersTab({ patientId }) {
     categoryOption: CATEGORY_OPTIONS[0].value,
   });
 
-  // Detect mock source
+  // Detect data source
   const isMockSource =
     sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
     sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
@@ -430,7 +433,7 @@ export default function EncountersTab({ patientId }) {
         let data = [];
         if (isMockSource) {
           const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
-          if (!patientMock) throw new Error("Patient not found in mock data");
+          if (!patientMock) throw new Error("Patient not found in data data");
           data = (patientMock.encounters || []).map((e) => ({ resource: e }));
         } else {
           const fetched = await fetchEncounters(patientId, sourceId, departmentId, setLatestCurl);
@@ -479,7 +482,7 @@ export default function EncountersTab({ patientId }) {
         const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
         if (patientMock) {
           patientMock.encounters = patientMock.encounters || [];
-          patientMock.encounters.push({ ...body, id: `mock-${Date.now()}` });
+          patientMock.encounters.push({ ...body, id: `data-${Date.now()}` });
         }
       }
 
@@ -515,19 +518,21 @@ export default function EncountersTab({ patientId }) {
       setSubmitting(false);
     }
   };
+  
+
 
   return (
     <div className="p-4">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Encounters</h2>
-        <button
+        {/* <button
           onClick={() => setOpen(true)}
           className="flex items-center gap-2 bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700"
         >
           <Plus className="w-4 h-4" />
           Add Encounter
-        </button>
+        </button> */}
       </div>
 
       {/* Add Encounter Modal */}
