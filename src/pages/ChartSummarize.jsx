@@ -1,10 +1,11 @@
-import { useParams, useNavigate } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 import { useState } from "react";
 import { ArrowLeft, Brain, FileText, Loader2 } from "lucide-react";
 
 export default function ChartSummarizer() {
   const id = "7002";
   const [summary, setSummary] = useState("");
+  const [showSummaryModal, setShowSummaryModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const PATIENTS = [
@@ -123,7 +124,7 @@ export default function ChartSummarizer() {
     try {
       const input = "Please summarize the patient's history for review.";
       const response = await fetch(
-        "https://stage-ray-serve.xcaliberhealth.io/provider-assistant/v1/chat/completions",
+        "https://dev-ray-serve.xcaliberhealth.io/provider-assistant/v1/chat/completions",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
