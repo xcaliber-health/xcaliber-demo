@@ -139,6 +139,7 @@ export default function DashboardLayout() {
   const [curlCommand, setCurlCommand] = useState("");
   const [copySuccess, setCopySuccess] = useState("");
   const [messages, setMessages] = useState([]);
+  const [localEvents, setLocalEvents] = useState([]);
 
   const handleGetCurlClick = () => setShowCurlDrawer(true);
   const copyToClipboard = () => {
@@ -249,7 +250,7 @@ export default function DashboardLayout() {
   }
 
   return (
-    <AppContext.Provider value={{ ehr, parentEhr, childEhr, departmentId, sourceId, baseUrl, setLatestCurl: setCurlCommand, messages, MOCK_EHRS }}>
+    <AppContext.Provider value={{ ehr, parentEhr, childEhr, departmentId, sourceId, baseUrl, setLatestCurl: setCurlCommand, messages, MOCK_EHRS ,localEvents, setLocalEvents,}}>
       <div className="flex h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-indigo-100 overflow-hidden">
         {/* Sidebar */}
         <aside className="w-72 bg-white shadow-xl flex flex-col fixed left-0 top-0 bottom-0 border-r border-gray-200 z-50">
