@@ -1,18 +1,24 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import { submitEntity } from "../api/HandleEntity";
 import { getAppointment } from "../api/appointment";
-import {
-  Loader2,
-  HeartPulse,
-  ChevronDown,
-  ChevronRight,
-  UploadCloud,
-} from "lucide-react";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
+import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+
+import { Loader2, HeartPulse, ChevronDown, ChevronRight } from "lucide-react";
 import toast from "react-hot-toast";
 import { AppContext } from "../layouts/DashboardLayout";
 
+// Mock PDF list from /public/pdfs
+const pdfList = [
+  { name: "Hemoglobin Report", file: "/pdfs/lowhemo.pdf" },
+  { name: "PCV Report", file: "/pdfs/highPCV.pdf" },
+  { name: "RBC Report", file: "/pdfs/lowRBC.pdf" },
+];
+
 export default function ClinicalProcessing() {
-  const [file, setFile] = useState(null);
+  const [selectedPdf, setSelectedPdf] = useState(null);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [editedData, setEditedData] = useState({});
@@ -22,85 +28,50 @@ export default function ClinicalProcessing() {
   const isMounted = useRef(true);
   const { setLatestCurl } = useContext(AppContext);
 
-  // ⏱ configurable data delay
   const TIME_FACTOR = 4000; // milliseconds
+  const pdfPlugin = defaultLayoutPlugin();
 
   const getAbnormalitiesByFile = (fileName) => {
     if (!fileName) return [];
-    if (fileName.toLowerCase().includes("hemo")) {
-      return ["Hemoglobin level is critically low"];
-    } else if (fileName.toLowerCase().includes("pcv")) {
-      return ["Packed Cell Volume (PCV) is high"];
-    } else if (fileName.toLowerCase().includes("rbc")) {
-      return ["Red Blood Cell (RBC) count is low"];
-    } else {
-      return ["Hemoglobin level is critically low"];
-    }
+    if (fileName.toLowerCase().includes("hemo")) return ["Hemoglobin level is critically low"];
+    if (fileName.toLowerCase().includes("pcv")) return ["Packed Cell Volume (PCV) is high"];
+    if (fileName.toLowerCase().includes("rbc")) return ["Red Blood Cell (RBC) count is low"];
+    return ["Hemoglobin level is critically low"];
   };
 
   useEffect(() => {
     return () => (isMounted.current = false);
   }, []);
 
-  // 🧪 Data entity data (only this part is fake)
   const mockEntities = {
-    Patient: [
-      {
-        id: "P-001",
-        name: "Jane Doe",
-        gender: "female",
-        birthDate: "1990-05-14",
-      },
-    ],
+    Patient: [{ id: "P-001", name: "Jane Doe", gender: "female", birthDate: "1990-05-14" }],
     Observation: [
-      {
-        code: "718-7",
-        display: "Hemoglobin [Mass/volume] in Blood",
-        value: "8.2 g/dL",
-        interpretation: "L (Low)",
-      },
-      {
-        code: "4544-3",
-        display: "Hematocrit [Volume Fraction] of Blood",
-        value: "49 %",
-        interpretation: "H (High)",
-      },
+      { code: "718-7", display: "Hemoglobin [Mass/volume] in Blood", value: "8.2 g/dL", interpretation: "L (Low)" },
+      { code: "4544-3", display: "Hematocrit [Volume Fraction] of Blood", value: "49 %", interpretation: "H (High)" },
     ],
-    Practitioner: [
-      {
-        id: "pract-002",
-        name: "Dr. Arjun Mehta",
-        role: "Cardiologist",
-      },
-    ],
+    Practitioner: [{ id: "pract-002", name: "Dr. Arjun Mehta", role: "Cardiologist" }],
   };
 
-  const handleUpload = async () => {
-    if (!file) return toast.error("Please select a PDF file first.");
+  const handleProcess = async () => {
+    if (!selectedPdf) return toast.error("Please select a PDF first.");
 
     setLoading(true);
-    toast.loading("Uploading PDF...");
+    toast.loading("Processing PDF...");
 
-    // ⏳ simulate upload delay
     await new Promise((res) => setTimeout(res, TIME_FACTOR));
     toast.dismiss();
-    toast.success("PDF uploaded successfully. Processing...");
+    toast.success("PDF processed successfully.");
 
-    // ⏳ simulate entity extraction delay
     await new Promise((res) => setTimeout(res, TIME_FACTOR));
 
-    // ✅ data entity data appears here
     if (isMounted.current) {
       setData(mockEntities);
       setEditedData(mockEntities);
       setActiveStep(1);
       toast.success("Entities extracted successfully!");
 
-      // ✅ keep the real appointment creation logic
       toast.loading("Creating appointment...");
-      const submitResult = await submitEntity(
-        setLatestCurl
-      );
+      const submitResult = await submitEntity(setLatestCurl);
       toast.dismiss();
 
       if (submitResult?.success) {
@@ -121,8 +92,7 @@ export default function ClinicalProcessing() {
     }
   };
 
-  const toggleSection = (key) =>
-    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
+  const toggleSection = (key) => setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
@@ -134,39 +104,48 @@ export default function ClinicalProcessing() {
           </div>
           <div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Custom Clinical Processing 
+              Custom Clinical Processing
             </h1>
-            <p className="text-sm text-gray-600">
-              Upload a clinical PDF → extract entities → real appointment
-            </p>
+            <p className="text-sm text-gray-600">Select a PDF → extract entities → schedule appointment</p>
           </div>
         </div>
 
-        {/* Step 0: Upload */}
+        {/* Step 0: PDF Selection */}
         {activeStep === 0 && (
-          <div className="bg-white/95 p-6 shadow-xl rounded-3xl">
+          <div className="bg-white/95 p-6 shadow-xl rounded-3xl flex flex-col gap-4">
             <div className="flex flex-col md:flex-row items-center gap-4">
-              <label className="flex items-center gap-2 cursor-pointer bg-white border border-gray-300 px-4 py-2 rounded-2xl hover:bg-gray-50 shadow-sm">
-                <UploadCloud className="w-5 h-5 text-indigo-500" />
-                <span className="text-sm font-medium">Choose PDF</span>
-                <input
-                  type="file"
-                  accept="application/pdf"
-                  onChange={(e) => setFile(e.target.files[0])}
-                  className="hidden"
-                />
-              </label>
-              <span className="text-sm text-gray-500">
-                {file?.name || "No file selected"}
-              </span>
+              <select
+                value={selectedPdf?.file || ""}
+                onChange={(e) => setSelectedPdf(pdfList.find((p) => p.file === e.target.value))}
+                className="block w-full md:w-64 px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="">Select PDF</option>
+                {pdfList.map((pdf) => (
+                  <option key={pdf.file} value={pdf.file}>
+                    {pdf.name}
+                  </option>
+                ))}
+              </select>
+
               <button
-                onClick={handleUpload}
-                disabled={loading}
+                onClick={handleProcess}
+                disabled={loading || !selectedPdf}
                 className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl flex items-center gap-2"
               >
-                {loading ? <Loader2 className="animate-spin w-5 h-5" /> : "Upload & Process"}
+                {loading ? <Loader2 className="animate-spin w-5 h-5" /> : "Process PDF"}
               </button>
             </div>
+
+            {/* PDF Viewer */}
+            {selectedPdf && (
+              <div className="flex-1 min-h-[600px] border rounded-2xl shadow-lg overflow-hidden">
+                <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
+                  <div className="h-full w-full">
+                    <Viewer fileUrl={selectedPdf.file} plugins={[pdfPlugin]} />
+                  </div>
+                </Worker>
+              </div>
+            )}
           </div>
         )}
 
@@ -174,11 +153,11 @@ export default function ClinicalProcessing() {
         {activeStep === 1 && data && (
           <div className="bg-white/95 p-4 shadow-xl rounded-3xl mt-4 max-h-[600px] overflow-auto">
             {/* Abnormalities */}
-            {file && getAbnormalitiesByFile(file.name).length > 0 && (
+            {selectedPdf && getAbnormalitiesByFile(selectedPdf.name).length > 0 && (
               <div className="bg-red-100 border border-red-400 text-red-800 px-4 py-2 rounded-lg mb-4">
                 <h2 className="font-bold mb-1">Abnormality Detected</h2>
                 <ul className="list-disc pl-5">
-                  {getAbnormalitiesByFile(file.name).map((ab, idx) => (
+                  {getAbnormalitiesByFile(selectedPdf.name).map((ab, idx) => (
                     <li key={idx}>{ab}</li>
                   ))}
                 </ul>
@@ -236,9 +215,7 @@ export default function ClinicalProcessing() {
                             <tr key={idx} className="hover:bg-gray-50">
                               {Object.entries(item).map(([field, value]) => (
                                 <td key={field} className="px-3 py-2 border">
-                                  {typeof value === "object"
-                                    ? JSON.stringify(value)
-                                    : String(value)}
+                                  {typeof value === "object" ? JSON.stringify(value) : String(value)}
                                 </td>
                               ))}
                             </tr>
