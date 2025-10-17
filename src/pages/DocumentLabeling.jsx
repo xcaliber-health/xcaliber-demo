@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 
 export default function DocumentLabeling() {
+  // --- State Management --------------------------------------------------
+  const [isLoading, setIsLoading] = useState(false);
+  const [showMetadata, setShowMetadata] = useState(false);
+  const [visibleFields, setVisibleFields] = useState([]);
+
   // --- Data ---------------------------------------------------------------
   const clinic = {
     name: "YOUR CLINIC",
@@ -96,6 +101,38 @@ export default function DocumentLabeling() {
     },
   ];
 
+  // --- Handler Functions -------------------------------------------------
+  const handleGetMetadata = async () => {
+    setIsLoading(true);
+    setShowMetadata(false);
+    setVisibleFields([]);
+
+    // Simulate loading for 2 seconds
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    setIsLoading(false);
+    setShowMetadata(true);
+
+    // Animate fields appearing one by one
+    const availableFields = [
+      { key: "document_class", label: "Document Class" },
+      { key: "document_status", label: "Document Status" },
+      { key: "confidence_score", label: "Confidence Score" },
+      { key: "assigned_to", label: "Assigned To" },
+      { key: "provider_user_name", label: "Provider" },
+      { key: "servicing_facility", label: "Facility" },
+      { key: "created_date", label: "Created Date" },
+      { key: "last_modified_datetime", label: "Last Modified" },
+      { key: "is_phi", label: "Contains PHI" },
+      { key: "sign_off", label: "Signed Off" },
+    ];
+
+    for (let i = 0; i < availableFields.length; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 150));
+      setVisibleFields((prev) => [...prev, i]);
+    }
+  };
+
   // --- UI helpers ---------------------------------------------------------
   const FlagBadge = ({ flag }) => {
     const base =
@@ -179,11 +216,12 @@ export default function DocumentLabeling() {
   );
 
   // Metadata Component
-  const MetadataSection = ({ metadata }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [showMetadata, setShowMetadata] = useState(false);
-    const [visibleFields, setVisibleFields] = useState([]);
-
+  const MetadataSection = ({
+    metadata,
+    isLoading,
+    showMetadata,
+    visibleFields,
+  }) => {
     const metadataObj = metadata[0]; // Get first metadata object
 
     // Define which fields to show as available metadata
@@ -220,62 +258,11 @@ export default function DocumentLabeling() {
       return value;
     };
 
-    const handleGetMetadata = async () => {
-      setIsLoading(true);
-      setShowMetadata(false);
-      setVisibleFields([]);
-
-      // Simulate loading for 2 seconds
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      setIsLoading(false);
-      setShowMetadata(true);
-
-      // Animate fields appearing one by one
-      for (let i = 0; i < availableFields.length; i++) {
-        await new Promise((resolve) => setTimeout(resolve, 150));
-        setVisibleFields((prev) => [...prev, i]);
-      }
-    };
-
     return (
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
         {/* Header */}
         <div className=" h-2 rounded-t-lg"></div>
         <div className="p-4">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-2xl font-semibold text-gray-900">Metadata</h3>
-            <div className="flex flex-col space-y-1">
-              <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
-              <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
-              <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
-            </div>
-          </div>
-
-          {/* Get Metadata Button */}
-          {!showMetadata && (
-            <div className="flex justify-center mb-6">
-              <button
-                onClick={handleGetMetadata}
-                disabled={isLoading}
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-                  isLoading
-                    ? "bg-blue-100 text-blue-600 cursor-not-allowed"
-                    : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-md"
-                }`}
-              >
-                {isLoading ? (
-                  <>
-                    <Spinner />
-                    <span>Loading...</span>
-                  </>
-                ) : (
-                  <span>Get Metadata</span>
-                )}
-              </button>
-            </div>
-          )}
-
           {/* Loading State */}
           {isLoading && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
@@ -284,34 +271,48 @@ export default function DocumentLabeling() {
             </div>
           )}
 
-          {/* Available Metadata */}
+          {/* Full Metadata Section */}
           {showMetadata && (
-            <div className="space-y-3">
-              {availableFields.map((field, index) => {
-                const value = formatValue(field.key, metadataObj[field.key]);
-                if (value === null) return null;
+            <>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-2xl font-semibold text-gray-900">
+                  Metadata
+                </h3>
+                <div className="flex flex-col space-y-1">
+                  <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
+                  <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
+                  <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
+                </div>
+              </div>
 
-                const isVisible = visibleFields.includes(index);
+              {/* Available Metadata */}
+              <div className="space-y-3">
+                {availableFields.map((field, index) => {
+                  const value = formatValue(field.key, metadataObj[field.key]);
+                  if (value === null) return null;
 
-                return (
-                  <div
-                    key={field.key}
-                    className={`space-y-1 transition-all duration-500 ${
-                      isVisible
-                        ? "opacity-100 transform translate-y-0"
-                        : "opacity-0 transform translate-y-2"
-                    }`}
-                  >
-                    <div className="text-xs text-gray-500 font-medium">
-                      {field.label}
+                  const isVisible = visibleFields.includes(index);
+
+                  return (
+                    <div
+                      key={field.key}
+                      className={`space-y-1 transition-all duration-500 ease-in ${
+                        isVisible
+                          ? "opacity-100 transform translate-y-0"
+                          : "opacity-0 transform translate-y-2"
+                      }`}
+                    >
+                      <div className="text-xs text-gray-500 font-medium">
+                        {field.label}
+                      </div>
+                      <div className="text-sm font-semibold text-gray-900">
+                        {value}
+                      </div>
                     </div>
-                    <div className="text-sm font-semibold text-gray-900">
-                      {value}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            </>
           )}
         </div>
       </div>
@@ -623,8 +624,28 @@ export default function DocumentLabeling() {
 
           {/* Metadata Sidebar */}
           <div className="w-80 flex-shrink-0">
-            <div className="sticky top-6">
-              <MetadataSection metadata={metadata} />
+            <div className="sticky top-6 space-y-4">
+              {/* Load Metadata Button */}
+              {!showMetadata && !isLoading && (
+                <div className="flex justify-center">
+                  <button
+                    onClick={handleGetMetadata}
+                    className="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-200 bg-blue-600 text-white hover:bg-blue-700 hover:shadow-md"
+                  >
+                    <span>Load Metadata</span>
+                  </button>
+                </div>
+              )}
+
+              {/* Metadata Section */}
+              {(showMetadata || isLoading) && (
+                <MetadataSection
+                  metadata={metadata}
+                  isLoading={isLoading}
+                  showMetadata={showMetadata}
+                  visibleFields={visibleFields}
+                />
+              )}
             </div>
           </div>
         </div>
