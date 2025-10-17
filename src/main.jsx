@@ -53,6 +53,8 @@ import BulkDataExtraction from "./pages/BulkDataExtraction";
 
 import ClaimsDataStreaming from "./pages/ClaimsDataStreaming";
 
+import ChartSummarizer from "./pages/ChartSummarize";
+
 
 
 
@@ -114,6 +116,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/bulk-data-extraction" element={<BulkDataExtraction />} />
 
         <Route path="/claims-streaming" element={<ClaimsDataStreaming />} />
+        <Route path="/chart-summary" element={<ChartSummarizer />} />
 
 
       </Route>
