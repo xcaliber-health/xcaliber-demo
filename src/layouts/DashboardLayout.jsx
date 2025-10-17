@@ -465,14 +465,14 @@ export default function DashboardLayout() {
                 </span>
               </div>
             </div> */}
-
+            {/* 
             <button
               onClick={handleGetCurlClick}
               className="flex items-center justify-center bg-gradient-to-br from-indigo-600 to-indigo-700 text-white w-12 h-12 rounded-full shadow-lg hover:scale-110 hover:shadow-indigo-500/30 transition-all duration-300 focus:outline-none"
               aria-label="Get Curl"
             >
               <Code2 className="w-5 h-5" />
-            </button>
+            </button> */}
           </div>
 
           {showCurlDrawer && (
@@ -523,7 +523,7 @@ export default function DashboardLayout() {
         </div>
       </div>
       {/* Powered by XCaliber */}
-      <div className="fixed bottom-8 right-24 flex flex-col items-center text-gray-600 opacity-90 pointer-events-none z-50">
+      <div className="fixed bottom-8 right-4 flex flex-col items-center text-gray-600 opacity-90 pointer-events-none z-50">
         <span className="font-semibold text-sm mb-1 ml-[2px]">Powered by</span>
         <img src="/XCaliber.png" alt="XCaliber Logo" className="h-10 w-auto" />
       </div>
