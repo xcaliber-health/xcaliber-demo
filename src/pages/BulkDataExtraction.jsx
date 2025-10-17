@@ -114,6 +114,7 @@ export default function BulkDataExtraction() {
       setLoadingIds(false);
     }
   };
+
   // :white_check_mark: Fetch mapping for selected ID
   const handleSelectId = async (id) => {
     console.log("Selected ID:", id);
@@ -184,25 +185,26 @@ export default function BulkDataExtraction() {
                         )}
                       </div>
                         {expandedResource === r && (
-                          <ul className="mt-2 space-y-1 pl-4">
-                            {loadingIds ? (
-                              <li className="text-gray-500 text-sm">Loading IDs...</li>
-                            ) : (
-                              (resourceIds[r] || []).map((id) => (
-                                <li
-                                  key={id}
-                                  onClick={() => handleSelectId(id)} // ✅ pass the actual ID
-                                  className={`p-2 rounded-xl cursor-pointer text-sm ${
-                                    selectedId === id
-                                      ? "bg-purple-100 text-purple-700 font-medium"
-                                      : "hover:bg-gray-50"
-                                  }`}
-                                >
-                                  {id}
-                                </li>
-                              ))
-                            )}
-                          </ul>
+                        <ul className="mt-2 space-y-1 pl-4">
+                          {loadingIds ? (
+                            <li className="text-gray-500 text-sm">Loading IDs...</li>
+                          ) : (
+                            (resourceIds[r] || []).map(({ id, name }) => (
+                              <li
+                                key={id}
+                                onClick={() => handleSelectId(id)} // still pass the ID internally
+                                className={`p-2 rounded-xl cursor-pointer text-sm ${
+                                  selectedId === id
+                                    ? "bg-purple-100 text-purple-700 font-medium"
+                                    : "hover:bg-gray-50"
+                                }`}
+                              >
+                                {name} {/* show name instead of raw ID */}
+                              </li>
+                            ))
+                          )}
+                        </ul>
+
                         )}
 
                     </li>
