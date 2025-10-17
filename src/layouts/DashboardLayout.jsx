@@ -30,40 +30,54 @@ const EHR_OPTIONS = {
   Elation: ["REST API", "FHIR", "EHR Operator", "Webhooks"],
   ECW: ["FHIR", "EHR Operator"],
   Epic: ["FHIR", "EHR Operator"],
-  Kno2: [],
-  Cerner: [],
-  Meditech: [],
-  PracticeFusion: [],
-  Veradigm: [],
-  PointClickCare: [],
+  Kno2: ["CCDA"],
+  Cerner: ["FHIR"],
+  Meditech: ["FHIR"],
+  PracticeFusion: ["FHIR"],
+  Veradigm: ["FHIR"],
+  PointClickCare: ["Rest", "FHIR", "EHR Operator"],
 };
 
-function EHRDropdown({ ehr, setEhr }) {
+// Mock EHR list
+const MOCK_EHRS = [
+  "Epic",
+  "Kno2",
+  "Cerner",
+  "Meditech",
+  "PracticeFusion",
+  "Veradigm",
+  "PointClickCare",
+];
+
+function EHRDropdown({ ehr, setEhr, setParentEhr, setChildEhr }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [hoveredItem, setHoveredItem] = useState(null);
+  const [hoveredParent, setHoveredParent] = useState(null);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
     if (!isOpen) return;
-
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setIsOpen(false);
-        setHoveredItem(null);
+        setHoveredParent(null);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  // ✅ Updated so even parents set EHR on click
-  const handleItemClick = (key, children) => {
-    setEhr(key); // always update the selected EHR
-    if (children.length === 0) {
-      setIsOpen(false);
-      setHoveredItem(null);
-    }
+  const handleParentClick = (key) => {
+    setEhr(key);
+    setParentEhr(key);
+    setChildEhr(null);
+    setIsOpen(false);
+  };
+
+  const handleChildClick = (parent, child) => {
+    setEhr(`${parent}: ${child}`);
+    setParentEhr(parent);
+    setChildEhr(child);
+    setIsOpen(false);
   };
 
   return (
@@ -85,14 +99,16 @@ function EHRDropdown({ ehr, setEhr }) {
           {Object.entries(EHR_OPTIONS).map(([key, children]) => (
             <div
               key={key}
-              className="relative group"
-              onMouseEnter={() => setHoveredItem(key)}
-              onMouseLeave={() => setHoveredItem(null)}
+              className="relative"
+              onMouseEnter={() => setHoveredParent(key)}
+              onMouseLeave={() => setHoveredParent(null)}
             >
               <button
-                onClick={() => handleItemClick(key, children)}
+                onClick={() => handleParentClick(key)}
                 className={`w-full text-left px-4 py-2.5 flex justify-between items-center text-sm font-medium hover:bg-indigo-50 transition-colors ${
-                  ehr === key ? "bg-indigo-50 text-indigo-700" : "text-gray-700"
+                  ehr.startsWith(key)
+                    ? "bg-indigo-50 text-indigo-700"
+                    : "text-gray-700"
                 }`}
               >
                 <span>{key}</span>
@@ -101,18 +117,19 @@ function EHRDropdown({ ehr, setEhr }) {
                 )}
               </button>
 
-              {children.length > 0 && hoveredItem === key && (
-                <div className="absolute left-full top-0 ml-1 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 z-[10000] py-1">
+              {children.length > 0 && (
+                <div
+                  className={`absolute left-full top-0 ml-1 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 z-[10000] py-1 transition-opacity duration-150 ${
+                    hoveredParent === key
+                      ? "opacity-100 pointer-events-auto"
+                      : "opacity-0 pointer-events-none"
+                  }`}
+                >
                   {children.map((child) => (
                     <button
                       key={child}
                       className="w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
-                      onClick={() => {
-                        console.log(`${key} -> ${child} selected`);
-                        setEhr(key); // keep the parent as selected
-                        setIsOpen(false);
-                        setHoveredItem(null);
-                      }}
+                      onClick={() => handleChildClick(key, child)}
                     >
                       {child}
                     </button>
@@ -129,12 +146,15 @@ function EHRDropdown({ ehr, setEhr }) {
 
 export default function DashboardLayout() {
   const [ehr, setEhr] = useState("Athena");
+  const [parentEhr, setParentEhr] = useState("Athena");
+  const [childEhr, setChildEhr] = useState(null);
   const [departmentId, setDepartmentId] = useState("150");
   const [showSplash, setShowSplash] = useState(true);
   const [showCurlDrawer, setShowCurlDrawer] = useState(false);
   const [curlCommand, setCurlCommand] = useState("");
   const [copySuccess, setCopySuccess] = useState("");
   const [messages, setMessages] = useState([]);
+  const [localEvents, setLocalEvents] = useState([]);
 
   const handleGetCurlClick = () => setShowCurlDrawer(true);
   const copyToClipboard = () => {
@@ -175,8 +195,9 @@ export default function DashboardLayout() {
     PointClickCare: import.meta.env.VITE_SOURCE_ID_POINTCLICKCARE_MOCK,
   };
 
-  const sourceId = sourceIdMap[ehr] || import.meta.env.VITE_SOURCE_ID_ATHENA;
-  const baseUrl = baseUrlMap[ehr] || import.meta.env.VITE_API_BASE;
+  const sourceId =
+    sourceIdMap[parentEhr] || import.meta.env.VITE_SOURCE_ID_ATHENA;
+  const baseUrl = baseUrlMap[parentEhr] || import.meta.env.VITE_API_BASE;
   const location = useLocation();
   const activePath = location.pathname;
 
@@ -219,8 +240,6 @@ export default function DashboardLayout() {
           icon: DownloadCloud,
         },
         { to: "/claims", label: "Claims List", icon: FileText },
-        // { to: "/notes", label: "Notes", icon: Notebook },
-        // { to: "/orders", label: "Orders", icon: PackageCheck },
       ],
     },
     {
@@ -232,6 +251,11 @@ export default function DashboardLayout() {
           icon: ClipboardList,
         },
         { to: "/chart-summary", label: "Chart Summary", icon: BarChart2 },
+        {
+          to: "/document-labeling",
+          label: "Document Labeling",
+          icon: BarChart2,
+        },
       ],
     },
     {
@@ -284,23 +308,27 @@ export default function DashboardLayout() {
     <AppContext.Provider
       value={{
         ehr,
+        parentEhr,
+        childEhr,
         departmentId,
         sourceId,
         baseUrl,
         setLatestCurl: setCurlCommand,
         messages,
+        MOCK_EHRS,
+        localEvents,
+        setLocalEvents,
       }}
     >
       <div className="flex h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-indigo-100 overflow-hidden">
+        {/* Sidebar */}
         <aside className="w-72 bg-white shadow-xl flex flex-col fixed left-0 top-0 bottom-0 border-r border-gray-200 z-50">
-          <div className="px-4 py-3 border-b border-gray-100 bg-white">
-            <div className="flex items-center justify-center">
-              <img
-                src="/logo.png"
-                alt="Acme Health Logo"
-                className="h-12 w-auto drop-shadow-sm"
-              />
-            </div>
+          <div className="px-4 py-3 border-b border-gray-100 bg-white flex items-center justify-center">
+            <img
+              src="/logo.png"
+              alt="Acme Health Logo"
+              className="h-12 w-auto drop-shadow-sm"
+            />
           </div>
           <nav className="flex-1 p-4 space-y-6 overflow-y-auto hide-scrollbar">
             {navGroups.map((group) => (
@@ -347,17 +375,35 @@ export default function DashboardLayout() {
           </nav>
         </aside>
 
+        {/* Main */}
         <div className="flex-1 ml-72 flex flex-col overflow-hidden">
+          {/* Header */}
           <header className="h-16 bg-white/95 backdrop-blur-sm shadow-lg border-b border-white/20 flex items-center justify-between px-6 space-x-4 relative z-[60]">
-            <div className="flex items-center">
-              <span className="text-sm font-semibold text-indigo-600">
-                This is a Non-PHI Sandbox with synthetic data
-              </span>
+            <div className="flex items-center text-sm font-semibold text-indigo-600">
+              This is a Non-PHI Sandbox with synthetic data
             </div>
-
             <div className="flex items-center gap-4">
-              <EHRDropdown ehr={ehr} setEhr={setEhr} />
+              <EHRDropdown
+                ehr={ehr}
+                setEhr={setEhr}
+                setParentEhr={setParentEhr}
+                setChildEhr={setChildEhr}
+              />
 
+              {/* <select
+                value={departmentId}
+                onChange={(e) => setDepartmentId(e.target.value)}
+                className="appearance-none bg-gradient-to-r from-white to-gray-50 border border-gray-200 rounded-xl px-4 py-2 pr-10 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-300 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
+              >
+                {departments.map((deptId) => (
+                  <option key={deptId} value={deptId}>
+                    Department {deptId}
+                  </option>
+                ))}
+              </select> */}
+              {/* <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" /> */}
+
+              {/* Docs & Git */}
               <div className="flex items-center gap-3">
                 <a
                   href="https://docs.xcaliberhealth.ai/en"
@@ -401,6 +447,7 @@ export default function DashboardLayout() {
             </div>
           </header>
 
+          {/* Outlet */}
           <main className="flex-1 overflow-y-auto hide-scrollbar">
             <Outlet />
           </main>
