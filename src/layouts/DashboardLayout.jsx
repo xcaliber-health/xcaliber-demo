@@ -210,6 +210,7 @@ export default function DashboardLayout() {
       links: [
         { to: "/document-reference", label: "Clinical Document Attachments", icon: ClipboardList },
         { to: "/chart-summary", label: "Chart Summary", icon: BarChart2 },
+        { to: "/document-labeling", label: "Document Labeling", icon: BarChart2 },
       ],
     },
     {
