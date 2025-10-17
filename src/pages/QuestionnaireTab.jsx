@@ -188,7 +188,7 @@ import {
   mapQuestionnaireRow,
   createQuestionnaireResponse
 } from "../api/questionnaireApi";
-import { ECW_MOCK_PATIENTS } from "../mocks/patientListMock";
+import { ECW_MOCK_PATIENTS } from "../data/patientListMock";
 
 export default function QuestionnaireTab({ patientId }) {
   const { departmentId, sourceId, setLatestCurl, userId } = useContext(AppContext);
@@ -203,7 +203,7 @@ export default function QuestionnaireTab({ patientId }) {
     answer: "N",
   });
 
-  // Detect mock source
+  // Detect data source
   const isMockSource =
     sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
     sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
@@ -219,7 +219,7 @@ export default function QuestionnaireTab({ patientId }) {
 
         if (isMockSource) {
           const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
-          if (!patientMock) throw new Error("Patient not found in mock data");
+          if (!patientMock) throw new Error("Patient not found in data data");
           data = patientMock.questionnaireResponses || [];
         } else {
           data = await fetchQuestionnaireResponses(patientId, departmentId, sourceId, setLatestCurl);
@@ -255,7 +255,7 @@ export default function QuestionnaireTab({ patientId }) {
           patientMock.questionnaireResponses = patientMock.questionnaireResponses || [];
           patientMock.questionnaireResponses.push({
             ...formValues,
-            id: `mock-${Date.now()}`,
+            id: `data-${Date.now()}`,
             userId,
           });
         }

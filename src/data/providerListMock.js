@@ -14,7 +14,7 @@ export const MOCK_PROVIDERS = [
     roles: [
       {
         specialty: "Cardiology",
-        organization: "Mock Heart Center",
+        organization: "Data Heart Center",
         locations: [{ name: "Main Clinic - Building A" }],
         services: ["Cardiac Consultations", "EKG Review"],
         telecom: [{ system: "phone", value: "555-123-4567" }],
@@ -35,7 +35,7 @@ export const MOCK_PROVIDERS = [
     roles: [
       {
         specialty: "Pediatrics",
-        organization: "Mock Children’s Hospital",
+        organization: "Data Children’s Hospital",
         locations: [{ name: "West Wing - Level 2" }],
         services: ["Child Wellness Visits", "Vaccinations"],
         telecom: [{ system: "phone", value: "555-987-6543" }],
@@ -56,7 +56,7 @@ export const MOCK_PROVIDERS = [
     roles: [
       {
         specialty: "Dermatology",
-        organization: "Mock Skin Institute",
+        organization: "Data Skin Institute",
         locations: [{ name: "Downtown Campus - Suite 302" }],
         services: ["Skin Exams", "Biopsy Procedures"],
         telecom: [{ system: "phone", value: "555-555-1212" }],
@@ -77,7 +77,7 @@ export const MOCK_PROVIDERS = [
     roles: [
       {
         specialty: "Orthopedics",
-        organization: "Mock Ortho Center",
+        organization: "Data Ortho Center",
         locations: [{ name: "North Clinic - Room 101" }],
         services: ["Joint Replacement", "Sports Injury Care"],
         telecom: [{ system: "phone", value: "555-321-6549" }],

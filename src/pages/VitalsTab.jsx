@@ -173,7 +173,7 @@
 import { useEffect, useState, useContext } from "react"; 
 import { fetchVitals as apiFetchVitals, createVitals } from "../api/VitalsApi";
 import { AppContext } from "../layouts/DashboardLayout";
-import { ECW_MOCK_PATIENTS } from "../mocks/patientListMock";
+import { ECW_MOCK_PATIENTS } from "../data/patientListMock";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -200,9 +200,9 @@ export default function VitalsTab({ patientId }) {
           sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
 
         if (isMockSource) {
-          // Mock patients
+          // Data patients
           const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
-          if (!patientMock) throw new Error("Patient not found in mock data");
+          if (!patientMock) throw new Error("Patient not found in data data");
           data = (patientMock.vitals || []).map((v) => ({ resource: v }));
         } else {
           // Real EHR fetch
@@ -246,7 +246,7 @@ export default function VitalsTab({ patientId }) {
         await createVitals(patientId, departmentId, sourceId, formValues);
         toast.success("Vital added successfully");
       } else {
-        // Add to mock
+        // Add to data
         const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
         if (patientMock) {
           patientMock.vitals = patientMock.vitals || [];
@@ -255,7 +255,7 @@ export default function VitalsTab({ patientId }) {
             valueQuantity: { value: formValues.value, unit: formValues.unit },
             meta: { lastUpdated: new Date().toISOString() },
           });
-          toast.success("Vital added to mock data");
+          toast.success("Vital added to data data");
         }
       }
 

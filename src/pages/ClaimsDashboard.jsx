@@ -254,7 +254,7 @@ import { fetchClaims, fetchClaimById } from "../api/claims";
 import { AppContext } from "../layouts/DashboardLayout";
 import { Loader2, Search, Users } from "lucide-react";
 import toast from "react-hot-toast";
-import { ECW_MOCK_CLAIMS } from "../mocks/claimsMock";
+import { ECW_MOCK_CLAIMS } from "../data/claimsMock";
 
 // ✅ Reusable components
 function Card({ children, className = "" }) {
@@ -310,7 +310,7 @@ export default function ClaimsDashboard() {
     currentPage * itemsPerPage
   );
 
-  // ✅ Detect if using mock source
+  // ✅ Detect if using data source
   const isMockSource =
     sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
     sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
@@ -332,10 +332,10 @@ export default function ClaimsDashboard() {
         let data = [];
 
         if (isMockSource) {
-          // ✅ Mock claims mode
+          // ✅ Data claims mode
           await new Promise((r) => setTimeout(r, 2500)); // simulate delay
 
-          // Normalize mock data
+          // Normalize data data
           let mockData = ECW_MOCK_CLAIMS.entry.map((e) => {
             const res = e.resource;
             return {

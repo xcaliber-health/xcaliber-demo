@@ -329,7 +329,7 @@ import { AppContext } from "../layouts/DashboardLayout";
 import { fetchProviders, fetchProviderByIdSimple } from "../api/providers";
 import toast from "react-hot-toast";
 import { Loader2, Search, Users, Calendar, ArrowRight, CalendarDays, Bell } from "lucide-react";
-import { MOCK_PROVIDERS } from "../mocks/providerListMock";
+import { MOCK_PROVIDERS } from "../data/providerListMock";
 
 // ✅ Reusable Tailwind components
 function Card({ children, className = "" }) {
@@ -397,7 +397,7 @@ export default function FindAppointment() {
         let data = [];
 
         if (isMockSource) {
-          // Use mock data (only id + name)
+          // Use data data (only id + name)
           data = MOCK_PROVIDERS
             .filter((p) => !q || p.name.toLowerCase().includes(q.toLowerCase()) || p.id === q)
             .map((p) => ({ id: p.id, name: p.name }));

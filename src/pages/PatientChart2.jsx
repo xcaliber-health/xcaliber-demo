@@ -365,7 +365,7 @@ import toast from "react-hot-toast";
 import { fhirFetch } from "../api/fhir";
 import { usePatientTabs } from "../api/patienttab";
 import { AppContext } from "../layouts/DashboardLayout";
-import { ECW_MOCK_PATIENTS } from "../mocks/patientListMock";
+import { ECW_MOCK_PATIENTS } from "../data/patientListMock";
 import VitalsTab from "../pages/VitalsTab";
 import AllergiesTab from "../pages/AllergiesTab";
 import ImmunizationsTab from "../pages/ImmunizationsTab";
@@ -411,7 +411,7 @@ export default function PatientChart() {
           const delay = Math.floor(Math.random() * 400) + 800;
           await new Promise((resolve) => setTimeout(resolve, delay));
           fhir = ECW_MOCK_PATIENTS.find((p) => p.id === id);
-          if (!fhir) throw new Error("Patient not found in mock data");
+          if (!fhir) throw new Error("Patient not found in data data");
         } else {
           fhir = await fhirFetch(`/Patient/${id}`, {
             sourceId,

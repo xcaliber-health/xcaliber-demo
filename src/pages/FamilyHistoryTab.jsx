@@ -247,7 +247,7 @@
 //     "Unspecified Relation",
 //   ];
 
-//   // Detect mock source
+//   // Detect data source
 //   const isMockSource =
 //     sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
 //     sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
@@ -262,7 +262,7 @@
 
 //         if (isMockSource) {
 //           const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
-//           if (!patientMock) throw new Error("Patient not found in mock data");
+//           if (!patientMock) throw new Error("Patient not found in data data");
 //           data = patientMock.familyHistory || [];
 //         } else {
 //           const resp = await fetchFamilyHistory(patientId, sourceId, departmentId, setLatestCurl);
@@ -304,7 +304,7 @@
 //         const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
 //         if (patientMock) {
 //           patientMock.familyHistory = patientMock.familyHistory || [];
-//           patientMock.familyHistory.push({ ...formData, id: `mock-${Date.now()}` });
+//           patientMock.familyHistory.push({ ...formData, id: `data-${Date.now()}` });
 //         }
 //       } else {
 //         await createFamilyHistory(patientId, sourceId, departmentId, formData);
@@ -460,7 +460,7 @@ import { Loader2, Plus } from "lucide-react";
 import toast from "react-hot-toast";
 import { AppContext } from "../layouts/DashboardLayout";
 import { fetchFamilyHistory, createFamilyHistory } from "../api/FamilyHistoryApi";
-import { ECW_MOCK_PATIENTS } from "../mocks/patientListMock";
+import { ECW_MOCK_PATIENTS } from "../data/patientListMock";
 
 export default function FamilyHistoryTab({ patientId }) {
   const { departmentId, sourceId, setLatestCurl } = useContext(AppContext);
@@ -492,7 +492,7 @@ export default function FamilyHistoryTab({ patientId }) {
     "Unspecified Relation",
   ];
 
-  // Detect mock source
+  // Detect data source
   const isMockSource =
     sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
     sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
@@ -507,7 +507,7 @@ export default function FamilyHistoryTab({ patientId }) {
 
         if (isMockSource) {
           const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
-          if (!patientMock) throw new Error("Patient not found in mock data");
+          if (!patientMock) throw new Error("Patient not found in data data");
           data = patientMock.familyHistory || [];
         } else {
           const resp = await fetchFamilyHistory(patientId, sourceId, departmentId, setLatestCurl);
@@ -549,9 +549,9 @@ export default function FamilyHistoryTab({ patientId }) {
         const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
         if (patientMock) {
           patientMock.familyHistory = patientMock.familyHistory || [];
-          // --- normalize mock entry to FHIR-like structure ---
+          // --- normalize data entry to FHIR-like structure ---
           const newEntry = {
-            id: `mock-${Date.now()}`,
+            id: `data-${Date.now()}`,
             relationship: {
               coding: [{ display: formData.relation }],
             },

@@ -391,7 +391,7 @@ export default function BookAppointment() {
           setLatestCurl,
         });
       } else {
-        // ⏳ Simulate delay for mock booking
+        // ⏳ Simulate delay for data booking
         await new Promise((resolve) => setTimeout(resolve, 1500));
       }
 

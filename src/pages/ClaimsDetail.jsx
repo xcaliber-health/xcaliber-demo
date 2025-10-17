@@ -221,7 +221,7 @@ import { fetchClaimById } from "../api/claims";
 import { AppContext } from "../layouts/DashboardLayout";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
-import { ECW_MOCK_CLAIMS } from "../mocks/claimsMock";
+import { ECW_MOCK_CLAIMS } from "../data/claimsMock";
 
 // Reusable Card
 function Card({ children }) {
@@ -250,7 +250,7 @@ function Badge({ status }) {
 // Extract ID from reference string
 const getIdFromReference = (ref) => ref?.split("/")[1] || "N/A";
 
-// Normalize mock claim to Athena-like structure
+// Normalize data claim to Athena-like structure
 const normalizeMockClaim = (entry) => {
   const res = entry.resource;
   return {
@@ -326,7 +326,7 @@ export default function ClaimDetail() {
         if (isMockSource) {
           await new Promise((r) => setTimeout(r, 1500)); // simulate delay
           const entry = ECW_MOCK_CLAIMS.entry.find((e) => e.resource.id === id);
-          if (!entry) throw new Error("Claim not found in mock data");
+          if (!entry) throw new Error("Claim not found in data data");
           data = normalizeMockClaim(entry);
         } else {
           data = await fetchClaimById(id, sourceId, patientId, departmentId);

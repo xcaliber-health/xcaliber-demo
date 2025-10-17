@@ -232,7 +232,7 @@ import { Loader2, Plus } from "lucide-react";
 import toast from "react-hot-toast";
 import { AppContext } from "../layouts/DashboardLayout";
 import { fetchProcedures, mapProcedureRow, addProcedure } from "../api/procedureApi";
-import { ECW_MOCK_PATIENTS } from "../mocks/patientListMock";
+import { ECW_MOCK_PATIENTS } from "../data/patientListMock";
 
 export default function ProcedureTab({ patientId }) {
   const { sourceId, departmentId, setLatestCurl } = useContext(AppContext);
@@ -248,7 +248,7 @@ export default function ProcedureTab({ patientId }) {
   const [procedureCode, setProcedureCode] = useState("78725"); // CPT code
   const [procedureDisplay] = useState("Kidney function study"); // fixed display
 
-  // Detect mock source
+  // Detect data source
   const isMockSource =
     sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
     sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
@@ -264,7 +264,7 @@ export default function ProcedureTab({ patientId }) {
 
         if (isMockSource) {
           const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
-          if (!patientMock) throw new Error("Patient not found in mock data");
+          if (!patientMock) throw new Error("Patient not found in data data");
           data = patientMock.procedures || [];
         } else {
           data = await fetchProcedures({ patientId, departmentId, sourceId, setLatestCurl });
@@ -299,7 +299,7 @@ export default function ProcedureTab({ patientId }) {
         if (patientMock) {
           patientMock.procedures = patientMock.procedures || [];
           patientMock.procedures.push({
-            id: `mock-${Date.now()}`,
+            id: `data-${Date.now()}`,
             status,
             performedDate,
             procedureCode,

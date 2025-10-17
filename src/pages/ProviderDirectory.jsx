@@ -172,7 +172,7 @@ import { AppContext } from "../layouts/DashboardLayout";
 import { fetchProvidersDirectory } from "../api/providers";
 import { Loader2, Search, Users } from "lucide-react";
 import toast from "react-hot-toast";
-import { MOCK_PROVIDERS } from "../mocks/providerListMock"; // create a mock file similar to ECW_MOCK_PATIENTS
+import { MOCK_PROVIDERS } from "../data/providerListMock"; // create a data file similar to ECW_MOCK_PATIENTS
 
 // -------------------- Reusable Tailwind Components --------------------
 function Card({ children, className = "" }) {
@@ -216,7 +216,7 @@ export default function ProviderDirectory() {
   const totalPages = Math.ceil(providers.length / itemsPerPage);
   const paginatedProviders = providers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  // Determine if source should use mock data
+  // Determine if source should use data data
   const isMockSource =
     sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
     sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
@@ -240,7 +240,7 @@ export default function ProviderDirectory() {
         let data = [];
 
         if (isMockSource) {
-          // Use mock providers
+          // Use data providers
           data = MOCK_PROVIDERS.map((p) => ({
             id: p.id,
             name: p.name,
