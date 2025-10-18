@@ -1,0 +1,542 @@
+{
+    "diagnoses": [],
+
+    "encounters": [],
+    "imaging_studies": [],
+    "labs": [
+        {
+            "analysis_datetime": "2024-01-11T00:00:00",
+            "entity_value": "Microalbumin",
+            "equipment_instance_identifier": null,
+            "lab_test_code": null,
+            "lab_test_findings": "39.0 mg/dL - ABNORMAL",
+            "lab_test_id": "B240111111",
+            "observation_method": null,
+            "observation_site": null,
+            "responsible_observer": "Thomas K. Huard, PhD",
+            "severity_assessment": "ABNORMAL",
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "58431-8",
+                    "name": "Microalbumin panel - 24 hour Urine"
+                }
+            ],
+            "confidence_score": "62.62%"
+        },
+        {
+            "analysis_datetime": "2024-01-11T00:00:00",
+            "entity_value": "Glucose",
+            "equipment_instance_identifier": null,
+            "lab_test_code": null,
+            "lab_test_findings": "17 mg/dL - NORMAL",
+            "lab_test_id": "B240111111",
+            "observation_method": null,
+            "observation_site": null,
+            "responsible_observer": "Thomas K. Huard, PhD",
+            "severity_assessment": "NORMAL",
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "LP32534-7",
+                    "name": "Glucose"
+                }
+            ],
+            "confidence_score": "52.37%"
+        },
+        {
+            "analysis_datetime": "2024-01-11T00:00:00",
+            "entity_value": "Microprotein",
+            "equipment_instance_identifier": null,
+            "lab_test_code": null,
+            "lab_test_findings": "196.0 mg/dL - ABNORMAL",
+            "lab_test_id": "B240111111",
+            "observation_method": null,
+            "observation_site": null,
+            "responsible_observer": "Thomas K. Huard, PhD",
+            "severity_assessment": "ABNORMAL",
+            "codes": [],
+            "confidence_score": "61.82%"
+        },
+        {
+            "analysis_datetime": "2024-01-11T00:00:00",
+            "entity_value": "Beta-hydroxybutyrate(ketones)",
+            "equipment_instance_identifier": null,
+            "lab_test_code": null,
+            "lab_test_findings": "0.10 mmol/L - NORMAL",
+            "lab_test_id": "B240111111",
+            "observation_method": null,
+            "observation_site": null,
+            "responsible_observer": "Thomas K. Huard, PhD",
+            "severity_assessment": "NORMAL",
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "2513-0",
+                    "name": "Ketones [Presence] in Serum or Plasma"
+                }
+            ],
+            "confidence_score": "58.6%"
+        },
+        {
+            "analysis_datetime": "2024-01-11T00:00:00",
+            "entity_value": "Bilirubin",
+            "equipment_instance_identifier": null,
+            "lab_test_code": null,
+            "lab_test_findings": "0.30 mg/dL - NORMAL",
+            "lab_test_id": "B240111111",
+            "observation_method": null,
+            "observation_site": null,
+            "responsible_observer": "Thomas K. Huard, PhD",
+            "severity_assessment": "NORMAL",
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "LP15448-1",
+                    "name": "Bilirubin"
+                }
+            ],
+            "confidence_score": "54.69%"
+        },
+        {
+            "analysis_datetime": "2024-01-11T00:00:00",
+            "entity_value": "pH",
+            "equipment_instance_identifier": null,
+            "lab_test_code": null,
+            "lab_test_findings": "6.5 - NORMAL",
+            "lab_test_id": "B240111111",
+            "observation_method": null,
+            "observation_site": null,
+            "responsible_observer": "Thomas K. Huard, PhD",
+            "severity_assessment": "NORMAL",
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "LP14752-7",
+                    "name": "pH"
+                }
+            ],
+            "confidence_score": "39.65%"
+        },
+        {
+            "analysis_datetime": "2024-01-11T00:00:00",
+            "entity_value": "Specific Gravity",
+            "equipment_instance_identifier": null,
+            "lab_test_code": null,
+            "lab_test_findings": "1.013 - NORMAL",
+            "lab_test_id": "B240111111",
+            "observation_method": null,
+            "observation_site": null,
+            "responsible_observer": "Thomas K. Huard, PhD",
+            "severity_assessment": "NORMAL",
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "2965-2",
+                    "name": "Specific gravity of Urine"
+                }
+            ],
+            "confidence_score": "41.44%"
+        },
+        {
+            "analysis_datetime": "2024-01-11T00:00:00",
+            "entity_value": "Creatinine",
+            "equipment_instance_identifier": null,
+            "lab_test_code": null,
+            "lab_test_findings": "113.19 mg/dL - NORMAL",
+            "lab_test_id": "B240111111",
+            "observation_method": null,
+            "observation_site": null,
+            "responsible_observer": "Thomas K. Huard, PhD",
+            "severity_assessment": "NORMAL",
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "LP29693-6",
+                    "name": "Laboratory"
+                }
+            ],
+            "confidence_score": "57.28%"
+        },
+        {
+            "analysis_datetime": "2024-01-11T00:00:00",
+            "entity_value": "Nitrite",
+            "equipment_instance_identifier": null,
+            "lab_test_code": null,
+            "lab_test_findings": "163 mg/L - ABNORMAL",
+            "lab_test_id": "B240111111",
+            "observation_method": null,
+            "observation_site": null,
+            "responsible_observer": "Thomas K. Huard, PhD",
+            "severity_assessment": "ABNORMAL",
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "32710-6",
+                    "name": "Nitrite [Presence] in Urine"
+                }
+            ],
+            "confidence_score": "44.22%"
+        },
+        {
+            "analysis_datetime": "2024-01-11T00:00:00",
+            "entity_value": "Albumin/Creatinine Ratio, Random Urine",
+            "equipment_instance_identifier": null,
+            "lab_test_code": null,
+            "lab_test_findings": "344.553 mg/g - SEVERELY INCREASED",
+            "lab_test_id": "B240111111",
+            "observation_method": null,
+            "observation_site": null,
+            "responsible_observer": "Thomas K. Huard, PhD",
+            "severity_assessment": "SEVERELY INCREASED",
+            "codes": [],
+            "confidence_score": "50.41%"
+        },
+        {
+            "analysis_datetime": "2024-01-11T00:00:00",
+            "entity_value": "Protein/Creatinine Ratio, Random Urine",
+            "equipment_instance_identifier": null,
+            "lab_test_code": null,
+            "lab_test_findings": "1731.6 mg/g - SEVERELY INCREASED",
+            "lab_test_id": "B240111111",
+            "observation_method": null,
+            "observation_site": null,
+            "responsible_observer": "Thomas K. Huard, PhD",
+            "severity_assessment": "SEVERELY INCREASED",
+            "codes": [],
+            "confidence_score": "56.12%"
+        }
+    ],
+    "medications": [],
+    "metadata": [
+        {
+            "appointment_identifier": null,
+            "assigned_to": "Thomas K. Huard, PhD",
+            "created_date": "2024-01-12T10:03:37",
+            "date_of_admission": null,
+            "date_of_birth": "2000-03-20",
+            "date_of_discharge": null,
+            "date_of_issue": null,
+            "date_of_order": "2024-01-11",
+            "diagnosis_code": null,
+            "diagnostics_id": "B240111111",
+            "document_class": "Laboratory Report",
+            "document_status": "Final Report",
+            "is_phi": true,
+            "lab_test_names": "Microalbumin, Glucose, Microprotein, Beta-hydroxybutyrate(ketones), Bilirubin, pH, Specific Gravity, Creatinine, Hemoglobin, Nitrite, Albumin/Creatinine Ratio, Protein/Creatinine Ratio",
+            "last_modified_datetime": "2024-01-12T10:03:37",
+            "patient_full_name": "SUE INFECTION",
+            "patient_id": "54321",
+            "principal_diagnosis": null,
+            "procedure_code": "Urine Ratios Panel",
+            "procedure_id": null,
+            "provider_id": null,
+            "provider_user_name": "Ashley Gavelek, NP",
+            "servicing_facility": "YOUR CLINIC",
+            "sign_off": true,
+            "tie_to_order_id": null,
+            "confidence_score": "85.0%"
+        }
+    ],
+    "observations": [
+        {
+            "bio_marker": "Microalbumin",
+            "bio_marker_measurement": "39.0",
+            "bio_marker_result": "ABNORMAL",
+            "entity_value": "Microalbumin",
+            "observation_datetime": "2024-01-11T00:00:00",
+            "performing_organization_name": "YOUR CLINIC",
+            "producer_id": null,
+            "reference_range_date": null,
+            "references_range": "\\u22643.000",
+            "result_status": "Final",
+            "source": "Urine",
+            "status": "Final",
+            "units": "mg/dL",
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "58431-8",
+                    "name": "Microalbumin panel - 24 hour Urine"
+                }
+            ],
+            "confidence_score": "53.32%"
+        },
+        {
+            "bio_marker": "Glucose",
+            "bio_marker_measurement": "17",
+            "bio_marker_result": "NORMAL",
+            "entity_value": "Glucose",
+            "observation_datetime": "2024-01-11T00:00:00",
+            "performing_organization_name": "YOUR CLINIC",
+            "producer_id": null,
+            "reference_range_date": null,
+            "references_range": "\\u226450.000",
+            "result_status": "Final",
+            "source": "Urine",
+            "status": "Final",
+            "units": "mg/dL",
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "LP32534-7",
+                    "name": "Glucose"
+                }
+            ],
+            "confidence_score": "31.92%"
+        },
+        {
+            "bio_marker": "Microprotein",
+            "bio_marker_measurement": "196.0",
+            "bio_marker_result": "ABNORMAL",
+            "entity_value": "Microprotein",
+            "observation_datetime": "2024-01-11T00:00:00",
+            "performing_organization_name": "YOUR CLINIC",
+            "producer_id": null,
+            "reference_range_date": null,
+            "references_range": "\\u226415.000",
+            "result_status": "Final",
+            "source": "Urine",
+            "status": "Final",
+            "units": "mg/dL",
+            "codes": [],
+            "confidence_score": "33.96%"
+        },
+        {
+            "bio_marker": "Beta-hydroxybutyrate(ketones)",
+            "bio_marker_measurement": "0.10",
+            "bio_marker_result": "NORMAL",
+            "entity_value": "Beta-hydroxybutyrate(ketones)",
+            "observation_datetime": "2024-01-11T00:00:00",
+            "performing_organization_name": "YOUR CLINIC",
+            "producer_id": null,
+            "reference_range_date": null,
+            "references_range": "\\u22640.500",
+            "result_status": "Final",
+            "source": "Urine",
+            "status": "Final",
+            "units": "mmol/L",
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "2513-0",
+                    "name": "Ketones [Presence] in Serum or Plasma"
+                }
+            ],
+            "confidence_score": "49.2%"
+        },
+        {
+            "bio_marker": "Bilirubin",
+            "bio_marker_measurement": "0.30",
+            "bio_marker_result": "NORMAL",
+            "entity_value": "Bilirubin",
+            "observation_datetime": "2024-01-11T00:00:00",
+            "performing_organization_name": "YOUR CLINIC",
+            "producer_id": null,
+            "reference_range_date": null,
+            "references_range": "\\u22641.000",
+            "result_status": "Final",
+            "source": "Urine",
+            "status": "Final",
+            "units": "mg/dL",
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "LP15448-1",
+                    "name": "Bilirubin"
+                }
+            ],
+            "confidence_score": "44.52%"
+        },
+        {
+            "bio_marker": "pH",
+            "bio_marker_measurement": "6.5",
+            "bio_marker_result": "NORMAL",
+            "entity_value": "pH",
+            "observation_datetime": "2024-01-11T00:00:00",
+            "performing_organization_name": "YOUR CLINIC",
+            "producer_id": null,
+            "reference_range_date": null,
+            "references_range": "4.800-8.500",
+            "result_status": "Final",
+            "source": "Urine",
+            "status": "Final",
+            "units": null,
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "LP14752-7",
+                    "name": "pH"
+                }
+            ],
+            "confidence_score": "33.67%"
+        },
+        {
+            "bio_marker": "Specific Gravity",
+            "bio_marker_measurement": "1.013",
+            "bio_marker_result": "NORMAL",
+            "entity_value": "Specific Gravity",
+            "observation_datetime": "2024-01-11T00:00:00",
+            "performing_organization_name": "YOUR CLINIC",
+            "producer_id": null,
+            "reference_range_date": null,
+            "references_range": "1.003-1.025",
+            "result_status": "Final",
+            "source": "Urine",
+            "status": "Final",
+            "units": null,
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "2965-2",
+                    "name": "Specific gravity of Urine"
+                }
+            ],
+            "confidence_score": "44.32%"
+        },
+        {
+            "bio_marker": "Creatinine",
+            "bio_marker_measurement": "113.19",
+            "bio_marker_result": "NORMAL",
+            "entity_value": "Creatinine",
+            "observation_datetime": "2024-01-11T00:00:00",
+            "performing_organization_name": "YOUR CLINIC",
+            "producer_id": null,
+            "reference_range_date": null,
+            "references_range": "20.000-300.000",
+            "result_status": "Final",
+            "source": "Urine",
+            "status": "Final",
+            "units": "mg/dL",
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "LP29693-6",
+                    "name": "Laboratory"
+                }
+            ],
+            "confidence_score": "38.18%"
+        },
+        {
+            "bio_marker": "Nitrite",
+            "bio_marker_measurement": "163",
+            "bio_marker_result": "ABNORMAL",
+            "entity_value": "Nitrite",
+            "observation_datetime": "2024-01-11T00:00:00",
+            "performing_organization_name": "YOUR CLINIC",
+            "producer_id": null,
+            "reference_range_date": null,
+            "references_range": "\\u2264100.000",
+            "result_status": "Final",
+            "source": "Urine",
+            "status": "Final",
+            "units": "mg/L",
+            "codes": [
+                {
+                    "terminology": "LOINC",
+                    "code": "32710-6",
+                    "name": "Nitrite [Presence] in Urine"
+                }
+            ],
+            "confidence_score": "36.89%"
+        },
+        {
+            "bio_marker": "Albumin/Creatinine Ratio",
+            "bio_marker_measurement": "344.553",
+            "bio_marker_result": "SEVERELY INCREASED",
+            "entity_value": "Albumin/Creatinine Ratio, Random Urine",
+            "observation_datetime": "2024-01-11T00:00:00",
+            "performing_organization_name": "YOUR CLINIC",
+            "producer_id": null,
+            "reference_range_date": null,
+            "references_range": "<30.000",
+            "result_status": "Final",
+            "source": "Urine",
+            "status": "Final",
+            "units": "mg/g",
+            "codes": [],
+            "confidence_score": "54.48%"
+        },
+        {
+            "bio_marker": "Protein/Creatinine Ratio",
+            "bio_marker_measurement": "1731.6",
+            "bio_marker_result": "SEVERELY INCREASED",
+            "entity_value": "Protein/Creatinine Ratio, Random Urine",
+            "observation_datetime": "2024-01-11T00:00:00",
+            "performing_organization_name": "YOUR CLINIC",
+            "producer_id": null,
+            "reference_range_date": null,
+            "references_range": "<150.000",
+            "result_status": "Final",
+            "source": "Urine",
+            "status": "Final",
+            "units": "mg/g",
+            "codes": [],
+            "confidence_score": "52.97%"
+        }
+    ],
+    "orders": [],
+    "patients": [
+        {
+            "age": "23 years",
+            "birth_datetime": "2000-03-20T00:00:00",
+            "birth_place": null,
+            "city": null,
+            "county": null,
+            "death_datetime": null,
+            "death_indicator": null,
+            "driving_licence_number": null,
+            "entity_value": "SUE INFECTION",
+            "ethnic_group": null,
+            "home_phone": null,
+            "language": null,
+            "last_modified_datetime": null,
+            "latitude": null,
+            "longitude": null,
+            "marital_status": null,
+            "occupation": null,
+            "office_phone": null,
+            "patient_account_number": null,
+            "patient_address": null,
+            "patient_id": "54321",
+            "race": null,
+            "sex": null,
+            "social_security_number": null,
+            "state": null,
+            "vip_indicator": null,
+            "zip_code": null,
+            "confidence_score": "85.0%"
+        }
+    ],
+    "procedures": [],
+    "providers": [
+        {
+            "address": "1234 Easy Street",
+            "dea": null,
+            "employment_designation": "NP",
+            "entity_value": "Ashley Gavelek",
+            "fax": "(229) 438-9999",
+            "npi": null,
+            "phone": "(229) 883-1111",
+            "prov_cred": "NP",
+            "prov_type": "Nurse Practitioner",
+            "sex": null,
+            "spi": null,
+            "confidence_score": "95%"
+        },
+        {
+            "address": "1234 Easy Street",
+            "dea": null,
+            "employment_designation": "Laboratory Director",
+            "entity_value": "Thomas K. Huard",
+            "fax": "(229) 438-9999",
+            "npi": null,
+            "phone": "(229) 883-1111",
+            "prov_cred": "PhD",
+            "prov_type": "Laboratory Director",
+            "sex": null,
+            "spi": null,
+            "confidence_score": "95%"
+        }
+    ]
+}

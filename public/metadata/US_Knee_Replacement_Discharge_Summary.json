@@ -1,0 +1,9 @@
+{
+        "patient_full_name": "Robert Johnson",
+        "patient_id": "ACME-2025-00456",
+        "date_of_admission": "10-Oct-2025",
+        "date_of_discharge": "18-Oct-2025",
+        "principal_diagnosis": "Advanced Osteoarthritis of Right Knee - Status Post Right Total Knee Replacement (TKR)",
+        "servicing_facility": "ACME HEALTH HOSPITAL",
+        "document_class": "Discharge Summary"
+    }

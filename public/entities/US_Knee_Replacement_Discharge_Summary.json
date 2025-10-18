@@ -1,0 +1,151 @@
+{
+    "patients": [
+        {
+            "entity_value": "Robert Johnson",
+            "age": "65",
+            "sex": "Male",
+            "patient_id": "ACME-2025-00456",
+            "confidence_score": "50.0%"
+        }
+    ],
+    "encounters": [
+        {
+            "entity_value": "Inpatient Stay",
+            "admit_datetime": "10-Oct-2025",
+            "patient_care": "in-patient",
+            "servicing_facility": "ACME HEALTH HOSPITAL",
+            "confidence_score": "75.0%"
+        }
+    ],
+    "diagnoses": [
+        {
+            "entity_value": "Advanced Osteoarthritis of Right Knee",
+            "diagnosis_description": "Advanced Osteoarthritis of Right Knee - Status Post Right Total Knee Replacement (TKR)",
+            "anatomical_region": "Right Knee",
+            "codes": [
+                {
+                    "terminology": "ICD10CM",
+                    "code": "A06.3",
+                    "name": "Ameboma of intestine"
+                }
+            ],
+            "confidence_score": "100.0%"
+        }
+    ],
+    "procedures": [
+        {
+            "entity_value": "Right Total Knee Replacement",
+            "procedure_description": "Right Total Knee Replacement using cemented prosthesis performed under spinal anesthesia",
+            "procedure_datetime": "11-Oct-2025",
+            "substance_used": "spinal anesthesia",
+            "codes": [
+                {
+                    "terminology": "ICD10PCS",
+                    "code": "00R",
+                    "name": "Medical and Surgical @ Central Nervous System and Cranial Nerves @ Replacement"
+                }
+            ],
+            "confidence_score": "93.75%"
+        }
+    ],
+    "medications": [
+        {
+            "entity_value": "Acetaminophen",
+            "strength": "650 mg",
+            "dosage_form": "tablet",
+            "frequency": "every 6 hours as needed",
+            "amount": "1",
+            "notes": "for pain",
+            "codes": [
+                {
+                    "terminology": "RXNORM",
+                    "code": "1006887",
+                    "name": "acetaminophen / doxylamine / phenylephrine"
+                }
+            ],
+            "confidence_score": "100.0%"
+        },
+        {
+            "entity_value": "Xarelto (Rivaroxaban)",
+            "strength": "10 mg",
+            "dosage_form": "tablet",
+            "frequency": "daily",
+            "amount": "1",
+            "notes": "for 14 days",
+            "codes": [
+                {
+                    "terminology": "RXNORM",
+                    "code": "1114195",
+                    "name": "rivaroxaban"
+                }
+            ],
+            "confidence_score": "83.33%"
+        },
+        {
+            "entity_value": "Omeprazole",
+            "strength": "40 mg",
+            "dosage_form": "capsule",
+            "frequency": "daily",
+            "amount": "1",
+            "notes": "before breakfast",
+            "codes": [
+                {
+                    "terminology": "RXNORM",
+                    "code": "104099",
+                    "name": "omeprazole 20 MG Delayed Release Oral Capsule [Losec]"
+            }
+        ],
+        "confidence_score": "100.0%"
+    },
+    {
+        "entity_value": "Calcium and Vitamin D3 supplements",
+        "notes": "as prescribed",
+        "codes": [
+            {
+                "terminology": "RXNORM",
+                "code": "1001397",
+                "name": "calcium carbonate 300 MG / ergocalciferol 62.5 UNT Oral Tablet"
+            }
+        ],
+        "confidence_score": "50.0%"
+    }
+],
+"providers": [
+    {
+        "entity_value": "Dr. Emily Carter",
+        "prov_cred": "MD",
+        "prov_type": "Orthopedic Surgeon",
+        "phone": "(214) 555-9821",
+        "address": "Acme Health Hospital, Dallas, TX",
+        "confidence_score": "85.0%"
+    }
+],
+"organizations": [
+    {
+        "entity_value": "ACME HEALTH HOSPITAL",
+        "type": "Hospital",
+        "address_line": "1234 Willow Creek Road",
+        "city": "Dallas",
+        "state": "TX",
+        "postal_code": "75201",
+        "phone_number": "(214) 555-2310",
+        "email": "contact@acmehealth.com",
+        "confidence_score": "71.0%"
+    }
+],
+"metadata": [
+    {
+        "patient_full_name": "Robert Johnson",
+        "patient_id": "ACME-2025-00456",
+        "date_of_admission": "10-Oct-2025",
+        "date_of_discharge": "18-Oct-2025",
+        "principal_diagnosis": "Advanced Osteoarthritis of Right Knee - Status Post Right Total Knee Replacement (TKR)",
+        "servicing_facility": "ACME HEALTH HOSPITAL",
+        "document_class": "Discharge Summary"
+    }
+],
+"observations": [],
+"labs": [],
+"imaging_studies": [],
+"orders": []
+}
