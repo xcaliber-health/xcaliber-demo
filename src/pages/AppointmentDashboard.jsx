@@ -141,7 +141,7 @@ export default function AppointmentDashboard() {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-hidden flex flex-col">
+    <div className="h-full bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-hidden flex flex-col">
       {/* Header */}
       <div className="flex-shrink-0 p-4 pb-2">
         <div className="max-w-7xl mx-auto">

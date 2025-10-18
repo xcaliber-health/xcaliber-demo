@@ -168,7 +168,7 @@ const [loadingEntities, setLoadingEntities] = useState(true);
   }, {});
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col">
+    <div className="h-full bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col">
       <div className="flex-shrink-0 p-4 pb-2">
         <div className="max-w-7xl mx-auto flex items-center gap-3">
           <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">

@@ -554,7 +554,7 @@ export default function ClaimDetail() {
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen space-y-6">
+    <div className="p-8 bg-gray-50 h-full space-y-6">
       {/* Claim Header */}
       <Card>
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(640px,1fr)_20rem] gap-6 items-start">

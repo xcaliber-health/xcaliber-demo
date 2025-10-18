@@ -724,7 +724,7 @@ export default function KnowledgeSource() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-indigo-100 p-6">
+    <div className="h-full bg-gradient-to-br from-slate-50 via-indigo-50/30 to-indigo-100 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">

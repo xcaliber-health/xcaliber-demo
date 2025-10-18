@@ -166,7 +166,7 @@ export default function KafkaToSnowflakeDemo() {
 
   // --- UI ---
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-hidden">
+    <div className="h-full flex flex-col bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-hidden">
       {/* Header */}
       <header className="p-4 pb-1">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
