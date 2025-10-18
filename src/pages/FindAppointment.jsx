@@ -441,7 +441,7 @@ export default function FindAppointment() {
   const paginatedProviders = providers.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
   return (
-    <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
+    <div className="h-full bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
       {/* Header */}
       <div className="flex-shrink-0 p-4 pb-1">
         <div className="max-w-6xl mx-auto">

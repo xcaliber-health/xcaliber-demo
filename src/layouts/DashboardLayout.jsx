@@ -33,7 +33,7 @@ const EHR_OPTIONS = {
   Elation: ["REST API", "FHIR", "EHR Operator", "Webhooks"],
   ECW: ["FHIR", "EHR Operator", "HL7"],
   Epic: ["FHIR", "EHR Operator", "HL7"],
-  Kno2: ["CCDA","HL7"],
+  Kno2: ["CCDA", "HL7"],
   Cerner: ["FHIR", "HL7"],
   Meditech: ["FHIR", "HL7"],
   PracticeFusion: ["FHIR"],
@@ -396,30 +396,29 @@ export default function DashboardLayout() {
 
           </div> */}
           <div className="flex items-center justify-center relative px-2 py-3 border-b border-gray-100">
-  {!collapsed && (
-<Link to="/">
-  <img
-    src="/logo.png"
-    alt="Acme Health Logo"
-    className="h-12 w-auto drop-shadow-sm cursor-pointer"
-  />
-</Link>
-  )}
+            {!collapsed && (
+              <Link to="/">
+                <img
+                  src="/logo.png"
+                  alt="Acme Health Logo"
+                  className="h-12 w-auto drop-shadow-sm cursor-pointer"
+                />
+              </Link>
+            )}
 
-  {/* Keep collapse button absolutely positioned */}
-  <button
-    onClick={() => setCollapsed(!collapsed)}
-    className="absolute right-2 p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-transform duration-200"
-    aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-  >
-    <ChevronLeft
-      className={`w-5 h-5 transition-transform duration-200 ${
-        collapsed ? "rotate-180" : ""
-      }`}
-    />
-  </button>
-</div>
-
+            {/* Keep collapse button absolutely positioned */}
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              className="absolute right-2 p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-transform duration-200"
+              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              <ChevronLeft
+                className={`w-5 h-5 transition-transform duration-200 ${
+                  collapsed ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+          </div>
 
           <nav className="flex-1 p-2 space-y-6 overflow-y-auto hide-scrollbar">
             {navGroups.map((group) => (
@@ -483,9 +482,13 @@ export default function DashboardLayout() {
             (This is a Non-PHI Sandbox with synthetic data)
             </div> */}
             <div className="flex items-center gap-2">
-  <span className="text-lg font-semibold text-indigo-600">Health Data Gateway</span>
-  <span className="text-sm text-gray-500">(This is a Non-PHI Sandbox with synthetic data)</span>
-</div>
+              <span className="text-lg font-semibold text-indigo-600">
+                Health Data Gateway
+              </span>
+              <span className="text-sm text-gray-500">
+                (This is a Non-PHI Sandbox with synthetic data)
+              </span>
+            </div>
 
             <div className="flex items-center gap-4">
               <EHRDropdown
@@ -627,19 +630,17 @@ export default function DashboardLayout() {
           </div>
         </div>
       </div>
-      
+
       {/* Powered by XCaliber */}
-{/* <div className="fixed bottom-8 right-4 flex flex-col items-center text-gray-600 opacity-90 pointer-events-none z-50">
+      {/* <div className="fixed bottom-8 right-4 flex flex-col items-center text-gray-600 opacity-90 pointer-events-none z-50">
   <span className="font-semibold text-sm mb-1 ml-[2px]">Powered by</span>
   <img src="/XCaliber.png" alt="XCaliber Logo" className="h-16 w-auto" />
 </div> */}
-{/* Powered by XCaliber */}
-<div className="fixed bottom-4 right-4 flex items-center gap-1 text-gray-600 opacity-90 z-50 pointer-events-none">
-  <span className="text-xs font-semibold">Powered by</span>
-  <img src="/favicon.png" alt="XCaliber Logo" className="h-3 w-auto" />
-</div>
-
-
+      {/* Powered by XCaliber */}
+      <div className="fixed bottom-4 right-4 flex items-center gap-1 text-gray-600 opacity-90 z-50 pointer-events-none">
+        <span className="text-xs font-semibold">Powered by</span>
+        <img src="/favicon.png" alt="XCaliber Logo" className="h-3 w-auto" />
+      </div>
     </AppContext.Provider>
   );
 }
