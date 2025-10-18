@@ -176,7 +176,7 @@ const [loadingEntities, setLoadingEntities] = useState(true);
           </div>
           <div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Document Labelling
+              AI-Ready Labeled Dataset
             </h1>
             <p className="text-sm text-gray-600">View and label PDF documents</p>
           </div>
