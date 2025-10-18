@@ -301,16 +301,21 @@ const getPatientFullName = (nameArrayOrString) => {
 
 // -------------------- PatientList Component --------------------
 export default function PatientList() {
+  const { ehr, sourceId, baseUrl, departmentId, setLatestCurl } = useContext(AppContext);
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState(search);
+  //const [search, setSearch] = useState("");
+  
   const [initialLoaded, setInitialLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
+  const [search, setSearch] = useState(
+    ehr.toLowerCase().startsWith("athena") ? "sofia" : ""
+  );
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
 
   const navigate = useNavigate();
-  const { ehr, sourceId, baseUrl, departmentId, setLatestCurl } = useContext(AppContext);
+  
 
   const totalPages = Math.ceil(patients.length / rowsPerPage);
   const paginatedPatients = patients.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
@@ -320,35 +325,49 @@ export default function PatientList() {
     sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
     sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
 
+    // Sync search if EHR changes
+  useEffect(() => {
+    if (ehr.toLowerCase().startsWith("athena")) {
+      setSearch("sofia");
+    } else {
+      setSearch("");
+    }
+  }, [ehr]);
+
+  
+
+
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search.trim()), 400);
     return () => clearTimeout(t);
   }, [search]);
 
 
-  useEffect(() => {
+
+
+useEffect(() => {
   if (!sourceId) return;
 
   setLoading(true);
-  setPatients([]); // reset previous patients
-  setCurrentPage(1); // reset pagination
+  setPatients([]);
+  setCurrentPage(1);
 
   const loadPatients = async () => {
     try {
       let data = [];
 
       if (isMockSource) {
-        data = ECW_MOCK_PATIENTS.map(p => ({
+        // Non-Athena mock patients
+        data = ECW_MOCK_PATIENTS.map((p) => ({
           id: p.id,
           name: getPatientFullName(p.name),
           gender: p.gender || "Unknown",
           birthDate: p.birthDate || "Unknown",
           email: p.email || "",
           phone: p.phone || "",
-          status: p.status || "N/A"
+          status: p.status || "N/A",
         }));
-        // simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await new Promise((resolve) => setTimeout(resolve, 3000));
       } else {
         const rawData = await fetchPatients(
           sourceId,
@@ -359,22 +378,27 @@ export default function PatientList() {
           setLatestCurl,
           { headers: { "x-interaction-mode": "false" } }
         );
-        data = rawData.map(p => ({
+
+        data = rawData.map((p) => ({
           ...p,
           name: getPatientFullName(p.name),
           gender: p.gender || "Unknown",
           birthDate: p.birthDate || "Unknown",
           email: p.email || "",
           phone: p.phone || "",
-          status: p.status || "N/A"
+          status: p.status || "N/A",
         }));
+
+        // === Filter for Athena only ===
+        if (ehr.startsWith("Athena")) {
+          data = data.filter((p) => p.name.toLowerCase().includes("sofia"));
+        }
       }
 
       setPatients(data);
       data.length
         ? toast.success(`Loaded ${data.length} patient(s)`)
         : toast("No patients found", { icon: "ℹ️" });
-
     } catch (err) {
       toast.error(err?.message || "Failed to fetch patients");
     } finally {
@@ -384,7 +408,6 @@ export default function PatientList() {
 
   loadPatients();
 }, [sourceId, departmentId, ehr, baseUrl, debouncedSearch]);
-
 
 
   return (
