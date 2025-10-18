@@ -1,11 +1,10 @@
-import ReactMarkdown from "react-markdown";
+
 import { useState } from "react";
 import { ArrowLeft, Brain, FileText, Loader2 } from "lucide-react";
 const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
 export default function ChartSummarizer() {
   const id = "7002";
   const [summary, setSummary] = useState("");
-  const [showSummaryModal, setShowSummaryModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const PATIENTS = [
@@ -226,7 +225,6 @@ const handleChartSummarizer = async () => {
 
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
-      {/* Header */}
       <div className="flex-shrink-0 p-4 pb-2">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -261,14 +259,11 @@ const handleChartSummarizer = async () => {
         </div>
       </div>
 
-      {/* Content */}
       <div className="flex-1 px-4 pb-2 overflow-hidden min-h-0">
         <div className="max-w-6xl mx-auto h-full grid grid-cols-3 gap-6">
-          {/* Left Column */}
           <div className="col-span-1">
             <div className="bg-white/95 backdrop-blur-sm border border-white/20 shadow-xl rounded-3xl p-6 flex flex-col justify-between h-full">
               <div className="space-y-3">
-                {/* Patient Info */}
                 <h2 className="text-2xl font-bold text-gray-800">
                   {patient.fullName}
                 </h2>
@@ -299,7 +294,6 @@ const handleChartSummarizer = async () => {
                   </p>
                 </div>
 
-                {/* Appointments */}
                 <div className="mt-6">
                   <h3 className="font-semibold mb-2 text-gray-800 text-lg">
                     Appointments
@@ -344,31 +338,28 @@ const handleChartSummarizer = async () => {
             </div>
           </div>
 
-          {/* Right Column */}
-          <div className="col-span-2 bg-white/95 backdrop-blur-sm shadow-xl border border-white/20 rounded-3xl p-4 flex flex-col overflow-y-auto hide-scrollbar">
-            {/* Tabs */}
-            <div className="flex items-center mb-2">
-              {/* Left arrow */}
+          <div className="col-span-2 bg-white/95 backdrop-blur-sm shadow-xl border border-white/20 rounded-3xl p-6 flex flex-col overflow-hidden">
+            <div className="flex items-center mb-4 border-b border-gray-200 pb-3">
               <button
                 onClick={() => {
                   const container = document.getElementById("tabs-container");
-                  container.scrollBy({ left: -150, behavior: "smooth" });
+                  container?.scrollBy({ left: -150, behavior: "smooth" });
                 }}
-                className="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-50"
+                className="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-50 flex-shrink-0"
               >
                 <ArrowLeft className="w-4 h-4" />
               </button>
 
-              {/* Tabs */}
               <div
                 id="tabs-container"
                 className="flex-1 flex items-center space-x-4 overflow-x-auto hide-scrollbar px-2"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
               >
                 {Object.entries(tabs).map(([key, tab]) => (
                   <button
                     key={key}
                     onClick={() => setActiveTab(key)}
-                    className={`py-2 px-4 whitespace-nowrap transition-colors ${
+                    className={`py-2 px-4 whitespace-nowrap transition-colors text-sm ${
                       activeTab === key
                         ? "border-b-2 border-indigo-500 font-semibold text-indigo-600"
                         : "text-gray-600 hover:text-indigo-500"
@@ -379,27 +370,25 @@ const handleChartSummarizer = async () => {
                 ))}
               </div>
 
-              {/* Right arrow */}
               <button
                 onClick={() => {
                   const container = document.getElementById("tabs-container");
-                  container.scrollBy({ left: 150, behavior: "smooth" });
+                  container?.scrollBy({ left: 150, behavior: "smooth" });
                 }}
-                className="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-50"
+                className="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-50 flex-shrink-0"
               >
                 <ArrowLeft className="w-4 h-4 rotate-180" />
               </button>
             </div>
 
-            {/* Tab Content */}
-            <div className="overflow-x-auto max-h-[60vh] mt-4">
+            <div className="overflow-y-auto hide-scrollbar" style={{ scrollbarWidth: "none", msOverflowStyle: "none", maxHeight: "35vh" }}>
               <table className="w-full border-collapse text-sm">
                 <thead className="bg-indigo-50 border-b border-gray-200 sticky top-0 z-10">
                   <tr>
                     {tabs[activeTab].headers.map((h, i) => (
                       <th
                         key={i}
-                        className="p-2 text-left text-gray-700 font-semibold uppercase text-xs"
+                        className="p-3 text-left text-gray-700 font-semibold uppercase text-xs tracking-wide"
                       >
                         {h}
                       </th>
@@ -411,10 +400,10 @@ const handleChartSummarizer = async () => {
                     tabs[activeTab].rows.map((row, i) => (
                       <tr
                         key={i}
-                        className="border-b border-gray-100 hover:bg-indigo-50"
+                        className="border-b border-gray-100 hover:bg-indigo-50 transition-colors"
                       >
                         {row.map((cell, j) => (
-                          <td key={j} className="p-2 text-gray-800">
+                          <td key={j} className="p-3 text-gray-800">
                             {cell || "-"}
                           </td>
                         ))}
@@ -424,7 +413,7 @@ const handleChartSummarizer = async () => {
                     <tr>
                       <td
                         colSpan={tabs[activeTab].headers.length}
-                        className="text-center py-6 text-gray-500"
+                        className="text-center py-8 text-gray-500"
                       >
                         No data available
                       </td>
@@ -435,13 +424,18 @@ const handleChartSummarizer = async () => {
             </div>
 
             {summary && (
-              <div className="mt-4">
-                <h4 className="text-md font-semibold mb-2 text-indigo-700">
+              <div className="mt-5 pt-5 border-t border-gray-200 flex-shrink-0">
+                <h4 className="text-xl font-bold mb-3 text-indigo-700">
                   Chart Summary
                 </h4>
-                <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-xl text-sm overflow-auto">
-                  <ReactMarkdown>{summary}</ReactMarkdown>
-                </div>
+                {/* <div className="p-5 bg-indigo-50 border border-indigo-200 rounded-2xl text-sm text-gray-800 leading-relaxed whitespace-pre-line max-h-64 overflow-y-auto" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+                  {summary}
+                </div> */}
+                <div className="p-6 bg-indigo-50 border border-indigo-200 border border-indigo-200 rounded-2xl text-base text-gray-800 leading-relaxed whitespace-pre-line max-h-[50vh] overflow-y-auto shadow-md" 
+     style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+  {summary}
+</div>
+
               </div>
             )}
 
