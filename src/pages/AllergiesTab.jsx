@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function AllergiesTab({ patientId }) {
-  const { sourceId, departmentId, setLatestCurl } = useContext(AppContext);
+  const { sourceId, departmentId, setLatestCurl , localEvents, setLocalEvents} = useContext(AppContext);
   const [allergies, setAllergies] = useState([]);
   const [loadingList, setLoadingList] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -130,6 +130,18 @@ export default function AllergiesTab({ patientId }) {
       }
 
       toast.success("Allergy saved successfully");
+      // ✅ Add to local events
+if (setLocalEvents) {
+  const newEvent = {
+    id: `${Date.now()}`,
+    eventType: "Allergy.save",
+    createdTime: new Date().toISOString(),
+    provider: "System", // or use providerName if available
+    details: formValues.allergy || "Unknown Allergy",
+  };
+  setLocalEvents([newEvent, ...(localEvents || [])]);
+}
+
       setOpen(false);
       setFormValues({
         allergy: "",
