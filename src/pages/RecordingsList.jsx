@@ -20,6 +20,22 @@ const AssistantFinal = ({ recorderData }) => {
   const [isRunning, setIsRunning] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(false);
+  // Selected EHR filter
+  const [selectedEHR, setSelectedEHR] = useState("");
+  // Get all unique EHR tags from scripts
+  const ehrOptions = Array.from(
+    new Set(scriptList.flatMap((s) => s.tags || []))
+  );
+  // Filter scripts by selected EHR tag
+  const filteredScripts = selectedEHR
+    ? scriptList.filter((s) => s.tags.includes(selectedEHR))
+    : scriptList;
+
+  useEffect(() => {
+    if (!filteredScripts.includes(activeScript)) {
+      setActiveScript(filteredScripts[0] || null);
+    }
+  }, [selectedEHR, filteredScripts]);
 
   const intervalRef = useRef(null);
 
@@ -183,6 +199,25 @@ const AssistantFinal = ({ recorderData }) => {
             isCollapsed ? "opacity-0 pointer-events-none" : "opacity-100"
           }`}
         >
+          {/* EHR Filter */}
+          <div className="mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Filter by EHR
+            </label>
+            <select
+              className="px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
+              onChange={(e) => setSelectedEHR(e.target.value)}
+              value={selectedEHR}
+            >
+              <option value="">All</option>
+              {ehrOptions.map((ehr) => (
+                <option key={ehr} value={ehr}>
+                  {ehr}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <h3 className="text-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
             Select a Workflow
           </h3>
@@ -201,12 +236,12 @@ const AssistantFinal = ({ recorderData }) => {
                 className="px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
                 onChange={(e) =>
                   setActiveScript(
-                    scriptList.find((s) => s.uuid === e.target.value)
+                    filteredScripts.find((s) => s.uuid === e.target.value)
                   )
                 }
                 value={activeScript?.uuid || ""}
               >
-                {scriptList.map((script) => (
+                {filteredScripts.map((script) => (
                   <option key={script.uuid} value={script.uuid}>
                     {script.title}
                   </option>
@@ -243,7 +278,7 @@ const AssistantFinal = ({ recorderData }) => {
                         </label>
                         <input
                           type={
-                            param.name.toLowerCase().includes("password")
+                            ["password", "mfaKey"].includes(param.name)
                               ? "password"
                               : "text"
                           }
@@ -255,7 +290,13 @@ const AssistantFinal = ({ recorderData }) => {
                             })
                           }
                           className="px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm w-full"
-                          placeholder={`Enter ${param.name}`}
+                          placeholder={
+                            ["password", "mfaKey", "mfaKey_sms_json"].includes(
+                              param.name
+                            )
+                              ? "••••••••"
+                              : `Enter ${param.name}`
+                          }
                         />
                       </div>
                     ))}

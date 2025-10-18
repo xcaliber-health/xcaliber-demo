@@ -1,4 +1,3 @@
-
 // import React, { useEffect, useState, useContext } from "react";
 // import { AppContext } from "../layouts/DashboardLayout";
 // import { fetchProvidersDirectory } from "../api/providers";
@@ -177,7 +176,9 @@ import { MOCK_PROVIDERS } from "../data/providerListMock"; // create a data file
 // -------------------- Reusable Tailwind Components --------------------
 function Card({ children, className = "" }) {
   return (
-    <div className={`bg-white/95 backdrop-blur-sm shadow-xl rounded-3xl border border-white/20 ${className}`}>
+    <div
+      className={`bg-white/95 backdrop-blur-sm shadow-xl rounded-3xl border border-white/20 ${className}`}
+    >
       {children}
     </div>
   );
@@ -214,7 +215,10 @@ export default function ProviderDirectory() {
   const itemsPerPage = 6;
 
   const totalPages = Math.ceil(providers.length / itemsPerPage);
-  const paginatedProviders = providers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedProviders = providers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   // Determine if source should use data data
   const isMockSource =
@@ -254,7 +258,13 @@ export default function ProviderDirectory() {
           await new Promise((resolve) => setTimeout(resolve, 3000)); // simulate network delay
         } else {
           // Fetch real providers
-          const res = await fetchProvidersDirectory(sourceId, departmentId, debouncedSearch, "", setLatestCurl);
+          const res = await fetchProvidersDirectory(
+            sourceId,
+            departmentId,
+            debouncedSearch,
+            "",
+            setLatestCurl
+          );
           data = res.providers.map((p) => ({
             id: p.id,
             name: p.name,
@@ -294,7 +304,9 @@ export default function ProviderDirectory() {
               <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Provider Directory
               </h1>
-              <p className="text-sm text-gray-600">Search and browse providers</p>
+              <p className="text-sm text-gray-600">
+                Search and browse providers
+              </p>
             </div>
           </div>
 
@@ -318,7 +330,7 @@ export default function ProviderDirectory() {
           {/* Providers */}
           <Card className="p-6">
             {loading ? (
-              <div className="flex justify-center items-center py-10 text-indigo-600">
+             <div className="flex justify-center items-center flex-1 text-indigo-600 min-h-[400px]">
                 <Loader2 className="animate-spin h-6 w-6 mr-2" />
                 Loading providers...
               </div>
@@ -329,14 +341,36 @@ export default function ProviderDirectory() {
                     key={p.id}
                     className="bg-gray-50 border border-gray-200 rounded-xl p-5 hover:shadow-lg transition flex flex-col h-full"
                   >
-                    <h3 className="text-lg font-semibold mb-1 text-gray-800">{p.name}</h3>
-                    <p className="text-sm text-gray-500 mb-1">Provider ID: {p.identifier || "—"}</p>
-                    <p className="text-sm text-gray-500 mb-3">NPI: {p.npi || "—"}</p>
+                    <h3 className="text-lg font-semibold mb-1 text-gray-800">
+                      {p.name}
+                    </h3>
+                    <p className="text-sm text-gray-500 mb-1">
+                      Provider ID: {p.identifier || "—"}
+                    </p>
+                    <p className="text-sm text-gray-500 mb-3">
+                      NPI: {p.npi || "—"}
+                    </p>
                     <div className="space-y-1 text-sm text-gray-700 flex-grow">
-                      {p.specialty && <p><strong>Specialty:</strong> {p.specialty}</p>}
-                      {p.providerType && <p><strong>Type:</strong> {p.providerType}</p>}
-                      {p.phone && <p><strong>Phone:</strong> {p.phone}</p>}
-                      {p.email && <p><strong>Email:</strong> {p.email}</p>}
+                      {p.specialty && (
+                        <p>
+                          <strong>Specialty:</strong> {p.specialty}
+                        </p>
+                      )}
+                      {p.providerType && (
+                        <p>
+                          <strong>Type:</strong> {p.providerType}
+                        </p>
+                      )}
+                      {p.phone && (
+                        <p>
+                          <strong>Phone:</strong> {p.phone}
+                        </p>
+                      )}
+                      {p.email && (
+                        <p>
+                          <strong>Email:</strong> {p.email}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -351,11 +385,21 @@ export default function ProviderDirectory() {
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center mt-6 space-x-4">
-                <Button disabled={currentPage === 1} onClick={() => setCurrentPage((p) => p - 1)}>← Prev</Button>
+                <Button
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage((p) => p - 1)}
+                >
+                  ← Prev
+                </Button>
                 <span className="px-4 py-2 text-gray-600 text-sm">
                   Page {currentPage} of {totalPages}
                 </span>
-                <Button disabled={currentPage === totalPages} onClick={() => setCurrentPage((p) => p + 1)}>Next →</Button>
+                <Button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage((p) => p + 1)}
+                >
+                  Next →
+                </Button>
               </div>
             )}
           </Card>

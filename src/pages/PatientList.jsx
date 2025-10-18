@@ -303,7 +303,7 @@ const getPatientFullName = (nameArrayOrString) => {
 export default function PatientList() {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("william");
+  const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState(search);
   const [initialLoaded, setInitialLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);

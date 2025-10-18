@@ -81,7 +81,7 @@ function CopyButton({ text }) {
 export default function BulkDataExtraction() {
   const ehrOptions = ["Athena", "Elation", "ECW", "Epic", "Cerner"];
   // :white_check_mark: Set default selected EHRs
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [sourceEHR, setSourceEHR] = useState("ECW");
   const [targetEHR, setTargetEHR] = useState("Athena");
   const [resources, setResources] = useState([]);
@@ -164,7 +164,10 @@ export default function BulkDataExtraction() {
                 <Database className="w-4 h-4" /> Resources & IDs
               </h2>
               {loadingResources ? (
-                <p className="text-gray-500 text-sm">Loading resources...</p>
+                <div className="flex justify-center items-center flex-1 min-h-[300px] text-indigo-600">
+                  <RefreshCw className="animate-spin h-6 w-6 mr-2" />
+                  Loading resources...
+                </div>
               ) : (
                 <ul className="space-y-2 max-h-[70vh] overflow-y-auto">
                   {resources.map((r) => (
@@ -184,10 +187,12 @@ export default function BulkDataExtraction() {
                           <ChevronDown className="w-4 h-4" />
                         )}
                       </div>
-                        {expandedResource === r && (
+                      {expandedResource === r && (
                         <ul className="mt-2 space-y-1 pl-4">
                           {loadingIds ? (
-                            <li className="text-gray-500 text-sm">Loading IDs...</li>
+                            <li className="text-gray-500 text-sm">
+                              Loading IDs...
+                            </li>
                           ) : (
                             (resourceIds[r] || []).map(({ id, name }) => (
                               <li
@@ -204,9 +209,7 @@ export default function BulkDataExtraction() {
                             ))
                           )}
                         </ul>
-
-                        )}
-
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -214,41 +217,41 @@ export default function BulkDataExtraction() {
             </Card>
             {/* Target Mapping */}
             <Card className="p-4">
-                  <h2 className="font-semibold mb-3 text-indigo-600">
-                    Target Mapping
-                  </h2>
-                  {selectedId ? (
-                    mappedId ? (
-                      <div className="flex flex-col gap-2">
-                        <p className="text-sm text-gray-500">Mapped ID</p>
-                        <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-4 py-3">
-                          <div className="flex items-center gap-2">
-                            <CheckCircle className="text-green-500 w-5 h-5" />
-                            <span className="text-green-700 font-medium text-lg">
-                              {mappedId}
-                            </span>
-                          </div>
-                          <CopyButton text={mappedId} />
-                        </div>
-                        {/* New button to navigate */}
-                        <button
-                          onClick={() => navigate(`/patients/${mappedId}`)}
-                          className="mt-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2 px-3 rounded-xl transition"
-                        >
-                          Go to Patient
-                        </button>
+              <h2 className="font-semibold mb-3 text-indigo-600">
+                Target Mapping
+              </h2>
+              {selectedId ? (
+                mappedId ? (
+                  <div className="flex flex-col gap-2">
+                    <p className="text-sm text-gray-500">Mapped ID</p>
+                    <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="text-green-500 w-5 h-5" />
+                        <span className="text-green-700 font-medium text-lg">
+                          {mappedId}
+                        </span>
                       </div>
-                    ) : (
-                      <div className="flex items-center gap-2 text-gray-500 text-sm">
-                        <RefreshCw className="animate-spin w-4 h-4" />
-                        Checking mapping...
-                      </div>
-                    )
-                  ) : (
-                    <p className="text-gray-500 text-sm">
-                      Select an ID to view mapping.
-                    </p>
-                  )}
+                      <CopyButton text={mappedId} />
+                    </div>
+                    {/* New button to navigate */}
+                    <button
+                      onClick={() => navigate(`/patients/${mappedId}`)}
+                      className="mt-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2 px-3 rounded-xl transition"
+                    >
+                      Go to Patient
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-gray-500 text-sm">
+                    <RefreshCw className="animate-spin w-4 h-4" />
+                    Checking mapping...
+                  </div>
+                )
+              ) : (
+                <p className="text-gray-500 text-sm">
+                  Select an ID to view mapping.
+                </p>
+              )}
             </Card>
           </div>
         </div>

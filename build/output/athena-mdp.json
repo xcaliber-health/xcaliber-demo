@@ -1,0 +1,4890 @@
+{
+  "allergyintolerance": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "entry": [
+      {
+        "fullUrl": "https://blitz.xcaliberapis.com/fhir-gateway-2/fhir/R4/AllergyIntolerance/93057",
+        "search": {
+          "mode": "match"
+        },
+        "resource": {
+          "category": [
+            "medication"
+          ],
+          "clinicalStatus": {
+            "coding": [
+              {
+                "code": "active",
+                "display": "Active",
+                "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+              }
+            ]
+          },
+          "code": {
+            "coding": [
+              {
+                "code": "93057",
+                "display": "Abatinex",
+                "system": "athena"
+              }
+            ]
+          },
+          "criticality": "high",
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/department-id",
+              "valueString": "1"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/last-modified-date-time",
+              "valueString": "2025-07-27T07:03:24Z"
+            }
+          ],
+          "id": "93057",
+          "meta": {
+            "lastUpdated": "2025-10-03T05:41:23.900Z",
+            "tag": [
+              {
+                "code": "f7bfd15e-9a83-564c-a2db-df419a940d2e",
+                "system": "http://xcaliber-fhir/structureDefinition/patient-id"
+              },
+              {
+                "code": "000-000-000-000",
+                "system": "http://xcaliber-fhir/structureDefinition/dataproduct-id"
+              },
+              {
+                "code": "ef123977-6ef1-3e8e-a30f-3879cea0b344",
+                "system": "http://xcaliber-fhir/structureDefinition/source-id"
+              }
+            ],
+            "versionId": "8fa518b2-8f67-42b0-bdfa-5338dc4264f0",
+            "author": {
+              "reference": "system"
+            },
+            "compartment": [
+              {
+                "reference": "Patient/pt-P001-1"
+              }
+            ]
+          },
+          "onsetDateTime": "2024-11-27T05:00:00Z",
+          "patient": {
+            "reference": "Patient/pt-P001-1"
+          },
+          "reaction": [
+            {
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/severity-code",
+                  "valueInteger": 24484000
+                }
+              ],
+              "manifestation": [
+                {
+                  "coding": [
+                    {
+                      "code": "21522001",
+                      "display": "abdominal pain",
+                      "system": "http://snomed.info/sct"
+                    }
+                  ]
+                }
+              ],
+              "severity": "severe"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/severity-code",
+                  "valueInteger": 24484000
+                }
+              ],
+              "manifestation": [
+                {
+                  "coding": [
+                    {
+                      "code": "410429000",
+                      "display": "cardiac arrest",
+                      "system": "http://snomed.info/sct"
+                    }
+                  ]
+                }
+              ],
+              "severity": "severe"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/severity-code",
+                  "valueInteger": 255604002
+                }
+              ],
+              "manifestation": [
+                {
+                  "coding": [
+                    {
+                      "code": "29857009",
+                      "display": "chest pain",
+                      "system": "http://snomed.info/sct"
+                    }
+                  ]
+                }
+              ],
+              "severity": "mild"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/severity-code",
+                  "valueInteger": 255604002
+                }
+              ],
+              "manifestation": [
+                {
+                  "coding": [
+                    {
+                      "code": "40917007",
+                      "display": "confusion",
+                      "system": "http://snomed.info/sct"
+                    }
+                  ]
+                }
+              ],
+              "severity": "mild"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/severity-code",
+                  "valueInteger": 255604002
+                }
+              ],
+              "manifestation": [
+                {
+                  "coding": [
+                    {
+                      "code": "62315008",
+                      "display": "diarrhea",
+                      "system": "http://snomed.info/sct"
+                    }
+                  ]
+                }
+              ],
+              "severity": "mild"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/severity-code",
+                  "valueInteger": 255604002
+                }
+              ],
+              "manifestation": [
+                {
+                  "coding": [
+                    {
+                      "code": "267036007",
+                      "display": "dyspnea",
+                      "system": "http://snomed.info/sct"
+                    }
+                  ]
+                }
+              ],
+              "severity": "mild"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/severity-code",
+                  "valueInteger": 255604002
+                }
+              ],
+              "manifestation": [
+                {
+                  "coding": [
+                    {
+                      "code": "75705005",
+                      "display": "eye redness",
+                      "system": "http://snomed.info/sct"
+                    }
+                  ]
+                }
+              ],
+              "severity": "mild"
+            }
+          ],
+          "resourceType": "AllergyIntolerance",
+          "verificationStatus": {
+            "coding": [
+              {
+                "code": "confirmed",
+                "display": "Confirmed",
+                "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "total": 1,
+    "link": [
+      {
+        "relation": "self",
+        "url": "https://blitz.xcaliberapis.com/fhir-gateway-2/fhir/R4/AllergyIntolerance?_count=1&dataProductId=000-000-000-000&departmentId=1&patient=4406&sourceId=ef123977-6ef1-3e8e-a30f-3879cea0b344&tenantId=512fe16b-57cc-3887-b28f-829f21aa9ef2"
+      },
+      {
+        "relation": "first",
+        "url": "https://blitz.xcaliberapis.com/fhir-gateway-2/fhir/R4/AllergyIntolerance?_count=1&dataProductId=000-000-000-000&departmentId=1&patient=4406&sourceId=ef123977-6ef1-3e8e-a30f-3879cea0b344&tenantId=512fe16b-57cc-3887-b28f-829f21aa9ef2"
+      },
+      {
+        "relation": "next",
+        "url": "https://blitz.xcaliberapis.com/fhir-gateway-2/fhir/R4/AllergyIntolerance?_count=1&_offset=1&dataProductId=000-000-000-000&departmentId=1&patient=4406&sourceId=ef123977-6ef1-3e8e-a30f-3879cea0b344&tenantId=512fe16b-57cc-3887-b28f-829f21aa9ef2"
+      }
+    ]
+  },
+  "appointment": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "entry": [
+      {
+        "fullUrl": "https://blitz.xcaliberapis.com/fhir-gateway-2/fhir/R4/Appointment/1276933",
+        "search": {
+          "mode": "match"
+        },
+        "resource": {
+          "appointmentType": {
+            "coding": [
+              {
+                "code": "FOLLOWUP",
+                "display": "Follow-up"
+              }
+            ],
+            "text": "Follow-up"
+          },
+          "end": "2016-11-10T05:15:00Z",
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/department-id",
+              "valueString": "dept-P001-1"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/copay",
+              "valueString": "{\"collectedforappointment\":25,\"insurancecopay\":25,\"collectedforother\":0}"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/appointment-status",
+              "valueCoding": {
+                "code": "booked",
+                "display": "Booked",
+                "system": "http://hl7.org/fhir/R4B/valueset-appointmentstatus.html"
+              }
+            }
+          ],
+          "id": "1276933",
+          "meta": {
+            "lastUpdated": "2025-10-01T07:12:57Z",
+            "tag": [
+              {
+                "code": "f7bfd15e-9a83-564c-a2db-df419a940d2e",
+                "system": "http://xcaliber-fhir/structureDefinition/patient-id"
+              },
+              {
+                "code": "000-000-000-000",
+                "system": "http://xcaliber-fhir/structureDefinition/dataproduct-id"
+              },
+              {
+                "code": "ef123977-6ef1-3e8e-a30f-3879cea0b344",
+                "system": "http://xcaliber-fhir/structureDefinition/source-id"
+              },
+              {
+                "system": "http://xcaliber-fhir/structureDefinition/xcStatus",
+                "code": "DRAFT"
+              },
+              {
+                "system": "http://xcaliber-fhir/structureDefinition/xcStatus",
+                "code": "DRAFT"
+              },
+              {
+                "system": "http://xcaliber-fhir/structureDefinition/dataproduct-id",
+                "code": "000-000-000-000"
+              },
+              {
+                "system": "http://xcaliber-fhir/structureDefinition/source-id",
+                "code": "ef123977-6ef1-3e8e-a30f-3879cea0b344"
+              }
+            ],
+            "versionId": "0f660e29-2dbe-43c2-918f-d47be8225df8",
+            "author": {
+              "reference": "system"
+            },
+            "compartment": [
+              {
+                "reference": "Patient/pt-P001-1"
+              }
+            ]
+          },
+          "minutesDuration": 30,
+          "participant": [
+            {
+              "actor": {
+                "reference": "Location/loc-P001-1"
+              },
+              "status": "accepted"
+            },
+            {
+              "actor": {
+                "reference": "Practitioner/pract-P001-1"
+              },
+              "status": "accepted"
+            },
+            {
+              "actor": {
+                "reference": "Patient/pt-P001-1"
+              },
+              "status": "accepted"
+            }
+          ],
+          "resourceType": "Appointment",
+          "start": "2016-11-10T05:00:00Z",
+          "status": "booked"
+        }
+      }
+    ],
+    "total": 1,
+    "link": [
+      {
+        "relation": "self",
+        "url": "https://blitz.xcaliberapis.com/fhir-gateway-2/fhir/R4/Appointment?_count=1&dataProductId=000-000-000-000&departmentId=1&end=le2024-05-14&patient=4406&sourceId=ef123977-6ef1-3e8e-a30f-3879cea0b344&tenantId=512fe16b-57cc-3887-b28f-829f21aa9ef2"
+      },
+      {
+        "relation": "first",
+        "url": "https://blitz.xcaliberapis.com/fhir-gateway-2/fhir/R4/Appointment?_count=1&dataProductId=000-000-000-000&departmentId=1&end=le2024-05-14&patient=4406&sourceId=ef123977-6ef1-3e8e-a30f-3879cea0b344&tenantId=512fe16b-57cc-3887-b28f-829f21aa9ef2"
+      },
+      {
+        "relation": "next",
+        "url": "https://blitz.xcaliberapis.com/fhir-gateway-2/fhir/R4/Appointment?_count=1&_offset=1&dataProductId=000-000-000-000&departmentId=1&end=le2024-05-14&patient=4406&sourceId=ef123977-6ef1-3e8e-a30f-3879cea0b344&tenantId=512fe16b-57cc-3887-b28f-829f21aa9ef2"
+      }
+    ]
+  },
+  "basic": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "Basic",
+          "id": "rc-1001",
+          "subject": {
+            "reference": "Patient/pt-P001-1"
+          },
+          "code": {
+            "text": "care-coordination"
+          },
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/all-charts",
+              "valueString": "Y"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/department-count",
+              "valueInteger": 2
+            }
+          ]
+        }
+      },
+      {
+        "resource": {
+          "resourceType": "Basic",
+          "id": "rc-1002",
+          "subject": {
+            "reference": "Patient/pt-P001-1"
+          },
+          "code": {
+            "text": "care-coordination"
+          },
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/all-charts",
+              "valueString": "Y"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/department-count",
+              "valueInteger": 2
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "careplan": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "CarePlan",
+          "id": "cp-001",
+          "intent": "plan",
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/text-div",
+              "valueString": "<div>Comprehensive diabetes and hypertension management plan including medication adherence, dietary modifications, regular monitoring, and lifestyle interventions.</div>"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/text-status",
+              "valueString": "generated"
+            }
+          ],
+          "subject": {
+            "reference": "Patient/pt-P001-1"
+          },
+          "category": [
+            {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "LP29684-5",
+                  "display": "Care plan"
+                }
+              ]
+            }
+          ],
+          "status": "active",
+          "contributor": [
+            {
+              "display": "Dr. Maria Rodriguez",
+              "reference": "Practitioner/pract-P001-1",
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/role",
+                  "valueCodeableConcept": {
+                    "text": "Endocrinologist"
+                  }
+                }
+              ]
+            },
+            {
+              "display": "Diabetes Care Coordinator",
+              "reference": "Practitioner/pract-P001-1",
+              "extension": []
+            }
+          ]
+        }
+      },
+      {
+        "resource": {
+          "resourceType": "CarePlan",
+          "id": "cp-002",
+          "intent": "plan",
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/text-div",
+              "valueString": "<div>Cardiovascular risk reduction plan with blood pressure monitoring, medication optimization, and lifestyle counseling.</div>"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/text-status",
+              "valueString": "additional"
+            }
+          ],
+          "subject": {
+            "reference": "Patient/pt-P001-1"
+          },
+          "category": [
+            {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "LP29684-5",
+                  "display": "Care plan"
+                }
+              ]
+            }
+          ],
+          "status": "active",
+          "contributor": [
+            {
+              "display": "Dr. James Wilson",
+              "reference": "Practitioner/pract-P001-1",
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/role",
+                  "valueCodeableConcept": {
+                    "text": "Cardiologist"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "careteam": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "CareTeam",
+          "subject": {
+            "reference": "Patient/pt-P001-1"
+          },
+          "contained": [
+            {
+              "resourceType": "Practitioner",
+              "id": "90210",
+              "name": [
+                {
+                  "given": [
+                    "Sarah",
+                    "Elizabeth"
+                  ],
+                  "family": "Johnson",
+                  "text": "Dr. Sarah Johnson",
+                  "suffix": [
+                    "MD"
+                  ],
+                  "extension": []
+                }
+              ],
+              "address": [
+                {
+                  "line": [
+                    "456 Medical Plaza",
+                    "Suite 200"
+                  ],
+                  "city": "Springfield",
+                  "country": "US",
+                  "state": "IL",
+                  "postalCode": "62701"
+                }
+              ],
+              "qualification": [
+                {
+                  "code": {
+                    "text": "Endocrinology"
+                  }
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/facility-id",
+                  "valueString": "facility456"
+                }
+              ]
+            },
+            {
+              "resourceType": "Practitioner",
+              "id": "practitioner-1",
+              "name": [
+                {
+                  "text": "Dr. Martinez",
+                  "suffix": [
+                    "MD"
+                  ],
+                  "extension": [
+                    {
+                      "url": "http://xcaliber-fhir/structureDefinition/preferred-name",
+                      "valueString": "Carlos Martinez"
+                    }
+                  ]
+                }
+              ],
+              "identifier": [
+                {
+                  "type": {
+                    "text": "npi"
+                  },
+                  "value": "9876543210"
+                }
+              ],
+              "telecom": [
+                {
+                  "system": "phone",
+                  "value": "555-234-5678"
+                },
+                {
+                  "system": "fax",
+                  "value": "555-234-5679"
+                }
+              ],
+              "qualification": [
+                {
+                  "code": {
+                    "text": "Cardiology"
+                  }
+                }
+              ]
+            }
+          ],
+          "participant": [
+            {
+              "id": "member123",
+              "member": {
+                "reference": "Practitioner/pract-P001-1"
+              },
+              "role": [
+                {
+                  "coding": [
+                    {
+                      "code": "primary",
+                      "display": "Primary Care Provider"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "member": {
+                "reference": "#practitioner-1"
+              }
+            }
+          ],
+          "note": [
+            {
+              "text": "Multidisciplinary care team for diabetes and hypertension management"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "claim": {
+    "resourceType": "Claim",
+    "id": "cl-P001-1",
+    "patient": {
+      "reference": "Patient/pt-P001-1"
+    },
+    "status": "active",
+    "created": "2025-01-12T10:30:00Z",
+    "billablePeriod": {
+      "end": "2025-01-11T00:00:00Z"
+    },
+    "use": "claim",
+    "type": {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/claim-type",
+          "code": "professional"
+        }
+      ]
+    },
+    "provider": {
+      "reference": "Practitioner/pract-P001-1",
+      "extension": [
+        {
+          "url": "http://xcaliber-fhir/structureDefinition/REFERRINGPROVIDERID",
+          "valueString": "54321"
+        }
+      ]
+    },
+    "priority": {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/processpriority",
+          "code": "normal"
+        }
+      ]
+    },
+    "insurance": [
+      {
+        "coverage": {
+          "reference": "Coverage/PRIM-001",
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/PRIMARYINSURANCEPACKAGEID",
+              "valueString": "PKG-100"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/PRIMARYINSURANCESTATUS",
+              "valueString": "active"
+            }
+          ]
+        },
+        "focal": true,
+        "sequence": 1
+      },
+      {
+        "coverage": {
+          "reference": "Coverage/SEC-002",
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SECONDARYINSURANCEPACKAGEID",
+              "valueString": "PKG-200"
+            }
+          ]
+        },
+        "focal": false,
+        "sequence": 2
+      }
+    ],
+    "procedure": [
+      {
+        "procedureCodeableConcept": {
+          "coding": [
+            {
+              "code": "99214",
+              "display": "Office visit established patient"
+            }
+          ]
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "display": "Primary"
+              }
+            ]
+          }
+        ],
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/PROCEDURECHARGEAMOUNT",
+            "valueString": "180.00"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/ALLOWABLEAMOUNT",
+            "valueString": "144.00"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/ALLOWABLEMAX",
+            "valueString": "160.00"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/PROCEDURETRANSACTIONID",
+            "valueString": "TX-10003"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/ALLOWABLEMIN",
+            "valueString": "120.00"
+          }
+        ],
+        "sequence": 1
+      },
+      {
+        "procedureCodeableConcept": {
+          "coding": [
+            {
+              "code": "83036",
+              "display": "Hemoglobin A1C"
+            }
+          ]
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "display": "Secondary"
+              }
+            ]
+          }
+        ],
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/PROCEDURECHARGEAMOUNT",
+            "valueString": "85.00"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/PROCEDURETRANSACTIONID",
+            "valueString": "TX-10004"
+          }
+        ],
+        "sequence": 2
+      }
+    ],
+    "diagnosis": [
+      {
+        "id": "DX-1",
+        "diagnosisCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "E11.9",
+              "display": "Type 2 diabetes mellitus without complications"
+            }
+          ]
+        },
+        "type": [
+          {
+            "text": "principal"
+          }
+        ],
+        "extension": [],
+        "sequence": 1
+      },
+      {
+        "id": "DX-2",
+        "diagnosisCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "I10",
+              "display": "Essential hypertension"
+            }
+          ]
+        },
+        "type": [
+          {
+            "text": "secondary"
+          }
+        ],
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/DELETEDDIAGNOSIS",
+            "valueString": "false"
+          }
+        ],
+        "sequence": 2
+      }
+    ],
+    "total": 265.0,
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/APPOINTMENTID",
+        "valueString": "ap-P001-1"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DEPARTMENTID",
+        "valueString": "dept-P001-1"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/REFERRALAUTHID",
+        "valueInteger": 445567
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/REFERRINGPROVIDERID",
+        "valueInteger": 54322
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/RESERVED19",
+        "valueString": "RES-20"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/TRANSACTIONDETAILS",
+        "valueString": "{\"batch\":\"B-2025-08\",\"method\":\"EDI\"}"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/TRANSACTIONID",
+        "valueString": "TX-CLM-0002"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PATIENTPAYERNOTE",
+        "valueString": "Patient copay collected at time of service"
+      }
+    ],
+    "contained": [
+      {
+        "resourceType": "Basic",
+        "id": "CN-1001",
+        "code": {
+          "coding": [
+            {
+              "code": "claim-note"
+            }
+          ]
+        },
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/NOTE.NOTE_STATUS",
+            "valueString": "NEW"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/NOTE.ATHENA_KICK_CODE_NAME",
+            "valueString": "KICK-B2"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/NOTE.KICK_CODE_NAME",
+            "valueString": "KICK-SECONDARY"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/NOTE.CLAIM_NOTE",
+            "valueString": "Diabetes management follow-up required."
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/NOTE.KICK_CODE",
+            "valueString": "B2"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/NOTE.GLOBAL_CLAIM_RULE_NAME",
+            "valueString": "RULE-DM-FOLLOWUP"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/NOTE.PENDING_FLAG",
+            "valueString": "N"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/NOTE.FIX_TEXT",
+            "valueString": "Schedule next A1C in 3 months."
+          }
+        ]
+      },
+      {
+        "resourceType": "Basic",
+        "id": "CN-1002",
+        "code": {
+          "coding": [
+            {
+              "code": "claim-note"
+            }
+          ]
+        },
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/NOTE.NOTE_STATUS",
+            "valueString": "COMPLETED"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/NOTE.CLAIM_NOTE",
+            "valueString": "Lab results reviewed and documented."
+          }
+        ]
+      }
+    ]
+  },
+  "communication": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "Communication",
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/timestamp",
+              "valueString": "2025-08-16T09:15:00Z"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/from",
+              "valueReference": {
+                "reference": "90210",
+                "display": "Dr. Sarah Johnson",
+                "extension": [
+                  {
+                    "url": "http://xcaliber-fhir/structureDefinition/user-name",
+                    "valueString": "sjohnson"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/to",
+              "valueReference": {
+                "reference": "90211",
+                "display": "Maria Santos",
+                "extension": [
+                  {
+                    "url": "http://xcaliber-fhir/structureDefinition/user-name",
+                    "valueString": "msantos"
+                  }
+                ]
+              }
+            }
+          ],
+          "identifier": [
+            {
+              "type": {
+                "text": "brand-id"
+              },
+              "value": "comm001"
+            },
+            {
+              "type": {
+                "text": "document-id"
+              },
+              "value": "msg789"
+            }
+          ],
+          "subject": {
+            "reference": "Patient/pt-P001-1"
+          },
+          "category": [
+            {
+              "coding": [
+                {
+                  "code": "appointment-reminder"
+                }
+              ]
+            }
+          ],
+          "topic": {
+            "coding": [
+              {
+                "display": "Diabetes Follow-up Appointment Reminder"
+              }
+            ]
+          },
+          "status": "completed",
+          "payload": [
+            {
+              "contentString": "Dear Ms. Santos, this is a reminder for your diabetes follow-up appointment scheduled for tomorrow at 10:00 AM with Dr. Johnson. Please bring your glucose log and current medications. If you need to reschedule, please call (555) 123-4567.",
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/un-read",
+                  "valueString": "false"
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/is-reply",
+                  "valueString": "false"
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/display-date",
+                  "valueDateTime": "2025-08-16T09:15:00Z"
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/timestamp",
+                  "valueString": "1724662500"
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/from",
+                  "valueString": "clinic@endocrinology.com"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "condition": {
+    "resourceType": "Condition",
+    "subject": {
+      "reference": "Patient/pt-P001-1",
+      "id": "456"
+    },
+    "clinicalStatus": {
+      "coding": [
+        {
+          "system": "https://terminology.hl7.org/3.1.0/CodeSystem-condition-clinical.html",
+          "code": "active"
+        },
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+          "code": "active"
+        }
+      ],
+      "extension": []
+    },
+    "note": [
+      {
+        "text": "Well-controlled diabetes with good medication compliance"
+      }
+    ],
+    "extension": [
+      {
+        "url": "TINY_URLS.CONDITION.DEACTIVATEDDATE",
+        "valueDateTime": "2023-12-01T10:30:00Z"
+      },
+      {
+        "url": "TINY_URLS.CONDITION.DEACTIVATEDUSER",
+        "valueString": "dr.smith"
+      },
+      {
+        "url": "TINY_URLS.CONDITION.LASTMODIFIEDBY",
+        "valueString": "dr.martinez"
+      },
+      {
+        "url": "TINY_URLS.CONDITION.LASTMODIFIEDDATETIME",
+        "valueDateTime": "2025-08-15T14:30:00Z"
+      },
+      {
+        "url": "TINY_URLS.CONDITION.MOSTRECENTDIAGNOSISNOTE",
+        "valueString": "Patient reports good glucose control with current regimen"
+      },
+      {
+        "url": "TINY_URLS.CONDITION.DEPARTMENTID",
+        "valueString": "12345"
+      },
+      {
+        "url": "TINY_URLS.CONDITION.SECTIONNOTE",
+        "valueString": "Patient continues current diabetes management plan"
+      },
+      {
+        "url": "http://tiny.url/condition/status",
+        "valueString": "active"
+      },
+      {
+        "url": "TINY_URLS.CONDITION.EVENTTYPEEND",
+        "valueString": "ONGOING"
+      },
+      {
+        "url": "TINY_URLS.CONDITION.EVENTTYPEHIDE",
+        "valueString": "HIDDEN"
+      },
+      {
+        "url": "TINY_URLS.CONDITION.ENCOUNTERDATETIME",
+        "valueDate": "2023-10-15"
+      },
+      {
+        "url": "TINY_URLS.CONDITION.ONSETDATE",
+        "valueDateTime": "2023-10-15T10:30:00Z"
+      },
+      {
+        "url": "TINY_URLS.CONDITION.SOURCE",
+        "valueString": "active"
+      },
+      {
+        "url": "TINY_URLS.CONDITION.PROBLEMSTATUS",
+        "valueString": "bilateral"
+      },
+      {
+        "url": "TINY_URLS.CONDITION.LATERALITY",
+        "valueString": "left"
+      },
+      {
+        "url": "TINY_URLS.CONDITION.EVENTTYPESTART",
+        "valueString": "START"
+      }
+    ],
+    "code": {
+      "coding": [
+        {
+          "code": "E11.9",
+          "display": "Type 2 diabetes mellitus without complications",
+          "system": "http://snomed.info/sct"
+        },
+        {
+          "system": "ICD10",
+          "code": "E11.9",
+          "extension": [
+            {
+              "url": "TINY_URLS.CONDITION.ACCURACYLEVEL",
+              "valueString": "Best Match"
+            }
+          ]
+        },
+        {
+          "code": "E11.9",
+          "system": "http://hl7.org/fhir/sid/icd-10-cm",
+          "display": "Type 2 diabetes mellitus without complications"
+        }
+      ]
+    },
+    "contained": [
+      {
+        "id": "clinical-impression-1",
+        "resourceType": "ClinicalImpression",
+        "effectiveDateTime": "2023-11-15T14:20:00Z",
+        "date": "2023-11-15T14:20:00Z",
+        "assessor": {
+          "reference": "Practitioner/pract-P001-1"
+        },
+        "code": {
+          "coding": [
+            {
+              "code": "active"
+            }
+          ]
+        },
+        "finding": [
+          {
+            "itemCodeableConcept": {
+              "coding": [
+                {
+                  "code": "E11.9",
+                  "system": "http://hl7.org/fhir/sid/icd-10-cm",
+                  "display": "Type 2 diabetes mellitus without complications"
+                }
+              ]
+            }
+          }
+        ],
+        "note": [
+          {
+            "text": "Patient demonstrates good understanding of diabetes management"
+          }
+        ],
+        "extension": []
+      }
+    ],
+    "id": "123",
+    "category": [
+      {
+        "coding": [
+          {
+            "code": "problem-list-item"
+          }
+        ]
+      }
+    ],
+    "abatementDateTime": "2023-12-15T10:30:00Z",
+    "onsetDateTime": "2023-01-15T09:00:00Z"
+  },
+  "coverage": {
+    "resourceType": "Coverage",
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DEPARTMENTID",
+        "valueInteger": 123
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/INSURANCEPHONE",
+        "valueString": "555-234-5678"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/INSUREDENTITYTYPEID",
+        "valueString": "1"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SEQUENCENUMBER",
+        "valueInteger": 1
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/UPDATEAPPOINTMENTS",
+        "valueBoolean": true
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/VALIDATEINSURANCEIDNUMBER",
+        "valueBoolean": true
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/COINSURANCEPERCENT",
+        "valueInteger": 15
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/NOTE",
+        "valueString": "Coverage for diabetes and hypertension management"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/NOTE",
+        "valueString": "Patient has comprehensive coverage with endocrinology benefits"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/COPAYS",
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/COPAY",
+            "valueCode": [
+              {
+                "copayamount": "25.00",
+                "copaytype": "office_visit"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/INSUREDREFERRINGPROVIDER",
+        "valueString": "Dr. Smith"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/INSUREDIDNUMBER",
+        "valueString": "Dr. Rodriguez"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/INSURANCEPRODUCTTYPE",
+        "valueString": "INS987654321"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ELIGIBILITYLASTCHECKED",
+        "valueDate": "2024-01-15"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ELIGIBILITYMESSAGE",
+        "valueString": "Coverage verified and active"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ELIGIBILITYSTATUS",
+        "valueString": "Coverage verified and active for chronic conditions"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ELIGIBILITYREASON",
+        "valueString": "active"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/INSURANCEPOLICYHOLDERADDRESS",
+        "valueAddress": {
+          "state": "CA",
+          "postalCode": "90210",
+          "country": "US",
+          "line": [
+            "123 Main St",
+            "Apt 4B"
+          ]
+        }
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/INS",
+        "valueHumanName": {
+          "given": [
+            "John",
+            "Michael"
+          ],
+          "family": "Smith",
+          "suffix": "Jr"
+        }
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ansi271",
+        "valueString": "271response"
+      }
+    ],
+    "policyHolder": {
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/sid/us-ssn",
+          "valueCode": "123456789"
+        },
+        {
+          "url": "http://xcaliber-fhir/structureDefinition/us-core-birthsex",
+          "valueCode": "F"
+        },
+        {
+          "url": "http://xcaliber-fhir/structureDefinition/INSURANCEPOLICYHOLDERCOUNTRY",
+          "valueString": "US"
+        },
+        {
+          "url": "http://xcaliber-fhir/structureDefinition/INSURANCEPOLICYHOLDERDOB",
+          "valueDate": "1980-01-01"
+        },
+        {
+          "url": "http://xcaliber-fhir/structureDefinition/INSURANCEPOLICYHOLDERNAME",
+          "valueHumanName": {
+            "family": "Santos"
+          }
+        }
+      ],
+      "display": "Maria Santos",
+      "identifier": {},
+      "reference": "Patient/pt-P001-1"
+    },
+    "beneficiary": {
+      "reference": "Patient/pt-P001-1",
+      "id": "123"
+    },
+    "id": "cv-P001-1",
+    "status": "active",
+    "identifier": [
+      {
+        "system": "insurance-id-number",
+        "value": "MS789654321"
+      },
+      {
+        "system": "insurance-package-id",
+        "value": "PPO456"
+      }
+    ],
+    "period": {
+      "start": "2024-01-01T00:00:00",
+      "end": "2024-12-31T00:00:00",
+      "extension": [
+        {
+          "url": "http://xcaliber-fhir/structureDefinition/cancelled",
+          "valueDateTime": "2024-06-15T00:00:00Z"
+        }
+      ]
+    },
+    "relationship": {
+      "id": "1",
+      "text": "Self"
+    },
+    "class": [
+      {
+        "name": "Comprehensive Health Plan",
+        "type": {
+          "text": "PPO"
+        },
+        "value": "PPO456789"
+      }
+    ],
+    "costToBeneficiary": [
+      {
+        "valueMoney": {
+          "value": 20.0
+        },
+        "type": {
+          "text": "Specialist Visit"
+        }
+      },
+      {
+        "valueMoney": {
+          "value": 15.0
+        },
+        "type": {
+          "text": "copay"
+        }
+      }
+    ],
+    "type": {
+      "coding": [
+        {
+          "system": "athena",
+          "display": "employer"
+        }
+      ]
+    },
+    "contained": [
+      {
+        "resourceType": "Media",
+        "type": {
+          "coding": [
+            {
+              "code": "insurance-document"
+            }
+          ]
+        },
+        "content": {
+          "id": "insurance-image",
+          "data": "base64encodeddata"
+        }
+      }
+    ]
+  },
+  "diagnosticreport": {
+    "resourceType": "DiagnosticReport",
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PRIORITY",
+        "valueString": "routine"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ATTACHMENTEXISTS",
+        "valueBoolean": true
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/EXACTDUPLICATEDOCUMENTID",
+        "valueInteger": 67891
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/FACILITYID",
+        "valueInteger": 67890
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/INTERNALNOTE",
+        "valueString": "Lab results for diabetes monitoring"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/INTERPRETATIONTEMPLATE",
+        "valueString": "HbA1c and lipid panel interpretation"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ISREVIEWEDBYPROVIDER",
+        "valueBoolean": true
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CREATED_DATE",
+        "valueDateTime": "2023-10-15T10:00:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/STATUS",
+        "valueString": "final"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DOCUMENT",
+        "valueString": "final"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/LABRESULTDATE",
+        "valueDate": "2023-10-15"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SUPERSEDEDDOCUMENTID",
+        "valueString": "DOC123456"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/appointment-id",
+        "valueInteger": 789
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/assigned-to",
+        "valueString": "Dr. Smith"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/created-user",
+        "valueString": "Dr. Johnson"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/deleted-datetime",
+        "valueDateTime": "2023-10-16T10:30:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/department-id",
+        "valueString": "DEPT001"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/status",
+        "valueString": "ENDO001"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/subject",
+        "valueString": "final"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/alarm-days",
+        "valueString": "pt-P001-1"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/action-note",
+        "valueString": "3"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/result-category",
+        "valueString": "Monitor HbA1c trends"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/result-notes",
+        "valueString": "laboratory"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/provider-user-name",
+        "valueString": "HbA1c 7.2%, lipids within target range"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/tied-to-procedure-or-surgery",
+        "valueString": "dr.johnson"
+      }
+    ],
+    "presentedForm": [
+      {
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/STATUS",
+            "valueString": "final"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/DOCUMENT_SOURCE",
+            "valueString": "lab"
+          }
+        ]
+      }
+    ],
+    "issued": "2023-10-15T14:30:00Z",
+    "contained": [
+      {
+        "resourceType": "Organization",
+        "id": "12345",
+        "address": [
+          {
+            "line": [
+              "456 Medical Plaza",
+              "Floor 2"
+            ],
+            "city": "Springfield",
+            "state": "IL",
+            "postalCode": "62701"
+          }
+        ],
+        "name": "LabCorp"
+      }
+    ],
+    "category": [
+      {
+        "coding": [
+          {
+            "system": "athena",
+            "code": "LAB",
+            "extension": [
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/document-subclass",
+                "valueString": "ENDOCRINOLOGY"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+            "code": "LAB"
+          }
+        ]
+      }
+    ],
+    "effectiveDateTime": "2023-10-15T14:30:00Z",
+    "basedOn": [
+      {
+        "reference": "ServiceRequest/12345"
+      }
+    ],
+    "encounter": {
+      "reference": "Encounter/en-P001-1"
+    },
+    "result": [
+      {
+        "reference": "Observation/analyte123"
+      }
+    ],
+    "id": "12345",
+    "identifier": [
+      {
+        "system": "http://acme.com/lab/reports",
+        "value": "DR-P001-1-A1"
+      }
+    ],
+    "status": "final",
+    "code": {
+      "coding": [
+        {
+          "system": "http://loinc.org",
+          "code": "57698-3",
+          "display": "Lipid panel with direct LDL - Serum or Plasma"
+        }
+      ],
+      "text": "Diabetes Monitoring Panel"
+    },
+    "subject": {
+      "reference": "Patient/pt-P001-1"
+    },
+    "performer": [
+      {
+        "reference": "Practitioner/pract-P001-1"
+      }
+    ],
+    "conclusion": "HbA1c slightly elevated at 7.2%, lipid levels within target range for diabetic patient",
+    "text": {
+      "status": "generated",
+      "div": "{\"labresultid\":\"DR-P001-1-A1\",\"resultstatus\":\"final\",\"panel\":\"diabetes_monitoring\"}"
+    }
+  },
+  "documentReference": {
+    "resourceType": "DocumentReference",
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/.DEPARTMENTID",
+        "valueInteger": 456
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/.ENCOUNTERVISITNAME",
+        "valueString": "Follow-up Visit"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/.ENCOUNTERTYPE",
+        "valueString": "follow-up"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/.LASTREOPENED",
+        "valueString": "2025-10-08T09:15:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/.LASTUPDATED",
+        "valueString": "2025-10-08T11:30:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/.PROVIDERLASTNAME",
+        "valueString": "Johnson"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/.PROVIDERPHONE",
+        "valueString": "555-987-6543"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/.STAGE",
+        "valueString": "final"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/.PATIENTSTATUSID",
+        "valueInteger": 1
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/.PATIENTSTATUS",
+        "valueString": "active"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/patientstatus",
+        "valueString": "active"
+      }
+    ],
+    "contained": [
+      {
+        "resourceType": "Condition",
+        "id": "hypertension",
+        "code": {
+          "text": "diabetes mellitus",
+          "coding": [
+            {
+              "code": "E11.9",
+              "system": "ICD-10",
+              "display": "Type 2 diabetes mellitus without complications"
+            },
+            {
+              "code": "44054006",
+              "system": "SNOMED"
+            }
+          ]
+        },
+        "note": "Patient has well-controlled type 2 diabetes"
+      }
+    ],
+    "id": "123",
+    "identifier": [
+      {
+        "system": "http://tiny.url/encounter/xcaliber-athena-extension",
+        "value": "123"
+      }
+    ],
+    "status": "current",
+    "docStatus": "final",
+    "type": {
+      "coding": [
+        {
+          "system": "http://loinc.org",
+          "code": "67781-5",
+          "display": "Progress note"
+        }
+      ]
+    },
+    "category": [
+      {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "11506-3",
+            "display": "Progress note"
+          }
+        ],
+        "text": "Follow-up note"
+      }
+    ],
+    "author": [
+      {
+        "reference": "Practitioner/pract-P001-1",
+        "display": "Dr. Johnson"
+      }
+    ],
+    "subject": {
+      "reference": "Patient/pt-P001-1"
+    },
+    "context": {
+      "encounter": [
+        {
+          "reference": "Encounter/en-P001-1"
+        },
+        {
+          "reference": "Encounter/en-P001-1"
+        }
+      ],
+      "period": {
+        "start": "2025-10-08T09:00:00.000Z",
+        "end": "2025-10-08T11:30:00.000Z"
+      },
+      "related": [
+        {
+          "reference": "Appointment/ap-P001-1"
+        },
+        {
+          "reference": "Location/loc-P001-1",
+          "display": "Endocrinology Clinic Room 205"
+        }
+      ],
+      "sourcePatientInfo": {
+        "extension": []
+      }
+    },
+    "content": [
+      {
+        "attachment": {
+          "contentType": "text/html",
+          "data": "PGgxPkZvbGxvdy11cCBOb3RlPC9oMT4KPHA+RGlhYmV0ZXMgZm9sbG93LXVwIHZpc2l0Li4uPC9wPg==",
+          "title": "Follow-up note"
+        }
+      }
+    ]
+  },
+  "eligibilityresponse": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "CoverageEligibilityResponse",
+          "event": [
+            {
+              "type": {
+                "coding": [
+                  {
+                    "code": "last-checked",
+                    "system": "athena"
+                  }
+                ]
+              },
+              "whenDateTime": "2025-08-16T14:30:00Z"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/ansi271",
+              "valueString": "271*00*1*0*1234567890*12345*20250816*1430*1*005010X279A1*000000001*0*P*:~"
+            }
+          ],
+          "servicedDate": "2025-08-16",
+          "patient": {
+            "reference": "Patient/pt-P001-1"
+          },
+          "insurance": [
+            {
+              "coverage": {
+                "reference": "Coverage/456"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "encounter": {
+    "resourceType": "Encounter",
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PATIENTSTATUSID",
+        "valueString": "active"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PROVIDERFIRSTNAME",
+        "valueString": "Dr. Maria"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PROVIDERLASTNAME",
+        "valueString": "Rodriguez"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PROVIDERPHONE",
+        "valueString": "555-234-5678"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ENCOUNTERVISITNAME",
+        "valueString": "Diabetes Follow-up"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/LASTREOPENED",
+        "valueDate": "2025-08-14"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/LASTUPDATED",
+        "valueDate": "2025-08-15"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/REVIEWEDANDSIGNEDBY",
+        "valueString": "Dr. Maria Rodriguez"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/REVIEWEDANDSIGNEDDATE",
+        "valueDate": "2025-08-15"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/STATUS",
+        "valueString": "completed"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DEPARTMENTID",
+        "valueString": "456"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/STAGE",
+        "valueString": "active"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CLOSEDDATE",
+        "valueDate": "2025-08-15"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CLOSEDUSER",
+        "valueString": "admin"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PATIENTLOCATION",
+        "valueString": "Room 205"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PATIENTLOCATIONID",
+        "valueInteger": 205
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PATIENTSTATUS",
+        "valueString": "discharged"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PATIENTSTATUSID",
+        "valueString": "3"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/REVIEWED_AND_SIGNED_DATE",
+        "valueDate": "2025-08-15"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/STATUS",
+        "valueString": "completed"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DESCRIPTION",
+        "valueString": "Diabetes management follow-up visit"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DIAGNOSISID",
+        "valueInteger": 789
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/NOTE",
+        "valueString": "Patient shows good glucose control with current regimen"
+      }
+    ],
+    "id": "en-P001-1",
+    "status": "finished",
+    "type": [
+      {
+        "coding": []
+      },
+      {
+        "coding": [
+          {
+            "system": "http://xcaliber-fhir/structureDefinition/XCALIBER_ATHENA_EXTENSION",
+            "code": "office-visit",
+            "display": "office-visit"
+          }
+        ]
+      }
+    ],
+    "subject": {
+      "reference": "Patient/pt-P001-1"
+    },
+    "participant": [
+      {
+        "individual": {
+          "reference": "Practitioner/pract-P001-1"
+        }
+      }
+    ],
+    "appointment": [
+      {
+        "reference": "Appointment/ap-P001-1"
+      }
+    ],
+    "period": {
+      "start": "2025-08-15T09:00:00Z",
+      "end": "2025-08-15T09:30:00Z"
+    },
+    "location": [
+      {
+        "location": {
+          "reference": "Location/loc-P001-1",
+          "type": "Department"
+        }
+      },
+      {
+        "location": {
+          "reference": "Location/loc-P001-1",
+          "display": "Room 205",
+          "type": "Patient"
+        }
+      }
+    ],
+    "contained": [
+      {
+        "resourceType": "Practitioner",
+        "id": "90210",
+        "name": [
+          {
+            "family": "Rodriguez",
+            "given": [
+              "Maria"
+            ],
+            "use": "official"
+          }
+        ]
+      },
+      {
+        "resourceType": "Practitioner",
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "555-234-5678",
+            "use": "work"
+          }
+        ],
+        "name": [
+          {
+            "given": [
+              "Maria"
+            ],
+            "family": "Rodriguez",
+            "use": "official"
+          }
+        ]
+      }
+    ],
+    "class": {
+      "code": "AMB",
+      "display": "ambulatory",
+      "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+    },
+    "diagnosis": [
+      {
+        "use": {
+          "coding": [
+            {
+              "code": "E11.9",
+              "system": "http://snomed.info/sct",
+              "display": "Type 2 diabetes mellitus without complications"
+            },
+            {
+              "code": "E11.9",
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "display": "Type 2 diabetes mellitus without complications"
+            }
+          ]
+        },
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/NOTE",
+            "valueString": "Well-controlled diabetes, continue current management"
+          }
+        ]
+      }
+    ]
+  },
+  "enrollmentrequest": {
+    "resourceType": "EnrollmentRequest",
+    "identifier": [
+      {
+        "system": "insurance-id",
+        "value": "ENR-P001-1-2025"
+      }
+    ],
+    "status": "active",
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CURRENTSTATUSID",
+        "valueInteger": 2
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DEPARTMENTID",
+        "valueDateTime": "2025-08-15T00:00:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DEPARTMENTID",
+        "valueDateTime": "2025-08-01T00:00:00Z"
+      }
+    ]
+  },
+  "episodeofcare": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "EpisodeOfCare",
+          "id": "12345",
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/INITIALEXAMDATE",
+              "valueDate": "2023-01-20"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/LASTMODIFIEDBY",
+              "valueString": "Dr. Martinez"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/LASTMODIFIEDDATETIME",
+              "valueDateTime": "2025-09-22T14:30:00Z"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/PASTPREGNANCY",
+              "valueAnnotation": {
+                "text": "Previous pregnancy notes",
+                "author": {
+                  "authorString": "Dr. Johnson"
+                },
+                "time": "2023-01-10T14:20:00Z"
+              }
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/PRIMARYPROVIDERID",
+              "valueReference": {
+                "reference": "Practitioner/pract-P001-1",
+                "display": "Primary Provider Id"
+              }
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/CLOSEDATETIME",
+              "valueDateTime": "2025-10-08T16:00:00Z"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/CLOSEREASON",
+              "valueString": "Ongoing care management"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/CREATEDBY",
+              "valueString": "Dr. Martinez"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/CREATEDDATETIME",
+              "valueDateTime": "2025-08-15T09:00:00Z"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/DELIVERYDATE",
+              "valueDate": "2023-09-15"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/ESTIMATEDDELIVERYDATE",
+              "valueDate": "2023-09-10"
+            }
+          ],
+          "type": [
+            {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/episodeofcare-type",
+                  "code": "dm",
+                  "display": "Disease Management"
+                }
+              ],
+              "text": "Diabetes and Hypertension Management"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "explanationofbenefit": {
+    "resourceType": "ExplanationOfBenefit",
+    "id": "eob-P001-1",
+    "identifier": [
+      {
+        "value": "EOB-2025-001",
+        "type": {
+          "text": "referral-auth-number"
+        }
+      },
+      {
+        "value": "REQ-456",
+        "type": {
+          "text": "requisition-id"
+        }
+      }
+    ],
+    "benefitPeriod": {
+      "start": "2025-01-01"
+    },
+    "status": "active",
+    "use": "claim",
+    "outcome": "complete",
+    "diagnosis": [
+      {
+        "diagnosisCodeableConcept": {
+          "coding": [
+            {
+              "code": "E11.9"
+            }
+          ]
+        }
+      },
+      {
+        "diagnosisCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "E11.9"
+            }
+          ]
+        }
+      },
+      {
+        "diagnosisCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-9-cm",
+              "code": "250.00"
+            }
+          ]
+        }
+      }
+    ],
+    "procedure": [
+      {
+        "procedureCodeableConcept": {
+          "coding": [
+            {
+              "code": "99214"
+            }
+          ]
+        }
+      },
+      {
+        "procedureCodeableConcept": {
+          "coding": [
+            {
+              "code": "83036"
+            }
+          ]
+        }
+      }
+    ],
+    "insurance": [
+      {
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/insurance-id-number",
+            "valueString": "CV123456"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/insurance-package-name",
+            "valueString": "Comprehensive Health Plan"
+          }
+        ]
+      }
+    ],
+    "provider": {
+      "reference": "Practitioner/pract-P001-1"
+    },
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ansi-name-code",
+        "valueString": "ANSI002"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ansi-specialty-code",
+        "valueString": "ENDO001"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/appointment-ids",
+        "valueString": "ap-P001-1,ap-P001-2"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/department-id",
+        "valueString": "dept-P001-1"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/referral-auth-units",
+        "valueString": "6"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/referred-to-provider-id",
+        "valueString": "pract-P001-1"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/specialty",
+        "valueString": "Endocrinology"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/specialty-id",
+        "valueString": "ENDO001"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/visits-approved",
+        "valueInteger": 3
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/visits-left",
+        "valueInteger": "2"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/specifies-visits",
+        "valueBoolean": true
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/expiration-date",
+        "valueDate": "2025-12-31"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/department-id",
+        "valueString": "dept-P001-1"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/document-id",
+        "valueString": "DOC456"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/end-date",
+        "valueString": "2025-12-31"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/expired",
+        "valueBoolean": false
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/last-modified",
+        "valueString": "2025-08-15T14:30:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/last-modified-by",
+        "valueString": "system"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/no-referral-required",
+        "valueBoolean": false
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/note",
+        "valueString": "Diabetes follow-up visit completed"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/notes-to-provider",
+        "valueString": "Continue current medication regimen"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/referral-auth-units",
+        "valueString": "3"
+      }
+    ]
+  },
+  "familymemberhistory": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "FamilyMemberHistory",
+          "id": "father-123",
+          "patient": {
+            "reference": "Patient/pt-P001-1"
+          },
+          "status": "completed",
+          "relationship": {
+            "coding": [
+              {
+                "code": "FTH",
+                "display": "father"
+              }
+            ]
+          },
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/DEPARTMENTID",
+              "valueString": "dept-P001-1"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/HISTORY_UNKNOWN",
+              "valueString": "false"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/HISTORY_UNKNOWN_LAST_MODIFIED_BY",
+              "valueString": "pract-P001-1"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/HISTORY_UNKNOWN_LAST_MODIFIED_DATE_TIME",
+              "valueString": "2025-08-15T10:30:00Z"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SECTION_NOTE",
+              "valueString": "Family history of hypertension and cardiac issues"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SECTION_NOTE_LAST_MODIFIED_DATE_TIME",
+              "valueString": "2025-08-15T14:30:00Z"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SECTION_NOTE_LAST_MODIFIED_BY",
+              "valueString": "Dr. Martinez"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/DEPARTMENT_ID",
+              "valueString": "dept-P001-1"
+            }
+          ],
+          "condition": [
+            {
+              "code": {
+                "coding": [
+                  {
+                    "code": "38341003",
+                    "display": "Hypertensive disorder",
+                    "system": "http://snomed.info/sct"
+                  }
+                ]
+              },
+              "extension": [],
+              "note": [
+                {
+                  "text": "Diagnosed at age 50, managed with medication"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "goal": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "Goal",
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/ISPRIMARYGOAL",
+              "valueString": "true"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/NAME",
+              "valueString": "Diabetes Management Goal"
+            }
+          ],
+          "category": [
+            {
+              "coding": [
+                {
+                  "system": "athena",
+                  "code": "clinical"
+                }
+              ]
+            }
+          ],
+          "achievementStatus": "in-progress",
+          "target": [
+            {
+              "dueDate": "2025-12-31",
+              "detailString": "HbA1c < 7%",
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/COMPOUNDVALUES",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "athena",
+                        "code": "hba1c",
+                        "display": "7"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "immunization": {
+    "resourceType": "Immunization",
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/VISGIVENDATE",
+        "valueDateTime": "2025-08-15T14:30:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DEPARTMENTID",
+        "valueString": "dept-P001-1"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/VACCINESECTIONNOTE",
+        "valueString": "Patient tolerated influenza vaccine well"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CLINICALORDERCLASSID",
+        "valueInteger": 789
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CLINICALORDERCLASSNAME",
+        "valueString": "Preventive Immunization"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ORDEREDDATE",
+        "valueDateTime": "2025-08-15T10:30:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PARTIALLYADMINISTERED",
+        "valueString": "false"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PRESCRIBEDDATE",
+        "valueDateTime": "2025-08-14"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/VISGIVENDATE",
+        "valueDateTime": "2025-08-15T10:30:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/APPROVEDDATE",
+        "valueDateTime": "2025-08-16T10:30:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SUBMITDATE",
+        "valueDateTime": "2025-08-15T14:20:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DELETED_DATE",
+        "valueDateTime": "2023-12-15T10:30:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/NDC",
+        "valueString": "49281-0627-10"
+      }
+    ],
+    "statusReason": {
+      "coding": [
+        {
+          "code": "CONTRA123",
+          "system": "http://example.com/contraindication",
+          "display": "Medical contraindication"
+        },
+        {
+          "code": "DECLINE456",
+          "system": "http://example.com/declined",
+          "display": "Patient declined"
+        },
+        {
+          "system": "http://xcaliber-fhir/structureDefinition/refused-reason",
+          "display": "Patient declined"
+        }
+      ],
+      "extension": [
+        {
+          "url": "http://xcaliber-fhir/structureDefinition/REFUSEDDATE",
+          "valueDateTime": "2023-10-13"
+        },
+        {
+          "url": "http://xcaliber-fhir/structureDefinition/REFUSEDNOTE",
+          "valueString": "Patient declined vaccination"
+        }
+      ]
+    },
+    "performer": [
+      {
+        "actor": {
+          "display": "Dr. Martinez",
+          "type": "Practitioner"
+        },
+        "function": {
+          "coding": [
+            {
+              "code": "OP"
+            }
+          ]
+        }
+      },
+      {
+        "actor": {
+          "display": "Dr. Martinez"
+        },
+        "function": {
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/APPROVEDBY",
+              "valueString": "APPROVEDBY"
+            }
+          ]
+        }
+      },
+      {
+        "actor": {
+          "display": "Dr. Martinez"
+        },
+        "function": {
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/ENTEREDBY",
+              "valueString": "ENTEREDBY"
+            }
+          ]
+        }
+      },
+      {
+        "actor": {
+          "display": "Dr. Rodriguez",
+          "type": "Practitioner"
+        },
+        "function": {
+          "coding": [
+            {
+              "code": "OP"
+            }
+          ]
+        }
+      },
+      {
+        "actor": {
+          "reference": "Practitioner/pract-P001-1"
+        }
+      }
+    ],
+    "id": "imm-P001-1",
+    "vaccineCode": {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/sid/cvx",
+          "display": "Influenza vaccine"
+        },
+        {
+          "system": "http://hl7.org/fhir/sid/cvx",
+          "display": "Influenza",
+          "code": "141"
+        },
+        {
+          "system": "http://hl7.org/fhir/sid/ndc",
+          "code": "49281-0627-10"
+        }
+      ],
+      "text": "Influenza vaccine"
+    },
+    "patient": {
+      "reference": "Patient/pt-P001-1"
+    },
+    "manufacturer": {
+      "identifier": {
+        "value": "GSK"
+      }
+    },
+    "education": [],
+    "occurrenceDateTime": "2025-08-15T10:30:00Z",
+    "route": {
+      "coding": [
+        {
+          "display": "Intramuscular"
+        }
+      ],
+      "extension": [
+        {
+          "url": "http://xcaliber-fhir/structureDefinition/ADMINISTERROUTEDESCRIPTION",
+          "valueString": "Left deltoid muscle"
+        }
+      ]
+    },
+    "note": [
+      {
+        "text": "Patient tolerated influenza vaccine well",
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/ADMINISTERNOTE",
+            "valueString": "ADMINISTERNOTE"
+          }
+        ]
+      }
+    ],
+    "site": {
+      "coding": [
+        {
+          "display": "Left arm"
+        }
+      ]
+    },
+    "doseQuantity": {
+      "value": 0.5,
+      "unit": "mL"
+    },
+    "status": "completed",
+    "primarySource": true
+  },
+  "insurancepackage": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "InsurancePlan",
+          "id": "12345",
+          "extension": [],
+          "name": "BlueCross Health Plus",
+          "contact": [
+            {
+              "address": {
+                "line": [
+                  "456 Insurance Blvd"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "location": {
+    "resourceType": "Location",
+    "id": "loc-P001-1",
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CHARTSHARINGGROUPID",
+        "valueString": "group123"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CLINICALS",
+        "valueString": "clinical456"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/COMMUNICATORBRANDID",
+        "valueString": "brand789"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CREDITCARDTYPES",
+        "valueString": "[\"visa\",\"mastercard\"]"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DOESNOTOBSERVEDST",
+        "valueString": "false"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ECOMMERCECREDITCARDTYPES",
+        "valueString": "[\"amex\",\"discover\"]"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ISHOSPITALDEPARTMENT",
+        "valueString": "true"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/MEDICATIONHISTORYCONSENT",
+        "valueString": "consent123"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SERVICEDEPARTMENT",
+        "valueBoolean": true
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SINGLEAPPOINTMENTCONTRACTMAX",
+        "valueString": "100"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/TIMEZONE",
+        "valueInteger": -6
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/TIMEZONENAME",
+        "valueString": "America/Chicago"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/TIMEZONEOFFSET",
+        "valueInteger": -360
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/TYPEOFBILL",
+        "valueString": "Endocrinology Department"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/FEDERAL_TAX_ID",
+        "valueString": "12-3456789"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/MEDICATIONHISTORYCONSENT",
+        "valueString": "true"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ONEYEARCONTRACTMAX",
+        "valueString": "Endocrine Provider Group"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PATIENTDEPARTMENTNAME",
+        "valueString": "Dr. Martinez, Dr. Johnson"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PLACEOFSERVICEFACILITY",
+        "valueString": "https://portal.springfieldendo.com"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PORTALURL",
+        "valueString": "https://portal.example.com"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PROVIDERGROUPID",
+        "valueString": "PG123"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PROVIDERGROUPNAME",
+        "valueString": "Main Provider Group"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PROVIDERLIST",
+        "valueString": "Dr. Smith, Dr. Jones"
+      }
+    ],
+    "name": "Springfield Endocrinology Center",
+    "address": {
+      "line": [
+        "456 Medical Plaza Drive",
+        "Suite 200",
+        "Building A"
+      ],
+      "city": "Springfield",
+      "state": "IL",
+      "postalCode": "62701"
+    },
+    "telecom": [
+      {
+        "system": "phone",
+        "value": "555-234-5600"
+      },
+      {
+        "system": "fax",
+        "value": "555-234-5601",
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/clinicalproviderfax",
+            "valueString": "CLINICALPROVIDERFAX"
+          }
+        ]
+      },
+      {
+        "system": "fax",
+        "value": "555-234-5602"
+      }
+    ],
+    "position": {
+      "latitude": 39.7825,
+      "longitude": -89.6495
+    },
+    "type": [
+      {
+        "coding": [
+          {
+            "system": "http://xcaliber-fhir/structureDefinition/placeofservicetype",
+            "code": "11",
+            "display": "Clinic"
+          }
+        ]
+      },
+      {
+        "coding": [
+          {
+            "system": "https://www.athenahealth.com/PLACEOFSERVICETYPE",
+            "code": "11",
+            "display": "Clinic"
+          }
+        ]
+      }
+    ]
+  },
+  "media": {
+    "resourceType": "Media",
+    "identifier": "12345",
+    "status": "completed",
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/APPOINTMENTID",
+        "valueInteger": 67890
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SUBJECT",
+        "valueString": "Diabetic retinal screening"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ASSIGNEDTO",
+        "valueString": "Dr. Rodriguez"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CLINICALPROVIDERID",
+        "valueInteger": 54321
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CREATEDDATE",
+        "valueDate": "2023-10-15"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DELETEDDATETIME",
+        "valueDateTime": "2023-10-20T14:30:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DOCUMENTCLASS",
+        "valueString": "Retinal Photography"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DOCUMENTSOURCE",
+        "valueString": "Ophthalmology Department"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/EXTERNALACCESSIONID",
+        "valueString": "RET-2025-001"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DOCUMENTSOURCE",
+        "valueString": "lab-report"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/EXTERNALACCESSIONID",
+        "valueString": "RET-INT-789"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/EXTERNALNOTE",
+        "valueString": "Routine diabetic eye exam - no retinopathy detected"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/FILESIZE",
+        "valueInteger": 2048
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/INTERNALACCESSIONID",
+        "valueString": "INT789012"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/INTERNALNOTE",
+        "valueString": "routine"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/LASTMODIFIEDDATE",
+        "valueDate": "2023-12-01"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/LASTMODIFIEDDATETIME",
+        "valueDateTime": "2023-12-01T10:30:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PRIORITY",
+        "valueString": "high"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PROVIDERID",
+        "valueInteger": 67890
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PROVIDERUSERNAME",
+        "valueString": "drsmith"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/TIETOORDERID",
+        "valueInteger": 12345
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ACTIONNOTE",
+        "valueInteger": 67890
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/TIETOPROCEDUREORSURGERY",
+        "valueInteger": 54321
+      }
+    ],
+    "issued": "2024-01-15T10:30:00Z",
+    "operator": {
+      "id": "pract-P001-1",
+      "type": "practitioner"
+    },
+    "note": [
+      {
+        "text": "Fundus photography for diabetic retinopathy screening - bilateral images obtained"
+      }
+    ],
+    "createdDateTime": "2024-01-15",
+    "modality": {
+      "coding": [
+        {
+          "code": "digital"
+        }
+      ]
+    },
+    "type": {
+      "coding": [
+        {
+          "code": "fundus-photography",
+          "display": "Fundus Photography"
+        },
+        {
+          "code": "RET",
+          "display": "Retinal Imaging"
+        }
+      ]
+    },
+    "encounter": {
+      "identifier": "en-P001-1"
+    },
+    "content": {
+      "contentType": "image/jpeg",
+      "url": "http://xcaliber-fhir/structureDefinition/retinal-image.jpg",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+      "contained": [
+        {
+          "resourceType": "Media",
+          "status": "completed",
+          "content": {
+            "contentType": "image/jpeg",
+            "url": "http://xcaliber-fhir/structureDefinition/retinal-od.jpg",
+            "id": "retinal-od",
+            "extension": [
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/pageordering",
+                "valueInteger": 1
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "medicationrequest": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "MedicationRequest",
+          "id": "12345",
+          "subject": {
+            "reference": "Patient/pt-P001-1"
+          },
+          "encounter": {
+            "reference": "Encounter/en-P001-1"
+          },
+          "intent": "order",
+          "medicationCodeableConcept": {
+            "coding": [
+              {
+                "system": "ATHENA",
+                "code": "1596450",
+                "display": "Metformin 500mg Tablet"
+              },
+              {
+                "code": "metformin-500",
+                "system": "http://example.com/external-codes",
+                "display": "Metformin hydrochloride 500mg"
+              }
+            ],
+            "text": "Metformin 500mg twice daily for diabetes management"
+          },
+          "statusReason": {
+            "coding": [
+              {
+                "code": "diabetes-control",
+                "system": "http://example.com/contraindications",
+                "display": "Diabetes management"
+              },
+              {
+                "code": "glycemic-control",
+                "system": "http://example.com/declined-reasons",
+                "display": "Glycemic control indication"
+              }
+            ],
+            "text": "Prescribed for diabetes management and glycemic control"
+          },
+          "recorder": {
+            "display": "Dr. Maria Rodriguez"
+          },
+          "doNotPerform": false,
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/DEPARTMENTID",
+              "valueInteger": 201
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/ASSIGNEDUSER",
+              "valueString": "dr.rodriguez"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/FACILITYORDERCODE",
+              "valueString": "ENDO001"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/FACILITYORDERCODEDESCRIPTION",
+              "valueString": "Endocrinology Medication Order"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/LASTMODIFIEDBY",
+              "valueString": "Dr. Maria Rodriguez"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/LASTMODIFIEDDATETIME",
+              "valueDateTime": "2023-10-15T14:30:00Z"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/NDC",
+              "valueString": "00093-1074-01"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/ORDERINGPROVIDER",
+              "valueString": "Dr. Maria Rodriguez"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SPECIMENCOLLECTIONSITE",
+              "valueString": "Oral administration"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/FUTURESUBMITDATE",
+              "valueDate": "2024-01-15"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/EARLIESTFILLDATE",
+              "valueDate": "2024-01-10"
+            }
+          ],
+          "contained": [
+            {
+              "resourceType": "Practitioner",
+              "id": "123",
+              "name": [],
+              "address": []
+            },
+            {
+              "resourceType": "Practitioner",
+              "id": "12345",
+              "name": [
+                {
+                  "text": "Dr. Maria Rodriguez",
+                  "use": "official"
+                }
+              ],
+              "address": [
+                {
+                  "city": "Springfield",
+                  "state": "IL",
+                  "postalCode": "62701"
+                }
+              ],
+              "telecom": [
+                {
+                  "value": "555-234-5679",
+                  "system": "fax"
+                },
+                {
+                  "value": "555-234-5680",
+                  "system": "phone"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/CLIANUMBER",
+                  "valueString": "CLI789012"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "medicationstatement": {
+    "resourceType": "MedicationStatement",
+    "id": "12345",
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/THERAPEUTICCLASS",
+        "valueString": "Antidiabetic"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/UNSTRUCTUREDSIG",
+        "valueString": "Take with food as directed"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SECTION_NOTE",
+        "valueString": "Patient tolerating well"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DEPARTMENTID",
+        "valueString": "DEPT001"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/APPROVEDBY",
+        "valueString": "Dr. Martinez"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DENIEDBY",
+        "valueString": "Dr. Johnson"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DENIEDDATE",
+        "valueDate": "2025-08-20"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/BILLINGNDC",
+        "valueString": "00093-7267-01"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CREATEDBY",
+        "valueString": "Dr. Martinez"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/EARLIESTFILLDATE",
+        "valueString": "2025-08-15T00:00:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/FUTURESUBMITDATE",
+        "valueString": "2025-09-15T00:00:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PHARMACYNCPDPID",
+        "valueString": "1234567890"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PRESCRIBEDBY",
+        "valueString": "Dr. Martinez"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/QUANTITYVALUE",
+        "valueQuantity": {
+          "value": 90,
+          "unit": "tablets"
+        }
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/QUANTITY",
+        "valueInteger": 90
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/QUANTITYUNIT",
+        "valueString": "tablets"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/REFILLSALLOWED",
+        "valueInteger": 2
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ROUTE",
+        "valueString": "oral"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SOURCE",
+        "valueString": "patient"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/THERAPEUTICCLASS",
+        "valueString": "antidiabetic"
+      },
+      {
+        "url": "http://tiny.url/medication-statement/event-type-start",
+        "valueDate": "2025-08-15"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/FUTURESUBMITDATE",
+        "valueString": "2025-09-15T00:00:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ISDISCONTINUED",
+        "valueString": "false"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ISSAFETORENEW",
+        "valueBoolean": true
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ISSTRUCTUREDSIG",
+        "valueString": "true"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/NDCOPTIONS",
+        "valueString": "00093-7267-01"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ORDERINGMODE",
+        "valueString": "electronic"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ORGANCLASS",
+        "valueString": "endocrine"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PHARMACY",
+        "valueString": "Springfield Pharmacy"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PHARMACYNCPDPID",
+        "valueString": "1234567890"
+      }
+    ],
+    "subject": {
+      "reference": "Patient/pt-P001-1"
+    },
+    "medicationCodeableConcept": {
+      "coding": [
+        {
+          "code": "860975",
+          "display": "Metformin 500mg"
+        },
+        {
+          "code": "860975",
+          "display": "Metformin 500mg"
+        },
+        {
+          "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+          "code": "860975"
+        }
+      ]
+    },
+    "note": [
+      {
+        "text": "Patient reports good tolerance",
+        "authorString": "patient"
+      },
+      {
+        "text": "Continue current regimen",
+        "authorString": "practitioner"
+      }
+    ],
+    "informationSource": {
+      "identifier": {}
+    },
+    "effectivePeriod": {
+      "start": "2025-08-15T00:00:00.000Z",
+      "end": "2025-11-15T23:59:59.000Z"
+    },
+    "contained": [
+      {
+        "resourceType": "AuditEvent",
+        "type": {
+          "display": "START"
+        },
+        "agent": [
+          {
+            "who": {
+              "reference": "#athena-Dr. Smith"
+            },
+            "requestor": true
+          }
+        ],
+        "source": {
+          "observer": {
+            "reference": "Organization/org-P001-1"
+          }
+        },
+        "recorded": "2025-08-15T10:30:00Z"
+      },
+      {
+        "resourceType": "Organization",
+        "id": "athena-org",
+        "name": "Springfield Medical Center"
+      }
+    ],
+    "status": "active",
+    "medicationReference": {
+      "reference": "Medication/med123"
+    },
+    "statusReason": [
+      {
+        "coding": [
+          {
+            "display": "Ongoing treatment"
+          }
+        ]
+      }
+    ]
+  },
+  "observation": {
+    "resourceType": "Observation",
+    "id": "123",
+    "status": "final",
+    "code": {
+      "coding": [
+        {
+          "system": "http://loinc.org",
+          "code": "33747-0",
+          "display": "Hemoglobin A1c/Hemoglobin.total in Blood"
+        }
+      ]
+    },
+    "issued": "2025-08-15T10:30:00Z",
+    "referenceRange": [
+      {
+        "high": {
+          "value": 7.0
+        },
+        "low": {
+          "value": 4.0
+        },
+        "extension": []
+      },
+      {
+        "high": {
+          "value": 6.5
+        },
+        "low": {
+          "value": 5.7
+        },
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/highordinal",
+            "valueString": "95th"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/lowordinal",
+            "valueString": "5th"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/prefix",
+            "valueString": ">"
+          }
+        ]
+      }
+    ],
+    "subject": {
+      "reference": "Patient/pt-P001-1",
+      "id": "123"
+    },
+    "category": [
+      {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+            "code": "laboratory",
+            "display": "Laboratory"
+          }
+        ]
+      }
+    ],
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CLINICALELEMENTID",
+        "valueString": "HbA1c-12345"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CREATEDBY",
+        "valueString": "provider456"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CREATEDDATE",
+        "valueString": "2025-08-15T10:30:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ISGRAPHABLE",
+        "valueBoolean": true
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/LASTMODIFIEDBY",
+        "valueString": "Dr. Martinez"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/LASTMODIFIEDDATE",
+        "valueString": "2025-08-15T10:30:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/READINGID",
+        "valueInteger": 54321
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SOURCE",
+        "valueString": "Laboratory System"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SOURCEID",
+        "valueInteger": 98765
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CREATEDBY",
+        "valueString": "Lab Tech"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/12345",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "33747-0",
+              "display": "Hemoglobin A1c/Hemoglobin.total in Blood"
+            }
+          ]
+        }
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CREATEDBY",
+        "valueString": "Dr. Martinez"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CREATEDDATE",
+        "valueString": "2025-08-15T10:30:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/LASTMODIFIEDBY",
+        "valueString": "Dr. Martinez"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/LASTMODIFIEDDATE",
+        "valueString": "2025-08-15T10:30:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SOURCE",
+        "valueString": "lab_system"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SOURCEID",
+        "valueInteger": 54321
+      }
+    ],
+    "component": [
+      {
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "33747-0",
+              "display": "Hemoglobin A1c/Hemoglobin.total in Blood"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 6.8,
+          "unit": "%"
+        }
+      },
+      {
+        "id": "hba1c-component",
+        "code": {},
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/SOURCE",
+            "valueString": "lab_system"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/SOURCEID",
+            "valueInteger": 54321
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/CLINICALELEMENTID",
+            "valueString": "HbA1c-component-12345"
+          }
+        ]
+      }
+    ],
+    "bodySite": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "87612001",
+          "display": "Blood"
+        }
+      ]
+    }
+  },
+  "organization": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "Organization",
+          "id": "123",
+          "name": "Springfield Medical Center",
+          "contact": [
+            {
+              "telecom": [
+                {
+                  "system": "fax",
+                  "value": "555-234-5678"
+                },
+                {
+                  "system": "phone",
+                  "value": "555-234-5679"
+                }
+              ],
+              "address": {
+                "line": [
+                  "123 Oak Street"
+                ],
+                "city": "Springfield",
+                "state": "IL",
+                "postalCode": "62701",
+                "country": "US"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/notes",
+              "valueString": "Multi-specialty medical center serving Springfield area"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/ordering",
+              "valueString": "Primary care and specialty services"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/category",
+              "valueString": "healthcare"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "patient": {
+    "resourceType": "Patient",
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PRIMARYDEPARTMENTID",
+        "valueString": "123"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DEPARTMENTID",
+        "valueInteger": 456
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/REFERRALSOURCEID",
+        "valueString": "789"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/REGISTRATIONDATE",
+        "valueString": "2023-01-15"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/REFERRALSOURCEOTHER",
+        "valueString": "Other referral source"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SEXUALORIENTATION",
+        "valueString": "heterosexual"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SEXUALORIENTATIONOTHER",
+        "valueString": "Other orientation"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SSN",
+        "valueString": "555-12-3456"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/STATUS",
+        "valueString": "active"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/LEGALSEX",
+        "valueCode": "F"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SEX",
+        "valueCode": "F"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CLINICALORDERTYPEGROUPID",
+        "valueString": "Administrative Assistant"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/COUNTRYCODE",
+        "valueString": "US"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DEFAULTPHARMACYNCPDPID",
+        "valueString": "67890"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ETHNICITYCODES",
+        "valueCode": "2135-2"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ETHNICITYCODES",
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/ETHNICITYCODES",
+            "valueCode": "2135-2"
+          }
+        ]
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/GENDERIDENTITYOTHER",
+        "valueString": "Prefers morning appointments for diabetes management"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/IGNORERESTRICTIONS",
+        "valueBoolean": true
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/INDUSTRYCODE",
+        "valueString": "62"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/MOBILECARRIERID",
+        "valueString": "she/her"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/NOTES",
+        "valueString": "Patient prefers morning appointments"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PORTALACCESSGIVEN",
+        "valueBoolean": true
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PREFERREDPRONOUNS",
+        "valueString": "they/them"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/GUARANTORADDRESSSAMEASPATIENT",
+        "valueBoolean": true
+      },
+      {
+        "url": "us-core-birthsex",
+        "valueCode": "F"
+      },
+      {
+        "url": "clinical-order-type-group-id",
+        "valueString": "12345"
+      },
+      {
+        "url": "countrycode",
+        "valueString": "US"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/NEXTKINNAME",
+        "valueString": null
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/NEXTKINPHONE",
+        "valueString": null
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/NEXTKINRELATIONSHIP",
+        "valueString": null
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/PRIMARYDEPARTMENTID",
+        "valueInteger": 123
+      }
+    ],
+    "birthDate": "1978-03-15T00:00:00",
+    "id": "pt-P001-1",
+    "name": [
+      {
+        "given": [
+          "Maria",
+          "Elena"
+        ],
+        "use": "official",
+        "suffix": "Jr",
+        "family": "Santos"
+      },
+      {
+        "given": [
+          "Maria",
+          "Elena"
+        ],
+        "family": "Santos",
+        "suffix": "Jr"
+      },
+      {
+        "use": "official",
+        "given": [
+          "Maria",
+          "Elena"
+        ],
+        "family": "Santos",
+        "suffix": "Jr",
+        "text": null
+      },
+      {
+        "use": "usual",
+        "given": [
+          null
+        ]
+      },
+      {
+        "use": "old",
+        "given": [
+          null
+        ]
+      }
+    ],
+    "communication": [
+      {
+        "language": {
+          "coding": [
+            {
+              "code": null
+            }
+          ]
+        }
+      }
+    ],
+    "address": [
+      {
+        "city": "Springfield",
+        "state": "IL",
+        "postalCode": "62701",
+        "line": [
+          "123 Oak Street",
+          "Apt 2A"
+        ],
+        "country": "US"
+      },
+      {
+        "line": [
+          "123 Oak Street",
+          "Apt 2A"
+        ],
+        "city": "Springfield",
+        "state": "IL",
+        "postalCode": "62701",
+        "country": "US",
+        "extension": []
+      }
+    ],
+    "identifier": [
+      {
+        "system": "https://xcaliberapis.structureDefinition/guarantor-ssn",
+        "value": "555-12-3456"
+      },
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "DL"
+            }
+          ]
+        },
+        "value": null
+      },
+      {
+        "type": {
+          "coding": [
+            {
+              "code": "DL"
+            }
+          ]
+        },
+        "value": "555-12-3456",
+        "period": {
+          "end": "2025-01-15T00:00:00"
+        },
+        "assigner": {
+          "reference": "Patient/pt-P001-1"
+        }
+      },
+      {
+        "system": "industry",
+        "value": "56"
+      },
+      {
+        "system": "occupation",
+        "value": "43-4061"
+      }
+    ],
+    "patient": {
+      "reference": "Patient/pt-P001-1"
+    },
+    "contact": [
+      {
+        "relationship": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+                "code": "E",
+                "display": "Employer"
+              }
+            ]
+          }
+        ],
+        "telecom": [
+          {
+            "system": "email",
+            "value": "maria.santos@email.com"
+          },
+          {
+            "system": "phone",
+            "value": "(555) 234-5678"
+          }
+        ],
+        "address": {
+          "line": [
+            "123 Oak Street"
+          ],
+          "city": "Springfield",
+          "state": "IL",
+          "postalCode": "62701",
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/GUARANTORADDRESSSAMEASPATIENT",
+              "valueBoolean": true
+            }
+          ]
+        },
+        "extension": [
+          [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/GUARANTOREMPLOYERID",
+              "valueId": "EMP123"
+            }
+          ]
+        ]
+      },
+      {
+        "telecom": [
+          {
+            "system": "phone",
+            "use": "home",
+            "value": "(555) 234-5678"
+          },
+          {
+            "system": "phone",
+            "use": "mobile",
+            "value": "(555) 234-5678"
+          }
+        ],
+        "name": {
+          "text": "Maria Santos"
+        },
+        "relationship": [
+          {
+            "coding": [
+              {
+                "code": "EP",
+                "display": "Employer"
+              }
+            ]
+          }
+        ],
+        "extension": [
+          {
+            "url": "contactpreference",
+            "valueString": "email"
+          }
+        ]
+      }
+    ],
+    "deceasedDateTime": null,
+    "contained": [
+      {
+        "resourceType": "RelatedPerson",
+        "id": "123",
+        "relationship": [
+          {
+            "coding": [
+              {
+                "code": "E"
+              }
+            ]
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "(555) 234-5678"
+          }
+        ]
+      }
+    ],
+    "telecom": [
+      {
+        "system": "phone",
+        "use": "work",
+        "value": "(555) 234-5678"
+      },
+      {
+        "system": "phone",
+        "use": "mobile",
+        "value": "(555) 234-5678",
+        "extension": [
+          {
+            "url": "contactpreference-lab-sms",
+            "valueBoolean": true
+          }
+        ]
+      },
+      {
+        "system": "email",
+        "value": "maria.santos@email.com"
+      },
+      {
+        "system": "phone",
+        "use": "home",
+        "value": "(555) 234-5678"
+      },
+      {
+        "system": "phone",
+        "use": "work",
+        "value": "(555) 234-5679"
+      },
+      {
+        "system": "phone",
+        "use": "mobile",
+        "value": "(555) 234-5680"
+      }
+    ],
+    "generalPractitioner": [
+      {
+        "reference": "Practitioner/pract-P001-1"
+      }
+    ],
+    "gender": "F",
+    "maritalStatus": {
+      "coding": [
+        {
+          "code": "S"
+        }
+      ]
+    }
+  },
+  "paymentnotice": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "PaymentNotice",
+          "id": "123",
+          "created": "2024-01-15T00:00:00",
+          "identifier": [
+            {
+              "type": {
+                "text": "epayment-id"
+              },
+              "value": "epay-P001-1"
+            },
+            {
+              "type": {
+                "text": "epayment-receipt-id"
+              },
+              "value": "receipt-P001-1"
+            },
+            {
+              "type": {
+                "text": "pre-payment-id"
+              },
+              "value": "prepay-P001-1"
+            },
+            {
+              "type": {
+                "text": "transaction-id"
+              },
+              "value": "txn-P001-1"
+            }
+          ],
+          "recipient": {
+            "reference": "Practitioner/pract-P001-1"
+          },
+          "amount": {
+            "value": "275.00"
+          },
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/check-ccnumber",
+              "valueString": "5678"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/payment-method",
+              "valueString": "credit-card"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/name-on-card",
+              "valueString": "Maria Santos"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/original-plan",
+              "valueString": "Plan-P001-1"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/patient-id",
+              "valueString": "pt-P001-1"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/place-of-payment",
+              "valueString": "Springfield Medical Center"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/reason",
+              "valueString": "Diabetes and hypertension care payment"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/type",
+              "valueString": "Standard"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/post-date",
+              "valueDate": "2023-12-01"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "person": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "Person",
+          "id": "123",
+          "name": [
+            {
+              "family": "Santos",
+              "given": [
+                "Maria"
+              ],
+              "text": "Maria Santos"
+            }
+          ],
+          "identifier": [
+            {
+              "system": "http://hl7.org/fhir/sid/us-npi",
+              "value": "987654321"
+            },
+            {
+              "system": "http://xcaliber-fhir/structureDefinition/FEDERALIDNUMBER",
+              "value": "555234567"
+            }
+          ],
+          "telecom": [
+            {
+              "system": "email",
+              "value": "maria.santos@email.com"
+            },
+            {
+              "system": "email",
+              "value": "maria.santos.alt@email.com"
+            }
+          ],
+          "gender": "female",
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SPECIALTY",
+              "valueString": "Endocrinology"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SPECIALTYID",
+              "valueInteger": 201
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SUPERVISINGPROVIDERID",
+              "valueInteger": 789
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SUPERVISINGPROVIDERUSERNAME",
+              "valueString": "supervisor456"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/USUALDEPARTMENTID",
+              "valueInteger": 456
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/ACCEPTINGNEWPATIENTSYN",
+              "valueString": "Y"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/BILLABLE",
+              "valueString": "Y"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/CREATEENCOUNTERONCHECKINYN",
+              "valueString": "Y"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/CREATEENCOUNTERPROVIDERIDLIST",
+              "valueString": "789,456"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/ENTITYTYPE",
+              "valueString": "PATIENT"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/HIDEINPORTALYN",
+              "valueString": "N"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/HOMEDEPARTMENT",
+              "valueString": "General Practice"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/OTHERPROVIDERIDLIST",
+              "valueString": "78901,23456"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/PERSONALPRONOUNS",
+              "valueString": "she/her"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/PROVIDERGROUPLIST",
+              "valueString": "Group C,Group D"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/PROVIDERTYPE",
+              "valueString": "Patient"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/PROVIDERTYPEID",
+              "valueString": "PT001"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/PROVIDERUSERNAME",
+              "valueString": "msantos"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SCHEDULERESOURCETYPE",
+              "valueString": "Patient"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SCHEDULINGNAME",
+              "valueString": "Maria Santos"
+            }
+          ],
+          "contained": [
+            {
+              "resourceType": "PractitionerRole",
+              "specialty": [
+                {
+                  "coding": [
+                    {
+                      "display": "Endocrinology",
+                      "code": "207RE0101X"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "practitioner": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "Practitioner",
+          "id": "pract-P001-1",
+          "identifier": [
+            {
+              "system": "http://hl7.org/fhir/sid/us-npi",
+              "value": "1234567890"
+            },
+            {
+              "system": "http://xcaliber-fhir/structureDefinition/FEDERALIDNUMBER",
+              "value": "987654321"
+            }
+          ],
+          "name": [
+            {
+              "family": "Rodriguez",
+              "given": [
+                "Elena"
+              ],
+              "text": "Dr. Elena Rodriguez"
+            }
+          ],
+          "telecom": [
+            {
+              "system": "email",
+              "value": "elena.rodriguez@healthcare.com"
+            }
+          ],
+          "gender": "female",
+          "qualification": [
+            {
+              "code": {
+                "coding": [
+                  {
+                    "system": "practitioner-specialty-system",
+                    "display": "Endocrinology",
+                    "code": "207RE0101X"
+                  }
+                ]
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/ACCEPTINGNEWPATIENTSYN",
+              "valueString": "Y"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/BILLABLE",
+              "valueBoolean": true
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/CREATEENCOUNTERONCHECKINYN",
+              "valueString": "Y"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/CREATEENCOUNTERPROVIDERIDLIST",
+              "valueString": "123,456"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/ENTITYTYPE",
+              "valueString": "PERSON"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SCHEDULERESOURCETYPE",
+              "valueString": "PROVIDER"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SCHEDULINGNAME",
+              "valueString": "Dr. Elena Rodriguez"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SUPERVISINGPROVIDERID",
+              "valueInteger": 67891
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/SUPERVISINGPROVIDERUSERNAME",
+              "valueString": "supervisor124"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/USUALDEPARTMENTID",
+              "valueInteger": 102
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/HIDEINPORTALYN",
+              "valueString": "N"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/HOMEDEPARTMENT",
+              "valueString": "ENDOCRINOLOGY"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/OTHERPROVIDERIDLIST",
+              "valueString": "123,456,790"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/PERSONALPRONOUNS",
+              "valueString": "she/her"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/PROVIDERGROUPLIST",
+              "valueString": "GROUP1,GROUP3"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/PROVIDERTYPE",
+              "valueString": "MD"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/PROVIDERTYPEID",
+              "valueString": "12346"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/PROVIDERUSERNAME",
+              "valueString": "erodriguez"
+            }
+          ],
+          "contained": [
+            {
+              "resourceType": "PractitionerRole",
+              "specialty": [
+                {
+                  "coding": [
+                    {
+                      "system": "http://xcaliber-fhir/structureDefinition/PRACTITIONERSPECIALITY",
+                      "display": "Endocrinology",
+                      "code": "207RE0101X"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "practitionerRole": {
+    "resourceType": "PractitionerRole",
+    "id": "prrole-P001-1",
+    "practitioner": {
+      "reference": "Practitioner/pract-P001-1"
+    },
+    "location": [
+      {
+        "reference": "Location/loc-P001-1",
+        "display": "Endocrinology Clinic"
+      },
+      {
+        "reference": "Location/loc-P001-1",
+        "display": "Primary Care Center"
+      }
+    ],
+    "organization": {
+      "reference": "Organization/org-P001-1"
+    }
+  },
+  "procedure": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "Procedure",
+          "id": "456",
+          "subject": {
+            "reference": "Patient/pt-P001-1"
+          },
+          "status": "completed",
+          "performedDateTime": "2024-01-15T10:30:00Z",
+          "code": {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "252160004",
+                "display": "Standard ECG"
+              }
+            ]
+          },
+          "note": [
+            {
+              "text": "ECG performed as part of hypertension evaluation. Normal sinus rhythm, no acute changes noted."
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "provenance": {
+    "documentId": "doc-P001-1",
+    "taskIds": [
+      "task-P001-1",
+      "task-P001-2"
+    ],
+    "timestamp": "2025-10-08T14:30:00Z"
+  },
+  "questionnaire": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "Questionnaire",
+          "id": "123",
+          "name": "Diabetes Management Intake Form",
+          "publisher": "Springfield Endocrinology Associates",
+          "date": "2023-01-15T00:00:00",
+          "status": "active",
+          "item": [
+            {
+              "id": "q1",
+              "linkId": "question-1",
+              "text": "How well controlled has your diabetes been in the past 3 months?",
+              "type": "choice",
+              "initial": [
+                {
+                  "valueString": "Well controlled"
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueString": "Well controlled"
+                },
+                {
+                  "valueString": "Moderately controlled"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/hidden",
+                  "valueString": "false"
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/header-text",
+                  "valueString": "Section Header"
+                }
+              ]
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/template-id",
+              "valueString": "template-123"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/category",
+              "valueString": "diabetes-intake"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/template-type",
+              "valueString": "intake"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/declined-reason-text",
+              "valueString": "Patient declined to complete intake form"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/note",
+              "valueString": "Diabetes management intake questionnaire for follow-up visits"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/document-ids",
+              "valueString": "doc123,doc456"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/guidelines",
+              "valueString": "Follow standard screening guidelines"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/maximum-score",
+              "valueString": "Follow ADA diabetes management guidelines"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/metaquestions",
+              "valueString": "50"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/score",
+              "valueString": "{\"diabetes_control\":\"hba1c_target\"}"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "questionnaireresponse": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "QuestionnaireResponse",
+          "id": "123",
+          "subject": {
+            "reference": "Patient/pt-P001-1"
+          },
+          "status": "completed",
+          "questionnaire": "Questionnaire/789",
+          "authored": "2024-01-15T10:30:00Z",
+          "item": [
+            {
+              "linkId": "question_key_1",
+              "text": "How are you managing your chronic conditions?",
+              "answer": [
+                {
+                  "valueString": "I'm managing well with my diabetes and blood pressure medications"
+                }
+              ],
+              "extension": []
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/category",
+              "valueString": "chronic-care"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/DEPRECATED",
+              "valueString": "false"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/LASTUPDATEDBY",
+              "valueString": "pract-P001-1"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/NOTE",
+              "valueString": "Patient reports good adherence to diabetes and hypertension management plan"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/NOTELASTUPDATEDBY",
+              "valueString": "pract-P001-1"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/NOTELASTUPDATEDDATE",
+              "valueString": "2024-01-15"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/NOTPERFORMEDREASON",
+              "valueString": "Patient compliant with treatment"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/ORDERING",
+              "valueInteger": 1
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "servicerequest": {
+    "resourceType": "ServiceRequest",
+    "id": "12345",
+    "intent": "order",
+    "encounter": {
+      "reference": "Encounter/en-P001-1"
+    },
+    "subject": {
+      "reference": "Patient/pt-P001-1"
+    },
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DEPARTMENTID",
+        "valueInteger": 200
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/EARLIESTFILLDATE",
+        "valueString": "2025-08-15"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/LASTMODIFIEDBY",
+        "valueString": "provider456"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/MODIFIEDDATETIME",
+        "valueString": "2025-08-15T09:00:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/NDC",
+        "valueId": "12345-678-90"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/ORDERINGPROVIDER",
+        "valueString": "Dr. Johnson"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/REFILLS",
+        "valueString": "3"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CONTRAINDICATIONREASON",
+        "valueCodableConcept": {
+          "coding": [
+            {
+              "system": "ICD10",
+              "code": "Z87.891",
+              "description": "Personal history of diabetes"
+            }
+          ]
+        }
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CREATEDUSER",
+        "valueInteger": 789
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/CLASS",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "code": "LAB",
+              "display": "Laboratory"
+            }
+          ]
+        }
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SPECIMENCOLLECTIONSITE",
+        "valueString": "left arm"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/REQUESTEDVISITS",
+        "valueString": "1"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/DATEOFSERVICE",
+        "valueDateTime": "2025-08-15T09:00:00Z"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/SECTIONNAMEKEY",
+        "valueString": "diabetes-monitoring"
+      },
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/FLOWSHEETID",
+        "valueString": "67890"
+      }
+    ],
+    "contained": [
+      {
+        "resourceType": "DocumentReference",
+        "category": [
+          {
+            "coding": [
+              {
+                "code": "LAB",
+                "extension": [
+                  {
+                    "url": "http://xcaliber-fhir/structureDefinition/document-subclass",
+                    "valueString": "BLOOD"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "custodian": {
+          "reference": "Practitioner/pract-P001-1"
+        }
+      },
+      {
+        "resourceType": "Practitioner",
+        "id": "12345",
+        "identifier": [],
+        "name": [
+          {
+            "text": "Dr. Maria Johnson",
+            "use": "official"
+          },
+          {
+            "use": "usual",
+            "text": "Maria Johnson MD"
+          }
+        ],
+        "address": [],
+        "telecom": [
+          {
+            "value": "555-234-5678",
+            "system": "fax"
+          }
+        ],
+        "extension": []
+      },
+      {
+        "resourceType": "Coverage",
+        "id": "12345",
+        "identifier": [
+          {
+            "system": "insurance-package-id",
+            "value": "PKG456"
+          }
+        ],
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/VISITSAPPROVED",
+            "valueString": "5"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/MEMBERID",
+            "valueString": "MBR789"
+          }
+        ],
+        "period": {
+          "start": "2025-01-01T00:00:00",
+          "end": "2025-12-31T00:00:00"
+        }
+      },
+      {
+        "resourceType": "DocumentReference",
+        "id": "doc123",
+        "category": {
+          "coding": [
+            {
+              "system": "athena",
+              "code": "LAB"
+            }
+          ]
+        },
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/SECTIONNAMEKEY",
+            "valueString": "diabetes-monitoring"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/FLOWSHEETID",
+            "valueString": "67890"
+          }
+        ],
+        "description": "Diabetes monitoring lab results",
+        "context": {
+          "encounter": [
+            {
+              "reference": "Encounter/en-P001-1"
+            }
+          ]
+        }
+      },
+      {
+        "resourceType": "DocumentReference",
+        "id": "doc789",
+        "category": {
+          "coding": [
+            {
+              "system": "athena",
+              "code": "REPORT"
+            }
+          ]
+        }
+      },
+      {
+        "resourceType": "Practitioner"
+      },
+      {
+        "resourceType": "QuestionnaireResponse",
+        "item": [
+          {
+            "text": "What is your primary concern?",
+            "answer": [
+              {
+                "valueString": "Chest pain"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "resourceType": "Coverage",
+        "extension": [
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/SEQUENCENUMBER",
+            "valueInteger": 1
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/ADDITIONALINFORMATION",
+            "valueString": "Additional coverage info"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/AUTHORIZATIONNUMBER",
+            "valueString": "AUTH123456"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/AUTHORIZATIONSTATUS",
+            "valueString": "approved"
+          },
+          {
+            "url": "http://xcaliber-fhir/structureDefinition/VISITSAPPROVED",
+            "valueString": "5"
+          }
+        ]
+      }
+    ],
+    "performerType": {
+      "coding": [
+        {
+          "system": "ATHENA",
+          "code": "12345",
+          "display": "Endocrinology Lab Order"
+        }
+      ]
+    },
+    "class": [
+      {
+        "name": "Aetna Better Health"
+      }
+    ]
+  },
+  "slot": {
+    "id": "123456",
+    "status": "free",
+    "patient": {
+      "reference": "Patient/pt-P001-1"
+    },
+    "departmentId": {
+      "reference": "departmentId/1"
+    },
+    "extension": [
+      {
+        "url": "http://xcaliber-fhir/structureDefinition/department-id",
+        "valueString": "dept-P001-1"
+      }
+    ]
+  },
+  "tasks": {
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "Task",
+          "id": "123",
+          "authoredOn": "2025-09-22T14:30:00Z",
+          "status": "requested",
+          "priority": "routine",
+          "description": "Diabetes management follow-up required",
+          "owner": {
+            "reference": "Patient/pt-P001-1"
+          },
+          "intent": "order",
+          "code": {
+            "coding": [
+              {
+                "system": "http://xcaliber-fhir/structureDefinition/sub-type",
+                "code": "182856006",
+                "display": "Diabetes follow-up"
+              },
+              {
+                "system": "http://xcaliber-fhir/structureDefinition/inbox-category",
+                "display": "Endocrinology"
+              }
+            ]
+          },
+          "extension": [
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/department-id",
+              "valueString": "ENDO"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/document-class",
+              "valueString": "Clinical Note"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/document-subclass",
+              "valueString": "Follow-up Note"
+            },
+            {
+              "url": "http://xcaliber-fhir/structureDefinition/result-category",
+              "valueString": "Lab Results"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
