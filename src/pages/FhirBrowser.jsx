@@ -2,7 +2,7 @@ const BASE = import.meta.env.VITE_API_BASE;
 const TOKEN = import.meta.env.VITE_API_TOKEN;
 const ECW_URL = import.meta.env.VITE_ECW_BASE_URL;
 const ECW_SOURCE_ID = import.meta.env.VITE_ECW_SOURCE_ID;
-const ATHENA_SOURCE_ID = import.meta.env.VITE_REFERENCE_SOURCE_ID;
+const ATHENA_SOURCE_ID = import.meta.env.VITE_SOURCE_ID_ATHENA;
 const ELATION_SOURCE_ID = import.meta.env.VITE_REFERENCE_SOURCE_ID;
 import React, { useEffect, useState, useContext } from "react";
 import mockElation from "../mock-data/mock-elation.json";
@@ -134,7 +134,7 @@ const resourceIconMap = {
 };
 
 function FhirBrowser() {
-  const { ehr } = useContext(AppContext);
+  const { parentEhr,ehr } = useContext(AppContext);
   const [endpoints, setEndpoints] = useState([]);
   const [filteredEndpoints, setFilteredEndpoints] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -223,7 +223,7 @@ function FhirBrowser() {
   };
 
   const { baseUrl, endpointsFile, headers, defaultParams = {} } =
-    EHR_CONFIG[ehr] || {};
+    EHR_CONFIG[parentEhr] || {};
 
   useEffect(() => {
     if (!searchTerm) {
@@ -263,10 +263,10 @@ useEffect(() => {
     Veradigm: mockVeradigm,
     PointClickCare:mockPointClickCare
   };
-
-  if (mockMap[ehr]) {
+  console.log(parentEhr, "rftuygiu", ehr)
+  if (mockMap[parentEhr]) {
     setEndpoints(
-      Object.keys(mockMap[ehr]).map((res) => ({
+      Object.keys(mockMap[parentEhr]).map((res) => ({
         resource: res,
         displayName: res,
         path: `/${res}`
@@ -294,49 +294,49 @@ useEffect(() => {
     setResourceList([]);
     setSelectedResourceId(null);
     setResourceSearchTerm("");
-
+    console.log(parentEhr)
     // 🧩 Build params from endpoint defaults + global defaults
-    if (ehr === "Elation") {
+    if (parentEhr === "Elation") {
     const resources = mockElation[endpoint.resource] || [];
     setResourceList(resources);
     return; // do not hit API
     }
-    if (ehr === "Epic") {
+    if (parentEhr === "Epic") {
     const resources = mockEpic[endpoint.resource] || [];
     setResourceList(resources);
     return; // do not hit API
     }
-    if (ehr === "Kno2") {
+    if (parentEhr === "Kno2") {
       const resources = mockKno2[endpoint.resource] || [];
       setResourceList(resources);
       return;
     }
 
-    if (ehr === "Cerner") {
+    if (parentEhr === "Cerner") {
       const resources = mockCerner[endpoint.resource] || [];
       setResourceList(resources);
       return;
     }
 
-    if (ehr === "Meditech") {
+    if (parentEhr === "Meditech") {
       const resources = mockMeditech[endpoint.resource] || [];
       setResourceList(resources);
       return;
     }
 
-    if (ehr === "PracticeFusion") {
+    if (parentEhr === "PracticeFusion") {
       const resources = mockpracticefusion[endpoint.resource] || [];
       setResourceList(resources);
       return;
     }
 
-    if (ehr === "Veradigm") {
+    if (parentEhr === "Veradigm") {
       const resources = mockVeradigm[endpoint.resource] || [];
       setResourceList(resources);
       return;
     }
-    if (ehr === "Veradigm") {
-      const resources = mockVeradigm[endpoint.resource] || [];
+    if (parentEhr === "PointClickCare") {
+      const resources = mockPointClickCare[endpoint.resource] || [];
       setResourceList(resources);
       return;
     }
@@ -386,7 +386,8 @@ useEffect(() => {
     try {
       const res = await axios.get(url, { headers });
       let resources = [];
-      if(ehr === "ECW"){
+      if(parentEhr === "ECW"){
+        console.log(res)
         resources = res.data.data.entry?.map((entry) => entry.resource) || [];
       }else{
         resources = res.data.entry?.map((entry) => entry.resource) || [];
@@ -456,6 +457,13 @@ useEffect(() => {
       console.error("Failed to copy:", err);
     }
   };
+  useEffect(() => {
+  if (endpoints.length > 0 && !selected) {
+    // Auto-select the first endpoint
+    handleSelect(endpoints[0]);
+  }
+}, [endpoints, selected]);
+
 
   const handleDownload = () => {
     const blob = new Blob([jsonString], { type: "application/json" });
