@@ -597,7 +597,7 @@ const MediaIngestion = ({ url, type, onLoad }) => {
   );
 };
 
-export default function ContentIntegrations() {
+export default function KnowledgeSource() {
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -729,7 +729,7 @@ export default function ContentIntegrations() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Content Integrations
+            Knowledge Source
           </h1>
           <p className="text-gray-600">
             Ingest and process content from Google Drive, YouTube, Dropbox, and
