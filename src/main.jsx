@@ -61,7 +61,7 @@ import ClaimsDataStreaming from "./pages/ClaimsDataStreaming";
 import ChartSummarizer from "./pages/ChartSummarize";
 import DocumentLabeling from "./pages/DocumentLabeling";
 import RawBrowser from "./pages/RawBrowser";
-import ContentIntegrations from "./pages/ContentIntegrations";
+import KnowledgeSource from "./pages/KnowledgeSource";
 
 // ✅ Wrapper to inject props into VitalsTab
 function VitalsTabWrapper() {
@@ -122,7 +122,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
         <Route path="/bulk-data-extraction" element={<BulkDataExtraction />} />
         {/* Content Integrations */}
-        <Route path="/contentIntegrations" element={<ContentIntegrations />} />
+        <Route path="/knowledgesource" element={<KnowledgeSource />} />
 
         <Route path="/claims-streaming" element={<ClaimsDataStreaming />} />
         <Route path="/chart-summary" element={<ChartSummarizer />} />

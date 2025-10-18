@@ -261,8 +261,8 @@ export default function DashboardLayout() {
         },
         { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
         {
-          to: "/contentIntegrations",
-          label: "Content Integrationss",
+          to: "/knowledgesource",
+          label: "Knowledge Source",
           icon: Airplay,
         },
       ],
