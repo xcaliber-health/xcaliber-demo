@@ -1,7 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import { useState } from "react";
 import { ArrowLeft, Brain, FileText, Loader2 } from "lucide-react";
-
+const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
 export default function ChartSummarizer() {
   const id = "7002";
   const [summary, setSummary] = useState("");
@@ -118,31 +118,31 @@ export default function ChartSummarizer() {
     },
   ];
 
-  const handleChartSummarizer = async () => {
-    setLoading(true);
-    setSummary("");
-    try {
-      const input = "Please summarize the patient's history for review.";
-      const response = await fetch(
-        "https://dev-ray-serve.xcaliberhealth.io/provider-assistant/v1/chat/completions",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: [{ content: input }] }),
-        }
-      );
+const handleChartSummarizer = async () => {
+  setLoading(true);
+  setSummary("");
 
-      if (!response.ok) throw new Error(`HTTP error ${response.status}`);
-      const data = await response.json();
-      const reply = data?.choices?.[0]?.message?.content || "⚠️ No response";
-      setSummary(reply);
-    } catch (error) {
-      console.error("Error calling agent API:", error);
-      setSummary("⚠️ Sorry, the assistant is unavailable right now.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const url = `${SAMPLE_BFF_URL}/api/chartsummary/${id}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+
+    const data = await response.json();
+    setSummary(data.summary || "⚠️ No summary available");
+  } catch (error) {
+    console.error("Error fetching chart summary:", error);
+    setSummary("⚠️ Sorry, the assistant is unavailable right now.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const patient = PATIENTS.find((p) => p.id === id);
   const [activeTab, setActiveTab] = useState("vitals");
@@ -434,17 +434,17 @@ export default function ChartSummarizer() {
               </table>
             </div>
 
-            {/* Summary */}
             {summary && (
               <div className="mt-4">
                 <h4 className="text-md font-semibold mb-2 text-indigo-700">
                   Chart Summary
                 </h4>
-                <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-xl text-sm whitespace-pre-line">
-                  {summary}
+                <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-xl text-sm overflow-auto">
+                  <ReactMarkdown>{summary}</ReactMarkdown>
                 </div>
               </div>
             )}
+
           </div>
         </div>
       </div>

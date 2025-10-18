@@ -10,10 +10,9 @@ import { Loader2, HeartPulse, ChevronDown, ChevronRight } from "lucide-react";
 import toast from "react-hot-toast";
 import { AppContext } from "../layouts/DashboardLayout";
 
-const BASE = import.meta.env.VITE_PDF_URL;
 // Mock PDF list from /public/pdfs
 const pdfList = [
-  { name: "Hemoglobin Report", file: `${BASE}/lowhemo.pdf` },
+  { name: "Hemoglobin Report", file: "/pdfs/lowhemo.pdf" },
   { name: "PCV Report", file: "/pdfs/highPCV.pdf" },
   { name: "RBC Report", file: "/pdfs/lowRBC.pdf" },
 ];
