@@ -269,6 +269,9 @@
 //     </div>
 //   );
 // }
+
+
+
 import { useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AppContext } from "../layouts/DashboardLayout";
@@ -287,8 +290,9 @@ const appointmentMappings = {
 };
 
 const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
-const NOTIFICATION_PHONE_NUMBER = import.meta.env.VITE_NOTIFICATION_PHONE_NUMBER;
-
+const NOTIFICATION_PHONE_NUMBER1 = import.meta.env.VITE_NOTIFICATION_PHONE_NUMBER1;
+const NOTIFICATION_PHONE_NUMBER2 = import.meta.env.VITE_NOTIFICATION_PHONE_NUMBER2;
+const NOTIFICATION_PHONE_NUMBER3 = import.meta.env.VITE_NOTIFICATION_PHONE_NUMBER3;
 // Reusable Components
 function Card({ children, className = "" }) {
   return (
@@ -353,91 +357,95 @@ export default function BookAppointment() {
     ([code, info]) => ({ code, display: info.display })
   );
 
-  async function handleBook() {
-    setErrorMsg("");
-    setSuccessMsg("");
 
-    if (!date || !startTime || !endTime || !appointmentType) {
-      setErrorMsg("Please select date, start/end time, and appointment type.");
-      return;
-    }
+async function handleBook() {
+  setErrorMsg("");
+  setSuccessMsg("");
 
-    const start = new Date(`${date}T${startTime}:00Z`);
-    const end = new Date(`${date}T${endTime}:00Z`);
-
-    if (end <= start) {
-      setErrorMsg("End time must be later than start time.");
-      return;
-    }
-
-    const typeInfo = appointmentMappings[appointmentType];
-
-    try {
-      setLoading(true);
-
-      if (isRealSource) {
-        // ✅ Only Athena and Elation call the real API
-        await createAppointment({
-          patientId,
-          providerId: provider.id,
-          sourceId,
-          departmentId,
-          start: start.toISOString(),
-          end: end.toISOString(),
-          appointmentType: { code: appointmentType, display: typeInfo.display },
-          setLatestCurl,
-        });
-      } else {
-        // ⏳ Simulate delay for data booking
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-      }
-
-      // Success message
-      const notificationMessage = `📩 Your appointment (${typeInfo.display}) with ${provider.name} is confirmed for ${date} ${startTime} - ${endTime}`;
-      setSuccessMsg(notificationMessage);
-
-      // Add to local events (instant update in EventBrowser)
-      // if (setLocalEvents) {
-      //   const newEvent = {
-      //     id: `local-${Date.now()}`,
-      //     eventType: typeInfo.display,
-      //     createdTime: new Date().toISOString(),
-      //     provider: provider.name,
-      //   };
-      //   setLocalEvents([newEvent, ...localEvents]);
-      // }
-      // Add to local events (instant update in EventBrowser)
-if (setLocalEvents) {
-  const newEvent = {
-    id: `${Date.now()}`,           // Removed "local-" prefix
-    eventType: "Appointment.save", // Set to desired event type
-    createdTime: new Date().toISOString(), // Keep current time
-    provider: provider.name,
-  };
-  setLocalEvents([newEvent, ...localEvents]);
-}
-
-
-      // Send SMS
-      await fetch(`${SAMPLE_BFF_URL}/api/send-sms`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ to: NOTIFICATION_PHONE_NUMBER, body: notificationMessage }),
-      });
-
-      // Clear form
-      setDate("");
-      setStartTime("");
-      setEndTime("");
-      setAppointmentType("562");
-    } catch (err) {
-      if (isRealSource) setErrorMsg(`Booking failed: ${err.message}`);
-      else setErrorMsg("Booking failed unexpectedly.");
-    } finally {
-      setLoading(false);
-    }
+  if (!date || !startTime || !endTime || !appointmentType) {
+    setErrorMsg("Please select date, start/end time, and appointment type.");
+    return;
   }
+
+  const start = new Date(`${date}T${startTime}:00Z`);
+  const end = new Date(`${date}T${endTime}:00Z`);
+
+  if (end <= start) {
+    setErrorMsg("End time must be later than start time.");
+    return;
+  }
+
+  const typeInfo = appointmentMappings[appointmentType];
+
+  try {
+    setLoading(true);
+
+    if (isRealSource) {
+      // ✅ Only Athena and Elation call the real API
+      await createAppointment({
+        patientId,
+        providerId: provider.id,
+        sourceId,
+        departmentId,
+        start: start.toISOString(),
+        end: end.toISOString(),
+        appointmentType: { code: appointmentType, display: typeInfo.display },
+        setLatestCurl,
+      });
+    } else {
+      // ⏳ Simulate delay for data booking
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+    }
+
+    // ✅ Success message
+    const notificationMessage = `📩 Your appointment (${typeInfo.display}) with ${provider.name} is confirmed for ${date} ${startTime} - ${endTime}`;
+    setSuccessMsg(notificationMessage);
+
+    // ✅ Add to local events
+    if (setLocalEvents) {
+      const newEvent = {
+        id: `${Date.now()}`,
+        eventType: "Appointment.save",
+        createdTime: new Date().toISOString(),
+        provider: provider.name,
+      };
+      setLocalEvents([newEvent, ...localEvents]);
+    }
+
+    // ✅ Send SMS notification
+    // await fetch(`${SAMPLE_BFF_URL}/api/send-sms`, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   credentials: "include",
+    //   body: JSON.stringify({
+    //     to: NOTIFICATION_PHONE_NUMBER,
+    //     body: notificationMessage,
+    //   }),
+    // });
+    //await fetch(`http://localhost:3000/api/send-sms`, {
+    await fetch(`${SAMPLE_BFF_URL}/api/send-sms`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  credentials: "include",
+  body: JSON.stringify({
+    to: [NOTIFICATION_PHONE_NUMBER1,NOTIFICATION_PHONE_NUMBER2,NOTIFICATION_PHONE_NUMBER3 ],
+    body: notificationMessage
+  }),
+});
+
+
+    // ✅ Reset form fields
+    setDate("");
+    setStartTime("");
+    setEndTime("");
+    setAppointmentType("562");
+  } catch (err) {
+    if (isRealSource) setErrorMsg(`Booking failed: ${err.message}`);
+    else setErrorMsg("Booking failed unexpectedly.");
+  } finally {
+    setLoading(false);
+  }
+}
 
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
@@ -535,3 +543,5 @@ if (setLocalEvents) {
     </div>
   );
 }
+
+
