@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { ArrowLeft, Brain, FileText, Loader2 } from "lucide-react";
 const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
 export default function ChartSummarizer() {
@@ -431,10 +432,12 @@ const handleChartSummarizer = async () => {
                 {/* <div className="p-5 bg-indigo-50 border border-indigo-200 rounded-2xl text-sm text-gray-800 leading-relaxed whitespace-pre-line max-h-64 overflow-y-auto" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
                   {summary}
                 </div> */}
-                <div className="p-6 bg-indigo-50 border border-indigo-200 border border-indigo-200 rounded-2xl text-base text-gray-800 leading-relaxed whitespace-pre-line max-h-[50vh] overflow-y-auto shadow-md" 
-     style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
-  {summary}
+<div className="p-6 bg-indigo-50 border border-indigo-200 rounded-2xl text-base text-gray-800 leading-relaxed max-h-[50vh] overflow-y-auto shadow-md">
+  <ReactMarkdown
+    children={summary}
+  />
 </div>
+
 
               </div>
             )}
