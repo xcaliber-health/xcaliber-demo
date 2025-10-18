@@ -1,0 +1,326 @@
+[
+  {
+    "resource": "allergyintolerance",
+    "path": "/AllergyIntolerance",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "appointment",
+    "path": "/Appointment",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "coverage",
+    "path": "/Coverage",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "diagnosticreport",
+    "path": "/DiagnosticReport",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "encounter",
+    "path": "/Encounter",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "familymemberhistory",
+    "path": "/FamilyMemberHistory",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "immunization",
+    "path": "/Immunization",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "invoice",
+    "path": "/Invoice",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "location",
+    "path": "/Location",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "medicationrequest",
+    "path": "/MedicationRequest",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "medicationstatement",
+    "path": "/MedicationStatement",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "observation",
+    "path": "/Observation",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "patient",
+    "path": "/Patient",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "person",
+    "path": "/Person",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "practitioner",
+    "path": "/Practitioner",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "practitionerrole",
+    "path": "/PractitionerRole",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "procedure",
+    "path": "/Procedure",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  },
+  {
+    "resource": "questionnaireresponse",
+    "path": "/QuestionnaireResponse",
+    "parameters": [
+      {
+        "name": "x-source-id",
+        "in": "header",
+        "type": "string",
+        "description": "Source system identifier. — 🔴 On demand filter"
+      },
+      {
+        "name": "patient",
+        "in": "query",
+        "type": "string",
+        "description": "Filter by Patient reference/id (FHIR patient). — 🔵 On demand filter"
+      }
+    ]
+  }
+]
