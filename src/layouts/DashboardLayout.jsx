@@ -1,4 +1,3 @@
-
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useState, useEffect, createContext, useRef } from "react";
 import { io } from "socket.io-client";
@@ -36,11 +35,19 @@ const EHR_OPTIONS = {
   Meditech: ["FHIR"],
   PracticeFusion: ["FHIR"],
   Veradigm: ["FHIR"],
-  PointClickCare: ["Rest","FHIR","EHR Operator"],
+  PointClickCare: ["Rest", "FHIR", "EHR Operator"],
 };
 
 // Mock EHR list
-const MOCK_EHRS = ["Epic", "Kno2", "Cerner", "Meditech", "PracticeFusion", "Veradigm", "PointClickCare"];
+const MOCK_EHRS = [
+  "Epic",
+  "Kno2",
+  "Cerner",
+  "Meditech",
+  "PracticeFusion",
+  "Veradigm",
+  "PointClickCare",
+];
 
 function EHRDropdown({ ehr, setEhr, setParentEhr, setChildEhr }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -81,7 +88,9 @@ function EHRDropdown({ ehr, setEhr, setParentEhr, setChildEhr }) {
       >
         {ehr}
         <ChevronDown
-          className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+          className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
         />
       </button>
 
@@ -97,17 +106,23 @@ function EHRDropdown({ ehr, setEhr, setParentEhr, setChildEhr }) {
               <button
                 onClick={() => handleParentClick(key)}
                 className={`w-full text-left px-4 py-2.5 flex justify-between items-center text-sm font-medium hover:bg-indigo-50 transition-colors ${
-                  ehr.startsWith(key) ? "bg-indigo-50 text-indigo-700" : "text-gray-700"
+                  ehr.startsWith(key)
+                    ? "bg-indigo-50 text-indigo-700"
+                    : "text-gray-700"
                 }`}
               >
                 <span>{key}</span>
-                {children.length > 0 && <ChevronRight className="w-4 h-4 text-gray-400" />}
+                {children.length > 0 && (
+                  <ChevronRight className="w-4 h-4 text-gray-400" />
+                )}
               </button>
 
               {children.length > 0 && (
                 <div
                   className={`absolute left-full top-0 ml-1 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 z-[10000] py-1 transition-opacity duration-150 ${
-                    hoveredParent === key ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+                    hoveredParent === key
+                      ? "opacity-100 pointer-events-auto"
+                      : "opacity-0 pointer-events-none"
                   }`}
                 >
                   {children.map((child) => (
@@ -143,7 +158,8 @@ export default function DashboardLayout() {
 
   const handleGetCurlClick = () => setShowCurlDrawer(true);
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(curlCommand)
+    navigator.clipboard
+      .writeText(curlCommand)
       .then(() => setCopySuccess("Copied!"))
       .catch(() => setCopySuccess("Failed to copy"));
   };
@@ -179,12 +195,17 @@ export default function DashboardLayout() {
     PointClickCare: import.meta.env.VITE_SOURCE_ID_POINTCLICKCARE_MOCK,
   };
 
-  const sourceId = sourceIdMap[parentEhr] || import.meta.env.VITE_SOURCE_ID_ATHENA;
+  const sourceId =
+    sourceIdMap[parentEhr] || import.meta.env.VITE_SOURCE_ID_ATHENA;
   const baseUrl = baseUrlMap[parentEhr] || import.meta.env.VITE_API_BASE;
   const location = useLocation();
   const activePath = location.pathname;
 
-  const departments = [1,21,62,82,102,142,143,144,145,147,148,149,150,155,157,158,159,160,162,163,164,165,166,168,169,170,180,181,183,184,185,192,194,195];
+  const departments = [
+    1, 21, 62, 82, 102, 142, 143, 144, 145, 147, 148, 149, 150, 155, 157, 158,
+    159, 160, 162, 163, 164, 165, 166, 168, 169, 170, 180, 181, 183, 184, 185,
+    192, 194, 195,
+  ];
 
   const navGroups = [
     {
@@ -192,25 +213,49 @@ export default function DashboardLayout() {
       links: [
         { to: "/patients", label: "Oncologist Patient Chart", icon: Users },
         { to: "/scripts", label: "EHR Operator", icon: Cpu },
-        { to: "/claims-streaming", label: "Claims Data Streaming", icon: Cloud },
+        {
+          to: "/claims-streaming",
+          label: "Claims Data Streaming",
+          icon: Cloud,
+        },
         { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
       ],
     },
     {
       title: "Sample App Workflows",
       links: [
-        { to: "/scheduling/find", label: "Scheduling Mobile App", icon: Calendar },
-        { to: "/custom-clinical-processing", label: "Custom Clinical Processing", icon: HeartPulse },
-        { to: "/bulk-data-extraction", label: "Bulk Data Extraction", icon: DownloadCloud },
+        {
+          to: "/scheduling/find",
+          label: "Scheduling Mobile App",
+          icon: Calendar,
+        },
+        {
+          to: "/custom-clinical-processing",
+          label: "Custom Clinical Processing",
+          icon: HeartPulse,
+        },
+        {
+          to: "/bulk-data-extraction",
+          label: "Bulk Data Extraction",
+          icon: DownloadCloud,
+        },
         { to: "/claims", label: "Claims List", icon: FileText },
       ],
     },
     {
       title: "Health AI",
       links: [
-        { to: "/document-reference", label: "Clinical Document Attachments", icon: ClipboardList },
+        {
+          to: "/document-reference",
+          label: "Clinical Document Attachments",
+          icon: ClipboardList,
+        },
         { to: "/chart-summary", label: "Chart Summary", icon: BarChart2 },
-        { to: "/document-labeling", label: "Document Labeling", icon: BarChart2 },
+        {
+          to: "/document-labeling",
+          label: "Document Labeling",
+          icon: BarChart2,
+        },
       ],
     },
     {
@@ -233,7 +278,10 @@ export default function DashboardLayout() {
     socket.on("connect", () => console.log("Socket connected:", socket.id));
     socket.on("disconnect", () => console.log("Socket disconnected"));
     socket.on("new-sms", (msg) => {
-      setMessages((prev) => [...prev, { text: msg.body || JSON.stringify(msg), sender: "clinic" }]);
+      setMessages((prev) => [
+        ...prev,
+        { text: msg.body || JSON.stringify(msg), sender: "clinic" },
+      ]);
     });
 
     return () => socket.disconnect();
@@ -242,26 +290,52 @@ export default function DashboardLayout() {
   if (showSplash) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-indigo-100">
-        <img src="/XCaliber.png" alt="XCaliber Splash" className="h-28 w-auto animate-pulse drop-shadow-xl" />
+        <img
+          src="/XCaliber.png"
+          alt="XCaliber Splash"
+          className="h-28 w-auto animate-pulse drop-shadow-xl"
+        />
         <p className="mt-6 text-gray-600 text-sm font-medium tracking-wide text-center px-6">
-          This demo application uses <span className="font-semibold text-indigo-600">non-PHI</span> sample data only.
+          This demo application uses{" "}
+          <span className="font-semibold text-indigo-600">non-PHI</span> sample
+          data only.
         </p>
       </div>
     );
   }
 
   return (
-    <AppContext.Provider value={{ ehr, parentEhr, childEhr, departmentId, sourceId, baseUrl, setLatestCurl: setCurlCommand, messages, MOCK_EHRS ,localEvents, setLocalEvents,}}>
+    <AppContext.Provider
+      value={{
+        ehr,
+        parentEhr,
+        childEhr,
+        departmentId,
+        sourceId,
+        baseUrl,
+        setLatestCurl: setCurlCommand,
+        messages,
+        MOCK_EHRS,
+        localEvents,
+        setLocalEvents,
+      }}
+    >
       <div className="flex h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-indigo-100 overflow-hidden">
         {/* Sidebar */}
         <aside className="w-72 bg-white shadow-xl flex flex-col fixed left-0 top-0 bottom-0 border-r border-gray-200 z-50">
           <div className="px-4 py-3 border-b border-gray-100 bg-white flex items-center justify-center">
-            <img src="/logo.png" alt="Acme Health Logo" className="h-12 w-auto drop-shadow-sm" />
+            <img
+              src="/logo.png"
+              alt="Acme Health Logo"
+              className="h-12 w-auto drop-shadow-sm"
+            />
           </div>
           <nav className="flex-1 p-4 space-y-6 overflow-y-auto hide-scrollbar">
             {navGroups.map((group) => (
               <div key={group.title}>
-                <h3 className="px-2 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">{group.title}</h3>
+                <h3 className="px-2 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  {group.title}
+                </h3>
                 <div className="space-y-1">
                   {group.links.map((link) => {
                     const Icon = link.icon;
@@ -276,8 +350,20 @@ export default function DashboardLayout() {
                             : "text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-indigo-100 hover:text-indigo-700"
                         }`}
                       >
-                        <div className={`p-2 rounded-lg transition-colors ${isActive ? "bg-white/20" : "bg-gray-100 group-hover:bg-indigo-100"}`}>
-                          <Icon className={`h-4 w-4 ${isActive ? "text-white" : "text-gray-600 group-hover:text-indigo-600"}`} />
+                        <div
+                          className={`p-2 rounded-lg transition-colors ${
+                            isActive
+                              ? "bg-white/20"
+                              : "bg-gray-100 group-hover:bg-indigo-100"
+                          }`}
+                        >
+                          <Icon
+                            className={`h-4 w-4 ${
+                              isActive
+                                ? "text-white"
+                                : "text-gray-600 group-hover:text-indigo-600"
+                            }`}
+                          />
                         </div>
                         <span className="font-medium">{link.label}</span>
                       </Link>
@@ -297,22 +383,34 @@ export default function DashboardLayout() {
               This is a Non-PHI Sandbox with synthetic data
             </div>
             <div className="flex items-center gap-4">
-              <EHRDropdown ehr={ehr} setEhr={setEhr} setParentEhr={setParentEhr} setChildEhr={setChildEhr} />
+              <EHRDropdown
+                ehr={ehr}
+                setEhr={setEhr}
+                setParentEhr={setParentEhr}
+                setChildEhr={setChildEhr}
+              />
 
-              <select
+              {/* <select
                 value={departmentId}
                 onChange={(e) => setDepartmentId(e.target.value)}
                 className="appearance-none bg-gradient-to-r from-white to-gray-50 border border-gray-200 rounded-xl px-4 py-2 pr-10 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-300 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
               >
                 {departments.map((deptId) => (
-                  <option key={deptId} value={deptId}>Department {deptId}</option>
+                  <option key={deptId} value={deptId}>
+                    Department {deptId}
+                  </option>
                 ))}
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              </select> */}
+              {/* <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" /> */}
 
               {/* Docs & Git */}
               <div className="flex items-center gap-3">
-                <a href="https://docs.xcaliberhealth.ai/en" target="_blank" rel="noopener noreferrer" className="group relative flex items-center bg-white/80 backdrop-blur-md border border-gray-200 rounded-full shadow-md overflow-hidden transition-all duration-300 w-10 h-10 hover:w-auto hover:pr-4">
+                <a
+                  href="https://docs.xcaliberhealth.ai/en"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative flex items-center bg-white/80 backdrop-blur-md border border-gray-200 rounded-full shadow-md overflow-hidden transition-all duration-300 w-10 h-10 hover:w-auto hover:pr-4"
+                >
                   <div className="flex items-center justify-center w-10 h-10 flex-none">
                     <Book className="w-5 h-5 text-indigo-600 transition-transform duration-300 group-hover:scale-110" />
                   </div>
@@ -321,10 +419,24 @@ export default function DashboardLayout() {
                   </span>
                 </a>
 
-                <a href="https://github.com/xcaliber-health/xcaliber-demo/tree/master" target="_blank" rel="noopener noreferrer" className="group relative flex items-center bg-white/80 backdrop-blur-md border border-gray-200 rounded-full shadow-md overflow-hidden transition-all duration-300 w-10 h-10 hover:w-auto hover:pr-4">
+                <a
+                  href="https://github.com/xcaliber-health/xcaliber-demo/tree/master"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative flex items-center bg-white/80 backdrop-blur-md border border-gray-200 rounded-full shadow-md overflow-hidden transition-all duration-300 w-10 h-10 hover:w-auto hover:pr-4"
+                >
                   <div className="flex items-center justify-center w-10 h-10 flex-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-gray-800 transition-transform duration-300 group-hover:scale-110">
-                      <path fillRule="evenodd" d="M12 0C5.37 0 0 5.373 0 12a12 12 0 008.207 11.385c.6.11.793-.26.793-.577v-2.26c-3.338.728-4.042-1.61-4.042-1.61-.547-1.388-1.335-1.757-1.335-1.757-1.09-.747.083-.732.083-.732 1.205.086 1.84 1.24 1.84 1.24 1.07 1.834 2.807 1.304 3.492.998.108-.787.418-1.304.762-1.605-2.665-.304-5.466-1.366-5.466-6.078 0-1.343.465-2.443 1.233-3.304-.124-.304-.535-1.523.117-3.176 0 0 1.006-.322 3.3 1.23a11.43 11.43 0 016.006 0c2.29-1.552 3.293-1.23 3.293-1.23.655 1.653.244 2.872.12 3.176.77.861 1.23 1.961 1.23 3.304 0 4.723-2.806 5.77-5.478 6.068.43.37.815 1.096.815 2.21v3.28c0 .32.19.694.8.575A12 12 0 0024 12c0-6.627-5.373-12-12-12z" clipRule="evenodd" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-6 h-6 text-gray-800 transition-transform duration-300 group-hover:scale-110"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12 0C5.37 0 0 5.373 0 12a12 12 0 008.207 11.385c.6.11.793-.26.793-.577v-2.26c-3.338.728-4.042-1.61-4.042-1.61-.547-1.388-1.335-1.757-1.335-1.757-1.09-.747.083-.732.083-.732 1.205.086 1.84 1.24 1.84 1.24 1.07 1.834 2.807 1.304 3.492.998.108-.787.418-1.304.762-1.605-2.665-.304-5.466-1.366-5.466-6.078 0-1.343.465-2.443 1.233-3.304-.124-.304-.535-1.523.117-3.176 0 0 1.006-.322 3.3 1.23a11.43 11.43 0 016.006 0c2.29-1.552 3.293-1.23 3.293-1.23.655 1.653.244 2.872.12 3.176.77.861 1.23 1.961 1.23 3.304 0 4.723-2.806 5.77-5.478 6.068.43.37.815 1.096.815 2.21v3.28c0 .32.19.694.8.575A12 12 0 0024 12c0-6.627-5.373-12-12-12z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <span className="whitespace-nowrap text-gray-700 text-sm font-semibold opacity-0 group-hover:opacity-100 ml-2 transition-opacity duration-300">
@@ -336,33 +448,53 @@ export default function DashboardLayout() {
           </header>
 
           {/* Outlet */}
-                    <main className="flex-1 overflow-y-auto hide-scrollbar">
+          <main className="flex-1 overflow-y-auto hide-scrollbar">
             <Outlet />
           </main>
 
           <div className="fixed bottom-8 right-8 flex flex-col items-end gap-3 z-50">
-            <div className="group relative flex items-center justify-end cursor-pointer select-none">
+            {/* <div className="group relative flex items-center justify-end cursor-pointer select-none">
               <div className="flex items-center bg-white/70 backdrop-blur-md border border-gray-200 rounded-full shadow-md overflow-hidden transition-all duration-300 group-hover:pr-4 group-hover:w-auto w-10 h-10">
-                <img src="/favicon.png" alt="XCaliber" className="h-8 w-8 p-2 ml-1 transition-transform duration-300 group-hover:scale-105" />
+                <img
+                  src="/favicon.png"
+                  alt="XCaliber"
+                  className="h-8 w-8 p-2 ml-1 transition-transform duration-300 group-hover:scale-105"
+                />
                 <span className="whitespace-nowrap text-gray-700 text-sm font-semibold opacity-0 group-hover:opacity-100 ml-2 transition-opacity duration-300">
                   Powered by XCaliber Health
                 </span>
               </div>
-            </div>
-
-            <button onClick={handleGetCurlClick} className="flex items-center justify-center bg-gradient-to-br from-indigo-600 to-indigo-700 text-white w-12 h-12 rounded-full shadow-lg hover:scale-110 hover:shadow-indigo-500/30 transition-all duration-300 focus:outline-none" aria-label="Get Curl">
+            </div> */}
+            {/* 
+            <button
+              onClick={handleGetCurlClick}
+              className="flex items-center justify-center bg-gradient-to-br from-indigo-600 to-indigo-700 text-white w-12 h-12 rounded-full shadow-lg hover:scale-110 hover:shadow-indigo-500/30 transition-all duration-300 focus:outline-none"
+              aria-label="Get Curl"
+            >
               <Code2 className="w-5 h-5" />
-            </button>
+            </button> */}
           </div>
 
-          {showCurlDrawer && <div className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40 transition-opacity duration-300" onClick={() => setShowCurlDrawer(false)} />}
-          <div className={`fixed top-0 right-0 h-full bg-white/95 backdrop-blur-md border-l border-gray-100 shadow-2xl w-[28rem] transform transition-transform duration-300 ease-in-out z-50 ${showCurlDrawer ? "translate-x-0" : "translate-x-full"}`}>
+          {showCurlDrawer && (
+            <div
+              className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40 transition-opacity duration-300"
+              onClick={() => setShowCurlDrawer(false)}
+            />
+          )}
+          <div
+            className={`fixed top-0 right-0 h-full bg-white/95 backdrop-blur-md border-l border-gray-100 shadow-2xl w-[28rem] transform transition-transform duration-300 ease-in-out z-50 ${
+              showCurlDrawer ? "translate-x-0" : "translate-x-full"
+            }`}
+          >
             <div className="flex flex-col h-full p-6">
               <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
                 <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
                   <Code2 className="w-5 h-5 text-indigo-600" /> cURL Request
                 </h2>
-                <button onClick={() => setShowCurlDrawer(false)} className="text-gray-400 hover:text-gray-700 text-2xl font-bold transition">
+                <button
+                  onClick={() => setShowCurlDrawer(false)}
+                  className="text-gray-400 hover:text-gray-700 text-2xl font-bold transition"
+                >
                   ×
                 </button>
               </div>
@@ -374,14 +506,26 @@ export default function DashboardLayout() {
                 />
               </div>
               <div className="mt-4 flex items-center justify-between">
-                <button onClick={copyToClipboard} className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:from-indigo-700 hover:to-indigo-800 transition-all duration-200">
+                <button
+                  onClick={copyToClipboard}
+                  className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:from-indigo-700 hover:to-indigo-800 transition-all duration-200"
+                >
                   <DownloadCloud className="w-4 h-4" /> Copy to Clipboard
                 </button>
-                {copySuccess && <p className="text-green-600 text-sm font-medium">{copySuccess}</p>}
+                {copySuccess && (
+                  <p className="text-green-600 text-sm font-medium">
+                    {copySuccess}
+                  </p>
+                )}
               </div>
             </div>
           </div>
         </div>
+      </div>
+      {/* Powered by XCaliber */}
+      <div className="fixed bottom-8 right-4 flex flex-col items-center text-gray-600 opacity-90 pointer-events-none z-50">
+        <span className="font-semibold text-sm mb-1 ml-[2px]">Powered by</span>
+        <img src="/XCaliber.png" alt="XCaliber Logo" className="h-10 w-auto" />
       </div>
     </AppContext.Provider>
   );
