@@ -34,7 +34,7 @@ export async function getMappingForId(patientId) {
     const data = await cachedFhirFetch(
       url,
       { method: "GET", headers: { "Content-Type": "application/json" } },
-      5 * 60 * 1000 // 5 minutes TTL
+       24 * 60 * 60 * 1000 // 1 day TTL
     );
 
     console.log("came after BFF call")

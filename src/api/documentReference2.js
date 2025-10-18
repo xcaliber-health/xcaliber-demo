@@ -8,7 +8,7 @@ export async function fetchDocumentPDF({ patientId, documentId, departmentId, ca
   const response = await cachedFhirFetch(
     url,
     { sourceId, headers: { "x-interaction-mode": "true" }, setLatestCurl },
-    5 * 60 * 1000 // TTL 5 minutes
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
 
   const base64Data = response?.content?.data;
@@ -27,6 +27,6 @@ export async function fetchDiagnosticReport({ patientId, documentId, departmentI
   return await cachedFhirFetch( 
     url,
     { sourceId, setLatestCurl },
-    5 * 60 * 1000 // TTL 5 minutes
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
 }

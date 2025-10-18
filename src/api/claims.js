@@ -10,7 +10,7 @@ const bundle = await cachedFhirFetch(
       headers: { "x-interaction-mode": "false" },
       setLatestCurl,
     },
-    5 * 60 * 1000 // 5 minutes TTL
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
 
   return (bundle.entry || []).map((e) => {
@@ -79,7 +79,7 @@ const bundle = await cachedFhirFetch(
 export async function fetchClaimById(claimId, sourceId, patientId, departmentId, setLatestCurl
 ) {
   const url = `/Claim/${claimId}?patient=${patientId}&departmentId=${departmentId}`;
-  const c = await cachedFhirFetch(url, { sourceId, setLatestCurl }, 5 * 60 * 1000); // TTL 5 min
+  const c = await cachedFhirFetch(url, { sourceId, setLatestCurl },  24 * 60 * 60 * 1000 ); 
 
   // Notes (Athena only)
   const notes = (c.contained || [])

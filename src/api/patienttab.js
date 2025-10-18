@@ -8,7 +8,7 @@ export const usePatientTabs = () => {
   const { departmentId, sourceId } = useContext(AppContext);
 
   // Helper function for cached fetch
-  const fetchWithCache = async (url, options = {}, ttl = 5 * 60 * 1000) => {
+  const fetchWithCache = async (url, options = {}, ttl =  24 * 60 * 60 * 1000) => {
     return cachedFhirFetch(url, { method: "GET", ...options }, ttl);
   };
 

@@ -23,7 +23,7 @@ async function getAllNotes({ departmentId, category, sourceId, patientId, setLat
     path += `&category=${category}`;
   }
 
-  const data = await cachedFhirFetch(path, { sourceId, setLatestCurl }, 5 * 60 * 1000); // TTL 5 min
+  const data = await cachedFhirFetch(path, { sourceId, setLatestCurl },  24 * 60 * 60 * 1000 ); 
   return (
     data.entry?.map((e) => {
       const resource = e.resource;
@@ -55,7 +55,7 @@ async function getNoteById(id, { departmentId, patientId, category, sourceId, se
   if (!category) throw new Error("category is required");
 
   const path = `/DocumentReference/${id}?patient=${patientId}&category=${category}&departmentId=${departmentId}`;
-  const data = await cachedFhirFetch(path, { sourceId, setLatestCurl }, 5 * 60 * 1000); // TTL 5 min
+  const data = await cachedFhirFetch(path, { sourceId, setLatestCurl },  24 * 60 * 60 * 1000 ); 
 
   const resource = data.resource || data;
 

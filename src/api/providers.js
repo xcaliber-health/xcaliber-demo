@@ -39,7 +39,7 @@ const bundle = await cachedFhirFetch(
     headers: { "x-interaction-mode": "false" },
     setLatestCurl,
   },
-  5 * 60 * 1000 // TTL 5 minutes
+   24 * 60 * 60 * 1000 // 1 day TTL
 );
 
 
@@ -80,7 +80,7 @@ export async function fetchProviders(sourceId, departmentId, count = 100, search
         method: "GET",
         sourceId,
         headers: { "x-interaction-mode": "false" },
-      }, 5 * 60 * 1000); // TTL 5 min
+      },  24 * 60 * 60 * 1000 ); 
 
       if (practitioner) {
         providers.push({
@@ -109,7 +109,7 @@ export async function fetchProviders(sourceId, departmentId, count = 100, search
           headers: { "x-interaction-mode": "false" },
           setLatestCurl,
         },
-        5 * 60 * 1000
+         24 * 60 * 60 * 1000 // 1 day TTL
       );
 
       providers = (bundle.entry || []).map((e) => {
@@ -142,7 +142,7 @@ export async function fetchProviderByIdSimple(providerId, sourceId) {
   const p = await cachedFhirFetch(`/Practitioner/${providerId}`, {
     method: "GET",
     sourceId,
-  }, 5 * 60 * 1000); // TTL 5 min
+  },  24 * 60 * 60 * 1000 ); 
 
   return {
     id: p.id,
@@ -162,7 +162,7 @@ export async function fetchProviderById(providerId, sourceId) {
     `&_include=PractitionerRole:organization` +
     `&_include=PractitionerRole:location`;
 
-  const bundle = await cachedFhirFetch(url, { method: "GET", sourceId }, 5 * 60 * 1000);
+  const bundle = await cachedFhirFetch(url, { method: "GET", sourceId },  24 * 60 * 60 * 1000 );
 
   const roles = [];
   const orgs = {};
@@ -174,7 +174,7 @@ export async function fetchProviderById(providerId, sourceId) {
     if (r.resourceType === "PractitionerRole") roles.push(r);
   });
 
-  const practitioner = await cachedFhirFetch(`/Practitioner/${providerId}`, { method: "GET", sourceId }, 5 * 60 * 1000);
+  const practitioner = await cachedFhirFetch(`/Practitioner/${providerId}`, { method: "GET", sourceId }, 24 * 60 * 60 * 1000 );
 
   return {
     id: practitioner.id,

@@ -14,7 +14,7 @@ export const cache = {
       return null;
     }
   },
-  set: (key, data, ttl = 5 * 60 * 1000) => { // default TTL 5 min
+  set: (key, data, ttl =  24 * 60 * 60 * 1000 ) => { // default TTL 5 min
     localStorage.setItem(
       key,
       JSON.stringify({ data, expiry: ttl ? Date.now() + ttl : null })

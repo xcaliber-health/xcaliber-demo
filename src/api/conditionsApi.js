@@ -27,7 +27,7 @@ export async function fetchConditions(patientId, departmentId, sourceId, setLate
       headers: { "x-interaction-mode": "false" },
       setLatestCurl,
     },
-    5 * 60 * 1000 // 5 minutes TTL
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
 
   return bundle.entry?.map((e) => e.resource) || [];

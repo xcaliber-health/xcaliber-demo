@@ -21,7 +21,7 @@ export async function fetchAllergies(patientId, sourceId, departmentId, setLates
       },
       setLatestCurl,
     },
-    5 * 60 * 1000
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
 }
 

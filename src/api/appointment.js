@@ -28,7 +28,7 @@ export async function fetchAppointments({ patientId, providerId, sourceId, depar
       headers: isAthena ? { "x-interaction-mode": "false" } : undefined,
       setLatestCurl,
     },
-    5 * 60 * 1000
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
 
   return (bundle.entry || []).map((e) => {
@@ -154,7 +154,7 @@ export async function getAppointment(id) {
         "X-Source-Id": "ef123977-6ef1-3e8e-a30f-3879cea0b344",
       },
     },
-    5 * 60 * 1000
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
 
   return res;

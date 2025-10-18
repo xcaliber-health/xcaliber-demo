@@ -7,7 +7,7 @@ export async function fetchDocumentReferences(patientId, category, departmentId)
   const bundle = await cachedFhirFetch( 
     url,
     {},
-    5 * 60 * 1000 // TTL 5 minutes
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
 
   return (bundle.entry || []).map(e => {
@@ -27,7 +27,7 @@ export async function fetchDocumentReferenceById(documentId, patientId, departme
   const doc = await cachedFhirFetch( 
     url,
     {},
-    5 * 60 * 1000 // TTL 5 minutes
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
 
   // Extract raw content

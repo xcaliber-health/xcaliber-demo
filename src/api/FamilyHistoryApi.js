@@ -29,7 +29,7 @@ export async function fetchFamilyHistory(patientId, sourceId, departmentId, setL
       headers: { "x-interaction-mode": "false" },
       setLatestCurl
     },
-    5 * 60 * 1000 // TTL 5 minutes
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
   return bundle;
 }

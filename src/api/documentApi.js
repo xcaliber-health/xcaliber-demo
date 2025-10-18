@@ -15,7 +15,7 @@ export async function fetchDocuments(patientId, departmentId, category, sourceId
         headers: { "x-interaction-mode": "false" },
         setLatestCurl,
       },
-      5 * 60 * 1000 // TTL 5 minutes
+       24 * 60 * 60 * 1000 // 1 day TTL
     );
 
     return bundle?.entry ? bundle : { entry: [] };
@@ -39,7 +39,7 @@ export async function fetchDocumentById(documentId, sourceId, setLatestCurl) {
         headers: { "x-interaction-mode": "false" },
         setLatestCurl,
       },
-      5 * 60 * 1000 // TTL 5 minutes
+       24 * 60 * 60 * 1000 // 1 day TTL
     );
   } catch (err) {
     console.error("fetchDocumentById error:", err);

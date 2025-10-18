@@ -138,7 +138,7 @@ export async function fetchOrders({
       },
       setLatestCurl,
     },
-    5 * 60 * 1000 // custom TTL (5 min)
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
 
   return (bundle.entry || []).map((e) => {

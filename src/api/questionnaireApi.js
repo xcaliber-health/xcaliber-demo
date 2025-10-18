@@ -36,7 +36,7 @@ export async function fetchQuestionnaireResponses(
       headers: { "x-interaction-mode": "false" },
       setLatestCurl,
     },
-    5 * 60 * 1000 // TTL = 5 min
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
 
   return bundle.entry?.map((e) => e.resource) || [];

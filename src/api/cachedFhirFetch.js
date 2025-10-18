@@ -11,7 +11,7 @@ import { cache } from "./cache";
  * @param {boolean} forceRefresh - if true, ignores cache and fetches fresh data
  * @returns {Promise<any>}
  */
-export async function cachedFhirFetch(path, options = {}, ttl = 5 * 60 * 1000, forceRefresh = false) {
+export async function cachedFhirFetch(path, options = {}, ttl =  24 * 60 * 60 * 1000 , forceRefresh = false) {
   const { method = "GET", body, headers = {} } = options;
 
   // Only cache GET requests

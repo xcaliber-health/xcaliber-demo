@@ -61,7 +61,7 @@ export async function fetchPatients(
       headers: options.headers,
       setLatestCurl,
     },
-    5 * 60 * 1000 // TTL 5 minutes
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
 
   let patients = [];
