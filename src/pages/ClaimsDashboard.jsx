@@ -288,12 +288,17 @@ function Button({ children, className = "", ...props }) {
 }
 
 export default function ClaimsDashboard() {
-  const { ehr, sourceId, departmentId, setLatestCurl } = useContext(AppContext);
+  const { ehr, sourceId, departmentId, setLatestCurl, parentEhr } = useContext(AppContext);
 
+  // const patientId =
+  //   ehr === "Athena"
+  //     ? import.meta.env.VITE_ATHENA_PATIENT_ID
+  //     : import.meta.env.VITE_ELATION_PATIENT_ID;
   const patientId =
-    ehr === "Athena"
+    parentEhr === "Athena"
       ? import.meta.env.VITE_ATHENA_PATIENT_ID
       : import.meta.env.VITE_ELATION_PATIENT_ID;
+
 
   const [claims, setClaims] = useState([]);
   const [search, setSearch] = useState("");
