@@ -276,7 +276,7 @@ import { useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AppContext } from "../layouts/DashboardLayout";
 import { createAppointment } from "../api/appointment";
-import { Loader2, Calendar, ArrowRight, Bell } from "lucide-react";
+import { Loader2, Calendar, ArrowRight, List } from "lucide-react";
 
 // Appointment type mappings
 const appointmentMappings = {
@@ -467,9 +467,9 @@ async function handleBook() {
           {/* Notifications Button */}
           <Button
             className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-md flex items-center gap-2 text-sm px-3 py-2"
-            onClick={() => navigate("/notifications")}
+            onClick={() => navigate("/event-browser")}
           >
-            <Bell className="w-4 h-4" /> Notifications
+            <List className="w-4 h-4" /> Event Browser
           </Button>
         </div>
       </div>
@@ -493,7 +493,27 @@ async function handleBook() {
 
               <div>
                 <label className="block font-medium mb-1">Start Time</label>
-                <Input type="time" value={startTime} onChange={(e) => { setStartTime(e.target.value); e.target.blur(); }} />
+                {/* <Input type="time" value={startTime} onChange={(e) => { setStartTime(e.target.value); e.target.blur(); }} /> */}
+                <Input
+  type="time"
+  value={startTime}
+  onChange={(e) => {
+    const newStart = e.target.value;
+    setStartTime(newStart);
+    e.target.blur();
+
+    if (newStart) {
+      // Auto set end time +1 hour
+      const [hours, minutes] = newStart.split(":").map(Number);
+      const end = new Date();
+      end.setHours(hours + 1, minutes);
+      const endHours = String(end.getHours()).padStart(2, "0");
+      const endMinutes = String(end.getMinutes()).padStart(2, "0");
+      setEndTime(`${endHours}:${endMinutes}`);
+    }
+  }}
+/>
+
               </div>
 
               <div>
