@@ -26,7 +26,7 @@ export default function ClinicalProcessing() {
   const [activeStep, setActiveStep] = useState(0);
   const [appointmentInfo, setAppointmentInfo] = useState(null);
   const isMounted = useRef(true);
-  const { setLatestCurl } = useContext(AppContext);
+  const { localEvents, setLocalEvents,setLatestCurl } = useContext(AppContext);
 
   const TIME_FACTOR = 4000; // milliseconds
   const pdfPlugin = defaultLayoutPlugin();
@@ -80,6 +80,16 @@ export default function ClinicalProcessing() {
         try {
           const appointmentData = await getAppointment(appointmentId);
           setAppointmentInfo(appointmentData);
+          // Add appointment to local events
+          if (setLocalEvents) {
+          const newEvent = {
+            id: appointmentId,
+            eventType: "Appointment.save",
+            createdTime: new Date().toISOString(),
+            provider: appointmentData.provider?.name || "Unknown provider",
+          };
+          setLocalEvents([newEvent, ...localEvents]);
+        }
         } catch (err) {
           console.error("Error fetching appointment info:", err);
           toast.error("Could not fetch appointment details.");
