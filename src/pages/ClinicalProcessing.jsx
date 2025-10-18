@@ -380,7 +380,7 @@ const pdfEntities = [
             <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               Clinical PDF Viewer
             </h1>
-            <p className="text-sm text-gray-600">Select a PDF → extract entities → schedule appointment</p>
+            <p className="text-sm text-gray-600">Select a PDF → Extract Entities → Schedule Appointment</p>
           </div>
         </div>
       </div>
