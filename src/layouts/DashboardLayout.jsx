@@ -33,7 +33,7 @@ const EHR_OPTIONS = {
   Elation: ["REST API", "FHIR", "EHR Operator", "Webhooks"],
   ECW: ["FHIR", "EHR Operator", "HL7"],
   Epic: ["FHIR", "EHR Operator", "HL7"],
-  Kno2: ["CCDA"],
+  Kno2: ["CCDA","HL7"],
   Cerner: ["FHIR", "HL7"],
   Meditech: ["FHIR", "HL7"],
   PracticeFusion: ["FHIR"],
@@ -261,8 +261,8 @@ export default function DashboardLayout() {
         },
         { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
         {
-          to: "/contentIntegrations",
-          label: "Content Integrationss",
+          to: "/knowledgesource",
+          label: "Knowledge Source",
           icon: Airplay,
         },
       ],
@@ -397,11 +397,13 @@ export default function DashboardLayout() {
           </div> */}
           <div className="flex items-center justify-center relative px-2 py-3 border-b border-gray-100">
   {!collapsed && (
-    <img
-      src="/logo.png"
-      alt="Acme Health Logo"
-      className="h-12 w-auto drop-shadow-sm"
-    />
+<Link to="/">
+  <img
+    src="/logo.png"
+    alt="Acme Health Logo"
+    className="h-12 w-auto drop-shadow-sm cursor-pointer"
+  />
+</Link>
   )}
 
   {/* Keep collapse button absolutely positioned */}
