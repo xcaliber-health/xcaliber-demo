@@ -187,6 +187,8 @@ export default function DocumentReference() {
                 className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               >
                 <option value="231756">231756</option>
+                <option value="247589">247589</option>
+                <option value="6f5ed691-914d-4d7b-ba07-b33393c291e9">6f5ed691-914d-4d7b-ba07-b33393c291e9</option>
               </select>
             </div>
           </div>
