@@ -1,4 +1,5 @@
 // src/api/AllergiesApi.js
+import { cachedFhirFetch } from "./cachedFhirFetch";
 import { fhirFetch } from "./fhir";
 
 const ELATION_SOURCE_ID = import.meta.env.VITE_SOURCE_ID_ELATION;
@@ -10,14 +11,18 @@ export async function fetchAllergies(patientId, sourceId, departmentId, setLates
       ? `/AllergyIntolerance?patient=${patientId}`
       : `/AllergyIntolerance?patient=${patientId}&departmentId=${departmentId}`;
 
-  return fhirFetch(url, {
-    sourceId,
-    headers: {
-      "x-interaction-mode": "false",
-      
+
+  return cachedFhirFetch(
+    url,
+    {
+      sourceId,
+      headers: {
+        "x-interaction-mode": "false",
+      },
+      setLatestCurl,
     },
-    setLatestCurl,
-  });
+    5 * 60 * 1000
+  );
 }
 
 // ✅ Create a new allergy (all user-entered values)

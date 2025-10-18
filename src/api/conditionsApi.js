@@ -1,12 +1,11 @@
-
 import { fhirFetch } from "./fhir";
+import { cachedFhirFetch } from "./cachedFhirFetch"; 
 
 // ---------------- SNOMED mapping ----------------
 export const conditionMapping = {
   "Cough": "49727002",
   "Fever": "386661006",
   "Headache": "25064002",
-  
 };
 
 // ---------------- Clinical Status Options ----------------
@@ -20,11 +19,16 @@ export async function fetchConditions(patientId, departmentId, sourceId, setLate
 
   const url = `/Condition?patient=${patientId}&departmentId=${departmentId}&category=problem-list-item`;
 
-  const bundle = await fhirFetch(url, {
-    sourceId,
-    headers: { "x-interaction-mode": "false" },
-    setLatestCurl,
-  });
+
+  const bundle = await cachedFhirFetch(
+    url,
+    {
+      sourceId,
+      headers: { "x-interaction-mode": "false" },
+      setLatestCurl,
+    },
+    5 * 60 * 1000 // 5 minutes TTL
+  );
 
   return bundle.entry?.map((e) => e.resource) || [];
 }
@@ -50,14 +54,12 @@ export function mapConditionRow(res) {
 
 // Build FHIR Condition POST body
 export function buildConditionBody(formData, patientId, departmentId) {
-  // Correct clinicalStatus: match server enum exactly
   const clinicalStatusCode =
-    formData.clinicalStatus.toLowerCase() === "chronic" ? "CHRONIC" : formData.clinicalStatus.charAt(0)//.toUpperCase() 
+    formData.clinicalStatus.toLowerCase() === "chronic" ? "CHRONIC" : formData.clinicalStatus.charAt(0)
     + formData.clinicalStatus.slice(1);
 
-  // Extension status: same as above for server
   const extensionStatus =
-    formData.clinicalStatus.toLowerCase() === "chronic" ? "CHRONIC" : formData.clinicalStatus//.toUpperCase();
+    formData.clinicalStatus.toLowerCase() === "chronic" ? "CHRONIC" : formData.clinicalStatus;
 
   return {
     resourceType: "Condition",
@@ -76,7 +78,7 @@ export function buildConditionBody(formData, patientId, departmentId) {
     clinicalStatus: {
       coding: [
         {
-          code: clinicalStatusCode, // EXACT server enum
+          code: clinicalStatusCode,
           display: clinicalStatusCode,
         },
       ],

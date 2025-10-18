@@ -1,11 +1,15 @@
-
 import { fhirFetch } from "./fhir";
+import { cachedFhirFetch } from "./cachedFhirFetch"; 
 
 export async function fetchDocumentPDF({ patientId, documentId, departmentId, category, sourceId, setLatestCurl }) {
   if (!sourceId) throw new Error("sourceId is missing when calling fetchDocumentPDF");
 
   const url = `/Media/${documentId}?patient=${patientId}&departmentId=${departmentId}&category=${category}`;
-  const response = await fhirFetch(url, { sourceId,headers: { "x-interaction-mode": "true" }, setLatestCurl });
+  const response = await cachedFhirFetch(
+    url,
+    { sourceId, headers: { "x-interaction-mode": "true" }, setLatestCurl },
+    5 * 60 * 1000 // TTL 5 minutes
+  );
 
   const base64Data = response?.content?.data;
   if (!base64Data) throw new Error("No PDF data found in response");
@@ -20,5 +24,9 @@ export async function fetchDiagnosticReport({ patientId, documentId, departmentI
   if (!sourceId) throw new Error("sourceId is missing when calling fetchDiagnosticReport");
 
   const url = `/DiagnosticReport/${documentId}?patient=${patientId}&departmentId=${departmentId}&category=${category}`;
-  return await fhirFetch(url, { sourceId }, setLatestCurl);
+  return await cachedFhirFetch( 
+    url,
+    { sourceId, setLatestCurl },
+    5 * 60 * 1000 // TTL 5 minutes
+  );
 }

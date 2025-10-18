@@ -1,6 +1,5 @@
-
-
 import { fhirFetch } from "./fhir";
+import { cachedFhirFetch } from "./cachedFhirFetch"; 
 
 // Fetch documents for a patient
 export async function fetchDocuments(patientId, departmentId, category, sourceId, setLatestCurl) {
@@ -9,13 +8,14 @@ export async function fetchDocuments(patientId, departmentId, category, sourceId
   }
 
   try {
-    const bundle = await fhirFetch(
+    const bundle = await cachedFhirFetch( 
       `/DocumentReference?patient=${patientId}&departmentId=${departmentId}&category=${category}`,
       {
         sourceId,
         headers: { "x-interaction-mode": "false" },
         setLatestCurl,
-      }
+      },
+      5 * 60 * 1000 // TTL 5 minutes
     );
 
     return bundle?.entry ? bundle : { entry: [] };
@@ -32,18 +32,22 @@ export async function fetchDocumentById(documentId, sourceId, setLatestCurl) {
   }
 
   try {
-    return await fhirFetch(`/DocumentReference/${documentId}`, {
-      sourceId,
-      headers: { "x-interaction-mode": "false" },
-      setLatestCurl,
-    });
+    return await cachedFhirFetch( 
+      `/DocumentReference/${documentId}`,
+      {
+        sourceId,
+        headers: { "x-interaction-mode": "false" },
+        setLatestCurl,
+      },
+      5 * 60 * 1000 // TTL 5 minutes
+    );
   } catch (err) {
     console.error("fetchDocumentById error:", err);
     throw new Error(err.message || "Failed to fetch document by ID");
   }
 }
 
-
+// POST
 export async function createDocumentReference(body, sourceId, setLatestCurl) {
   if (!sourceId) throw new Error("sourceId is required for creating document");
   return fhirFetch("/DocumentReference", {

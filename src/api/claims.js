@@ -1,16 +1,16 @@
 
+import { cachedFhirFetch } from "./cachedFhirFetch";
 import { fhirFetch } from "./fhir";
 
 export async function fetchClaims(patientId, sourceId, setLatestCurl) {
-  const bundle = await fhirFetch(
+const bundle = await cachedFhirFetch(
     `/Claim?_count=1000&patient=${patientId}`,
     {
       sourceId,
-      headers: {
-        "x-interaction-mode": "false", // ✅ important for Athena passthrough
-      },
-       setLatestCurl ,
-    }
+      headers: { "x-interaction-mode": "false" },
+      setLatestCurl,
+    },
+    5 * 60 * 1000 // 5 minutes TTL
   );
 
   return (bundle.entry || []).map((e) => {
@@ -79,7 +79,7 @@ export async function fetchClaims(patientId, sourceId, setLatestCurl) {
 export async function fetchClaimById(claimId, sourceId, patientId, departmentId, setLatestCurl
 ) {
   const url = `/Claim/${claimId}?patient=${patientId}&departmentId=${departmentId}`;
-  const c = await fhirFetch(url, { sourceId ,setLatestCurl});
+  const c = await cachedFhirFetch(url, { sourceId, setLatestCurl }, 5 * 60 * 1000); // TTL 5 min
 
   // Notes (Athena only)
   const notes = (c.contained || [])

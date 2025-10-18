@@ -1,18 +1,6 @@
-
 import { fhirFetch } from "./fhir";
+import { cachedFhirFetch } from "./cachedFhirFetch"; 
 
-// ✅ Fetch Encounters
-// export async function fetchEncounters(patientId, sourceId, departmentId, setLatestCurl) {
-//   const bundle = await fhirFetch(
-//     `/Encounter?patient=${patientId}&departmentId=${departmentId}`,
-//     {
-//       sourceId,
-//       headers: { "x-interaction-mode": "false" },
-//       setLatestCurl,
-//     }
-//   );
-//   return bundle;
-// }
 const ELATION_SOURCE_ID = import.meta.env.VITE_SOURCE_ID_ELATION;
 
 // ✅ Fetch Encounters
@@ -23,24 +11,25 @@ export async function fetchEncounters(patientId, sourceId, departmentId, setLate
       ? `/Encounter?patient=${patientId}`
       : `/Encounter?patient=${patientId}&departmentId=${departmentId}`;
 
-  const bundle = await fhirFetch(url, {
-    sourceId,
-    headers: {
-      "x-interaction-mode": "false",
-      
+  const bundle = await cachedFhirFetch(
+    url,
+    {
+      sourceId,
+      headers: {
+        "x-interaction-mode": "false",
+      },
+      setLatestCurl,
     },
-    setLatestCurl,
-  });
+    5 * 60 * 1000 // TTL 5 minutes
+  );
 
   return bundle;
 }
 
 // ✅ Create Encounter
 
-
 const CLASS_MAP = {
   Ambulatory: { code: "AMB", system: "http://terminology.hl7.org/CodeSystem/v3-ActCode" },
-  
 };
 
 export async function createEncounter(patientId, sourceId, departmentId, data) {

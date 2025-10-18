@@ -1,5 +1,5 @@
-
 import { fhirFetch } from "./fhir";
+import { cachedFhirFetch } from "./cachedFhirFetch";
 
 // Relationship → code mapping
 const relationshipCodeMap = {
@@ -22,13 +22,14 @@ const relationshipCodeMap = {
 
 // ✅ Fetch Family History
 export async function fetchFamilyHistory(patientId, sourceId, departmentId, setLatestCurl) {
-  const bundle = await fhirFetch(
+  const bundle = await cachedFhirFetch( 
     `/FamilyMemberHistory?patient=${patientId}&departmentId=${departmentId}`,
     {
       sourceId,
       headers: { "x-interaction-mode": "false" },
       setLatestCurl
-    }
+    },
+    5 * 60 * 1000 // TTL 5 minutes
   );
   return bundle;
 }
