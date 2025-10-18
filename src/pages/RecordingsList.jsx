@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import {
   HiOutlineCheckCircle,
@@ -7,12 +7,10 @@ import {
   HiChevronDown,
   HiChevronUp,
 } from "react-icons/hi";
-import { AppContext } from "../layouts/DashboardLayout";
 
 const backendUrl = import.meta.env.VITE_BASE_URL;
 
 const AssistantFinal = ({ recorderData }) => {
-  const { ehr } = useContext(AppContext);
   const id = recorderData?.[0]?.id || null;
 
   const [scriptList, setScriptList] = useState([]);
@@ -24,16 +22,20 @@ const AssistantFinal = ({ recorderData }) => {
   const [accordionOpen, setAccordionOpen] = useState(false);
   // Selected EHR filter
   const [selectedEHR, setSelectedEHR] = useState("");
-  // Filter scripts by EHR value from context
-  const filteredScripts = ehr
-    ? scriptList.filter((s) => s.tags.includes(ehr))
+  // Get all unique EHR tags from scripts
+  const ehrOptions = Array.from(
+    new Set(scriptList.flatMap((s) => s.tags || []))
+  );
+  // Filter scripts by selected EHR tag
+  const filteredScripts = selectedEHR
+    ? scriptList.filter((s) => s.tags.includes(selectedEHR))
     : scriptList;
 
   useEffect(() => {
     if (!filteredScripts.includes(activeScript)) {
       setActiveScript(filteredScripts[0] || null);
     }
-  }, [ehr, filteredScripts]);
+  }, [selectedEHR, filteredScripts]);
 
   const intervalRef = useRef(null);
 
@@ -198,7 +200,7 @@ const AssistantFinal = ({ recorderData }) => {
           }`}
         >
           {/* EHR Filter */}
-          {/* <div className="mb-2">
+          <div className="mb-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Filter by EHR
             </label>
@@ -214,10 +216,10 @@ const AssistantFinal = ({ recorderData }) => {
                 </option>
               ))}
             </select>
-          </div> */}
+          </div>
 
           <h3 className="text-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Select a task
+            Select a Workflow
           </h3>
 
           {/* Script selector / loader / empty message */}
@@ -228,7 +230,7 @@ const AssistantFinal = ({ recorderData }) => {
                 Loading workflows...
               </span>
             </div>
-          ) : filteredScripts.length > 0 ? (
+          ) : scriptList.length > 0 ? (
             <div className="relative z-0">
               <select
                 className="px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
@@ -246,10 +248,6 @@ const AssistantFinal = ({ recorderData }) => {
                 ))}
               </select>
             </div>
-          ) : ehr && !["Athena", "Elation"].includes(ehr) ? (
-            <p className="text-gray-500 text-sm">
-              Previews are only available for Athena and Elation.
-            </p>
           ) : (
             <p className="text-gray-500 text-sm">No workflows available.</p>
           )}
