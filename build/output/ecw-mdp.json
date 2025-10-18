@@ -1,0 +1,4058 @@
+{
+  "allergyIntolerance": {
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "clinicalStatus": {
+                "type": "object",
+                "properties": {
+                  "coding": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "display": {
+                          "type": "string"
+                        },
+                        "system": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "code": {
+                "type": "object",
+                "properties": {
+                  "coding": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "display": {
+                          "type": "string"
+                        },
+                        "system": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                }
+              },
+              "note": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "onsetDateTime": {
+                "type": "string",
+                "format": "date"
+              },
+              "patient": {
+                "type": "object",
+                "properties": {
+                  "reference": {
+                    "type": "string"
+                  }
+                }
+              },
+              "reaction": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": [
+                  "AllergyIntolerance"
+                ]
+              }
+            }
+          },
+          "example": {
+            "clinicalStatus": {
+              "coding": [
+                {
+                  "code": "active",
+                  "display": "Active",
+                  "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+                }
+              ]
+            },
+            "code": {
+              "coding": [
+                {
+                  "code": "418184004",
+                  "display": "Allergy to rye",
+                  "system": "http://snomed.info/sct"
+                }
+              ],
+              "text": "Allergy to rye"
+            },
+            "note": [],
+            "onsetDateTime": "2025-06-01",
+            "patient": {
+              "reference": "Patient/143098907918337"
+            },
+            "reaction": [],
+            "resourceType": "AllergyIntolerance"
+          }
+        }
+      }
+    }
+  },
+  "Appointment": {
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "appointmentType": {
+                "type": "object",
+                "properties": {
+                  "coding": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "display": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": {
+                "type": "string"
+              },
+              "end": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "extension": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    },
+                    "valueString": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "minutesDuration": {
+                "type": "integer"
+              },
+              "participant": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "actor": {
+                      "type": "object",
+                      "properties": {
+                        "reference": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": [
+                  "Appointment"
+                ]
+              },
+              "start": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "status": {
+                "type": "string"
+              }
+            }
+          },
+          "example": {
+            "appointmentType": {
+              "coding": [
+                {
+                  "code": "Recurring Yearly - Phy&Virtual - Blocked",
+                  "display": "Recurring Yearly - Phy&Virtual - Blocked"
+                }
+              ],
+              "text": "Recurring Yearly - Phy&Virtual - Blocked"
+            },
+            "description": "Recurring Yearly - Phy&Virtual - Blocked",
+            "end": "2026-08-05T08:30:00.000+00:00",
+            "extension": [
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/slot-type",
+                "valueString": "event"
+              },
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/appointment-mode",
+                "valueString": "VIDEO"
+              },
+              {
+                "url": "https://foldhealth.io/structure/location-group-id",
+                "valueString": "74802ba4-0fdc-48f9-bee0-34bd9e5c738d"
+              }
+            ],
+            "minutesDuration": 60,
+            "participant": [
+              {
+                "actor": {
+                  "reference": "Practitioner/141440612892674"
+                },
+                "required": "required",
+                "status": "accepted"
+              },
+              {
+                "actor": {
+                  "reference": "HealthcareService/140857911017476"
+                }
+              }
+            ],
+            "resourceType": "Appointment",
+            "start": "2026-08-05T07:30:00.000+00:00",
+            "status": "Scheduled"
+          }
+        }
+      }
+    }
+  },
+  "combined": {
+    "allergyIntolerance": {
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "clinicalStatus": {
+                  "type": "object",
+                  "properties": {
+                    "coding": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "display": {
+                            "type": "string"
+                          },
+                          "system": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "code": {
+                  "type": "object",
+                  "properties": {
+                    "coding": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "display": {
+                            "type": "string"
+                          },
+                          "system": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "note": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "onsetDateTime": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "patient": {
+                  "type": "object",
+                  "properties": {
+                    "reference": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "reaction": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "resourceType": {
+                  "type": "string",
+                  "enum": [
+                    "AllergyIntolerance"
+                  ]
+                }
+              }
+            },
+            "example": {
+              "clinicalStatus": {
+                "coding": [
+                  {
+                    "code": "active",
+                    "display": "Active",
+                    "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+                  }
+                ]
+              },
+              "code": {
+                "coding": [
+                  {
+                    "code": "418184004",
+                    "display": "Allergy to rye",
+                    "system": "http://snomed.info/sct"
+                  }
+                ],
+                "text": "Allergy to rye"
+              },
+              "note": [],
+              "onsetDateTime": "2025-06-01",
+              "patient": {
+                "reference": "Patient/143098907918337"
+              },
+              "reaction": [],
+              "resourceType": "AllergyIntolerance"
+            }
+          }
+        }
+      }
+    },
+    "Appointment": {
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "appointmentType": {
+                  "type": "object",
+                  "properties": {
+                    "coding": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "display": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "description": {
+                  "type": "string"
+                },
+                "end": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "extension": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "valueString": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "minutesDuration": {
+                  "type": "integer"
+                },
+                "participant": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "actor": {
+                        "type": "object",
+                        "properties": {
+                          "reference": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "resourceType": {
+                  "type": "string",
+                  "enum": [
+                    "Appointment"
+                  ]
+                },
+                "start": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "status": {
+                  "type": "string"
+                }
+              }
+            },
+            "example": {
+              "appointmentType": {
+                "coding": [
+                  {
+                    "code": "Recurring Yearly - Phy&Virtual - Blocked",
+                    "display": "Recurring Yearly - Phy&Virtual - Blocked"
+                  }
+                ],
+                "text": "Recurring Yearly - Phy&Virtual - Blocked"
+              },
+              "description": "Recurring Yearly - Phy&Virtual - Blocked",
+              "end": "2026-08-05T08:30:00.000+00:00",
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/slot-type",
+                  "valueString": "event"
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/appointment-mode",
+                  "valueString": "VIDEO"
+                },
+                {
+                  "url": "https://foldhealth.io/structure/location-group-id",
+                  "valueString": "74802ba4-0fdc-48f9-bee0-34bd9e5c738d"
+                }
+              ],
+              "minutesDuration": 60,
+              "participant": [
+                {
+                  "actor": {
+                    "reference": "Practitioner/141440612892674"
+                  },
+                  "required": "required",
+                  "status": "accepted"
+                },
+                {
+                  "actor": {
+                    "reference": "HealthcareService/140857911017476"
+                  }
+                }
+              ],
+              "resourceType": "Appointment",
+              "start": "2026-08-05T07:30:00.000+00:00",
+              "status": "Scheduled"
+            }
+          }
+        }
+      }
+    },
+    "Conditions": {
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "category": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "coding": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "display": {
+                              "type": "string"
+                            },
+                            "system": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "clinicalStatus": {
+                  "type": "object",
+                  "properties": {
+                    "coding": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "display": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "code": {
+                  "type": "object",
+                  "properties": {
+                    "coding": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "display": {
+                            "type": "string"
+                          },
+                          "system": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "contained": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "object",
+                        "properties": {
+                          "coding": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "code": {
+                                  "type": "string"
+                                },
+                                "system": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "date": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "effectivePeriod": {
+                        "type": "object",
+                        "properties": {
+                          "start": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "end": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      },
+                      "extension": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "url": {
+                              "type": "string"
+                            },
+                            "valueString": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "note": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "text": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "resourceType": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "extension": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "valueString": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "identifier": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "system": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "lastUpdated": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                },
+                "note": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "onsetDateTime": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "recordedDate": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "resourceType": {
+                  "type": "string",
+                  "enum": [
+                    "Condition"
+                  ]
+                },
+                "subject": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "reference": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "text": {
+                  "type": "object",
+                  "properties": {
+                    "div": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "category": [
+                {
+                  "coding": [
+                    {
+                      "code": "problem-list-item",
+                      "display": "Problem List Item",
+                      "system": "http://terminology.hl7.org/CodeSystem/condition-category"
+                    }
+                  ]
+                }
+              ],
+              "clinicalStatus": {
+                "coding": [
+                  {
+                    "code": "resolved",
+                    "display": "Resolved"
+                  }
+                ]
+              },
+              "code": {
+                "coding": [
+                  {
+                    "code": "30242009",
+                    "display": "Scarlet fever",
+                    "system": "http://snomed.info/sct"
+                  },
+                  {
+                    "code": "A38.9",
+                    "system": "ICD10"
+                  },
+                  {
+                    "code": "A38.9",
+                    "system": "http://hl7.org/fhir/sid/icd-10-cm"
+                  },
+                  {
+                    "code": "A38.9",
+                    "system": "http://hl7.org/fhir/sid/icd-10-cm"
+                  }
+                ],
+                "text": "Scarlet fever"
+              },
+              "contained": [
+                {
+                  "code": {
+                    "coding": [
+                      {
+                        "code": "resolved",
+                        "system": "https://terminology.hl7.org/3.1.0/CodeSystem-condition-clinical.html"
+                      },
+                      {
+                        "code": "active",
+                        "system": "https://terminology.hl7.org/3.1.0/CodeSystem-condition-clinical.html"
+                      }
+                    ]
+                  },
+                  "effectivePeriod": {
+                    "end": "2025-06-15T04:00:00Z"
+                  },
+                  "extension": [
+                    {
+                      "url": "http://xcaliber-fhir/structureDefinition/event-type-hidden",
+                      "valueString": "HIDDEN"
+                    }
+                  ],
+                  "note": [
+                    {}
+                  ],
+                  "resourceType": "ClinicalImpression"
+                },
+                {
+                  "code": {
+                    "coding": [
+                      {
+                        "code": "resolved",
+                        "system": "https://terminology.hl7.org/3.1.0/CodeSystem-condition-clinical.html"
+                      },
+                      {
+                        "code": "active",
+                        "system": "https://terminology.hl7.org/3.1.0/CodeSystem-condition-clinical.html"
+                      }
+                    ]
+                  },
+                  "date": "2025-06-26T04:00:00Z",
+                  "effectivePeriod": {
+                    "start": "2025-06-10T04:00:00Z"
+                  },
+                  "extension": [
+                    {
+                      "url": "http://xcaliber-fhir/structureDefinition/status"
+                    },
+                    {
+                      "url": "http://xcaliber-fhir/structureDefinition/event-type-start",
+                      "valueString": "START"
+                    },
+                    {
+                      "url": "http://xcaliber-fhir/structureDefinition/on-set-date",
+                      "valueString": "2025-06-10T04:00:00Z"
+                    },
+                    {
+                      "url": "https://foldhealth.io/structure/practitioner-reference",
+                      "valueString": "p-lvivek"
+                    }
+                  ],
+                  "note": [
+                    {
+                      "text": "Scarlet Fever - Resolved"
+                    }
+                  ],
+                  "resourceType": "ClinicalImpression"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/deactivated-date",
+                  "valueString": "2025-06-15T04:00:00Z"
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/deactivated-user",
+                  "valueString": "p-lvivek"
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/last-modified-by",
+                  "valueString": "p-lvivek"
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/last-modified-datetime",
+                  "valueString": "2025-06-26T10:05:09Z"
+                },
+                {
+                  "url": "https://foldhealth.io/structure/patient-location-id",
+                  "valueString": "150"
+                },
+                {
+                  "url": "https://foldhealth.io/structure/account-uuid",
+                  "valueString": "49a6927a-c3d6-4284-ac67-4b5f9ad47604"
+                },
+                {
+                  "url": "https://foldhealth.io/structure/ehr-code",
+                  "valueString": "FOLD_ATHENA_EHR"
+                },
+                {
+                  "url": "https://foldhealth.io/structure/location-group-id",
+                  "valueString": "b9d3ffc2-24f0-4fc4-9cc9-82b36c8cae6f"
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/status",
+                  "valueString": "ACUTE"
+                }
+              ],
+              "identifier": [
+                {
+                  "system": "https://foldhealth.io/structure/resource-group-identifier",
+                  "value": "5220c77e-daa4-4115-9180-02c36daa4c8a"
+                },
+                {
+                  "system": "https://foldhealth.io/structure/resource-version-identifier",
+                  "value": "b129f913-4047-4d57-9e32-3590ec2926fe"
+                }
+              ],
+              "meta": {
+                "lastUpdated": "2025-06-26T10:05:19.618237+00:00"
+              },
+              "note": [
+                {
+                  "text": "Scarlet Fever - Resolved"
+                }
+              ],
+              "onsetDateTime": "2025-06-10",
+              "recordedDate": "2025-06-26T04:00:00Z",
+              "resourceType": "Condition",
+              "subject": {
+                "id": "48566",
+                "reference": "Patient/143098907918337"
+              },
+              "text": {
+                "div": "Scarlet fever",
+                "status": "generated"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Coverage": null,
+    "DiagnosticReport": {
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "category": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "code": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "extension": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "valueInteger": {
+                        "type": "integer"
+                      },
+                      "valueString": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "issued": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "presentedForm": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "contentType": {
+                        "type": "string"
+                      },
+                      "data": {
+                        "type": "string",
+                        "description": "Base64-encoded binary content"
+                      }
+                    }
+                  }
+                },
+                "resourceType": {
+                  "type": "string",
+                  "enum": [
+                    "DiagnosticReport"
+                  ]
+                },
+                "subject": {
+                  "type": "object",
+                  "properties": {
+                    "reference": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "category": [
+                {
+                  "text": "Misc"
+                }
+              ],
+              "code": {
+                "text": "Visit Note - OMW Evidence"
+              },
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/practice",
+                  "valueInteger": 140857911017476
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/physician",
+                  "valueInteger": 141444516282370
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/document-date",
+                  "valueString": "2025-06-27T09:58:27.724Z"
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/chart-date",
+                  "valueString": "2025-06-27T09:58:27.724Z"
+                }
+              ],
+              "issued": "2025-06-27T09:58:27.724Z",
+              "presentedForm": [
+                {
+                  "contentType": "application/octet-stream",
+                  "data": "VGhpcyBpcyBkdW1teSBiYXNlNjQgYm9keQ=="
+                }
+              ],
+              "resourceType": "DiagnosticReport",
+              "subject": {
+                "reference": "Patient/143090184880129"
+              }
+            }
+          }
+        }
+      }
+    },
+    "DocumentReference": {
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "author": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "reference": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "category": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "coding": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "system": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "content": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "attachment": {
+                        "type": "object",
+                        "properties": {
+                          "contentType": {
+                            "type": "string"
+                          },
+                          "data": {
+                            "type": "string",
+                            "description": "Base64 or plain text content (as string)"
+                          },
+                          "hash": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "context": {
+                  "type": "object",
+                  "properties": {
+                    "encounter": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "reference": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "period": {
+                      "type": "object",
+                      "properties": {
+                        "start": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "docStatus": {
+                  "type": "string"
+                },
+                "extension": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "valueString": {
+                        "type": "string"
+                      },
+                      "valueBoolean": {
+                        "type": "boolean"
+                      },
+                      "valueInteger": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                },
+                "identifier": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "system": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "resourceType": {
+                  "type": "string",
+                  "enum": [
+                    "DocumentReference"
+                  ]
+                },
+                "subject": {
+                  "type": "object",
+                  "properties": {
+                    "reference": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "type": {
+                  "type": "object",
+                  "properties": {
+                    "coding": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "system": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "author": [
+                {
+                  "reference": "Practitioner/142330941997058"
+                }
+              ],
+              "category": [
+                {
+                  "coding": [
+                    {
+                      "code": "non_visit_notes",
+                      "system": "Elation"
+                    }
+                  ]
+                }
+              ],
+              "content": [
+                {
+                  "attachment": {
+                    "contentType": "text/plain",
+                    "data": "[Workflow User]:[04-15-2025, 02:57 PM] \nHi,\n\nWere glad to have you with us. Your health and well-being are our top priority, and we're here to support you every step of the way. Feel free to explore the app and let us know if you need any assistance.\n\nYour care team is just a tap away!\n\nTEXT IS UPDAated 7march!!!!!!!\n\nDoctor's Contact Information\nDr. [Pooja Ambure]\nSpecialty: [CBT]\nPhone: [(205) 898-2112]\nEmail: [poojaa+elation@fold.health]\nOffice Hours: [10AM to 5PM ]\nLocation: [https://www.amarbuilders.com/projects/ATP.html ] \nlocation view on MAP : https://www.google.com/maps/dir//Balewadi+-+Hinjawadi+Rd,+Patil+Nagar,+Balewadi,+Pune,+Maharashtra+411045/@18.5754027,73.6825101,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3bc2b918de3458e9:0x2952c2612b7dda95!2m2!1d73.7649118!2d18.5754206?entry=ttu&g_ep=EgoyMDI1MDIyNS4wIKXMDSoASAFQAw%3D%3D \n\n~!@#$%^&*()_+{}|:\"?><```1234567890-=\\\\]][['';;//..,,,\n~!@#$%^&*()_+{}|:\"?><```1234567890-=\\\\]][['';;//..,,,\nALL TYPE OF CHARACTERS\n\n**********************THIS IS Patient messages default group settings**************************************\n\nTEXT is updated , 10april\n\nhttps://elation.patientapp.qa.foldhealth.io/#/messaging \nhttps://elation.patientapp.qa.foldhealth.io/#/myFamilyMember \nhttps://elation.patientapp.qa.foldhealth.io/\nhttps://elation.patientapp.qa.foldhealth.io/#/wearables\nhttps://elation.patientapp.qa.foldhealth.io/#/myTasks\nclick https://www.amazon.com/ \ncheck https://en.wikipedia.org/wiki/Main_Page\n",
+                    "hash": "md5 hash of base64 section content",
+                    "title": "Narrative"
+                  }
+                }
+              ],
+              "context": {
+                "encounter": [
+                  {
+                    "reference": "Encounter/2025-04-15T13:11:40.316+00:00"
+                  }
+                ],
+                "period": {
+                  "start": "2025-04-15T13:11:40.316+00:00"
+                }
+              },
+              "date": "2025-04-15T13:11:40.316+00:00",
+              "docStatus": "preliminary",
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/created-date",
+                  "valueString": "2025-04-15T13:11:39.916Z"
+                },
+                {
+                  "url": "https://foldhealth.io/structure/is-note-status-component-exist",
+                  "valueBoolean": false
+                },
+                {
+                  "url": "https://foldhealth.io/structure/is-note-sub-status-component-exist",
+                  "valueBoolean": false
+                }
+              ],
+              "identifier": [
+                {
+                  "system": "https://foldhealth.io/structure/resource-group-identifier",
+                  "value": "ec6cf339-66a5-4c1e-bc5b-9d94412da871"
+                },
+                {
+                  "system": "https://foldhealth.io/structure/resource-can-update-group-identifier",
+                  "value": "false"
+                },
+                {
+                  "system": "https://foldhealth.io/structure/resource-version-identifier",
+                  "value": "aa48c1ec-a091-4e00-80d3-e85082c74723"
+                },
+                {
+                  "system": "https://foldhealth.io/structure/resource-can-update-version-identifier",
+                  "value": "false"
+                },
+                {
+                  "system": "https://foldhealth.io/structure/resource-can-update-source-patient-id-and-location-group-id",
+                  "value": "false"
+                },
+                {
+                  "system": "https://foldhealth.io/structure/resource-can-update-last-updated-by-location-group-id",
+                  "value": "false"
+                }
+              ],
+              "resourceType": "DocumentReference",
+              "subject": {
+                "reference": "Patient/142887843856385"
+              },
+              "type": {
+                "coding": [
+                  {
+                    "code": "nonvisit",
+                    "system": "Elation"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "Encounter": null,
+    "FamilyMemberHistory": null,
+    "Immunization": {
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "doseQuantity": {
+                  "type": "object",
+                  "properties": {
+                    "unit": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "occurrenceDateTime": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "patient": {
+                  "type": "object",
+                  "properties": {
+                    "reference": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "performer": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "actor": {
+                        "type": "object",
+                        "properties": {
+                          "reference": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "function": {
+                        "type": "object",
+                        "properties": {
+                          "coding": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "code": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "primarySource": {
+                  "type": "boolean"
+                },
+                "resourceType": {
+                  "type": "string",
+                  "enum": [
+                    "Immunization"
+                  ]
+                },
+                "status": {
+                  "type": "string"
+                },
+                "vaccineCode": {
+                  "type": "object",
+                  "properties": {
+                    "coding": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "display": {
+                            "type": "string"
+                          },
+                          "system": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "doseQuantity": {
+                "unit": "1",
+                "value": 1
+              },
+              "occurrenceDateTime": "2025-06-23T10:45:23.082Z",
+              "patient": {
+                "reference": "Patient/143090225905665"
+              },
+              "performer": [
+                {
+                  "actor": {
+                    "reference": "Practitioner/141210539655170"
+                  },
+                  "function": {
+                    "coding": [
+                      {
+                        "code": "OP"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "actor": {
+                    "reference": "Practitioner/141210539655170"
+                  },
+                  "function": {
+                    "coding": [
+                      {
+                        "code": "AP"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "primarySource": true,
+              "resourceType": "Immunization",
+              "status": "completed",
+              "vaccineCode": {
+                "coding": [
+                  {
+                    "code": "15",
+                    "display": "influenza, split (incl. purified surface antigen)",
+                    "system": "http://hl7.org/fhir/sid/cvx"
+                  }
+                ],
+                "text": "influenza, split (incl. purified surface antigen)"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Invoice": null,
+    "Location": null,
+    "MedicationRequest": null,
+    "MedicationStatement": {
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dosage": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "doseAndRate": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "doseQuantity": {
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "type": "number",
+                                  "nullable": true
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "extension": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "valueString": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "medicationCodeableConcept": {
+                  "type": "object",
+                  "properties": {
+                    "coding": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "display": {
+                            "type": "string"
+                          },
+                          "system": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "resourceType": {
+                  "type": "string",
+                  "enum": [
+                    "MedicationStatement"
+                  ]
+                },
+                "status": {
+                  "type": "string"
+                },
+                "subject": {
+                  "type": "object",
+                  "properties": {
+                    "reference": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "dosage": [
+                {
+                  "doseAndRate": [
+                    {
+                      "doseQuantity": {
+                        "value": null
+                      }
+                    }
+                  ]
+                }
+              ],
+              "extension": [
+                {
+                  "url": "https://docs.xcaliberapis.com/xchange/elation/extensions/is_doc_med",
+                  "valueString": "true"
+                },
+                {
+                  "url": "https://docs.xcaliberapis.com/xchange/elation/extensions/medication_type",
+                  "valueString": "prescription"
+                },
+                {
+                  "url": "https://docs.xcaliberapis.com/xchange/elation/extensions/order_type",
+                  "valueString": "New"
+                },
+                {
+                  "url": "https://docs.xcaliberapis.com/xchange/elation/extensions/practice",
+                  "valueString": "140857911017476"
+                },
+                {
+                  "url": "https://docs.xcaliberapis.com/xchange/elation/extensions/medication_thread",
+                  "valueString": "true"
+                }
+              ],
+              "medicationCodeableConcept": {
+                "coding": [
+                  {
+                    "code": "246515",
+                    "display": "paramethasone 6 MG Oral Tablet",
+                    "system": "http://www.nlm.nih.gov/research/umls/rxnorm"
+                  }
+                ],
+                "text": "paramethasone 6 MG Oral Tablet"
+              },
+              "resourceType": "MedicationStatement",
+              "status": "active",
+              "subject": {
+                "reference": "Patient/142837780905985"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Observation": {
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "entry": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "resource": {
+                        "type": "object",
+                        "properties": {
+                          "category": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "coding": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "code": {
+                                        "type": "string"
+                                      },
+                                      "display": {
+                                        "type": "string"
+                                      },
+                                      "system": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "code": {
+                            "type": "object",
+                            "properties": {
+                              "coding": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "code": {
+                                      "type": "string"
+                                    },
+                                    "display": {
+                                      "type": "string"
+                                    },
+                                    "system": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "text": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "effectiveDateTime": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "extension": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "url": {
+                                  "type": "string"
+                                },
+                                "valueString": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "identifier": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "system": {
+                                  "type": "string"
+                                },
+                                "value": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "meta": {
+                            "type": "object",
+                            "properties": {
+                              "lastUpdated": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            }
+                          },
+                          "performer": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "reference": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "resourceType": {
+                            "type": "string",
+                            "enum": [
+                              "Observation"
+                            ]
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "subject": {
+                            "type": "object",
+                            "properties": {
+                              "reference": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "valueQuantity": {
+                            "type": "object",
+                            "properties": {
+                              "unit": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "resourceType": {
+                  "type": "string",
+                  "enum": [
+                    "Bundle"
+                  ]
+                },
+                "type": {
+                  "type": "string"
+                }
+              }
+            },
+            "example": {
+              "entry": [
+                {
+                  "resource": {
+                    "category": [
+                      {
+                        "coding": [
+                          {
+                            "code": "vital-signs",
+                            "display": "Vital Signs",
+                            "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+                          }
+                        ]
+                      }
+                    ],
+                    "code": {
+                      "coding": [
+                        {
+                          "code": "59408-5",
+                          "display": "Oxygen Saturation",
+                          "system": "http://loinc.org"
+                        }
+                      ],
+                      "text": "Oxygen Saturation"
+                    },
+                    "effectiveDateTime": "2025-06-26T13:28:06.055Z",
+                    "extension": [
+                      {
+                        "url": "https://foldhealth.io/structure/is-code-injected",
+                        "valueString": "true"
+                      },
+                      {
+                        "url": "https://foldhealth.io/structure/account-uuid",
+                        "valueString": "49a6927a-c3d6-4284-ac67-4b5f9ad47604"
+                      },
+                      {
+                        "url": "https://foldhealth.io/structure/ehr-code",
+                        "valueString": "FOLD_ATHENA_EHR"
+                      },
+                      {
+                        "url": "https://foldhealth.io/structure/location-group-id",
+                        "valueString": "b9d3ffc2-24f0-4fc4-9cc9-82b36c8cae6f"
+                      }
+                    ],
+                    "identifier": [
+                      {
+                        "system": "https://foldhealth.io/structure/resource-group-identifier",
+                        "value": "742d7410-4911-4a48-a310-843b4d2e416d"
+                      },
+                      {
+                        "system": "https://foldhealth.io/structure/resource-version-identifier",
+                        "value": "39bf3a58-9ef0-41b6-a607-358a3b6d8652"
+                      }
+                    ],
+                    "meta": {
+                      "lastUpdated": "2025-06-26T13:29:58.949846+00:00"
+                    },
+                    "performer": [
+                      {
+                        "reference": "Organization/140857911017476"
+                      }
+                    ],
+                    "resourceType": "Observation",
+                    "status": "final",
+                    "subject": {
+                      "reference": "Patient/143098907918337"
+                    },
+                    "valueQuantity": {
+                      "unit": "%",
+                      "value": 95
+                    }
+                  }
+                }
+              ],
+              "resourceType": "Bundle",
+              "type": "batch"
+            }
+          }
+        }
+      }
+    },
+    "patient": {
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "city": {
+                        "type": "string"
+                      },
+                      "postalCode": {
+                        "type": "string"
+                      },
+                      "state": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "use": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "birthDate": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "communication": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "language": {
+                        "type": "object"
+                      },
+                      "preferred": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                },
+                "contained": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "extension": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "valueCode": {
+                        "type": "string"
+                      },
+                      "valueString": {
+                        "type": "string"
+                      },
+                      "valueBoolean": {
+                        "type": "boolean"
+                      },
+                      "extension": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                },
+                "generalPractitioner": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "reference": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "name": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "family": {
+                        "type": "string"
+                      },
+                      "given": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "text": {
+                        "type": "string"
+                      },
+                      "use": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "resourceType": {
+                  "type": "string",
+                  "enum": [
+                    "Patient"
+                  ]
+                },
+                "telecom": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "extension": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "url": {
+                              "type": "string"
+                            },
+                            "valueBoolean": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      },
+                      "rank": {
+                        "type": "integer"
+                      },
+                      "system": {
+                        "type": "string"
+                      },
+                      "use": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "address": [
+                {
+                  "city": "Schenectady",
+                  "postalCode": "12345",
+                  "state": "NY",
+                  "type": "both",
+                  "use": "home"
+                }
+              ],
+              "birthDate": "1982-01-21",
+              "communication": [
+                {
+                  "language": {},
+                  "preferred": true
+                }
+              ],
+              "contained": [],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
+                  "valueCode": "Female"
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/patient-preferred-service-location",
+                  "valueString": "142758093455607"
+                },
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/tags",
+                  "extension": []
+                }
+              ],
+              "generalPractitioner": [
+                {
+                  "reference": "Practitioner/141444516282370"
+                }
+              ],
+              "name": [
+                {
+                  "family": "Cain",
+                  "given": [
+                    "Crystal",
+                    "1408"
+                  ],
+                  "text": "Crystal Cain",
+                  "use": "official"
+                },
+                {
+                  "text": "",
+                  "use": "usual"
+                }
+              ],
+              "resourceType": "Patient",
+              "telecom": [
+                {
+                  "extension": [
+                    {
+                      "url": "https://foldhealth.io/structure/is-verified",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "rank": 1,
+                  "system": "email",
+                  "use": "home",
+                  "value": "sagarc+cain@fold.health"
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "https://foldhealth.io/structure/is-verified",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "rank": 1,
+                  "system": "phone",
+                  "use": "Mobile",
+                  "value": "8285648983"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Person": null,
+    "Practitioner": null,
+    "PractitionerRole": null,
+    "Procedure": {
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "object",
+                  "properties": {
+                    "coding": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "display": {
+                            "type": "string"
+                          },
+                          "system": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "resourceType": {
+                  "type": "string",
+                  "enum": [
+                    "Procedure"
+                  ]
+                },
+                "subject": {
+                  "type": "object",
+                  "properties": {
+                    "reference": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "code": {
+                "coding": [
+                  {
+                    "code": "65785",
+                    "display": "Implantation of intrastromal corneal ring segments",
+                    "system": "CPT"
+                  }
+                ],
+                "text": "Implantation of intrastromal corneal ring segments"
+              }
+            }
+          }
+        }
+      }
+    },
+    "QuestionnaireResponse": {
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "authored": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "extension": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "valueString": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "identifier": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "system": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "item": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "resourceType": {
+                  "type": "string",
+                  "enum": [
+                    "QuestionnaireResponse"
+                  ]
+                },
+                "subject": {
+                  "type": "object",
+                  "properties": {
+                    "reference": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "text": {
+                  "type": "string"
+                }
+              }
+            },
+            "example": {
+              "authored": "2025-04-05T09:11:01.174Z",
+              "extension": [
+                {
+                  "url": "http://xcaliber-fhir/structureDefinition/history-type",
+                  "valueString": "Social"
+                }
+              ],
+              "identifier": [
+                {
+                  "system": "https://foldhealth.io/structure/resource-group-identifier",
+                  "value": "2647fb23-ef7e-40b5-8d96-de1b58afd389"
+                },
+                {
+                  "system": "https://foldhealth.io/structure/resource-can-update-group-identifier",
+                  "value": "false"
+                },
+                {
+                  "system": "https://foldhealth.io/structure/resource-version-identifier",
+                  "value": "daec7ce9-022c-4f20-ad38-348c013b0256"
+                },
+                {
+                  "system": "https://foldhealth.io/structure/resource-can-update-version-identifier",
+                  "value": "false"
+                },
+                {
+                  "system": "https://foldhealth.io/structure/resource-can-update-source-patient-id-and-location-group-id",
+                  "value": "false"
+                },
+                {
+                  "system": "https://foldhealth.io/structure/resource-can-update-last-updated-by-location-group-id",
+                  "value": "false"
+                }
+              ],
+              "item": [],
+              "resourceType": "QuestionnaireResponse",
+              "subject": {
+                "reference": "Patient/142852173332481"
+              },
+              "text": "Elation Social History check"
+            }
+          }
+        }
+      }
+    },
+    "servicerequest": null
+  },
+  "Conditions": {
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "coding": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "display": {
+                            "type": "string"
+                          },
+                          "system": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "clinicalStatus": {
+                "type": "object",
+                "properties": {
+                  "coding": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "display": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "code": {
+                "type": "object",
+                "properties": {
+                  "coding": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "display": {
+                          "type": "string"
+                        },
+                        "system": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                }
+              },
+              "contained": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "object",
+                      "properties": {
+                        "coding": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "code": {
+                                "type": "string"
+                              },
+                              "system": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "date": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "effectivePeriod": {
+                      "type": "object",
+                      "properties": {
+                        "start": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "end": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "extension": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "valueString": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "note": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "resourceType": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "extension": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    },
+                    "valueString": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "identifier": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "system": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "meta": {
+                "type": "object",
+                "properties": {
+                  "lastUpdated": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              },
+              "note": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "onsetDateTime": {
+                "type": "string",
+                "format": "date"
+              },
+              "recordedDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": [
+                  "Condition"
+                ]
+              },
+              "subject": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "reference": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text": {
+                "type": "object",
+                "properties": {
+                  "div": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "example": {
+            "category": [
+              {
+                "coding": [
+                  {
+                    "code": "problem-list-item",
+                    "display": "Problem List Item",
+                    "system": "http://terminology.hl7.org/CodeSystem/condition-category"
+                  }
+                ]
+              }
+            ],
+            "clinicalStatus": {
+              "coding": [
+                {
+                  "code": "resolved",
+                  "display": "Resolved"
+                }
+              ]
+            },
+            "code": {
+              "coding": [
+                {
+                  "code": "30242009",
+                  "display": "Scarlet fever",
+                  "system": "http://snomed.info/sct"
+                },
+                {
+                  "code": "A38.9",
+                  "system": "ICD10"
+                },
+                {
+                  "code": "A38.9",
+                  "system": "http://hl7.org/fhir/sid/icd-10-cm"
+                },
+                {
+                  "code": "A38.9",
+                  "system": "http://hl7.org/fhir/sid/icd-10-cm"
+                }
+              ],
+              "text": "Scarlet fever"
+            },
+            "contained": [
+              {
+                "code": {
+                  "coding": [
+                    {
+                      "code": "resolved",
+                      "system": "https://terminology.hl7.org/3.1.0/CodeSystem-condition-clinical.html"
+                    },
+                    {
+                      "code": "active",
+                      "system": "https://terminology.hl7.org/3.1.0/CodeSystem-condition-clinical.html"
+                    }
+                  ]
+                },
+                "effectivePeriod": {
+                  "end": "2025-06-15T04:00:00Z"
+                },
+                "extension": [
+                  {
+                    "url": "http://xcaliber-fhir/structureDefinition/event-type-hidden",
+                    "valueString": "HIDDEN"
+                  }
+                ],
+                "note": [
+                  {}
+                ],
+                "resourceType": "ClinicalImpression"
+              },
+              {
+                "code": {
+                  "coding": [
+                    {
+                      "code": "resolved",
+                      "system": "https://terminology.hl7.org/3.1.0/CodeSystem-condition-clinical.html"
+                    },
+                    {
+                      "code": "active",
+                      "system": "https://terminology.hl7.org/3.1.0/CodeSystem-condition-clinical.html"
+                    }
+                  ]
+                },
+                "date": "2025-06-26T04:00:00Z",
+                "effectivePeriod": {
+                  "start": "2025-06-10T04:00:00Z"
+                },
+                "extension": [
+                  {
+                    "url": "http://xcaliber-fhir/structureDefinition/status"
+                  },
+                  {
+                    "url": "http://xcaliber-fhir/structureDefinition/event-type-start",
+                    "valueString": "START"
+                  },
+                  {
+                    "url": "http://xcaliber-fhir/structureDefinition/on-set-date",
+                    "valueString": "2025-06-10T04:00:00Z"
+                  },
+                  {
+                    "url": "https://foldhealth.io/structure/practitioner-reference",
+                    "valueString": "p-lvivek"
+                  }
+                ],
+                "note": [
+                  {
+                    "text": "Scarlet Fever - Resolved"
+                  }
+                ],
+                "resourceType": "ClinicalImpression"
+              }
+            ],
+            "extension": [
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/deactivated-date",
+                "valueString": "2025-06-15T04:00:00Z"
+              },
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/deactivated-user",
+                "valueString": "p-lvivek"
+              },
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/last-modified-by",
+                "valueString": "p-lvivek"
+              },
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/last-modified-datetime",
+                "valueString": "2025-06-26T10:05:09Z"
+              },
+              {
+                "url": "https://foldhealth.io/structure/patient-location-id",
+                "valueString": "150"
+              },
+              {
+                "url": "https://foldhealth.io/structure/account-uuid",
+                "valueString": "49a6927a-c3d6-4284-ac67-4b5f9ad47604"
+              },
+              {
+                "url": "https://foldhealth.io/structure/ehr-code",
+                "valueString": "FOLD_ATHENA_EHR"
+              },
+              {
+                "url": "https://foldhealth.io/structure/location-group-id",
+                "valueString": "b9d3ffc2-24f0-4fc4-9cc9-82b36c8cae6f"
+              },
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/status",
+                "valueString": "ACUTE"
+              }
+            ],
+            "identifier": [
+              {
+                "system": "https://foldhealth.io/structure/resource-group-identifier",
+                "value": "5220c77e-daa4-4115-9180-02c36daa4c8a"
+              },
+              {
+                "system": "https://foldhealth.io/structure/resource-version-identifier",
+                "value": "b129f913-4047-4d57-9e32-3590ec2926fe"
+              }
+            ],
+            "meta": {
+              "lastUpdated": "2025-06-26T10:05:19.618237+00:00"
+            },
+            "note": [
+              {
+                "text": "Scarlet Fever - Resolved"
+              }
+            ],
+            "onsetDateTime": "2025-06-10",
+            "recordedDate": "2025-06-26T04:00:00Z",
+            "resourceType": "Condition",
+            "subject": {
+              "id": "48566",
+              "reference": "Patient/143098907918337"
+            },
+            "text": {
+              "div": "Scarlet fever",
+              "status": "generated"
+            }
+          }
+        }
+      }
+    }
+  },
+  "DiagnosticReport": {
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "code": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  }
+                }
+              },
+              "extension": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    },
+                    "valueInteger": {
+                      "type": "integer"
+                    },
+                    "valueString": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "issued": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "presentedForm": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "contentType": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "Base64-encoded binary content"
+                    }
+                  }
+                }
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": [
+                  "DiagnosticReport"
+                ]
+              },
+              "subject": {
+                "type": "object",
+                "properties": {
+                  "reference": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "example": {
+            "category": [
+              {
+                "text": "Misc"
+              }
+            ],
+            "code": {
+              "text": "Visit Note - OMW Evidence"
+            },
+            "extension": [
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/practice",
+                "valueInteger": 140857911017476
+              },
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/physician",
+                "valueInteger": 141444516282370
+              },
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/document-date",
+                "valueString": "2025-06-27T09:58:27.724Z"
+              },
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/chart-date",
+                "valueString": "2025-06-27T09:58:27.724Z"
+              }
+            ],
+            "issued": "2025-06-27T09:58:27.724Z",
+            "presentedForm": [
+              {
+                "contentType": "application/octet-stream",
+                "data": "VGhpcyBpcyBkdW1teSBiYXNlNjQgYm9keQ=="
+              }
+            ],
+            "resourceType": "DiagnosticReport",
+            "subject": {
+              "reference": "Patient/143090184880129"
+            }
+          }
+        }
+      }
+    }
+  },
+  "DocumentReference": {
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "author": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "reference": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "category": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "coding": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "system": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "content": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "attachment": {
+                      "type": "object",
+                      "properties": {
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "data": {
+                          "type": "string",
+                          "description": "Base64 or plain text content (as string)"
+                        },
+                        "hash": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "context": {
+                "type": "object",
+                "properties": {
+                  "encounter": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "reference": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "period": {
+                    "type": "object",
+                    "properties": {
+                      "start": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                }
+              },
+              "date": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "docStatus": {
+                "type": "string"
+              },
+              "extension": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    },
+                    "valueString": {
+                      "type": "string"
+                    },
+                    "valueBoolean": {
+                      "type": "boolean"
+                    },
+                    "valueInteger": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              },
+              "identifier": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "system": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": [
+                  "DocumentReference"
+                ]
+              },
+              "subject": {
+                "type": "object",
+                "properties": {
+                  "reference": {
+                    "type": "string"
+                  }
+                }
+              },
+              "type": {
+                "type": "object",
+                "properties": {
+                  "coding": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "system": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "example": {
+            "author": [
+              {
+                "reference": "Practitioner/142330941997058"
+              }
+            ],
+            "category": [
+              {
+                "coding": [
+                  {
+                    "code": "non_visit_notes",
+                    "system": "Elation"
+                  }
+                ]
+              }
+            ],
+            "content": [
+              {
+                "attachment": {
+                  "contentType": "text/plain",
+                  "data": "[Workflow User]:[04-15-2025, 02:57 PM] \nHi,\n\nWere glad to have you with us. Your health and well-being are our top priority, and we're here to support you every step of the way. Feel free to explore the app and let us know if you need any assistance.\n\nYour care team is just a tap away!\n\nTEXT IS UPDAated 7march!!!!!!!\n\nDoctor's Contact Information\nDr. [Pooja Ambure]\nSpecialty: [CBT]\nPhone: [(205) 898-2112]\nEmail: [poojaa+elation@fold.health]\nOffice Hours: [10AM to 5PM ]\nLocation: [https://www.amarbuilders.com/projects/ATP.html ] \nlocation view on MAP : https://www.google.com/maps/dir//Balewadi+-+Hinjawadi+Rd,+Patil+Nagar,+Balewadi,+Pune,+Maharashtra+411045/@18.5754027,73.6825101,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3bc2b918de3458e9:0x2952c2612b7dda95!2m2!1d73.7649118!2d18.5754206?entry=ttu&g_ep=EgoyMDI1MDIyNS4wIKXMDSoASAFQAw%3D%3D \n\n~!@#$%^&*()_+{}|:\"?><```1234567890-=\\\\]][['';;//..,,,\n~!@#$%^&*()_+{}|:\"?><```1234567890-=\\\\]][['';;//..,,,\nALL TYPE OF CHARACTERS\n\n**********************THIS IS Patient messages default group settings**************************************\n\nTEXT is updated , 10april\n\nhttps://elation.patientapp.qa.foldhealth.io/#/messaging \nhttps://elation.patientapp.qa.foldhealth.io/#/myFamilyMember \nhttps://elation.patientapp.qa.foldhealth.io/\nhttps://elation.patientapp.qa.foldhealth.io/#/wearables\nhttps://elation.patientapp.qa.foldhealth.io/#/myTasks\nclick https://www.amazon.com/ \ncheck https://en.wikipedia.org/wiki/Main_Page\n",
+                  "hash": "md5 hash of base64 section content",
+                  "title": "Narrative"
+                }
+              }
+            ],
+            "context": {
+              "encounter": [
+                {
+                  "reference": "Encounter/2025-04-15T13:11:40.316+00:00"
+                }
+              ],
+              "period": {
+                "start": "2025-04-15T13:11:40.316+00:00"
+              }
+            },
+            "date": "2025-04-15T13:11:40.316+00:00",
+            "docStatus": "preliminary",
+            "extension": [
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/created-date",
+                "valueString": "2025-04-15T13:11:39.916Z"
+              },
+              {
+                "url": "https://foldhealth.io/structure/is-note-status-component-exist",
+                "valueBoolean": false
+              },
+              {
+                "url": "https://foldhealth.io/structure/is-note-sub-status-component-exist",
+                "valueBoolean": false
+              }
+            ],
+            "identifier": [
+              {
+                "system": "https://foldhealth.io/structure/resource-group-identifier",
+                "value": "ec6cf339-66a5-4c1e-bc5b-9d94412da871"
+              },
+              {
+                "system": "https://foldhealth.io/structure/resource-can-update-group-identifier",
+                "value": "false"
+              },
+              {
+                "system": "https://foldhealth.io/structure/resource-version-identifier",
+                "value": "aa48c1ec-a091-4e00-80d3-e85082c74723"
+              },
+              {
+                "system": "https://foldhealth.io/structure/resource-can-update-version-identifier",
+                "value": "false"
+              },
+              {
+                "system": "https://foldhealth.io/structure/resource-can-update-source-patient-id-and-location-group-id",
+                "value": "false"
+              },
+              {
+                "system": "https://foldhealth.io/structure/resource-can-update-last-updated-by-location-group-id",
+                "value": "false"
+              }
+            ],
+            "resourceType": "DocumentReference",
+            "subject": {
+              "reference": "Patient/142887843856385"
+            },
+            "type": {
+              "coding": [
+                {
+                  "code": "nonvisit",
+                  "system": "Elation"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "Immunization": {
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "doseQuantity": {
+                "type": "object",
+                "properties": {
+                  "unit": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                }
+              },
+              "occurrenceDateTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "patient": {
+                "type": "object",
+                "properties": {
+                  "reference": {
+                    "type": "string"
+                  }
+                }
+              },
+              "performer": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "actor": {
+                      "type": "object",
+                      "properties": {
+                        "reference": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "function": {
+                      "type": "object",
+                      "properties": {
+                        "coding": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "code": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "primarySource": {
+                "type": "boolean"
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": [
+                  "Immunization"
+                ]
+              },
+              "status": {
+                "type": "string"
+              },
+              "vaccineCode": {
+                "type": "object",
+                "properties": {
+                  "coding": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "display": {
+                          "type": "string"
+                        },
+                        "system": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "example": {
+            "doseQuantity": {
+              "unit": "1",
+              "value": 1
+            },
+            "occurrenceDateTime": "2025-06-23T10:45:23.082Z",
+            "patient": {
+              "reference": "Patient/143090225905665"
+            },
+            "performer": [
+              {
+                "actor": {
+                  "reference": "Practitioner/141210539655170"
+                },
+                "function": {
+                  "coding": [
+                    {
+                      "code": "OP"
+                    }
+                  ]
+                }
+              },
+              {
+                "actor": {
+                  "reference": "Practitioner/141210539655170"
+                },
+                "function": {
+                  "coding": [
+                    {
+                      "code": "AP"
+                    }
+                  ]
+                }
+              }
+            ],
+            "primarySource": true,
+            "resourceType": "Immunization",
+            "status": "completed",
+            "vaccineCode": {
+              "coding": [
+                {
+                  "code": "15",
+                  "display": "influenza, split (incl. purified surface antigen)",
+                  "system": "http://hl7.org/fhir/sid/cvx"
+                }
+              ],
+              "text": "influenza, split (incl. purified surface antigen)"
+            }
+          }
+        }
+      }
+    }
+  },
+  "MedicationStatement": {
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "dosage": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "doseAndRate": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "doseQuantity": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "number",
+                                "nullable": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "extension": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    },
+                    "valueString": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "medicationCodeableConcept": {
+                "type": "object",
+                "properties": {
+                  "coding": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "display": {
+                          "type": "string"
+                        },
+                        "system": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                }
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": [
+                  "MedicationStatement"
+                ]
+              },
+              "status": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "object",
+                "properties": {
+                  "reference": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "example": {
+            "dosage": [
+              {
+                "doseAndRate": [
+                  {
+                    "doseQuantity": {
+                      "value": null
+                    }
+                  }
+                ]
+              }
+            ],
+            "extension": [
+              {
+                "url": "https://docs.xcaliberapis.com/xchange/elation/extensions/is_doc_med",
+                "valueString": "true"
+              },
+              {
+                "url": "https://docs.xcaliberapis.com/xchange/elation/extensions/medication_type",
+                "valueString": "prescription"
+              },
+              {
+                "url": "https://docs.xcaliberapis.com/xchange/elation/extensions/order_type",
+                "valueString": "New"
+              },
+              {
+                "url": "https://docs.xcaliberapis.com/xchange/elation/extensions/practice",
+                "valueString": "140857911017476"
+              },
+              {
+                "url": "https://docs.xcaliberapis.com/xchange/elation/extensions/medication_thread",
+                "valueString": "true"
+              }
+            ],
+            "medicationCodeableConcept": {
+              "coding": [
+                {
+                  "code": "246515",
+                  "display": "paramethasone 6 MG Oral Tablet",
+                  "system": "http://www.nlm.nih.gov/research/umls/rxnorm"
+                }
+              ],
+              "text": "paramethasone 6 MG Oral Tablet"
+            },
+            "resourceType": "MedicationStatement",
+            "status": "active",
+            "subject": {
+              "reference": "Patient/142837780905985"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Observation": {
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "entry": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "resource": {
+                      "type": "object",
+                      "properties": {
+                        "category": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "coding": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "code": {
+                                      "type": "string"
+                                    },
+                                    "display": {
+                                      "type": "string"
+                                    },
+                                    "system": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "code": {
+                          "type": "object",
+                          "properties": {
+                            "coding": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "code": {
+                                    "type": "string"
+                                  },
+                                  "display": {
+                                    "type": "string"
+                                  },
+                                  "system": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "text": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "effectiveDateTime": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "extension": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string"
+                              },
+                              "valueString": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "identifier": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "system": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "meta": {
+                          "type": "object",
+                          "properties": {
+                            "lastUpdated": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        },
+                        "performer": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "reference": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "resourceType": {
+                          "type": "string",
+                          "enum": [
+                            "Observation"
+                          ]
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "subject": {
+                          "type": "object",
+                          "properties": {
+                            "reference": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "valueQuantity": {
+                          "type": "object",
+                          "properties": {
+                            "unit": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": [
+                  "Bundle"
+                ]
+              },
+              "type": {
+                "type": "string"
+              }
+            }
+          },
+          "example": {
+            "entry": [
+              {
+                "resource": {
+                  "category": [
+                    {
+                      "coding": [
+                        {
+                          "code": "vital-signs",
+                          "display": "Vital Signs",
+                          "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+                        }
+                      ]
+                    }
+                  ],
+                  "code": {
+                    "coding": [
+                      {
+                        "code": "59408-5",
+                        "display": "Oxygen Saturation",
+                        "system": "http://loinc.org"
+                      }
+                    ],
+                    "text": "Oxygen Saturation"
+                  },
+                  "effectiveDateTime": "2025-06-26T13:28:06.055Z",
+                  "extension": [
+                    {
+                      "url": "https://foldhealth.io/structure/is-code-injected",
+                      "valueString": "true"
+                    },
+                    {
+                      "url": "https://foldhealth.io/structure/account-uuid",
+                      "valueString": "49a6927a-c3d6-4284-ac67-4b5f9ad47604"
+                    },
+                    {
+                      "url": "https://foldhealth.io/structure/ehr-code",
+                      "valueString": "FOLD_ATHENA_EHR"
+                    },
+                    {
+                      "url": "https://foldhealth.io/structure/location-group-id",
+                      "valueString": "b9d3ffc2-24f0-4fc4-9cc9-82b36c8cae6f"
+                    }
+                  ],
+                  "identifier": [
+                    {
+                      "system": "https://foldhealth.io/structure/resource-group-identifier",
+                      "value": "742d7410-4911-4a48-a310-843b4d2e416d"
+                    },
+                    {
+                      "system": "https://foldhealth.io/structure/resource-version-identifier",
+                      "value": "39bf3a58-9ef0-41b6-a607-358a3b6d8652"
+                    }
+                  ],
+                  "meta": {
+                    "lastUpdated": "2025-06-26T13:29:58.949846+00:00"
+                  },
+                  "performer": [
+                    {
+                      "reference": "Organization/140857911017476"
+                    }
+                  ],
+                  "resourceType": "Observation",
+                  "status": "final",
+                  "subject": {
+                    "reference": "Patient/143098907918337"
+                  },
+                  "valueQuantity": {
+                    "unit": "%",
+                    "value": 95
+                  }
+                }
+              }
+            ],
+            "resourceType": "Bundle",
+            "type": "batch"
+          }
+        }
+      }
+    }
+  },
+  "patient": {
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "city": {
+                      "type": "string"
+                    },
+                    "postalCode": {
+                      "type": "string"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "use": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "birthDate": {
+                "type": "string",
+                "format": "date"
+              },
+              "communication": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "language": {
+                      "type": "object"
+                    },
+                    "preferred": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              },
+              "contained": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "extension": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    },
+                    "valueCode": {
+                      "type": "string"
+                    },
+                    "valueString": {
+                      "type": "string"
+                    },
+                    "valueBoolean": {
+                      "type": "boolean"
+                    },
+                    "extension": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              },
+              "generalPractitioner": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "reference": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "name": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "family": {
+                      "type": "string"
+                    },
+                    "given": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "use": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": [
+                  "Patient"
+                ]
+              },
+              "telecom": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "extension": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "valueBoolean": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    },
+                    "rank": {
+                      "type": "integer"
+                    },
+                    "system": {
+                      "type": "string"
+                    },
+                    "use": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "example": {
+            "address": [
+              {
+                "city": "Schenectady",
+                "postalCode": "12345",
+                "state": "NY",
+                "type": "both",
+                "use": "home"
+              }
+            ],
+            "birthDate": "1982-01-21",
+            "communication": [
+              {
+                "language": {},
+                "preferred": true
+              }
+            ],
+            "contained": [],
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
+                "valueCode": "Female"
+              },
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/patient-preferred-service-location",
+                "valueString": "142758093455607"
+              },
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/tags",
+                "extension": []
+              }
+            ],
+            "generalPractitioner": [
+              {
+                "reference": "Practitioner/141444516282370"
+              }
+            ],
+            "name": [
+              {
+                "family": "Cain",
+                "given": [
+                  "Crystal",
+                  "1408"
+                ],
+                "text": "Crystal Cain",
+                "use": "official"
+              },
+              {
+                "text": "",
+                "use": "usual"
+              }
+            ],
+            "resourceType": "Patient",
+            "telecom": [
+              {
+                "extension": [
+                  {
+                    "url": "https://foldhealth.io/structure/is-verified",
+                    "valueBoolean": true
+                  }
+                ],
+                "rank": 1,
+                "system": "email",
+                "use": "home",
+                "value": "sagarc+cain@fold.health"
+              },
+              {
+                "extension": [
+                  {
+                    "url": "https://foldhealth.io/structure/is-verified",
+                    "valueBoolean": true
+                  }
+                ],
+                "rank": 1,
+                "system": "phone",
+                "use": "Mobile",
+                "value": "8285648983"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "Procedure": {
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "object",
+                "properties": {
+                  "coding": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "display": {
+                          "type": "string"
+                        },
+                        "system": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                }
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": [
+                  "Procedure"
+                ]
+              },
+              "subject": {
+                "type": "object",
+                "properties": {
+                  "reference": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "example": {
+            "code": {
+              "coding": [
+                {
+                  "code": "65785",
+                  "display": "Implantation of intrastromal corneal ring segments",
+                  "system": "CPT"
+                }
+              ],
+              "text": "Implantation of intrastromal corneal ring segments"
+            }
+          }
+        }
+      }
+    }
+  },
+  "QuestionnaireResponse": {
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "authored": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "extension": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    },
+                    "valueString": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "identifier": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "system": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "item": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": [
+                  "QuestionnaireResponse"
+                ]
+              },
+              "subject": {
+                "type": "object",
+                "properties": {
+                  "reference": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text": {
+                "type": "string"
+              }
+            }
+          },
+          "example": {
+            "authored": "2025-04-05T09:11:01.174Z",
+            "extension": [
+              {
+                "url": "http://xcaliber-fhir/structureDefinition/history-type",
+                "valueString": "Social"
+              }
+            ],
+            "identifier": [
+              {
+                "system": "https://foldhealth.io/structure/resource-group-identifier",
+                "value": "2647fb23-ef7e-40b5-8d96-de1b58afd389"
+              },
+              {
+                "system": "https://foldhealth.io/structure/resource-can-update-group-identifier",
+                "value": "false"
+              },
+              {
+                "system": "https://foldhealth.io/structure/resource-version-identifier",
+                "value": "daec7ce9-022c-4f20-ad38-348c013b0256"
+              },
+              {
+                "system": "https://foldhealth.io/structure/resource-can-update-version-identifier",
+                "value": "false"
+              },
+              {
+                "system": "https://foldhealth.io/structure/resource-can-update-source-patient-id-and-location-group-id",
+                "value": "false"
+              },
+              {
+                "system": "https://foldhealth.io/structure/resource-can-update-last-updated-by-location-group-id",
+                "value": "false"
+              }
+            ],
+            "item": [],
+            "resourceType": "QuestionnaireResponse",
+            "subject": {
+              "reference": "Patient/142852173332481"
+            },
+            "text": "Elation Social History check"
+          }
+        }
+      }
+    }
+  }
+}
