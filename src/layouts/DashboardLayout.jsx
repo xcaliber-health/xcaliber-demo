@@ -21,6 +21,8 @@ import {
   Book,
   BarChart2,
   Terminal,
+  ChevronLeft, 
+  FileSignature,
 } from "lucide-react";
 
 export const AppContext = createContext();
@@ -53,6 +55,7 @@ function EHRDropdown({ ehr, setEhr, setParentEhr, setChildEhr }) {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredParent, setHoveredParent] = useState(null);
   const dropdownRef = useRef(null);
+  const hoverTimeout = useRef(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -66,12 +69,40 @@ function EHRDropdown({ ehr, setEhr, setParentEhr, setChildEhr }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
+  const handleParentMouseEnter = (key) => {
+    if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
+    setHoveredParent(key);
+  };
+
+  const handleParentMouseLeave = () => {
+    hoverTimeout.current = setTimeout(() => {
+      setHoveredParent(null);
+    }, 300); // 300ms delay before hiding
+  };
+
+  // const handleParentClick = (key) => {
+  //   setEhr(key);
+  //   setParentEhr(key);
+  //   setChildEhr(null);
+  //   setIsOpen(false);
+  // };
   const handleParentClick = (key) => {
+  const children = EHR_OPTIONS[key];
+  const firstChild = children.length > 0 ? children[0] : null;
+
+  if (firstChild) {
+    setEhr(`${key}: ${firstChild}`);
+    setParentEhr(key);
+    setChildEhr(firstChild);
+  } else {
     setEhr(key);
     setParentEhr(key);
     setChildEhr(null);
-    setIsOpen(false);
-  };
+  }
+
+  setIsOpen(false);
+};
+
 
   const handleChildClick = (parent, child) => {
     setEhr(`${parent}: ${child}`);
@@ -100,8 +131,8 @@ function EHRDropdown({ ehr, setEhr, setParentEhr, setChildEhr }) {
             <div
               key={key}
               className="relative"
-              onMouseEnter={() => setHoveredParent(key)}
-              onMouseLeave={() => setHoveredParent(null)}
+              onMouseEnter={() => handleParentMouseEnter(key)}
+              onMouseLeave={handleParentMouseLeave}
             >
               <button
                 onClick={() => handleParentClick(key)}
@@ -144,6 +175,7 @@ function EHRDropdown({ ehr, setEhr, setParentEhr, setChildEhr }) {
   );
 }
 
+
 export default function DashboardLayout() {
   const [ehr, setEhr] = useState("Athena");
   const [parentEhr, setParentEhr] = useState("Athena");
@@ -155,6 +187,9 @@ export default function DashboardLayout() {
   const [copySuccess, setCopySuccess] = useState("");
   const [messages, setMessages] = useState([]);
   const [localEvents, setLocalEvents] = useState([]);
+  const [collapsed, setCollapsed] = useState(false); // sidebar collapsed state
+  
+
 
   const handleGetCurlClick = () => setShowCurlDrawer(true);
   const copyToClipboard = () => {
@@ -163,6 +198,16 @@ export default function DashboardLayout() {
       .then(() => setCopySuccess("Copied!"))
       .catch(() => setCopySuccess("Failed to copy"));
   };
+
+  useEffect(() => {
+  const firstParent = "Athena"; // or any default
+  const firstChild = EHR_OPTIONS[firstParent][0]; // first child
+
+  setParentEhr(firstParent);
+  setChildEhr(firstChild);
+  setEhr(`${firstParent}: ${firstChild}`);
+}, []);
+
 
   useEffect(() => {
     const timer = setTimeout(() => setShowSplash(false), 3000);
@@ -254,7 +299,7 @@ export default function DashboardLayout() {
         {
           to: "/document-labeling",
           label: "Document Labeling",
-          icon: BarChart2,
+          icon: FileSignature,
         },
       ],
     },
@@ -320,22 +365,46 @@ export default function DashboardLayout() {
         setLocalEvents,
       }}
     >
-      <div className="flex h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-indigo-100 overflow-hidden">
+      
+        <div className="flex h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-indigo-100 overflow-hidden">
         {/* Sidebar */}
-        <aside className="w-72 bg-white shadow-xl flex flex-col fixed left-0 top-0 bottom-0 border-r border-gray-200 z-50">
-          <div className="px-4 py-3 border-b border-gray-100 bg-white flex items-center justify-center">
-            <img
-              src="/logo.png"
-              alt="Acme Health Logo"
-              className="h-12 w-auto drop-shadow-sm"
-            />
+        <aside
+          className={`flex flex-col fixed left-0 top-0 bottom-0 bg-white shadow-xl border-r border-gray-200 z-50 transition-all duration-300 ${
+            collapsed ? "w-20" : "w-72"
+          }`}
+        >
+          <div className="flex items-center justify-between px-2 py-3 border-b border-gray-100">
+            {!collapsed && (
+              <img
+                src="/logo.png"
+                alt="Acme Health Logo"
+                className="h-12 w-auto drop-shadow-sm"
+              />
+            )}
+
+            
+            <button
+  onClick={() => setCollapsed(!collapsed)}
+  className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-transform duration-200"
+  aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+>
+  <ChevronLeft
+    className={`w-5 h-5 transition-transform duration-200 ${
+      collapsed ? "rotate-180" : ""
+    }`}
+  />
+</button>
+
           </div>
-          <nav className="flex-1 p-4 space-y-6 overflow-y-auto hide-scrollbar">
+
+          <nav className="flex-1 p-2 space-y-6 overflow-y-auto hide-scrollbar">
             {navGroups.map((group) => (
               <div key={group.title}>
-                <h3 className="px-2 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  {group.title}
-                </h3>
+                {!collapsed && (
+                  <h3 className="px-2 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    {group.title}
+                  </h3>
+                )}
                 <div className="space-y-1">
                   {group.links.map((link) => {
                     const Icon = link.icon;
@@ -365,7 +434,7 @@ export default function DashboardLayout() {
                             }`}
                           />
                         </div>
-                        <span className="font-medium">{link.label}</span>
+                        {!collapsed && <span className="font-medium">{link.label}</span>}
                       </Link>
                     );
                   })}
@@ -375,8 +444,10 @@ export default function DashboardLayout() {
           </nav>
         </aside>
 
+
         {/* Main */}
-        <div className="flex-1 ml-72 flex flex-col overflow-hidden">
+        {/* <div className="flex-1 ml-72 flex flex-col overflow-hidden"> */}
+        <div className={`flex-1 flex flex-col overflow-hidden ${collapsed ? "ml-20" : "ml-72"}`}>
           {/* Header */}
           <header className="h-16 bg-white/95 backdrop-blur-sm shadow-lg border-b border-white/20 flex items-center justify-between px-6 space-x-4 relative z-[60]">
             <div className="flex items-center text-sm font-semibold text-indigo-600">
@@ -522,11 +593,13 @@ export default function DashboardLayout() {
           </div>
         </div>
       </div>
+      
       {/* Powered by XCaliber */}
-      <div className="fixed bottom-8 right-4 flex flex-col items-center text-gray-600 opacity-90 pointer-events-none z-50">
-        <span className="font-semibold text-sm mb-1 ml-[2px]">Powered by</span>
-        <img src="/XCaliber.png" alt="XCaliber Logo" className="h-10 w-auto" />
-      </div>
+<div className="fixed bottom-8 right-4 flex flex-col items-center text-gray-600 opacity-90 pointer-events-none z-50">
+  <span className="font-semibold text-sm mb-1 ml-[2px]">Powered by</span>
+  <img src="/XCaliber.png" alt="XCaliber Logo" className="h-16 w-auto" />
+</div>
+
     </AppContext.Provider>
   );
 }
