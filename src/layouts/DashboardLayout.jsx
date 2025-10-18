@@ -309,7 +309,7 @@ export default function DashboardLayout() {
       links: [
         { to: "/fhir-browser", label: "FHIR Browser", icon: Database },
         { to: "/event-browser", label: "Event Browser", icon: List },
-        { to: "/raw-browser", label: "Raw Browser", icon: Terminal },
+        //{ to: "/raw-browser", label: "Raw Browser", icon: Terminal },
       ],
     },
   ];
