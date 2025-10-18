@@ -1,4 +1,6 @@
+
 import { useEffect, useState, useContext } from "react";
+import { createPortal } from "react-dom";
 import { fetchAllergies, createAllergy } from "../api/AllergiesApi";
 import { AppContext } from "../layouts/DashboardLayout";
 import { ECW_MOCK_PATIENTS } from "../data/patientListMock";
@@ -6,7 +8,8 @@ import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function AllergiesTab({ patientId }) {
-  const { sourceId, departmentId, setLatestCurl , localEvents, setLocalEvents} = useContext(AppContext);
+  const { sourceId, departmentId, setLatestCurl, localEvents, setLocalEvents } =
+    useContext(AppContext);
   const [allergies, setAllergies] = useState([]);
   const [loadingList, setLoadingList] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -18,11 +21,8 @@ export default function AllergiesTab({ patientId }) {
     system: "athena",
     category: "medication",
     criticality: "",
-    note: "",
     onsetDateTime: "",
     reaction: "",
-    deactivatedDate: "",
-    reactivatedDate: "",
     status: "",
   });
 
@@ -33,14 +33,8 @@ export default function AllergiesTab({ patientId }) {
   const normalizeAllergy = (a) => {
     const resource = a.resource || a;
     return {
-      code:
-        resource?.code?.coding?.[0]?.display ||
-        resource?.code ||
-        "Unknown Allergy",
-      clinicalStatus:
-        resource?.clinicalStatus?.coding?.[0]?.code ||
-        resource?.clinicalStatus ||
-        "-",
+      code: resource?.code?.coding?.[0]?.display || resource?.code || "Unknown Allergy",
+      clinicalStatus: resource?.clinicalStatus?.coding?.[0]?.code || resource?.clinicalStatus || "-",
       onsetDateTime: resource?.onsetDateTime || "",
       reaction:
         resource?.reaction?.map((r) => ({
@@ -62,19 +56,12 @@ export default function AllergiesTab({ patientId }) {
           if (!patientMock) throw new Error("Patient not found in mock data");
           data = (patientMock.allergies || []).map((a) => ({ resource: a }));
         } else {
-          const fetched = await fetchAllergies(
-            patientId,
-            sourceId,
-            departmentId,
-            setLatestCurl
-          );
+          const fetched = await fetchAllergies(patientId, sourceId, departmentId, setLatestCurl);
           data = fetched.entry || [];
         }
-        const normalized = data.map(normalizeAllergy).sort((a, b) => {
-          const timeA = new Date(a.onsetDateTime || 0).getTime();
-          const timeB = new Date(b.onsetDateTime || 0).getTime();
-          return timeB - timeA;
-        });
+        const normalized = data
+          .map(normalizeAllergy)
+          .sort((a, b) => new Date(b.onsetDateTime || 0) - new Date(a.onsetDateTime || 0));
         setAllergies(normalized);
       } catch (err) {
         console.error(err);
@@ -92,55 +79,90 @@ export default function AllergiesTab({ patientId }) {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
+  const addDays = (dateStr, days) => {
+    const d = new Date(dateStr);
+    d.setDate(d.getDate() + days);
+    return d.toISOString();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
     try {
+      // Prepare controlled values for note, deactivatedDate, reactivatedDate
+      const note = "rash";
+      const deactivatedDate = formValues.onsetDateTime ? addDays(formValues.onsetDateTime, 1) : "";
+      const reactivatedDate = formValues.onsetDateTime ? addDays(formValues.onsetDateTime, 2) : "";
+
+      // New form data including hidden fields
+      const allergyData = {
+        ...formValues,
+        note,
+        deactivatedDate,
+        reactivatedDate,
+      };
+
       if (!isMockSource) {
-        await createAllergy(
-          patientId,
-          sourceId,
-          departmentId,
-          formValues,
-          setLatestCurl
-        );
+        await createAllergy(patientId, sourceId, departmentId, allergyData, setLatestCurl);
       } else {
         const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
         if (patientMock) {
           patientMock.allergies = patientMock.allergies || [];
           patientMock.allergies.push({
-            code: formValues.allergy,
-            reaction: formValues.reaction
+            code: allergyData.allergy,
+            reaction: allergyData.reaction
               ? [
                   {
-                    description: formValues.reaction,
-                    severity: formValues.criticality,
-                    onset: formValues.onsetDateTime,
+                    description: allergyData.reaction,
+                    severity: allergyData.criticality,
+                    onset: allergyData.onsetDateTime,
                   },
                 ]
               : [],
-            clinicalStatus: formValues.status || "active",
-            onsetDateTime: formValues.onsetDateTime,
-            deactivatedDate: formValues.deactivatedDate,
-            reactivatedDate: formValues.reactivatedDate,
-            note: formValues.note,
+            clinicalStatus: allergyData.status || "active",
+            onsetDateTime: allergyData.onsetDateTime,
+            deactivatedDate: allergyData.deactivatedDate,
+            reactivatedDate: allergyData.reactivatedDate,
+            note: allergyData.note,
             meta: { created: new Date().toISOString() },
           });
         }
       }
 
       toast.success("Allergy saved successfully");
-      // ✅ Add to local events
-if (setLocalEvents) {
-  const newEvent = {
-    id: `${Date.now()}`,
-    eventType: "Allergy.save",
-    createdTime: new Date().toISOString(),
-    provider: "System", // or use providerName if available
-    details: formValues.allergy || "Unknown Allergy",
-  };
-  setLocalEvents([newEvent, ...(localEvents || [])]);
-}
+
+      // Immediately update UI
+// Generate the allergy object for display
+const newAllergy = {
+  code: allergyData.allergy,
+  clinicalStatus: allergyData.status || "active",
+  onsetDateTime: allergyData.onsetDateTime,
+  reaction: allergyData.reaction
+    ? [
+        {
+          description: allergyData.reaction,
+          severity: allergyData.criticality,
+          onset: allergyData.onsetDateTime,
+        },
+      ]
+    : [],
+  meta: { created: new Date().toISOString() },
+};
+
+// Update local allergies list immediately for instant UI feedback
+setAllergies((prev) => [newAllergy, ...prev]);
+
+
+      if (setLocalEvents) {
+        const newEvent = {
+          id: `${Date.now()}`,
+          eventType: "Allergy.save",
+          createdTime: new Date().toISOString(),
+          provider: "System",
+          details: allergyData.allergy || "Unknown Allergy",
+        };
+        setLocalEvents([newEvent, ...(localEvents || [])]);
+      }
 
       setOpen(false);
       setFormValues({
@@ -149,34 +171,24 @@ if (setLocalEvents) {
         system: "athena",
         category: "medication",
         criticality: "",
-        note: "",
         onsetDateTime: "",
         reaction: "",
-        deactivatedDate: "",
-        reactivatedDate: "",
         status: "",
       });
 
-      let updated = [];
-      if (isMockSource) {
-        const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
-        updated = (patientMock.allergies || []).map((a) => ({ resource: a }));
-      } else {
-        const fetched = await fetchAllergies(
-          patientId,
-          sourceId,
-          departmentId,
-          setLatestCurl
-        );
-        updated = fetched.entry || [];
-      }
+      // let updated = [];
+      // if (isMockSource) {
+      //   const patientMock = ECW_MOCK_PATIENTS.find((p) => p.id === patientId);
+      //   updated = (patientMock.allergies || []).map((a) => ({ resource: a }));
+      // } else {
+      //   const fetched = await fetchAllergies(patientId, sourceId, departmentId, setLatestCurl);
+      //   updated = fetched.entry || [];
+      // }
 
-      const normalized = updated.map(normalizeAllergy).sort((a, b) => {
-        const timeA = new Date(a.onsetDateTime || 0).getTime();
-        const timeB = new Date(b.onsetDateTime || 0).getTime();
-        return timeB - timeA;
-      });
-      setAllergies(normalized);
+      // const normalized = updated
+      //   .map(normalizeAllergy)
+      //   .sort((a, b) => new Date(b.onsetDateTime || 0) - new Date(a.onsetDateTime || 0));
+      // setAllergies(normalized);
     } catch (err) {
       console.error(err);
       toast.error("Failed to save allergy");
@@ -184,6 +196,119 @@ if (setLocalEvents) {
       setSubmitting(false);
     }
   };
+
+  // Modal form without note/deactivated/reactivated fields shown
+  const AllergyModal = () => (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div className="bg-white p-6 rounded-2xl shadow-xl w-[500px] max-h-[90vh] overflow-y-auto hide-scrollbar border border-indigo-100">
+        <h2 className="text-lg font-semibold text-indigo-700 mb-4">Add Allergy</h2>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Allergy */}
+          <div>
+            <label className="font-medium text-gray-700">Allergy</label>
+            <select
+              name="allergy"
+              value={formValues.allergy}
+              onChange={handleChange}
+              className="border border-gray-300 rounded-lg p-2 w-full focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+              required
+            >
+              <option value="">Select an allergy</option>
+              <option value="Penicillin">Carbamates</option>
+              <option value="Fish Containing Products">Fish Containing Products</option>
+              <option value="fish derived">Fish Derived</option>
+              <option value="fish oil">Fish Oil</option>
+              <option value="crayfish">Cray Fish</option>
+              <option value="shellfish derived">Shellfish Derived</option>
+            </select>
+          </div>
+
+          <input type="hidden" name="code" value="12345" />
+
+          {/* Category */}
+          <div>
+            <label className="font-medium text-gray-700">Category</label>
+            <select
+              name="category"
+              value={formValues.category}
+              onChange={handleChange}
+              className="border border-gray-300 rounded-lg p-2 w-full focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+            >
+              <option value="medication">Medication</option>
+              <option value="food">Food</option>
+              <option value="environment">Environment</option>
+              <option value="biologic">Biologic</option>
+            </select>
+          </div>
+
+          {/* Criticality */}
+          <div>
+            <label className="font-medium text-gray-700">Criticality</label>
+            <select
+              name="criticality"
+              value={formValues.criticality}
+              onChange={handleChange}
+              className="border border-gray-300 rounded-lg p-2 w-full focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+            >
+              <option value="">Select Criticality</option>
+              <option value="low">Low</option>
+              <option value="high">High</option>
+              <option value="unable-to-assess">Unable to assess</option>
+            </select>
+          </div>
+
+          {/* Onset Date */}
+          <div>
+            <label className="font-medium text-gray-700">Onset Date</label>
+            <input
+              type="datetime-local"
+              name="onsetDateTime"
+              value={formValues.onsetDateTime}
+              onChange={handleChange}
+              className="border border-gray-300 rounded-lg p-2 w-full focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+            />
+          </div>
+
+          {/* Reaction */}
+          {/* <div>
+            <label className="font-medium text-gray-700">Reaction</label>
+            <input
+              name="reaction"
+              value={formValues.reaction}
+              onChange={handleChange}
+              placeholder="Reaction description"
+              className="border border-gray-300 rounded-lg p-2 w-full focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+            />
+          </div> */}
+
+          {/* Submit + Cancel */}
+          <button
+            type="submit"
+            className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-60"
+            disabled={submitting}
+          >
+            {submitting ? (
+              <span className="flex items-center justify-center">
+                <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                Saving...
+              </span>
+            ) : (
+              "Save"
+            )}
+          </button>
+
+          <button
+            type="button"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+            onClick={() => setOpen(false)}
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 
   return (
     <div className="p-6 bg-gradient-to-br from-indigo-50 to-white rounded-2xl shadow-sm">
@@ -197,215 +322,8 @@ if (setLocalEvents) {
         </button>
       </div>
 
-      {/* Add Allergy Modal */}
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-xl w-[500px] max-h-[90vh] overflow-y-auto hide-scrollbar border border-indigo-100">
-            <h2 className="text-lg font-semibold text-indigo-700 mb-4">
-              Add Allergy
-            </h2>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Allergy */}
-              <div>
-                <label className="font-medium text-gray-700">Allergy</label>
-                <select
-                  name="allergy"
-                  value={formValues.allergy}
-                  onChange={handleChange}
-                  className="border border-gray-300 rounded-lg p-2 w-full focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                  required
-                >
-                  <option value="">Select an allergy</option>
-                  <option value="Penicillin">Carbamates</option>
-                  <option value="Fish Containing Products">
-                    Fish Containing Products
-                  </option>
-                  <option value="fish derived">Fish Derived</option>
-                  <option value="fish oil">Fish Oil</option>
-                  <option value="crayfish">Cray Fish</option>
-                  <option value="shellfish derived">Shellfish Derived</option>
-                </select>
-              </div>
-
-              <input type="hidden" name="code" value="12345" />
-
-              {/* Category */}
-              <div>
-                <label className="font-medium text-gray-700">Category</label>
-                <select
-                  name="category"
-                  value={formValues.category}
-                  onChange={handleChange}
-                  className="border border-gray-300 rounded-lg p-2 w-full focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                >
-                  <option value="medication">Medication</option>
-                  <option value="food">Food</option>
-                  <option value="environment">Environment</option>
-                  <option value="biologic">Biologic</option>
-                </select>
-              </div>
-
-              {/* Criticality */}
-              <div>
-                <label className="font-medium text-gray-700">Criticality</label>
-                <select
-                  name="criticality"
-                  value={formValues.criticality}
-                  onChange={handleChange}
-                  className="border border-gray-300 rounded-lg p-2 w-full focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                >
-                  <option value="">Select Criticality</option>
-                  <option value="low">Low</option>
-                  <option value="high">High</option>
-                  <option value="unable-to-assess">Unable to assess</option>
-                </select>
-              </div>
-
-              {/* Note */}
-              <div>
-                <label className="font-medium text-gray-700">Note</label>
-                <input
-                  name="note"
-                  value={formValues.note}
-                  onChange={handleChange}
-                  placeholder="Note"
-                  className="border border-gray-300 rounded-lg p-2 w-full focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                />
-              </div>
-
-              {/* Onset Date */}
-              <div>
-                <label className="font-medium text-gray-700">Onset Date</label>
-                <div className="flex gap-2">
-                  <input
-                    name="onsetDateTimeTemp"
-                    type="datetime-local"
-                    value={
-                      formValues.onsetDateTimeTemp || formValues.onsetDateTime
-                    }
-                    onChange={(e) =>
-                      setFormValues((prev) => ({
-                        ...prev,
-                        onsetDateTimeTemp: e.target.value,
-                      }))
-                    }
-                    className="border border-gray-300 rounded-lg p-2 flex-1 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    className="px-3 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition"
-                    onClick={() =>
-                      setFormValues((prev) => ({
-                        ...prev,
-                        onsetDateTime: prev.onsetDateTimeTemp,
-                      }))
-                    }
-                  >
-                    OK
-                  </button>
-                </div>
-              </div>
-
-              {/* Deactivated Date */}
-              <div>
-                <label className="font-medium text-gray-700">
-                  Deactivated Date
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    name="deactivatedDateTemp"
-                    type="datetime-local"
-                    value={
-                      formValues.deactivatedDateTemp ||
-                      formValues.deactivatedDate
-                    }
-                    onChange={(e) =>
-                      setFormValues((prev) => ({
-                        ...prev,
-                        deactivatedDateTemp: e.target.value,
-                      }))
-                    }
-                    className="border border-gray-300 rounded-lg p-2 flex-1 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    className="px-3 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition"
-                    onClick={() =>
-                      setFormValues((prev) => ({
-                        ...prev,
-                        deactivatedDate: prev.deactivatedDateTemp,
-                      }))
-                    }
-                  >
-                    OK
-                  </button>
-                </div>
-              </div>
-
-              {/* Reactivated Date */}
-              <div>
-                <label className="font-medium text-gray-700">
-                  Reactivated Date
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    name="reactivatedDateTemp"
-                    type="date"
-                    value={
-                      formValues.reactivatedDateTemp ||
-                      formValues.reactivatedDate
-                    }
-                    onChange={(e) =>
-                      setFormValues((prev) => ({
-                        ...prev,
-                        reactivatedDateTemp: e.target.value,
-                      }))
-                    }
-                    className="border border-gray-300 rounded-lg p-2 flex-1 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    className="px-3 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition"
-                    onClick={() =>
-                      setFormValues((prev) => ({
-                        ...prev,
-                        reactivatedDate: prev.reactivatedDateTemp,
-                      }))
-                    }
-                  >
-                    OK
-                  </button>
-                </div>
-              </div>
-
-              {/* Submit + Cancel */}
-              <button
-                type="submit"
-                className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-60"
-                disabled={submitting}
-              >
-                {submitting ? (
-                  <span className="flex items-center justify-center">
-                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                    Saving...
-                  </span>
-                ) : (
-                  "Save"
-                )}
-              </button>
-
-              <button
-                type="button"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
-                onClick={() => setOpen(false)}
-              >
-                Cancel
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
+      {/* Render modal through portal to avoid clipping */}
+      {open && createPortal(<AllergyModal />, document.body)}
 
       {/* Allergies List */}
       {loadingList ? (
@@ -429,12 +347,8 @@ if (setLocalEvents) {
                   {item.reaction.length > 0 ? (
                     item.reaction.map((r, i) => (
                       <li key={i}>
-                        {r.description && (
-                          <span className="font-semibold">
-                            {r.description}
-                          </span>
-                        )}{" "}
-                        — Severity: {r.severity}
+                        {r.description && <span className="font-semibold">{r.description}</span>} — Severity:{" "}
+                        {r.severity}
                         {r.onset && `, Onset: ${r.onset.split("T")[0]}`}
                       </li>
                     ))
@@ -444,8 +358,7 @@ if (setLocalEvents) {
                 </ul>
               </div>
               <p className="text-sm text-gray-500">
-                <span className="font-medium">Status:</span>{" "}
-                {item.clinicalStatus}
+                <span className="font-medium">Status:</span> {item.clinicalStatus}
               </p>
               {item.meta?.created && (
                 <p className="text-xs text-gray-400">

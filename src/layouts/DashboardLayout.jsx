@@ -285,7 +285,7 @@ export default function DashboardLayout() {
           label: "Bulk Data Extraction",
           icon: DownloadCloud,
         },
-        { to: "/claims", label: "Prior Auth", icon: FileText },
+        { to: "/claims", label: "Claims", icon: FileText },
       ],
     },
     {
