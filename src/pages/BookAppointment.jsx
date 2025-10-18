@@ -534,14 +534,27 @@ async function handleBook() {
                 </select>
               </div>
 
-              <Button
+              {/* <Button
                 onClick={handleBook}
                 disabled={loading || !date || !startTime || !endTime || !appointmentType}
                 className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white w-full flex justify-center items-center gap-2"
               >
                 {loading ? <Loader2 className="animate-spin h-4 w-4" /> : "Confirm & Book"}
                 <ArrowRight className="w-4 h-4" />
-              </Button>
+              </Button> */}
+              <div className="flex justify-end">
+  <Button
+    onClick={handleBook}
+    disabled={loading || !date || !startTime || !endTime || !appointmentType}
+    className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 
+               text-white text-sm px-3 py-1.5 rounded-lg flex items-center gap-2"
+  >
+    {loading ? <Loader2 className="animate-spin h-4 w-4" /> : "Confirm & Book"}
+    <ArrowRight className="w-4 h-4" />
+  </Button>
+</div>
+
+
 
               {successMsg && (
                 <div className="p-3 bg-green-100 text-green-700 rounded flex justify-between">

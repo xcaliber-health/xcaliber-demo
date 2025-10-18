@@ -22,7 +22,7 @@ function Button({ children, className = "", ...props }) {
 const MetadataSection = ({ metadata }) => {
   if (!metadata) return null;
 
-  const obj = metadata[0];
+  const obj = metadata;
   const fields = [
     { key: "document_class", label: "Document Class" },
     { key: "document_status", label: "Document Status" },
@@ -43,55 +43,31 @@ const MetadataSection = ({ metadata }) => {
     return val;
   };
 
+
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow p-2 mb-2 text-xs">
-      {fields.map((f) => {
-        const val = formatValue(f.key, obj[f.key]);
-        if (!val) return null;
-        return (
-          <div key={f.key} className="mb-1">
-            <div className="text-xs text-gray-600">{f.label}</div>
-            <div className="text-sm font-semibold">{val}</div>
-          </div>
-        );
-      })}
-    </div>
-  );
+  <div className="text-xs">
+    {fields.map((f) => {
+      const val = formatValue(f.key, obj[f.key]);
+      if (!val) return null;
+      return (
+        <div key={f.key} className="mb-1">
+          <div className="text-xs text-gray-600">{f.label}</div>
+          <div className="text-sm font-semibold">{val}</div>
+        </div>
+      );
+    })}
+  </div>
+);
+
 };
 
-// const EntitiesSection = ({ entities }) => {
-//   if (!entities) return null;
 
-//   return (
-//     <div className="bg-white rounded-lg border border-gray-200 shadow p-2 mb-2 text-xs">
-//       {Object.keys(entities).map((section) => (
-//         <div key={section} className="mb-2">
-//           <h3 className="font-semibold mb-1 text-sm">
-//             {section.charAt(0).toUpperCase() + section.slice(1)}
-//           </h3>
-//           {entities[section].length === 0 && (
-//             <p className="text-xs text-gray-500">No {section} found</p>
-//           )}
-//           {entities[section].map((item, idx) => (
-//             <div key={idx} className="mb-1">
-//               {item.entity_value && (
-//                 <div className="text-xs text-gray-600">{item.entity_value}</div>
-//               )}
-//               {item.lab_test_findings && (
-//                 <div className="text-sm font-semibold">{item.lab_test_findings}</div>
-//               )}
-//             </div>
-//           ))}
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
 const EntitiesSection = ({ entities }) => {
   if (!entities) return null;
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow p-2 mb-2 text-xs">
+    //<div className="bg-white rounded-lg border border-gray-200 shadow p-2 mb-2 text-xs">
+    <div className="text-xs">
       {Object.keys(entities).map((section) => {
         // Skip rendering this section if no entities present or empty array
         if (
@@ -133,6 +109,11 @@ export default function DocumentLabeling() {
   const [entities, setEntities] = useState(null);
   const [activeTab, setActiveTab] = useState("metadata");
 
+  const [loadingPdf, setLoadingPdf] = useState(true);
+const [loadingMetadata, setLoadingMetadata] = useState(true);
+const [loadingEntities, setLoadingEntities] = useState(true);
+
+
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   useEffect(() => {
@@ -164,7 +145,7 @@ export default function DocumentLabeling() {
 
         const resMeta = await fetch(`/metadata/${selectedPdf}.json`);
         const dataMeta = await resMeta.json();
-        setMetadata([dataMeta]);
+        setMetadata(dataMeta);
 
         const resEntities = await fetch(`/entities/${selectedPdf}.json`);
         const dataEntities = await resEntities.json();
@@ -173,6 +154,8 @@ export default function DocumentLabeling() {
         console.error(err);
       }
     };
+
+    
 
     fetchPdfData();
   }, [selectedPdf]);
@@ -238,26 +221,30 @@ export default function DocumentLabeling() {
           </div>
 
           {/* Metadata / Entities */}
-          <div className="flex flex-col overflow-hidden flex-1 max-h-[750px]">
-            <div className="flex gap-2 mb-3">
-              <Button
-                className={activeTab === "metadata" ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-700"}
-                onClick={() => setActiveTab("metadata")}
-              >
-                Metadata
-              </Button>
-              <Button
-                className={activeTab === "entities" ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-700"}
-                onClick={() => setActiveTab("entities")}
-              >
-                Entities
-              </Button>
-            </div>
+          
+            <div className="flex flex-col overflow-hidden flex-1 max-h-[750px]">
+  <div className="flex gap-2 mb-3">
+    <Button
+      className={activeTab === "metadata" ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-700"}
+      onClick={() => setActiveTab("metadata")}
+    >
+      Labels
+    </Button>
+    <Button
+      className={activeTab === "entities" ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-700"}
+      onClick={() => setActiveTab("entities")}
+    >
+      Entities
+    </Button>
+  </div>
 
-            <div className="flex-1 overflow-y-auto p-2 bg-white border border-gray-200 rounded-lg shadow min-h-0">
-              {activeTab === "metadata" && <MetadataSection metadata={metadata} />}
-              {activeTab === "entities" && <EntitiesSection entities={entities} />}
-            </div>
+  {/* Single card container wraps both sections */}
+  <div className="flex-1 overflow-y-auto p-2 bg-white border border-gray-200 rounded-lg shadow min-h-0">
+    {activeTab === "metadata" && <MetadataSection metadata={metadata} />}
+    {activeTab === "entities" && <EntitiesSection entities={entities} />}
+  </div>
+
+
           </div>
         </div>
       </div>
