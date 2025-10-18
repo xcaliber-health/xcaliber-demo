@@ -15,7 +15,7 @@ export async function fetchVitals(patientId, departmentId, sourceId, setLatestCu
       headers: { "x-interaction-mode": "false" },
       setLatestCurl,
     },
-    5 * 60 * 1000 // TTL = 5 min
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
 }
 
