@@ -21,8 +21,9 @@ import {
   Book,
   BarChart2,
   Terminal,
-  ChevronLeft, 
+  ChevronLeft,
   FileSignature,
+  Airplay,
 } from "lucide-react";
 
 export const AppContext = createContext();
@@ -33,8 +34,8 @@ const EHR_OPTIONS = {
   ECW: ["FHIR", "EHR Operator", "HL7"],
   Epic: ["FHIR", "EHR Operator", "HL7"],
   Kno2: ["CCDA"],
-  Cerner: ["FHIR","HL7"],
-  Meditech: ["FHIR","HL7"],
+  Cerner: ["FHIR", "HL7"],
+  Meditech: ["FHIR", "HL7"],
   PracticeFusion: ["FHIR"],
   Veradigm: ["FHIR"],
   PointClickCare: ["Rest", "FHIR", "EHR Operator"],
@@ -87,22 +88,21 @@ function EHRDropdown({ ehr, setEhr, setParentEhr, setChildEhr }) {
   //   setIsOpen(false);
   // };
   const handleParentClick = (key) => {
-  const children = EHR_OPTIONS[key];
-  const firstChild = children.length > 0 ? children[0] : null;
+    const children = EHR_OPTIONS[key];
+    const firstChild = children.length > 0 ? children[0] : null;
 
-  if (firstChild) {
-    setEhr(`${key}: ${firstChild}`);
-    setParentEhr(key);
-    setChildEhr(firstChild);
-  } else {
-    setEhr(key);
-    setParentEhr(key);
-    setChildEhr(null);
-  }
+    if (firstChild) {
+      setEhr(`${key}: ${firstChild}`);
+      setParentEhr(key);
+      setChildEhr(firstChild);
+    } else {
+      setEhr(key);
+      setParentEhr(key);
+      setChildEhr(null);
+    }
 
-  setIsOpen(false);
-};
-
+    setIsOpen(false);
+  };
 
   const handleChildClick = (parent, child) => {
     setEhr(`${parent}: ${child}`);
@@ -175,7 +175,6 @@ function EHRDropdown({ ehr, setEhr, setParentEhr, setChildEhr }) {
   );
 }
 
-
 export default function DashboardLayout() {
   const [ehr, setEhr] = useState("Athena");
   const [parentEhr, setParentEhr] = useState("Athena");
@@ -188,8 +187,6 @@ export default function DashboardLayout() {
   const [messages, setMessages] = useState([]);
   const [localEvents, setLocalEvents] = useState([]);
   const [collapsed, setCollapsed] = useState(false); // sidebar collapsed state
-  
-
 
   const handleGetCurlClick = () => setShowCurlDrawer(true);
   const copyToClipboard = () => {
@@ -200,14 +197,13 @@ export default function DashboardLayout() {
   };
 
   useEffect(() => {
-  const firstParent = "Athena"; // or any default
-  const firstChild = EHR_OPTIONS[firstParent][0]; // first child
+    const firstParent = "Athena"; // or any default
+    const firstChild = EHR_OPTIONS[firstParent][0]; // first child
 
-  setParentEhr(firstParent);
-  setChildEhr(firstChild);
-  setEhr(`${firstParent}: ${firstChild}`);
-}, []);
-
+    setParentEhr(firstParent);
+    setChildEhr(firstChild);
+    setEhr(`${firstParent}: ${firstChild}`);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowSplash(false), 3000);
@@ -264,6 +260,11 @@ export default function DashboardLayout() {
           icon: Cloud,
         },
         { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
+        {
+          to: "/contentIntegrations",
+          label: "Content Integrationss",
+          icon: Airplay,
+        },
       ],
     },
     {
@@ -284,7 +285,7 @@ export default function DashboardLayout() {
           label: "Bulk Data Extraction",
           icon: DownloadCloud,
         },
-        { to: "/claims", label: "Claims List", icon: FileText },
+        { to: "/claims", label: "Prior Auth", icon: FileText },
       ],
     },
     {
@@ -365,8 +366,7 @@ export default function DashboardLayout() {
         setLocalEvents,
       }}
     >
-      
-        <div className="flex h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-indigo-100 overflow-hidden">
+      <div className="flex h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-indigo-100 overflow-hidden">
         {/* Sidebar */}
         <aside
           className={`flex flex-col fixed left-0 top-0 bottom-0 bg-white shadow-xl border-r border-gray-200 z-50 transition-all duration-300 ${
@@ -382,7 +382,6 @@ export default function DashboardLayout() {
               />
             )}
 
-            
             <button
   onClick={() => setCollapsed(!collapsed)}
   className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-transform duration-200"
@@ -457,7 +456,9 @@ export default function DashboardLayout() {
                             }`}
                           />
                         </div>
-                        {!collapsed && <span className="font-medium">{link.label}</span>}
+                        {!collapsed && (
+                          <span className="font-medium">{link.label}</span>
+                        )}
                       </Link>
                     );
                   })}
@@ -467,10 +468,13 @@ export default function DashboardLayout() {
           </nav>
         </aside>
 
-
         {/* Main */}
         {/* <div className="flex-1 ml-72 flex flex-col overflow-hidden"> */}
-        <div className={`flex-1 flex flex-col overflow-hidden ${collapsed ? "ml-20" : "ml-72"}`}>
+        <div
+          className={`flex-1 flex flex-col overflow-hidden ${
+            collapsed ? "ml-20" : "ml-72"
+          }`}
+        >
           {/* Header */}
           <header className="h-16 bg-white/95 backdrop-blur-sm shadow-lg border-b border-white/20 flex items-center justify-between px-6 space-x-4 relative z-[60]">
             {/* <div className="flex items-center text-sm font-semibold text-indigo-600">
