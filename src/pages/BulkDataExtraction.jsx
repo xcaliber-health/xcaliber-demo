@@ -161,7 +161,7 @@ export default function BulkDataExtraction() {
             {/* Resources + IDs */}
             <Card className="p-4 col-span-2">
               <h2 className="font-semibold mb-3 flex items-center gap-2 text-indigo-600">
-                <Database className="w-4 h-4" /> Resources & IDs
+                <Database className="w-4 h-4" /> Select what you want to migrate
               </h2>
               {loadingResources ? (
                 <div className="flex justify-center items-center flex-1 min-h-[300px] text-indigo-600">
@@ -218,12 +218,12 @@ export default function BulkDataExtraction() {
             {/* Target Mapping */}
             <Card className="p-4">
               <h2 className="font-semibold mb-3 text-indigo-600">
-                Target Mapping
+                Extraction Details
               </h2>
               {selectedId ? (
                 mappedId ? (
                   <div className="flex flex-col gap-2">
-                    <p className="text-sm text-gray-500">Mapped ID</p>
+                    <p className="text-sm text-gray-500">New Record ID</p>
                     <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-4 py-3">
                       <div className="flex items-center gap-2">
                         <CheckCircle className="text-green-500 w-5 h-5" />
@@ -238,7 +238,7 @@ export default function BulkDataExtraction() {
                       onClick={() => navigate(`/patients/${mappedId}`)}
                       className="mt-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2 px-3 rounded-xl transition"
                     >
-                      Go to Patient
+                      View in Target EHR
                     </button>
                   </div>
                 ) : (

@@ -142,9 +142,9 @@ export default function DocumentReference() {
             </div>
             <div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                Document Viewer
+                Clinical Document Processing
               </h1>
-              <p className="text-sm text-gray-600">Viewing PDF & JSON from FHIR APIs</p>
+              <p className="text-sm text-gray-600">Extracting entities and mapping them to FHIR from clinical documents</p>
             </div>
           </div>
         </div>
