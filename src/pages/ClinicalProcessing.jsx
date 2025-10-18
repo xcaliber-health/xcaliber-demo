@@ -84,6 +84,9 @@ export default function ClinicalProcessing() {
   const [showAbnormality, setShowAbnormality] = useState(false);
   const [openSections, setOpenSections] = useState({});
   const isMounted = useRef(true);
+  const { localEvents, setLocalEvents,setLatestCurl } = useContext(AppContext);
+
+  const TIME_FACTOR = 4000; // milliseconds
   const pdfPlugin = defaultLayoutPlugin();
 
   useEffect(() => {
@@ -351,15 +354,32 @@ const pdfEntities = [
     const submitResult = await submitEntity(setLatestCurl);
     toast.dismiss();
 
-    if (submitResult?.success) {
-      toast.success("Appointment successfully created!");
-      const appointmentId = submitResult?.appointmentId || "1045267";
-      try {
-        const appointmentData = await getAppointment(appointmentId);
-        if (isMounted.current) setAppointmentInfo(appointmentData);
-      } catch (err) {
-        console.error(err);
-        toast.error("Could not fetch appointment details.");
+      toast.loading("Creating appointment...");
+      const submitResult = await submitEntity(setLatestCurl);
+      toast.dismiss();
+
+      if (submitResult?.success) {
+        toast.success("Appointment successfully created!");
+        const appointmentId = submitResult?.appointmentId || "1045267";
+        try {
+          const appointmentData = await getAppointment(appointmentId);
+          setAppointmentInfo(appointmentData);
+          // Add appointment to local events
+          if (setLocalEvents) {
+          const newEvent = {
+            id: appointmentId,
+            eventType: "Appointment.save",
+            createdTime: new Date().toISOString(),
+            provider: appointmentData.provider?.name || "Unknown provider",
+          };
+          setLocalEvents([newEvent, ...localEvents]);
+        }
+        } catch (err) {
+          console.error("Error fetching appointment info:", err);
+          toast.error("Could not fetch appointment details.");
+        }
+      } else {
+        toast.error("Failed to create appointment.");
       }
     } else {
       toast.error("Failed to create appointment.");
