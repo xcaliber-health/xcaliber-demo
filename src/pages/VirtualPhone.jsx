@@ -9,7 +9,7 @@ export default function VirtualPhone() {
   const { messages } = useContext(AppContext); // <- get messages from context
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-6">
+    <div className="h-full flex flex-col items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-6">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-4 relative border border-indigo-100">
         <button
           onClick={() => navigate(-1)}

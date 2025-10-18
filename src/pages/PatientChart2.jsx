@@ -198,7 +198,7 @@ export default function PatientChart() {
     );
 
   return (
-    <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden ">
+    <div className="h-full bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden ">
       <div className="flex-1 px-6 pb-4 overflow-hidden min-h-0 mt-8">
         <div className="max-w-7xl mx-auto h-full grid grid-cols-3 gap-6">
           {/* Left Column */}

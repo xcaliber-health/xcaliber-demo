@@ -13,7 +13,9 @@ const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
 
 function Card({ children, className = "" }) {
   return (
-    <div className={`bg-white/95 backdrop-blur-sm shadow-xl rounded-3xl border border-white/20 ${className}`}>
+    <div
+      className={`bg-white/95 backdrop-blur-sm shadow-xl rounded-3xl border border-white/20 ${className}`}
+    >
       {children}
     </div>
   );
@@ -73,9 +75,8 @@ function EntityCard({ title, items, open, toggleOpen }) {
   );
 }
 
-
 export default function ClinicalProcessing() {
-  const { setLatestCurl } = useContext(AppContext);
+  // const { setLatestCurl } = useContext(AppContext);
   const [pdfList, setPdfList] = useState([]);
   const [selectedPdf, setSelectedPdf] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -84,6 +85,9 @@ export default function ClinicalProcessing() {
   const [showAbnormality, setShowAbnormality] = useState(false);
   const [openSections, setOpenSections] = useState({});
   const isMounted = useRef(true);
+  const { localEvents, setLocalEvents, setLatestCurl } = useContext(AppContext);
+
+  const TIME_FACTOR = 4000; // milliseconds
   const pdfPlugin = defaultLayoutPlugin();
 
   useEffect(() => {
@@ -103,7 +107,9 @@ export default function ClinicalProcessing() {
   }, []);
 
   const fetchPdfBase64 = async (name) => {
-    const res = await fetch(`${SAMPLE_BFF_URL}/clinicaldocuments/${encodeURIComponent(name)}/pdf`);
+    const res = await fetch(
+      `${SAMPLE_BFF_URL}/clinicaldocuments/${encodeURIComponent(name)}/pdf`
+    );
     const data = await res.json();
     return `data:application/pdf;base64,${data.base64}`;
   };
@@ -129,196 +135,198 @@ export default function ClinicalProcessing() {
 
   const getAbnormalitiesByFile = (name) => {
     if (!name) return [];
-    if (name.toLowerCase().includes("hemo")) return ["Hemoglobin level is critically low"];
-    if (name.toLowerCase().includes("pcv")) return ["Packed Cell Volume (PCV) is high"];
-    if (name.toLowerCase().includes("rbc")) return ["Red Blood Cell (RBC) count is low"];
+    if (name.toLowerCase().includes("hemo"))
+      return ["Hemoglobin level is critically low"];
+    if (name.toLowerCase().includes("pcv"))
+      return ["Packed Cell Volume (PCV) is high"];
+    if (name.toLowerCase().includes("rbc"))
+      return ["Red Blood Cell (RBC) count is low"];
     return [];
   };
 
-// Sample entity data for different PDFs
-const pdfEntities = [
-  {
-    name: "hemo", // PDF name containing "hemo"
-    entities: {
-  Patient: [
+  // Sample entity data for different PDFs
+  const pdfEntities = [
     {
-      id: "PID-555",
-      name: "Yash M. Patel",
-      gender: "Male",
-      age: "21 Years",
-      birthDate: "2004-02-28", // not in report
-    },
-  ],
-  Observation: [
-    {
-      code: "718-7",
-      display: "Hemoglobin [Mass/volume] in Blood",
-      value: "8 g/dL",
-      interpretation: "L (Low)",
-    },
-    {
-      code: "4544-3",
-      display: "Hematocrit [Volume Fraction] of Blood",
-      value: "47.5 %",
-      interpretation: "Normal",
-    },
-    {
-      code: "789-8",
-      display: "Red Blood Cell Count",
-      value: "5.1 mill/cumm",
-      interpretation: "Normal",
-    },
-    {
-      code: "6690-2",
-      display: "White Blood Cell Count",
-      value: "9000 cells/mcL",
-      interpretation: "Normal",
-    },
-    {
-      code: "777-3",
-      display: "Platelet Count",
-      value: "320000 cells/mcL",
-      interpretation: "Normal",
-    },
-  ],
-  Practitioner: [
-    {
-      id: "pract-002",
-      name: "Dr. Hiren Shah",
-      role: "Cardiologist",
-    }
-  ],
-  Organization: [
-    {
-      name: "Drlogy Pathology Lab",
-      address:
-        "105-108, Smart Vision Complex, Healthcare Road, Opp. Healthcare Complex, Mumbai - 689578",
-    },
-  ],
+      name: "hemo", // PDF name containing "hemo"
+      entities: {
+        Patient: [
+          {
+            id: "PID-555",
+            name: "Yash M. Patel",
+            gender: "Male",
+            age: "21 Years",
+            birthDate: "2004-02-28", // not in report
+          },
+        ],
+        Observation: [
+          {
+            code: "718-7",
+            display: "Hemoglobin [Mass/volume] in Blood",
+            value: "8 g/dL",
+            interpretation: "L (Low)",
+          },
+          {
+            code: "4544-3",
+            display: "Hematocrit [Volume Fraction] of Blood",
+            value: "47.5 %",
+            interpretation: "Normal",
+          },
+          {
+            code: "789-8",
+            display: "Red Blood Cell Count",
+            value: "5.1 mill/cumm",
+            interpretation: "Normal",
+          },
+          {
+            code: "6690-2",
+            display: "White Blood Cell Count",
+            value: "9000 cells/mcL",
+            interpretation: "Normal",
+          },
+          {
+            code: "777-3",
+            display: "Platelet Count",
+            value: "320000 cells/mcL",
+            interpretation: "Normal",
+          },
+        ],
+        Practitioner: [
+          {
+            id: "pract-002",
+            name: "Dr. Hiren Shah",
+            role: "Cardiologist",
+          },
+        ],
+        Organization: [
+          {
+            name: "Drlogy Pathology Lab",
+            address:
+              "105-108, Smart Vision Complex, Healthcare Road, Opp. Healthcare Complex, Mumbai - 689578",
+          },
+        ],
       },
-  },
-  {
-    name: "pcv", // PDF name containing "pcv"
-    entities: {
-  Patient: [
-    {
-      id: "PID-555",
-      name: "Yash M. Patel",
-      gender: "Male",
-      age: "21 Years",
-      birthDate: "2004-02-28", // not in report
-    },
-  ],
-  Observation: [
-    {
-      code: "718-7",
-      display: "Hemoglobin [Mass/volume] in Blood",
-      value: "14 g/dL",
-      interpretation: "Normal",
     },
     {
-      code: "4544-3",
-      display: "Hematocrit [Volume Fraction] of Blood",
-      value: "59.1 %",
-      interpretation: "H (High)",
+      name: "pcv", // PDF name containing "pcv"
+      entities: {
+        Patient: [
+          {
+            id: "PID-555",
+            name: "Yash M. Patel",
+            gender: "Male",
+            age: "21 Years",
+            birthDate: "2004-02-28", // not in report
+          },
+        ],
+        Observation: [
+          {
+            code: "718-7",
+            display: "Hemoglobin [Mass/volume] in Blood",
+            value: "14 g/dL",
+            interpretation: "Normal",
+          },
+          {
+            code: "4544-3",
+            display: "Hematocrit [Volume Fraction] of Blood",
+            value: "59.1 %",
+            interpretation: "H (High)",
+          },
+          {
+            code: "789-8",
+            display: "Red Blood Cell Count",
+            value: "5.1 mill/cumm",
+            interpretation: "Normal",
+          },
+          {
+            code: "6690-2",
+            display: "White Blood Cell Count",
+            value: "9000 cells/mcL",
+            interpretation: "Normal",
+          },
+          {
+            code: "777-3",
+            display: "Platelet Count",
+            value: "320000 cells/mcL",
+            interpretation: "Normal",
+          },
+        ],
+        Practitioner: [
+          {
+            id: "pract-002",
+            name: "Dr. Hiren Shah",
+            role: "Cardiologist",
+          },
+        ],
+        Organization: [
+          {
+            name: "Drlogy Pathology Lab",
+            address:
+              "105-108, Smart Vision Complex, Healthcare Road, Opp. Healthcare Complex, Mumbai - 689578",
+          },
+        ],
+      },
     },
     {
-      code: "789-8",
-      display: "Red Blood Cell Count",
-      value: "5.1 mill/cumm",
-      interpretation: "Normal",
+      name: "rbc", // PDF name containing "rbc"
+      entities: {
+        Patient: [
+          {
+            id: "PID-555",
+            name: "Yash M. Patel",
+            gender: "Male",
+            age: "21 Years",
+            birthDate: "2004-02-28", // not in report
+          },
+        ],
+        Observation: [
+          {
+            code: "718-7",
+            display: "Hemoglobin [Mass/volume] in Blood",
+            value: "14 g/dL",
+            interpretation: "Normal",
+          },
+          {
+            code: "4544-3",
+            display: "Hematocrit [Volume Fraction] of Blood",
+            value: "47.5 %",
+            interpretation: "Normal",
+          },
+          {
+            code: "789-8",
+            display: "Red Blood Cell Count",
+            value: "3.1 mill/cumm",
+            interpretation: "L (Low)",
+          },
+          {
+            code: "6690-2",
+            display: "White Blood Cell Count",
+            value: "9000 cells/mcL",
+            interpretation: "Normal",
+          },
+          {
+            code: "777-3",
+            display: "Platelet Count",
+            value: "320000 cells/mcL",
+            interpretation: "Normal",
+          },
+        ],
+        Practitioner: [
+          {
+            id: "pract-002",
+            name: "Dr. Hiren Shah",
+            role: "Cardiologist",
+          },
+        ],
+        Organization: [
+          {
+            name: "Drlogy Pathology Lab",
+            address:
+              "105-108, Smart Vision Complex, Healthcare Road, Opp. Healthcare Complex, Mumbai - 689578",
+          },
+        ],
+      },
     },
-    {
-      code: "6690-2",
-      display: "White Blood Cell Count",
-      value: "9000 cells/mcL",
-      interpretation: "Normal",
-    },
-    {
-      code: "777-3",
-      display: "Platelet Count",
-      value: "320000 cells/mcL",
-      interpretation: "Normal",
-    },
-  ],
-  Practitioner: [
-    {
-      id: "pract-002",
-      name: "Dr. Hiren Shah",
-      role: "Cardiologist",
-    }
-  ],
-  Organization: [
-    {
-      name: "Drlogy Pathology Lab",
-      address:
-        "105-108, Smart Vision Complex, Healthcare Road, Opp. Healthcare Complex, Mumbai - 689578",
-    },
-  ],
-},
-  },
-  {
-    name: "rbc", // PDF name containing "rbc"
-    entities: {
-  Patient: [
-    {
-      id: "PID-555",
-      name: "Yash M. Patel",
-      gender: "Male",
-      age: "21 Years",
-      birthDate: "2004-02-28", // not in report
-    },
-  ],
-  Observation: [
-    {
-      code: "718-7",
-      display: "Hemoglobin [Mass/volume] in Blood",
-      value: "14 g/dL",
-      interpretation: "Normal",
-    },
-    {
-      code: "4544-3",
-      display: "Hematocrit [Volume Fraction] of Blood",
-      value: "47.5 %",
-      interpretation: "Normal",
-    },
-    {
-      code: "789-8",
-      display: "Red Blood Cell Count",
-      value: "3.1 mill/cumm",
-      interpretation: "L (Low)",
-    },
-    {
-      code: "6690-2",
-      display: "White Blood Cell Count",
-      value: "9000 cells/mcL",
-      interpretation: "Normal",
-    },
-    {
-      code: "777-3",
-      display: "Platelet Count",
-      value: "320000 cells/mcL",
-      interpretation: "Normal",
-    },
-  ],
-  Practitioner: [
-    {
-      id: "pract-002",
-      name: "Dr. Hiren Shah",
-      role: "Cardiologist",
-    }
-  ],
-  Organization: [
-    {
-      name: "Drlogy Pathology Lab",
-      address:
-        "105-108, Smart Vision Complex, Healthcare Road, Opp. Healthcare Complex, Mumbai - 689578",
-    },
-  ],
-},
-  },
-];
-
+  ];
 
   const toggleSection = (key) =>
     setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -337,7 +345,7 @@ const pdfEntities = [
     if (isMounted.current) setShowAbnormality(true);
     await new Promise((res) => setTimeout(res, 1000));
 
-    const selectedEntities = pdfEntities.find(pdf =>
+    const selectedEntities = pdfEntities.find((pdf) =>
       selectedPdf.name.toLowerCase().includes(pdf.name)
     )?.entities;
 
@@ -347,6 +355,7 @@ const pdfEntities = [
       toast.success("Entities extracted successfully!");
     }
     // Step 4: Creating appointment
+
     toast.loading("Creating appointment...");
     const submitResult = await submitEntity(setLatestCurl);
     toast.dismiss();
@@ -356,9 +365,19 @@ const pdfEntities = [
       const appointmentId = submitResult?.appointmentId || "1045267";
       try {
         const appointmentData = await getAppointment(appointmentId);
-        if (isMounted.current) setAppointmentInfo(appointmentData);
+        setAppointmentInfo(appointmentData);
+        // Add appointment to local events
+        if (setLocalEvents) {
+          const newEvent = {
+            id: appointmentId,
+            eventType: "Appointment.save",
+            createdTime: new Date().toISOString(),
+            provider: appointmentData.provider?.name || "Unknown provider",
+          };
+          setLocalEvents([newEvent, ...localEvents]);
+        }
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching appointment info:", err);
         toast.error("Could not fetch appointment details.");
       }
     } else {
@@ -369,7 +388,7 @@ const pdfEntities = [
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
+    <div className="h-full bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
       {/* Header */}
       <div className="flex-shrink-0 p-6 pb-3">
         <div className="max-w-7xl mx-auto flex items-center gap-3">
@@ -380,7 +399,9 @@ const pdfEntities = [
             <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               Clinical PDF Viewer
             </h1>
-            <p className="text-sm text-gray-600">Select a PDF → Extract Entities → Schedule Appointment</p>
+            <p className="text-sm text-gray-600">
+              Select a PDF → Extract Entities → Schedule Appointment
+            </p>
           </div>
         </div>
       </div>
@@ -394,7 +415,9 @@ const pdfEntities = [
           >
             <option value="">Select PDF</option>
             {pdfList.map((name) => (
-              <option key={name} value={name}>{name}</option>
+              <option key={name} value={name}>
+                {name}
+              </option>
             ))}
           </select>
           <button
@@ -402,72 +425,91 @@ const pdfEntities = [
             disabled={loading || !selectedPdf}
             className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl flex items-center gap-2"
           >
-            {loading ? <Loader2 className="animate-spin w-5 h-5" /> : "Process PDF"}
+            {loading ? (
+              <Loader2 className="animate-spin w-5 h-5" />
+            ) : (
+              "Process PDF"
+            )}
           </button>
         </div>
       </div>
 
-{/* Two-column layout */}
-{selectedPdf && (
-  <div className="flex-1 px-6 pb-6 pt-4 overflow-hidden">
-    <div className="max-w-7xl mx-auto h-full flex gap-6">
-      {/* Left: PDF (50%) */}
-      <Card className="flex-[0.5] flex flex-col overflow-hidden p-4">
-        <div className="w-full h-full rounded-2xl overflow-hidden border border-gray-200 shadow-lg">
-          <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
-            <div style={{ height: "100%", width: "100%" }}>
-              <Viewer fileUrl={selectedPdf.file} plugins={[pdfPlugin]} />
+      {/* Two-column layout */}
+      {selectedPdf && (
+        <div className="flex-1 px-6 pb-6 pt-4 overflow-hidden">
+          <div className="max-w-7xl mx-auto h-full flex gap-6">
+            {/* Left: PDF (50%) */}
+            <Card className="flex-[0.5] flex flex-col overflow-hidden p-4">
+              <div className="w-full h-full rounded-2xl overflow-hidden border border-gray-200 shadow-lg">
+                <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
+                  <div style={{ height: "100%", width: "100%" }}>
+                    <Viewer fileUrl={selectedPdf.file} plugins={[pdfPlugin]} />
+                  </div>
+                </Worker>
+              </div>
+            </Card>
+
+            {/* Right: Abnormalities + Entities + Appointment (50%) */}
+            <div className="flex-[0.5] flex flex-col gap-4 overflow-auto">
+              {/* Abnormalities */}
+              {showAbnormality &&
+                getAbnormalitiesByFile(selectedPdf.name).length > 0 && (
+                  <Card className="p-4 bg-red-100 border-red-400 text-red-800">
+                    <h2 className="font-bold mb-2">Abnormality Detected</h2>
+                    <ul className="list-disc pl-5">
+                      {getAbnormalitiesByFile(selectedPdf.name).map(
+                        (ab, idx) => (
+                          <li key={idx}>{ab}</li>
+                        )
+                      )}
+                    </ul>
+                  </Card>
+                )}
+
+              {/* Entities */}
+              {entities && (
+                <Card className="p-4 bg-blue-50 border-blue-400 text-gray-800">
+                  <h2 className="font-bold mb-3 text-gray-700 text-lg">
+                    Entities
+                  </h2>
+                  {Object.entries(entities).map(([key, items]) => (
+                    <EntityCard
+                      key={key}
+                      title={key}
+                      items={items}
+                      open={openSections[key]}
+                      toggleOpen={() => toggleSection(key)}
+                    />
+                  ))}
+                </Card>
+              )}
+
+              {/* Appointment Details */}
+              {appointmentInfo && (
+                <Card className="p-4 bg-green-100 border-green-400 text-green-800">
+                  <h2 className="font-bold mb-2">Appointment Details</h2>
+                  <p>
+                    <strong>ID:</strong> {appointmentInfo.id}
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {appointmentInfo.status}
+                  </p>
+                  <p>
+                    <strong>Start:</strong> {appointmentInfo.start}
+                  </p>
+                  <p>
+                    <strong>End:</strong> {appointmentInfo.end}
+                  </p>
+                  <p>
+                    <strong>Type:</strong>{" "}
+                    {appointmentInfo.appointmentType?.text}
+                  </p>
+                </Card>
+              )}
             </div>
-          </Worker>
+          </div>
         </div>
-      </Card>
-
-      {/* Right: Abnormalities + Entities + Appointment (50%) */}
-      <div className="flex-[0.5] flex flex-col gap-4 overflow-auto">
-        {/* Abnormalities */}
-        {showAbnormality && getAbnormalitiesByFile(selectedPdf.name).length > 0 && (
-          <Card className="p-4 bg-red-100 border-red-400 text-red-800">
-            <h2 className="font-bold mb-2">Abnormality Detected</h2>
-            <ul className="list-disc pl-5">
-              {getAbnormalitiesByFile(selectedPdf.name).map((ab, idx) => (
-                <li key={idx}>{ab}</li>
-              ))}
-            </ul>
-          </Card>
-        )}
-
-{/* Entities */}
-{entities && (
-  <Card className="p-4 bg-blue-50 border-blue-400 text-gray-800">
-    <h2 className="font-bold mb-3 text-gray-700 text-lg">Entities</h2>
-    {Object.entries(entities).map(([key, items]) => (
-      <EntityCard
-        key={key}
-        title={key}
-        items={items}
-        open={openSections[key]}
-        toggleOpen={() => toggleSection(key)}
-      />
-    ))}
-  </Card>
-)}
-
-        {/* Appointment Details */}
-        {appointmentInfo && (
-          <Card className="p-4 bg-green-100 border-green-400 text-green-800">
-            <h2 className="font-bold mb-2">Appointment Details</h2>
-            <p><strong>ID:</strong> {appointmentInfo.id}</p>
-            <p><strong>Status:</strong> {appointmentInfo.status}</p>
-            <p><strong>Start:</strong> {appointmentInfo.start}</p>
-            <p><strong>End:</strong> {appointmentInfo.end}</p>
-            <p><strong>Type:</strong> {appointmentInfo.appointmentType?.text}</p>
-          </Card>
-        )}
-      </div>
-    </div>
-  </div>
-)}
-
+      )}
     </div>
   );
 }

@@ -486,7 +486,7 @@ useEffect(() => {
   );
 
   return (
-    <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex overflow-hidden">
+    <div className="h-full bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex overflow-hidden">
       <aside className="w-80 flex flex-col border-r border-white/20 backdrop-blur-sm bg-white/80">
         <div className="p-6 border-b border-white/20">
           <div className="flex items-center gap-3 mb-4">

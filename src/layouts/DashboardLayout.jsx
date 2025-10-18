@@ -272,8 +272,8 @@ export default function DashboardLayout() {
         },
         { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
         {
-          to: "/contentIntegrations",
-          label: "Content Integrationss",
+          to: "/knowledgesource",
+          label: "Knowledge Source",
           icon: Airplay,
         },
       ],
@@ -296,7 +296,7 @@ export default function DashboardLayout() {
           label: "Bulk Data Extraction",
           icon: DownloadCloud,
         },
-        { to: "/claims", label: "Prior Auth", icon: FileText },
+        { to: "/claims", label: "Claims", icon: FileText },
       ],
     },
     {
@@ -676,7 +676,6 @@ export default function DashboardLayout() {
           </div>
         </div>
       </div>
-
       {/* Powered by XCaliber */}
       <div className="fixed bottom-4 right-4 flex items-center gap-1 text-gray-600 opacity-90 z-50 pointer-events-none">
         <span className="text-xs font-semibold">Powered by</span>

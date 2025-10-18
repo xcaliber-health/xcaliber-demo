@@ -166,7 +166,7 @@ export default function KafkaToSnowflakeDemo() {
 
   // --- UI ---
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-hidden">
+    <div className="h-full flex flex-col bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-hidden">
       {/* Header */}
       <header className="p-4 pb-1">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
@@ -176,10 +176,10 @@ export default function KafkaToSnowflakeDemo() {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-                Kafka → Snowflake Demo
+                Real-Time Claims Feed to Snowflake
               </h1>
               <p className="text-sm text-gray-500">
-                Simulate Kafka ingestion into Snowflake
+                See how claims flow into your analytics lake seconds after submission.
               </p>
             </div>
           </div>
@@ -192,7 +192,7 @@ export default function KafkaToSnowflakeDemo() {
           {/* LEFT PANEL */}
           <Card className="w-2/5 p-5 flex flex-col overflow-y-auto">
             <h2 className="text-lg font-semibold text-indigo-700 mb-4">
-              Settings
+              Incoming Claims Stream
             </h2>
             <div className="space-y-3 text-sm">
               <div>
@@ -262,7 +262,7 @@ export default function KafkaToSnowflakeDemo() {
                       : "bg-indigo-600 text-white"
                   }`}
                 >
-                  {running ? "Running..." : "Start"}
+                  {running ? "Stimulating..." : "Simulate Stream"}
                 </Button>
                 <Button
                   onClick={handleReset}
@@ -270,21 +270,6 @@ export default function KafkaToSnowflakeDemo() {
                 >
                   <RotateCw className="inline w-4 h-4 mr-1" /> Reset
                 </Button>
-              </div>
-
-              <div className="mt-3 text-gray-700 space-y-1">
-                <p>
-                  Status:{" "}
-                  <span className="font-medium text-indigo-700">{phase}</span>
-                </p>
-                <p>
-                  Rows transferred:{" "}
-                  <span className="font-medium">{rowsTransferred}</span>
-                </p>
-                <p>
-                  Throughput:{" "}
-                  <span className="font-medium">{throughput} rows/s</span>
-                </p>
               </div>
 
               {mappingPreviewOpen && (
@@ -329,7 +314,7 @@ export default function KafkaToSnowflakeDemo() {
                 <div className="col-span-2 flex flex-col min-h-0">
                   <div className="flex-1 bg-indigo-50 border border-gray-200 rounded-xl p-3 flex flex-col overflow-hidden">
                     <div className="text-xs text-gray-500 mb-2 flex-shrink-0">
-                      Event Stream
+                      Incoming Claims
                     </div>
                     <div className="flex-1 overflow-auto pr-1 text-sm space-y-2">
                       {Array.from({ length: 8 }).map((_, i) => {
@@ -359,7 +344,7 @@ export default function KafkaToSnowflakeDemo() {
                 {/* Progress */}
                 <div className="flex flex-col bg-indigo-50 border border-gray-200 rounded-xl p-4 justify-between">
                   <div>
-                    <p className="text-xs text-gray-500">Progress</p>
+                    <p className="text-xs text-gray-500">Claims Streamed</p>
                     <div className="mt-2 h-3 bg-white border rounded overflow-hidden">
                       <div
                         className="h-full bg-gradient-to-r from-indigo-500 to-purple-500"
@@ -383,7 +368,7 @@ export default function KafkaToSnowflakeDemo() {
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">Latency</p>
+                    <p className="text-xs text-gray-500">Avg Stream Delay</p>
                     <p className="font-medium">
                       {phase === "transferring"
                         ? `${Math.round(50 + Math.random() * 150)} ms`

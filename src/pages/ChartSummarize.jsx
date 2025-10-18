@@ -225,7 +225,7 @@ const handleChartSummarizer = async () => {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
+    <div className="h-full bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
       <div className="flex-shrink-0 p-4 pb-2">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -234,7 +234,7 @@ const handleChartSummarizer = async () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                Chart Summarizer
+                Chart Summary
               </h1>
               <p className="text-sm text-gray-600">
                 Comprehensive summary and data review
