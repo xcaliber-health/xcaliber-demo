@@ -151,16 +151,29 @@ async function handleBook() {
     //     body: notificationMessage,
     //   }),
     // });
-    //await fetch(`http://localhost:3000/api/send-sms`, {
-    await fetch(`${SAMPLE_BFF_URL}/api/send-sms`, {
+
+
+//     await fetch(`http://localhost:3000/api/send-sms`, {
+//     //await fetch(`${SAMPLE_BFF_URL}/api/send-sms`, {
+//   method: "POST",
+//   headers: { "Content-Type": "application/json" },
+//   credentials: "include",
+//   body: JSON.stringify({
+//     to: [NOTIFICATION_PHONE_NUMBER1,NOTIFICATION_PHONE_NUMBER2,NOTIFICATION_PHONE_NUMBER3 ],
+//     body: notificationMessage
+//   }),
+// });
+
+//await fetch(`http://localhost:3000/api/send-sms`, {
+await fetch(`${SAMPLE_BFF_URL}/api/send-sms`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   credentials: "include",
   body: JSON.stringify({
-    to: [NOTIFICATION_PHONE_NUMBER1,NOTIFICATION_PHONE_NUMBER2,NOTIFICATION_PHONE_NUMBER3 ],
     body: notificationMessage
   }),
 });
+
 
 
     // ✅ Reset form fields
