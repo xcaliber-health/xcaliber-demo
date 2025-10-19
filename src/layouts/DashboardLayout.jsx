@@ -33,7 +33,7 @@ const EHR_OPTIONS = {
   Elation: ["REST API", "FHIR", "EHR Operator", "Webhooks"],
   ECW: ["FHIR", "EHR Operator", "HL7"],
   Epic: ["FHIR", "EHR Operator", "HL7"],
-  Kno2: ["CCDA", "HL7"],
+  HIE: ["CCDA", "HL7"],
   Cerner: ["FHIR", "HL7"],
   Meditech: ["FHIR", "HL7"],
   PracticeFusion: ["FHIR"],
@@ -44,7 +44,7 @@ const EHR_OPTIONS = {
 // Mock EHR list
 const MOCK_EHRS = [
   "Epic",
-  "Kno2",
+  "HIE",
   "Cerner",
   "Meditech",
   "PracticeFusion",
@@ -215,7 +215,7 @@ export default function DashboardLayout() {
     Elation: import.meta.env.VITE_API_BASE,
     ECW: import.meta.env.VITE_API_BASE_ECW,
     Epic: import.meta.env.VITE_SOURCE_ID_EPIC_MOCK,
-    Kno2: import.meta.env.VITE_SOURCE_ID_KNO2_MOCK,
+    HIE: import.meta.env.VITE_SOURCE_ID_KNO2_MOCK,
     Cerner: import.meta.env.VITE_SOURCE_ID_CERNER_MOCK,
     Meditech: import.meta.env.VITE_SOURCE_ID_MEDITECH_MOCK,
     PracticeFusion: import.meta.env.VITE_SOURCE_ID_PRACTICEFUSION_MOCK,
@@ -228,7 +228,7 @@ export default function DashboardLayout() {
     Elation: import.meta.env.VITE_SOURCE_ID_ELATION,
     ECW: import.meta.env.VITE_SOURCE_ID_ECW,
     Epic: import.meta.env.VITE_SOURCE_ID_EPIC_MOCK,
-    Kno2: import.meta.env.VITE_SOURCE_ID_KNO2_MOCK,
+    HIE: import.meta.env.VITE_SOURCE_ID_KNO2_MOCK,
     Cerner: import.meta.env.VITE_SOURCE_ID_CERNER_MOCK,
     Meditech: import.meta.env.VITE_SOURCE_ID_MEDITECH_MOCK,
     PracticeFusion: import.meta.env.VITE_SOURCE_ID_PRACTICEFUSION_MOCK,
@@ -314,24 +314,24 @@ export default function DashboardLayout() {
     },
   ];
 
-  useEffect(() => {
-    const socket = io(import.meta.env.VITE_SOCKET_URL, {
-      transports: ["websocket", "polling"],
-      reconnection: true,
-      withCredentials: true,
-    });
+  // useEffect(() => {
+  //   const socket = io(import.meta.env.VITE_SOCKET_URL, {
+  //     transports: ["websocket", "polling"],
+  //     reconnection: true,
+  //     withCredentials: true,
+  //   });
 
-    socket.on("connect", () => console.log("Socket connected:", socket.id));
-    socket.on("disconnect", () => console.log("Socket disconnected"));
-    socket.on("new-sms", (msg) => {
-      setMessages((prev) => [
-        ...prev,
-        { text: msg.body || JSON.stringify(msg), sender: "clinic" },
-      ]);
-    });
+  //   socket.on("connect", () => console.log("Socket connected:", socket.id));
+  //   socket.on("disconnect", () => console.log("Socket disconnected"));
+  //   socket.on("new-sms", (msg) => {
+  //     setMessages((prev) => [
+  //       ...prev,
+  //       { text: msg.body || JSON.stringify(msg), sender: "clinic" },
+  //     ]);
+  //   });
 
-    return () => socket.disconnect();
-  }, []);
+  //   return () => socket.disconnect();
+  // }, []);
 
   if (showSplash) {
     return (
