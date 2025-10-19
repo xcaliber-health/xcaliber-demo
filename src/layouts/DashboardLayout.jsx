@@ -256,13 +256,13 @@ export default function DashboardLayout() {
         { to: "/scripts", label: "EHR Operator", icon: Cpu },
         {
           to: "/claims-streaming",
-          label: "Claims Data Streaming",
+          label: "Real-Time Claims Feed to Snowflake",
           icon: Cloud,
         },
         { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
         {
           to: "/knowledgesource",
-          label: "Knowledge Source",
+          label: "Content Repository",
           icon: Airplay,
         },
       ],
@@ -277,7 +277,7 @@ export default function DashboardLayout() {
         },
         {
           to: "/custom-clinical-processing",
-          label: "Custom Clinical Processing",
+          label: "Real-Time Clinical Intervention",
           icon: HeartPulse,
         },
         {

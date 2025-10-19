@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Database, Server, Play, RotateCw } from "lucide-react";
+import { Database, Server, Play, RotateCw,Cloud } from "lucide-react";
 
 function Card({ children, className = "" }) {
   return (
@@ -172,7 +172,7 @@ export default function KafkaToSnowflakeDemo() {
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <Server className="text-white w-5 h-5" />
+              <Cloud className="text-white w-5 h-5" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
