@@ -1,36 +1,20 @@
 
-
-export const ECW_MOCK_PATIENTS =[
+export const ECW_MOCK_PATIENTS = [
   {
     "id": "6341",
     "name": [
-      {
-        "family": "Ross",
-        "given": [
-          "Sofia"
-        ],
-        "use": "official"
-      }
+      { "family": "Ross", "given": ["Sofia"], "use": "official" }
     ],
     "fullName": "Sofia Ross",
     "birthDate": "1973-09-12",
     "gender": "F",
     "telecom": [
-      {
-        "system": "phone",
-        "value": "4155550137",
-        "use": "home"
-      },
-      {
-        "system": "email",
-        "value": "sofia.ross@example.com"
-      }
+      { "system": "phone", "value": "4155550137", "use": "home" },
+      { "system": "email", "value": "sofia.ross@example.com" }
     ],
     "address": [
       {
-        "line": [
-          "789 Magnolia Ave"
-        ],
+        "line": ["789 Magnolia Ave"],
         "city": "San Francisco",
         "state": "CA",
         "postalCode": "94107",
@@ -43,306 +27,179 @@ export const ECW_MOCK_PATIENTS =[
       {
         "id": "appt-001",
         "participant": [
-          {
-            "actor": {
-              "reference": "Practitioner/123"
-            }
-          },
-          {
-            "actor": {
-              "reference": "Patient/6341"
-            }
-          }
+          { "actor": { "reference": "Practitioner/123" } },
+          { "actor": { "reference": "Patient/6341" } }
         ],
-        "appointmentType": {
-          "text": "Oncology follow-up"
-        },
+        "appointmentType": { "text": "Oncology follow-up" },
         "start": "2025-11-15T10:00:00Z",
         "status": "booked"
       },
       {
         "id": "appt-002",
         "participant": [
-          {
-            "actor": {
-              "reference": "Practitioner/456"
-            }
-          },
-          {
-            "actor": {
-              "reference": "Patient/6341"
-            }
-          }
+          { "actor": { "reference": "Practitioner/456" } },
+          { "actor": { "reference": "Patient/6341" } }
         ],
-        "appointmentType": {
-          "text": "Imaging review"
-        },
+        "appointmentType": { "text": "Imaging review" },
         "start": "2025-11-05T14:00:00Z",
         "status": "booked"
       }
     ],
     "vitals": [
       {
-        "code": {
-          "coding": [
-            {
-              "display": "Blood Pressure (Systolic)"
-            }
-          ]
-        },
-        "valueQuantity": {
-          "value": 118,
-          "unit": "mmHg"
-        },
-        "meta": {
-          "lastUpdated": "2025-10-16T10:00:00Z"
-        }
+        "code": { "coding": [{ "display": "Blood Pressure (Systolic)" }] },
+        "valueQuantity": { "value": 118, "unit": "mmHg" },
+        "meta": { "lastUpdated": "2025-10-16T10:00:00Z" }
       },
       {
-        "code": {
-          "coding": [
-            {
-              "display": "Blood Pressure (Diastolic)"
-            }
-          ]
-        },
-        "valueQuantity": {
-          "value": 78,
-          "unit": "mmHg"
-        },
-        "meta": {
-          "lastUpdated": "2025-10-16T10:00:00Z"
-        }
+        "code": { "coding": [{ "display": "Blood Pressure (Diastolic)" }] },
+        "valueQuantity": { "value": 78, "unit": "mmHg" },
+        "meta": { "lastUpdated": "2025-10-16T10:00:00Z" }
       },
       {
-        "code": {
-          "coding": [
-            {
-              "display": "Heart Rate"
-            }
-          ]
-        },
-        "valueQuantity": {
-          "value": 72,
-          "unit": "bpm"
-        },
-        "meta": {
-          "lastUpdated": "2025-10-16T10:05:00Z"
-        }
+        "code": { "coding": [{ "display": "Heart Rate" }] },
+        "valueQuantity": { "value": 72, "unit": "bpm" },
+        "meta": { "lastUpdated": "2025-10-16T10:05:00Z" }
       },
       {
-        "code": {
-          "coding": [
-            {
-              "display": "Temperature"
-            }
-          ]
-        },
-        "valueQuantity": {
-          "value": 36.7,
-          "unit": "\u00b0C"
-        },
-        "meta": {
-          "lastUpdated": "2025-10-16T10:05:00Z"
-        }
+        "code": { "coding": [{ "display": "Temperature" }] },
+        "valueQuantity": { "value": 36.7, "unit": "\u00b0C" },
+        "meta": { "lastUpdated": "2025-10-16T10:05:00Z" }
       }
     ],
     "allergies": [
       {
         "code": "Penicillin",
         "reaction": [
-          {
-            "description": "Rash",
-            "severity": "high",
-            "onset": "2020-01-10T10:00:00Z"
-          }
+          { "description": "Rash", "severity": "high", "onset": "2020-01-10T10:00:00Z" }
         ],
         "clinicalStatus": "active",
         "onsetDateTime": "2020-01-10T10:00:00Z",
-        "meta": {
-          "created": "2020-01-05T08:30:00Z"
-        }
+        "meta": { "created": "2020-01-05T08:30:00Z" }
       },
       {
         "code": "Latex",
         "reaction": [
-          {
-            "description": "Itching",
-            "severity": "medium",
-            "onset": "2021-06-01T12:00:00Z"
-          }
+          { "description": "Itching", "severity": "medium", "onset": "2021-06-01T12:00:00Z" }
         ],
         "clinicalStatus": "inactive",
         "onsetDateTime": "2021-06-01T12:00:00Z",
-        "meta": {
-          "created": "2021-05-28T10:00:00Z"
-        }
+        "meta": { "created": "2021-05-28T10:00:00Z" }
       }
     ],
-    
-    "diagnosticReports":[
-  {
-    "code": { "coding": [{ "display": "Breast core needle biopsy - pathology" }] },
-    "status": "final",
-    "effectiveDateTime": "2023-03-14T00:00:00Z"
-  },
-  {
-    "code": { "coding": [{ "display": "Post-treatment CT chest/abdomen/pelvis" }] },
-    "status": "final",
-    "effectiveDateTime": "2024-03-01T00:00:00Z"
-  },
-  {
-    "code": { "coding": [{ "display": "CA 15-3 tumor marker" }] },
-    "status": "final",
-    "effectiveDateTime": "2025-10-10T00:00:00Z"
-  }
-],
-
+    "diagnosticReports": [
+      {
+        "code": { "coding": [{ "display": "Breast core needle biopsy - pathology" }] },
+        "status": "final",
+        "effectiveDateTime": "2023-03-14T00:00:00Z"
+      },
+      {
+        "code": { "coding": [{ "display": "Post-treatment CT chest/abdomen/pelvis" }] },
+        "status": "final",
+        "effectiveDateTime": "2024-03-01T00:00:00Z"
+      },
+      {
+        "code": { "coding": [{ "display": "CA 15-3 tumor marker" }] },
+        "status": "final",
+        "effectiveDateTime": "2025-10-10T00:00:00Z"
+      }
+    ],
     "serviceRequests": [
-    {
-  "category": [
-    { "coding": [{ "display": "Lab" }] },
-    { "coding": [{ "code": "CA15-3" }] }
-  ],
-  "status": "completed",
-  "priority": "routine",
-  "authoredOn": "2025-10-10"
-},
-{
-  "category": [
-    { "coding": [{ "display": "Imaging" }] },
-    { "coding": [{ "code": "MRI-Breast-Right" }] }
-  ],
-  "status": "scheduled",
-  "priority": "routine",
-  "authoredOn": "2025-11-05"
-},
-],
-
-
+      {
+        "category": [
+          { "coding": [{ "display": "Lab" }] },
+          { "coding": [{ "code": "CA15-3" }] }
+        ],
+        "status": "completed",
+        "priority": "routine",
+        "authoredOn": "2025-10-10"
+      },
+      {
+        "category": [
+          { "coding": [{ "display": "Imaging" }] },
+          { "coding": [{ "code": "MRI-Breast-Right" }] }
+        ],
+        "status": "scheduled",
+        "priority": "routine",
+        "authoredOn": "2025-11-05"
+      }
+    ],
     "immunizations": [],
-    
-
     "encounters": [
-  {
-  "class": {
-    "code": "AMB",
-    "display": "ambulatory",
-    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
-  },
-  "status": "finished",
-  "period": {
-    "start": "2023-04-01T08:00:00Z",
-    "end": "2023-09-15T16:00:00Z"
-  },
-  "type": "Neoadjuvant chemotherapy (AC \u2192 Paclitaxel)",
+      {
+        "class": {
+          "code": "AMB",
+          "display": "ambulatory",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+        },
+        "status": "finished",
+        "period": {
+          "start": "2023-04-01T08:00:00Z",
+          "end": "2023-09-15T16:00:00Z"
+        },
+        "type": "Neoadjuvant chemotherapy (AC \u2192 Paclitaxel)",
         "extension": [
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/provider-first-name",
-            "valueString": "Marco"
-          },
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/provider-last-name",
-            "valueString": "Bellini"
-          }
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-first-name", "valueString": "Marco" },
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-last-name", "valueString": "Bellini" }
         ]
-}
-,
-  {
-  "class": {
-    "code": "AMB",
-    "display": "ambulatory",
-    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
-  },
-  "status": "finished",
-  "period": {
-    "start": "2023-10-10T07:30:00Z",
-    "end": "2023-10-10T11:00:00Z"
-  },
-  "type": "Left modified radical mastectomy",
+      },
+      {
+        "class": {
+          "code": "AMB",
+          "display": "ambulatory",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+        },
+        "status": "finished",
+        "period": {
+          "start": "2023-10-10T07:30:00Z",
+          "end": "2023-10-10T11:00:00Z"
+        },
+        "type": "Left modified radical mastectomy",
         "extension": [
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/provider-first-name",
-            "valueString": "Marco"
-          },
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/provider-last-name",
-            "valueString": "Bellini"
-          }
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-first-name", "valueString": "Marco" },
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-last-name", "valueString": "Bellini" }
         ]
-}
-]
-
-,
-"tasks": [
-  {
-    "description": "Review lab results for patient Sofia Ross",
-    "status": "completed",
-    "intent": "order"
-  },
-  {
-    "description": "Schedule follow-up appointment",
-    "status": "in-progress",
-    "intent": "plan"
-  },
-  {
-    "code": {
-      "coding": [
-        { "display": "Medication refill request" }
-      ]
-    },
-    "status": "requested",
-    "intent": "order"
-  }
-]
-,
+      }
+    ],
+    "tasks": [
+      { "description": "Review lab results for patient Sofia Ross", "status": "completed", "intent": "order" },
+      { "description": "Schedule follow-up appointment", "status": "in-progress", "intent": "plan" },
+      {
+        "code": {
+          "coding": [
+            { "display": "Medication refill request" }
+          ]
+        },
+        "status": "requested",
+        "intent": "order"
+      }
+    ],
     "procedures": [
-  {
-    "code": {
-      "coding": [
-        { "display": "Ultrasound-guided core needle biopsy, left breast" }
-      ]
-    },
-    "status": "completed",
-    "performedDateTime": "2023-03-10"
-  },
-  {
-    "code": {
-      "coding": [
-        { "display": "Port-a-cath insertion (right subclavian)" }
-      ]
-    },
-    "status": "completed",
-    "performedDateTime": "2023-03-28"
-  },
-  {
-    "code": {
-      "coding": [
-        { "display": "Left modified radical mastectomy with axillary lymph node dissection" }
-      ]
-    },
-    "status": "completed",
-    "performedDateTime": "2023-10-10",
-    "note": "3/12 nodes positive"
-  }
-]
-,
+      {
+        "code": { "coding": [{ "display": "Ultrasound-guided core needle biopsy, left breast" }] },
+        "status": "completed",
+        "performedDateTime": "2023-03-10"
+      },
+      {
+        "code": { "coding": [{ "display": "Port-a-cath insertion (right subclavian)" }] },
+        "status": "completed",
+        "performedDateTime": "2023-03-28"
+      },
+      {
+        "code": { "coding": [{ "display": "Left modified radical mastectomy with axillary lymph node dissection" }] },
+        "status": "completed",
+        "performedDateTime": "2023-10-10",
+        "note": "3/12 nodes positive"
+      }
+    ],
     "documents": [
       {
         "description": "Oncology Consultation Note",
         "category": [
-          {
-            "coding": [
-              {
-                "code": "progress-note"
-              }
-            ]
-          }
+          { "coding": [{ "code": "progress-note" }] }
         ],
         "author": [
-          {
-            "display": "Dr. Marco Bellini"
-          }
+          { "display": "Dr. Marco Bellini" }
         ],
         "date": "2025-10-16T09:00:00Z",
         "status": "final"
@@ -350,18 +207,10 @@ export const ECW_MOCK_PATIENTS =[
       {
         "description": "Surgical Pathology Report",
         "category": [
-          {
-            "coding": [
-              {
-                "code": "pathology-report"
-              }
-            ]
-          }
+          { "coding": [{ "code": "pathology-report" }] }
         ],
         "author": [
-          {
-            "display": "Dr. Lucia Moretti"
-          }
+          { "display": "Dr. Lucia Moretti" }
         ],
         "date": "2023-10-12T14:00:00Z",
         "status": "final"
@@ -371,21 +220,12 @@ export const ECW_MOCK_PATIENTS =[
       {
         "code": {
           "coding": [
-            {
-              "display": "Invasive ductal carcinoma, left breast",
-              "code": "C50.912"
-            }
+            { "display": "Invasive ductal carcinoma, left breast", "code": "C50.912" }
           ]
         },
         "extension": [
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/status",
-            "valueString": "active"
-          },
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/on-set-date",
-            "valueDateTime": "2023-03-14"
-          }
+          { "url": "http://xcaliber-fhir/structureDefinition/status", "valueString": "active" },
+          { "url": "http://xcaliber-fhir/structureDefinition/on-set-date", "valueDateTime": "2023-03-14" }
         ],
         "status": "active",
         "onsetDateTime": "2023-03-14"
@@ -393,21 +233,12 @@ export const ECW_MOCK_PATIENTS =[
       {
         "code": {
           "coding": [
-            {
-              "display": "BRCA1 gene mutation carrier",
-              "code": "Z15.01"
-            }
+            { "display": "BRCA1 gene mutation carrier", "code": "Z15.01" }
           ]
         },
         "extension": [
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/status",
-            "valueString": "active"
-          },
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/on-set-date",
-            "valueDateTime": "2023-04-10"
-          }
+          { "url": "http://xcaliber-fhir/structureDefinition/status", "valueString": "active" },
+          { "url": "http://xcaliber-fhir/structureDefinition/on-set-date", "valueDateTime": "2023-04-10" }
         ],
         "status": "active",
         "onsetDateTime": "2023-04-10"
@@ -417,18 +248,14 @@ export const ECW_MOCK_PATIENTS =[
       {
         "relationship": {
           "coding": [
-            {
-              "display": "Mother"
-            }
+            { "display": "Mother" }
           ]
         },
         "condition": [
           {
             "code": {
               "coding": [
-                {
-                  "display": "Breast cancer"
-                }
+                { "display": "Breast cancer" }
               ]
             }
           }
@@ -436,91 +263,54 @@ export const ECW_MOCK_PATIENTS =[
       }
     ],
     "basics": [
-  {
-    "resourceType": "Basic",
-    "id": "basic-001",
-    "code": {
-      "text": "Risk Contract"
-    },
-    "meta": {
-      "lastUpdated": "2025-10-16T10:00:00Z"
-    }
-  },
-  {
-    "resourceType": "Basic",
-    "id": "basic-002",
-    "code": {
-      "text": "Clinical Risk Assessment"
-    },
-    "meta": {
-      "lastUpdated": "2025-09-25T09:30:00Z"
-    }
-  },
-  {
-    "resourceType": "Basic",
-    "id": "basic-003",
-    "code": {
-      "text": "Patient Intake Form"
-    },
-    "meta": {
-      "lastUpdated": "2025-08-10T14:45:00Z"
-    }
-  }
-]
-,
+      {
+        "resourceType": "Basic",
+        "id": "basic-001",
+        "code": { "text": "Risk Contract" },
+        "meta": { "lastUpdated": "2025-10-16T10:00:00Z" }
+      },
+      {
+        "resourceType": "Basic",
+        "id": "basic-002",
+        "code": { "text": "Clinical Risk Assessment" },
+        "meta": { "lastUpdated": "2025-09-25T09:30:00Z" }
+      },
+      {
+        "resourceType": "Basic",
+        "id": "basic-003",
+        "code": { "text": "Patient Intake Form" },
+        "meta": { "lastUpdated": "2025-08-10T14:45:00Z" }
+      }
+    ],
     "questionnaireResponses": [
       {
         "extension": [
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/category",
-            "valueString": "Allergy History"
-          }
+          { "url": "http://xcaliber-fhir/structureDefinition/category", "valueString": "Allergy History" }
         ],
         "status": "completed",
-        "meta": {
-          "lastUpdated": "2025-09-10"
-        },
+        "meta": { "lastUpdated": "2025-09-10" },
         "item": [
           {
             "text": "Do you have allergies?",
-            "answer": [
-              {
-                "valueString": "No"
-              }
-            ],
+            "answer": [{ "valueString": "No" }],
             "extension": [
-              {
-                "url": "http://xcaliber-fhir/structureDefinition/last-modified-by",
-                "valueString": "Nurse Jane"
-              }
+              { "url": "http://xcaliber-fhir/structureDefinition/last-modified-by", "valueString": "Nurse Jane" }
             ]
           }
         ]
       },
       {
         "extension": [
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/category",
-            "valueString": "Smoking Status"
-          }
+          { "url": "http://xcaliber-fhir/structureDefinition/category", "valueString": "Smoking Status" }
         ],
         "status": "completed",
-        "meta": {
-          "lastUpdated": "2025-08-05"
-        },
+        "meta": { "lastUpdated": "2025-08-05" },
         "item": [
           {
             "text": "Do you smoke?",
-            "answer": [
-              {
-                "valueString": "No"
-              }
-            ],
+            "answer": [{ "valueString": "No" }],
             "extension": [
-              {
-                "url": "http://xcaliber-fhir/structureDefinition/last-modified-by",
-                "valueString": "Dr. Marco Bellini"
-              }
+              { "url": "http://xcaliber-fhir/structureDefinition/last-modified-by", "valueString": "Dr. Marco Bellini" }
             ]
           }
         ]
@@ -530,33 +320,18 @@ export const ECW_MOCK_PATIENTS =[
   {
     "id": "6605",
     "name": [
-      {
-        "family": "Novak",
-        "given": [
-          "Hanah"
-        ],
-        "use": "official"
-      }
+      { "family": "Novak", "given": ["Hanah"], "use": "official" }
     ],
     "fullName": "Hanah Novak",
     "birthDate": "1986-04-22",
     "gender": "F",
     "telecom": [
-      {
-        "system": "phone",
-        "value": "3105550163",
-        "use": "home"
-      },
-      {
-        "system": "email",
-        "value": "hanah.novak@example.com"
-      }
+      { "system": "phone", "value": "3105550163", "use": "home" },
+      { "system": "email", "value": "hanah.novak@example.com" }
     ],
     "address": [
       {
-        "line": [
-          "2207 Demo Street"
-        ],
+        "line": ["2207 Demo Street"],
         "city": "Los Angeles",
         "state": "CA",
         "postalCode": "90017",
@@ -569,155 +344,134 @@ export const ECW_MOCK_PATIENTS =[
       {
         "id": "appt-101",
         "participant": [
-          {
-            "actor": {
-              "reference": "Practitioner/789"
-            }
-          },
-          {
-            "actor": {
-              "reference": "Patient/6605"
-            }
-          }
+          { "actor": { "reference": "Practitioner/789" } },
+          { "actor": { "reference": "Patient/6605" } }
         ],
-        "appointmentType": {
-          "text": "Gyn/Oncology follow-up"
-        },
+        "appointmentType": { "text": "Gyn/Oncology follow-up" },
         "start": "2025-12-02T11:00:00Z",
         "status": "booked"
       }
     ],
     "vitals": [
       {
-        "code": {
-          "coding": [
-            {
-              "display": "Blood Pressure (Systolic)"
-            }
-          ]
-        },
-        "valueQuantity": {
-          "value": 122,
-          "unit": "mmHg"
-        },
-        "meta": {
-          "lastUpdated": "2025-10-16T10:00:00Z"
-        }
+        "code": { "coding": [{ "display": "Blood Pressure (Systolic)" }] },
+        "valueQuantity": { "value": 122, "unit": "mmHg" },
+        "meta": { "lastUpdated": "2025-10-16T10:00:00Z" }
       },
       {
-        "code": {
-          "coding": [
-            {
-              "display": "Blood Pressure (Diastolic)"
-            }
-          ]
-        },
-        "valueQuantity": {
-          "value": 80,
-          "unit": "mmHg"
-        },
-        "meta": {
-          "lastUpdated": "2025-10-16T10:00:00Z"
-        }
+        "code": { "coding": [{ "display": "Blood Pressure (Diastolic)" }] },
+        "valueQuantity": { "value": 80, "unit": "mmHg" },
+        "meta": { "lastUpdated": "2025-10-16T10:00:00Z" }
       },
       {
-        "code": {
-          "coding": [
-            {
-              "display": "Heart Rate"
-            }
-          ]
-        },
-        "valueQuantity": {
-          "value": 76,
-          "unit": "bpm"
-        },
-        "meta": {
-          "lastUpdated": "2025-10-16T10:05:00Z"
-        }
+        "code": { "coding": [{ "display": "Heart Rate" }] },
+        "valueQuantity": { "value": 76, "unit": "bpm" },
+        "meta": { "lastUpdated": "2025-10-16T10:05:00Z" }
       }
     ],
-    "allergies": [],
+    "allergies": [
+      {
+        "code": "Penicillin",
+        "reaction": [],
+        "clinicalStatus": "inactive",
+        "onsetDateTime": null,
+        "meta": { "created": "2025-01-01T00:00:00Z" }
+      }
+    ],
     "diagnosticReports": [
-      [
-        "Ovarian mass surgical pathology",
-        "final",
-        "2024-04-15"
-      ],
-      [
-        "CT Abdomen/Pelvis with contrast",
-        "final",
-        "2024-03-28"
-      ]
+      {
+        "code": { "coding": [{ "display": "Ovarian mass surgical pathology" }] },
+        "status": "final",
+        "effectiveDateTime": "2024-04-15T00:00:00Z"
+      },
+      {
+        "code": { "coding": [{ "display": "CT Abdomen/Pelvis with contrast" }] },
+        "status": "final",
+        "effectiveDateTime": "2024-03-28T00:00:00Z"
+      }
     ],
     "serviceRequests": [
       {
-        "type": "Imaging",
-        "code": "CT-AbdomenPelvis",
+        "category": [
+          { "coding": [{ "display": "Imaging" }] },
+          { "coding": [{ "code": "CT-AbdomenPelvis" }] }
+        ],
         "status": "completed",
         "priority": "routine",
-        "date": "2024-03-28"
+        "authoredOn": "2024-03-28"
       },
       {
-        "type": "Genetics",
-        "code": "BRCA testing",
+        "category": [
+          { "coding": [{ "display": "Genetics" }] },
+          { "coding": [{ "code": "BRCA testing" }] }
+        ],
         "status": "completed",
         "priority": "routine",
-        "date": "2024-04-01"
+        "authoredOn": "2024-04-01"
       }
     ],
     "immunizations": [],
+    
     "encounters": [
       {
-        "period": {
-          "start": "2024-04-10T07:30:00Z",
-          "end": "2024-04-10T13:00:00Z"
+        "class": {
+          "code": "AMB",
+          "display": "ambulatory",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
         },
-        "type": "Total abdominal hysterectomy with bilateral salpingo-oophorectomy and omentectomy",
+        "status": "finished",
+        "period": {
+          "start": "2023-04-01T08:00:00Z",
+          "end": "2023-09-15T16:00:00Z"
+        },
+        "type": "Neoadjuvant chemotherapy (AC \u2192 Paclitaxel)",
         "extension": [
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/provider-first-name",
-            "valueString": "Elena"
-          },
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/provider-last-name",
-            "valueString": "Petrova"
-          }
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-first-name", "valueString": "Marco" },
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-last-name", "valueString": "Bellini" }
+        ]
+      },
+      {
+        "class": {
+          "code": "AMB",
+          "display": "ambulatory",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+        },
+        "status": "finished",
+        "period": {
+          "start": "2023-10-10T07:30:00Z",
+          "end": "2023-10-10T11:00:00Z"
+        },
+        "type": "Left modified radical mastectomy",
+        "extension": [
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-first-name", "valueString": "Marco" },
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-last-name", "valueString": "Bellini" }
         ]
       }
     ],
+    "tasks": [
+      { "description": "Confirm post-op healing status", "status": "in-progress", "intent": "plan" },
+      { "description": "Schedule genetic counseling", "status": "requested", "intent": "order" }
+    ],
     "procedures": [
       {
-        "code": {
-          "display": "Total abdominal hysterectomy with BSO"
-        },
+        "code": { "coding": [{ "display": "Total abdominal hysterectomy with BSO" }] },
         "status": "completed",
-        "performedDate": "2024-04-10"
+        "performedDateTime": "2024-04-10"
       },
       {
-        "code": {
-          "display": "Omentectomy"
-        },
+        "code": { "coding": [{ "display": "Omentectomy" }] },
         "status": "completed",
-        "performedDate": "2024-04-10"
+        "performedDateTime": "2024-04-10"
       }
     ],
     "documents": [
       {
         "description": "Surgical Pathology Report - Ovarian carcinoma",
         "category": [
-          {
-            "coding": [
-              {
-                "code": "pathology-report"
-              }
-            ]
-          }
+          { "coding": [{ "code": "pathology-report" }] }
         ],
         "author": [
-          {
-            "display": "Dr. Elena Petrova"
-          }
+          { "display": "Dr. Elena Petrova" }
         ],
         "date": "2024-04-15T11:00:00Z",
         "status": "final"
@@ -725,18 +479,10 @@ export const ECW_MOCK_PATIENTS =[
       {
         "description": "Genetic Testing Report - BRCA2",
         "category": [
-          {
-            "coding": [
-              {
-                "code": "genetics-report"
-              }
-            ]
-          }
+          { "coding": [{ "code": "genetics-report" }] }
         ],
         "author": [
-          {
-            "display": "Genetics Lab"
-          }
+          { "display": "Genetics Lab" }
         ],
         "date": "2024-04-05T09:30:00Z",
         "status": "final"
@@ -746,21 +492,12 @@ export const ECW_MOCK_PATIENTS =[
       {
         "code": {
           "coding": [
-            {
-              "display": "Ovarian serous carcinoma",
-              "code": "C56.9"
-            }
+            { "display": "Ovarian serous carcinoma", "code": "C56.9" }
           ]
         },
         "extension": [
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/status",
-            "valueString": "active"
-          },
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/on-set-date",
-            "valueDateTime": "2024-04-15"
-          }
+          { "url": "http://xcaliber-fhir/structureDefinition/status", "valueString": "active" },
+          { "url": "http://xcaliber-fhir/structureDefinition/on-set-date", "valueDateTime": "2024-04-15" }
         ],
         "status": "active",
         "onsetDateTime": "2024-04-15"
@@ -768,21 +505,12 @@ export const ECW_MOCK_PATIENTS =[
       {
         "code": {
           "coding": [
-            {
-              "display": "BRCA2 gene mutation carrier",
-              "code": "Z15.02"
-            }
+            { "display": "BRCA2 gene mutation carrier", "code": "Z15.02" }
           ]
         },
         "extension": [
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/status",
-            "valueString": "active"
-          },
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/on-set-date",
-            "valueDateTime": "2024-04-05"
-          }
+          { "url": "http://xcaliber-fhir/structureDefinition/status", "valueString": "active" },
+          { "url": "http://xcaliber-fhir/structureDefinition/on-set-date", "valueDateTime": "2024-04-05" }
         ],
         "status": "active",
         "onsetDateTime": "2024-04-05"
@@ -792,56 +520,68 @@ export const ECW_MOCK_PATIENTS =[
       {
         "relationship": {
           "coding": [
-            {
-              "display": "Mother"
-            }
+            { "display": "Mother" }
           ]
         },
         "condition": [
           {
             "code": {
               "coding": [
-                {
-                  "display": "Breast cancer"
-                }
+                { "display": "Breast cancer" }
               ]
             }
           }
         ]
       }
     ],
-    "questionnaireResponses": []
+    "basics": [
+      {
+        "resourceType": "Basic",
+        "id": "basic-101",
+        "code": { "text": "Risk Contract" },
+        "meta": { "lastUpdated": "2025-01-10T10:00:00Z" }
+      },
+      {
+        "resourceType": "Basic",
+        "id": "basic-102",
+        "code": { "text": "Clinical Risk Assessment" },
+        "meta": { "lastUpdated": "2025-02-15T09:30:00Z" }
+      }
+    ],
+    "questionnaireResponses": [
+      {
+        "extension": [
+          { "url": "http://xcaliber-fhir/structureDefinition/category", "valueString": "Allergy History" }
+        ],
+        "status": "completed",
+        "meta": { "lastUpdated": "2025-01-15" },
+        "item": [
+          {
+            "text": "Do you have allergies?",
+            "answer": [{ "valueString": "No" }],
+            "extension": [
+              { "url": "http://xcaliber-fhir/structureDefinition/last-modified-by", "valueString": "Nurse Ana" }
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "7001",
     "name": [
-      {
-        "family": "Ramirez",
-        "given": [
-          "Carlos"
-        ],
-        "use": "official"
-      }
+      { "family": "Ramirez", "given": ["Carlos"], "use": "official" }
     ],
     "fullName": "Carlos Ramirez",
     "birthDate": "1979-11-30",
     "gender": "M",
     "telecom": [
-      {
-        "system": "phone",
-        "value": "7205550177",
-        "use": "home"
-      },
-      {
-        "system": "email",
-        "value": "carlos.ramirez@example.com"
-      }
+      { "system": "phone", "value": "7205550177", "use": "home" },
+      { "system": "email", "value": "carlos.ramirez@example.com" }
     ],
     "address": [
       {
-        "line": [
-          "1500 Wynkoop St"
-        ],
+        "line": ["1500 Wynkoop St"],
         "city": "Denver",
         "state": "CO",
         "postalCode": "80202",
@@ -850,77 +590,108 @@ export const ECW_MOCK_PATIENTS =[
       }
     ],
     "status": "active",
-    "appointments": [],
-    "vitals": [
+    "appointments": [
       {
-        "code": {
-          "coding": [
-            {
-              "display": "Weight"
-            }
-          ]
-        },
-        "valueQuantity": {
-          "value": 88,
-          "unit": "kg"
-        },
-        "meta": {
-          "lastUpdated": "2025-10-10T08:00:00Z"
-        }
+        "id": "appt-201",
+        "participant": [
+          { "actor": { "reference": "Practitioner/123" } },
+          { "actor": { "reference": "Patient/6606" } }
+        ],
+        "appointmentType": { "text": "Oncology - Immunotherapy review" },
+        "start": "2025-10-20T09:00:00Z",
+        "status": "booked"
       }
     ],
-    "allergies": [],
+    "vitals": [
+      {
+        "code": { "coding": [{ "display": "Weight" }] },
+        "valueQuantity": { "value": 88, "unit": "kg" },
+        "meta": { "lastUpdated": "2025-10-10T08:00:00Z" }
+      }
+    ],
+    "allergies": [
+      {
+        "code": "Fish Containing Products",
+        "reaction": [],
+        "clinicalStatus": "inactive",
+        "onsetDateTime": null,
+        "meta": { "created": "2025-03-01T00:00:00Z" }
+      }
+    ],
     "diagnosticReports": [
-      [
-        "PSA",
-        "final",
-        "2025-03-01"
-      ]
+      {
+        "code": { "coding": [{ "display": "PSA" }] },
+        "status": "final",
+        "effectiveDateTime": "2025-03-01T00:00:00Z"
+      }
     ],
     "serviceRequests": [
       {
-        "type": "Imaging",
-        "code": "BoneScan",
+        "category": [
+          { "coding": [{ "display": "Imaging" }] },
+          { "coding": [{ "code": "BoneScan" }] }
+        ],
         "status": "completed",
         "priority": "routine",
-        "date": "2025-03-05"
+        "authoredOn": "2025-03-05"
       }
     ],
     "immunizations": [],
     "encounters": [
       {
-        "period": {
-          "start": "2025-03-01T09:00:00Z",
-          "end": "2025-03-01T09:30:00Z"
+        "class": {
+          "code": "AMB",
+          "display": "ambulatory",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
         },
-        "type": "Urology consult"
+        "status": "finished",
+        "period": {
+          "start": "2023-04-01T08:00:00Z",
+          "end": "2023-09-15T16:00:00Z"
+        },
+        "type": "Neoadjuvant chemotherapy (AC \u2192 Paclitaxel)",
+        "extension": [
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-first-name", "valueString": "Marco" },
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-last-name", "valueString": "Bellini" }
+        ]
+      },
+      {
+        "class": {
+          "code": "AMB",
+          "display": "ambulatory",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+        },
+        "status": "finished",
+        "period": {
+          "start": "2023-10-10T07:30:00Z",
+          "end": "2023-10-10T11:00:00Z"
+        },
+        "type": "Left modified radical mastectomy",
+        "extension": [
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-first-name", "valueString": "Marco" },
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-last-name", "valueString": "Bellini" }
+        ]
       }
+    ],
+    "tasks": [
+      { "description": "Prepare PSA test results", "status": "completed", "intent": "order" },
+      { "description": "Schedule urology follow-up", "status": "in-progress", "intent": "plan" }
     ],
     "procedures": [
       {
-        "code": {
-          "display": "Transrectal ultrasound guided biopsy"
-        },
+        "code": { "coding": [{ "display": "Transrectal ultrasound guided biopsy" }] },
         "status": "completed",
-        "performedDate": "2025-03-01"
+        "performedDateTime": "2025-03-01"
       }
     ],
     "documents": [
       {
         "description": "Urology Report",
         "category": [
-          {
-            "coding": [
-              {
-                "code": "progress-note"
-              }
-            ]
-          }
+          { "coding": [{ "code": "progress-note" }] }
         ],
         "author": [
-          {
-            "display": "Dr. Mark Stevens"
-          }
+          { "display": "Dr. Mark Stevens" }
         ],
         "date": "2025-03-01T10:00:00Z",
         "status": "final"
@@ -930,60 +701,83 @@ export const ECW_MOCK_PATIENTS =[
       {
         "code": {
           "coding": [
-            {
-              "display": "Prostate adenocarcinoma",
-              "code": "C61"
-            }
+            { "display": "Prostate adenocarcinoma", "code": "C61" }
           ]
         },
         "extension": [
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/status",
-            "valueString": "active"
-          },
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/on-set-date",
-            "valueDateTime": "2025-03-01"
-          }
+          { "url": "http://xcaliber-fhir/structureDefinition/status", "valueString": "active" },
+          { "url": "http://xcaliber-fhir/structureDefinition/on-set-date", "valueDateTime": "2025-03-01" }
         ],
         "status": "active",
         "onsetDateTime": "2025-03-01"
       }
     ],
-    "familyHistory": [],
-    "questionnaireResponses": []
+    "familyHistory": [
+      {
+        "relationship": {
+          "coding": [
+            { "display": "Mother" }
+          ]
+        },
+        "condition": [
+          {
+            "code": {
+              "coding": [
+                { "display": "Skin cancer" }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "basics": [
+      {
+        "resourceType": "Basic",
+        "id": "basic-201",
+        "code": { "text": "Risk Contract" },
+        "meta": { "lastUpdated": "2025-03-01T08:00:00Z" }
+      },
+      {
+        "resourceType": "Basic",
+        "id": "basic-202",
+        "code": { "text": "Clinical Risk Assessment" },
+        "meta": { "lastUpdated": "2025-02-25T09:30:00Z" }
+      }
+    ],
+    "questionnaireResponses": [
+      {
+        "extension": [
+          { "url": "http://xcaliber-fhir/structureDefinition/category", "valueString": "Lifestyle" }
+        ],
+        "status": "completed",
+        "meta": { "lastUpdated": "2025-03-01" },
+        "item": [
+          {
+            "text": "Do you exercise regularly?",
+            "answer": [{ "valueString": "Yes" }],
+            "extension": [
+              { "url": "http://xcaliber-fhir/structureDefinition/last-modified-by", "valueString": "Nurse Lisa" }
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "6606",
     "name": [
-      {
-        "family": "Thompson",
-        "given": [
-          "Noah"
-        ],
-        "use": "official"
-      }
+      { "family": "Thompson", "given": ["Noah"], "use": "official" }
     ],
     "fullName": "Noah Thompson",
     "birthDate": "1990-08-14",
     "gender": "M",
     "telecom": [
-      {
-        "system": "phone",
-        "value": "4155553200",
-        "use": "home"
-      },
-      {
-        "system": "email",
-        "value": "noah.thompson@example.com"
-      }
+      { "system": "phone", "value": "4155553200", "use": "home" },
+      { "system": "email", "value": "noah.thompson@example.com" }
     ],
     "address": [
       {
-        "line": [
-          "1234 Example Lane",
-          "Apt 4B"
-        ],
+        "line": ["1234 Example Lane", "Apt 4B"],
         "city": "San Francisco",
         "state": "CA",
         "postalCode": "94105",
@@ -996,132 +790,116 @@ export const ECW_MOCK_PATIENTS =[
       {
         "id": "appt-201",
         "participant": [
-          {
-            "actor": {
-              "reference": "Practitioner/123"
-            }
-          },
-          {
-            "actor": {
-              "reference": "Patient/6606"
-            }
-          }
+          { "actor": { "reference": "Practitioner/123" } },
+          { "actor": { "reference": "Patient/6606" } }
         ],
-        "appointmentType": {
-          "text": "Oncology - Immunotherapy review"
-        },
+        "appointmentType": { "text": "Oncology - Immunotherapy review" },
         "start": "2025-10-20T09:00:00Z",
         "status": "booked"
       }
     ],
     "vitals": [
       {
-        "code": {
-          "coding": [
-            {
-              "display": "Weight"
-            }
-          ]
-        },
-        "valueQuantity": {
-          "value": 82,
-          "unit": "kg"
-        },
-        "meta": {
-          "lastUpdated": "2025-10-16T10:10:00Z"
-        }
+        "code": { "coding": [{ "display": "Weight" }] },
+        "valueQuantity": { "value": 82, "unit": "kg" },
+        "meta": { "lastUpdated": "2025-10-16T10:10:00Z" }
       }
     ],
     "allergies": [
       {
         "code": "Penicillin",
         "reaction": [
-          {
-            "description": "Rash",
-            "severity": "medium",
-            "onset": "2019-05-10T09:00:00Z"
-          }
+          { "description": "Rash", "severity": "medium", "onset": "2019-05-10T09:00:00Z" }
         ],
         "clinicalStatus": "inactive",
         "onsetDateTime": "2019-05-10T09:00:00Z",
-        "meta": {
-          "created": "2019-05-09T08:00:00Z"
-        }
+        "meta": { "created": "2019-05-09T08:00:00Z" }
       }
     ],
     "diagnosticReports": [
-      [
-        "Excisional biopsy - skin lesion",
-        "final",
-        "2025-06-10"
-      ],
-      [
-        "PET-CT whole body",
-        "final",
-        "2025-06-20"
-      ]
+      {
+        "code": { "coding": [{ "display": "Excisional biopsy - skin lesion" }] },
+        "status": "final",
+        "effectiveDateTime": "2025-06-10T00:00:00Z"
+      },
+      {
+        "code": { "coding": [{ "display": "PET-CT whole body" }] },
+        "status": "final",
+        "effectiveDateTime": "2025-06-20T00:00:00Z"
+      }
     ],
     "serviceRequests": [
       {
-        "type": "Imaging",
-        "code": "PET-CT",
+        "category": [
+          { "coding": [{ "display": "Imaging" }] },
+          { "coding": [{ "code": "PET-CT" }] }
+        ],
         "status": "completed",
         "priority": "stat",
-        "date": "2025-06-20"
+        "authoredOn": "2025-06-20"
       }
     ],
     "immunizations": [],
     "encounters": [
       {
-        "period": {
-          "start": "2025-06-10T08:00:00Z",
-          "end": "2025-06-10T12:00:00Z"
+        "class": {
+          "code": "AMB",
+          "display": "ambulatory",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
         },
-        "type": "Excisional biopsy and sentinel node biopsy",
+        "status": "finished",
+        "period": {
+          "start": "2023-04-01T08:00:00Z",
+          "end": "2023-09-15T16:00:00Z"
+        },
+        "type": "Neoadjuvant chemotherapy (AC \u2192 Paclitaxel)",
         "extension": [
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/provider-first-name",
-            "valueString": "Charles"
-          },
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/provider-last-name",
-            "valueString": "Green"
-          }
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-first-name", "valueString": "Marco" },
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-last-name", "valueString": "Bellini" }
+        ]
+      },
+      {
+        "class": {
+          "code": "AMB",
+          "display": "ambulatory",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+        },
+        "status": "finished",
+        "period": {
+          "start": "2023-10-10T07:30:00Z",
+          "end": "2023-10-10T11:00:00Z"
+        },
+        "type": "Left modified radical mastectomy",
+        "extension": [
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-first-name", "valueString": "Marco" },
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-last-name", "valueString": "Bellini" }
         ]
       }
     ],
+    "tasks": [
+      { "description": "Administer nivolumab infusion", "status": "in-progress", "intent": "order" },
+      { "description": "Review pathology report comments", "status": "completed", "intent": "plan" }
+    ],
     "procedures": [
       {
-        "code": {
-          "display": "Excisional biopsy of skin lesion"
-        },
+        "code": { "coding": [{ "display": "Excisional biopsy of skin lesion" }] },
         "status": "completed",
-        "performedDate": "2025-06-10"
+        "performedDateTime": "2025-06-10"
       },
       {
-        "code": {
-          "display": "Nivolumab infusion"
-        },
+        "code": { "coding": [{ "display": "Nivolumab infusion" }] },
         "status": "in-progress",
-        "performedDate": "2025-07-01"
+        "performedDateTime": "2025-07-01"
       }
     ],
     "documents": [
       {
         "description": "Surgical Pathology Report - Melanoma",
         "category": [
-          {
-            "coding": [
-              {
-                "code": "pathology-report"
-              }
-            ]
-          }
+          { "coding": [{ "code": "pathology-report" }] }
         ],
         "author": [
-          {
-            "display": "Dr. Charles Green"
-          }
+          { "display": "Dr. Charles Green" }
         ],
         "date": "2025-06-12T14:30:00Z",
         "status": "final"
@@ -1131,21 +909,12 @@ export const ECW_MOCK_PATIENTS =[
       {
         "code": {
           "coding": [
-            {
-              "display": "Malignant melanoma of skin",
-              "code": "C43.62"
-            }
+            { "display": "Malignant melanoma of skin", "code": "C43.62" }
           ]
         },
         "extension": [
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/status",
-            "valueString": "active"
-          },
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/on-set-date",
-            "valueDateTime": "2025-06-10"
-          }
+          { "url": "http://xcaliber-fhir/structureDefinition/status", "valueString": "active" },
+          { "url": "http://xcaliber-fhir/structureDefinition/on-set-date", "valueDateTime": "2025-06-10" }
         ],
         "status": "active",
         "onsetDateTime": "2025-06-10"
@@ -1155,57 +924,68 @@ export const ECW_MOCK_PATIENTS =[
       {
         "relationship": {
           "coding": [
-            {
-              "display": "Mother"
-            }
+            { "display": "Mother" }
           ]
         },
         "condition": [
           {
             "code": {
               "coding": [
-                {
-                  "display": "Skin cancer"
-                }
+                { "display": "Skin cancer" }
               ]
             }
           }
         ]
       }
     ],
-    "questionnaireResponses": []
+    "basics": [
+      {
+        "resourceType": "Basic",
+        "id": "basic-301",
+        "code": { "text": "Risk Contract" },
+        "meta": { "lastUpdated": "2025-06-01T10:00:00Z" }
+      },
+      {
+        "resourceType": "Basic",
+        "id": "basic-302",
+        "code": { "text": "Clinical Risk Assessment" },
+        "meta": { "lastUpdated": "2025-06-05T09:30:00Z" }
+      }
+    ],
+    "questionnaireResponses": [
+      {
+        "extension": [
+          { "url": "http://xcaliber-fhir/structureDefinition/category", "valueString": "Allergy History" }
+        ],
+        "status": "completed",
+        "meta": { "lastUpdated": "2025-06-05" },
+        "item": [
+          {
+            "text": "Do you have allergies?",
+            "answer": [{ "valueString": "Yes" }],
+            "extension": [
+              { "url": "http://xcaliber-fhir/structureDefinition/last-modified-by", "valueString": "Nurse Kelly" }
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "7002",
     "name": [
-      {
-        "family": "Patel",
-        "given": [
-          "Amina"
-        ],
-        "use": "official"
-      }
+      { "family": "Patel", "given": ["Amina"], "use": "official" }
     ],
     "fullName": "Amina Patel",
     "birthDate": "1988-05-22",
     "gender": "F",
     "telecom": [
-      {
-        "system": "phone",
-        "value": "6465550189",
-        "use": "home"
-      },
-      {
-        "system": "email",
-        "value": "amina.patel@example.com"
-      }
+      { "system": "phone", "value": "6465550189", "use": "home" },
+      { "system": "email", "value": "amina.patel@example.com" }
     ],
     "address": [
       {
-        "line": [
-          "250 Park Ave S",
-          "Floor 10"
-        ],
+        "line": ["250 Park Ave S", "Floor 10"],
         "city": "New York",
         "state": "NY",
         "postalCode": "10003",
@@ -1218,94 +998,104 @@ export const ECW_MOCK_PATIENTS =[
       {
         "id": "appt-301",
         "participant": [
-          {
-            "actor": {
-              "reference": "Practitioner/321"
-            }
-          },
-          {
-            "actor": {
-              "reference": "Patient/7002"
-            }
-          }
+          { "actor": { "reference": "Practitioner/321" } },
+          { "actor": { "reference": "Patient/7002" } }
         ],
-        "appointmentType": {
-          "text": "Oncology consult"
-        },
+        "appointmentType": { "text": "Oncology consult" },
         "start": "2025-10-30T11:00:00Z",
         "status": "booked"
       }
     ],
     "vitals": [
       {
-        "code": {
-          "coding": [
-            {
-              "display": "Blood Pressure (Systolic)"
-            }
-          ]
-        },
-        "valueQuantity": {
-          "value": 120,
-          "unit": "mmHg"
-        },
-        "meta": {
-          "lastUpdated": "2025-10-16T09:00:00Z"
-        }
+        "code": { "coding": [{ "display": "Blood Pressure (Systolic)" }] },
+        "valueQuantity": { "value": 120, "unit": "mmHg" },
+        "meta": { "lastUpdated": "2025-10-16T09:00:00Z" }
       }
     ],
-    "allergies": [],
+    "allergies": [
+      {
+        "code": "Beeswax",
+        "reaction": [],
+        "clinicalStatus": "inactive",
+        "onsetDateTime": null,
+        "meta": { "created": "2025-05-01T00:00:00Z" }
+      }
+    ],
     "diagnosticReports": [
-      [
-        "Colonoscopy - pathology",
-        "final",
-        "2025-02-15"
-      ]
+      {
+        "code": { "coding": [{ "display": "Colonoscopy - pathology" }] },
+        "status": "final",
+        "effectiveDateTime": "2025-02-15T00:00:00Z"
+      }
     ],
     "serviceRequests": [
       {
-        "type": "Lab",
-        "code": "CEA",
+        "category": [
+          { "coding": [{ "display": "Lab" }] },
+          { "coding": [{ "code": "CEA" }] }
+        ],
         "status": "completed",
         "priority": "routine",
-        "date": "2025-02-15"
+        "authoredOn": "2025-02-15"
       }
     ],
     "immunizations": [],
     "encounters": [
       {
-        "period": {
-          "start": "2025-02-15T08:00:00Z",
-          "end": "2025-02-15T10:00:00Z"
+        "class": {
+          "code": "AMB",
+          "display": "ambulatory",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
         },
-        "type": "Colonoscopy and polypectomy"
+        "status": "finished",
+        "period": {
+          "start": "2023-04-01T08:00:00Z",
+          "end": "2023-09-15T16:00:00Z"
+        },
+        "type": "Neoadjuvant chemotherapy (AC \u2192 Paclitaxel)",
+        "extension": [
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-first-name", "valueString": "Marco" },
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-last-name", "valueString": "Bellini" }
+        ]
+      },
+      {
+        "class": {
+          "code": "AMB",
+          "display": "ambulatory",
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+        },
+        "status": "finished",
+        "period": {
+          "start": "2023-10-10T07:30:00Z",
+          "end": "2023-10-10T11:00:00Z"
+        },
+        "type": "Left modified radical mastectomy",
+        "extension": [
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-first-name", "valueString": "Marco" },
+          { "url": "http://xcaliber-fhir/structureDefinition/provider-last-name", "valueString": "Bellini" }
+        ]
       }
+    ],
+    "tasks": [
+      { "description": "Monitor post-colonoscopy recovery", "status": "completed", "intent": "plan" },
+      { "description": "Order CEA labs", "status": "requested", "intent": "order" }
     ],
     "procedures": [
       {
-        "code": {
-          "display": "Colonoscopy with polypectomy"
-        },
+        "code": { "coding": [{ "display": "Colonoscopy with polypectomy" }] },
         "status": "completed",
-        "performedDate": "2025-02-15"
+        "performedDateTime": "2025-02-15"
       }
     ],
     "documents": [
       {
         "description": "Pathology Report - Colon adenocarcinoma",
         "category": [
-          {
-            "coding": [
-              {
-                "code": "pathology-report"
-              }
-            ]
-          }
+          { "coding": [{ "code": "pathology-report" }] }
         ],
         "author": [
-          {
-            "display": "Dr. Karen Lee"
-          }
+          { "display": "Dr. Karen Lee" }
         ],
         "date": "2025-02-17T12:00:00Z",
         "status": "final"
@@ -1315,27 +1105,66 @@ export const ECW_MOCK_PATIENTS =[
       {
         "code": {
           "coding": [
-            {
-              "display": "Colon adenocarcinoma, sigmoid colon",
-              "code": "C18.7"
-            }
+            { "display": "Colon adenocarcinoma, sigmoid colon", "code": "C18.7" }
           ]
         },
         "extension": [
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/status",
-            "valueString": "active"
-          },
-          {
-            "url": "http://xcaliber-fhir/structureDefinition/on-set-date",
-            "valueDateTime": "2025-02-10"
-          }
+          { "url": "http://xcaliber-fhir/structureDefinition/status", "valueString": "active" },
+          { "url": "http://xcaliber-fhir/structureDefinition/on-set-date", "valueDateTime": "2025-02-10" }
         ],
         "status": "active",
         "onsetDateTime": "2025-02-10"
       }
     ],
-    "familyHistory": [],
-    "questionnaireResponses": []
+    "familyHistory": [
+      {
+        "relationship": {
+          "coding": [
+            { "display": "Mother" }
+          ]
+        },
+        "condition": [
+          {
+            "code": {
+              "coding": [
+                { "display": "Skin cancer" }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "basics": [
+      {
+        "resourceType": "Basic",
+        "id": "basic-401",
+        "code": { "text": "Risk Contract" },
+        "meta": { "lastUpdated": "2025-02-10T10:00:00Z" }
+      },
+      {
+        "resourceType": "Basic",
+        "id": "basic-402",
+        "code": { "text": "Clinical Risk Assessment" },
+        "meta": { "lastUpdated": "2025-02-12T09:30:00Z" }
+      }
+    ],
+    "questionnaireResponses": [
+      {
+        "extension": [
+          { "url": "http://xcaliber-fhir/structureDefinition/category", "valueString": "Smoking Status" }
+        ],
+        "status": "completed",
+        "meta": { "lastUpdated": "2025-02-10" },
+        "item": [
+          {
+            "text": "Do you smoke?",
+            "answer": [{ "valueString": "No" }],
+            "extension": [
+              { "url": "http://xcaliber-fhir/structureDefinition/last-modified-by", "valueString": "Dr. Ana Kumar" }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]
