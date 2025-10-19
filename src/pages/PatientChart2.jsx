@@ -416,7 +416,7 @@ function parsePatient(fhir) {
     gender: fhir.gender,
     birthDate: fhir.birthDate,
     email: telecom.find((t) => t.system === "email")?.value,
-    phone: telecom.find((t) => t.system === "phone" && t.use === "mobile")
+    phone: telecom.find((t) => t.system === "phone" )
       ?.value,
     address: address
       ? `${address.line?.join(", ")}, ${address.city}, ${address.state}, ${
