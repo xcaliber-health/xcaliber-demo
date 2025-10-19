@@ -299,7 +299,7 @@ export default function DashboardLayout() {
         { to: "/chart-summary", label: "Chart Summary", icon: BarChart2 },
         {
           to: "/document-labeling",
-          label: "Document Labeling",
+          label: "AI-Ready Labeled Dataset",
           icon: FileSignature,
         },
       ],
