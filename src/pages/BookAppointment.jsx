@@ -571,6 +571,7 @@ export default function BookAppointment({ provider, departmentId }) {
       }
 
       await fetch(`${SAMPLE_BFF_URL}/api/send-sms`, {
+      //await fetch(`http://localhost:3000/api/send-sms`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -578,6 +579,7 @@ export default function BookAppointment({ provider, departmentId }) {
           body: notificationMessage,
         }),
       });
+      
 
       setDate(formattedToday);
       setStartTime("");
