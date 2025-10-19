@@ -27,8 +27,9 @@ export default function AllergiesTab({ patientId }) {
   });
 
   const isMockSource =
-    sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
-    sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
+    sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA ;
+    // &&
+    // sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
 
   const normalizeAllergy = (a) => {
     const resource = a.resource || a;

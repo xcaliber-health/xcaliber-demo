@@ -400,8 +400,9 @@ export default function EncountersTab({ patientId }) {
 
   // Detect data source
   const isMockSource =
-    sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
-    sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
+    sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA ;
+    // &&
+    // sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
 
   // --- Normalize encounter ---
   const normalizeEncounter = (e) => {
