@@ -83,7 +83,14 @@ export async function fetchPatients(
         name:
           p.name?.[0]?.text ||
           `${p.name?.[0]?.given?.[0] || ""} ${p.name?.[0]?.family || ""}`.trim(),
-        gender: p.gender || "unknown",
+        //gender: p.gender || "unknown",
+        gender:
+  p.gender ||
+  p.extension?.find(
+    (ext) => ext.url === "http://xcaliber-fhir/structureDefinition/legal-sex"
+  )?.valueCode ||
+  "unknown",
+
         birthDate: p.birthDate || "-",
         email,
         phone,
@@ -107,7 +114,14 @@ export async function fetchPatients(
         name:
           p.name?.[0]?.text ||
           `${p.name?.[0]?.given?.[0] || ""} ${p.name?.[0]?.family || ""}`.trim(),
-        gender: p.gender || "unknown",
+        // gender: p.gender || "unknown",
+        gender:
+  p.gender ||
+  p.extension?.find(
+    (ext) => ext.url === "http://xcaliber-fhir/structureDefinition/legal-sex"
+  )?.valueCode ||
+  "unknown",
+
         birthDate: p.birthDate || "-",
         email,
         phone,
