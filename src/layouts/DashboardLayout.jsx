@@ -272,7 +272,7 @@ export default function DashboardLayout() {
       links: [
         {
           to: "/scheduling/find",
-          label: "Scheduling Mobile App",
+          label: "Scheduling Workflow Automation",
           icon: Calendar,
         },
         {
