@@ -42,8 +42,9 @@ export default function PatientChart() {
     if (!id || !sourceId) return;
 
     const isMockSource =
-      sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
-      sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
+      sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA ;
+      // &&
+      // sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
 
     const loadPatient = async () => {
       setPatientLoading(true);
@@ -416,7 +417,7 @@ function parsePatient(fhir) {
     gender: fhir.gender,
     birthDate: fhir.birthDate,
     email: telecom.find((t) => t.system === "email")?.value,
-    phone: telecom.find((t) => t.system === "phone" && t.use === "mobile")
+    phone: telecom.find((t) => t.system === "phone" )
       ?.value,
     address: address
       ? `${address.line?.join(", ")}, ${address.city}, ${address.state}, ${
@@ -424,7 +425,7 @@ function parsePatient(fhir) {
         }`
       : null,
     status: fhir.extension?.find(
-      (e) => e.url === "http://xcaliber-fhir/structureDefinition/patient-status"
+      (e) => e.url === "http://xcaliber-fhir/structureDefinition/status"
     )?.valueString,
   };
 }
