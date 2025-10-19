@@ -5,6 +5,7 @@
 // import { fetchProviders, fetchProviderByIdSimple } from "../api/providers";
 // import toast from "react-hot-toast";
 // import { Loader2, Search, Users, Calendar, ArrowRight, CalendarDays, Bell } from "lucide-react";
+// import { MOCK_PROVIDERS } from "../data/providerListMock";
 
 // // ✅ Reusable Tailwind components
 // function Card({ children, className = "" }) {
@@ -36,7 +37,7 @@
 // }
 
 // export default function FindAppointment() {
-//   const { sourceId, departmentId,setLatestCurl } = useContext(AppContext);
+//   const { sourceId, departmentId, setLatestCurl } = useContext(AppContext);
 //   const navigate = useNavigate();
 
 //   const [providers, setProviders] = useState([]);
@@ -44,10 +45,12 @@
 //   const [debouncedSearch, setDebouncedSearch] = useState("");
 //   const [error, setError] = useState(null);
 //   const [loading, setLoading] = useState(false);
-
 //   const [currentPage, setCurrentPage] = useState(1);
+
 //   const rowsPerPage = 10;
 //   const backendCount = 200;
+
+//   const isMockSource = ![import.meta.env.VITE_SOURCE_ID_ATHENA, import.meta.env.VITE_SOURCE_ID_ELATION].includes(sourceId);
 
 //   // debounce search input
 //   useEffect(() => {
@@ -60,40 +63,41 @@
 //     if (!sourceId || !departmentId) return;
 
 //     let cancelled = false;
+
 //     (async () => {
 //       setLoading(true);
 //       setError(null);
-
 //       const q = debouncedSearch;
 
 //       try {
-//         if (!q) {
-//           const { providers: list } = await fetchProviders(sourceId, departmentId, backendCount, "",setLatestCurl);
-//           if (!cancelled) {
-//             setProviders(list);
-//             setCurrentPage(1);
-//             toast.success(`Found ${list.length} providers`);
+//         let data = [];
+
+//         if (isMockSource) {
+//           // Use data data (only id + name)
+//           data = MOCK_PROVIDERS
+//             .filter((p) => !q || p.name.toLowerCase().includes(q.toLowerCase()) || p.id === q)
+//             .map((p) => ({ id: p.id, name: p.name }));
+//           await new Promise((res) => setTimeout(res, 2500));
+//         } else {
+//           // Real provider data
+//           if (!q) {
+//             const { providers: list } = await fetchProviders(sourceId, departmentId, backendCount, "", setLatestCurl);
+//             data = list;
+//           } else if (/^[0-9]+$/.test(q)) {
+//             try {
+//               const single = await fetchProviderByIdSimple(q, sourceId);
+//               data = [single];
+//             } catch {}
+//           } else {
+//             const { providers: byName } = await fetchProviders(sourceId, departmentId, backendCount, q, setLatestCurl);
+//             data = byName;
 //           }
-//           return;
 //         }
 
-//         if (/^[0-9]+$/.test(q)) {
-//           try {
-//             const single = await fetchProviderByIdSimple(q, sourceId);
-//             if (!cancelled) {
-//               setProviders([single]);
-//               setCurrentPage(1);
-//               toast.success(`Found provider ${single.name}`);
-//             }
-//             return;
-//           } catch {}
-//         }
-
-//         const { providers: byName } = await fetchProviders(sourceId, departmentId, backendCount, q,setLatestCurl);
 //         if (!cancelled) {
-//           setProviders(byName);
+//           setProviders(data);
 //           setCurrentPage(1);
-//           toast.success(`Found ${byName.length} providers`);
+//           toast.success(`Found ${data.length} provider${data.length !== 1 ? "s" : ""}`);
 //         }
 //       } catch (err) {
 //         if (!cancelled) {
@@ -113,7 +117,7 @@
 //   const paginatedProviders = providers.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
 //   return (
-//     <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
+//     <div className="h-full bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
 //       {/* Header */}
 //       <div className="flex-shrink-0 p-4 pb-1">
 //         <div className="max-w-6xl mx-auto">
@@ -123,22 +127,18 @@
 //             </div>
 //             <div>
 //               <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-//                 Find Appointment
+//                 Scheduling Workflow Automation
 //               </h1>
 //               <p className="text-sm text-gray-600">Search and book appointments with healthcare providers</p>
 //             </div>
-            
-// {/* ✅ Notifications Button */}
-// <Button
-//   className="ml-auto bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-md flex items-center gap-2 text-sm px-3 py-2"
-//   onClick={() => navigate("/notifications")}
-// >
-//   <Bell className="w-4 h-4" /> Notifications
-// </Button>
 
-
+//             {/* <Button
+//               className="ml-auto bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-md flex items-center gap-2 text-sm px-3 py-2"
+//               onClick={() => navigate("/notifications")}
+//             >
+//               <Bell className="w-4 h-4" /> Notifications
+//             </Button> */}
 //           </div>
-
 
 //           <div className="relative max-w-2xl">
 //             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-indigo-400 h-5 w-5" />
@@ -149,9 +149,9 @@
 //               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
 //               className="pl-12 shadow-lg py-2.5"
 //             />
-//             {search && (
+//             {search && loading && (
 //               <div className="absolute right-4 top-1/2 -translate-y-1/2">
-//                 <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></div>
+//                 <Loader2 className="w-2.5 h-2.5 text-indigo-500 animate-spin" />
 //               </div>
 //             )}
 //           </div>
@@ -168,7 +168,7 @@
 //                 <div className="flex items-center gap-2 text-indigo-700">
 //                   <Users className="w-4 h-4" />
 //                   <span className="font-medium text-sm">
-//                     {providers.length} provider{providers.length !== 1 ? 's' : ''} found
+//                     {providers.length} provider{providers.length !== 1 ? "s" : ""} found
 //                   </span>
 //                 </div>
 //                 {totalPages > 1 && (
@@ -201,10 +201,13 @@
 //                                 <p className="text-xs text-indigo-600 font-medium">ID: {p.id}</p>
 //                               </div>
 //                             </div>
-//                             <div className="space-y-1 text-xs text-gray-600 ml-10">
-//                               {p.email && <p className="flex items-center gap-2"><span className="text-gray-400">✉</span>{p.email}</p>}
-//                               {p.phone && <p className="flex items-center gap-2"><span className="text-gray-400">📞</span>{p.phone}</p>}
-//                             </div>
+
+//                             {!isMockSource && (
+//                               <div className="space-y-1 text-xs text-gray-600 ml-10">
+//                                 {p.email && <p className="flex items-center gap-2"><span className="text-gray-400">✉</span>{p.email}</p>}
+//                                 {p.phone && <p className="flex items-center gap-2"><span className="text-gray-400">📞</span>{p.phone}</p>}
+//                               </div>
+//                             )}
 //                           </div>
 //                           <div className="flex gap-1.5 ml-3">
 //                             <Button
@@ -297,10 +300,6 @@
 //       </div>
 
 //       <style>{`
-//         @keyframes fadeInUp {
-//           from { opacity: 0; transform: translateY(20px); }
-//           to { opacity: 1; transform: translateY(0); }
-//         }
 //         .custom-scrollbar {
 //           scrollbar-width: thin;
 //           scrollbar-color: #e0e7ff #f8fafc;
@@ -323,13 +322,17 @@
 //     </div>
 //   );
 // }
+
+// FindAppointment.jsx
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../layouts/DashboardLayout";
 import { fetchProviders, fetchProviderByIdSimple } from "../api/providers";
 import toast from "react-hot-toast";
-import { Loader2, Search, Users, Calendar, ArrowRight, CalendarDays, Bell } from "lucide-react";
+import { Loader2, Search, Users, Calendar, ArrowRight, CalendarDays } from "lucide-react";
 import { MOCK_PROVIDERS } from "../data/providerListMock";
+import BookAppointment from "./BookAppointment"; // Import BookAppointment
+
 
 // ✅ Reusable Tailwind components
 function Card({ children, className = "" }) {
@@ -371,6 +374,9 @@ export default function FindAppointment() {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState(null);
+
   const rowsPerPage = 10;
   const backendCount = 200;
 
@@ -397,13 +403,11 @@ export default function FindAppointment() {
         let data = [];
 
         if (isMockSource) {
-          // Use data data (only id + name)
           data = MOCK_PROVIDERS
             .filter((p) => !q || p.name.toLowerCase().includes(q.toLowerCase()) || p.id === q)
             .map((p) => ({ id: p.id, name: p.name }));
           await new Promise((res) => setTimeout(res, 2500));
         } else {
-          // Real provider data
           if (!q) {
             const { providers: list } = await fetchProviders(sourceId, departmentId, backendCount, "", setLatestCurl);
             data = list;
@@ -440,8 +444,19 @@ export default function FindAppointment() {
   const totalPages = Math.ceil(providers.length / rowsPerPage);
   const paginatedProviders = providers.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
+  const openBookingDrawer = (provider) => {
+    setSelectedProvider(provider);
+    setDrawerOpen(true);
+    toast.success(`Starting booking with ${provider.name}`);
+  };
+
+  const closeDrawer = () => {
+    setDrawerOpen(false);
+    setSelectedProvider(null);
+  };
+
   return (
-    <div className="h-full bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
+    <div className="relative h-full bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
       {/* Header */}
       <div className="flex-shrink-0 p-4 pb-1">
         <div className="max-w-6xl mx-auto">
@@ -455,13 +470,6 @@ export default function FindAppointment() {
               </h1>
               <p className="text-sm text-gray-600">Search and book appointments with healthcare providers</p>
             </div>
-
-            {/* <Button
-              className="ml-auto bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-md flex items-center gap-2 text-sm px-3 py-2"
-              onClick={() => navigate("/notifications")}
-            >
-              <Bell className="w-4 h-4" /> Notifications
-            </Button> */}
           </div>
 
           <div className="relative max-w-2xl">
@@ -547,10 +555,7 @@ export default function FindAppointment() {
                             </Button>
                             <Button
                               className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg flex items-center gap-1 text-xs px-2 py-1"
-                              onClick={() => {
-                                navigate("/scheduling/book", { state: { provider: p, departmentId } });
-                                toast.success(`Starting booking with ${p.name}`);
-                              }}
+                              onClick={() => openBookingDrawer(p)}
                             >
                               Book Now <ArrowRight className="w-3 h-3" />
                             </Button>
@@ -621,6 +626,33 @@ export default function FindAppointment() {
             </div>
           </Card>
         </div>
+      </div>
+
+      {/* Drawer backdrop */}
+      {drawerOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-40 z-40"
+          onClick={closeDrawer}
+        />
+      )}
+
+      {/* Drawer panel */}
+      <div
+        className={`fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-lg z-50 transform transition-transform duration-300 ${
+          drawerOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="p-4 flex justify-between items-center border-b border-gray-200">
+          <h2 className="text-lg font-semibold">Book Appointment</h2>
+          <button onClick={closeDrawer} className="text-gray-600 hover:text-gray-900 text-2xl font-bold leading-none select-none">
+            &times;
+          </button>
+        </div>
+
+        {/* Render BookAppointment with selectedProvider and departmentId */}
+        {selectedProvider && (
+          <BookAppointment provider={selectedProvider} departmentId={departmentId} />
+        )}
       </div>
 
       <style>{`
