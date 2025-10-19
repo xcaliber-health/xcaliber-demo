@@ -114,24 +114,6 @@ export default function ClinicalProcessing() {
     return `data:application/pdf;base64,${data.base64}`;
   };
 
-  const handleSelectPdf = async (name) => {
-    if (!name) return;
-    setLoading(true);
-    setShowAbnormality(false);
-    setEntities(null);
-    setAppointmentInfo(null);
-    setOpenSections({});
-    try {
-      const fileUrl = await fetchPdfBase64(name);
-      setSelectedPdf({ name, file: fileUrl });
-      toast.success(`Loaded: ${name}`);
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to load PDF");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const getAbnormalitiesByFile = (name) => {
     if (!name) return [];
@@ -331,61 +313,83 @@ export default function ClinicalProcessing() {
   const toggleSection = (key) =>
     setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
-  const handleProcess = async () => {
+const handleSelectPdf = async (name) => {
+    if (!name) return;
+    setShowAbnormality(false);
+    setEntities(null);
+    setAppointmentInfo(null);
+    setOpenSections({});
+
+    try {
+        const fileUrl = await fetchPdfBase64(name);
+        setSelectedPdf({ name, file: fileUrl });
+        toast.success(`Loaded: ${name}`);
+    } catch (err) {
+        console.error(err);
+        toast.error("Failed to load PDF");
+    }
+    // Remove setLoading here so button won't spin on select
+};
+
+const handleProcess = async () => {
     if (!selectedPdf) return toast.error("Please select a PDF first.");
     setLoading(true);
 
-    // Step 1: Processing PDF
     toast.loading("Processing PDF...");
     await new Promise((res) => setTimeout(res, 3000));
     toast.dismiss();
     toast.success("PDF processed successfully.");
 
-    // Step 2: Show Abnormality
     if (isMounted.current) setShowAbnormality(true);
     await new Promise((res) => setTimeout(res, 1000));
 
     const selectedEntities = pdfEntities.find((pdf) =>
-      selectedPdf.name.toLowerCase().includes(pdf.name)
+        selectedPdf.name.toLowerCase().includes(pdf.name)
     )?.entities;
 
-    // Set entities
     if (isMounted.current && selectedEntities) {
-      setEntities(selectedEntities);
-      toast.success("Entities extracted successfully!");
+        setEntities(selectedEntities);
+        toast.success("Entities extracted successfully!");
     }
-    // Step 4: Creating appointment
 
+    // Submit Entity and show simplified appointment info
     toast.loading("Creating appointment...");
     const submitResult = await submitEntity(setLatestCurl);
     toast.dismiss();
 
     if (submitResult?.success) {
-      toast.success("Appointment successfully created!");
-      const appointmentId = submitResult?.appointmentId || "1045267";
-      try {
-        const appointmentData = await getAppointment(appointmentId);
-        setAppointmentInfo(appointmentData);
-        // Add appointment to local events
-        if (setLocalEvents) {
-          const newEvent = {
-            id: appointmentId,
-            eventType: "Appointment.save",
-            createdTime: new Date().toISOString(),
-            provider: appointmentData.provider?.name || "Unknown provider",
-          };
-          setLocalEvents([newEvent, ...localEvents]);
+        toast.success("Appointment successfully created!");
+        const appointmentId = submitResult?.appointmentId || "1045267";
+        const startTime = new Date();
+        const endTime = new Date(startTime.getTime() + 30 * 60 * 1000); // +30 minutes
+
+        if (isMounted.current) {
+            setAppointmentInfo({
+                id: appointmentId,
+                status: "Scheduled",
+                start: startTime.toISOString(),
+                end: endTime.toISOString(),
+                provider: "nani",
+                appointmentType: { text: "General Consultation" },
+            });
+
+            if (setLocalEvents) {
+                const newEvent = {
+                    id: appointmentId,
+                    eventType: "Appointment.save",
+                    createdTime: startTime.toISOString(),
+                    provider: "nani",
+                };
+                setLocalEvents([newEvent, ...localEvents]);
+            }
         }
-      } catch (err) {
-        console.error("Error fetching appointment info:", err);
-        toast.error("Could not fetch appointment details.");
-      }
     } else {
-      toast.error("Failed to create appointment.");
+        toast.error("Failed to create appointment.");
     }
 
     setLoading(false);
-  };
+};
+
 
   return (
     <div className="h-full bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col overflow-hidden">
