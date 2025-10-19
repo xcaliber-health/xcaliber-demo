@@ -215,7 +215,7 @@ setAllergies((prev) => [newAllergy, ...prev]);
               required
             >
               <option value="">Select an allergy</option>
-              <option value="Penicillin">Carbamates</option>
+              <option value="Penicillin">Penicillin</option>
               <option value="Fish Containing Products">Fish Containing Products</option>
               <option value="fish derived">Fish Derived</option>
               <option value="fish oil">Fish Oil</option>
@@ -283,7 +283,7 @@ setAllergies((prev) => [newAllergy, ...prev]);
           </div> */}
 
           {/* Submit + Cancel */}
-          <button
+          {/* <button
             type="submit"
             className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-60"
             disabled={submitting}
@@ -304,7 +304,33 @@ setAllergies((prev) => [newAllergy, ...prev]);
             onClick={() => setOpen(false)}
           >
             Cancel
-          </button>
+          </button> */}
+          {/* Submit + Cancel */}
+<div className="flex justify-end gap-3 mt-4">
+  <button
+    type="submit"
+    className="px-4 py-1 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-60 text-sm flex items-center"
+    disabled={submitting}
+  >
+    {submitting ? (
+      <span className="flex items-center">
+        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+        Saving...
+      </span>
+    ) : (
+      "Save"
+    )}
+  </button>
+
+  <button
+    type="button"
+    className="px-4 py-1 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm"
+    onClick={() => setOpen(false)}
+  >
+    Cancel
+  </button>
+</div>
+
         </form>
       </div>
     </div>
