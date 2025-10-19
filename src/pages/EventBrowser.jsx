@@ -276,15 +276,25 @@ export default function EventBrowser() {
   {paginatedEvents.map((event) => {
     const isLocal = localEvents.some(localEvent => localEvent.id === event.id);
     return (
+      // <tr
+      //   key={event.id}
+      //   className={`transition-colors ${
+      //     isLocal ? "cursor-not-allowed" : "cursor-pointer hover:bg-indigo-50"
+      //   }`}
+      //   onClick={() => {
+      //     if (!isLocal) handleSelect(event);
+      //   }}
+      // >
       <tr
-        key={event.id}
-        className={`transition-colors ${
-          isLocal ? "cursor-not-allowed" : "cursor-pointer hover:bg-indigo-50"
-        }`}
-        onClick={() => {
-          if (!isLocal) handleSelect(event);
-        }}
-      >
+  key={event.id}
+  className={`transition-colors ${
+    isLocal ? "cursor-default" : "cursor-pointer hover:bg-indigo-50"
+  }`}
+  onClick={() => {
+    if (!isLocal) handleSelect(event);
+  }}
+>
+
         <td className="py-2 px-4 border-b text-sm text-gray-800">
           {event.id}
         </td>
