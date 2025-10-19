@@ -1,8 +1,9 @@
 import { fhirFetch } from "./fhir";
 import { cachedFhirFetch } from "./cachedFhirFetch"; 
+const SOURCE_ID = "ef123977-6ef1-3e8e-a30f-3879cea0b344";
 
-export async function fetchDocumentPDF({ patientId, documentId, departmentId, category, sourceId, setLatestCurl }) {
-  if (!sourceId) throw new Error("sourceId is missing when calling fetchDocumentPDF");
+export async function fetchDocumentPDF({ patientId, documentId, departmentId, category, setLatestCurl }) {
+  //if (!sourceId) throw new Error("sourceId is missing when calling fetchDocumentPDF");
 
   const url = `/Media/${documentId}?patient=${patientId}&departmentId=${departmentId}&category=${category}`;
   const response = await cachedFhirFetch(
@@ -10,6 +11,7 @@ export async function fetchDocumentPDF({ patientId, documentId, departmentId, ca
     { sourceId, headers: { "x-interaction-mode": "true" }, setLatestCurl },
      24 * 60 * 60 * 1000 // 1 day TTL
   );
+  //const response = await fhirFetch(url, { sourceId: SOURCE_ID,headers: { "x-interaction-mode": "true" }, setLatestCurl });
 
   const base64Data = response?.content?.data;
   if (!base64Data) throw new Error("No PDF data found in response");
@@ -20,8 +22,8 @@ export async function fetchDocumentPDF({ patientId, documentId, departmentId, ca
   return URL.createObjectURL(new Blob([byteArray], { type: "application/pdf" }));
 }
 
-export async function fetchDiagnosticReport({ patientId, documentId, departmentId, category, sourceId, setLatestCurl }) {
-  if (!sourceId) throw new Error("sourceId is missing when calling fetchDiagnosticReport");
+export async function fetchDiagnosticReport({ patientId, documentId, departmentId, category, setLatestCurl }) {
+  //if (!sourceId) throw new Error("sourceId is missing when calling fetchDiagnosticReport");
 
   const url = `/DiagnosticReport/${documentId}?patient=${patientId}&departmentId=${departmentId}&category=${category}`;
   return await cachedFhirFetch( 
@@ -29,4 +31,5 @@ export async function fetchDiagnosticReport({ patientId, documentId, departmentI
     { sourceId, setLatestCurl },
      24 * 60 * 60 * 1000 // 1 day TTL
   );
+  //return await fhirFetch(url, { sourceId: SOURCE_ID }, setLatestCurl);
 }

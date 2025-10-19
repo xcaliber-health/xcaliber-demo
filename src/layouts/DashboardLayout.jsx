@@ -267,13 +267,13 @@ export default function DashboardLayout() {
         { to: "/scripts", label: "EHR Operator", icon: Cpu },
         {
           to: "/claims-streaming",
-          label: "Claims Data Streaming",
+          label: "Real-Time Claims Feed to Snowflake",
           icon: Cloud,
         },
         { to: "/providerDirectory", label: "Provider Directory", icon: Folder },
         {
           to: "/knowledgesource",
-          label: "Knowledge Source",
+          label: "Content Repository",
           icon: Airplay,
         },
       ],
@@ -283,12 +283,12 @@ export default function DashboardLayout() {
       links: [
         {
           to: "/scheduling/find",
-          label: "Scheduling Mobile App",
+          label: "Scheduling Workflow Automation",
           icon: Calendar,
         },
         {
           to: "/custom-clinical-processing",
-          label: "Custom Clinical Processing",
+          label: "Real-Time Clinical Intervention",
           icon: HeartPulse,
         },
         {
@@ -304,13 +304,13 @@ export default function DashboardLayout() {
       links: [
         {
           to: "/document-reference",
-          label: "Clinical Document Attachments",
+          label: "Clinical Document Processing",
           icon: ClipboardList,
         },
         { to: "/chart-summary", label: "Chart Summary", icon: BarChart2 },
         {
           to: "/document-labeling",
-          label: "Document Labeling",
+          label: "AI-Ready Labeled Dataset",
           icon: FileSignature,
         },
       ],

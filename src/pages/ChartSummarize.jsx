@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { ArrowLeft, Brain, FileText, Loader2 } from "lucide-react";
+import { ArrowLeft, Brain, FileText, Loader2, BarChart2 } from "lucide-react";
 const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
 export default function ChartSummarizer() {
   const id = "7002";
@@ -230,7 +230,7 @@ const handleChartSummarizer = async () => {
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-              <Brain className="w-5 h-5 text-white" />
+              <BarChart2 className="w-5 h-5 text-white" />
             </div>
             <div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
