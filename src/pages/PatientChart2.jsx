@@ -42,8 +42,9 @@ export default function PatientChart() {
     if (!id || !sourceId) return;
 
     const isMockSource =
-      sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
-      sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
+      sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA ;
+      // &&
+      // sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
 
     const loadPatient = async () => {
       setPatientLoading(true);
