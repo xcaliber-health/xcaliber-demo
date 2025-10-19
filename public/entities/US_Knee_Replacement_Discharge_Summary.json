@@ -1,16 +1,28 @@
 {
-    "patients": [
+    "patient": [
         {
-            "entity_value": "Robert Johnson",
+            "patient_name": "Robert Johnson",
             "age": "65",
             "sex": "Male",
             "patient_id": "ACME-2025-00456",
             "confidence_score": "50.0%"
         }
     ],
+    "appointments": [
+    {
+      "appointment_name": "Appointment 1",
+      "appointment_date": "10/25/2025",
+      "type": "Follow Up"
+    },
+    {
+      "appointment_name": "Appointment 2",
+      "appointment_date": "11/29/2025",
+      "type": "Follow Up"
+    }
+  ],
     "encounters": [
         {
-            "entity_value": "Inpatient Stay",
+            "encounter_name": "Inpatient Stay",
             "admit_datetime": "10-Oct-2025",
             "patient_care": "in-patient",
             "servicing_facility": "ACME HEALTH HOSPITAL",
@@ -19,7 +31,7 @@
     ],
     "diagnoses": [
         {
-            "entity_value": "Advanced Osteoarthritis of Right Knee",
+            "diagnosis name": "Advanced Osteoarthritis of Right Knee",
             "diagnosis_description": "Advanced Osteoarthritis of Right Knee - Status Post Right Total Knee Replacement (TKR)",
             "anatomical_region": "Right Knee",
             "codes": [
@@ -34,7 +46,7 @@
     ],
     "procedures": [
         {
-            "entity_value": "Right Total Knee Replacement",
+            "procedure_name": "Right Total Knee Replacement",
             "procedure_description": "Right Total Knee Replacement using cemented prosthesis performed under spinal anesthesia",
             "procedure_datetime": "11-Oct-2025",
             "substance_used": "spinal anesthesia",
@@ -50,7 +62,7 @@
     ],
     "medications": [
         {
-            "entity_value": "Acetaminophen",
+            "medication_name": "Acetaminophen",
             "strength": "650 mg",
             "dosage_form": "tablet",
             "frequency": "every 6 hours as needed",
@@ -66,7 +78,7 @@
             "confidence_score": "100.0%"
         },
         {
-            "entity_value": "Xarelto (Rivaroxaban)",
+            "medication_name": "Xarelto (Rivaroxaban)",
             "strength": "10 mg",
             "dosage_form": "tablet",
             "frequency": "daily",
@@ -82,7 +94,7 @@
             "confidence_score": "83.33%"
         },
         {
-            "entity_value": "Omeprazole",
+            "medication_name": "Omeprazole",
             "strength": "40 mg",
             "dosage_form": "capsule",
             "frequency": "daily",
@@ -98,7 +110,7 @@
         "confidence_score": "100.0%"
     },
     {
-        "entity_value": "Calcium and Vitamin D3 supplements",
+        "medication_name": "Calcium and Vitamin D3 supplements",
         "notes": "as prescribed",
         "codes": [
             {
@@ -112,7 +124,7 @@
 ],
 "providers": [
     {
-        "entity_value": "Dr. Emily Carter",
+        "provider_name": "Dr. Emily Carter",
         "prov_cred": "MD",
         "prov_type": "Orthopedic Surgeon",
         "phone": "(214) 555-9821",
@@ -122,7 +134,7 @@
 ],
 "organizations": [
     {
-        "entity_value": "ACME HEALTH HOSPITAL",
+        "organization_name": "ACME HEALTH HOSPITAL",
         "type": "Hospital",
         "address_line": "1234 Willow Creek Road",
         "city": "Dallas",
