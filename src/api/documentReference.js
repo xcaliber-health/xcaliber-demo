@@ -1,9 +1,14 @@
-import { fhirFetch } from "./fhir"; 
+import { fhirFetch } from "./fhir";
+import { cachedFhirFetch } from "./cachedFhirFetch"; 
 
 // Fetch documents list for a patient + category + department
 export async function fetchDocumentReferences(patientId, category, departmentId) {
   const url = `/fhir-gateway-2/fhir/R4/DocumentReference?patient=${patientId}&category=${category}&departmentId=${departmentId}`;
-  const bundle = await fhirFetch(url);
+  const bundle = await cachedFhirFetch( 
+    url,
+    {},
+     24 * 60 * 60 * 1000 // 1 day TTL
+  );
 
   return (bundle.entry || []).map(e => {
     const doc = e.resource;
@@ -19,7 +24,11 @@ export async function fetchDocumentReferences(patientId, category, departmentId)
 // Fetch full document + mapped data
 export async function fetchDocumentReferenceById(documentId, patientId, departmentId) {
   const url = `/fhir-gateway-2/fhir/R4/DocumentReference/${documentId}?patient=${patientId}&departmentId=${departmentId}`;
-  const doc = await fhirFetch(url);
+  const doc = await cachedFhirFetch( 
+    url,
+    {},
+     24 * 60 * 60 * 1000 // 1 day TTL
+  );
 
   // Extract raw content
   const rawContent = doc.content?.[0]?.attachment?.data || "";

@@ -1,6 +1,8 @@
 
 
-import { fhirFetch } from "./fhir";
+import { cache } from "./cache";
+import { cachedFhirFetch } from "./cachedFhirFetch";
+// import { fhirFetch } from "./fhir";
 
 // Create Order
 export async function createOrder({
@@ -101,13 +103,14 @@ export async function createOrder({
     }
     throw new Error(error?.issue?.[0]?.details?.text || "Failed to create order");
   }
-
+  cache.clearAll(); 
   return await response.json();
 }
 
 /**
  * Fetch ServiceRequest orders
  */
+
 export async function fetchOrders({
   patientId,
   encounterId,
@@ -121,17 +124,22 @@ export async function fetchOrders({
   }
 
   let url = `/ServiceRequest?patient=${patientId}&encounter=Encounter/${encounterId}`;
-  //if (departmentId) url += `&departmentId=${departmentId}`;
   if (category) url += `&category=${category}`;
 
-  const bundle = await fhirFetch(url, {
-    sourceId,
-    headers: {
-      "Authorization": `Bearer ${import.meta.env.VITE_API_TOKEN}`,
-      "x-interaction-mode": "false",
+
+  const bundle = await cachedFhirFetch(
+    url,
+    {
+      method: "GET",
+      sourceId,
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        "x-interaction-mode": "false",
+      },
+      setLatestCurl,
     },
-    setLatestCurl,
-  });
+     24 * 60 * 60 * 1000 // 1 day TTL
+  );
 
   return (bundle.entry || []).map((e) => {
     const r = e.resource;

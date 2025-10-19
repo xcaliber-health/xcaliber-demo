@@ -1,6 +1,9 @@
 
 // src/api/providers.js
+import { cachedFhirFetch } from "./cachedFhirFetch";
 import { fhirFetch } from "./fhir";
+import { cache } from "./cache";
+
 
 export async function fetchProvidersDirectory(sourceId, departmentId, name = "", providerId = "",setLatestCurl) {
   if (!sourceId) throw new Error("Missing sourceId");
@@ -28,11 +31,17 @@ export async function fetchProvidersDirectory(sourceId, departmentId, name = "",
       let url = `/Practitioner?_count=100`;
       if (name) url += `&name=${encodeURIComponent(name)}`;
 
-      const bundle = await fhirFetch(url, {
-        sourceId,
-        headers: { "x-interaction-mode": "false" },
-        setLatestCurl,
-      });
+const bundle = await cachedFhirFetch(
+  url,
+  {
+    method: "GET",
+    sourceId,
+    headers: { "x-interaction-mode": "false" },
+    setLatestCurl,
+  },
+   24 * 60 * 60 * 1000 // 1 day TTL
+);
+
 
       providers = (bundle.entry || []).map((e) => {
         const p = e.resource;
@@ -57,7 +66,7 @@ export async function fetchProvidersDirectory(sourceId, departmentId, name = "",
 }
 
 // 2. Find Appointment → includes departmentId + optional search (name or id)
-export async function fetchProviders(sourceId, departmentId, count = 100, search = "",setLatestCurl) {
+export async function fetchProviders(sourceId, departmentId, count = 100, search = "", setLatestCurl) {
   if (!sourceId) throw new Error("Missing sourceId");
   if (!departmentId) throw new Error("Missing departmentId");
 
@@ -67,10 +76,11 @@ export async function fetchProviders(sourceId, departmentId, count = 100, search
   try {
     if (search && /^\d+$/.test(search)) {
       // 🔹 Treat search as Provider ID
-      const practitioner = await fhirFetch(`/Practitioner/${search}`, {
+      const practitioner = await cachedFhirFetch(`/Practitioner/${search}`, {
+        method: "GET",
         sourceId,
         headers: { "x-interaction-mode": "false" },
-      });
+      },  24 * 60 * 60 * 1000 ); 
 
       if (practitioner) {
         providers.push({
@@ -91,11 +101,16 @@ export async function fetchProviders(sourceId, departmentId, count = 100, search
         url += `&name=${encodeURIComponent(search)}`;
       }
 
-      const bundle = await fhirFetch(url, {
-        sourceId,
-        headers: { "x-interaction-mode": "false" },
-        setLatestCurl,
-      });
+      const bundle = await cachedFhirFetch(
+        url,
+        {
+          method: "GET",
+          sourceId,
+          headers: { "x-interaction-mode": "false" },
+          setLatestCurl,
+        },
+         24 * 60 * 60 * 1000 // 1 day TTL
+      );
 
       providers = (bundle.entry || []).map((e) => {
         const p = e.resource;
@@ -124,7 +139,10 @@ export async function fetchProviderByIdSimple(providerId, sourceId) {
   if (!providerId) throw new Error("Missing providerId");
   if (!sourceId) throw new Error("Missing sourceId");
 
-  const p = await fhirFetch(`/Practitioner/${providerId}`, { sourceId });
+  const p = await cachedFhirFetch(`/Practitioner/${providerId}`, {
+    method: "GET",
+    sourceId,
+  },  24 * 60 * 60 * 1000 ); 
 
   return {
     id: p.id,
@@ -137,7 +155,6 @@ export async function fetchProviderByIdSimple(providerId, sourceId) {
   };
 }
 
-
 // Fetch provider by ID (Practitioner + roles)
 export async function fetchProviderById(providerId, sourceId) {
   const url =
@@ -145,7 +162,7 @@ export async function fetchProviderById(providerId, sourceId) {
     `&_include=PractitionerRole:organization` +
     `&_include=PractitionerRole:location`;
 
-  const bundle = await fhirFetch(url, { sourceId });
+  const bundle = await cachedFhirFetch(url, { method: "GET", sourceId },  24 * 60 * 60 * 1000 );
 
   const roles = [];
   const orgs = {};
@@ -157,17 +174,13 @@ export async function fetchProviderById(providerId, sourceId) {
     if (r.resourceType === "PractitionerRole") roles.push(r);
   });
 
-  const practitioner = await fhirFetch(`/Practitioner/${providerId}`, {
-    sourceId,
-  });
+  const practitioner = await cachedFhirFetch(`/Practitioner/${providerId}`, { method: "GET", sourceId }, 24 * 60 * 60 * 1000 );
 
   return {
     id: practitioner.id,
     name:
       practitioner.name?.[0]?.text ||
-      `${practitioner.name?.[0]?.given?.[0] || ""} ${
-        practitioner.name?.[0]?.family || ""
-      }`.trim(),
+      `${practitioner.name?.[0]?.given?.[0] || ""} ${practitioner.name?.[0]?.family || ""}`.trim(),
     identifier: practitioner.identifier?.[0]?.value || null,
     gender: practitioner.gender || null,
     qualifications:
@@ -177,21 +190,17 @@ export async function fetchProviderById(providerId, sourceId) {
     roles: roles.map((r) => ({
       specialty: r.specialty?.[0]?.coding?.[0]?.display,
       organization: orgs[r.organization?.reference?.split("/")[1]]?.name,
-      locations: (r.location || [])
-        .map((l) => locations[l.reference?.split("/")[1]])
-        .filter(Boolean),
+      locations: (r.location || []).map((l) => locations[l.reference?.split("/")[1]]).filter(Boolean),
       services: r.healthcareService?.map((s) => s.display) || [],
       telecom: r.telecom || [],
     })),
     phone:
       practitioner.telecom?.find((t) => t.system === "phone")?.value ||
-      roles.flatMap((r) => r.telecom || []).find((t) => t.system === "phone")
-        ?.value ||
+      roles.flatMap((r) => r.telecom || []).find((t) => t.system === "phone")?.value ||
       null,
     email:
       practitioner.telecom?.find((t) => t.system === "email")?.value ||
-      roles.flatMap((r) => r.telecom || []).find((t) => t.system === "email")
-        ?.value ||
+      roles.flatMap((r) => r.telecom || []).find((t) => t.system === "email")?.value ||
       null,
   };
 }

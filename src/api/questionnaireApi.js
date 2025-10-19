@@ -1,5 +1,6 @@
-
+import { cachedFhirFetch } from "./cachedFhirFetch";
 import { fhirFetch } from "./fhir";
+import { cache } from "./cache";
 
 // Fetch all questionnaire responses
 // export async function fetchQuestionnaireResponses(patientId, departmentId, sourceId, setLatestCurl, category = "medical-history") {
@@ -11,7 +12,7 @@ import { fhirFetch } from "./fhir";
 // }
 const ELATION_SOURCE_ID = import.meta.env.VITE_SOURCE_ID_ELATION;
 
-// ✅ Fetch all questionnaire responses
+// Fetch all questionnaire responses
 export async function fetchQuestionnaireResponses(
   patientId,
   departmentId,
@@ -27,29 +28,37 @@ export async function fetchQuestionnaireResponses(
       ? `/QuestionnaireResponse?patient=${patientId}`
       : `/QuestionnaireResponse?patient=${patientId}&departmentId=${departmentId}&category=${category}`;
 
-  const bundle = await fhirFetch(url, {
-    sourceId,
-    headers: { "x-interaction-mode": "false" },
-    setLatestCurl,
-  });
+  const bundle = await cachedFhirFetch(
+    url,
+    {
+      method: "GET",
+      sourceId,
+      headers: { "x-interaction-mode": "false" },
+      setLatestCurl,
+    },
+     24 * 60 * 60 * 1000 // 1 day TTL
+  );
 
   return bundle.entry?.map((e) => e.resource) || [];
 }
-
 
 // Map response to table row
 export function mapQuestionnaireRow(res) {
   const row = [];
 
   // History Type / Category
-  const historyType = res.extension?.find(ext => ext.url === "http://xcaliber-fhir/structureDefinition/category")?.valueString;
+  const historyType = res.extension?.find(
+    (ext) => ext.url === "http://xcaliber-fhir/structureDefinition/category"
+  )?.valueString;
   row.push(historyType || "-");
 
   // Status
   row.push(res.status || "-");
 
   // Authored / Last Updated
-  const authored = res.meta?.lastUpdated ? new Date(res.meta.lastUpdated).toLocaleDateString() : "-";
+  const authored = res.meta?.lastUpdated
+    ? new Date(res.meta.lastUpdated).toLocaleDateString()
+    : "-";
   row.push(authored);
 
   // First Question Text & Answer
@@ -62,15 +71,32 @@ export function mapQuestionnaireRow(res) {
   }
 
   // Last Modified By
-  const modifiedBy = res.item?.[0]?.extension?.find(ext => ext.url === "http://xcaliber-fhir/structureDefinition/last-modified-by")?.valueString || "-";
+  const modifiedBy =
+    res.item?.[0]?.extension?.find(
+      (ext) =>
+        ext.url === "http://xcaliber-fhir/structureDefinition/last-modified-by"
+    )?.valueString || "-";
   row.push(modifiedBy);
 
   return row;
 }
 
 // Create a new QuestionnaireResponse
-export async function createQuestionnaireResponse({ patientId, departmentId, sourceId, authored, answerValue, userId, category = "social-history", questionnaireId = "Questionnaire/190" }, setLatestCurl) {
-  if (!patientId || !departmentId || !sourceId) throw new Error("Missing required parameters");
+export async function createQuestionnaireResponse(
+  {
+    patientId,
+    departmentId,
+    sourceId,
+    authored,
+    answerValue,
+    userId,
+    category = "social-history",
+    questionnaireId = "Questionnaire/190",
+  },
+  setLatestCurl
+) {
+  if (!patientId || !departmentId || !sourceId)
+    throw new Error("Missing required parameters");
 
   const body = {
     resourceType: "QuestionnaireResponse",
@@ -83,21 +109,38 @@ export async function createQuestionnaireResponse({ patientId, departmentId, sou
         text: "Do you have an advance directive?",
         answer: [{ valueString: answerValue }],
         extension: [
-          { url: "http://xcaliber-fhir/structureDefinition/last-updated-by", valueString: userId }
-        ]
-      }
+          {
+            url: "http://xcaliber-fhir/structureDefinition/last-updated-by",
+            valueString: userId,
+          },
+        ],
+      },
     ],
     extension: [
-      { url: "http://xcaliber-fhir/structureDefinition/category", valueString: category },
-      { url: "http://xcaliber-fhir/structureDefinition/department-id", valueString: `${departmentId}` }
-    ]
+      {
+        url: "http://xcaliber-fhir/structureDefinition/category",
+        valueString: category,
+      },
+      {
+        url: "http://xcaliber-fhir/structureDefinition/department-id",
+        valueString: `${departmentId}`,
+      },
+    ],
   };
 
-  return fhirFetch(`/QuestionnaireResponse`, {
+  const result = await fhirFetch(`/QuestionnaireResponse`, {
     method: "POST",
     sourceId,
     body,
     headers: { "Content-Type": "application/fhir+json" },
-    setLatestCurl
+    setLatestCurl,
   });
+
+  // Clear cached GET for this patient & department
+  const cacheKeyPrefix = `GET:/QuestionnaireResponse?patient=${patientId}`;
+  Object.keys(localStorage).forEach((key) => {
+    if (key.startsWith(cacheKeyPrefix)) localStorage.removeItem(key);
+  });
+
+  return result;
 }

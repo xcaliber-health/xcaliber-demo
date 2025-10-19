@@ -1,15 +1,20 @@
-
 // src/api/procedureApi.js
 import { fhirFetch } from "./fhir";
+import { cachedFhirFetch } from "./cachedFhirFetch";
 
 // ✅ Named export for fetchProcedures
 export async function fetchProcedures({ patientId, departmentId, sourceId, setLatestCurl }) {
   const url = `/Procedure?patient=${patientId}&departmentId=${departmentId}`;
-  const bundle = await fhirFetch(url, {
-    sourceId,
-    headers: { "x-interaction-mode": "false" },
-    setLatestCurl,
-  });
+  const bundle = await cachedFhirFetch(
+    url,
+    {
+      method: "GET",
+      sourceId,
+      headers: { "x-interaction-mode": "false" },
+      setLatestCurl,
+    },
+     24 * 60 * 60 * 1000 // 1 day TTL
+  );
   return bundle.entry?.map((e) => e.resource) || [];
 }
 
@@ -52,7 +57,7 @@ export async function addProcedure({ patientId, departmentId, sourceId, setLates
     method: "POST",
     sourceId,
     headers: { "Content-Type": "application/fhir+json" },
-    body:postBody,
+    body: postBody,
     setLatestCurl,
   });
 }

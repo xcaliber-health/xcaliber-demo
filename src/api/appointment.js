@@ -1,6 +1,7 @@
-
 import { fhirFetch } from "./fhir";
+import { cachedFhirFetch } from "./cachedFhirFetch"; 
 const TOKEN = import.meta.env.VITE_API_TOKEN;
+
 // Fetch appointments
 export async function fetchAppointments({ patientId, providerId, sourceId, departmentId,setLatestCurl }) {
   if (!patientId || !sourceId) {
@@ -19,11 +20,16 @@ export async function fetchAppointments({ patientId, providerId, sourceId, depar
     url += `&actor=Practitioner/${providerId}`;
   }
 
-  const bundle = await fhirFetch(url, {
-    sourceId,
-    headers: isAthena ? { "x-interaction-mode": "false" } : undefined,
-    setLatestCurl,
-  });
+
+  const bundle = await cachedFhirFetch(
+    url,
+    {
+      sourceId,
+      headers: isAthena ? { "x-interaction-mode": "false" } : undefined,
+      setLatestCurl,
+    },
+     24 * 60 * 60 * 1000 // 1 day TTL
+  );
 
   return (bundle.entry || []).map((e) => {
     const a = e.resource;
@@ -138,16 +144,18 @@ export async function createAppointment({
 
 export async function getAppointment(id) {
   console.log("Fetching appointment with ID:", id);
-  const res = await fetch(
+
+
+  const res = await cachedFhirFetch(
     `https://blitz.xcaliberapis.com/fhir-gateway-2/fhir/R4/Appointment/${id}`,
     {
       headers: {
         Authorization: `Bearer ${TOKEN}`,
         "X-Source-Id": "ef123977-6ef1-3e8e-a30f-3879cea0b344",
       },
-    }
+    },
+     24 * 60 * 60 * 1000 // 1 day TTL
   );
-  if (!res.ok) throw new Error("Failed to fetch appointment");
-  return res.json();
-}
 
+  return res;
+}

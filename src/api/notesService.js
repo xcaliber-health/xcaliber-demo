@@ -1,5 +1,5 @@
-
 import { fhirFetch } from "./fhir";
+import { cachedFhirFetch } from "./cachedFhirFetch";
 
 export const notesService = {
   getAllNotes,
@@ -13,7 +13,7 @@ export const notesService = {
 /**
  * Get all notes for a given patient filtered by category.
  */
-async function getAllNotes({ departmentId, category, sourceId, patientId,setLatestCurl }) {
+async function getAllNotes({ departmentId, category, sourceId, patientId, setLatestCurl }) {
   if (!sourceId) throw new Error("sourceId is required");
   if (!departmentId) throw new Error("departmentId is required");
   if (!patientId) throw new Error("patientId is required");
@@ -23,7 +23,7 @@ async function getAllNotes({ departmentId, category, sourceId, patientId,setLate
     path += `&category=${category}`;
   }
 
-  const data = await fhirFetch(path, { sourceId,setLatestCurl });
+  const data = await cachedFhirFetch(path, { sourceId, setLatestCurl },  24 * 60 * 60 * 1000 ); 
   return (
     data.entry?.map((e) => {
       const resource = e.resource;
@@ -48,7 +48,6 @@ async function getAllNotes({ departmentId, category, sourceId, patientId,setLate
 /**
  * Get a single note by ID.
  */
-
 async function getNoteById(id, { departmentId, patientId, category, sourceId, setLatestCurl }) {
   if (!sourceId) throw new Error("sourceId is required");
   if (!departmentId) throw new Error("departmentId is required");
@@ -56,7 +55,7 @@ async function getNoteById(id, { departmentId, patientId, category, sourceId, se
   if (!category) throw new Error("category is required");
 
   const path = `/DocumentReference/${id}?patient=${patientId}&category=${category}&departmentId=${departmentId}`;
-  const data = await fhirFetch(path, { sourceId, setLatestCurl });
+  const data = await cachedFhirFetch(path, { sourceId, setLatestCurl },  24 * 60 * 60 * 1000 ); 
 
   const resource = data.resource || data;
 
@@ -91,7 +90,6 @@ async function getNoteById(id, { departmentId, patientId, category, sourceId, se
       : null,
   };
 }
-
 
 /**
  * Create a new note.
