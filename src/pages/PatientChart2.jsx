@@ -424,7 +424,7 @@ function parsePatient(fhir) {
         }`
       : null,
     status: fhir.extension?.find(
-      (e) => e.url === "http://xcaliber-fhir/structureDefinition/patient-status"
+      (e) => e.url === "http://xcaliber-fhir/structureDefinition/status"
     )?.valueString,
   };
 }
