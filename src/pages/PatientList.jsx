@@ -359,15 +359,29 @@ useEffect(() => {
 
       if (isMockSource) {
         // Non-Athena mock patients
-        data = ECW_MOCK_PATIENTS.map((p) => ({
-          id: p.id,
-          name: getPatientFullName(p.name),
-          gender: p.gender || "Unknown",
-          birthDate: p.birthDate || "Unknown",
-          email: p.email || "",
-          phone: p.phone || "",
-          status: p.status || "N/A",
-        }));
+        // data = ECW_MOCK_PATIENTS.map((p) => ({
+        //   id: p.id,
+        //   name: getPatientFullName(p.name),
+        //   gender: p.gender || "Unknown",
+        //   birthDate: p.birthDate || "Unknown",
+        //   email: p.email || "",
+        //   phone: p.phone || "",
+        //   status: p.status || "N/A",
+        // }));
+        data = ECW_MOCK_PATIENTS.map((p) => {
+  const phoneEntry = p.telecom?.find(entry => entry.system === "phone");
+  const emailEntry = p.telecom?.find(entry => entry.system === "email");
+  return {
+    id: p.id,
+    name: getPatientFullName(p.name),
+    gender: p.gender || "Unknown",
+    birthDate: p.birthDate || "Unknown",
+    email: emailEntry?.value || "",
+    phone: phoneEntry?.value || "",
+    status: p.status || "N/A",
+  };
+});
+
         await new Promise((resolve) => setTimeout(resolve, 3000));
       } else {
         const rawData = await fetchPatients(
