@@ -142,7 +142,7 @@ export default function KafkaToSnowflakeDemo() {
       );
       if (elapsed >= duration) {
         clearInterval(interval);
-        pushLog(`Flushed ${transferred} rows into ${snowflakeSchema}.`);
+        pushLog(`Flushed ${transferred} claims into ${snowflakeSchema}.`);
         setPhase("completed");
         setRunning(false);
       }
@@ -237,7 +237,7 @@ export default function KafkaToSnowflakeDemo() {
                   className="w-full accent-indigo-600 mt-1"
                 />
                 <p className="text-gray-500 text-xs mt-1">
-                  Batch: {batchSize} rows
+                  Batch: {batchSize} claims
                 </p>
               </div>
 
@@ -262,7 +262,7 @@ export default function KafkaToSnowflakeDemo() {
                       : "bg-indigo-600 text-white"
                   }`}
                 >
-                  {running ? "Stimulating..." : "Simulate Stream"}
+                  {running ? "Starting..." : "Start"}
                 </Button>
                 <Button
                   onClick={handleReset}
@@ -413,13 +413,13 @@ export default function KafkaToSnowflakeDemo() {
                 <p className="text-sm text-gray-500 mb-2">Metrics</p>
                 <div className="grid grid-cols-2 gap-3 flex-1">
                   <div className="bg-indigo-50 rounded-lg border p-3">
-                    <p className="text-xs text-gray-500">Rows/sec</p>
+                    <p className="text-xs text-gray-500">Claims/sec</p>
                     <p className="text-lg font-semibold text-indigo-700">
                       {throughput}
                     </p>
                   </div>
                   <div className="bg-indigo-50 rounded-lg border p-3">
-                    <p className="text-xs text-gray-500">Total rows</p>
+                    <p className="text-xs text-gray-500">Total claims</p>
                     <p className="text-lg font-semibold text-indigo-700">
                       {rowsTransferred}
                     </p>
@@ -428,7 +428,7 @@ export default function KafkaToSnowflakeDemo() {
                     <p className="text-xs text-gray-500">Last commit</p>
                     <p className="mt-1 text-sm text-indigo-700">
                       {phase === "completed"
-                        ? `${rowsTransferred} rows committed to ${snowflakeSchema}`
+                        ? `${rowsTransferred} claims committed to ${snowflakeSchema}`
                         : "—"}
                     </p>
                   </div>

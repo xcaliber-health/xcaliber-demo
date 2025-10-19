@@ -6,7 +6,7 @@
     "labs": [
         {
             "analysis_datetime": "2024-01-11T00:00:00",
-            "lab_name": "Microalbumin",
+            "test_name": "Microalbumin",
             "equipment_instance_identifier": null,
             "lab_test_code": null,
             "lab_test_findings": "39.0 mg/dL - ABNORMAL",
@@ -26,7 +26,7 @@
         },
         {
             "analysis_datetime": "2024-01-11T00:00:00",
-            "lab_name": "Glucose",
+            "test_name": "Glucose",
             "equipment_instance_identifier": null,
             "lab_test_code": null,
             "lab_test_findings": "17 mg/dL - NORMAL",
@@ -46,7 +46,7 @@
         },
         {
             "analysis_datetime": "2024-01-11T00:00:00",
-            "lab_name": "Microprotein",
+            "test_name": "Microprotein",
             "equipment_instance_identifier": null,
             "lab_test_code": null,
             "lab_test_findings": "196.0 mg/dL - ABNORMAL",
@@ -60,7 +60,7 @@
         },
         {
             "analysis_datetime": "2024-01-11T00:00:00",
-            "lab_name": "Beta-hydroxybutyrate(ketones)",
+            "test_name": "Beta-hydroxybutyrate(ketones)",
             "equipment_instance_identifier": null,
             "lab_test_code": null,
             "lab_test_findings": "0.10 mmol/L - NORMAL",
@@ -80,7 +80,7 @@
         },
         {
             "analysis_datetime": "2024-01-11T00:00:00",
-            "lab_name": "Bilirubin",
+            "test_name": "Bilirubin",
             "equipment_instance_identifier": null,
             "lab_test_code": null,
             "lab_test_findings": "0.30 mg/dL - NORMAL",
@@ -100,7 +100,7 @@
         },
         {
             "analysis_datetime": "2024-01-11T00:00:00",
-            "lab_name": "pH",
+            "test_name": "pH",
             "equipment_instance_identifier": null,
             "lab_test_code": null,
             "lab_test_findings": "6.5 - NORMAL",
@@ -120,7 +120,7 @@
         },
         {
             "analysis_datetime": "2024-01-11T00:00:00",
-            "lab_name": "Specific Gravity",
+            "test_name": "Specific Gravity",
             "equipment_instance_identifier": null,
             "lab_test_code": null,
             "lab_test_findings": "1.013 - NORMAL",
@@ -140,7 +140,7 @@
         },
         {
             "analysis_datetime": "2024-01-11T00:00:00",
-            "lab_name": "Creatinine",
+            "test_name": "Creatinine",
             "equipment_instance_identifier": null,
             "lab_test_code": null,
             "lab_test_findings": "113.19 mg/dL - NORMAL",
@@ -160,7 +160,7 @@
         },
         {
             "analysis_datetime": "2024-01-11T00:00:00",
-            "lab_name": "Nitrite",
+            "test_name": "Nitrite",
             "equipment_instance_identifier": null,
             "lab_test_code": null,
             "lab_test_findings": "163 mg/L - ABNORMAL",
@@ -180,7 +180,7 @@
         },
         {
             "analysis_datetime": "2024-01-11T00:00:00",
-            "lab_name": "Albumin/Creatinine Ratio, Random Urine",
+            "test_name": "Albumin/Creatinine Ratio, Random Urine",
             "equipment_instance_identifier": null,
             "lab_test_code": null,
             "lab_test_findings": "344.553 mg/g - SEVERELY INCREASED",
@@ -194,7 +194,7 @@
         },
         {
             "analysis_datetime": "2024-01-11T00:00:00",
-            "lab_name": "Protein/Creatinine Ratio, Random Urine",
+            "test_name": "Protein/Creatinine Ratio, Random Urine",
             "equipment_instance_identifier": null,
             "lab_test_code": null,
             "lab_test_findings": "1731.6 mg/g - SEVERELY INCREASED",
