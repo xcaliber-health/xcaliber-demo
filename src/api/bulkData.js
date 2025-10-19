@@ -1,4 +1,4 @@
-import { cachedFhirFetch } from "./cachedFhirFetch";
+
 const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -22,8 +22,6 @@ export async function getIdsForResource(ehrName, resourceName) {
   return idsWithNames;
 }
 
-// frontend/api.js
-
 export async function getMappingForId(patientId) {
   if (!patientId) throw new Error("patientId is required");
 
@@ -31,19 +29,26 @@ export async function getMappingForId(patientId) {
     console.log(`Calling /api/migrate for patientId: ${patientId}`);
     const url = `${SAMPLE_BFF_URL}/api/migrate?patientId=${patientId}`;
     
-    const data = await cachedFhirFetch(
-      url,
-      { method: "GET", headers: { "Content-Type": "application/json" } },
-       24 * 60 * 60 * 1000 // 1 day TTL
-    );
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
 
-    console.log("came after BFF call")
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
     console.log("Migration result:", data);
 
-    return data.fhirResponse.data.id; // contains migrated patient info
+    return data.fhirResponse?.data?.id || null; // contains migrated patient info
   } catch (err) {
     console.error("Error calling /api/migrate:", err);
     return null;
   }
 }
+
 
