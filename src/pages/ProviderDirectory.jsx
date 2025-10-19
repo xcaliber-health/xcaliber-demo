@@ -169,7 +169,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AppContext } from "../layouts/DashboardLayout";
 import { fetchProvidersDirectory } from "../api/providers";
-import { Loader2, Search, Users } from "lucide-react";
+import { Loader2, Search, Users,Folder } from "lucide-react";
 import toast from "react-hot-toast";
 import { MOCK_PROVIDERS } from "../data/providerListMock"; // create a data file similar to ECW_MOCK_PATIENTS
 
@@ -298,7 +298,7 @@ export default function ProviderDirectory() {
           {/* Header */}
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-              <Users className="w-5 h-5 text-white" />
+              <Folder className="w-5 h-5 text-white" />
             </div>
             <div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
