@@ -260,8 +260,9 @@ export default function DocumentTab({ patientId }) {
   });
 
   const isMockSource =
-    sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA &&
-    sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
+    sourceId !== import.meta.env.VITE_SOURCE_ID_ATHENA ;
+    // &&
+    // sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
 
   // --- Normalize document data ---
   const normalizeDocument = (doc) => {
