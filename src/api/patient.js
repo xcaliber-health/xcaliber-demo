@@ -53,16 +53,22 @@ export async function fetchPatients(
 
   console.log("Fetching patients with path:", url);
 
-  const bundle = await cachedFhirFetch(
-    url,
-    {
-      baseUrl,
-      sourceId,
-      headers: options.headers,
-      setLatestCurl,
-    },
-     24 * 60 * 60 * 1000 // 1 day TTL
-  );
+  // const bundle = await cachedFhirFetch(
+  //   url,
+  //   {
+  //     baseUrl,
+  //     sourceId,
+  //     headers: options.headers,
+  //     setLatestCurl,
+  //   },
+  //    24 * 60 * 60 * 1000 // 1 day TTL
+  // );
+  const bundle = await fhirFetch(url, {
+    baseUrl,
+    sourceId,
+    headers: options.headers,
+    setLatestCurl,
+  });
 
   let patients = [];
 
