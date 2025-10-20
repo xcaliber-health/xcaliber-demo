@@ -4,6 +4,7 @@ const ECW_URL = import.meta.env.VITE_ECW_BASE_URL;
 const ECW_SOURCE_ID = import.meta.env.VITE_ECW_SOURCE_ID;
 const ATHENA_SOURCE_ID = import.meta.env.VITE_SOURCE_ID_ATHENA;
 const ELATION_SOURCE_ID = import.meta.env.VITE_REFERENCE_SOURCE_ID;
+const SAMPLE_BFF_URL = import.meta.env.VITE_SAMPLE_BFF_URL;
 // Removed the mock data imports as they will now come from the backend API
 // import mockElation from "../mock-data/mock-elation.json";
 // import mockEpic from "../mock-data/mock-epic.json";
@@ -263,7 +264,7 @@ function FhirBrowser() {
 if (useMockBackend) {
       // Fetch mock data from the backend API using native fetch
       setLoading(true); // Ensure loading is true before fetch
-      fetch(`http://localhost:3000/api/fhirResources?ehr=${parentEhr}`)
+      fetch(`${SAMPLE_BFF_URL}/api/fhirResources?ehr=${parentEhr}`)
         .then(async (response) => {
           // 1. Check for HTTP errors (fetch only rejects on network failure)
           if (!response.ok) {
