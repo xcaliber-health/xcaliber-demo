@@ -15,9 +15,9 @@ export async function fetchPatients(
 
   // Determine the search term: use "sofia" only for Athena, otherwise use user input
   let searchForUrl = search || "";
-  if (ehr.toLowerCase().startsWith("athena")) {
-    searchForUrl = "sofia";
-  }
+  // if (ehr.toLowerCase().startsWith("athena")) {
+  //   searchForUrl = "sofia";
+  // }
 
   const safeSearch = searchForUrl.toLowerCase();
 
