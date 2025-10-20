@@ -8,7 +8,7 @@ export async function fetchDocumentPDF({ patientId, documentId, departmentId, ca
   const url = `/Media/${documentId}?patient=${patientId}&departmentId=${departmentId}&category=${category}`;
   const response = await cachedFhirFetch(
     url,
-    { sourceId, headers: { "x-interaction-mode": "true" }, setLatestCurl },
+    { sourceId: SOURCE_ID, headers: { "x-interaction-mode": "true" }, setLatestCurl },
      24 * 60 * 60 * 1000 // 1 day TTL
   );
   //const response = await fhirFetch(url, { sourceId: SOURCE_ID,headers: { "x-interaction-mode": "true" }, setLatestCurl });
@@ -28,7 +28,7 @@ export async function fetchDiagnosticReport({ patientId, documentId, departmentI
   const url = `/DiagnosticReport/${documentId}?patient=${patientId}&departmentId=${departmentId}&category=${category}`;
   return await cachedFhirFetch( 
     url,
-    { sourceId, setLatestCurl },
+    { sourceId:SOURCE_ID, setLatestCurl },
      24 * 60 * 60 * 1000 // 1 day TTL
   );
   //return await fhirFetch(url, { sourceId: SOURCE_ID }, setLatestCurl);
