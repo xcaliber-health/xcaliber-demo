@@ -4,15 +4,16 @@ const ECW_URL = import.meta.env.VITE_ECW_BASE_URL;
 const ECW_SOURCE_ID = import.meta.env.VITE_ECW_SOURCE_ID;
 const ATHENA_SOURCE_ID = import.meta.env.VITE_SOURCE_ID_ATHENA;
 const ELATION_SOURCE_ID = import.meta.env.VITE_REFERENCE_SOURCE_ID;
+// Removed the mock data imports as they will now come from the backend API
+// import mockElation from "../mock-data/mock-elation.json";
+// import mockEpic from "../mock-data/mock-epic.json";
+// import mockKno2 from "../mock-data/mock-kno2.json";
+// import mockMeditech from "../mock-data/mock-meditech.json";
+// import mockCerner from "../mock-data/mock-cerner.json";
+// import mockVeradigm from "../mock-data/mock-veradigm.json";
+// import mockpracticefusion from "../mock-data/mock-practicefusion.json";
+// import mockPointClickCare from "../mock-data/mock-pointclick.json";
 import React, { useEffect, useState, useContext } from "react";
-import mockElation from "../mock-data/mock-elation.json";
-import mockEpic from "../mock-data/mock-epic.json";
-import mockKno2 from "../mock-data/mock-kno2.json";
-import mockMeditech from "../mock-data/mock-meditech.json";
-import mockCerner from "../mock-data/mock-cerner.json";
-import mockVeradigm from "../mock-data/mock-veradigm.json";
-import mockpracticefusion from "../mock-data/mock-practicefusion.json";
-import mockPointClickCare from "../mock-data/mock-pointclick.json";
 import axios from "axios";
 import Editor from "@monaco-editor/react";
 import {
@@ -24,6 +25,7 @@ import {
 } from "lucide-react";
 import { AppContext } from "../layouts/DashboardLayout";
 
+// --- Card Component (Unchanged) ---
 function Card({ children, className = "", gradient = false }) {
   return (
     <div className={`
@@ -40,6 +42,7 @@ function Card({ children, className = "", gradient = false }) {
   );
 }
 
+// --- Button Component (Unchanged) ---
 function Button({ children, className = "", variant = "primary", size = "md", loading = false, ...props }) {
   const baseClasses =
     "font-medium transition-all duration-200 disabled:opacity-50 transform hover:scale-105 active:scale-95 flex items-center gap-2 relative overflow-hidden";
@@ -75,6 +78,7 @@ function Button({ children, className = "", variant = "primary", size = "md", lo
   );
 }
 
+// --- Badge Component (Unchanged) ---
 function Badge({ children, variant = "default", className = "" }) {
   const variants = {
     default:
@@ -94,6 +98,7 @@ function Badge({ children, variant = "default", className = "" }) {
   );
 }
 
+// --- resourceIconMap (Unchanged) ---
 const resourceIconMap = {
   Allergyintolerance: AlertTriangle,
   Appointment: Calendar,
@@ -134,7 +139,7 @@ const resourceIconMap = {
 };
 
 function FhirBrowser() {
-  const { parentEhr,ehr } = useContext(AppContext);
+  const { parentEhr, ehr } = useContext(AppContext);
   const [endpoints, setEndpoints] = useState([]);
   const [filteredEndpoints, setFilteredEndpoints] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -150,18 +155,19 @@ function FhirBrowser() {
   const [resourceList, setResourceList] = useState([]);
   const [selectedResourceId, setSelectedResourceId] = useState(null);
   const [resourceSearchTerm, setResourceSearchTerm] = useState("");
+  const { setLatestCurl } = useContext(AppContext); // Destructured here
 
   const toPascalCase = (str) =>
     str
       ? str
-          .replace(/[_\s-]+/g, " ")
-          .split(" ")
-          .map(
-            (word) =>
-              word.charAt(0).toUpperCase() +
-              word.slice(1).toLowerCase()
-          )
-          .join("")
+        .replace(/[_\s-]+/g, " ")
+        .split(" ")
+        .map(
+          (word) =>
+            word.charAt(0).toUpperCase() +
+            word.slice(1).toLowerCase()
+        )
+        .join("")
       : "";
 
   const EHR_CONFIG = {
@@ -169,7 +175,7 @@ function FhirBrowser() {
       baseUrl: BASE,
       endpointsFile: "/athena-endpoints.json",
       headers: {
-        Authorization: "Bearer "+ TOKEN,
+        Authorization: "Bearer " + TOKEN,
         "x-source-id": ATHENA_SOURCE_ID,
         "x-interaction-mode": "false",
       },
@@ -177,10 +183,10 @@ function FhirBrowser() {
         patient: "4406",
         departmentId: "150",
       },
+      useMockBackend: false, // Explicitly false for direct API access
     },
     Elation: {
-      data: true,               // flag to use data
-      mockFile: mockElation,    // the imported data JSON
+      useMockBackend: true, // Now uses the mock backend
     },
     ECW: {
       baseUrl: ECW_URL,
@@ -191,38 +197,32 @@ function FhirBrowser() {
       defaultParams: {
         patient: "Lt2IFR5Ah76n4d8TFP5gBJiCIKJuEyZG8Ek3KV3alFE"
       },
+      useMockBackend: false, // Explicitly false for direct API access
     },
     Epic: {
-      data: true, 
-      mockFile: mockEpic,
+      useMockBackend: true,
     },
     Kno2: {
-      data: true, 
-      mockFile: mockKno2,
+      useMockBackend: true,
     },
     Cerner: {
-      data: true, 
-      mockFile: mockCerner,
+      useMockBackend: true,
     },
     Meditech: {
-      data: true, 
-      mockFile: mockMeditech,
+      useMockBackend: true,
     },
     PracticeFusion: {
-      data: true, 
-      mockFile: mockpracticefusion,
+      useMockBackend: true,
     },
-    Veradigm:{
-      data: true, 
-      mockFile: mockVeradigm,
+    Veradigm: {
+      useMockBackend: true,
     },
-    PointClickCare:{
-      data: true, 
-      mockFile:mockPointClickCare,
+    PointClickCare: {
+      useMockBackend: true,
     }
   };
 
-  const { baseUrl, endpointsFile, headers, defaultParams = {} } =
+  const { baseUrl, endpointsFile, headers, defaultParams = {}, useMockBackend } =
     EHR_CONFIG[parentEhr] || {};
 
   useEffect(() => {
@@ -252,40 +252,62 @@ function FhirBrowser() {
     }
   }, [response]);
 
-useEffect(() => {
-  const mockMap = {
-    Elation: mockElation,
-    Epic: mockEpic,
-    Kno2: mockKno2,
-    Cerner: mockCerner,
-    Meditech: mockMeditech,
-    PracticeFusion: mockpracticefusion,
-    Veradigm: mockVeradigm,
-    PointClickCare:mockPointClickCare
-  };
-  console.log(parentEhr, "rftuygiu", ehr)
-  if (mockMap[parentEhr]) {
-    setEndpoints(
-      Object.keys(mockMap[parentEhr]).map((res) => ({
-        resource: res,
-        displayName: res,
-        path: `/${res}`
-      }))
-    );
-    return;
-  }
+  useEffect(() => {
+    // Reset selection and response when EHR changes
+    setSelected(null);
+    setEndpoints([]);
+    setResponse(null);
+    setResourceList([]);
+    setLoading(true);
 
-  if (!endpointsFile) return;
+if (useMockBackend) {
+      // Fetch mock data from the backend API using native fetch
+      setLoading(true); // Ensure loading is true before fetch
+      fetch(`http://localhost:3000/api/fhirResources?ehr=${parentEhr}`)
+        .then(async (response) => {
+          // 1. Check for HTTP errors (fetch only rejects on network failure)
+          if (!response.ok) {
+            let errorText = await response.text();
+            throw new Error(`HTTP Error ${response.status}: ${response.statusText}. Detail: ${errorText}`);
+          }
+          
+          // 2. Manually parse the JSON response
+          const data = await response.json();
 
-  setLoading(true);
-  fetch(endpointsFile)
-    .then((res) => res.json())
-    .then(setEndpoints)
-    .catch((err) => console.error(`Error loading ${endpointsFile}`, err))
-    .finally(() => setLoading(false));
+          // Process the successful response (data is the resource map)
+          setEndpoints(
+            Object.keys(data).map((resourceName) => ({
+              resource: resourceName,
+              displayName: resourceName,
+              path: `/${resourceName}`,
+              isMocked: true,
+              mockData: data // Store the full mock data object
+            }))
+          );
+        })
+        .catch((err) => {
+          // Handle both network errors and the thrown HTTP errors
+          console.error(`Error loading mock data for ${parentEhr}`, err);
+          setError(`Error loading mock data for ${parentEhr}: ${err.message}`);
+          setEndpoints([]);
+        })
+        .finally(() => setLoading(false));
+      return;
+    }
 
-}, [ehr, endpointsFile]); // <-- add `ehr` here!
+    // Original logic for Athena/ECW (non-mocked)
+    if (!endpointsFile) {
+      setLoading(false);
+      return;
+    }
 
+    fetch(endpointsFile)
+      .then((res) => res.json())
+      .then(setEndpoints)
+      .catch((err) => console.error(`Error loading ${endpointsFile}`, err))
+      .finally(() => setLoading(false));
+
+  }, [parentEhr, endpointsFile, useMockBackend]); // Changed dependency from `ehr` to `parentEhr` and added `useMockBackend`
 
   const handleSelect = (endpoint) => {
     setSelected(endpoint);
@@ -294,65 +316,25 @@ useEffect(() => {
     setResourceList([]);
     setSelectedResourceId(null);
     setResourceSearchTerm("");
-    console.log(parentEhr)
-    // 🧩 Build params from endpoint defaults + global defaults
-    if (parentEhr === "Elation") {
-    const resources = mockElation[endpoint.resource] || [];
-    setResourceList(resources);
-    return; // do not hit API
-    }
-    if (parentEhr === "Epic") {
-    const resources = mockEpic[endpoint.resource] || [];
-    setResourceList(resources);
-    return; // do not hit API
-    }
-    if (parentEhr === "Kno2") {
-      const resources = mockKno2[endpoint.resource] || [];
-      setResourceList(resources);
-      return;
+
+    if (endpoint.isMocked) {
+      // The endpoint is a mock endpoint, the data is in `endpoint.mockData` (which is the full map)
+      const mockResourceData = endpoint.mockData[endpoint.resource] || [];
+      setResourceList(mockResourceData);
+      return; // Do not hit API
     }
 
-    if (parentEhr === "Cerner") {
-      const resources = mockCerner[endpoint.resource] || [];
-      setResourceList(resources);
-      return;
-    }
-
-    if (parentEhr === "Meditech") {
-      const resources = mockMeditech[endpoint.resource] || [];
-      setResourceList(resources);
-      return;
-    }
-
-    if (parentEhr === "PracticeFusion") {
-      const resources = mockpracticefusion[endpoint.resource] || [];
-      setResourceList(resources);
-      return;
-    }
-
-    if (parentEhr === "Veradigm") {
-      const resources = mockVeradigm[endpoint.resource] || [];
-      setResourceList(resources);
-      return;
-    }
-    if (parentEhr === "PointClickCare") {
-      const resources = mockPointClickCare[endpoint.resource] || [];
-      setResourceList(resources);
-      return;
-    }
-
+    // Logic for Athena/ECW (non-mocked)
     const endpointDefaults = {};
     endpoint.parameters.forEach((p) => {
       if (p.default !== undefined) {
         endpointDefaults[p.name] = p.default;
       }
     });
-    console.log
 
     const finalParams = { ...endpointDefaults, ...defaultParams };
     handleAutoFetch(endpoint, finalParams);
   };
-
 
   const handleAutoFetch = async (endpoint, finalParams) => {
     setLoading(true);
@@ -386,14 +368,12 @@ useEffect(() => {
     try {
       const res = await axios.get(url, { headers });
       let resources = [];
-      if(parentEhr === "ECW"){
-        console.log(res)
+      if (parentEhr === "ECW") {
         resources = res.data.data.entry?.map((entry) => entry.resource) || [];
-      }else{
+      } else {
         resources = res.data.entry?.map((entry) => entry.resource) || [];
       }
       setResourceList(resources);
-      console.log(resources);
       setResponse(null);
     } catch (err) {
       if (err.response) {
@@ -410,7 +390,7 @@ useEffect(() => {
       setLoading(false);
     }
   };
-  const { setLatestCurl } = useContext(AppContext);
+
   const handleSelectResourceId = (id) => {
     setSelectedResourceId(id);
     const selectedResource = resourceList.find((res) => res.id === id);
@@ -418,19 +398,6 @@ useEffect(() => {
       setResponse(selectedResource);
     }
   };
-//   const handleSelectResourceId = (id) => {
-//   setSelectedResourceId(id);
-//   const resource = resourceList.find((r) => r.id === id);
-//   if (resource) {
-//     setResponse(resource);
-//     setJsonString(JSON.stringify(resource, null, 2));
-//     setIsValid(true);
-//     setError(null);
-//   }
-// };
-
-
-
 
   const handleEditorChange = (value) => {
     if (value === undefined) return;
@@ -457,12 +424,13 @@ useEffect(() => {
       console.error("Failed to copy:", err);
     }
   };
+
+  // Auto-select the first endpoint after they are loaded
   useEffect(() => {
-  if (endpoints.length > 0 && !selected) {
-    // Auto-select the first endpoint
-    handleSelect(endpoints[0]);
-  }
-}, [endpoints, selected]);
+    if (endpoints.length > 0 && !selected) {
+      handleSelect(endpoints[0]);
+    }
+  }, [endpoints, selected]);
 
 
   const handleDownload = () => {
@@ -502,10 +470,10 @@ useEffect(() => {
           </div>
           <div className="relative">
             {/*<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-800 opacity-90 w-4 h-4"/>*/}
-            <Search 
-  className="absolute left-3 top-1/2 transform -translate-y-1/2 !text-indigo-700 w-5 h-5"
-  strokeWidth={4.5}
-/>
+            <Search
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 !text-indigo-700 w-5 h-5"
+              strokeWidth={4.5}
+            />
 
             <input
               type="text"
@@ -588,7 +556,7 @@ useEffect(() => {
             </div>
             <div className="flex-1 p-6 overflow-hidden">
               <div className="h-full flex gap-6">
-                {/* Resource ID card only if response not present */}
+                {/* Resource ID card only if resourceList is present and no individual response is selected/fetched yet */}
                 {resourceList.length > 0 && !response && (
                   <Card className="flex-1 rounded-xl flex flex-col max-h-[710px]">
                     <div className="p-4 border-b border-gray-100">
@@ -615,35 +583,35 @@ useEffect(() => {
                       ) : (
                         <div className="space-y-2">
                           <table className="min-w-full border border-gray-200 rounded-xl overflow-hidden">
-  <thead className="bg-indigo-100">
-    <tr>
-      <th className="px-16 py-2 text-left text-sm font-semibold text-indigo-600">ID</th>
-      <th className="px-16 py-2 text-left text-sm font-semibold text-indigo-600">Last Updated</th>
-      
-    </tr>
-  </thead>
-  <tbody>
-    {filteredResourceList.map((res) => (
-      <tr
-        key={res.id}
-        className={`cursor-pointer transition-colors duration-200 ${
-          selectedResourceId === res.id
-            ? "bg-indigo-50"
-            : "hover:bg-gray-50"
-        }`}
-        onClick={() => handleSelectResourceId(res.id)}
-      >
-        <td className="px-16 py-2 font-mono text-sm text-gray-800">{res.id}</td>
-        <td className="px-16 py-2 text-sm text-gray-600">
-          {res.meta?.lastUpdated
-            ? new Date(res.meta.lastUpdated).toLocaleString()
-            : "—"}
-        </td>
-        
-      </tr>
-    ))}
-  </tbody>
-</table>
+                            <thead className="bg-indigo-100">
+                              <tr>
+                                <th className="px-16 py-2 text-left text-sm font-semibold text-indigo-600">ID</th>
+                                <th className="px-16 py-2 text-left text-sm font-semibold text-indigo-600">Last Updated</th>
+
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {filteredResourceList.map((res) => (
+                                <tr
+                                  key={res.id}
+                                  className={`cursor-pointer transition-colors duration-200 ${
+                                    selectedResourceId === res.id
+                                      ? "bg-indigo-50"
+                                      : "hover:bg-gray-50"
+                                    }`}
+                                  onClick={() => handleSelectResourceId(res.id)}
+                                >
+                                  <td className="px-16 py-2 font-mono text-sm text-gray-800">{res.id}</td>
+                                  <td className="px-16 py-2 text-sm text-gray-600">
+                                    {res.meta?.lastUpdated
+                                      ? new Date(res.meta.lastUpdated).toLocaleString()
+                                      : "—"}
+                                  </td>
+
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
 
                         </div>
                       )}
@@ -726,14 +694,26 @@ useEffect(() => {
                   </Card>
                 )}
 
+                {/* Loading/Initial State for the main content area */}
                 {!response && resourceList.length === 0 && (
                   <div className="flex-1 flex items-center justify-center">
                     <Card className="p-12 text-center max-w-md" gradient>
                       <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                         <Database className="w-8 h-8 text-white" />
                       </div>
-                      <h3 className="text-xl font-bold text-gray-800 mb-2">Loading Resources</h3>
-                      <p className="text-gray-600">Fetching data from the FHIR server...</p>
+                      <h3 className="text-xl font-bold text-gray-800 mb-2">
+                        {loading ? "Loading Resources" : "Select a FHIR Resource"}
+                      </h3>
+                      <p className="text-gray-600">
+                        {loading
+                          ? "Fetching data from the FHIR server..."
+                          : "Choose a resource from the sidebar to start exploring FHIR data"}
+                      </p>
+                      {!loading && (
+                        <div className="flex items-center justify-center gap-2 text-sm text-gray-500 mt-6">
+                          <span>{endpoints.length} resources available</span>
+                        </div>
+                      )}
                     </Card>
                   </div>
                 )}

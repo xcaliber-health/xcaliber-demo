@@ -1,23 +1,2679 @@
 {
-  "Practice": [
+  "Account": [
     {
-      "id": "account-001",
       "resourceType": "Account",
-      "name": "Yang, Moore and Rasmussen",
-      "balance": 94622,
-      "currency": "HRK",
+      "id": "account-001",
+      "identifier": [
+        {
+          "system": "http://example.org/fhir/account",
+          "value": "ACC-001"
+        }
+      ],
+      "status": "active",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/account-type",
+            "code": "patient"
+          }
+        ]
+      },
+      "name": "John Doe",
+      "balance": 500,
+      "currency": "USD",
+      "subject": {
+        "reference": "Patient/pat-001"
+      },
+      "servicePeriod": {
+        "start": "2025-01-01",
+        "end": "2025-12-31"
+      },
+      "description": "Patient billing account",
       "meta": {
-        "lastUpdated": "2025-10-16T08:25:49.051816Z"
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Account for John Doe</div>"
       }
     },
     {
-      "id": "account-002",
       "resourceType": "Account",
-      "name": "Jones-Medina",
-      "balance": 95442,
-      "currency": "JPY",
+      "id": "account-002",
+      "identifier": [
+        {
+          "system": "http://example.org/fhir/account",
+          "value": "ACC-002"
+        }
+      ],
+      "status": "active",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/account-type",
+            "code": "patient"
+          }
+        ]
+      },
+      "name": "Jane Smith",
+      "balance": 300,
+      "currency": "USD",
+      "subject": {
+        "reference": "Patient/pat-002"
+      },
+      "servicePeriod": {
+        "start": "2025-01-01",
+        "end": "2025-12-31"
+      },
+      "description": "Patient billing account",
       "meta": {
-        "lastUpdated": "2025-10-16T08:25:49.051816Z"
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Account for Jane Smith</div>"
       }
     }
-  ]}
+  ],
+  "AllergyIntolerance": [
+    {
+      "resourceType": "AllergyIntolerance",
+      "id": "allergy-001",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2025-10-16T08:25:49Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div xmlns='http://www.w3.org/1999/xhtml'>AllergyIntolerance for patient A \u2014 peanut</div>"
+      },
+      "clinicalStatus": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+            "code": "active"
+          }
+        ]
+      },
+      "verificationStatus": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+            "code": "confirmed"
+          }
+        ]
+      },
+      "type": "allergy",
+      "category": [
+        "food"
+      ],
+      "criticality": "high",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "256349002",
+            "display": "Peanut allergy"
+          }
+        ],
+        "text": "Peanut"
+      },
+      "patient": {
+        "reference": "Patient/pat-001",
+        "display": "Alice Carter"
+      },
+      "onsetDateTime": "2010-05-01T00:00:00Z",
+      "reaction": [
+        {
+          "manifestation": [
+            {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "39579001",
+                  "display": "Anaphylaxis"
+                }
+              ],
+              "text": "Anaphylaxis"
+            }
+          ],
+          "severity": "severe"
+        }
+      ]
+    },
+    {
+      "resourceType": "AllergyIntolerance",
+      "id": "allergy-002",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2025-10-15T10:11:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div xmlns='http://www.w3.org/1999/xhtml'>AllergyIntolerance for patient B \u2014 penicillin</div>"
+      },
+      "clinicalStatus": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+            "code": "active"
+          }
+        ]
+      },
+      "verificationStatus": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+            "code": "unconfirmed"
+          }
+        ]
+      },
+      "type": "allergy",
+      "category": [
+        "medication"
+      ],
+      "criticality": "high",
+      "code": {
+        "coding": [
+          {
+            "system": "http://www.nlm.nih.gov/research/umls",
+            "code": "D014485",
+            "display": "Penicillin"
+          }
+        ],
+        "text": "Penicillin"
+      },
+      "patient": {
+        "reference": "Patient/pat-002",
+        "display": "Bob Singh"
+      },
+      "onsetString": "Childhood",
+      "reaction": [
+        {
+          "manifestation": [
+            {
+              "text": "Rash and hives"
+            }
+          ],
+          "severity": "moderate"
+        }
+      ]
+    }
+  ],
+  "Appointment": [
+    {
+      "resourceType": "Appointment",
+      "id": "appointment-001",
+      "status": "booked",
+      "serviceCategory": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/service-category",
+              "code": "consult"
+            }
+          ]
+        }
+      ],
+      "start": "2025-10-21T09:00:00Z",
+      "end": "2025-10-21T09:30:00Z",
+      "participant": [
+        {
+          "actor": {
+            "reference": "Patient/pat-001"
+          },
+          "status": "accepted"
+        },
+        {
+          "actor": {
+            "reference": "Practitioner/pract-001"
+          },
+          "status": "accepted"
+        }
+      ],
+      "reasonCode": [
+        {
+          "text": "Routine checkup"
+        }
+      ],
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Appointment for John Doe</div>"
+      }
+    },
+    {
+      "resourceType": "Appointment",
+      "id": "appointment-002",
+      "status": "booked",
+      "serviceCategory": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/service-category",
+              "code": "consult"
+            }
+          ]
+        }
+      ],
+      "start": "2025-10-22T10:00:00Z",
+      "end": "2025-10-22T10:30:00Z",
+      "participant": [
+        {
+          "actor": {
+            "reference": "Patient/pat-002"
+          },
+          "status": "accepted"
+        },
+        {
+          "actor": {
+            "reference": "Practitioner/pract-002"
+          },
+          "status": "accepted"
+        }
+      ],
+      "reasonCode": [
+        {
+          "text": "Follow-up"
+        }
+      ],
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Appointment for Jane Smith</div>"
+      }
+    }
+  ],
+  "BodyStructure": [
+    {
+      "resourceType": "BodyStructure",
+      "id": "bodystructure-001",
+      "patient": {
+        "reference": "Patient/pat-001"
+      },
+      "location": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "89621000",
+            "display": "Right arm"
+          }
+        ]
+      },
+      "description": "Right arm injury",
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>BodyStructure: Right arm</div>"
+      },
+      "morphology": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "82272006",
+            "display": "Fracture of upper limb"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "BodyStructure",
+      "id": "bodystructure-002",
+      "patient": {
+        "reference": "Patient/pat-002"
+      },
+      "location": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "89622000",
+            "display": "Left leg"
+          }
+        ]
+      },
+      "description": "Left leg fracture",
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>BodyStructure: Left leg</div>"
+      },
+      "morphology": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "82272006",
+            "display": "Fracture of lower limb"
+          }
+        ]
+      }
+    }
+  ],
+  "CarePlan": [
+    {
+      "resourceType": "CarePlan",
+      "id": "careplan-001",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2025-09-30T09:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>CarePlan for diabetes management</div>"
+      },
+      "status": "active",
+      "intent": "plan",
+      "title": "Diabetes outpatient management",
+      "subject": {
+        "reference": "Patient/pat-003",
+        "display": "Carlos Ramos"
+      },
+      "period": {
+        "start": "2025-09-01",
+        "end": "2026-03-01"
+      },
+      "careTeam": [
+        {
+          "reference": "CareTeam/ct-001",
+          "display": "Diabetes care team"
+        }
+      ],
+      "goal": [
+        {
+          "reference": "Goal/goal-001"
+        }
+      ],
+      "activity": [
+        {
+          "detail": {
+            "kind": "ServiceRequest",
+            "code": {
+              "text": "HbA1c monitoring every 3 months"
+            },
+            "status": "not-started",
+            "scheduledPeriod": {
+              "start": "2025-09-01",
+              "end": "2026-03-01"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "CarePlan",
+      "id": "careplan-002",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2025-08-01T12:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Post-operative rehab plan</div>"
+      },
+      "status": "active",
+      "intent": "order",
+      "title": "Post-op knee rehab",
+      "subject": {
+        "reference": "Patient/pat-004",
+        "display": "Diana Zhou"
+      },
+      "period": {
+        "start": "2025-07-15",
+        "end": "2025-10-15"
+      },
+      "careTeam": [
+        {
+          "reference": "CareTeam/ct-002",
+          "display": "Ortho rehab team"
+        }
+      ],
+      "goal": [
+        {
+          "reference": "Goal/goal-010"
+        }
+      ],
+      "activity": [
+        {
+          "detail": {
+            "code": {
+              "text": "Physiotherapy twice weekly"
+            },
+            "status": "in-progress"
+          }
+        }
+      ]
+    }
+  ],
+  "CareTeam": [
+    {
+      "resourceType": "CareTeam",
+      "id": "ct-001",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2025-06-20T13:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Primary care team</div>"
+      },
+      "status": "active",
+      "name": "Primary Care Team A",
+      "subject": {
+        "reference": "Patient/pat-003"
+      },
+      "period": {
+        "start": "2025-01-01"
+      },
+      "participant": [
+        {
+          "role": [
+            {
+              "text": "Primary physician"
+            }
+          ],
+          "member": {
+            "reference": "Practitioner/pr-001",
+            "display": "Dr. Emily Park"
+          }
+        },
+        {
+          "role": [
+            {
+              "text": "Nurse"
+            }
+          ],
+          "member": {
+            "reference": "Practitioner/pr-005",
+            "display": "Nurse Jill"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "CareTeam",
+      "id": "ct-002",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2025-07-01T09:30:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Orthopedics rehab team</div>"
+      },
+      "status": "active",
+      "name": "Ortho Rehab Team",
+      "subject": {
+        "reference": "Patient/pat-004"
+      },
+      "participant": [
+        {
+          "role": [
+            {
+              "text": "Physiotherapist"
+            }
+          ],
+          "member": {
+            "reference": "Practitioner/pr-010",
+            "display": "PT Sam Lee"
+          }
+        }
+      ]
+    }
+  ],
+  "ClinicalImpression": [
+    {
+      "resourceType": "ClinicalImpression",
+      "id": "clinicalimpression-001",
+      "status": "completed",
+      "subject": {
+        "reference": "Patient/pat-001"
+      },
+      "date": "2025-10-20",
+      "description": "Initial assessment of patient",
+      "finding": [
+        {
+          "itemCodeableConcept": {
+            "text": "High blood pressure"
+          }
+        }
+      ],
+      "assessor": {
+        "reference": "Practitioner/pract-001"
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Clinical impression for John Doe</div>"
+      }
+    },
+    {
+      "resourceType": "ClinicalImpression",
+      "id": "clinicalimpression-002",
+      "status": "completed",
+      "subject": {
+        "reference": "Patient/pat-002"
+      },
+      "date": "2025-10-20",
+      "description": "Follow-up assessment",
+      "finding": [
+        {
+          "itemCodeableConcept": {
+            "text": "Mild anemia"
+          }
+        }
+      ],
+      "assessor": {
+        "reference": "Practitioner/pract-002"
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Clinical impression for Jane Smith</div>"
+      }
+    }
+  ],
+  "Composition": [
+    {
+      "resourceType": "Composition",
+      "id": "composition-001",
+      "status": "final",
+      "type": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "11506-3",
+            "display": "Consult note"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/pat-001"
+      },
+      "date": "2025-10-20T09:00:00Z",
+      "title": "Consultation Note",
+      "section": [
+        {
+          "title": "History",
+          "text": {
+            "status": "generated",
+            "div": "<div>Patient history details...</div>"
+          }
+        }
+      ],
+      "author": [
+        {
+          "reference": "Practitioner/pract-001"
+        }
+      ],
+      "custodian": {
+        "reference": "Organization/org-001"
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Composition for John Doe</div>"
+      }
+    },
+    {
+      "resourceType": "Composition",
+      "id": "composition-002",
+      "status": "final",
+      "type": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "34133-9",
+            "display": "Discharge summary"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/pat-002"
+      },
+      "date": "2025-10-20T09:30:00Z",
+      "title": "Discharge Summary",
+      "section": [
+        {
+          "title": "Diagnosis",
+          "text": {
+            "status": "generated",
+            "div": "<div>Diagnosis details...</div>"
+          }
+        }
+      ],
+      "author": [
+        {
+          "reference": "Practitioner/pract-002"
+        }
+      ],
+      "custodian": {
+        "reference": "Organization/org-002"
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Composition for Jane Smith</div>"
+      }
+    }
+  ],
+  "Condition": [
+    {
+      "resourceType": "Condition",
+      "id": "cond-001",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2025-05-12T11:22:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Type 2 diabetes mellitus</div>"
+      },
+      "clinicalStatus": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+            "code": "active"
+          }
+        ]
+      },
+      "verificationStatus": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+            "code": "confirmed"
+          }
+        ]
+      },
+      "category": [
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "394658006",
+              "display": "Diagnosis"
+            }
+          ],
+          "text": "Diagnosis"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "44054006",
+            "display": "Diabetes mellitus type 2"
+          }
+        ],
+        "text": "Type 2 diabetes mellitus"
+      },
+      "subject": {
+        "reference": "Patient/pat-003",
+        "display": "Carlos Ramos"
+      },
+      "onsetDateTime": "2018-03-01"
+    },
+    {
+      "resourceType": "Condition",
+      "id": "cond-002",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2025-03-10T08:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Osteoarthritis, left knee</div>"
+      },
+      "clinicalStatus": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+            "code": "active"
+          }
+        ]
+      },
+      "verificationStatus": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+            "code": "provisional"
+          }
+        ]
+      },
+      "code": {
+        "text": "Osteoarthritis of left knee"
+      },
+      "subject": {
+        "reference": "Patient/pat-004",
+        "display": "Diana Zhou"
+      },
+      "onsetString": "2020"
+    }
+  ],
+  "Consent": [
+    {
+      "resourceType": "Consent",
+      "id": "consent-001",
+      "status": "active",
+      "scope": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/consentscope",
+            "code": "patient-privacy"
+          }
+        ]
+      },
+      "category": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/consentcategory",
+              "code": "privacy"
+            }
+          ]
+        }
+      ],
+      "patient": {
+        "reference": "Patient/pat-001"
+      },
+      "dateTime": "2025-10-20T08:00:00Z",
+      "provision": {
+        "type": "permit",
+        "actor": [
+          {
+            "role": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/consentactorrole",
+                  "code": "practitioner"
+                }
+              ]
+            },
+            "reference": {
+              "reference": "Practitioner/pract-001"
+            }
+          }
+        ]
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Consent for John Doe</div>"
+      }
+    },
+    {
+      "resourceType": "Consent",
+      "id": "consent-002",
+      "status": "active",
+      "scope": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/consentscope",
+            "code": "patient-privacy"
+          }
+        ]
+      },
+      "category": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/consentcategory",
+              "code": "privacy"
+            }
+          ]
+        }
+      ],
+      "patient": {
+        "reference": "Patient/pat-002"
+      },
+      "dateTime": "2025-10-20T08:30:00Z",
+      "provision": {
+        "type": "permit",
+        "actor": [
+          {
+            "role": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/consentactorrole",
+                  "code": "practitioner"
+                }
+              ]
+            },
+            "reference": {
+              "reference": "Practitioner/pract-002"
+            }
+          }
+        ]
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Consent for Jane Smith</div>"
+      }
+    }
+  ],
+  "Coverage": [
+    {
+      "resourceType": "Coverage",
+      "id": "coverage-001",
+      "status": "active",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/coverage-type",
+            "code": "EHCPOL"
+          }
+        ]
+      },
+      "subscriberId": "SUB-001",
+      "beneficiary": {
+        "reference": "Patient/pat-001"
+      },
+      "period": {
+        "start": "2025-01-01",
+        "end": "2025-12-31"
+      },
+      "payor": [
+        {
+          "reference": "Organization/org-001"
+        }
+      ],
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Coverage for John Doe</div>"
+      }
+    },
+    {
+      "resourceType": "Coverage",
+      "id": "coverage-002",
+      "status": "active",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/coverage-type",
+            "code": "EHCPOL"
+          }
+        ]
+      },
+      "subscriberId": "SUB-002",
+      "beneficiary": {
+        "reference": "Patient/pat-002"
+      },
+      "period": {
+        "start": "2025-01-01",
+        "end": "2025-12-31"
+      },
+      "payor": [
+        {
+          "reference": "Organization/org-002"
+        }
+      ],
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Coverage for Jane Smith</div>"
+      }
+    }
+  ],
+  "Device": [
+    {
+      "resourceType": "Device",
+      "id": "device-001",
+      "meta": {
+        "lastUpdated": "2025-09-01T07:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Glucometer model X</div>"
+      },
+      "identifier": [
+        {
+          "system": "http://hospital.example/devices",
+          "value": "GLX-1000"
+        }
+      ],
+      "status": "active",
+      "type": {
+        "text": "Glucometer"
+      },
+      "patient": {
+        "reference": "Patient/pat-003",
+        "display": "Carlos Ramos"
+      },
+      "note": [
+        {
+          "text": "Loaned device for home glucose monitoring"
+        }
+      ]
+    },
+    {
+      "resourceType": "Device",
+      "id": "device-002",
+      "meta": {
+        "lastUpdated": "2025-08-20T12:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Left knee brace</div>"
+      },
+      "identifier": [
+        {
+          "system": "http://hospital.example/devices",
+          "value": "KBR-200"
+        }
+      ],
+      "status": "active",
+      "type": {
+        "text": "Orthopedic brace"
+      },
+      "patient": {
+        "reference": "Patient/pat-004",
+        "display": "Diana Zhou"
+      }
+    }
+  ],
+  "DeviceRequest": [
+    {
+      "resourceType": "DeviceRequest",
+      "id": "devicerequest-001",
+      "status": "active",
+      "intent": "order",
+      "codeReference": {
+        "reference": "Device/device-001"
+      },
+      "subject": {
+        "reference": "Patient/pat-001"
+      },
+      "authoredOn": "2025-10-20",
+      "requester": {
+        "reference": "Practitioner/pract-001"
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Device request for John Doe</div>"
+      }
+    },
+    {
+      "resourceType": "DeviceRequest",
+      "id": "devicerequest-002",
+      "status": "active",
+      "intent": "order",
+      "codeReference": {
+        "reference": "Device/device-002"
+      },
+      "subject": {
+        "reference": "Patient/pat-002"
+      },
+      "authoredOn": "2025-10-20",
+      "requester": {
+        "reference": "Practitioner/pract-002"
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Device request for Jane Smith</div>"
+      }
+    }
+  ],
+  "DeviceUseStatement": [
+    {
+      "resourceType": "DeviceUseStatement",
+      "id": "deviceusestatement-001",
+      "status": "completed",
+      "subject": {
+        "reference": "Patient/pat-001"
+      },
+      "device": {
+        "reference": "Device/device-001"
+      },
+      "whenUsed": "2025-10-20T09:00:00Z",
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Device used by John Doe</div>"
+      }
+    },
+    {
+      "resourceType": "DeviceUseStatement",
+      "id": "deviceusestatement-002",
+      "status": "completed",
+      "subject": {
+        "reference": "Patient/pat-002"
+      },
+      "device": {
+        "reference": "Device/device-002"
+      },
+      "whenUsed": "2025-10-20T09:30:00Z",
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Device used by Jane Smith</div>"
+      }
+    }
+  ],
+  "DiagnosticReport": [
+    {
+      "resourceType": "DiagnosticReport",
+      "id": "dr-001",
+      "meta": {
+        "lastUpdated": "2025-10-01T14:30:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Basic metabolic panel</div>"
+      },
+      "status": "final",
+      "category": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+              "code": "LAB",
+              "display": "Laboratory"
+            }
+          ],
+          "text": "Laboratory"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "24323-8",
+            "display": "Basic metabolic panel"
+          }
+        ],
+        "text": "BMP"
+      },
+      "subject": {
+        "reference": "Patient/pat-003",
+        "display": "Carlos Ramos"
+      },
+      "effectiveDateTime": "2025-10-01T08:00:00Z",
+      "issued": "2025-10-01T14:30:00Z",
+      "result": [
+        {
+          "reference": "Observation/obs-001"
+        },
+        {
+          "reference": "Observation/obs-002"
+        }
+      ],
+      "conclusion": "Electrolytes within reference ranges"
+    },
+    {
+      "resourceType": "DiagnosticReport",
+      "id": "dr-002",
+      "meta": {
+        "lastUpdated": "2025-09-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Chest X-ray report</div>"
+      },
+      "status": "final",
+      "category": [
+        {
+          "text": "Imaging"
+        }
+      ],
+      "code": {
+        "text": "Chest X-ray (single view)"
+      },
+      "subject": {
+        "reference": "Patient/pat-005",
+        "display": "Ethan Park"
+      },
+      "effectiveDateTime": "2025-09-20T07:45:00Z",
+      "issued": "2025-09-20T10:00:00Z",
+      "conclusion": "No acute cardiopulmonary disease"
+    }
+  ],
+  "DocumentReference": [
+    {
+      "resourceType": "DocumentReference",
+      "id": "docref-001",
+      "meta": {
+        "lastUpdated": "2025-06-01T09:30:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Discharge summary</div>"
+      },
+      "status": "current",
+      "docStatus": "final",
+      "type": {
+        "coding": [
+          {
+            "text": "Discharge summary"
+          }
+        ],
+        "text": "Discharge summary"
+      },
+      "subject": {
+        "reference": "Patient/pat-006",
+        "display": "Fiona Green"
+      },
+      "date": "2025-05-30T16:00:00Z",
+      "author": [
+        {
+          "reference": "Practitioner/pr-001",
+          "display": "Dr. Emily Park"
+        }
+      ],
+      "content": [
+        {
+          "attachment": {
+            "contentType": "text/html",
+            "url": "http://example.org/documents/discharge-001.html",
+            "title": "Discharge summary - Fiona Green"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "DocumentReference",
+      "id": "docref-002",
+      "meta": {
+        "lastUpdated": "2025-07-10T11:15:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Operative note</div>"
+      },
+      "status": "current",
+      "docStatus": "final",
+      "type": {
+        "text": "Operative note"
+      },
+      "subject": {
+        "reference": "Patient/pat-004",
+        "display": "Diana Zhou"
+      },
+      "date": "2025-07-09T14:00:00Z",
+      "author": [
+        {
+          "reference": "Practitioner/pr-020",
+          "display": "Dr. Arun Patel"
+        }
+      ],
+      "content": [
+        {
+          "attachment": {
+            "contentType": "application/pdf",
+            "url": "http://example.org/documents/opnote-002.pdf",
+            "title": "Operative Note - knee"
+          }
+        }
+      ]
+    }
+  ],
+  "Encounter": [
+    {
+      "resourceType": "Encounter",
+      "id": "enc-001",
+      "meta": {
+        "lastUpdated": "2025-10-10T12:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Outpatient clinic visit</div>"
+      },
+      "status": "finished",
+      "class": {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+        "code": "AMB",
+        "display": "ambulatory"
+      },
+      "type": [
+        {
+          "text": "Primary care visit"
+        }
+      ],
+      "subject": {
+        "reference": "Patient/pat-003",
+        "display": "Carlos Ramos"
+      },
+      "period": {
+        "start": "2025-10-10T09:00:00Z",
+        "end": "2025-10-10T09:30:00Z"
+      },
+      "serviceProvider": {
+        "reference": "Organization/org-001",
+        "display": "City General Hospital"
+      }
+    },
+    {
+      "resourceType": "Encounter",
+      "id": "enc-002",
+      "meta": {
+        "lastUpdated": "2025-08-22T15:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Emergency department visit</div>"
+      },
+      "status": "finished",
+      "class": {
+        "code": "EMER",
+        "display": "emergency"
+      },
+      "type": [
+        {
+          "text": "Emergency visit"
+        }
+      ],
+      "subject": {
+        "reference": "Patient/pat-005",
+        "display": "Ethan Park"
+      },
+      "period": {
+        "start": "2025-08-22T13:12:00Z",
+        "end": "2025-08-22T16:00:00Z"
+      },
+      "location": [
+        {
+          "location": {
+            "reference": "Location/loc-002",
+            "display": "ED Bay 3"
+          }
+        }
+      ]
+    }
+  ],
+  "EpisodeOfCare": [
+    {
+      "resourceType": "EpisodeOfCare",
+      "id": "episodeofcare-001",
+      "status": "active",
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/episodeofcare-type",
+              "code": "longitudinal"
+            }
+          ]
+        }
+      ],
+      "patient": {
+        "reference": "Patient/pat-001"
+      },
+      "managingOrganization": {
+        "reference": "Organization/org-001"
+      },
+      "period": {
+        "start": "2025-01-01",
+        "end": "2025-12-31"
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Episode of care for John Doe</div>"
+      }
+    },
+    {
+      "resourceType": "EpisodeOfCare",
+      "id": "episodeofcare-002",
+      "status": "active",
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/episodeofcare-type",
+              "code": "longitudinal"
+            }
+          ]
+        }
+      ],
+      "patient": {
+        "reference": "Patient/pat-002"
+      },
+      "managingOrganization": {
+        "reference": "Organization/org-002"
+      },
+      "period": {
+        "start": "2025-01-01",
+        "end": "2025-12-31"
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Episode of care for Jane Smith</div>"
+      }
+    }
+  ],
+  "ExplanationOfBenefit": [
+    {
+      "resourceType": "ExplanationOfBenefit",
+      "id": "eob-001",
+      "status": "active",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/claim-type",
+            "code": "institutional"
+          }
+        ]
+      },
+      "patient": {
+        "reference": "Patient/pat-001"
+      },
+      "claim": {
+        "reference": "Claim/claim-001"
+      },
+      "created": "2025-10-20",
+      "provider": {
+        "reference": "Practitioner/pract-001"
+      },
+      "organization": {
+        "reference": "Organization/org-001"
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>EOB for John Doe</div>"
+      }
+    },
+    {
+      "resourceType": "ExplanationOfBenefit",
+      "id": "eob-002",
+      "status": "active",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/claim-type",
+            "code": "institutional"
+          }
+        ]
+      },
+      "patient": {
+        "reference": "Patient/pat-002"
+      },
+      "claim": {
+        "reference": "Claim/claim-002"
+      },
+      "created": "2025-10-20",
+      "provider": {
+        "reference": "Practitioner/pract-002"
+      },
+      "organization": {
+        "reference": "Organization/org-002"
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>EOB for Jane Smith</div>"
+      }
+    }
+  ],
+  "FamilyMemberHistory": [
+    {
+      "resourceType": "FamilyMemberHistory",
+      "id": "fmh-001",
+      "status": "completed",
+      "patient": {
+        "reference": "Patient/pat-001"
+      },
+      "date": "2025-10-20",
+      "relationship": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-RoleCode",
+            "code": "MTH"
+          }
+        ]
+      },
+      "name": "Mary Doe",
+      "bornPeriod": {
+        "start": "1960-01-01",
+        "end": "1960-12-31"
+      },
+      "note": [
+        {
+          "text": "Mother had hypertension"
+        }
+      ],
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Family history for John Doe</div>"
+      }
+    },
+    {
+      "resourceType": "FamilyMemberHistory",
+      "id": "fmh-002",
+      "status": "completed",
+      "patient": {
+        "reference": "Patient/pat-002"
+      },
+      "date": "2025-10-20",
+      "relationship": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-RoleCode",
+            "code": "FTH"
+          }
+        ]
+      },
+      "name": "Robert Smith",
+      "bornPeriod": {
+        "start": "1955-01-01",
+        "end": "1955-12-31"
+      },
+      "note": [
+        {
+          "text": "Father had diabetes"
+        }
+      ],
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Family history for Jane Smith</div>"
+      }
+    }
+  ],
+  "Flag": [
+    {
+      "resourceType": "Flag",
+      "id": "flag-001",
+      "status": "active",
+      "category": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/flag-category",
+              "code": "safety"
+            }
+          ]
+        }
+      ],
+      "subject": {
+        "reference": "Patient/pat-001"
+      },
+      "code": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/flag-code",
+            "code": "fall-risk"
+          }
+        ]
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Fall risk for John Doe</div>"
+      }
+    },
+    {
+      "resourceType": "Flag",
+      "id": "flag-002",
+      "status": "active",
+      "category": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/flag-category",
+              "code": "safety"
+            }
+          ]
+        }
+      ],
+      "subject": {
+        "reference": "Patient/pat-002"
+      },
+      "code": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/flag-code",
+            "code": "allergy-alert"
+          }
+        ]
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Allergy alert for Jane Smith</div>"
+      }
+    }
+  ],
+  "Goal": [
+    {
+      "resourceType": "Goal",
+      "id": "goal-001",
+      "meta": {
+        "lastUpdated": "2025-09-01T08:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Lower HbA1c below 7%</div>"
+      },
+      "lifecycleStatus": "active",
+      "achievementStatus": {
+        "text": "on-track"
+      },
+      "description": {
+        "text": "Reduce HbA1c to <7% within 6 months"
+      },
+      "subject": {
+        "reference": "Patient/pat-003"
+      },
+      "startDate": "2025-09-01",
+      "target": [
+        {
+          "measure": {
+            "text": "HbA1c"
+          },
+          "detailQuantity": {
+            "value": 7,
+            "unit": "%",
+            "system": "http://unitsofmeasure.org",
+            "code": "%"
+          },
+          "dueDate": "2026-03-01"
+        }
+      ]
+    },
+    {
+      "resourceType": "Goal",
+      "id": "goal-010",
+      "meta": {
+        "lastUpdated": "2025-07-16T09:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Recover ROM and ambulation after knee surgery</div>"
+      },
+      "lifecycleStatus": "active",
+      "description": {
+        "text": "Improve knee range of motion to 110 degrees in 3 months"
+      },
+      "subject": {
+        "reference": "Patient/pat-004"
+      },
+      "startDate": "2025-07-15",
+      "target": [
+        {
+          "detailQuantity": {
+            "value": 110,
+            "unit": "degrees"
+          },
+          "dueDate": "2025-10-15"
+        }
+      ]
+    }
+  ],
+  "Group": [
+    {
+      "resourceType": "Group",
+      "id": "group-001",
+      "meta": {
+        "lastUpdated": "2025-05-05T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Diabetes patient cohort</div>"
+      },
+      "active": true,
+      "type": "person",
+      "actual": false,
+      "name": "Diabetes cohort 2025",
+      "member": [
+        {
+          "entity": {
+            "reference": "Patient/pat-003",
+            "display": "Carlos Ramos"
+          }
+        },
+        {
+          "entity": {
+            "reference": "Patient/pat-007",
+            "display": "Grace Miller"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Group",
+      "id": "group-002",
+      "meta": {
+        "lastUpdated": "2025-04-01T09:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Orthopedic PT group</div>"
+      },
+      "active": true,
+      "type": "person",
+      "actual": false,
+      "name": "Ortho PT program",
+      "member": [
+        {
+          "entity": {
+            "reference": "Patient/pat-004",
+            "display": "Diana Zhou"
+          }
+        },
+        {
+          "entity": {
+            "reference": "Patient/pat-008",
+            "display": "Harish Patel"
+          }
+        }
+      ]
+    }
+  ],
+  "HealthcareService": [
+    {
+      "resourceType": "HealthcareService",
+      "id": "hcservice-001",
+      "name": "General Practice Clinic",
+      "providedBy": {
+        "reference": "Organization/org-001"
+      },
+      "category": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/service-category",
+              "code": "gp"
+            }
+          ]
+        }
+      ],
+      "active": true,
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Healthcare Service: GP Clinic</div>"
+      }
+    },
+    {
+      "resourceType": "HealthcareService",
+      "id": "hcservice-002",
+      "name": "Pediatric Clinic",
+      "providedBy": {
+        "reference": "Organization/org-002"
+      },
+      "category": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/service-category",
+              "code": "pediatrics"
+            }
+          ]
+        }
+      ],
+      "active": true,
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Healthcare Service: Pediatric Clinic</div>"
+      }
+    }
+  ],
+  "Immunization": [
+    {
+      "resourceType": "Immunization",
+      "id": "imm-001",
+      "meta": {
+        "lastUpdated": "2025-03-01T11:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Influenza vaccine 2024</div>"
+      },
+      "status": "completed",
+      "vaccineCode": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/sid/cvx",
+            "code": "140",
+            "display": "Influenza"
+          }
+        ],
+        "text": "Influenza vaccine"
+      },
+      "patient": {
+        "reference": "Patient/pat-003",
+        "display": "Carlos Ramos"
+      },
+      "occurrenceDateTime": "2024-10-15",
+      "primarySource": true,
+      "lotNumber": "FLU-2024-01"
+    },
+    {
+      "resourceType": "Immunization",
+      "id": "imm-002",
+      "meta": {
+        "lastUpdated": "2025-02-10T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Tdap vaccine</div>"
+      },
+      "status": "completed",
+      "vaccineCode": {
+        "text": "Tdap"
+      },
+      "patient": {
+        "reference": "Patient/pat-005",
+        "display": "Ethan Park"
+      },
+      "occurrenceDateTime": "2025-02-01",
+      "lotNumber": "TDAP-55"
+    }
+  ],
+  "ImmunizationRecommendation": [
+    {
+      "resourceType": "ImmunizationRecommendation",
+      "id": "immrec-001",
+      "patient": {
+        "reference": "Patient/pat-001"
+      },
+      "date": "2025-10-20",
+      "recommendation": [
+        {
+          "vaccineCode": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/sid/cvx",
+                "code": "140",
+                "display": "Influenza"
+              }
+            ]
+          },
+          "forecastStatus": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/immunization-recommendation-status",
+                "code": "due"
+              }
+            ]
+          }
+        }
+      ],
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Immunization Recommendation for John Doe</div>"
+      }
+    },
+    {
+      "resourceType": "ImmunizationRecommendation",
+      "id": "immrec-002",
+      "patient": {
+        "reference": "Patient/pat-002"
+      },
+      "date": "2025-10-20",
+      "recommendation": [
+        {
+          "vaccineCode": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/sid/cvx",
+                "code": "208",
+                "display": "HepB"
+              }
+            ]
+          },
+          "forecastStatus": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/immunization-recommendation-status",
+                "code": "due"
+              }
+            ]
+          }
+        }
+      ],
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Immunization Recommendation for Jane Smith</div>"
+      }
+    }
+  ],
+  "Invoice": [
+    {
+      "resourceType": "Invoice",
+      "id": "invoice-001",
+      "status": "issued",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/invoice-type",
+            "code": "professional"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/pat-001"
+      },
+      "participant": [
+        {
+          "actor": {
+            "reference": "Practitioner/pract-001"
+          }
+        }
+      ],
+      "totalGross": {
+        "value": 200,
+        "currency": "USD"
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Invoice for John Doe</div>"
+      }
+    },
+    {
+      "resourceType": "Invoice",
+      "id": "invoice-002",
+      "status": "issued",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/invoice-type",
+            "code": "professional"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/pat-002"
+      },
+      "participant": [
+        {
+          "actor": {
+            "reference": "Practitioner/pract-002"
+          }
+        }
+      ],
+      "totalGross": {
+        "value": 350,
+        "currency": "USD"
+      },
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Invoice for Jane Smith</div>"
+      }
+    }
+  ],
+  "Library": [
+    {
+      "resourceType": "Library",
+      "id": "library-001",
+      "status": "active",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/library-type",
+            "code": "logic-library"
+          }
+        ]
+      },
+      "content": [
+        {
+          "contentType": "text/cql",
+          "data": "VGhpcyBpcyBhIGxvZ2ljIGV4YW1wbGU="
+        }
+      ],
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Library logic example 1</div>"
+      }
+    },
+    {
+      "resourceType": "Library",
+      "id": "library-002",
+      "status": "active",
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/library-type",
+            "code": "logic-library"
+          }
+        ]
+      },
+      "content": [
+        {
+          "contentType": "text/cql",
+          "data": "VGhpcyBpcyBhbm90aGVyIGxvZ2ljIGV4YW1wbGU="
+        }
+      ],
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Library logic example 2</div>"
+      }
+    }
+  ],
+  "Location": [
+    {
+      "resourceType": "Location",
+      "id": "loc-001",
+      "meta": {
+        "lastUpdated": "2025-01-01T00:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Main hospital campus - Radiology</div>"
+      },
+      "status": "active",
+      "name": "City General Hospital - Radiology",
+      "address": {
+        "line": [
+          "1 Health St."
+        ],
+        "city": "Metrocity",
+        "postalCode": "400001",
+        "country": "IN"
+      }
+    },
+    {
+      "resourceType": "Location",
+      "id": "loc-002",
+      "meta": {
+        "lastUpdated": "2025-02-20T08:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Emergency Department - Bay 3</div>"
+      },
+      "status": "active",
+      "name": "ED Bay 3",
+      "partOf": {
+        "reference": "Location/loc-001",
+        "display": "City General Hospital - Radiology"
+      }
+    }
+  ],
+  "Media": [
+    {
+      "resourceType": "Media",
+      "id": "media-001",
+      "status": "completed",
+      "type": "photo",
+      "subject": {
+        "reference": "Patient/pat-001"
+      },
+      "content": {
+        "contentType": "image/jpeg",
+        "url": "http://example.org/images/pat-001-photo.jpg"
+      },
+      "issued": "2025-10-20T09:00:00Z",
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Patient John Doe photo</div>"
+      }
+    },
+    {
+      "resourceType": "Media",
+      "id": "media-002",
+      "status": "completed",
+      "type": "photo",
+      "subject": {
+        "reference": "Patient/pat-002"
+      },
+      "content": {
+        "contentType": "image/jpeg",
+        "url": "http://example.org/images/pat-002-photo.jpg"
+      },
+      "issued": "2025-10-20T09:30:00Z",
+      "meta": {
+        "lastUpdated": "2025-10-20T10:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Patient Jane Smith photo</div>"
+      }
+    }
+  ],
+  "Medication": [
+    {
+      "resourceType": "Medication",
+      "id": "med-001",
+      "meta": {
+        "lastUpdated": "2025-04-01T09:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Metformin 500mg tablet</div>"
+      },
+      "code": {
+        "coding": [
+          {
+            "system": "http://www.nlm.nih.gov/research/umls",
+            "code": "C0025706",
+            "display": "Metformin"
+          }
+        ],
+        "text": "Metformin 500mg tablet"
+      },
+      "status": "active",
+      "form": {
+        "coding": [
+          {
+            "text": "Tablet"
+          }
+        ],
+        "text": "Tablet"
+      }
+    },
+    {
+      "resourceType": "Medication",
+      "id": "med-002",
+      "meta": {
+        "lastUpdated": "2025-05-01T07:30:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Ibuprofen 200mg tablet</div>"
+      },
+      "code": {
+        "text": "Ibuprofen 200mg tablet"
+      },
+      "status": "active",
+      "form": {
+        "text": "Tablet"
+      }
+    }
+  ],
+  "MedicationRequest": [
+    {
+      "resourceType": "MedicationRequest",
+      "id": "medreq-001",
+      "meta": {
+        "lastUpdated": "2025-09-01T08:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Metformin 500mg BID</div>"
+      },
+      "status": "active",
+      "intent": "order",
+      "medicationReference": {
+        "reference": "Medication/med-001",
+        "display": "Metformin 500mg tablet"
+      },
+      "subject": {
+        "reference": "Patient/pat-003",
+        "display": "Carlos Ramos"
+      },
+      "authoredOn": "2025-09-01",
+      "dosageInstruction": [
+        {
+          "text": "500 mg orally twice a day",
+          "timing": {
+            "repeat": {
+              "frequency": 2,
+              "period": 1,
+              "periodUnit": "d"
+            }
+          }
+        }
+      ],
+      "requester": {
+        "reference": "Practitioner/pr-001",
+        "display": "Dr. Emily Park"
+      }
+    },
+    {
+      "resourceType": "MedicationRequest",
+      "id": "medreq-002",
+      "meta": {
+        "lastUpdated": "2025-08-01T09:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Ibuprofen PRN for pain</div>"
+      },
+      "status": "active",
+      "intent": "order",
+      "medicationReference": {
+        "reference": "Medication/med-002",
+        "display": "Ibuprofen 200mg tablet"
+      },
+      "subject": {
+        "reference": "Patient/pat-004",
+        "display": "Diana Zhou"
+      },
+      "authoredOn": "2025-07-20",
+      "dosageInstruction": [
+        {
+          "text": "200-400 mg orally every 4-6 hours as needed for pain"
+        }
+      ],
+      "requester": {
+        "reference": "Practitioner/pr-020",
+        "display": "Dr. Arun Patel"
+      }
+    }
+  ],
+  "Observation": [
+    {
+      "resourceType": "Observation",
+      "id": "obs-001",
+      "meta": {
+        "lastUpdated": "2025-10-01T08:05:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Serum sodium result</div>"
+      },
+      "status": "final",
+      "category": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+              "code": "laboratory"
+            }
+          ],
+          "text": "Laboratory"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "2951-2",
+            "display": "Sodium [Moles/volume] in Serum or Plasma"
+          }
+        ],
+        "text": "Sodium"
+      },
+      "subject": {
+        "reference": "Patient/pat-003",
+        "display": "Carlos Ramos"
+      },
+      "effectiveDateTime": "2025-10-01T07:50:00Z",
+      "valueQuantity": {
+        "value": 140,
+        "unit": "mmol/L",
+        "system": "http://unitsofmeasure.org",
+        "code": "mmol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 135
+          },
+          "high": {
+            "value": 145
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "obs-002",
+      "meta": {
+        "lastUpdated": "2025-10-01T08:05:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Serum potassium result</div>"
+      },
+      "status": "final",
+      "category": [
+        {
+          "text": "Laboratory"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "2823-3",
+            "display": "Potassium [Moles/volume] in Serum or Plasma"
+          }
+        ],
+        "text": "Potassium"
+      },
+      "subject": {
+        "reference": "Patient/pat-003",
+        "display": "Carlos Ramos"
+      },
+      "effectiveDateTime": "2025-10-01T07:50:00Z",
+      "valueQuantity": {
+        "value": 4.2,
+        "unit": "mmol/L",
+        "system": "http://unitsofmeasure.org",
+        "code": "mmol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 3.5
+          },
+          "high": {
+            "value": 5.0
+          }
+        }
+      ]
+    }
+  ],
+  "Organization": [
+    {
+      "resourceType": "Organization",
+      "id": "org-001",
+      "meta": {
+        "lastUpdated": "2025-01-01T00:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>City General Hospital</div>"
+      },
+      "identifier": [
+        {
+          "system": "http://example.org/ids/organizations",
+          "value": "CGH-001"
+        }
+      ],
+      "name": "City General Hospital",
+      "type": [
+        {
+          "text": "Hospital"
+        }
+      ],
+      "address": [
+        {
+          "line": [
+            "1 Health St."
+          ],
+          "city": "Metrocity",
+          "postalCode": "400001",
+          "country": "IN"
+        }
+      ],
+      "contact": [
+        {
+          "purpose": {
+            "text": "Administrative"
+          },
+          "telecom": [
+            {
+              "system": "phone",
+              "value": "+91-22-12345678"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resourceType": "Organization",
+      "id": "org-002",
+      "meta": {
+        "lastUpdated": "2025-02-01T00:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Downtown Health Clinic</div>"
+      },
+      "identifier": [
+        {
+          "system": "http://example.org/ids/organizations",
+          "value": "DHC-002"
+        }
+      ],
+      "name": "Downtown Health Clinic",
+      "type": [
+        {
+          "text": "Clinic"
+        }
+      ],
+      "address": [
+        {
+          "line": [
+            "45 Central Ave."
+          ],
+          "city": "Metrocity",
+          "postalCode": "400010",
+          "country": "IN"
+        }
+      ]
+    }
+  ],
+  "Patient": [
+    {
+      "resourceType": "Patient",
+      "id": "pat-001",
+      "meta": {
+        "lastUpdated": "2025-01-01T00:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Alice Carter</div>"
+      },
+      "identifier": [
+        {
+          "system": "http://hospital.example/mrn",
+          "value": "MRN-1001"
+        }
+      ],
+      "active": true,
+      "name": [
+        {
+          "family": "Carter",
+          "given": [
+            "Alice"
+          ],
+          "prefix": [
+            "Ms."
+          ]
+        }
+      ],
+      "gender": "female",
+      "birthDate": "1988-04-12",
+      "address": [
+        {
+          "line": [
+            "12 Rose Lane"
+          ],
+          "city": "Metrocity",
+          "postalCode": "400101",
+          "country": "IN"
+        }
+      ]
+    },
+    {
+      "resourceType": "Patient",
+      "id": "pat-002",
+      "meta": {
+        "lastUpdated": "2025-02-15T00:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Bob Singh</div>"
+      },
+      "identifier": [
+        {
+          "system": "http://hospital.example/mrn",
+          "value": "MRN-1002"
+        }
+      ],
+      "active": true,
+      "name": [
+        {
+          "family": "Singh",
+          "given": [
+            "Bob"
+          ]
+        }
+      ],
+      "gender": "male",
+      "birthDate": "1975-11-03",
+      "address": [
+        {
+          "line": [
+            "205 Lake Rd."
+          ],
+          "city": "Metrocity",
+          "postalCode": "400050",
+          "country": "IN"
+        }
+      ]
+    }
+  ],
+  "Practitioner": [
+    {
+      "resourceType": "Practitioner",
+      "id": "pr-001",
+      "meta": {
+        "lastUpdated": "2025-01-01T00:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Dr. Emily Park</div>"
+      },
+      "identifier": [
+        {
+          "system": "http://example.org/ids/practitioners",
+          "value": "PR-001"
+        }
+      ],
+      "name": [
+        {
+          "family": "Park",
+          "given": [
+            "Emily"
+          ],
+          "prefix": [
+            "Dr."
+          ]
+        }
+      ],
+      "gender": "female",
+      "qualification": [
+        {
+          "code": {
+            "text": "MD"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Practitioner",
+      "id": "pr-020",
+      "meta": {
+        "lastUpdated": "2025-07-09T00:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Dr. Arun Patel</div>"
+      },
+      "identifier": [
+        {
+          "system": "http://example.org/ids/practitioners",
+          "value": "PR-020"
+        }
+      ],
+      "name": [
+        {
+          "family": "Patel",
+          "given": [
+            "Arun"
+          ],
+          "prefix": [
+            "Dr."
+          ]
+        }
+      ],
+      "gender": "male",
+      "qualification": [
+        {
+          "code": {
+            "text": "MS, Ortho"
+          }
+        }
+      ]
+    }
+  ],
+  "Procedure": [
+    {
+      "resourceType": "Procedure",
+      "id": "proc-001",
+      "meta": {
+        "lastUpdated": "2025-07-09T18:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Arthroscopic knee surgery</div>"
+      },
+      "status": "completed",
+      "code": {
+        "text": "Arthroscopic partial meniscectomy"
+      },
+      "subject": {
+        "reference": "Patient/pat-004",
+        "display": "Diana Zhou"
+      },
+      "performedDateTime": "2025-07-09T14:00:00Z",
+      "performer": [
+        {
+          "actor": {
+            "reference": "Practitioner/pr-020",
+            "display": "Dr. Arun Patel"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Procedure",
+      "id": "proc-002",
+      "meta": {
+        "lastUpdated": "2025-08-10T12:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Appendectomy</div>"
+      },
+      "status": "completed",
+      "code": {
+        "text": "Appendectomy"
+      },
+      "subject": {
+        "reference": "Patient/pat-006",
+        "display": "Fiona Green"
+      },
+      "performedDateTime": "2025-08-09T09:30:00Z",
+      "performer": [
+        {
+          "actor": {
+            "reference": "Practitioner/pr-030",
+            "display": "Dr. Lina Gomez"
+          }
+        }
+      ]
+    }
+  ],
+  "Provenance": [
+    {
+      "resourceType": "Provenance",
+      "id": "prov-001",
+      "meta": {
+        "lastUpdated": "2025-10-10T12:30:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Provenance for DiagnosticReport dr-001</div>"
+      },
+      "target": [
+        {
+          "reference": "DiagnosticReport/dr-001"
+        }
+      ],
+      "recorded": "2025-10-01T15:00:00Z",
+      "agent": [
+        {
+          "type": {
+            "text": "Author"
+          },
+          "who": {
+            "reference": "Practitioner/pr-001",
+            "display": "Dr. Emily Park"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Provenance",
+      "id": "prov-002",
+      "meta": {
+        "lastUpdated": "2025-09-21T11:00:00Z"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div>Provenance for Observation obs-002</div>"
+      },
+      "target": [
+        {
+          "reference": "Observation/obs-002"
+        }
+      ],
+      "recorded": "2025-09-20T11:00:00Z",
+      "agent": [
+        {
+          "type": {
+            "text": "Performer"
+          },
+          "who": {
+            "reference": "Practitioner/pr-010",
+            "display": "PT Sam Lee"
+          }
+        }
+      ]
+    }
+  ]
+}
