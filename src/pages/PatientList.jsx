@@ -312,6 +312,7 @@ export default function PatientList() {
   const [search, setSearch] = useState(
     ehr.toLowerCase().startsWith("athena") ? "sofia" : ""
   );
+  
   const [debouncedSearch, setDebouncedSearch] = useState(search);
 
   const navigate = useNavigate();
@@ -327,13 +328,13 @@ export default function PatientList() {
     // sourceId !== import.meta.env.VITE_SOURCE_ID_ELATION;
 
     // Sync search if EHR changes
-  useEffect(() => {
-    if (ehr.toLowerCase().startsWith("athena")) {
-      setSearch("sofia");
-    } else {
-      setSearch("");
-    }
-  }, [ehr]);
+  // useEffect(() => {
+  //   if (ehr.toLowerCase().startsWith("athena")) {
+  //     setSearch("sofia");
+  //   } else {
+  //     setSearch("");
+  //   }
+  // }, [ehr]);
 
   
 
@@ -405,9 +406,9 @@ useEffect(() => {
         }));
 
         // === Filter for Athena only ===
-        if (ehr.startsWith("Athena")) {
-          data = data.filter((p) => p.name.toLowerCase().includes("sofia"));
-        }
+        // if (ehr.startsWith("Athena")) {
+        //   data = data.filter((p) => p.name.toLowerCase().includes("sofia"));
+        // }
       }
 
       setPatients(data);
